@@ -1,0 +1,12 @@
+{
+  "plugins": ["@typescript-eslint"],
+  "extends": ["next", "prettier", "plugin:@typescript-eslint/recommended"],
+  "rules": {
+    "no-undef": "warn",
+    "no-unused-vars": "warn",
+    "react/no-unescaped-entities": "off"
+  },
+  "env": {
+    "es6": true
+  }
+}
