@@ -1,7 +1,5 @@
 import * as React from 'react';
 import { providers } from 'ethers';
-
-// Imports
 import { Connector, Provider, chain, defaultChains } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
@@ -33,7 +31,7 @@ const connectors = ({ chainId }: ConnectorsConfig) => {
     }),
     new WalletLinkConnector({
       options: {
-        appName: 'Llamapay',
+        appName: 'LlamaPay',
         jsonRpcUrl: `${rpcUrl}/${infuraId}`,
       },
     }),

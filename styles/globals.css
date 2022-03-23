@@ -21,6 +21,12 @@
   }
 
   #__next {
-    isolation: isolate;
+    @apply isolate flex min-h-screen flex-col slashed-zero;
+  }
+}
+
+@layer components {
+  .nav-button {
+    @apply rounded-lg bg-zinc-100 py-2 px-3 dark:bg-zinc-800;
   }
 }
