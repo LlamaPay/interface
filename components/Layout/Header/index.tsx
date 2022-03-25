@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import * as React from 'react';
 import { useAccount } from 'wagmi';
-import { NetworksMenu, Account, WalletSelector } from '../../Web3';
+import { NetworksMenu, Account, WalletSelector } from 'components/Web3';
 
 const Header = () => {
   const [{ data }] = useAccount();

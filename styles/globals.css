@@ -29,4 +29,24 @@
   .nav-button {
     @apply rounded-lg bg-zinc-100 py-2 px-3 dark:bg-zinc-800;
   }
+
+  .animate-shimmer {
+    animation: shimmer 2s cubic-bezier(0.31, 0.29, 0.62, 0.59) infinite;
+    background: linear-gradient(to right, #eff1f3 5%, #eaeaea 20%, #eff1f3 40%);
+    background-size: 1000px 100%;
+  }
+
+  .dark .animate-shimmer {
+    background: linear-gradient(to right, #3a3a3a 5%, #4a4a4a 20%, #3a3a3a 40%);
+    background-size: 1000px 100%;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: -1000px 0;
+    }
+    100% {
+      background-position: 1000px 0;
+    }
+  }
 }

@@ -1,9 +1,9 @@
 import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment } from 'react';
 import { Connector, useAccount, useConnect } from 'wagmi';
-import { useIsMounted } from '../../hooks';
+import { useIsMounted } from 'hooks';
 import { XIcon } from '@heroicons/react/solid';
-import { formatAddress } from '../../lib/address';
+import { formatAddress } from 'lib/address';
 
 interface Props {
   isOpen: boolean;

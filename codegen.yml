@@ -1,0 +1,11 @@
+overwrite: true
+schema: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay'
+documents: './services/graphql/**/*.graphql'
+generates:
+  ./services/generated/graphql.tsx:
+    config:
+      withHooks: true
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-urql

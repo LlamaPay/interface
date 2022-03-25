@@ -1,0 +1,46 @@
+query StreamAndHistory {
+  user(id: "0xfe5ee99fdbccfada674a3b85ef653b3ce4656e13") {
+    streams(orderBy: createdTimestamp, orderDirection: desc) {
+      ...UserStream
+    }
+    historicalEvents(orderBy: createdTimestamp, orderDirection: desc) {
+      eventType
+      stream {
+        streamId
+        payer {
+          id
+        }
+        payee {
+          id
+        }
+        token
+        amountPerSec
+      }
+      oldStream {
+        streamId
+        payer {
+          id
+        }
+        payee {
+          id
+        }
+        token
+        amountPerSec
+      }
+      createdTimestamp
+    }
+  }
+}
+
+fragment UserStream on Stream {
+  streamId
+  payer {
+    id
+  }
+  payee {
+    id
+  }
+  token
+  amountPerSec
+  createdTimestamp
+}
