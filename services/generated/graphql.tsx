@@ -1,11 +1,28 @@
-import gql from 'graphql-tag';
-import * as Urql from 'urql';
+import { useQuery, UseQueryOptions } from 'react-query';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
+
+function fetcher<TData, TVariables>(query: string, variables?: TVariables) {
+  return async (): Promise<TData> => {
+    const res = await fetch("https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay", {
+    method: "POST",
+      body: JSON.stringify({ query, variables }),
+    });
+
+    const json = await res.json();
+
+    if (json.errors) {
+      const { message } = json.errors[0];
+
+      throw new Error(message);
+    }
+
+    return json.data;
+  }
+}
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -818,7 +835,7 @@ export type StreamAndHistoryQuery = { __typename?: 'Query', user?: { __typename?
 
 export type UserStreamFragment = { __typename?: 'Stream', streamId: any, token: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string } };
 
-export const UserStreamFragmentDoc = gql`
+export const UserStreamFragmentDoc = `
     fragment UserStream on Stream {
   streamId
   payer {
@@ -832,7 +849,7 @@ export const UserStreamFragmentDoc = gql`
   createdTimestamp
 }
     `;
-export const StreamAndHistoryDocument = gql`
+export const StreamAndHistoryDocument = `
     query StreamAndHistory {
   user(id: "0xfe5ee99fdbccfada674a3b85ef653b3ce4656e13") {
     streams(orderBy: createdTimestamp, orderDirection: desc) {
@@ -867,7 +884,15 @@ export const StreamAndHistoryDocument = gql`
   }
 }
     ${UserStreamFragmentDoc}`;
-
-export function useStreamAndHistoryQuery(options?: Omit<Urql.UseQueryArgs<StreamAndHistoryQueryVariables>, 'query'>) {
-  return Urql.useQuery<StreamAndHistoryQuery>({ query: StreamAndHistoryDocument, ...options });
-};
+export const useStreamAndHistoryQuery = <
+      TData = StreamAndHistoryQuery,
+      TError = unknown
+    >(
+      variables?: StreamAndHistoryQueryVariables,
+      options?: UseQueryOptions<StreamAndHistoryQuery, TError, TData>
+    ) =>
+    useQuery<StreamAndHistoryQuery, TError, TData>(
+      variables === undefined ? ['StreamAndHistory'] : ['StreamAndHistory', variables],
+      fetcher<StreamAndHistoryQuery, StreamAndHistoryQueryVariables>(StreamAndHistoryDocument, variables),
+      options
+    );

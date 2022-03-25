@@ -3,9 +3,10 @@ schema: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay'
 documents: './services/graphql/**/*.graphql'
 generates:
   ./services/generated/graphql.tsx:
-    config:
-      withHooks: true
     plugins:
       - typescript
       - typescript-operations
-      - typescript-urql
+      - typescript-react-query
+    config:
+      fetcher:
+        endpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay'
