@@ -59,6 +59,7 @@ export type HistoryEvent = {
   id: Scalars['ID'];
   oldStream?: Maybe<Stream>;
   stream: Stream;
+  txHash: Scalars['Bytes'];
   users: Array<User>;
 };
 
@@ -156,6 +157,12 @@ export type HistoryEvent_Filter = {
   stream_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   stream_starts_with?: InputMaybe<Scalars['String']>;
   stream_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  txHash?: InputMaybe<Scalars['Bytes']>;
+  txHash_contains?: InputMaybe<Scalars['Bytes']>;
+  txHash_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  txHash_not?: InputMaybe<Scalars['Bytes']>;
+  txHash_not_contains?: InputMaybe<Scalars['Bytes']>;
+  txHash_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
   users?: InputMaybe<Array<Scalars['String']>>;
   users_contains?: InputMaybe<Array<Scalars['String']>>;
   users_contains_nocase?: InputMaybe<Array<Scalars['String']>>;
@@ -171,6 +178,7 @@ export enum HistoryEvent_OrderBy {
   Id = 'id',
   OldStream = 'oldStream',
   Stream = 'stream',
+  TxHash = 'txHash',
   Users = 'users'
 }
 
@@ -828,6 +836,11 @@ export enum _SubgraphErrorPolicy_ {
   Deny = 'deny'
 }
 
+export type GetAllTokensQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetAllTokensQuery = { __typename?: 'Query', llamaPayFactories: Array<{ __typename?: 'LlamaPayFactory', contracts: Array<{ __typename?: 'LlamaPayContract', address: any, token: any }> }> };
+
 export type StreamAndHistoryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -849,6 +862,28 @@ export const UserStreamFragmentDoc = `
   createdTimestamp
 }
     `;
+export const GetAllTokensDocument = `
+    query GetAllTokens {
+  llamaPayFactories(orderBy: id) {
+    contracts {
+      address
+      token
+    }
+  }
+}
+    `;
+export const useGetAllTokensQuery = <
+      TData = GetAllTokensQuery,
+      TError = unknown
+    >(
+      variables?: GetAllTokensQueryVariables,
+      options?: UseQueryOptions<GetAllTokensQuery, TError, TData>
+    ) =>
+    useQuery<GetAllTokensQuery, TError, TData>(
+      variables === undefined ? ['GetAllTokens'] : ['GetAllTokens', variables],
+      fetcher<GetAllTokensQuery, GetAllTokensQueryVariables>(GetAllTokensDocument, variables),
+      options
+    );
 export const StreamAndHistoryDocument = `
     query StreamAndHistory {
   user(id: "0xfe5ee99fdbccfada674a3b85ef653b3ce4656e13") {

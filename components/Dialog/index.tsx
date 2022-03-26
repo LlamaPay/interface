@@ -1,6 +1,7 @@
 import { Dialog, Transition } from '@headlessui/react';
 import React, { Fragment } from 'react';
 import { XIcon } from '@heroicons/react/solid';
+import classNames from 'classnames';
 
 export type SetIsOpen = React.Dispatch<React.SetStateAction<boolean>>;
 
@@ -8,6 +9,7 @@ interface DialogProps {
   isOpen: boolean;
   setIsOpen: SetIsOpen;
   children: React.ReactNode;
+  className?: string;
 }
 
 interface DialogHeaderProps {
@@ -19,10 +21,10 @@ function closeModal(setIsOpen: SetIsOpen) {
   setIsOpen(false);
 }
 
-export const DialogWrapper = ({ isOpen, setIsOpen, children }: DialogProps) => {
+export const DialogWrapper = ({ isOpen, setIsOpen, children, className }: DialogProps) => {
   return (
     <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto " onClose={() => closeModal(setIsOpen)}>
+      <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={() => closeModal(setIsOpen)}>
         <div className="min-h-screen px-4 text-center">
           <Transition.Child
             as={Fragment}
@@ -49,7 +51,12 @@ export const DialogWrapper = ({ isOpen, setIsOpen, children }: DialogProps) => {
             leaveFrom="opacity-100 scale-100"
             leaveTo="opacity-0 scale-95"
           >
-            <div className="my-8 inline-block w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-6 text-left align-middle shadow-lg transition-all dark:bg-black dark:shadow-[#060606]">
+            <div
+              className={classNames(
+                'my-8 inline-block w-full max-w-md transform overflow-hidden overflow-y-visible rounded-2xl bg-white p-6 text-left align-middle shadow-lg transition-all dark:bg-black dark:shadow-[#060606]',
+                className
+              )}
+            >
               {children}
             </div>
           </Transition.Child>

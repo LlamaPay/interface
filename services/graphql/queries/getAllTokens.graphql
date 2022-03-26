@@ -1,0 +1,8 @@
+query GetAllTokens {
+  llamaPayFactories(orderBy: id) {
+    contracts {
+      address
+      token
+    }
+  }
+}

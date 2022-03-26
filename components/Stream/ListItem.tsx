@@ -12,7 +12,7 @@ interface ItemProps {
 }
 
 interface StreamProps {
-  amount: number | null;
+  totalStreamed: number | null;
   address: string;
   ticker?: string;
   tokenLogo: TokenLogo;
@@ -23,7 +23,8 @@ type TokenLogo = React.MutableRefObject<string | StaticImageData>;
 // TODO cleanup all hardcoded values
 export const ListItem = ({ data }: ItemProps) => {
   const isIncoming = data.payer?.id !== '0xfe5ee99fdbccfada674a3b85ef653b3ce4656e13';
-  const [amount, setTotalStreamed] = React.useState<number | null>(null);
+
+  const [totalStreamed, setTotalStreamed] = React.useState<number | null>(null);
 
   // TODO and handle error and loading states
   // const { data: tokenDetails } = useTokenPrice('0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2');
@@ -36,6 +37,11 @@ export const ListItem = ({ data }: ItemProps) => {
   }, [data]);
 
   React.useEffect(() => {
+    if (isDataValid) {
+      const totalAmount = (((Date.now() - createdAt) / 1000) * amountPerSec) / 1e18;
+      setTotalStreamed(totalAmount);
+    } else setTotalStreamed(null);
+
     const interval = setInterval(() => {
       if (isDataValid) {
         const totalAmount = (((Date.now() - createdAt) / 1000) * amountPerSec) / 1e18;
@@ -55,15 +61,15 @@ export const ListItem = ({ data }: ItemProps) => {
   return (
     <li key={data.streamId} className="flex flex-col space-y-2 sm:flex-row sm:space-y-0">
       {isIncoming ? (
-        <IncomingStream amount={amount} address={data.payer.id} tokenLogo={tokenLogo} />
+        <IncomingStream totalStreamed={totalStreamed} address={data.payer.id} tokenLogo={tokenLogo} />
       ) : (
-        <OutgoingStream amount={amount} address={data.payee.id} tokenLogo={tokenLogo} />
+        <OutgoingStream totalStreamed={totalStreamed} address={data.payee.id} tokenLogo={tokenLogo} />
       )}
     </li>
   );
 };
 
-const IncomingStream = ({ amount, address, ticker = 'Unknown token', tokenLogo }: StreamProps) => {
+const IncomingStream = ({ totalStreamed, address, ticker = 'Unknown token', tokenLogo }: StreamProps) => {
   return (
     <>
       <div className="mr-2 flex flex-1 items-center space-x-2">
@@ -76,7 +82,7 @@ const IncomingStream = ({ amount, address, ticker = 'Unknown token', tokenLogo }
         <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">{formatAddress(address)}</span>
       </div>
 
-      {amount && (
+      {totalStreamed && (
         <div className="flex items-baseline space-x-1 slashed-zero tabular-nums">
           <div className="relative top-[2px] h-6 w-6 self-end">
             <Tooltip content={ticker}>
@@ -91,8 +97,11 @@ const IncomingStream = ({ amount, address, ticker = 'Unknown token', tokenLogo }
               />
             </Tooltip>
           </div>
-          {/* TODO handle internalization and decimals when amount is not USD */}
-          <span>{`+${amount.toLocaleString('en-US', { maximumFractionDigits: 8, minimumFractionDigits: 8 })}`}</span>
+          {/* TODO handle internalization and decimals when totalStreamed is not USD */}
+          <span>{`+${totalStreamed.toLocaleString('en-US', {
+            maximumFractionDigits: 8,
+            minimumFractionDigits: 8,
+          })}`}</span>
           <span className="text-xs text-gray-500 dark:text-gray-400">so far</span>
           <span>
             <svg
@@ -113,7 +122,7 @@ const IncomingStream = ({ amount, address, ticker = 'Unknown token', tokenLogo }
   );
 };
 
-const OutgoingStream = ({ amount, address, ticker = 'Unknown token', tokenLogo }: StreamProps) => {
+const OutgoingStream = ({ totalStreamed, address, ticker = 'Unknown token', tokenLogo }: StreamProps) => {
   return (
     <>
       <div className="mr-2 flex flex-1 items-center space-x-2">
@@ -125,7 +134,7 @@ const OutgoingStream = ({ amount, address, ticker = 'Unknown token', tokenLogo }
         </Tooltip>
         <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">{formatAddress(address)}</span>
       </div>
-      {amount && (
+      {totalStreamed && (
         <div className="flex items-baseline space-x-1 slashed-zero tabular-nums">
           <div className="relative top-[2px] h-6 w-6 self-end">
             <Tooltip content={ticker}>
@@ -140,7 +149,10 @@ const OutgoingStream = ({ amount, address, ticker = 'Unknown token', tokenLogo }
               />
             </Tooltip>
           </div>
-          <span>{`-${amount.toLocaleString('en-US', { maximumFractionDigits: 8, minimumFractionDigits: 8 })}`}</span>
+          <span>{`-${totalStreamed.toLocaleString('en-US', {
+            maximumFractionDigits: 8,
+            minimumFractionDigits: 8,
+          })}`}</span>
           <span className="text-xs text-gray-500 dark:text-gray-400">so far</span>
           <span>
             <svg

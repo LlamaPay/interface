@@ -49,4 +49,12 @@
       background-position: 1000px 0;
     }
   }
+
+  .dark .react-select__menu {
+    background: #27272a;
+  }
+
+  .dark .react-select__option:hover {
+    background: #3f3f46 !important;
+  }
 }
