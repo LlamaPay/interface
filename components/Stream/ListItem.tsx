@@ -92,7 +92,7 @@ const IncomingStream = ({ amount, address, ticker = 'Unknown token', tokenLogo }
               />
             </div>
           </Tooltip>
-          <span>{`+${amount.toFixed(2)}`}</span>
+          <span>{`+${amount.toLocaleString("en-US", {maximumFractionDigits:2, minimumFractionDigits: 2})}`}</span>
           <span className="text-xs text-gray-500 dark:text-gray-400">so far</span>
           <span>
             <svg
@@ -140,7 +140,7 @@ const OutgoingStream = ({ amount, address, ticker = 'Unknown token', tokenLogo }
               />
             </div>
           </Tooltip>
-          <span>{`-${amount.toFixed(2)}`}</span>
+          <span>{`-${amount.toLocaleString("en-US", {maximumFractionDigits:2, minimumFractionDigits: 2})}`}</span>
           <span className="text-xs text-gray-500 dark:text-gray-400">so far</span>
           <span>
             <svg
