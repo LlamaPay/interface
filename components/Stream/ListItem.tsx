@@ -6,7 +6,6 @@ import { useTokenPrice } from 'queries/useTokenPrice';
 import EmptyToken from 'public/empty-token.webp';
 import Image from 'next/image';
 import Tooltip from 'components/Tooltip';
-import { getAddress } from 'ethers/lib/utils';
 
 interface ItemProps {
   data: UserStreamFragment;
@@ -24,7 +23,7 @@ type TokenLogo = React.MutableRefObject<string | StaticImageData>;
 // TODO cleanup all hardcoded values
 export const ListItem = ({ data }: ItemProps) => {
   const isIncoming = data.payer?.id !== '0xfe5ee99fdbccfada674a3b85ef653b3ce4656e13';
-  const [amount, setAmount] = React.useState<number | null>(null);
+  const [amount, setTotalStreamed] = React.useState<number | null>(null);
 
   // TODO and handle error and loading states
   // const { data: tokenDetails } = useTokenPrice('0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2');
@@ -39,14 +38,14 @@ export const ListItem = ({ data }: ItemProps) => {
   React.useEffect(() => {
     const interval = setInterval(() => {
       if (isDataValid) {
-        setAmount(((Date.now() - createdAt) / 1000) * amountPerSec);
-      } else setAmount(null);
+        const totalAmount = (((Date.now() - createdAt) / 1000) * amountPerSec) / 1e18;
+        setTotalStreamed(totalAmount);
+      } else setTotalStreamed(null);
     }, 1000);
     return () => clearInterval(interval);
   }, [createdAt, amountPerSec, isDataValid]);
 
   // const token = tokenDetails?.coins['ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'];
-
   // const tokenAddress = React.useMemo(() => getAddress('0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'), []);
 
   const tokenLogo: TokenLogo = React.useRef(
@@ -78,9 +77,9 @@ const IncomingStream = ({ amount, address, ticker = 'Unknown token', tokenLogo }
       </div>
 
       {amount && (
-        <div className="flex items-baseline space-x-1 tabular-nums">
-          <Tooltip content={ticker}>
-            <div className="relative top-1 flex">
+        <div className="flex items-baseline space-x-1 slashed-zero tabular-nums">
+          <div className="relative top-[2px] h-6 w-6 self-end">
+            <Tooltip content={ticker}>
               <Image
                 src={tokenLogo.current}
                 onError={() => {
@@ -90,9 +89,10 @@ const IncomingStream = ({ amount, address, ticker = 'Unknown token', tokenLogo }
                 width="20px"
                 height="20px"
               />
-            </div>
-          </Tooltip>
-          <span>{`+${amount.toLocaleString("en-US", {maximumFractionDigits:2, minimumFractionDigits: 2})}`}</span>
+            </Tooltip>
+          </div>
+          {/* TODO handle internalization and decimals when amount is not USD */}
+          <span>{`+${amount.toLocaleString('en-US', { maximumFractionDigits: 8, minimumFractionDigits: 8 })}`}</span>
           <span className="text-xs text-gray-500 dark:text-gray-400">so far</span>
           <span>
             <svg
@@ -126,9 +126,9 @@ const OutgoingStream = ({ amount, address, ticker = 'Unknown token', tokenLogo }
         <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">{formatAddress(address)}</span>
       </div>
       {amount && (
-        <div className="flex items-baseline space-x-1 tabular-nums">
-          <Tooltip content={ticker}>
-            <div className="relative top-1 flex">
+        <div className="flex items-baseline space-x-1 slashed-zero tabular-nums">
+          <div className="relative top-[2px] h-6 w-6 self-end">
+            <Tooltip content={ticker}>
               <Image
                 src={tokenLogo.current}
                 onError={() => {
@@ -138,9 +138,9 @@ const OutgoingStream = ({ amount, address, ticker = 'Unknown token', tokenLogo }
                 width="20px"
                 height="20px"
               />
-            </div>
-          </Tooltip>
-          <span>{`-${amount.toLocaleString("en-US", {maximumFractionDigits:2, minimumFractionDigits: 2})}`}</span>
+            </Tooltip>
+          </div>
+          <span>{`-${amount.toLocaleString('en-US', { maximumFractionDigits: 8, minimumFractionDigits: 8 })}`}</span>
           <span className="text-xs text-gray-500 dark:text-gray-400">so far</span>
           <span>
             <svg
