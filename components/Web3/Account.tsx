@@ -1,5 +1,5 @@
 import { useAccount } from 'wagmi';
-import { formatAddress } from 'lib/address';
+import { formatAddress } from 'utils/address';
 
 interface Props {
   showAccountInfo: () => void;

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { UserStreamFragment } from 'services/generated/graphql';
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid';
-import { formatAddress } from 'lib/address';
+import { formatAddress } from 'utils/address';
 import { useTokenPrice } from 'queries/useTokenPrice';
 import EmptyToken from 'public/empty-token.webp';
 import Image from 'next/image';
