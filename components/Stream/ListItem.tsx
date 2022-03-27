@@ -36,20 +36,21 @@ export const ListItem = ({ data }: ItemProps) => {
     return { createdAt, amountPerSec, isDataValid };
   }, [data]);
 
-  React.useEffect(() => {
+  const updateStreamed = React.useCallback(() => {
     if (isDataValid) {
       const totalAmount = (((Date.now() - createdAt) / 1000) * amountPerSec) / 1e18;
       setTotalStreamed(totalAmount);
     } else setTotalStreamed(null);
+  }, [amountPerSec, createdAt, isDataValid]);
+
+  React.useEffect(() => {
+    updateStreamed();
 
     const interval = setInterval(() => {
-      if (isDataValid) {
-        const totalAmount = (((Date.now() - createdAt) / 1000) * amountPerSec) / 1e18;
-        setTotalStreamed(totalAmount);
-      } else setTotalStreamed(null);
+      updateStreamed();
     }, 1000);
     return () => clearInterval(interval);
-  }, [createdAt, amountPerSec, isDataValid]);
+  }, [updateStreamed]);
 
   // const token = tokenDetails?.coins['ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'];
   // const tokenAddress = React.useMemo(() => getAddress('0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'), []);

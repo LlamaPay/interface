@@ -10,6 +10,7 @@ const Header = () => {
   const [openWalletSelector, setDisplaySelector] = React.useState(false);
   const router = useRouter();
 
+  // TODO fix mobile layout
   return (
     <header>
       <nav className="flex flex-1 items-baseline justify-end space-x-2 p-2 text-base">
