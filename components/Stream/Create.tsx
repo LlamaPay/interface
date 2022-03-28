@@ -16,8 +16,8 @@ export const Create = () => {
   const isDark = resolvedTheme === 'dark';
 
   return (
-    <form className="z-20 mx-auto mt-4 max-w-lg">
-      <h1 className="my-4 text-center text-xl">Create a new stream</h1>
+    <form className="z-2 w-full max-w-lg">
+      <h1 className="mb-3 text-center text-xl">Create a new stream</h1>
       <label className="flex flex-col space-y-2">
         <span>Select a Token</span>
         <Select
@@ -31,9 +31,11 @@ export const Create = () => {
               primary: '#3f3f46',
             },
           })}
-          onChange={c => setSelectedToken(c?.value)}
+          name="tokenAddress"
+          onChange={(c) => setSelectedToken(c?.value)}
         />
       </label>
+      <button className="nav-button mx-auto mt-2">Create Stream</button>
     </form>
   );
 };

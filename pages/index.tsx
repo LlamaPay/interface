@@ -5,19 +5,9 @@ import { HistoryList } from 'components/History';
 
 const Home: NextPage = () => {
   return (
-    <Layout>
-      <div className="flex items-center space-x-4">
-        <h1>Streams</h1>
-      </div>
-      <div className="mt-2 flex flex-col border dark:border-zinc-800">
-        <StreamList />
-      </div>
-      <div className="flex items-center space-x-4">
-        <h1>History</h1>
-      </div>
-      <div className="mt-2 flex flex-col border dark:border-zinc-800">
-        <HistoryList />
-      </div>
+    <Layout className="mx-auto mt-12 flex w-full max-w-7xl flex-col items-center space-y-6">
+      <StreamList />
+      <HistoryList />
     </Layout>
   );
 };

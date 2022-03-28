@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { useGetPayerBalance } from 'queries/useGetPayerBalance';
 import { useGetAllTokensQuery } from 'services/generated/graphql';
 import { createContract } from 'utils/contract';
-import { formatAddress } from 'utils/address';
+import PlaceholderList from './PlaceholderList';
+import BalanceList from './BalanceList';
 
 const Balance = () => {
   //TODO handle error and loading states
-  const { data: tokens } = useGetAllTokensQuery();
+  const { data: tokens, isLoading, error } = useGetAllTokensQuery();
 
   const tokenContracts = React.useMemo(() => {
     return (
@@ -18,24 +18,18 @@ const Balance = () => {
     );
   }, [tokens]);
 
-  const { data = [], refetch } = useGetPayerBalance('0xFE5eE99FDbcCFAda674A3b85EF653b3CE4656e13', tokenContracts);
-
-  React.useEffect(() => {
-    if (tokenContracts.length > 0) refetch();
-  }, [tokenContracts, refetch]);
-
   return (
-    <section>
-      <h1 className="text-center text-xl">Balances</h1>
-      <ul className="mx-auto max-w-2xl">
-        {data?.map((d) => (
-          <li key={d.token} className="flex justify-between space-x-2 border p-2">
-            <p className="truncate">{formatAddress(d.token)}</p>
-            {/* TODO handle decimals */}
-            <p>{d.amount}</p>
-          </li>
-        ))}
-      </ul>
+    <section className="w-full max-w-lg">
+      <h1 className="mb-3 text-center text-xl">Balances</h1>
+      {error ? (
+        <div className="mx-auto min-h-[44px] max-w-2xl border p-2">
+          <p className="text-center text-sm text-red-500">Something went wrong!</p>
+        </div>
+      ) : (
+        <ul className="mx-auto min-h-[44px] max-w-2xl space-y-3 border p-2">
+          {isLoading ? <PlaceholderList /> : <BalanceList contracts={tokenContracts} />}
+        </ul>
+      )}
     </section>
   );
 };

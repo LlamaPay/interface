@@ -10,11 +10,14 @@ export const List = () => {
   if (error) return <p className="mx-2 my-4 text-center text-red-500">Error loading data</p>;
 
   return (
-    <ul className="isolate flex flex-col space-y-4 rounded p-2">
-      {data?.user?.streams.map((stream) => (
-        <ListItem key={stream.streamId} data={stream} />
-      ))}
-    </ul>
+    <section className="w-full max-w-lg">
+      <h1 className="mb-3 text-center text-xl">Streams</h1>
+      <ul className="isolate flex flex-col space-y-4 rounded border p-2 dark:border-zinc-800">
+        {data?.user?.streams.map((stream) => (
+          <ListItem key={stream.streamId} data={stream} />
+        ))}
+      </ul>
+    </section>
   );
 };
 

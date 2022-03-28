@@ -10,11 +10,14 @@ export const List = () => {
   if (error) return <p className="mx-2 my-4 text-center text-red-500">Error loading data</p>;
 
   return (
-    <ul className="isolate flex flex-col space-y-4 rounded p-2">
-      {data?.user?.historicalEvents.map((historyEvent) => (
-        <ListItem key={historyEvent.txHash} data={historyEvent} />
-      ))}
-    </ul>
+    <section className="w-fit max-w-7xl">
+      <h1 className="mb-3 text-center text-xl">History</h1>
+      <ul className="isolate flex flex-col space-y-4 rounded border p-2">
+        {data?.user?.historicalEvents.map((historyEvent) => (
+          <ListItem key={historyEvent.txHash} data={historyEvent} />
+        ))}
+      </ul>
+    </section>
   );
 };
 
