@@ -9,7 +9,7 @@ export const List = () => {
   const [{ data: accountData }] = useAccount();
   // TODO handle error and loading states
   const { data, error, isLoading } = useStreamAndHistoryQuery({
-    id: accountData?.address ?? '',
+    id: accountData?.address.toLowerCase() ?? '',
   });
 
   const history = React.useMemo(() => {

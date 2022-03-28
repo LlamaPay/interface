@@ -7,7 +7,7 @@ import { ListItem } from './ListItem';
 export const List = () => {
   const [{ data: accountData }] = useAccount();
   const { data, error, isLoading } = useStreamAndHistoryQuery({
-    id: accountData?.address ?? '',
+    id: accountData?.address.toLowerCase() ?? '',
   });
 
   const streams = React.useMemo(() => {

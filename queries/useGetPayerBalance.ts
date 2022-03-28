@@ -32,7 +32,7 @@ const fetchBalance = async (id: string, contracts: Contract[]): Promise<Balance[
 
 export function useGetPayerBalance(contracts: Contract[]) {
   const [{ data: accountData }] = useAccount();
-  const payerAddress = accountData?.address ?? '';
+  const payerAddress = accountData?.address.toLowerCase() ?? '';
   return useQuery(['payerBalance', payerAddress], () => fetchBalance(payerAddress, contracts), {
     refetchInterval: 10000,
   });
