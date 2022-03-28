@@ -1,5 +1,5 @@
-query StreamAndHistory {
-  user(id: "0xfe5ee99fdbccfada674a3b85ef653b3ce4656e13") {
+query StreamAndHistory($id: ID!) {
+  user(id: $id) {
     streams(orderBy: createdTimestamp, orderDirection: desc) {
       ...UserStream
     }

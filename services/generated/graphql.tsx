@@ -841,7 +841,9 @@ export type GetAllTokensQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetAllTokensQuery = { __typename?: 'Query', llamaPayFactories: Array<{ __typename?: 'LlamaPayFactory', contracts: Array<{ __typename?: 'LlamaPayContract', address: any, token: any }> }> };
 
-export type StreamAndHistoryQueryVariables = Exact<{ [key: string]: never; }>;
+export type StreamAndHistoryQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
 
 
 export type StreamAndHistoryQuery = { __typename?: 'Query', user?: { __typename?: 'User', streams: Array<{ __typename?: 'Stream', streamId: any, token: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string } }>, historicalEvents: Array<{ __typename?: 'HistoryEvent', txHash: any, eventType: string, createdTimestamp: any, stream: { __typename?: 'Stream', streamId: any, token: any, amountPerSec: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string } }, oldStream?: { __typename?: 'Stream', streamId: any, token: any, amountPerSec: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string } } | null }> } | null };
@@ -916,8 +918,8 @@ export const useGetAllTokensQuery = <
       options
     );
 export const StreamAndHistoryDocument = `
-    query StreamAndHistory {
-  user(id: "0xfe5ee99fdbccfada674a3b85ef653b3ce4656e13") {
+    query StreamAndHistory($id: ID!) {
+  user(id: $id) {
     streams(orderBy: createdTimestamp, orderDirection: desc) {
       ...UserStream
     }
@@ -932,11 +934,11 @@ export const useStreamAndHistoryQuery = <
       TData = StreamAndHistoryQuery,
       TError = unknown
     >(
-      variables?: StreamAndHistoryQueryVariables,
+      variables: StreamAndHistoryQueryVariables,
       options?: UseQueryOptions<StreamAndHistoryQuery, TError, TData>
     ) =>
     useQuery<StreamAndHistoryQuery, TError, TData>(
-      variables === undefined ? ['StreamAndHistory'] : ['StreamAndHistory', variables],
+      ['StreamAndHistory', variables],
       fetcher<StreamAndHistoryQuery, StreamAndHistoryQueryVariables>(StreamAndHistoryDocument, variables),
       options
     );

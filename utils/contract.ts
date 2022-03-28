@@ -7,8 +7,6 @@ export const provider = new ethers.providers.JsonRpcProvider(
   `https://rinkeby.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
 );
 
-export const createContract = (cId: string) => new ethers.Contract(getAddress(cId), llamapayABI, provider);
-
 export const llamapayABI = [
   { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
   {
@@ -231,3 +229,99 @@ export const llamapayABI = [
     type: 'function',
   },
 ];
+
+export const factoryABI = [
+  { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, internalType: 'address', name: 'oldOwner', type: 'address' },
+      { indexed: false, internalType: 'address', name: 'newOwner', type: 'address' },
+    ],
+    name: 'ApplyTransferOwnership',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [{ indexed: false, internalType: 'address', name: 'futureOwner', type: 'address' }],
+    name: 'CommitTransferOwnership',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, internalType: 'address', name: 'token', type: 'address' },
+      { indexed: false, internalType: 'address', name: 'llamaPay', type: 'address' },
+    ],
+    name: 'LlamaPayCreated',
+    type: 'event',
+  },
+  { inputs: [], name: 'applyTransferOwnership', outputs: [], stateMutability: 'nonpayable', type: 'function' },
+  {
+    inputs: [{ internalType: 'address', name: '_futureOwner', type: 'address' }],
+    name: 'commitTransferOwnership',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'address', name: '_token', type: 'address' }],
+    name: 'createLlamaPayContract',
+    outputs: [{ internalType: 'address', name: 'llamaPayContract', type: 'address' }],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'futureOwner',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    name: 'getLlamaPayContractByIndex',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'address', name: '_token', type: 'address' }],
+    name: 'getLlamaPayContractByToken',
+    outputs: [
+      { internalType: 'address', name: 'predictedAddress', type: 'address' },
+      { internalType: 'bool', name: 'isDeployed', type: 'bool' },
+    ],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'getLlamaPayContractCount',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'owner',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'parameter',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+];
+
+export const createContract = (cId: string) => new ethers.Contract(getAddress(cId), llamapayABI, provider);
+
+export const llamapayFactory = new ethers.Contract(
+  getAddress('0xF7410203fe4B7D8595DA5211b52e5Dde405ea301'),
+  factoryABI,
+  provider
+);

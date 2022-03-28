@@ -1,33 +1,32 @@
+import * as React from 'react';
+import FallbackList from 'components/FallbackList';
 import { useStreamAndHistoryQuery } from 'services/generated/graphql';
+import { useAccount } from 'wagmi';
 import { ListItem } from './ListItem';
 
 export const List = () => {
-  // TODO handle error and loading states
-  const { data, error, isLoading } = useStreamAndHistoryQuery();
+  const [{ data: accountData }] = useAccount();
+  const { data, error, isLoading } = useStreamAndHistoryQuery({
+    id: accountData?.address ?? '',
+  });
 
-  if (isLoading) return <Shimmers />;
-
-  if (error) return <p className="mx-2 my-4 text-center text-red-500">Error loading data</p>;
+  const streams = React.useMemo(() => {
+    return data?.user?.streams ?? null;
+  }, [data]);
 
   return (
-    <section className="w-full max-w-lg">
+    <section className="min-h-[44px] w-full max-w-lg">
       <h1 className="mb-3 text-center text-xl">Streams</h1>
-      <ul className="isolate flex flex-col space-y-4 rounded border p-2 dark:border-zinc-800">
-        {data?.user?.streams.map((stream) => (
-          <ListItem key={stream.streamId} data={stream} />
-        ))}
-      </ul>
-    </section>
-  );
-};
 
-const Shimmers = () => {
-  return (
-    <ul>
-      <li className="animate-shimmer m-2 h-5 bg-gray-400"></li>
-      <li className="animate-shimmer m-2 h-5 bg-gray-400"></li>
-      <li className="animate-shimmer m-2 h-5 bg-gray-400"></li>
-      <li className="animate-shimmer m-2 h-5 bg-gray-400"></li>
-    </ul>
+      {isLoading || !streams || error ? (
+        <FallbackList isLoading={isLoading} data={streams} error={error} noDataText="No streams yet" />
+      ) : (
+        <ul className="isolate flex flex-col space-y-4 rounded border p-2">
+          {streams.map((stream) => (
+            <ListItem key={stream.streamId} data={stream} />
+          ))}
+        </ul>
+      )}
+    </section>
   );
 };

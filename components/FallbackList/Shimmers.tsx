@@ -1,4 +1,4 @@
-const PlaceholderList = () => {
+const Shimmers = () => {
   return (
     <>
       {Array(4)
@@ -10,4 +10,4 @@ const PlaceholderList = () => {
   );
 };
 
-export default PlaceholderList;
+export default Shimmers;
