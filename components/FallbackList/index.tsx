@@ -10,10 +10,10 @@ const FallbackList = ({ isLoading, data, error, noDataText }: FallbackProps) => 
     <>
       {isLoading ? (
         <ul className="space-y-4 rounded border p-2">
-          <li className="animate-shimmer m-2 h-5 bg-gray-400"></li>
-          <li className="animate-shimmer m-2 h-5 bg-gray-400"></li>
-          <li className="animate-shimmer m-2 h-5 bg-gray-400"></li>
-          <li className="animate-shimmer m-2 h-5 bg-gray-400"></li>
+          <li className="animate-shimmer h-5 bg-gray-400"></li>
+          <li className="animate-shimmer h-5 bg-gray-400"></li>
+          <li className="animate-shimmer h-5 bg-gray-400"></li>
+          <li className="animate-shimmer h-5 bg-gray-400"></li>
         </ul>
       ) : (
         <div className="rounded border p-2 dark:border-zinc-800">
