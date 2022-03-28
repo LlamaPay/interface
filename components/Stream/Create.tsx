@@ -6,6 +6,7 @@ import { useTheme } from 'next-themes';
 export const Create = () => {
   // TODO handle error and loading states
   const { data } = useGetAllTokensQuery();
+  const [selectedToken, setSelectedToken] = React.useState<string | null>(null);
 
   const contracts = React.useMemo(() => {
     return data?.llamaPayFactories[0]?.contracts?.map((c) => ({ value: c.address, label: c.token })) ?? [];
@@ -30,6 +31,7 @@ export const Create = () => {
               primary: '#3f3f46',
             },
           })}
+          onChange={c => setSelectedToken(c?.value)}
         />
       </label>
     </form>
