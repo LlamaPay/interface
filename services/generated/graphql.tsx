@@ -844,9 +844,11 @@ export type GetAllTokensQuery = { __typename?: 'Query', llamaPayFactories: Array
 export type StreamAndHistoryQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StreamAndHistoryQuery = { __typename?: 'Query', user?: { __typename?: 'User', streams: Array<{ __typename?: 'Stream', streamId: any, token: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string } }>, historicalEvents: Array<{ __typename?: 'HistoryEvent', eventType: string, createdTimestamp: any, stream: { __typename?: 'Stream', streamId: any, token: any, amountPerSec: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string } }, oldStream?: { __typename?: 'Stream', streamId: any, token: any, amountPerSec: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string } } | null }> } | null };
+export type StreamAndHistoryQuery = { __typename?: 'Query', user?: { __typename?: 'User', streams: Array<{ __typename?: 'Stream', streamId: any, token: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string } }>, historicalEvents: Array<{ __typename?: 'HistoryEvent', txHash: any, eventType: string, createdTimestamp: any, stream: { __typename?: 'Stream', streamId: any, token: any, amountPerSec: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string } }, oldStream?: { __typename?: 'Stream', streamId: any, token: any, amountPerSec: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string } } | null }> } | null };
 
 export type UserStreamFragment = { __typename?: 'Stream', streamId: any, token: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string } };
+
+export type UserHistoryFragment = { __typename?: 'HistoryEvent', txHash: any, eventType: string, createdTimestamp: any, stream: { __typename?: 'Stream', streamId: any, token: any, amountPerSec: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string } }, oldStream?: { __typename?: 'Stream', streamId: any, token: any, amountPerSec: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string } } | null };
 
 export const UserStreamFragmentDoc = `
     fragment UserStream on Stream {
@@ -859,6 +861,35 @@ export const UserStreamFragmentDoc = `
   }
   token
   amountPerSec
+  createdTimestamp
+}
+    `;
+export const UserHistoryFragmentDoc = `
+    fragment UserHistory on HistoryEvent {
+  txHash
+  eventType
+  stream {
+    streamId
+    payer {
+      id
+    }
+    payee {
+      id
+    }
+    token
+    amountPerSec
+  }
+  oldStream {
+    streamId
+    payer {
+      id
+    }
+    payee {
+      id
+    }
+    token
+    amountPerSec
+  }
   createdTimestamp
 }
     `;
@@ -891,34 +922,12 @@ export const StreamAndHistoryDocument = `
       ...UserStream
     }
     historicalEvents(orderBy: createdTimestamp, orderDirection: desc) {
-      eventType
-      stream {
-        streamId
-        payer {
-          id
-        }
-        payee {
-          id
-        }
-        token
-        amountPerSec
-      }
-      oldStream {
-        streamId
-        payer {
-          id
-        }
-        payee {
-          id
-        }
-        token
-        amountPerSec
-      }
-      createdTimestamp
+      ...UserHistory
     }
   }
 }
-    ${UserStreamFragmentDoc}`;
+    ${UserStreamFragmentDoc}
+${UserHistoryFragmentDoc}`;
 export const useStreamAndHistoryQuery = <
       TData = StreamAndHistoryQuery,
       TError = unknown

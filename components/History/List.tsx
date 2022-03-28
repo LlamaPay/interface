@@ -12,7 +12,7 @@ export const List = () => {
   return (
     <ul className="isolate flex flex-col space-y-4 rounded p-2">
       {data?.user?.historicalEvents.map((historyEvent) => (
-        <ListItem/>
+        <ListItem key={historyEvent.txHash} data={historyEvent} />
       ))}
     </ul>
   );

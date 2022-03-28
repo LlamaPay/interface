@@ -4,30 +4,7 @@ query StreamAndHistory {
       ...UserStream
     }
     historicalEvents(orderBy: createdTimestamp, orderDirection: desc) {
-      eventType
-      stream {
-        streamId
-        payer {
-          id
-        }
-        payee {
-          id
-        }
-        token
-        amountPerSec
-      }
-      oldStream {
-        streamId
-        payer {
-          id
-        }
-        payee {
-          id
-        }
-        token
-        amountPerSec
-      }
-      createdTimestamp
+      ...UserHistory
     }
   }
 }
@@ -42,5 +19,33 @@ fragment UserStream on Stream {
   }
   token
   amountPerSec
+  createdTimestamp
+}
+
+fragment UserHistory on HistoryEvent {
+  txHash
+  eventType
+  stream {
+    streamId
+    payer {
+      id
+    }
+    payee {
+      id
+    }
+    token
+    amountPerSec
+  }
+  oldStream {
+    streamId
+    payer {
+      id
+    }
+    payee {
+      id
+    }
+    token
+    amountPerSec
+  }
   createdTimestamp
 }
