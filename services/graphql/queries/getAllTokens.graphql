@@ -1,8 +1,11 @@
 query GetAllTokens {
-  llamaPayFactories(orderBy: id) {
-    contracts {
-      address
-      token
+  tokens(first: 100) {
+    address
+    symbol
+    name
+    decimals
+    contract {
+      id
     }
   }
 }

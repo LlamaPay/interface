@@ -20,7 +20,9 @@ fragment UserStream on Stream {
   payee {
     id
   }
-  token
+  token {
+    address
+  }
   amountPerSec
   createdTimestamp
 }
@@ -36,7 +38,9 @@ fragment UserHistory on HistoryEvent {
     payee {
       id
     }
-    token
+    token {
+      address
+    }
     amountPerSec
   }
   oldStream {
@@ -47,7 +51,9 @@ fragment UserHistory on HistoryEvent {
     payee {
       id
     }
-    token
+    token {
+      address
+    }
     amountPerSec
   }
   createdTimestamp

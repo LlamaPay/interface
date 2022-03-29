@@ -190,7 +190,7 @@ export type LlamaPayContract = {
   factory: LlamaPayFactory;
   id: Scalars['ID'];
   streams: Array<Stream>;
-  token: Scalars['Bytes'];
+  token: Token;
 };
 
 
@@ -253,12 +253,26 @@ export type LlamaPayContract_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
-  token?: InputMaybe<Scalars['Bytes']>;
-  token_contains?: InputMaybe<Scalars['Bytes']>;
-  token_in?: InputMaybe<Array<Scalars['Bytes']>>;
-  token_not?: InputMaybe<Scalars['Bytes']>;
-  token_not_contains?: InputMaybe<Scalars['Bytes']>;
-  token_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  token?: InputMaybe<Scalars['String']>;
+  token_contains?: InputMaybe<Scalars['String']>;
+  token_contains_nocase?: InputMaybe<Scalars['String']>;
+  token_ends_with?: InputMaybe<Scalars['String']>;
+  token_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  token_gt?: InputMaybe<Scalars['String']>;
+  token_gte?: InputMaybe<Scalars['String']>;
+  token_in?: InputMaybe<Array<Scalars['String']>>;
+  token_lt?: InputMaybe<Scalars['String']>;
+  token_lte?: InputMaybe<Scalars['String']>;
+  token_not?: InputMaybe<Scalars['String']>;
+  token_not_contains?: InputMaybe<Scalars['String']>;
+  token_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  token_not_ends_with?: InputMaybe<Scalars['String']>;
+  token_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  token_not_in?: InputMaybe<Array<Scalars['String']>>;
+  token_not_starts_with?: InputMaybe<Scalars['String']>;
+  token_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  token_starts_with?: InputMaybe<Scalars['String']>;
+  token_starts_with_nocase?: InputMaybe<Scalars['String']>;
 };
 
 export enum LlamaPayContract_OrderBy {
@@ -358,6 +372,8 @@ export type Query = {
   llamaPayFactory?: Maybe<LlamaPayFactory>;
   stream?: Maybe<Stream>;
   streams: Array<Stream>;
+  token?: Maybe<Token>;
+  tokens: Array<Token>;
   user?: Maybe<User>;
   users: Array<User>;
 };
@@ -440,6 +456,24 @@ export type QueryStreamsArgs = {
 };
 
 
+export type QueryTokenArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryTokensArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Token_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Token_Filter>;
+};
+
+
 export type QueryUserArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
@@ -469,7 +503,7 @@ export type Stream = {
   payee: User;
   payer: User;
   streamId: Scalars['Bytes'];
-  token: Scalars['Bytes'];
+  token: Token;
   users: Array<User>;
 };
 
@@ -594,12 +628,26 @@ export type Stream_Filter = {
   streamId_not?: InputMaybe<Scalars['Bytes']>;
   streamId_not_contains?: InputMaybe<Scalars['Bytes']>;
   streamId_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
-  token?: InputMaybe<Scalars['Bytes']>;
-  token_contains?: InputMaybe<Scalars['Bytes']>;
-  token_in?: InputMaybe<Array<Scalars['Bytes']>>;
-  token_not?: InputMaybe<Scalars['Bytes']>;
-  token_not_contains?: InputMaybe<Scalars['Bytes']>;
-  token_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  token?: InputMaybe<Scalars['String']>;
+  token_contains?: InputMaybe<Scalars['String']>;
+  token_contains_nocase?: InputMaybe<Scalars['String']>;
+  token_ends_with?: InputMaybe<Scalars['String']>;
+  token_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  token_gt?: InputMaybe<Scalars['String']>;
+  token_gte?: InputMaybe<Scalars['String']>;
+  token_in?: InputMaybe<Array<Scalars['String']>>;
+  token_lt?: InputMaybe<Scalars['String']>;
+  token_lte?: InputMaybe<Scalars['String']>;
+  token_not?: InputMaybe<Scalars['String']>;
+  token_not_contains?: InputMaybe<Scalars['String']>;
+  token_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  token_not_ends_with?: InputMaybe<Scalars['String']>;
+  token_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  token_not_in?: InputMaybe<Array<Scalars['String']>>;
+  token_not_starts_with?: InputMaybe<Scalars['String']>;
+  token_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  token_starts_with?: InputMaybe<Scalars['String']>;
+  token_starts_with_nocase?: InputMaybe<Scalars['String']>;
   users?: InputMaybe<Array<Scalars['String']>>;
   users_contains?: InputMaybe<Array<Scalars['String']>>;
   users_contains_nocase?: InputMaybe<Array<Scalars['String']>>;
@@ -635,6 +683,8 @@ export type Subscription = {
   llamaPayFactory?: Maybe<LlamaPayFactory>;
   stream?: Maybe<Stream>;
   streams: Array<Stream>;
+  token?: Maybe<Token>;
+  tokens: Array<Token>;
   user?: Maybe<User>;
   users: Array<User>;
 };
@@ -717,6 +767,24 @@ export type SubscriptionStreamsArgs = {
 };
 
 
+export type SubscriptionTokenArgs = {
+  block?: InputMaybe<Block_Height>;
+  id: Scalars['ID'];
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type SubscriptionTokensArgs = {
+  block?: InputMaybe<Block_Height>;
+  first?: InputMaybe<Scalars['Int']>;
+  orderBy?: InputMaybe<Token_OrderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  skip?: InputMaybe<Scalars['Int']>;
+  subgraphError?: _SubgraphErrorPolicy_;
+  where?: InputMaybe<Token_Filter>;
+};
+
+
 export type SubscriptionUserArgs = {
   block?: InputMaybe<Block_Height>;
   id: Scalars['ID'];
@@ -733,6 +801,110 @@ export type SubscriptionUsersArgs = {
   subgraphError?: _SubgraphErrorPolicy_;
   where?: InputMaybe<User_Filter>;
 };
+
+export type Token = {
+  __typename?: 'Token';
+  address: Scalars['Bytes'];
+  contract: LlamaPayContract;
+  decimals: Scalars['Int'];
+  id: Scalars['ID'];
+  name: Scalars['String'];
+  symbol: Scalars['String'];
+};
+
+export type Token_Filter = {
+  address?: InputMaybe<Scalars['Bytes']>;
+  address_contains?: InputMaybe<Scalars['Bytes']>;
+  address_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  address_not?: InputMaybe<Scalars['Bytes']>;
+  address_not_contains?: InputMaybe<Scalars['Bytes']>;
+  address_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  contract?: InputMaybe<Scalars['String']>;
+  contract_contains?: InputMaybe<Scalars['String']>;
+  contract_contains_nocase?: InputMaybe<Scalars['String']>;
+  contract_ends_with?: InputMaybe<Scalars['String']>;
+  contract_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  contract_gt?: InputMaybe<Scalars['String']>;
+  contract_gte?: InputMaybe<Scalars['String']>;
+  contract_in?: InputMaybe<Array<Scalars['String']>>;
+  contract_lt?: InputMaybe<Scalars['String']>;
+  contract_lte?: InputMaybe<Scalars['String']>;
+  contract_not?: InputMaybe<Scalars['String']>;
+  contract_not_contains?: InputMaybe<Scalars['String']>;
+  contract_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  contract_not_ends_with?: InputMaybe<Scalars['String']>;
+  contract_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  contract_not_in?: InputMaybe<Array<Scalars['String']>>;
+  contract_not_starts_with?: InputMaybe<Scalars['String']>;
+  contract_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  contract_starts_with?: InputMaybe<Scalars['String']>;
+  contract_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  decimals?: InputMaybe<Scalars['Int']>;
+  decimals_gt?: InputMaybe<Scalars['Int']>;
+  decimals_gte?: InputMaybe<Scalars['Int']>;
+  decimals_in?: InputMaybe<Array<Scalars['Int']>>;
+  decimals_lt?: InputMaybe<Scalars['Int']>;
+  decimals_lte?: InputMaybe<Scalars['Int']>;
+  decimals_not?: InputMaybe<Scalars['Int']>;
+  decimals_not_in?: InputMaybe<Array<Scalars['Int']>>;
+  id?: InputMaybe<Scalars['ID']>;
+  id_gt?: InputMaybe<Scalars['ID']>;
+  id_gte?: InputMaybe<Scalars['ID']>;
+  id_in?: InputMaybe<Array<Scalars['ID']>>;
+  id_lt?: InputMaybe<Scalars['ID']>;
+  id_lte?: InputMaybe<Scalars['ID']>;
+  id_not?: InputMaybe<Scalars['ID']>;
+  id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  name?: InputMaybe<Scalars['String']>;
+  name_contains?: InputMaybe<Scalars['String']>;
+  name_contains_nocase?: InputMaybe<Scalars['String']>;
+  name_ends_with?: InputMaybe<Scalars['String']>;
+  name_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  name_gt?: InputMaybe<Scalars['String']>;
+  name_gte?: InputMaybe<Scalars['String']>;
+  name_in?: InputMaybe<Array<Scalars['String']>>;
+  name_lt?: InputMaybe<Scalars['String']>;
+  name_lte?: InputMaybe<Scalars['String']>;
+  name_not?: InputMaybe<Scalars['String']>;
+  name_not_contains?: InputMaybe<Scalars['String']>;
+  name_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  name_not_ends_with?: InputMaybe<Scalars['String']>;
+  name_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  name_not_in?: InputMaybe<Array<Scalars['String']>>;
+  name_not_starts_with?: InputMaybe<Scalars['String']>;
+  name_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  name_starts_with?: InputMaybe<Scalars['String']>;
+  name_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  symbol?: InputMaybe<Scalars['String']>;
+  symbol_contains?: InputMaybe<Scalars['String']>;
+  symbol_contains_nocase?: InputMaybe<Scalars['String']>;
+  symbol_ends_with?: InputMaybe<Scalars['String']>;
+  symbol_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  symbol_gt?: InputMaybe<Scalars['String']>;
+  symbol_gte?: InputMaybe<Scalars['String']>;
+  symbol_in?: InputMaybe<Array<Scalars['String']>>;
+  symbol_lt?: InputMaybe<Scalars['String']>;
+  symbol_lte?: InputMaybe<Scalars['String']>;
+  symbol_not?: InputMaybe<Scalars['String']>;
+  symbol_not_contains?: InputMaybe<Scalars['String']>;
+  symbol_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  symbol_not_ends_with?: InputMaybe<Scalars['String']>;
+  symbol_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  symbol_not_in?: InputMaybe<Array<Scalars['String']>>;
+  symbol_not_starts_with?: InputMaybe<Scalars['String']>;
+  symbol_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  symbol_starts_with?: InputMaybe<Scalars['String']>;
+  symbol_starts_with_nocase?: InputMaybe<Scalars['String']>;
+};
+
+export enum Token_OrderBy {
+  Address = 'address',
+  Contract = 'contract',
+  Decimals = 'decimals',
+  Id = 'id',
+  Name = 'name',
+  Symbol = 'symbol'
+}
 
 export type User = {
   __typename?: 'User';
@@ -839,18 +1011,18 @@ export enum _SubgraphErrorPolicy_ {
 export type GetAllTokensQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetAllTokensQuery = { __typename?: 'Query', llamaPayFactories: Array<{ __typename?: 'LlamaPayFactory', contracts: Array<{ __typename?: 'LlamaPayContract', address: any, token: any }> }> };
+export type GetAllTokensQuery = { __typename?: 'Query', tokens: Array<{ __typename?: 'Token', address: any, symbol: string, name: string, decimals: number, contract: { __typename?: 'LlamaPayContract', id: string } }> };
 
 export type StreamAndHistoryQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
 
-export type StreamAndHistoryQuery = { __typename?: 'Query', user?: { __typename?: 'User', streams: Array<{ __typename?: 'Stream', streamId: any, token: any, amountPerSec: any, createdTimestamp: any, contract: { __typename?: 'LlamaPayContract', address: any }, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string } }>, historicalEvents: Array<{ __typename?: 'HistoryEvent', txHash: any, eventType: string, createdTimestamp: any, stream: { __typename?: 'Stream', streamId: any, token: any, amountPerSec: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string } }, oldStream?: { __typename?: 'Stream', streamId: any, token: any, amountPerSec: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string } } | null }> } | null };
+export type StreamAndHistoryQuery = { __typename?: 'Query', user?: { __typename?: 'User', streams: Array<{ __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, contract: { __typename?: 'LlamaPayContract', address: any }, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any } }>, historicalEvents: Array<{ __typename?: 'HistoryEvent', txHash: any, eventType: string, createdTimestamp: any, stream: { __typename?: 'Stream', streamId: any, amountPerSec: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any } }, oldStream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any } } | null }> } | null };
 
-export type UserStreamFragment = { __typename?: 'Stream', streamId: any, token: any, amountPerSec: any, createdTimestamp: any, contract: { __typename?: 'LlamaPayContract', address: any }, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string } };
+export type UserStreamFragment = { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, contract: { __typename?: 'LlamaPayContract', address: any }, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any } };
 
-export type UserHistoryFragment = { __typename?: 'HistoryEvent', txHash: any, eventType: string, createdTimestamp: any, stream: { __typename?: 'Stream', streamId: any, token: any, amountPerSec: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string } }, oldStream?: { __typename?: 'Stream', streamId: any, token: any, amountPerSec: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string } } | null };
+export type UserHistoryFragment = { __typename?: 'HistoryEvent', txHash: any, eventType: string, createdTimestamp: any, stream: { __typename?: 'Stream', streamId: any, amountPerSec: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any } }, oldStream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any } } | null };
 
 export const UserStreamFragmentDoc = `
     fragment UserStream on Stream {
@@ -864,7 +1036,9 @@ export const UserStreamFragmentDoc = `
   payee {
     id
   }
-  token
+  token {
+    address
+  }
   amountPerSec
   createdTimestamp
 }
@@ -881,7 +1055,9 @@ export const UserHistoryFragmentDoc = `
     payee {
       id
     }
-    token
+    token {
+      address
+    }
     amountPerSec
   }
   oldStream {
@@ -892,7 +1068,9 @@ export const UserHistoryFragmentDoc = `
     payee {
       id
     }
-    token
+    token {
+      address
+    }
     amountPerSec
   }
   createdTimestamp
@@ -900,10 +1078,13 @@ export const UserHistoryFragmentDoc = `
     `;
 export const GetAllTokensDocument = `
     query GetAllTokens {
-  llamaPayFactories(orderBy: id) {
-    contracts {
-      address
-      token
+  tokens(first: 100) {
+    address
+    symbol
+    name
+    decimals
+    contract {
+      id
     }
   }
 }
