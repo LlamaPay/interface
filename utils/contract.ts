@@ -321,7 +321,7 @@ export const factoryABI = [
 export const createContract = (cId: string) => new ethers.Contract(getAddress(cId), llamapayABI, provider);
 
 export const llamapayFactory = new ethers.Contract(
-  getAddress('0xF7410203fe4B7D8595DA5211b52e5Dde405ea301'),
+  getAddress('0x068d6b8ad65679a741d7086c0cb96f8530b38494'),
   factoryABI,
   provider
 );

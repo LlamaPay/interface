@@ -6,6 +6,7 @@ import { useTokenPrice } from 'queries/useTokenPrice';
 import EmptyToken from 'public/empty-token.webp';
 import Image from 'next/image';
 import Tooltip from 'components/Tooltip';
+import { useAccount } from 'wagmi';
 
 interface ItemProps {
   data: UserStreamFragment;
@@ -22,7 +23,10 @@ type TokenLogo = React.MutableRefObject<string | StaticImageData>;
 
 // TODO cleanup all hardcoded values
 export const ListItem = ({ data }: ItemProps) => {
-  const isIncoming = data.payer?.id !== '0xfe5ee99fdbccfada674a3b85ef653b3ce4656e13';
+
+  const [{ data: accountData }] = useAccount();
+
+  const isIncoming = data.payer?.id !== accountData?.address.toLowerCase();
 
   const [totalStreamed, setTotalStreamed] = React.useState<number | null>(null);
 

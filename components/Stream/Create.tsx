@@ -2,14 +2,17 @@ import * as React from 'react';
 import Select from 'react-select/creatable';
 import { useTheme } from 'next-themes';
 import { useGetContracts } from 'queries/useGetContracts';
+import { useGetAllTokensQuery } from "services/generated/graphql";
 import { getAddress } from 'ethers/lib/utils';
 
 export const Create = () => {
   // TODO handle error state
-  const { data = [], isLoading: contractsLoading } = useGetContracts();
+  // const { data, isLoading: contractsLoading } = useGetContracts();
+  const { data, error, isLoading } = useGetAllTokensQuery();
+  const [selectedToken, setSelectedToken] = React.useState<any>();
 
   const contracts = React.useMemo(() => {
-    return data.map((c) => ({ value: getAddress(c.address), label: getAddress(c.token) })) ?? [];
+    return data?.llamaPayFactories[0].contracts.map((c) => ({ value: getAddress(c.address), label: getAddress(c.token) })) ?? [];
   }, [data]);
 
   const { resolvedTheme } = useTheme();
@@ -32,7 +35,8 @@ export const Create = () => {
                 primary: '#3f3f46',
               },
             })}
-            isLoading={contractsLoading}
+            isLoading={isLoading}
+            onChange={setSelectedToken}
             name="tokenAddress"
           />
         </label>
