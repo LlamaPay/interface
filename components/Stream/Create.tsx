@@ -49,35 +49,14 @@ interface ICreateStreamForm {
 }
 
 const CreateStreamForm = ({ balancesExist, tokens }: ICreateStreamForm) => {
-  const { mutate: checkTokenApproval, data, isLoading, error } = useTokenApproval();
+  // TODO handle loading state
+  const { mutate: checkTokenApproval, data: isApproved = false, error } = useTokenApproval();
   const [{ data: accountData }] = useAccount();
-
-  // const tokenContract = React.useMemo(() => {
-  //   if (!tokenAddress) return null;
-
-  //   const token = tokens.find((t) => t.tokenAddress === tokenAddress);
-
-  //   if (token) {
-  //     return token.tokenContract;
-  //   } else {
-  //     return createContract(tokenAddress);
-  //   }
-  // }, [tokenAddress, tokens]);
-
-  // const {
-  //   isApproved: isTokenApproved,
-  //   isLoading,
-  //   tokenContractToWrite,
-  //   error,
-  // } = useTokenApproval({
-  //   tokenAddress,
-  //   tokenContract: tokenContract,
-  //   approvedForAmount: BigNumber.from(100000000),
-  // });
 
   const handleTokenChange = (token: OnChangeValue<TokenOption, false>) => {
     if (token?.value && accountData?.address) {
       const tokenDetails = tokens.find((t) => t.tokenAddress === token.value) ?? null;
+
       if (tokenDetails) {
         checkTokenApproval({
           token: tokenDetails.tokenContract,
@@ -141,10 +120,10 @@ const CreateStreamForm = ({ balancesExist, tokens }: ICreateStreamForm) => {
       <button
         className="nav-button mx-auto mt-2 w-full disabled:cursor-not-allowed"
         type="button"
-        disabled={false}
+        disabled={isApproved}
         onClick={handleApproval}
       >
-        Approve
+        {isApproved ? 'Approved' : 'Approve'}
       </button>
       <button className="nav-button mx-auto mt-2 w-full">Create Stream</button>
     </form>
