@@ -11,6 +11,9 @@ query StreamAndHistory($id: ID!) {
 
 fragment UserStream on Stream {
   streamId
+  contract {
+    address
+  }
   payer {
     id
   }

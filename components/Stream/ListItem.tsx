@@ -7,6 +7,7 @@ import EmptyToken from 'public/empty-token.webp';
 import Image from 'next/image';
 import Tooltip from 'components/Tooltip';
 import { useAccount } from 'wagmi';
+import { Modify } from './Modify';
 
 interface ItemProps {
   data: UserStreamFragment;
@@ -27,6 +28,8 @@ export const ListItem = ({ data }: ItemProps) => {
   const [{ data: accountData }] = useAccount();
 
   const isIncoming = data.payer?.id !== accountData?.address.toLowerCase();
+
+  const [openModify, setOpenModify] = React.useState(false);
 
   const [totalStreamed, setTotalStreamed] = React.useState<number | null>(null);
 
@@ -68,8 +71,13 @@ export const ListItem = ({ data }: ItemProps) => {
       {isIncoming ? (
         <IncomingStream totalStreamed={totalStreamed} address={data.payer.id} tokenLogo={tokenLogo} />
       ) : (
-        <OutgoingStream totalStreamed={totalStreamed} address={data.payee.id} tokenLogo={tokenLogo} />
+        <>
+          <OutgoingStream totalStreamed={totalStreamed} address={data.payee.id} tokenLogo={tokenLogo} />
+          <button onClick={() => setOpenModify(!openModify)}> Modify </button>
+          <Modify isOpen={openModify} setIsOpen={setOpenModify} payer={data.payer.id} payee={data.payee.id} amtPerSec={data.amountPerSec} contractAddress={data?.contract.address.toString()} />
+        </>
       )}
+
     </li>
   );
 };

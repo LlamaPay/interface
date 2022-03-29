@@ -34,12 +34,12 @@ export const ListItem = ({ data }: ItemProps) => {
       )
     case "StreamModified":
       return (
-        <StreamCancelled payer={payer} payee={payee} amtPerSec={amtPerSec} oldAmtPerSec={oldAmtPerSec} oldPayee={oldPayee} createdTime={createdTime} />
+        <StreamModified payer={payer} payee={payee} amtPerSec={amtPerSec} oldAmtPerSec={oldAmtPerSec} oldPayee={oldPayee} createdTime={createdTime} />
       )
 
     case "StreamCancelled":
       return (
-        <StreamModified payer={payer} payee={payee} amtPerSec={amtPerSec} oldAmtPerSec={oldAmtPerSec} oldPayee={oldPayee} createdTime={createdTime} />
+        <StreamCancelled payer={payer} payee={payee} amtPerSec={amtPerSec} oldAmtPerSec={oldAmtPerSec} oldPayee={oldPayee} createdTime={createdTime} />
       )
 
     default:
