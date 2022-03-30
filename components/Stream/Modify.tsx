@@ -3,7 +3,7 @@ import { ArrowRightIcon } from '@heroicons/react/solid';
 import { DialogHeader, DialogWrapper, SetIsOpen } from 'components/Dialog';
 import { llamapayABI } from 'utils/contract';
 import { useContract, useSigner } from 'wagmi';
-
+import BigNumber from 'bignumber.js';
 interface ModifyProps {
   isOpen: boolean;
   setIsOpen: SetIsOpen;
@@ -22,13 +22,28 @@ export const Modify = ({ isOpen, setIsOpen, payer, payee, amtPerSec, contractAdd
     signerOrProvider: signerData,
   });
 
-  const [newPayee, setNewPayee] = React.useState<any>();
-  const [newAmtPerSec, setNewAmtPerSec] = React.useState<any>();
+  const options = [
+    { name: 'Day', seconds: 86400 },
+    { name: 'Week', seconds: 604800 },
+    { name: 'Month', seconds: 2419200 },
+  ];
+
+  const [newPayee, setNewPayee] = React.useState<string>(payee);
+  const [newAmtPerSec, setNewAmtPerSec] = React.useState<number>(amtPerSec);
+  const [modifyButtonState, setModifyButtonState] = React.useState<string>('Modify Stream');
+  const [secondIndex, setSecondIndex] = React.useState<number>(0);
 
   // TODO CHECKS AND STUFF
   const handleModifyInput = React.useCallback(() => {
     async function modifyStream() {
-      await contract.modifyStream(payee, amtPerSec, newPayee, newAmtPerSec);
+      try {
+        // Replace with token decimals
+        const realAmtPerSec = new BigNumber(newAmtPerSec).times(1e18).div(options[secondIndex].seconds).toFixed(0);
+        await contract.modifyStream(payee, amtPerSec, newPayee, realAmtPerSec);
+        setModifyButtonState('Success');
+      } catch (error) {
+        console.error(error);
+      }
     }
     modifyStream();
   }, [contract, newPayee, newAmtPerSec]);
@@ -40,11 +55,19 @@ export const Modify = ({ isOpen, setIsOpen, payer, payee, amtPerSec, contractAdd
     if (name === 'amtpersec') setNewAmtPerSec(value);
   };
 
+  const handlePeriodClick = React.useCallback(() => {
+    if (secondIndex === options.length - 1) {
+      setSecondIndex(0);
+    } else {
+      setSecondIndex(secondIndex + 1);
+    }
+  }, [secondIndex]);
+
   return (
     <>
       <DialogWrapper isOpen={isOpen} setIsOpen={setIsOpen}>
+        <DialogHeader title="Modify Stream" setIsOpen={setIsOpen} />
         <div className="mt-3 flex flex-col space-y-2">
-          <DialogHeader title="Modify Stream" setIsOpen={setIsOpen} />
           <p className="text-md">Current Stream:</p>
           <div className="flex space-x-2">
             <span className=" text-sm">You</span>
@@ -53,9 +76,16 @@ export const Modify = ({ isOpen, setIsOpen, payer, payee, amtPerSec, contractAdd
           </div>
           <span className="text-sm"> Amount Per Second: {amtPerSec / 1e18}</span>
           <p className="text-md">New Stream:</p>
-          <input name="payee" className="text-sm" onChange={handleChange}></input>
-          <input name="amtpersec" className="text-sm" onChange={handleChange}></input>
-          <button onClick={handleModifyInput}>Modify Stream</button>
+          <p className="text-sm">New Payee:</p>
+          <input name="payee" className="text-sm" onChange={handleChange} value={newPayee} />
+          <div className="flex space-x-1">
+            <p className="text-sm">New Amount Per</p>
+            <button className="text-sm" onClick={handlePeriodClick}>
+              {options[secondIndex].name}
+            </button>
+          </div>
+          <input name="amtpersec" className="text-sm" onChange={handleChange} value={newAmtPerSec} />
+          <button onClick={handleModifyInput}>{modifyButtonState}</button>
         </div>
       </DialogWrapper>
     </>
