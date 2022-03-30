@@ -13,7 +13,7 @@ const useGetAllTokens = () => {
     if (data?.tokens) {
       return data?.tokens.map((c) => ({
         tokenAddress: getAddress(c.address),
-        llamaTokenAddress: getAddress(c.contract?.id),
+        llamaContractAddress: getAddress(c.contract?.id),
         name: c.name,
         symbol: c.symbol,
         decimals: c.decimals,

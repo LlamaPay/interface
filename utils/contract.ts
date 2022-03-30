@@ -1,4 +1,4 @@
-import { ethers } from 'ethers';
+import { ethers, Signer } from 'ethers';
 import { getAddress } from 'ethers/lib/utils';
 
 export type Provider = ethers.providers.BaseProvider;
@@ -318,31 +318,9 @@ export const factoryABI = [
   },
 ];
 
-export const tokenABI = [
-  {
-    inputs: [],
-    name: 'decimals',
-    outputs: [{ internalType: 'uint8', name: '', type: 'uint8' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'name',
-    outputs: [{ internalType: 'string', name: '', type: 'string' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'symbol',
-    outputs: [{ internalType: 'string', name: '', type: 'string' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-];
-
 export const createContract = (cId: string) => new ethers.Contract(getAddress(cId), llamapayABI, provider);
+export const createWriteContract = (id: string, signer: Signer) =>
+  new ethers.Contract(getAddress(id), llamapayABI, signer);
 
 export const llamapayFactory = new ethers.Contract(
   getAddress('0x068d6b8ad65679a741d7086c0cb96f8530b38494'),

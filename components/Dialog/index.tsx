@@ -1,5 +1,5 @@
+import * as React from 'react';
 import { Dialog, Transition } from '@headlessui/react';
-import React, { Fragment } from 'react';
 import { XIcon } from '@heroicons/react/solid';
 import classNames from 'classnames';
 
@@ -23,11 +23,11 @@ function closeModal(setIsOpen: SetIsOpen) {
 
 export const DialogWrapper = ({ isOpen, setIsOpen, children, className }: DialogProps) => {
   return (
-    <Transition appear show={isOpen} as={Fragment}>
+    <Transition appear show={isOpen} as={React.Fragment}>
       <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={() => closeModal(setIsOpen)}>
         <div className="min-h-screen px-4 text-center">
           <Transition.Child
-            as={Fragment}
+            as={React.Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0"
             enterTo="opacity-100"
@@ -43,7 +43,7 @@ export const DialogWrapper = ({ isOpen, setIsOpen, children, className }: Dialog
             &#8203;
           </span>
           <Transition.Child
-            as={Fragment}
+            as={React.Fragment}
             enter="ease-out duration-300"
             enterFrom="opacity-0 scale-95"
             enterTo="opacity-100 scale-100"

@@ -1,12 +1,14 @@
 import * as React from 'react';
-import Select from 'react-select/creatable';
+import Select from 'react-select';
 import { useTheme } from 'next-themes';
-import { BigNumber, Contract } from 'ethers';
 import { IToken } from 'types';
 import { OnChangeValue } from 'react-select';
-import useTokenApproval from 'queries/useTokenApproval';
+import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval';
 import { useAccount } from 'wagmi';
-
+import { getAddress } from 'ethers/lib/utils';
+import useStreamToken from 'queries/useStreamToken';
+import { checkIsAmountValid } from './utils';
+import BigNumber from 'bignumber.js';
 interface ICreateProps {
   tokens: IToken[] | null;
   noBalances: boolean;
@@ -18,6 +20,16 @@ interface TokenOption {
   label: string;
   value: string;
 }
+interface ICheckApproval {
+  tokenAddress: string;
+  userAddress?: string;
+  amountToDeposit: string;
+}
+
+type FormElements = {
+  amountPerSec: { value: string };
+  addressToStream: { value: string };
+};
 
 export const Create = ({ tokens, noBalances, isLoading, isError }: ICreateProps) => {
   return (
@@ -38,36 +50,13 @@ export const Create = ({ tokens, noBalances, isLoading, isError }: ICreateProps)
 
 interface ICreateStreamForm {
   balancesExist: boolean;
-  tokens: {
-    tokenAddress: string;
-    name: string;
-    symbol: string;
-    decimals: number;
-    tokenContract: Contract;
-    llamaTokenContract: Contract;
-  }[];
+  tokens: IToken[];
 }
 
 const CreateStreamForm = ({ balancesExist, tokens }: ICreateStreamForm) => {
-  // TODO handle loading state
-  const { mutate: checkTokenApproval, data: isApproved = false, error } = useTokenApproval();
   const [{ data: accountData }] = useAccount();
 
-  const handleTokenChange = (token: OnChangeValue<TokenOption, false>) => {
-    if (token?.value && accountData?.address) {
-      const tokenDetails = tokens.find((t) => t.tokenAddress === token.value) ?? null;
-
-      if (tokenDetails) {
-        checkTokenApproval({
-          token: tokenDetails.tokenContract,
-          userAddress: accountData.address,
-          approveForAddress: tokenDetails.llamaTokenAddress,
-          approvedForAmount: BigNumber.from(1000),
-        });
-      }
-    }
-  };
-
+  // Format tokens options to be used in select form element
   const tokenOptions = React.useMemo(
     () =>
       tokens?.map((c) => ({
@@ -77,8 +66,110 @@ const CreateStreamForm = ({ balancesExist, tokens }: ICreateStreamForm) => {
     [tokens]
   );
 
+  // store form values
+  const tokenAddress = React.useRef('');
+  const amountToDeposit = React.useRef('');
+
+  // Token approval hooks
+  // TODO handle loading and error states, also check if transaction is succesfull on chain, until then disable button and show loading state
+  const {
+    mutate: checkTokenApproval,
+    data: isApproved = false,
+    isLoading: checkingApproval,
+    error,
+  } = useCheckTokenApproval();
+  const {
+    mutate: approveToken,
+    data: approvedTransaction,
+    isLoading: approvingToken,
+    error: approvalError,
+  } = useApproveToken();
+
+  // function to check if a token is approved
+  // TODO implement debounce
+  function checkApproval({ tokenAddress, userAddress, amountToDeposit }: ICheckApproval) {
+    if (tokenAddress && userAddress) {
+      const tokenDetails = tokens.find((t) => t.tokenAddress === tokenAddress) ?? null;
+      const isAmountValid = checkIsAmountValid(amountToDeposit) && tokenDetails?.decimals;
+      if (tokenDetails && isAmountValid) {
+        const amount = new BigNumber(amountToDeposit).multipliedBy(10 ** tokenDetails.decimals);
+
+        checkTokenApproval({
+          token: tokenDetails.tokenContract,
+          userAddress: userAddress,
+          approveForAddress: tokenDetails.llamaContractAddress,
+          approvedForAmount: amount.toFixed(0),
+        });
+      }
+    }
+  }
+
+  // Handle changes in form
+  const handleTokenChange = (token: OnChangeValue<TokenOption, false>) => {
+    tokenAddress.current = token?.value ?? '';
+    checkApproval({
+      tokenAddress: tokenAddress.current,
+      userAddress: accountData?.address,
+      amountToDeposit: amountToDeposit.current,
+    });
+  };
+  const handleDepositChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    amountToDeposit.current = e.target.value;
+    checkApproval({
+      tokenAddress: tokenAddress.current,
+      userAddress: accountData?.address,
+      amountToDeposit: amountToDeposit.current,
+    });
+  };
+
+  // approve token on click
   const handleApproval = () => {
-    // tokenContractToWrite.approve('0xF3b2e219d57c3E2141885Ca52F0c0D705ffa931f', 10000000);
+    if (tokenAddress.current !== '') {
+      const tokenDetails = tokens.find((t) => t.tokenAddress === tokenAddress.current) ?? null;
+      const isAmountValid = checkIsAmountValid(amountToDeposit.current) && tokenDetails?.decimals;
+      if (tokenDetails && isAmountValid) {
+        const amount = new BigNumber(amountToDeposit.current).multipliedBy(10 ** tokenDetails.decimals);
+        // query mutation
+        approveToken({
+          tokenAddress: getAddress(tokenAddress.current),
+          spenderAddress: getAddress(tokenDetails.llamaContractAddress),
+          amountToApprove: amount.toFixed(0),
+        });
+      }
+    }
+  };
+
+  // TODO handle error state in ui
+  const { mutate: streamToken, isLoading, error: errorStreamingToken } = useStreamToken();
+
+  // create stream on submit
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.target as typeof e.target & FormElements;
+    const amountPerSec = form.amountPerSec.value;
+    const payeeAddress = form.addressToStream.value;
+
+    if (tokenAddress.current !== '' && isApproved) {
+      const tokenDetails = tokens.find((t) => t.tokenAddress === tokenAddress.current) ?? null;
+
+      // check if input amounts are valid
+      const isAmountPerSecValid = checkIsAmountValid(amountPerSec);
+      const isAmountToDepositValid = checkIsAmountValid(amountToDeposit.current);
+      if (tokenDetails && isAmountPerSecValid && isAmountToDepositValid && payeeAddress) {
+        // format amounts by token decimals
+        const amtPerSec = new BigNumber(amountPerSec).multipliedBy(10 ** tokenDetails.decimals);
+        const amtToDeposit = new BigNumber(amountToDeposit.current).multipliedBy(10 ** tokenDetails.decimals);
+
+        // query mutation
+        streamToken({
+          method: 'DEPOSIT_AND_CREATE',
+          amountPerSec: amtPerSec.toFixed(0),
+          amountToDeposit: amtToDeposit.toFixed(0),
+          payeeAddress: payeeAddress,
+          llamaContractAddress: tokenDetails?.llamaContractAddress,
+        });
+      }
+    }
   };
 
   const { resolvedTheme } = useTheme();
@@ -86,8 +177,11 @@ const CreateStreamForm = ({ balancesExist, tokens }: ICreateStreamForm) => {
 
   if (error) return <ErrorBoundary message="Something went wrong" />;
 
+  const isApproving = checkingApproval || approvingToken;
+  const disableSubmit = isLoading || isApproving;
+
   return (
-    <form className="flex flex-col space-y-4">
+    <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
       <label>
         <p>{balancesExist ? 'Select a Token' : 'Select a token to deposit'}</p>
         <Select
@@ -107,25 +201,48 @@ const CreateStreamForm = ({ balancesExist, tokens }: ICreateStreamForm) => {
       </label>
       <label>
         <p>Amount to deposit</p>
-        <input type="text" className="w-full rounded border p-1" />
+        <input
+          type="text"
+          className="w-full rounded border px-3 py-[6px]"
+          onChange={handleDepositChange}
+          pattern="\S(.*\S)?"
+          title="This field is required"
+        />
       </label>
       <label>
         <p>Address to stream</p>
-        <input type="text" className="w-full rounded border p-1" />
+        <input
+          type="text"
+          className="w-full rounded border px-3 py-[6px]"
+          name="addressToStream"
+          pattern="\S(.*\S)?"
+          title="This field is required"
+        />
       </label>
       <label>
         <p>Amount per sec</p>
-        <input type="text" className="w-full rounded border p-1" />
+        <input
+          type="text"
+          className="w-full rounded border px-3 py-[6px]"
+          name="amountPerSec"
+          pattern="\S(.*\S)?"
+          title="This field is required"
+        />
       </label>
       <button
         className="nav-button mx-auto mt-2 w-full disabled:cursor-not-allowed"
         type="button"
-        disabled={isApproved}
+        disabled={disableSubmit || isApproved}
         onClick={handleApproval}
       >
-        {isApproved ? 'Approved' : 'Approve'}
+        {isApproving ? '...' : isApproved ? 'Approved' : 'Approve'}
       </button>
-      <button className="nav-button mx-auto mt-2 w-full">Create Stream</button>
+      <button
+        className="nav-button mx-auto mt-2 w-full disabled:cursor-not-allowed"
+        disabled={disableSubmit || !isApproved}
+      >
+        Create Stream
+      </button>
     </form>
   );
 };
@@ -153,11 +270,11 @@ const Placeholder = () => {
       </label>
       <label>
         <p>Address to stream</p>
-        <input type="text" className="w-full rounded border p-1" />
+        <input type="text" className="w-full rounded border px-3 py-[6px]" />
       </label>
       <label>
         <p>Amount per sec</p>
-        <input type="text" className="w-full rounded border p-1" />
+        <input type="text" className="w-full rounded border px-3 py-[6px]" />
       </label>
       <button className="nav-button mx-auto mt-2 w-full disabled:cursor-not-allowed" type="button" disabled={true}>
         Approve

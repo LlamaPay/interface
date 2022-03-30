@@ -15,6 +15,7 @@
     "@heroicons/react": "^1.0.6",
     "@radix-ui/react-tooltip": "^0.1.7",
     "axios": "^0.26.1",
+    "bignumber.js": "^9.0.2",
     "classnames": "^2.3.1",
     "ethers": "^5.6.1",
     "graphql": "^16.3.0",

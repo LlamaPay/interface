@@ -1,4 +1,4 @@
-import { Contract, BigNumber } from 'ethers';
+import { Contract } from 'ethers';
 import { erc20ABI } from 'wagmi';
 import { provider } from './contract';
 
@@ -16,7 +16,7 @@ export interface ICheckTokenAllowance {
   token?: Contract;
   userAddress?: string;
   approveForAddress?: string;
-  approvedForAmount?: BigNumber;
+  approvedForAmount?: string;
 }
 
 // Checks if user has approved this token
@@ -30,7 +30,6 @@ export const checkHasApprovedEnough = async ({
     if (!userAddress || !token || !approveForAddress || !approvedForAmount) {
       throw new Error('Invalid arguments');
     }
-
     const res = (await token.allowance(userAddress, approveForAddress)).gte(approvedForAmount);
     return { res, err: null };
   } catch (err) {

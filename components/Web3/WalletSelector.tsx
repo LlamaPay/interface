@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import { Connector, useAccount, useConnect } from 'wagmi';
 import { useIsMounted } from 'hooks';
 import { formatAddress } from 'utils/address';
