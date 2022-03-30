@@ -22,9 +22,7 @@ export const List = () => {
         <FallbackList isLoading={isLoading} data={streams} error={error} noDataText="No streams yet" />
       ) : (
         <ul className="isolate flex flex-col space-y-4 rounded border p-2">
-          {streams.map((stream) => (
-            <ListItem key={stream.streamId} data={stream} />
-          ))}
+          {streams.map((stream) => (stream.active ? <ListItem key={stream.streamId} data={stream} /> : ''))}
         </ul>
       )}
     </section>

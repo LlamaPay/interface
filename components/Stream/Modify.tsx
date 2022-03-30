@@ -23,9 +23,9 @@ export const Modify = ({ isOpen, setIsOpen, payer, payee, amtPerSec, contractAdd
   });
 
   const options = [
-    { name: 'Day', seconds: 86400 },
     { name: 'Week', seconds: 604800 },
     { name: 'Month', seconds: 2419200 },
+    { name: 'Year', seconds: 29030400 },
   ];
 
   const [newPayee, setNewPayee] = React.useState<string>(payee);
@@ -84,7 +84,7 @@ export const Modify = ({ isOpen, setIsOpen, payer, payee, amtPerSec, contractAdd
               {options[secondIndex].name}
             </button>
           </div>
-          <input name="amtpersec" className="text-sm" onChange={handleChange} value={newAmtPerSec} />
+          <input name="amtpersec" className="text-sm" onChange={handleChange} />
           <button onClick={handleModifyInput}>{modifyButtonState}</button>
         </div>
       </DialogWrapper>

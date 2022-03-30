@@ -23,6 +23,7 @@ fragment UserStream on Stream {
   token {
     address
   }
+  active
   amountPerSec
   createdTimestamp
 }
