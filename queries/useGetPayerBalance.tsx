@@ -11,17 +11,21 @@ const fetchBalance = async (id: string, tokens: IToken[] | null): Promise<IBalan
 
     // filter zero balance tokens
     const data = res
-      .filter((d) => d.status === 'fulfilled' && d.value.toString() !== '0')
+
       .map((d, index) => {
         const amount =
           (d.status === 'fulfilled' && new BigNumber(d.value.toString()).dividedBy(10 ** tokens[index].decimals)) ??
           null;
         return {
-          token: tokens[index]?.name,
+          name: tokens[index]?.name,
           address: tokens[index]?.tokenAddress,
+          symbol: tokens[index]?.symbol,
           amount: amount ? amount.toFixed(0) : '',
+          contractAddress: tokens[index]?.llamaContractAddress,
         };
-      });
+      })
+      .filter((d) => d.amount !== '0');
+
     return data;
   } catch (error) {
     // console.log(error);

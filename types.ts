@@ -11,7 +11,9 @@ export interface IToken {
 }
 
 export interface IBalance {
-  token: string;
+  name: string;
   address: string;
+  symbol: string;
   amount: string;
+  contractAddress: string;
 }
