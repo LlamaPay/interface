@@ -8,6 +8,7 @@ interface ModifyProps {
   isOpen: boolean;
   setIsOpen: SetIsOpen;
   payee: string;
+  payer: string;
   amtPerSec: number;
   contractAddress: string;
 }

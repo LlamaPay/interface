@@ -9,6 +9,7 @@ import { useAccount } from 'wagmi';
 import { Modify } from './Modify';
 import { Cancel } from './Cancel';
 import { Push } from './Push';
+import { Withdrawable } from './Withdrawable';
 
 interface ItemProps {
   data: UserStreamFragment;
@@ -71,10 +72,24 @@ export const ListItem = ({ data }: ItemProps) => {
       {isIncoming ? (
         <>
           <IncomingStream totalStreamed={totalStreamed} address={data.payer.id} tokenLogo={tokenLogo} />
+          <Withdrawable
+            contractAddress={data?.contract.address.toString()}
+            payer={data.payer.id}
+            payee={data.payee.id}
+            amtPerSec={data.amountPerSec}
+            decimals={data.token.decimals}
+          />
         </>
       ) : (
         <>
           <OutgoingStream totalStreamed={totalStreamed} address={data.payee.id} tokenLogo={tokenLogo} />
+          <Withdrawable
+            contractAddress={data?.contract.address.toString()}
+            payer={data.payer.id}
+            payee={data.payee.id}
+            amtPerSec={data.amountPerSec}
+            decimals={data.token.decimals}
+          />
           <Push
             contractAddress={data?.contract.address.toString()}
             payer={data.payer.id}
