@@ -1,5 +1,4 @@
 import * as React from 'react';
-import classNames from 'classnames';
 import FallbackList from 'components/FallbackList';
 import { useStreamAndHistoryQuery } from 'services/generated/graphql';
 import { useAccount } from 'wagmi';
@@ -17,12 +16,7 @@ export const List = () => {
   }, [data]);
 
   return (
-    <section
-      className={classNames(
-        'min-h-[44px] max-w-7xl',
-        isLoading || error || !history ? 'w-full max-w-lg' : 'w-fit max-w-7xl'
-      )}
-    >
+    <section className="min-h-[44px] w-full">
       <h1 className="mb-3 text-center text-xl">History</h1>
       {isLoading || !history || error ? (
         <FallbackList isLoading={isLoading} data={history} error={error} noDataText="No history yet" />

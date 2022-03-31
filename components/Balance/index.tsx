@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { formatAddress } from 'utils/address';
 import FallbackList from 'components/FallbackList';
 import { IBalance } from 'types';
 
@@ -26,7 +25,7 @@ const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) =>
           {balances?.map((b) => (
             <li key={b.token} className="flex justify-between space-x-2">
               {/* TODO handle decimals and display token name and image when not on testnet */}
-              <p className="truncate">{formatAddress(b.token)}</p>
+              <p className="truncate">{b.token}</p>
               <p>{b.amount}</p>
             </li>
           ))}

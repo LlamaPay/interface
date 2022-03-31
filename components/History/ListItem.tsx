@@ -10,7 +10,7 @@ interface ItemProps {
 }
 
 function formatAmtPerSec(amtPerSec: number) {
-  let formatted = amtPerSec.toString();
+  const formatted = amtPerSec.toString();
   if (formatted.length > 10) {
     return `${formatted.slice(0, 10)}...`;
   }
@@ -41,7 +41,7 @@ export const ListItem = ({ data }: ItemProps) => {
   return (
     <>
       <div className="mr-2 flex flex-1 items-center space-x-2">
-        <div className="flex items-center space-x-2">
+        <div className="flex flex-1 items-center space-x-2">
           {eventType === 'StreamModified' ? (
             <Tooltip content="Modified Stream">
               <div className="rounded bg-yellow-100 p-1 text-yellow-600">
@@ -94,7 +94,7 @@ export const ListItem = ({ data }: ItemProps) => {
             </>
           )}
         </div>
-        <div className="flex flex-1 justify-end ">
+        <div className="flex justify-end">
           <button onClick={() => setInfo(!openInfo)} className="rounded-lg bg-zinc-200 p-1 text-sm dark:bg-zinc-700">
             More Info
           </button>
@@ -113,7 +113,7 @@ export const ListItem = ({ data }: ItemProps) => {
         </div>
       </div>
       {eventType === 'StreamModified' ? (
-        <div className="ml-8 flex items-center space-x-2">
+        <div className="ml-8 flex flex-1 items-center space-x-2">
           <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
             {account === payee ? formatAddress(payer) : 'You'}
           </span>

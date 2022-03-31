@@ -9,8 +9,22 @@ import useGetAllTokens from 'queries/useGetAllTokens';
 
 const Create: NextPage = () => {
   const [{ data: accountData }] = useAccount();
+
   const { data: tokens, isLoading: tokensLoading, error: tokensError } = useGetAllTokens();
-  const { data: balances = null, isLoading: balancesLoading, error: balancesError } = useGetPayerBalance(tokens);
+
+  // pass a unique key to getpayerBalance query when tokens data changes
+  // cuz initially when the component is mounted, tokens data is null
+  // and useGetPayerBalance wouldn't refetch until specified interval
+  // even though tokens are updated, this way it triggers a rerender and keeps the ui in loading state until we fetch balances on updated tokens data
+  const tokensKey = React.useMemo(() => {
+    return tokens && tokens?.length > 0 ? Date.now().toString() : '';
+  }, [tokens]);
+
+  const {
+    data: balances = null,
+    isLoading: balancesLoading,
+    error: balancesError,
+  } = useGetPayerBalance(tokens, tokensKey);
 
   const isLoading = tokensLoading || balancesLoading;
   const noBalances = !balances || balances.length === 0;

@@ -2,7 +2,6 @@ import * as React from 'react';
 import type { UserStreamFragment } from 'services/generated/graphql';
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid';
 import { formatAddress } from 'utils/address';
-import { useTokenPrice } from 'queries/useTokenPrice';
 import EmptyToken from 'public/empty-token.webp';
 import Image from 'next/image';
 import Tooltip from 'components/Tooltip';
@@ -49,7 +48,7 @@ export const ListItem = ({ data }: ItemProps) => {
       const totalAmount = (((Date.now() - createdAt) / 1000) * amountPerSec) / 10 ** data.token.decimals;
       setTotalStreamed(totalAmount);
     } else setTotalStreamed(null);
-  }, [amountPerSec, createdAt, isDataValid]);
+  }, [amountPerSec, createdAt, isDataValid, data.token.decimals]);
 
   React.useEffect(() => {
     updateStreamed();
@@ -99,6 +98,7 @@ export const ListItem = ({ data }: ItemProps) => {
             payee={data.payee.id}
             amtPerSec={data.amountPerSec}
             contractAddress={data?.contract.address.toString()}
+            payer={data.payer.id}
           />
         </>
       )}
@@ -121,7 +121,7 @@ const IncomingStream = ({ totalStreamed, address, ticker = 'Unknown token', toke
 
       {totalStreamed && (
         <div className="flex items-baseline space-x-1 slashed-zero tabular-nums">
-          <div className="relative top-[2px] h-6 w-6 self-end">
+          <div className="relative top-[-1px] h-6 w-6 self-end">
             <Tooltip content={ticker}>
               <Image
                 src={tokenLogo.current}
@@ -173,7 +173,7 @@ const OutgoingStream = ({ totalStreamed, address, ticker = 'Unknown token', toke
       </div>
       {totalStreamed && (
         <div className="flex items-baseline space-x-1 slashed-zero tabular-nums">
-          <div className="relative top-[2px] h-6 w-6 self-end">
+          <div className="relative top-[-1px] h-6 w-6 self-end">
             <Tooltip content={ticker}>
               <Image
                 src={tokenLogo.current}

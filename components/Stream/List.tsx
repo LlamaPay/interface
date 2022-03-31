@@ -15,7 +15,7 @@ export const List = () => {
   }, [data]);
 
   return (
-    <section className="min-h-[44px] w-full max-w-lg">
+    <section className="min-h-[44px] w-full">
       <h1 className="mb-3 text-center text-xl">Streams</h1>
 
       {isLoading || !streams || error ? (
