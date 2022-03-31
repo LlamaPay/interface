@@ -24,7 +24,7 @@ export const Cancel = ({ contractAddress, payee, amtPerSec }: CancelProps) => {
       } catch {}
     }
     cancelStream();
-  }, [contract]);
+  }, [contract, amtPerSec, payee]);
 
   return (
     <>
