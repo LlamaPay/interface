@@ -22,24 +22,22 @@ export const Modify = ({ isOpen, setIsOpen, payer, payee, amtPerSec, contractAdd
     signerOrProvider: signerData,
   });
 
-  const options = [
-    { name: 'Week', seconds: 604800 },
-    { name: 'Month', seconds: 2419200 },
-    { name: 'Year', seconds: 29030400 },
-  ];
+  const options = { month: 2419200, year: 29030400 };
 
   const [newPayee, setNewPayee] = React.useState<string>(payee);
-  const [newAmtPerSec, setNewAmtPerSec] = React.useState<number>(amtPerSec);
+  const [newAmtPerSec, setNewAmtPerSec] = React.useState<number | string>(amtPerSec);
   const [modifyButtonState, setModifyButtonState] = React.useState<string>('Modify Stream');
-  const [secondIndex, setSecondIndex] = React.useState<number>(0);
+  const [selectedPeriod, setSelectedPeriod] = React.useState<string>('month');
 
   // TODO CHECKS AND STUFF
   const handleModifyInput = React.useCallback(() => {
     async function modifyStream() {
       try {
         // Replace with token decimals
-        const realAmtPerSec = new BigNumber(newAmtPerSec).times(1e18).div(options[secondIndex].seconds).toFixed(0);
-        await contract.modifyStream(payee, amtPerSec, newPayee, realAmtPerSec);
+        const actualAmtPerSec = new BigNumber(newAmtPerSec).times(1e18);
+        if (selectedPeriod === 'month') actualAmtPerSec.div(options.month).toFixed(0);
+        if (selectedPeriod === 'year') actualAmtPerSec.div(options.year).toFixed(0);
+        await contract.modifyStream(payee, amtPerSec, newPayee, actualAmtPerSec);
         setModifyButtonState('Success');
       } catch (error) {
         console.error(error);
@@ -55,13 +53,10 @@ export const Modify = ({ isOpen, setIsOpen, payer, payee, amtPerSec, contractAdd
     if (name === 'amtpersec') setNewAmtPerSec(value);
   };
 
-  const handlePeriodClick = React.useCallback(() => {
-    if (secondIndex === options.length - 1) {
-      setSecondIndex(0);
-    } else {
-      setSecondIndex(secondIndex + 1);
-    }
-  }, [secondIndex]);
+  const handlePeriodChange = (event: any) => {
+    const name = event.target.name;
+    setSelectedPeriod(name);
+  };
 
   return (
     <>
@@ -69,22 +64,36 @@ export const Modify = ({ isOpen, setIsOpen, payer, payee, amtPerSec, contractAdd
         <DialogHeader title="Modify Stream" setIsOpen={setIsOpen} />
         <div className="mt-3 flex flex-col space-y-2">
           <p className="text-md">Current Stream:</p>
-          <div className="flex space-x-2">
+          <div className=" flex space-x-2">
             <span className=" text-sm">You</span>
-            <ArrowRightIcon className="h-4 w-4" />
-            <span className="truncate text-sm sm:max-w-[32ch] md:max-w-[48ch]"> {payee}</span>
+            <ArrowRightIcon className="h-5 w-4" />
+            <span className="text-sm "> {payee}</span>
           </div>
           <span className="text-sm"> Amount Per Second: {amtPerSec / 1e18}</span>
           <p className="text-md">New Stream:</p>
-          <p className="text-sm">New Payee:</p>
-          <input name="payee" className="text-sm" onChange={handleChange} value={newPayee} />
-          <div className="flex space-x-1">
-            <p className="text-sm">New Amount Per</p>
-            <button className="text-sm" onClick={handlePeriodClick}>
-              {options[secondIndex].name}
-            </button>
+          <div className="flex items-center space-x-1">
+            <p className="text-sm">Payee:</p>
+            <input name="payee" className="w-full text-sm" onChange={handleChange} value={newPayee} />
           </div>
-          <input name="amtpersec" className="text-sm" onChange={handleChange} />
+          <div className="flex items-center space-x-1">
+            <p className="text-sm">Per</p>
+            <button
+              name="month"
+              onClick={handlePeriodChange}
+              className={selectedPeriod === 'month' ? 'rounded-lg bg-zinc-200 p-1 text-sm dark:bg-zinc-700' : 'text-sm'}
+            >
+              Month
+            </button>
+            <button
+              name="year"
+              onClick={handlePeriodChange}
+              className={selectedPeriod === 'year' ? 'rounded-lg bg-zinc-200 p-1 text-sm dark:bg-zinc-700' : 'text-sm'}
+            >
+              Year
+            </button>
+            <input name="amtpersec" className="w-full text-sm" onChange={handleChange} />
+          </div>
+
           <button onClick={handleModifyInput}>{modifyButtonState}</button>
         </div>
       </DialogWrapper>
