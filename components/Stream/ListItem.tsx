@@ -67,27 +67,31 @@ export const ListItem = ({ data }: ItemProps) => {
   );
 
   return (
-    <li key={data.streamId} className="flex flex-col space-y-2 sm:flex-row sm:space-y-0">
+    <li key={data.streamId} className="flex flex-col content-center space-y-2 space-x-1 sm:flex-row sm:space-y-0">
       {isIncoming ? (
         <IncomingStream totalStreamed={totalStreamed} address={data.payer.id} tokenLogo={tokenLogo} />
       ) : (
         <>
           <OutgoingStream totalStreamed={totalStreamed} address={data.payee.id} tokenLogo={tokenLogo} />
-          <div className="flex space-x-1">
-            <button onClick={() => setOpenModify(!openModify)}> Modify </button>
-            <Cancel
-              payee={data.payee.id}
-              contractAddress={data?.contract.address.toString()}
-              amtPerSec={data.amountPerSec}
-            />
-            <Modify
-              isOpen={openModify}
-              setIsOpen={setOpenModify}
-              payee={data.payee.id}
-              amtPerSec={data.amountPerSec}
-              contractAddress={data?.contract.address.toString()}
-            />
-          </div>
+          <button
+            className="rounded-lg bg-zinc-200 p-1 text-sm dark:bg-zinc-700"
+            onClick={() => setOpenModify(!openModify)}
+          >
+            {' '}
+            Modify{' '}
+          </button>
+          <Cancel
+            payee={data.payee.id}
+            contractAddress={data?.contract.address.toString()}
+            amtPerSec={data.amountPerSec}
+          />
+          <Modify
+            isOpen={openModify}
+            setIsOpen={setOpenModify}
+            payee={data.payee.id}
+            amtPerSec={data.amountPerSec}
+            contractAddress={data?.contract.address.toString()}
+          />
         </>
       )}
     </li>

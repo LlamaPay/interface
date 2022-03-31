@@ -28,7 +28,9 @@ export const Cancel = ({ contractAddress, payee, amtPerSec }: CancelProps) => {
 
   return (
     <>
-      <button onClick={onCancel}>Cancel</button>
+      <button onClick={onCancel} className="rounded-lg bg-zinc-200 p-1 text-sm dark:bg-zinc-700">
+        Cancel
+      </button>
     </>
   );
 };
