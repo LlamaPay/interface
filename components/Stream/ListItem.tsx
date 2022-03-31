@@ -77,8 +77,7 @@ export const ListItem = ({ data }: ItemProps) => {
             className="rounded-lg bg-zinc-200 p-1 text-sm dark:bg-zinc-700"
             onClick={() => setOpenModify(!openModify)}
           >
-            {' '}
-            Modify{' '}
+            Modify
           </button>
           <Cancel
             payee={data.payee.id}
