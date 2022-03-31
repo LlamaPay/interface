@@ -8,9 +8,9 @@ interface MoreInfoProps {
   payer: string;
   payee: string;
   amtPerSec: number;
-  oldAmtPerSec: number | undefined;
-  oldPayer: string | undefined;
-  oldPayee: string | undefined;
+  oldAmtPerSec: number;
+  oldPayer: string;
+  oldPayee: string;
   createdTime: string;
 }
 
@@ -41,27 +41,20 @@ export const MoreInfo = ({
                 <p className="text-sm">Old Amount Per Second:</p>
                 <span className=" text-sm">{oldAmtPerSec}</span>
               </div>
-              <p className="text-sm">New Payer:</p>
-              <span className=" text-sm">{payer}</span>
-              <p className="text-sm">New Payee:</p>
-              <span className=" text-sm">{payee}</span>
-              <div className="flex space-x-1">
-                <p className="text-sm">New Amount Per Second:</p>
-                <span className=" text-sm">{amtPerSec}</span>
-              </div>
             </div>
           ) : (
-            <div>
-              <p className="text-sm">Payer:</p>
-              <span className=" text-sm">{payer}</span>
-              <p className="text-sm">Payee:</p>
-              <span className=" text-sm">{payee}</span>
-              <div className="flex space-x-1">
-                <p className="text-sm">Amount Per Second:</p>
-                <span className=" text-sm">{amtPerSec}</span>
-              </div>
-            </div>
+            ''
           )}
+          <div>
+            <p className="text-sm">Payer:</p>
+            <span className=" text-sm">{payer}</span>
+            <p className="text-sm">Payee:</p>
+            <span className=" text-sm">{payee}</span>
+            <div className="flex space-x-1">
+              <p className="text-sm">Amount Per Second:</p>
+              <span className=" text-sm">{amtPerSec}</span>
+            </div>
+          </div>
         </div>
       </DialogWrapper>
     </>

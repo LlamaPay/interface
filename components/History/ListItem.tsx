@@ -44,99 +44,68 @@ export const ListItem = ({ data }: ItemProps) => {
   let oldPayee = data.oldStream?.payee.id;
   let oldPayer = data.oldStream?.payer.id;
 
-  if (oldPayee === undefined) {
+  if (oldPayer === undefined || oldPayee === undefined) {
     oldPayee = 'DNE';
-  }
-
-  if (oldPayer === undefined) {
     oldPayer = 'DNE';
   }
 
   const createdTime = new Date(data.createdTimestamp * 1000).toLocaleString('en-CA');
 
-  switch (eventType) {
-    case 'StreamCreated':
-      return (
-        <StreamCreated
-          openInfo={openInfo}
-          setInfo={setInfo}
-          account={account}
-          eventType={eventType}
-          payer={payer}
-          payee={payee}
-          amtPerSec={amtPerSec}
-          oldPayer={oldPayer}
-          oldAmtPerSec={oldAmtPerSec}
-          oldPayee={oldPayee}
-          createdTime={createdTime}
-        />
-      );
-    case 'StreamModified':
-      return (
-        <StreamModified
-          openInfo={openInfo}
-          setInfo={setInfo}
-          account={account}
-          eventType={eventType}
-          payer={payer}
-          payee={payee}
-          oldPayer={oldPayer}
-          amtPerSec={amtPerSec}
-          oldAmtPerSec={oldAmtPerSec}
-          oldPayee={oldPayee}
-          createdTime={createdTime}
-        />
-      );
-
-    case 'StreamCancelled':
-      return (
-        <StreamCancelled
-          openInfo={openInfo}
-          setInfo={setInfo}
-          account={account}
-          eventType={eventType}
-          payer={payer}
-          payee={payee}
-          oldPayer={oldPayer}
-          amtPerSec={amtPerSec}
-          oldAmtPerSec={oldAmtPerSec}
-          oldPayee={oldPayee}
-          createdTime={createdTime}
-        />
-      );
-
-    default:
-      return <p> Failed to Load Data </p>;
-  }
-};
-
-const StreamCreated = ({
-  eventType,
-  openInfo,
-  setInfo,
-  account,
-  payer,
-  payee,
-  amtPerSec,
-  createdTime,
-}: HistoryProps) => {
   return (
     <>
       <div className="mr-2 flex flex-1 items-center space-x-2">
         <div className="flex items-center space-x-2">
-          <Tooltip content="Incoming stream">
-            <div className="rounded bg-green-100 p-1 text-green-600">
-              <CheckIcon className="h-4 w-4" />
-            </div>
-          </Tooltip>
-          <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
-            {account === payee ? formatAddress(payer) : 'You'}
-          </span>
-          <ArrowRightIcon className="h-4 w-4" />
-          <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
-            {account === payer ? formatAddress(payee) : 'You'}
-          </span>
-          <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(amtPerSec)}</span>
+          {eventType === 'StreamModified' ? (
+            <Tooltip content="Modified Stream">
+              <div className="rounded bg-yellow-100 p-1 text-yellow-600">
+                <PencilIcon className="h-4 w-4" />
+              </div>
+            </Tooltip>
+          ) : (
+            ''
+          )}
+          {eventType === 'StreamCreated' ? (
+            <Tooltip content="Incoming stream">
+              <div className="rounded bg-green-100 p-1 text-green-600">
+                <CheckIcon className="h-4 w-4" />
+              </div>
+            </Tooltip>
+          ) : (
+            ''
+          )}
+          {eventType === 'StreamCancelled' ? (
+            <Tooltip content="Cancelled stream">
+              <div className="rounded bg-red-100 p-1 text-red-600">
+                <XIcon className="h-4 w-4" />
+              </div>
+            </Tooltip>
+          ) : (
+            ''
+          )}
+          {eventType === 'StreamModified' ? (
+            <>
+              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
+                {account === oldPayee ? formatAddress(oldPayer) : 'You'}
+              </span>
+              <ArrowRightIcon className="h-4 w-4" />
+              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
+                {account === oldPayer ? formatAddress(oldPayee) : 'You'}
+              </span>
+              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(oldAmtPerSec)}</span>
+              <ChevronDoubleRightIcon className="h-4 w-4" />
+            </>
+          ) : (
+            <>
+              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
+                {account === payee ? formatAddress(payer) : 'You'}
+              </span>
+              <ArrowRightIcon className="h-4 w-4" />
+              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
+                {account === payer ? formatAddress(payee) : 'You'}
+              </span>
+              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(amtPerSec)}</span>
+            </>
+          )}
         </div>
         <div className="flex flex-1 justify-end ">
           <button onClick={() => setInfo(!openInfo)} className="rounded-lg bg-zinc-200 p-1 text-sm dark:bg-zinc-700">
@@ -146,130 +115,30 @@ const StreamCreated = ({
             isOpen={openInfo}
             setIsOpen={setInfo}
             eventType={eventType}
-            payer={payer}
-            payee={payee}
-            amtPerSec={amtPerSec}
-            oldAmtPerSec={undefined}
-            oldPayer={undefined}
-            oldPayee={undefined}
-            createdTime={createdTime}
-          />
-        </div>
-      </div>
-    </>
-  );
-};
-
-const StreamCancelled = ({
-  eventType,
-  openInfo,
-  setInfo,
-  account,
-  payer,
-  payee,
-  amtPerSec,
-  createdTime,
-}: HistoryProps) => {
-  return (
-    <>
-      <div className="mr-2 flex flex-1 items-center space-x-2">
-        <div className="flex items-center space-x-2">
-          <Tooltip content="Cancelled stream">
-            <div className="rounded bg-red-100 p-1 text-red-600">
-              <XIcon className="h-4 w-4" />
-            </div>
-          </Tooltip>
-          <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
-            {account === payee ? formatAddress(payer) : 'You'}
-          </span>
-          <ArrowRightIcon className="h-4 w-4" />
-          <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
-            {account === payer ? formatAddress(payee) : 'You'}
-          </span>
-          <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(amtPerSec)}</span>
-        </div>
-        <div className="flex flex-1 justify-end ">
-          <button onClick={() => setInfo(!openInfo)} className="rounded-lg bg-zinc-200 p-1 text-sm dark:bg-zinc-700">
-            More Info
-          </button>
-          <MoreInfo
-            isOpen={openInfo}
-            setIsOpen={setInfo}
-            eventType={eventType}
-            payer={payer}
-            payee={payee}
-            amtPerSec={amtPerSec}
-            oldAmtPerSec={undefined}
-            oldPayer={undefined}
-            oldPayee={undefined}
-            createdTime={createdTime}
-          />
-        </div>
-      </div>
-    </>
-  );
-};
-
-const StreamModified = ({
-  openInfo,
-  setInfo,
-  account,
-  eventType,
-  payer,
-  payee,
-  amtPerSec,
-  oldAmtPerSec,
-  oldPayer,
-  oldPayee,
-  createdTime,
-}: HistoryProps) => {
-  return (
-    <>
-      <div className="mr-2 flex flex-1 items-center space-x-2">
-        <div className="flex items-center space-x-2">
-          <Tooltip content="Modified stream">
-            <div className="rounded bg-yellow-100 p-1 text-yellow-600">
-              <PencilIcon className="h-4 w-4" />
-            </div>
-          </Tooltip>
-          <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
-            {account === oldPayee ? formatAddress(oldPayer) : 'You'}
-          </span>
-          <ArrowRightIcon className="h-4 w-4" />
-          <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
-            {account === oldPayer ? formatAddress(oldPayee) : 'You'}
-          </span>
-          <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(oldAmtPerSec)}</span>
-          <ChevronDoubleRightIcon className="h-4 w-4" />
-        </div>
-        <div className="flex flex-1 justify-end ">
-          <button onClick={() => setInfo(!openInfo)} className="rounded-lg bg-zinc-200 p-1 text-sm dark:bg-zinc-700">
-            More Info
-          </button>
-          <MoreInfo
-            eventType={eventType}
-            isOpen={openInfo}
-            setIsOpen={setInfo}
             payer={payer}
             payee={payee}
             amtPerSec={amtPerSec}
             oldAmtPerSec={oldAmtPerSec}
-            oldPayer={oldPayer}
+            oldPayer={oldPayee}
             oldPayee={oldPayee}
             createdTime={createdTime}
           />
         </div>
       </div>
-      <div className="ml-8 flex items-center space-x-2">
-        <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
-          {account === payee ? formatAddress(payer) : 'You'}
-        </span>
-        <ArrowRightIcon className="h-4 w-4" />
-        <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
-          {account === payer ? formatAddress(payee) : 'You'}
-        </span>
-        <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(amtPerSec)}</span>
-      </div>
+      {eventType === 'StreamModified' ? (
+        <div className="ml-8 flex items-center space-x-2">
+          <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
+            {account === payee ? formatAddress(payer) : 'You'}
+          </span>
+          <ArrowRightIcon className="h-4 w-4" />
+          <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
+            {account === payer ? formatAddress(payee) : 'You'}
+          </span>
+          <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(amtPerSec)}</span>
+        </div>
+      ) : (
+        ''
+      )}
     </>
   );
 };
