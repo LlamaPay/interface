@@ -9,6 +9,7 @@ import Tooltip from 'components/Tooltip';
 import { useAccount } from 'wagmi';
 import { Modify } from './Modify';
 import { Cancel } from './Cancel';
+import { Withdraw } from './Withdraw';
 
 interface ItemProps {
   data: UserStreamFragment;
@@ -69,7 +70,15 @@ export const ListItem = ({ data }: ItemProps) => {
   return (
     <li key={data.streamId} className="flex flex-col content-center space-y-2 space-x-1 sm:flex-row sm:space-y-0">
       {isIncoming ? (
-        <IncomingStream totalStreamed={totalStreamed} address={data.payer.id} tokenLogo={tokenLogo} />
+        <>
+          <IncomingStream totalStreamed={totalStreamed} address={data.payer.id} tokenLogo={tokenLogo} />
+          <Withdraw
+            payer={data.payer.id}
+            payee={data.payee.id}
+            amtPerSec={data.amountPerSec}
+            contractAddress={data?.contract.address.toString()}
+          />
+        </>
       ) : (
         <>
           <OutgoingStream totalStreamed={totalStreamed} address={data.payee.id} tokenLogo={tokenLogo} />
