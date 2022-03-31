@@ -8,6 +8,7 @@ import Image from 'next/image';
 import Tooltip from 'components/Tooltip';
 import { useAccount } from 'wagmi';
 import { Modify } from './Modify';
+import { Cancel } from './Cancel';
 
 interface ItemProps {
   data: UserStreamFragment;
@@ -24,7 +25,6 @@ type TokenLogo = React.MutableRefObject<string | StaticImageData>;
 
 // TODO cleanup all hardcoded values
 export const ListItem = ({ data }: ItemProps) => {
-
   const [{ data: accountData }] = useAccount();
 
   const isIncoming = data.payer?.id !== accountData?.address.toLowerCase();
@@ -73,11 +73,23 @@ export const ListItem = ({ data }: ItemProps) => {
       ) : (
         <>
           <OutgoingStream totalStreamed={totalStreamed} address={data.payee.id} tokenLogo={tokenLogo} />
-          <button onClick={() => setOpenModify(!openModify)}> Modify </button>
-          <Modify isOpen={openModify} setIsOpen={setOpenModify} payer={data.payer.id} payee={data.payee.id} amtPerSec={data.amountPerSec} contractAddress={data?.contract.address.toString()} />
+          <div className="flex space-x-1">
+            <button onClick={() => setOpenModify(!openModify)}> Modify </button>
+            <Cancel
+              payee={data.payee.id}
+              contractAddress={data?.contract.address.toString()}
+              amtPerSec={data.amountPerSec}
+            />
+            <Modify
+              isOpen={openModify}
+              setIsOpen={setOpenModify}
+              payee={data.payee.id}
+              amtPerSec={data.amountPerSec}
+              contractAddress={data?.contract.address.toString()}
+            />
+          </div>
         </>
       )}
-
     </li>
   );
 };

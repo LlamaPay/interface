@@ -7,13 +7,12 @@ import BigNumber from 'bignumber.js';
 interface ModifyProps {
   isOpen: boolean;
   setIsOpen: SetIsOpen;
-  payer: string;
   payee: string;
   amtPerSec: number;
   contractAddress: string;
 }
 
-export const Modify = ({ isOpen, setIsOpen, payer, payee, amtPerSec, contractAddress }: ModifyProps) => {
+export const Modify = ({ isOpen, setIsOpen, payee, amtPerSec, contractAddress }: ModifyProps) => {
   const [{ data: signerData }] = useSigner();
 
   const contract = useContract({
@@ -26,7 +25,6 @@ export const Modify = ({ isOpen, setIsOpen, payer, payee, amtPerSec, contractAdd
 
   const [newPayee, setNewPayee] = React.useState<string>(payee);
   const [newAmtPerSec, setNewAmtPerSec] = React.useState<number | string>(amtPerSec);
-  const [modifyButtonState, setModifyButtonState] = React.useState<string>('Modify Stream');
   const [selectedPeriod, setSelectedPeriod] = React.useState<string>('month');
 
   // TODO CHECKS AND STUFF
@@ -38,10 +36,7 @@ export const Modify = ({ isOpen, setIsOpen, payer, payee, amtPerSec, contractAdd
         if (selectedPeriod === 'month') actualAmtPerSec.div(options.month).toFixed(0);
         if (selectedPeriod === 'year') actualAmtPerSec.div(options.year).toFixed(0);
         await contract.modifyStream(payee, amtPerSec, newPayee, actualAmtPerSec);
-        setModifyButtonState('Success');
-      } catch (error) {
-        console.error(error);
-      }
+      } catch {}
     }
     modifyStream();
   }, [contract, newPayee, newAmtPerSec]);
@@ -94,7 +89,9 @@ export const Modify = ({ isOpen, setIsOpen, payer, payee, amtPerSec, contractAdd
             <input name="amtpersec" className="w-full text-sm" onChange={handleChange} />
           </div>
 
-          <button onClick={handleModifyInput}>{modifyButtonState}</button>
+          <button onClick={handleModifyInput} className="nav-button">
+            Modify Stream
+          </button>
         </div>
       </DialogWrapper>
     </>
