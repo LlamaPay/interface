@@ -1,3 +1,4 @@
+import { ArrowRightIcon } from '@heroicons/react/solid';
 import { DialogHeader, DialogWrapper, SetIsOpen } from 'components/Dialog';
 
 interface MoreInfoProps {
@@ -7,18 +8,21 @@ interface MoreInfoProps {
   payer: string;
   payee: string;
   amtPerSec: number;
-  oldAmtPerSec: number | null;
-  oldPayee: string | null;
+  oldAmtPerSec: number | undefined;
+  oldPayer: string | undefined;
+  oldPayee: string | undefined;
   createdTime: string;
 }
 
 export const MoreInfo = ({
   isOpen,
   setIsOpen,
+  eventType,
   payer,
   payee,
   amtPerSec,
   oldAmtPerSec,
+  oldPayer,
   oldPayee,
   createdTime,
 }: MoreInfoProps) => {
@@ -26,7 +30,39 @@ export const MoreInfo = ({
     <>
       <DialogWrapper isOpen={isOpen} setIsOpen={setIsOpen}>
         <DialogHeader title="More Info" setIsOpen={setIsOpen} />
-        <div className="mt-3 flex flex-col space-y-2"></div>
+        <div className="mt-3 flex flex-col space-y-2">
+          {eventType === 'StreamModified' ? (
+            <div>
+              <p className="text-sm">Old Payer:</p>
+              <span className=" text-sm">{oldPayer}</span>
+              <p className="text-sm">Old Payee:</p>
+              <span className=" text-sm">{oldPayee}</span>
+              <div className="flex space-x-1">
+                <p className="text-sm">Old Amount Per Second:</p>
+                <span className=" text-sm">{oldAmtPerSec}</span>
+              </div>
+              <p className="text-sm">New Payer:</p>
+              <span className=" text-sm">{payer}</span>
+              <p className="text-sm">New Payee:</p>
+              <span className=" text-sm">{payee}</span>
+              <div className="flex space-x-1">
+                <p className="text-sm">New Amount Per Second:</p>
+                <span className=" text-sm">{amtPerSec}</span>
+              </div>
+            </div>
+          ) : (
+            <div>
+              <p className="text-sm">Payer:</p>
+              <span className=" text-sm">{payer}</span>
+              <p className="text-sm">Payee:</p>
+              <span className=" text-sm">{payee}</span>
+              <div className="flex space-x-1">
+                <p className="text-sm">Amount Per Second:</p>
+                <span className=" text-sm">{amtPerSec}</span>
+              </div>
+            </div>
+          )}
+        </div>
       </DialogWrapper>
     </>
   );

@@ -17,6 +17,7 @@ interface HistoryProps {
   payer: string;
   payee: string;
   amtPerSec: number;
+  oldPayer: string;
   oldPayee: string;
   oldAmtPerSec: number;
   createdTime: string;
@@ -41,9 +42,16 @@ export const ListItem = ({ data }: ItemProps) => {
   const amtPerSec = data.stream.amountPerSec / 1e18;
   const oldAmtPerSec = data.oldStream?.amountPerSec / 1e18;
   let oldPayee = data.oldStream?.payee.id;
+  let oldPayer = data.oldStream?.payer.id;
+
   if (oldPayee === undefined) {
     oldPayee = 'DNE';
   }
+
+  if (oldPayer === undefined) {
+    oldPayer = 'DNE';
+  }
+
   const createdTime = new Date(data.createdTimestamp * 1000).toLocaleString('en-CA');
 
   switch (eventType) {
@@ -57,6 +65,7 @@ export const ListItem = ({ data }: ItemProps) => {
           payer={payer}
           payee={payee}
           amtPerSec={amtPerSec}
+          oldPayer={oldPayer}
           oldAmtPerSec={oldAmtPerSec}
           oldPayee={oldPayee}
           createdTime={createdTime}
@@ -71,6 +80,7 @@ export const ListItem = ({ data }: ItemProps) => {
           eventType={eventType}
           payer={payer}
           payee={payee}
+          oldPayer={oldPayer}
           amtPerSec={amtPerSec}
           oldAmtPerSec={oldAmtPerSec}
           oldPayee={oldPayee}
@@ -87,6 +97,7 @@ export const ListItem = ({ data }: ItemProps) => {
           eventType={eventType}
           payer={payer}
           payee={payee}
+          oldPayer={oldPayer}
           amtPerSec={amtPerSec}
           oldAmtPerSec={oldAmtPerSec}
           oldPayee={oldPayee}
@@ -138,8 +149,9 @@ const StreamCreated = ({
             payer={payer}
             payee={payee}
             amtPerSec={amtPerSec}
-            oldAmtPerSec={null}
-            oldPayee={null}
+            oldAmtPerSec={undefined}
+            oldPayer={undefined}
+            oldPayee={undefined}
             createdTime={createdTime}
           />
         </div>
@@ -187,8 +199,9 @@ const StreamCancelled = ({
             payer={payer}
             payee={payee}
             amtPerSec={amtPerSec}
-            oldAmtPerSec={null}
-            oldPayee={null}
+            oldAmtPerSec={undefined}
+            oldPayer={undefined}
+            oldPayee={undefined}
             createdTime={createdTime}
           />
         </div>
@@ -206,6 +219,7 @@ const StreamModified = ({
   payee,
   amtPerSec,
   oldAmtPerSec,
+  oldPayer,
   oldPayee,
   createdTime,
 }: HistoryProps) => {
@@ -219,11 +233,11 @@ const StreamModified = ({
             </div>
           </Tooltip>
           <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
-            {account === oldPayee ? formatAddress(payer) : 'You'}
+            {account === oldPayee ? formatAddress(oldPayer) : 'You'}
           </span>
           <ArrowRightIcon className="h-4 w-4" />
           <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
-            {account === payer ? formatAddress(oldPayee) : 'You'}
+            {account === oldPayer ? formatAddress(oldPayee) : 'You'}
           </span>
           <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(oldAmtPerSec)}</span>
           <ChevronDoubleRightIcon className="h-4 w-4" />
@@ -240,6 +254,7 @@ const StreamModified = ({
             payee={payee}
             amtPerSec={amtPerSec}
             oldAmtPerSec={oldAmtPerSec}
+            oldPayer={oldPayer}
             oldPayee={oldPayee}
             createdTime={createdTime}
           />
