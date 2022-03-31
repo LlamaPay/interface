@@ -9,6 +9,7 @@ import Tooltip from 'components/Tooltip';
 import { useAccount } from 'wagmi';
 import { Modify } from './Modify';
 import { Cancel } from './Cancel';
+import { Push } from './Push';
 
 interface ItemProps {
   data: UserStreamFragment;
@@ -75,6 +76,12 @@ export const ListItem = ({ data }: ItemProps) => {
       ) : (
         <>
           <OutgoingStream totalStreamed={totalStreamed} address={data.payee.id} tokenLogo={tokenLogo} />
+          <Push
+            contractAddress={data?.contract.address.toString()}
+            payer={data.payer.id}
+            payee={data.payee.id}
+            amtPerSec={data.amountPerSec}
+          />
           <button
             className="rounded-lg bg-zinc-200 p-1 text-sm dark:bg-zinc-700"
             onClick={() => setOpenModify(!openModify)}
