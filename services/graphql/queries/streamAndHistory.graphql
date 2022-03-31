@@ -22,6 +22,9 @@ fragment UserStream on Stream {
   }
   token {
     address
+    address
+    name
+    decimals
   }
   active
   amountPerSec
@@ -41,6 +44,8 @@ fragment UserHistory on HistoryEvent {
     }
     token {
       address
+      name
+      decimals
     }
     amountPerSec
   }

@@ -45,7 +45,7 @@ export const ListItem = ({ data }: ItemProps) => {
 
   const updateStreamed = React.useCallback(() => {
     if (isDataValid) {
-      const totalAmount = (((Date.now() - createdAt) / 1000) * amountPerSec) / 1e18;
+      const totalAmount = (((Date.now() - createdAt) / 1000) * amountPerSec) / 10 ** data.token.decimals;
       setTotalStreamed(totalAmount);
     } else setTotalStreamed(null);
   }, [amountPerSec, createdAt, isDataValid]);

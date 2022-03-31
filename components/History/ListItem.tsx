@@ -9,20 +9,6 @@ interface ItemProps {
   data: UserHistoryFragment;
 }
 
-interface HistoryProps {
-  openInfo: boolean;
-  setInfo: React.Dispatch<React.SetStateAction<boolean>>;
-  account: string | undefined;
-  eventType: string;
-  payer: string;
-  payee: string;
-  amtPerSec: number;
-  oldPayer: string;
-  oldPayee: string;
-  oldAmtPerSec: number;
-  createdTime: string;
-}
-
 function formatAmtPerSec(amtPerSec: number) {
   let formatted = amtPerSec.toString();
   if (formatted.length > 10) {
@@ -39,8 +25,9 @@ export const ListItem = ({ data }: ItemProps) => {
   const eventType = data.eventType;
   const payer = data.stream.payer.id;
   const payee = data.stream.payee.id;
-  const amtPerSec = data.stream.amountPerSec / 1e18;
-  const oldAmtPerSec = data.oldStream?.amountPerSec / 1e18;
+  const decimals = data.stream.token.decimals;
+  const amtPerSec = data.stream.amountPerSec / 10 ** decimals;
+  const oldAmtPerSec = data.oldStream?.amountPerSec / 10 ** decimals;
   let oldPayee = data.oldStream?.payee.id;
   let oldPayer = data.oldStream?.payer.id;
 
