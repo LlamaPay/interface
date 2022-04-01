@@ -55,10 +55,10 @@ export const ListItem = ({ data }: ItemProps) => {
 
   const updateStreamed = React.useCallback(() => {
     if (isDataValid) {
-      const totalAmount = (((Date.now() - createdAt) / 1000) * amountPerSec) / 10 ** data.token.decimals;
+      const totalAmount = (((Date.now() - createdAt) / 1000) * amountPerSec) / 1e20;
       setTotalStreamed(totalAmount);
     } else setTotalStreamed(null);
-  }, [amountPerSec, createdAt, isDataValid, data.token.decimals]);
+  }, [amountPerSec, createdAt, isDataValid]);
 
   React.useEffect(() => {
     updateStreamed();
