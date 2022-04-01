@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { ArrowRightIcon } from '@heroicons/react/solid';
 import { DialogHeader, DialogWrapper, SetIsOpen } from 'components/Dialog';
-import { llamapayABI } from 'utils/contract';
-import { useContract, useSigner } from 'wagmi';
 import BigNumber from 'bignumber.js';
 interface ModifyProps {
   isOpen: boolean;
@@ -10,18 +8,10 @@ interface ModifyProps {
   payee: string;
   payer: string;
   amtPerSec: number;
-  contractAddress: string;
+  contract: any;
 }
 
-export const Modify = ({ isOpen, setIsOpen, payee, amtPerSec, contractAddress }: ModifyProps) => {
-  const [{ data: signerData }] = useSigner();
-
-  const contract = useContract({
-    addressOrName: contractAddress,
-    contractInterface: llamapayABI,
-    signerOrProvider: signerData,
-  });
-
+export const Modify = ({ isOpen, setIsOpen, payee, amtPerSec, contract }: ModifyProps) => {
   const options = { month: 2419200, year: 29030400 };
 
   const [newPayee, setNewPayee] = React.useState<string>(payee);

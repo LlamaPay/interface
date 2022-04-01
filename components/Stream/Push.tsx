@@ -1,23 +1,13 @@
 import * as React from 'react';
-import { llamapayABI } from 'utils/contract';
-import { useContract, useSigner } from 'wagmi';
 
 interface PushProps {
-  contractAddress: string;
+  contract: any;
   payer: string;
   payee: string;
   amtPerSec: number;
 }
 
-export const Push = ({ contractAddress, payer, payee, amtPerSec }: PushProps) => {
-  const [{ data: signerData }] = useSigner();
-
-  const contract = useContract({
-    addressOrName: contractAddress,
-    contractInterface: llamapayABI,
-    signerOrProvider: signerData,
-  });
-
+export const Push = ({ contract, payer, payee, amtPerSec }: PushProps) => {
   const onPush = React.useCallback(() => {
     async function doPush() {
       try {

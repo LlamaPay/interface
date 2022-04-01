@@ -5,11 +5,12 @@ import { formatAddress } from 'utils/address';
 import EmptyToken from 'public/empty-token.webp';
 import Image from 'next/image';
 import Tooltip from 'components/Tooltip';
-import { useAccount } from 'wagmi';
+import { useAccount, useContract, useSigner } from 'wagmi';
 import { Modify } from './Modify';
 import { Cancel } from './Cancel';
 import { Push } from './Push';
 import { Withdrawable } from './Withdrawable';
+import { llamapayABI } from 'utils/contract';
 
 interface ItemProps {
   data: UserStreamFragment;
@@ -27,6 +28,14 @@ type TokenLogo = React.MutableRefObject<string | StaticImageData>;
 // TODO cleanup all hardcoded values
 export const ListItem = ({ data }: ItemProps) => {
   const [{ data: accountData }] = useAccount();
+
+  const [{ data: signerData }] = useSigner();
+
+  const contract = useContract({
+    addressOrName: data?.contract.address.toString(),
+    contractInterface: llamapayABI,
+    signerOrProvider: signerData,
+  });
 
   const isIncoming = data.payer?.id !== accountData?.address.toLowerCase();
 
@@ -73,7 +82,7 @@ export const ListItem = ({ data }: ItemProps) => {
         <>
           <IncomingStream totalStreamed={totalStreamed} address={data.payer.id} tokenLogo={tokenLogo} />
           <Withdrawable
-            contractAddress={data?.contract.address.toString()}
+            contract={contract}
             payer={data.payer.id}
             payee={data.payee.id}
             amtPerSec={data.amountPerSec}
@@ -84,35 +93,26 @@ export const ListItem = ({ data }: ItemProps) => {
         <>
           <OutgoingStream totalStreamed={totalStreamed} address={data.payee.id} tokenLogo={tokenLogo} />
           <Withdrawable
-            contractAddress={data?.contract.address.toString()}
+            contract={contract}
             payer={data.payer.id}
             payee={data.payee.id}
             amtPerSec={data.amountPerSec}
             decimals={data.token.decimals}
           />
-          <Push
-            contractAddress={data?.contract.address.toString()}
-            payer={data.payer.id}
-            payee={data.payee.id}
-            amtPerSec={data.amountPerSec}
-          />
+          <Push contract={contract} payer={data.payer.id} payee={data.payee.id} amtPerSec={data.amountPerSec} />
           <button
             className="rounded-lg bg-zinc-200 p-1 text-sm dark:bg-zinc-700"
             onClick={() => setOpenModify(!openModify)}
           >
             Modify
           </button>
-          <Cancel
-            payee={data.payee.id}
-            contractAddress={data?.contract.address.toString()}
-            amtPerSec={data.amountPerSec}
-          />
+          <Cancel payee={data.payee.id} contract={contract} amtPerSec={data.amountPerSec} />
           <Modify
             isOpen={openModify}
             setIsOpen={setOpenModify}
             payee={data.payee.id}
             amtPerSec={data.amountPerSec}
-            contractAddress={data?.contract.address.toString()}
+            contract={contract}
             payer={data.payer.id}
           />
         </>

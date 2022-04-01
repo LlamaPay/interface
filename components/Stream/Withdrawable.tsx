@@ -1,41 +1,52 @@
 import BigNumber from 'bignumber.js';
 import * as React from 'react';
-import { llamapayABI } from 'utils/contract';
-import { useContract, useSigner } from 'wagmi';
 
 interface WithdrawableProps {
-  contractAddress: string;
+  contract: any;
   payer: string;
   payee: string;
   amtPerSec: number;
   decimals: number;
 }
 
-export const Withdrawable = ({ contractAddress, payer, payee, amtPerSec, decimals }: WithdrawableProps) => {
-  const [{ data: signerData }] = useSigner();
-
+export const Withdrawable = ({ contract, payer, payee, amtPerSec, decimals }: WithdrawableProps) => {
   const [balanceState, setBalanceState] = React.useState<string>();
+  const [calledBalance, setCalledBalance] = React.useState<number>();
+  const [calledLastUpdate, setCalledLastUpdate] = React.useState<number>();
 
-  const contract = useContract({
-    addressOrName: contractAddress,
-    contractInterface: llamapayABI,
-    signerOrProvider: signerData,
-  });
-
-  React.useEffect(() => {
-    async function getBalance() {
+  const callBalance = React.useCallback(() => {
+    async function callContract() {
       try {
         const call = await contract.withdrawable(payer, payee, amtPerSec);
-        const balance = new BigNumber(call.withdrawableAmount.toString()).div(10 ** decimals).toString();
-        setBalanceState(balance);
-      } catch (error) {}
+        setCalledBalance(Number(call.withdrawableAmount));
+        setCalledLastUpdate(Number(call.lastUpdate));
+      } catch (error) {
+        setTimeout(() => {
+          callContract();
+        }, 1000);
+      }
     }
-    getBalance();
+    callContract();
+  }, [contract]);
+
+  callBalance();
+  const updateBalance = React.useCallback(() => {
+    if (calledBalance === undefined || calledLastUpdate === undefined) return;
+    const realBalance = new BigNumber(calledBalance)
+      .plus((Date.now() / 1e3 - calledLastUpdate) * amtPerSec)
+      .div(10 ** decimals)
+      .toString();
+    console.log(realBalance);
+    setBalanceState(realBalance);
+  }, [calledBalance, amtPerSec, calledLastUpdate, decimals]);
+
+  React.useEffect(() => {
+    updateBalance();
     const interval = setInterval(() => {
-      getBalance();
+      updateBalance();
     }, 1000);
     return () => clearInterval(interval);
-  }, [contract]);
+  }, [updateBalance]);
 
   return (
     <div className="flex items-baseline space-x-1">

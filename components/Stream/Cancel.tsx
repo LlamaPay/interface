@@ -1,22 +1,12 @@
 import * as React from 'react';
-import { llamapayABI } from 'utils/contract';
-import { useContract, useSigner } from 'wagmi';
 
 interface CancelProps {
-  contractAddress: string;
+  contract: any;
   payee: string;
   amtPerSec: number;
 }
 
-export const Cancel = ({ contractAddress, payee, amtPerSec }: CancelProps) => {
-  const [{ data: signerData }] = useSigner();
-
-  const contract = useContract({
-    addressOrName: contractAddress,
-    contractInterface: llamapayABI,
-    signerOrProvider: signerData,
-  });
-
+export const Cancel = ({ contract, payee, amtPerSec }: CancelProps) => {
   const onCancel = React.useCallback(() => {
     async function cancelStream() {
       try {
