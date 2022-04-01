@@ -22,7 +22,6 @@ export const Modify = ({ isOpen, setIsOpen, payee, amtPerSec, contract }: Modify
   const handleModifyInput = React.useCallback(() => {
     async function modifyStream() {
       try {
-        // Replace with token decimals
         const actualAmtPerSec = new BigNumber(newAmtPerSec).times(1e20);
         if (selectedPeriod === 'month') actualAmtPerSec.div(options.month).toFixed(0);
         if (selectedPeriod === 'year') actualAmtPerSec.div(options.year).toFixed(0);

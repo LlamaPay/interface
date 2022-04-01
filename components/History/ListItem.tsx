@@ -26,8 +26,8 @@ export const ListItem = ({ data }: ItemProps) => {
   const payer = data.stream.payer.id;
   const payee = data.stream.payee.id;
   const decimals = data.stream.token.decimals;
-  const amtPerSec = data.stream.amountPerSec / 10 ** decimals;
-  const oldAmtPerSec = data.oldStream?.amountPerSec / 10 ** decimals;
+  const amtPerSec = data.stream.amountPerSec / 1e20;
+  const oldAmtPerSec = data.oldStream?.amountPerSec / 1e20;
   let oldPayee = data.oldStream?.payee.id;
   let oldPayer = data.oldStream?.payer.id;
 
