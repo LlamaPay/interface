@@ -5,8 +5,8 @@ import { useSigner } from 'wagmi';
 
 interface IUseWithdrawPayerToken {
   llamaContractAddress: string;
-  amountToWithdraw: string;
-  withdrawAll: boolean;
+  amountToWithdraw?: string;
+  withdrawAll?: boolean;
 }
 
 interface IWithdrawPayerToken extends IUseWithdrawPayerToken {

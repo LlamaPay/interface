@@ -16,4 +16,6 @@ export interface IBalance {
   symbol: string;
   amount: string;
   contractAddress: string;
+  tokenDecimals: number;
+  tokenContract: Contract;
 }

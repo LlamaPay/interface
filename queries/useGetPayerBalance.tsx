@@ -2,6 +2,8 @@ import { useQuery } from 'react-query';
 import { IBalance, IToken } from 'types';
 import { useAccount } from 'wagmi';
 import BigNumber from 'bignumber.js';
+import { createERC20Contract } from 'utils/tokenUtils';
+import { getAddress } from 'ethers/lib/utils';
 
 // TODO update chain name based on user wallet network
 const fetchBalance = async (id: string, tokens: IToken[] | null): Promise<IBalance[] | null> => {
@@ -22,6 +24,8 @@ const fetchBalance = async (id: string, tokens: IToken[] | null): Promise<IBalan
           symbol: tokens[index]?.symbol,
           amount: amount ? amount.toFixed(0) : '',
           contractAddress: tokens[index]?.llamaContractAddress,
+          tokenDecimals: tokens[index].decimals,
+          tokenContract: createERC20Contract({ tokenAddress: getAddress(tokens[index]?.tokenAddress) }),
         };
       })
       .filter((d) => d.amount !== '0');

@@ -4,32 +4,33 @@ import { IBalance } from 'types';
 import useChainExplorer from 'hooks/useChainExplorer';
 import { DialogHeader, DialogWrapper } from 'components/Dialog';
 
-interface IBalanceProps {
-  balances: IBalance[] | null;
-  noBalances: boolean;
-  isLoading: boolean;
-  isError: boolean;
-}
-
-type TokenAction = 'deposit' | 'withdraw';
+import { IBalanceProps, IFormData, TokenAction } from './types';
+import DepositForm from './DepositForm';
+import WithdrawForm from './WithdrawForm';
 
 const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) => {
   // function that returns chain explorer url based on the chain user is connected to
   const chainExplorer = useChainExplorer();
   const [openDialog, setOpenDialog] = React.useState(false);
-  const [actionType, setActionType] = React.useState({
-    type: null as string | null,
-    llamaContractAddress: null as string | null,
-    title: null as 'Deposit' | 'Withdraw' | null,
-  });
 
-  const handleToken = (type: TokenAction, llamaContractAddress: string) => {
+  const formData = React.useRef<null | IFormData>(null);
+
+  const handleToken = (actionType: TokenAction, balance: IBalance) => {
     setOpenDialog(true);
-    setActionType({ type, llamaContractAddress, title: type === 'deposit' ? 'Deposit' : 'Withdraw' });
+    formData.current = {
+      actionType,
+      title: balance.name || balance.address, // TODO only show name of verified tokens, else show address
+      symbol: balance.symbol,
+      tokenDecimals: balance.tokenDecimals,
+      tokenAddress: balance.address,
+      tokenContract: balance.tokenContract,
+      llamaContractAddress: balance.contractAddress,
+      submit: actionType === 'deposit' ? 'Deposit' : 'Withdraw',
+    };
   };
 
   return (
-    <section className="w-full max-w-lg">
+    <section className="w-full max-w-lg overflow-x-auto">
       <h1 className="mb-3 text-center text-xl">Balances</h1>
 
       {isLoading || noBalances || isError ? (
@@ -64,15 +65,13 @@ const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) =>
                 <td className="whitespace-nowrap border p-1 text-right">{`${b.amount} ${b.symbol}`}</td>
                 <td className="space-x-2 border p-1">
                   <span className="flex space-x-2">
-                    <button
-                      className="rounded bg-gray-100 py-1 px-2"
-                      onClick={() => handleToken('deposit', b.contractAddress)}
-                    >
+                    <button className="rounded bg-gray-100 py-1 px-2" onClick={() => handleToken('deposit', b)}>
                       Deposit
                     </button>
                     <button
-                      className="rounded bg-gray-100 py-1 px-2"
-                      onClick={() => handleToken('withdraw', b.contractAddress)}
+                      className="rounded bg-gray-100 py-1 px-2 disabled:cursor-not-allowed"
+                      onClick={() => handleToken('withdraw', b)}
+                      disabled={Number.isNaN(b.amount) || Number(b.amount) <= 0}
                     >
                       Withdraw
                     </button>
@@ -84,7 +83,16 @@ const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) =>
         </table>
       )}
       <DialogWrapper isOpen={openDialog} setIsOpen={setOpenDialog}>
-        <DialogHeader title={actionType.title} setIsOpen={setOpenDialog} />
+        {formData.current && (
+          <>
+            <DialogHeader title={formData.current.title} setIsOpen={setOpenDialog} />
+            {formData.current.actionType === 'deposit' ? (
+              <DepositForm data={formData.current} />
+            ) : (
+              <WithdrawForm data={formData.current} />
+            )}
+          </>
+        )}
       </DialogWrapper>
     </section>
   );
