@@ -7,7 +7,7 @@ const Placeholder = () => {
   return (
     <form className="flex flex-col space-y-4">
       <label>
-        <p>Select a Token</p>
+        <p>Select a Token to stream</p>
         <Select
           options={[]}
           classNamePrefix="react-select"
@@ -30,9 +30,6 @@ const Placeholder = () => {
         <p>Amount per sec</p>
         <input type="text" className="w-full rounded border px-3 py-[6px]" />
       </label>
-      <button className="nav-button mx-auto mt-2 w-full disabled:cursor-not-allowed" type="button" disabled={true}>
-        Approve
-      </button>
       <button className="nav-button mx-auto mt-2 w-full disabled:cursor-not-allowed" type="button" disabled={true}>
         Create Stream
       </button>
