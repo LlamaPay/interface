@@ -29,7 +29,7 @@ export const CreateStream = ({ tokens, noBalances, isLoading, isError }: ICreate
         <Placeholder />
       ) : isError || !tokens || !tokenOptions ? (
         <ErrorBoundary message="Something went wrong" />
-      ) : !noBalances ? (
+      ) : noBalances ? (
         <DepositAndCreate tokens={tokens} tokenOptions={tokenOptions} isDark={isDark} />
       ) : (
         <CreateStreamOnly tokens={tokens} tokenOptions={tokenOptions} isDark={isDark} />
