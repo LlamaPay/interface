@@ -33,10 +33,9 @@ export const Withdrawable = ({ contract, payer, payee, amtPerSec, decimals }: Wi
   const updateBalance = React.useCallback(() => {
     if (calledBalance === undefined || calledLastUpdate === undefined) return;
     const realBalance = new BigNumber(calledBalance)
-      .plus((Date.now() / 1e3 - calledLastUpdate) * amtPerSec)
-      .div(10 ** decimals)
+      .div(10 ** (decimals - (20 - decimals)))
+      .plus(((Date.now() / 1e3 - calledLastUpdate) * amtPerSec) / 1e18)
       .toString();
-    console.log(realBalance);
     setBalanceState(realBalance);
   }, [calledBalance, amtPerSec, calledLastUpdate, decimals]);
 
