@@ -92,7 +92,7 @@ const Form = ({ balancesExist, tokens }: ICreateStreamForm) => {
       checkApproval({
         tokenAddress: tokenAddress.current,
         userAddress: accountData?.address,
-        approvedForAmount: amountToDeposit.current,
+        approvedForAmount: amountPerSec.current,
       });
     } else {
       checkApproval({
@@ -210,7 +210,7 @@ const Form = ({ balancesExist, tokens }: ICreateStreamForm) => {
 
   return (
     <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
-      {!balancesExist ? <CreateStreamOnly {...formProps} /> : <DepositAndCreate {...formProps} />}
+      {balancesExist ? <CreateStreamOnly {...formProps} /> : <DepositAndCreate {...formProps} />}
     </form>
   );
 };

@@ -17,7 +17,7 @@ const Create: NextPage = () => {
   // and useGetPayerBalance wouldn't refetch until specified interval
   // even though tokens are updated, this way it triggers a rerender and keeps the ui in loading state until we fetch balances on updated tokens data
   const tokensKey = React.useMemo(() => {
-    return tokens && tokens?.length > 0 ? Date.now().toString() : '';
+    return tokens && tokens?.length > 0 ? 'tokensExist' : 'noTokens';
   }, [tokens]);
 
   const {
