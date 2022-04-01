@@ -23,7 +23,7 @@ export const Modify = ({ isOpen, setIsOpen, payee, amtPerSec, contract }: Modify
     async function modifyStream() {
       try {
         // Replace with token decimals
-        const actualAmtPerSec = new BigNumber(newAmtPerSec).times(1e18);
+        const actualAmtPerSec = new BigNumber(newAmtPerSec).times(1e20);
         if (selectedPeriod === 'month') actualAmtPerSec.div(options.month).toFixed(0);
         if (selectedPeriod === 'year') actualAmtPerSec.div(options.year).toFixed(0);
         await contract.modifyStream(payee, amtPerSec, newPayee, actualAmtPerSec);
@@ -55,7 +55,7 @@ export const Modify = ({ isOpen, setIsOpen, payee, amtPerSec, contract }: Modify
             <ArrowRightIcon className="h-5 w-4" />
             <span className="text-sm "> {payee}</span>
           </div>
-          <span className="text-sm"> Amount Per Second: {amtPerSec / 1e18}</span>
+          <span className="text-sm"> Amount Per Second: {amtPerSec / 1e20}</span>
           <p className="text-md">New Stream:</p>
           <div className="flex items-center space-x-1">
             <p className="text-sm">Payee:</p>
