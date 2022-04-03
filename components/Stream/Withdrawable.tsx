@@ -9,10 +9,8 @@ interface WithdrawableProps {
   decimals: number;
 }
 
-function formatBalance(balance: number, decimals: number) {
-  const formatted = balance / 10 ** decimals;
-
-  return formatted.toLocaleString('en-US', { maximumFractionDigits: 4 });
+function formatBalance(balance: number) {
+  return balance.toLocaleString('en-US', { maximumFractionDigits: 5 });
 }
 
 export const Withdrawable = ({ contract, payer, payee, amtPerSec, decimals }: WithdrawableProps) => {
@@ -54,7 +52,7 @@ export const Withdrawable = ({ contract, payer, payee, amtPerSec, decimals }: Wi
 
   return (
     <div className="flex items-baseline space-x-1">
-      <p>{formatBalance(balanceState, decimals)}</p>
+      <p>{formatBalance(balanceState)}</p>
       <span className="text-xs text-gray-500 dark:text-gray-400">withdrawable</span>
     </div>
   );
