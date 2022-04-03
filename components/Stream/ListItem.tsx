@@ -21,9 +21,18 @@ interface StreamProps {
   address: string;
   ticker?: string;
   tokenLogo: TokenLogo;
+  decimals: number;
 }
 
 type TokenLogo = React.MutableRefObject<string | StaticImageData>;
+
+function formatBalance(balance: number, decimals: number) {
+  const formatted = (balance / 10 ** decimals).toString();
+  if (formatted.length > 10) {
+    return formatted.slice(0, 10);
+  }
+  return formatted;
+}
 
 // TODO cleanup all hardcoded values
 export const ListItem = ({ data }: ItemProps) => {
@@ -80,7 +89,12 @@ export const ListItem = ({ data }: ItemProps) => {
     <li key={data.streamId} className="flex flex-col content-center space-y-2 space-x-1 sm:flex-row sm:space-y-0">
       {isIncoming ? (
         <>
-          <IncomingStream totalStreamed={totalStreamed} address={data.payer.id} tokenLogo={tokenLogo} />
+          <IncomingStream
+            totalStreamed={totalStreamed}
+            decimals={data.token.decimals}
+            address={data.payer.id}
+            tokenLogo={tokenLogo}
+          />
           <Withdrawable
             contract={contract}
             payer={data.payer.id}
@@ -91,7 +105,12 @@ export const ListItem = ({ data }: ItemProps) => {
         </>
       ) : (
         <>
-          <OutgoingStream totalStreamed={totalStreamed} address={data.payee.id} tokenLogo={tokenLogo} />
+          <OutgoingStream
+            totalStreamed={totalStreamed}
+            decimals={data.token.decimals}
+            address={data.payee.id}
+            tokenLogo={tokenLogo}
+          />
           <Withdrawable
             contract={contract}
             payer={data.payer.id}
@@ -121,7 +140,7 @@ export const ListItem = ({ data }: ItemProps) => {
   );
 };
 
-const IncomingStream = ({ totalStreamed, address, ticker = 'Unknown token', tokenLogo }: StreamProps) => {
+const IncomingStream = ({ totalStreamed, decimals, address, ticker = 'Unknown token', tokenLogo }: StreamProps) => {
   return (
     <>
       <div className="mr-2 flex flex-1 items-center space-x-2">
@@ -150,10 +169,7 @@ const IncomingStream = ({ totalStreamed, address, ticker = 'Unknown token', toke
             </Tooltip>
           </div>
           {/* TODO handle internalization and decimals when totalStreamed is not USD */}
-          <span>{`+${totalStreamed.toLocaleString('en-US', {
-            maximumFractionDigits: 8,
-            minimumFractionDigits: 8,
-          })}`}</span>
+          <span>{`+${formatBalance(totalStreamed, decimals)}`}</span>
           <span className="text-xs text-gray-500 dark:text-gray-400">so far</span>
           <span>
             <svg
@@ -174,7 +190,7 @@ const IncomingStream = ({ totalStreamed, address, ticker = 'Unknown token', toke
   );
 };
 
-const OutgoingStream = ({ totalStreamed, address, ticker = 'Unknown token', tokenLogo }: StreamProps) => {
+const OutgoingStream = ({ totalStreamed, decimals, address, ticker = 'Unknown token', tokenLogo }: StreamProps) => {
   return (
     <>
       <div className="mr-2 flex flex-1 items-center space-x-2">
@@ -201,10 +217,7 @@ const OutgoingStream = ({ totalStreamed, address, ticker = 'Unknown token', toke
               />
             </Tooltip>
           </div>
-          <span>{`-${totalStreamed.toLocaleString('en-US', {
-            maximumFractionDigits: 8,
-            minimumFractionDigits: 8,
-          })}`}</span>
+          <span>{`-${formatBalance(totalStreamed, decimals)}`}</span>
           <span className="text-xs text-gray-500 dark:text-gray-400">so far</span>
           <span>
             <svg

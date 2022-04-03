@@ -9,8 +9,16 @@ interface WithdrawableProps {
   decimals: number;
 }
 
+function formatBalance(balance: number, decimals: number) {
+  const formatted = (balance / 10 ** decimals).toString();
+  if (formatted.length > 10) {
+    return formatted.slice(0, 10);
+  }
+  return formatted;
+}
+
 export const Withdrawable = ({ contract, payer, payee, amtPerSec, decimals }: WithdrawableProps) => {
-  const [balanceState, setBalanceState] = React.useState<string>();
+  const [balanceState, setBalanceState] = React.useState<number>(0);
   const [calledBalance, setCalledBalance] = React.useState<number>();
   const [calledLastUpdate, setCalledLastUpdate] = React.useState<number>();
 
@@ -34,9 +42,8 @@ export const Withdrawable = ({ contract, payer, payee, amtPerSec, decimals }: Wi
     if (calledBalance === undefined || calledLastUpdate === undefined) return;
     const realBalance = new BigNumber(calledBalance)
       .div(10 ** decimals)
-      .plus(((Date.now() / 1e3 - calledLastUpdate) * amtPerSec) / 1e20)
-      .toString();
-    setBalanceState(realBalance);
+      .plus(((Date.now() / 1e3 - calledLastUpdate) * amtPerSec) / 1e20);
+    setBalanceState(Number(realBalance));
   }, [calledBalance, amtPerSec, calledLastUpdate, decimals]);
 
   React.useEffect(() => {
@@ -49,7 +56,7 @@ export const Withdrawable = ({ contract, payer, payee, amtPerSec, decimals }: Wi
 
   return (
     <div className="flex items-baseline space-x-1">
-      <p>{balanceState}</p>
+      <p>{formatBalance(balanceState, decimals)}</p>
       <span className="text-xs text-gray-500 dark:text-gray-400">withdrawable</span>
     </div>
   );
