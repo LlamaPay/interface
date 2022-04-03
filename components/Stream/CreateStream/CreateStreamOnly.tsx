@@ -42,7 +42,7 @@ const CreateStreamOnly = ({ tokens }: IStreamFormProps) => {
     }
   };
 
-  const tokenAddresses = React.useMemo(() => tokens.map((t) => t.tokenAddress), [tokens]);
+  const tokenAddresses = React.useMemo(() => tokens.map((t) => t.name), [tokens]);
 
   return (
     <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>

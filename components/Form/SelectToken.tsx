@@ -13,26 +13,28 @@ interface ISelectTokenProps {
   className?: string;
 }
 
-function Token({ address, shortName }: { address: string; shortName?: boolean }) {
+function Token({ value, shortName }: { value: string; shortName?: boolean }) {
   const { data: tokens } = useGetAllTokens();
 
   const data = React.useMemo(() => {
-    return tokens?.find((t) => t.tokenAddress === address);
-  }, [address, tokens]);
-
-  if (!data) return null;
+    return tokens?.find((t) => t.name === value || t.tokenAddress === value);
+  }, [value, tokens]);
 
   // TODO show token image and symbol for verified lists, else show token address
   return (
-    <div className="flex flex-1 items-center space-x-2 overflow-x-hidden py-2">
+    <div className="flex flex-1 items-center space-x-2 overflow-x-hidden py-2 px-1">
       <div className="h-6 w-6 flex-shrink-0 rounded-full bg-orange-400"></div>
-      <div className="truncate">{shortName ? data.symbol : `${data.name} (${data.symbol})`}</div>
+      {data ? (
+        <div className="truncate">{shortName ? data.symbol : `${data.name} (${data.symbol})`}</div>
+      ) : (
+        <div className="truncate">{value}</div>
+      )}
     </div>
   );
 }
 
 export function SelectToken({ handleTokenChange, tokens, className }: ISelectTokenProps) {
-  const combobox = useComboboxState();
+  const combobox = useComboboxState({ list: tokens });
   // value and setValue shouldn't be passed to the select state because the
   // select value and the combobox value are different things.
   const { value, setValue, ...selectProps } = combobox;
@@ -55,7 +57,7 @@ export function SelectToken({ handleTokenChange, tokens, className }: ISelectTok
         className={classNames('flex w-full items-center rounded bg-green-100 p-2', className)}
         onClick={dialog.toggle}
       >
-        {<Token address={select.value} shortName />}
+        {<Token value={select.value} shortName />}
         <SelectArrow />
       </Select>
 
@@ -77,8 +79,8 @@ export function SelectToken({ handleTokenChange, tokens, className }: ISelectTok
           placeholder="Search name or paste address"
           className="m-4 rounded border px-3 py-[10px] slashed-zero"
         />
-        <ComboboxList state={combobox} className="m-4 mt-0 cursor-pointer list-none">
-          {tokens.map((token) => (
+        <ComboboxList state={combobox} className="m-4 mt-0 cursor-pointer list-none overflow-auto">
+          {combobox.matches.map((token) => (
             <ComboboxItem
               key={token}
               focusOnHover
@@ -92,12 +94,13 @@ export function SelectToken({ handleTokenChange, tokens, className }: ISelectTok
             >
               {(props) => (
                 <SelectItem {...props}>
-                  <Token address={token} />
+                  <Token value={token} />
                 </SelectItem>
               )}
             </ComboboxItem>
           ))}
         </ComboboxList>
+        <button className="m-4 mt-auto rounded bg-red-100 py-2 px-3">or add a new token</button>
       </Dialog>
     </>
   );
