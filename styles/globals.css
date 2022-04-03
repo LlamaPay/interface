@@ -50,11 +50,8 @@
     }
   }
 
-  .dark .react-select__menu {
-    background: #27272a;
-  }
-
-  .dark .react-select__option:hover {
-    background: #3f3f46 !important;
+  /* dialog backdrop of select token component */
+  [data-backdrop] {
+    background-color: rgb(0 0 0 / 20%);
   }
 }

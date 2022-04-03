@@ -23,13 +23,13 @@ export const CreateStream = ({ tokens, noBalances, isLoading, isError }: ICreate
   return (
     <section className="z-2 flex w-full max-w-lg flex-col">
       <h1 className="mb-3 text-center text-xl">
-        {noBalances && !isLoading ? 'Deposit and create a new stream' : 'Create a new stream'}
+        {noBalances && !isLoading ? 'Deposit and Create a New stream' : 'Create a new stream'}
       </h1>
       {isLoading ? (
         <Placeholder />
       ) : isError || !tokens || !tokenOptions ? (
         <ErrorBoundary message="Something went wrong" />
-      ) : noBalances ? (
+      ) : !noBalances ? (
         <DepositAndCreate tokens={tokens} tokenOptions={tokenOptions} isDark={isDark} />
       ) : (
         <CreateStreamOnly tokens={tokens} tokenOptions={tokenOptions} isDark={isDark} />

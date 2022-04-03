@@ -7,7 +7,7 @@ export interface TokenOption {
 
 export interface IStreamFormProps {
   tokens: IToken[];
-  tokenOptions: TokenOption[];
+  tokenOptions?: TokenOption[];
   isDark: boolean;
 }
 
