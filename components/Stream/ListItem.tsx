@@ -10,7 +10,7 @@ import { Modify } from './Modify';
 import { Cancel } from './Cancel';
 import { Push } from './Push';
 import { Withdrawable } from './Withdrawable';
-import { llamapayABI } from 'utils/contract';
+import llamaContract from 'abis/llamaContract';
 
 interface ItemProps {
   data: UserStreamFragment;
@@ -33,7 +33,7 @@ export const ListItem = ({ data }: ItemProps) => {
 
   const contract = useContract({
     addressOrName: data?.contract.address.toString(),
-    contractInterface: llamapayABI,
+    contractInterface: llamaContract,
     signerOrProvider: signerData,
   });
 
