@@ -10,11 +10,8 @@ interface ItemProps {
 }
 
 function formatAmtPerSec(amtPerSec: number) {
-  const formatted = amtPerSec.toString();
-  if (formatted.length > 10) {
-    return `${formatted.slice(0, 10)}...`;
-  }
-  return formatted;
+  const formatted = amtPerSec;
+  return formatted.toLocaleString('en-US', { maximumFractionDigits: 4 });
 }
 
 export const ListItem = ({ data }: ItemProps) => {

@@ -27,11 +27,9 @@ interface StreamProps {
 type TokenLogo = React.MutableRefObject<string | StaticImageData>;
 
 function formatBalance(balance: number, decimals: number) {
-  const formatted = (balance / 10 ** decimals).toString();
-  if (formatted.length > 10) {
-    return formatted.slice(0, 10);
-  }
-  return formatted;
+  const formatted = balance / 10 ** decimals;
+
+  return formatted.toLocaleString('en-US', { maximumFractionDigits: 4 });
 }
 
 // TODO cleanup all hardcoded values
