@@ -9,7 +9,7 @@ interface InputElement {
 }
 
 interface InputWithTokenElement extends InputElement {
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleTokenChange: (token: string) => void;
   tokens: string[];
 }

@@ -7,8 +7,6 @@ export interface TokenOption {
 
 export interface IStreamFormProps {
   tokens: IToken[];
-  tokenOptions?: TokenOption[];
-  isDark: boolean;
 }
 
 export interface ICreateProps {
@@ -25,7 +23,6 @@ export interface ICheckApproval {
 }
 
 export interface IFormElements {
-  tokenAddress: { value: string };
   amountToDeposit: { value: string };
   amountPerSec: { value: string };
   addressToStream: { value: string };

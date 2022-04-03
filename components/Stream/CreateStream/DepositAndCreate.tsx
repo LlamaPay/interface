@@ -13,7 +13,7 @@ const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
 
   const [{ data: accountData }] = useAccount();
 
-  // store form values
+  // store address of the token to stream as ariakit/select is a controlled component
   const [tokenAddress, setTokenAddress] = React.useState('');
 
   const amountToDeposit = React.useRef('');
@@ -98,11 +98,11 @@ const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
     const amountToDeposit = form.amountToDeposit?.value;
     const payeeAddress = form.addressToStream?.value;
 
-    if (tokenAddress !== '' && isApproved) {
+    if (tokenAddress !== '' && isApproved && payeeAddress) {
       // check if token exist in all tokens list
       const tokenDetails = tokens.find((t) => t.tokenAddress === tokenAddress) ?? null;
 
-      if (tokenDetails && payeeAddress) {
+      if (tokenDetails) {
         // convert amount to bignumber based on token decimals
         const amtPerSec = new BigNumber(amountPerSec).multipliedBy(10 ** tokenDetails.decimals);
         const amtToDeposit = new BigNumber(amountToDeposit).multipliedBy(10 ** tokenDetails.decimals);
