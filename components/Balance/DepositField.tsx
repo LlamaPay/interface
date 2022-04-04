@@ -18,16 +18,15 @@ const DepositField = ({ tokens }: { tokens: IToken[] }) => {
 
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     // read amountToDeposit from form element
     // make sure it matches the name prop on that element
     const form = e.target as typeof e.target & { amountToDeposit: { value: string } };
-    const amountToDeposit = form.amountToDeposit.value;
+    const amountToDeposit = form.amountToDeposit?.value;
 
     // make sure we are setting tokenAddress in the setTokenAddress and not name or symbol
     const tokenDetails = tokens?.find((t) => t.tokenAddress === tokenAddress);
 
-    if (tokenDetails) {
+    if (tokenDetails && amountToDeposit) {
       // format amount to bignumber
       const bigAmount = new BigNumber(amountToDeposit).multipliedBy(10 ** tokenDetails?.decimals);
 

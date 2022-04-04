@@ -16,4 +16,5 @@ export const createContract = (cId: string) => new ethers.Contract(getAddress(cI
 export const createWriteContract = (id: string, signer: Signer) =>
   new ethers.Contract(getAddress(id), llamaContractABI, signer);
 
-export const llamapayFactory = new ethers.Contract(getAddress(FACTORY_RINKEBY), factoryABI, provider);
+export const createFactoryWriteContract = (signer: Signer) =>
+  new ethers.Contract(getAddress(FACTORY_RINKEBY), factoryABI, signer);

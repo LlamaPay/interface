@@ -3,8 +3,11 @@ import { Select, SelectArrow, SelectItem, SelectLabel, useSelectState } from 'ar
 import { Dialog, DialogDismiss, DialogHeading, useDialogState } from 'ariakit/dialog';
 import { Combobox, ComboboxItem, ComboboxList, useComboboxState } from 'ariakit/combobox';
 import classNames from 'classnames';
-import { XIcon } from '@heroicons/react/solid';
+import { XIcon, ArrowLeftIcon } from '@heroicons/react/solid';
 import useGetAllTokens from 'queries/useGetAllTokens';
+import { InputText } from './Input';
+import { SubmitButton } from './Button';
+import useCreateLlamaPayContract from 'queries/useCreateLlamaPayContract';
 
 interface ISelectTokenProps {
   handleTokenChange: (token: string) => void;
@@ -33,6 +36,7 @@ function Token({ value, shortName }: { value: string; shortName?: boolean }) {
 }
 
 export function SelectToken({ handleTokenChange, tokens, className }: ISelectTokenProps) {
+  const [newTokenForm, setNewTokenForm] = React.useState(false);
   const combobox = useComboboxState({ list: tokens });
   // value and setValue shouldn't be passed to the select state because the
   // select value and the combobox value are different things.
@@ -42,6 +46,7 @@ export function SelectToken({ handleTokenChange, tokens, className }: ISelectTok
   // Resets combobox value when popover is collapsed
   if (!select.mounted && combobox.value) {
     combobox.setValue('');
+    setNewTokenForm(false);
   }
 
   const dialog = useDialogState();
@@ -65,42 +70,84 @@ export function SelectToken({ handleTokenChange, tokens, className }: ISelectTok
         state={select}
         className="absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex max-h-[80vh] max-w-lg flex-col overflow-auto rounded bg-zinc-100 drop-shadow-lg  dark:bg-zinc-800 sm:left-8 sm:right-8"
       >
-        <header className="relative mt-3 flex items-center justify-between">
-          <DialogHeading className="px-4">Select a token</DialogHeading>
-          <DialogDismiss className="absolute right-2 flex items-start justify-end">
-            <XIcon className="h-6 w-6" />
-          </DialogDismiss>
-        </header>
-
-        <Combobox
-          state={combobox}
-          autoSelect
-          placeholder="Search name or paste address"
-          className="m-4 rounded border px-3 py-[10px] slashed-zero"
-        />
-        <ComboboxList state={combobox} className="m-4 mt-0 cursor-pointer list-none overflow-auto">
-          {combobox.matches.map((token) => (
-            <ComboboxItem
-              key={token}
-              focusOnHover
-              className="scroll-mt-0 active-item:bg-amber-200"
-              onClick={() => {
-                select.setValue(token);
-                handleTokenChange(token);
-                dialog.toggle();
-                select.toggle();
-              }}
-            >
-              {(props) => (
-                <SelectItem {...props}>
-                  <Token value={token} />
-                </SelectItem>
-              )}
-            </ComboboxItem>
-          ))}
-        </ComboboxList>
-        <button className="m-4 mt-auto rounded bg-red-100 py-2 px-3">or add a new token</button>
+        {newTokenForm ? (
+          <NewTokenForm setNewTokenForm={setNewTokenForm} />
+        ) : (
+          <>
+            <header className="relative mt-3 flex items-center justify-between">
+              <DialogHeading className="px-4">Select a token</DialogHeading>
+              <DialogDismiss className="absolute right-2 flex items-start justify-end">
+                <XIcon className="h-6 w-6" />
+              </DialogDismiss>
+            </header>
+            <Combobox
+              state={combobox}
+              autoSelect
+              placeholder="Search name or paste address"
+              className="m-4 rounded border px-3 py-[10px] slashed-zero"
+            />
+            <ComboboxList state={combobox} className="m-4 mt-0 cursor-pointer list-none overflow-auto">
+              {combobox.matches.map((token) => (
+                <ComboboxItem
+                  key={token}
+                  focusOnHover
+                  className="scroll-mt-0 active-item:bg-amber-200"
+                  onClick={() => {
+                    select.setValue(token);
+                    handleTokenChange(token);
+                    dialog.toggle();
+                    select.toggle();
+                  }}
+                >
+                  {(props) => (
+                    <SelectItem {...props}>
+                      <Token value={token} />
+                    </SelectItem>
+                  )}
+                </ComboboxItem>
+              ))}
+            </ComboboxList>
+            <button className="m-4 mt-auto rounded bg-red-100 py-2 px-3" onClick={() => setNewTokenForm(true)}>
+              or add a new token
+            </button>
+          </>
+        )}
       </Dialog>
     </>
   );
 }
+
+const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<React.SetStateAction<boolean>> }) => {
+  // TODO handle loading and error states
+  const { mutate, isLoading } = useCreateLlamaPayContract();
+
+  // TODO make sure this submit handler doesn't mess up DepositField submit handler like error field or loading states, as this is triggering that component forms submit func
+  const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const form = e.target as typeof e.target & { tokenAddress: { value: string } };
+    const tokenAddress = form.tokenAddress?.value;
+    mutate({ tokenAddress });
+  };
+
+  return (
+    <>
+      <header className="relative m-4 mt-3 flex items-center justify-between">
+        <DialogHeading className="px-4">
+          <button className="absolute left-0" onClick={() => setNewTokenForm(false)}>
+            <ArrowLeftIcon className="h-6 w-6" />
+          </button>
+        </DialogHeading>
+        <DialogDismiss className="absolute right-0 top-0 flex items-start justify-end">
+          <XIcon className="h-6 w-6" />
+        </DialogDismiss>
+      </header>
+      <form className="m-4 mt-[10%]" onSubmit={handleSubmit}>
+        <InputText name="tokenAddress" isRequired={true} label="Token Address" />
+        <SubmitButton className="mt-4 bg-gray-200 disabled:cursor-not-allowed" disabled={isLoading}>
+          Add token
+        </SubmitButton>
+      </form>
+    </>
+  );
+};
