@@ -8,7 +8,7 @@ const CreateStreamOnly = ({ tokens }: IStreamFormProps) => {
   const { mutate: streamToken, isLoading, error: errorStreamingToken } = useStreamToken();
 
   // store address of the token to stream as ariakit/select is a controlled component
-  const [tokenAddress, setTokenAddress] = React.useState('');
+  const [tokenAddress, setTokenAddress] = React.useState(tokens[0]?.tokenAddress ?? '');
 
   // create stream on submit
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

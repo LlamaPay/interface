@@ -9,7 +9,6 @@ import useGetAllTokens from 'queries/useGetAllTokens';
 
 const Create: NextPage = () => {
   const [{ data: accountData }] = useAccount();
-
   const { data: tokens, isLoading: tokensLoading, error: tokensError } = useGetAllTokens();
 
   // pass a unique key to getpayerBalance query when tokens data changes

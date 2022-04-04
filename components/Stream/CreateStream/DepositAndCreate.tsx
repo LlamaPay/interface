@@ -9,7 +9,7 @@ const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
   const { mutate: streamToken, isLoading, error: errorStreamingToken } = useStreamToken();
 
   // store address of the token to stream as ariakit/select is a controlled component
-  const [tokenAddress, setTokenAddress] = React.useState('');
+  const [tokenAddress, setTokenAddress] = React.useState(tokens[0]?.tokenAddress ?? '');
 
   // Token approval hooks
   // TODO handle loading and error states, also check if transaction is succesfull on chain, until then disable button and show loading state
