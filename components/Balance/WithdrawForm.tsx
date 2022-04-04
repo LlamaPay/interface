@@ -1,8 +1,8 @@
 import * as React from 'react';
+import BigNumber from 'bignumber.js';
 import useWithdrawByPayer from 'queries/useWithdrawTokenByPayer';
 import { IFormData, IFormElements } from './types';
-import { checkIsAmountValid } from 'components/Stream/utils';
-import BigNumber from 'bignumber.js';
+import { checkIsAmountValid } from 'components/Form/utils';
 
 const WithdrawForm = ({ data }: { data: IFormData }) => {
   const { mutate, isLoading } = useWithdrawByPayer();

@@ -1,4 +1,5 @@
 import { Contract, Signer } from 'ethers';
+import { getAddress } from 'ethers/lib/utils';
 import { useMutation } from 'react-query';
 import { checkHasApprovedEnough, ICheckTokenAllowance } from 'utils/tokenUtils';
 import { erc20ABI, useSigner } from 'wagmi';
@@ -29,8 +30,8 @@ const approveToken = async ({ tokenAddress, signer, amountToApprove, spenderAddr
     if (!signer) {
       throw new Error("Couldn't get signer");
     } else {
-      const contract = new Contract(tokenAddress, erc20ABI, signer);
-      await contract.approve(spenderAddress, amountToApprove);
+      const contract = new Contract(getAddress(tokenAddress), erc20ABI, signer);
+      await contract.approve(getAddress(spenderAddress), amountToApprove);
     }
   } catch (error: any) {
     throw new Error(error?.reason ?? "Couldn't approve token");

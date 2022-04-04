@@ -1,13 +1,13 @@
 import * as React from 'react';
 import FallbackList from 'components/FallbackList';
-import { IBalance } from 'types';
-import useChainExplorer from 'hooks/useChainExplorer';
 import { DialogHeader, DialogWrapper } from 'components/Dialog';
-
-import { IBalanceProps, IFormData, TokenAction } from './types';
 import DepositForm from './DepositForm';
 import WithdrawForm from './WithdrawForm';
 import DepositField from './DepositField';
+import useChainExplorer from 'hooks/useChainExplorer';
+import useGetAllTokens from 'queries/useGetAllTokens';
+import { IBalance } from 'types';
+import { IBalanceProps, IFormData, TokenAction } from './types';
 
 const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) => {
   // function that returns chain explorer url based on the chain user is connected to
@@ -15,6 +15,9 @@ const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) =>
   const [openDialog, setOpenDialog] = React.useState(false);
 
   const formData = React.useRef<null | IFormData>(null);
+
+  // TODO handle loading and error states
+  const { data: tokens } = useGetAllTokens();
 
   const handleToken = (actionType: TokenAction, balance: IBalance) => {
     setOpenDialog(true);
@@ -86,7 +89,7 @@ const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) =>
           </tbody>
         </table>
       )}
-      <DepositField />
+      {tokens && <DepositField tokens={tokens} />}
       <DialogWrapper isOpen={openDialog} setIsOpen={setOpenDialog}>
         {formData.current && (
           <>

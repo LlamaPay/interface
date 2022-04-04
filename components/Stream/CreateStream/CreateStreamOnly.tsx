@@ -1,23 +1,14 @@
 import * as React from 'react';
 import BigNumber from 'bignumber.js';
-import { IStreamFormProps, IFormElements } from './types';
+import { InputText, InputWithTokenSelect, SubmitButton } from 'components/Form';
 import useStreamToken from 'queries/useStreamToken';
-import { InputText, InputWithToken, SubmitButton } from 'components/Form';
+import { IStreamFormProps, IFormElements } from './types';
 
-const CreateStreamOnly = ({ tokens, tokenOptions }: IStreamFormProps) => {
+const CreateStreamOnly = ({ tokens }: IStreamFormProps) => {
   const { mutate: streamToken, isLoading, error: errorStreamingToken } = useStreamToken();
 
   // store address of the token to stream as ariakit/select is a controlled component
   const [tokenAddress, setTokenAddress] = React.useState('');
-
-  // Handle changes in form
-  const handleTokenChange = (token: string) => {
-    const data = tokens.find((t) => t.name === token);
-
-    if (data) {
-      setTokenAddress(data.tokenAddress);
-    } else setTokenAddress(token);
-  };
 
   // create stream on submit
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -32,8 +23,8 @@ const CreateStreamOnly = ({ tokens, tokenOptions }: IStreamFormProps) => {
       const tokenDetails = tokens.find((t) => t.tokenAddress === tokenAddress) ?? null;
 
       if (tokenDetails) {
-        // convert amount to bignumber based on token decimals
-        const amtPerSec = new BigNumber(amountPerSec).multipliedBy(10 ** tokenDetails.decimals);
+        // format amount to bignumber
+        const amtPerSec = new BigNumber(amountPerSec).multipliedBy(1e20);
 
         // query mutation
         streamToken({
@@ -49,13 +40,12 @@ const CreateStreamOnly = ({ tokens, tokenOptions }: IStreamFormProps) => {
   return (
     <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
       <InputText name="addressToStream" isRequired={true} label="Address to stream" />
-      <InputWithToken
+      <InputWithTokenSelect
         name="amountPerSec"
-        handleTokenChange={handleTokenChange}
-        tokens={tokenOptions}
-        isRequired={true}
-        className="pr-[32%]"
         label="Amount per sec"
+        tokenAddress={tokenAddress}
+        setTokenAddress={setTokenAddress}
+        isRequired
       />
       <SubmitButton disabled={isLoading} className="mt-8">
         {isLoading ? '...' : 'Create Stream'}

@@ -11,7 +11,9 @@ export const List = () => {
   });
 
   const streams = React.useMemo(() => {
-    return data?.user?.streams ?? null;
+    const streams = data?.user?.streams ?? [];
+    const activeStreams = streams.filter((s) => s.active);
+    return activeStreams.length > 0 ? activeStreams : null;
   }, [data]);
 
   return (
@@ -21,8 +23,10 @@ export const List = () => {
       {isLoading || !streams || error ? (
         <FallbackList isLoading={isLoading} data={streams} error={error} noDataText="No streams yet" />
       ) : (
-        <ul className="isolate flex flex-col space-y-4 rounded border p-2">
-          {streams.map((stream) => (stream.active ? <ListItem key={stream.streamId} data={stream} /> : ''))}
+        <ul className="isolate flex flex-col space-y-4 rounded border p-2 ">
+          {streams.map((stream) => (
+            <ListItem key={stream.streamId} data={stream} />
+          ))}
         </ul>
       )}
     </section>

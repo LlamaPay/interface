@@ -6,8 +6,6 @@ import { ICreateProps } from './types';
 import ErrorBoundary from './ErrorBoundary';
 
 export const CreateStream = ({ tokens, noBalances, isLoading, isError }: ICreateProps) => {
-  const tokenOptions = React.useMemo(() => tokens?.map((t) => t.name), [tokens]);
-
   return (
     <section className="z-2 flex w-full max-w-lg flex-col">
       <h1 className="mb-3 text-center text-xl">
@@ -15,12 +13,12 @@ export const CreateStream = ({ tokens, noBalances, isLoading, isError }: ICreate
       </h1>
       {isLoading ? (
         <Placeholder />
-      ) : isError || !tokens || !tokenOptions ? (
+      ) : isError || !tokens ? (
         <ErrorBoundary message="Something went wrong" />
       ) : noBalances ? (
-        <DepositAndCreate tokens={tokens} tokenOptions={tokenOptions} />
+        <DepositAndCreate tokens={tokens} />
       ) : (
-        <CreateStreamOnly tokens={tokens} tokenOptions={tokenOptions} />
+        <CreateStreamOnly tokens={tokens} />
       )}
     </section>
   );

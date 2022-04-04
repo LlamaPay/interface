@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { checkIsAmountValid } from 'components/Stream/utils';
 import BigNumber from 'bignumber.js';
-import { IFormData, IFormElements } from './types';
-import useDepositToken from 'queries/useDepositToken';
 import { useAccount } from 'wagmi';
+import useDepositToken from 'queries/useDepositToken';
 import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval';
+import { IFormData, IFormElements } from './types';
+import { checkIsAmountValid } from 'components/Form/utils';
 
 const DepositForm = ({ data }: { data: IFormData }) => {
   const { mutate, isLoading } = useDepositToken();

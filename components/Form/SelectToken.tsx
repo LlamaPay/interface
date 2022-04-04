@@ -2,7 +2,6 @@ import * as React from 'react';
 import { Select, SelectArrow, SelectItem, SelectLabel, useSelectState } from 'ariakit/select';
 import { Dialog, DialogDismiss, DialogHeading, useDialogState } from 'ariakit/dialog';
 import { Combobox, ComboboxItem, ComboboxList, useComboboxState } from 'ariakit/combobox';
-
 import classNames from 'classnames';
 import { XIcon } from '@heroicons/react/solid';
 import useGetAllTokens from 'queries/useGetAllTokens';
