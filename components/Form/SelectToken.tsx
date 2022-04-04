@@ -64,7 +64,7 @@ export function SelectToken({ handleTokenChange, tokens, className }: ISelectTok
       {/* use select state as dialog state so that combobox options are displayed */}
       <Dialog
         state={select}
-        className="absolute top-8 left-4 right-4 bottom-8 z-50 mx-auto mt-auto flex max-h-[80vh] max-w-lg flex-col overflow-auto rounded bg-zinc-100 drop-shadow-lg dark:bg-zinc-800  sm:left-8 sm:right-8 sm:m-auto"
+        className="absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex max-h-[80vh] max-w-lg flex-col overflow-auto rounded bg-zinc-100 drop-shadow-lg  dark:bg-zinc-800 sm:left-8 sm:right-8"
       >
         <header className="relative mt-3 flex items-center justify-between">
           <DialogHeading className="px-4">Select a token</DialogHeading>

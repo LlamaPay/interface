@@ -7,6 +7,7 @@ import { DialogHeader, DialogWrapper } from 'components/Dialog';
 import { IBalanceProps, IFormData, TokenAction } from './types';
 import DepositForm from './DepositForm';
 import WithdrawForm from './WithdrawForm';
+import DepositField from './DepositField';
 
 const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) => {
   // function that returns chain explorer url based on the chain user is connected to
@@ -85,6 +86,7 @@ const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) =>
           </tbody>
         </table>
       )}
+      <DepositField />
       <DialogWrapper isOpen={openDialog} setIsOpen={setOpenDialog}>
         {formData.current && (
           <>

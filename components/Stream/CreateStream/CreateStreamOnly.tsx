@@ -4,7 +4,7 @@ import { IStreamFormProps, IFormElements } from './types';
 import useStreamToken from 'queries/useStreamToken';
 import { InputText, InputWithToken, SubmitButton } from 'components/Form';
 
-const CreateStreamOnly = ({ tokens }: IStreamFormProps) => {
+const CreateStreamOnly = ({ tokens, tokenOptions }: IStreamFormProps) => {
   const { mutate: streamToken, isLoading, error: errorStreamingToken } = useStreamToken();
 
   // store address of the token to stream as ariakit/select is a controlled component
@@ -12,7 +12,11 @@ const CreateStreamOnly = ({ tokens }: IStreamFormProps) => {
 
   // Handle changes in form
   const handleTokenChange = (token: string) => {
-    setTokenAddress(token);
+    const data = tokens.find((t) => t.name === token);
+
+    if (data) {
+      setTokenAddress(data.tokenAddress);
+    } else setTokenAddress(token);
   };
 
   // create stream on submit
@@ -42,15 +46,13 @@ const CreateStreamOnly = ({ tokens }: IStreamFormProps) => {
     }
   };
 
-  const tokenAddresses = React.useMemo(() => tokens.map((t) => t.name), [tokens]);
-
   return (
     <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
       <InputText name="addressToStream" isRequired={true} label="Address to stream" />
       <InputWithToken
         name="amountPerSec"
         handleTokenChange={handleTokenChange}
-        tokens={tokenAddresses}
+        tokens={tokenOptions}
         isRequired={true}
         className="pr-[32%]"
         label="Amount per sec"

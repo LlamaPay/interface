@@ -8,7 +8,7 @@ import { useAccount } from 'wagmi';
 import { getAddress } from 'ethers/lib/utils';
 import { InputAmount, InputText, InputWithToken, SubmitButton } from 'components/Form';
 
-const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
+const DepositAndCreate = ({ tokens, tokenOptions }: IStreamFormProps) => {
   const { mutate: streamToken, isLoading, error: errorStreamingToken } = useStreamToken();
 
   const [{ data: accountData }] = useAccount();
@@ -46,12 +46,15 @@ const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
 
   // Handle changes in form
   const handleTokenChange = (token: string) => {
-    setTokenAddress(token);
-    checkApproval({
-      tokenAddress: token,
-      userAddress: accountData?.address,
-      approvedForAmount: amountToDeposit.current,
-    });
+    const data = tokens.find((t) => t.name === token);
+    if (data) {
+      setTokenAddress(data.tokenAddress);
+      checkApproval({
+        tokenAddress: data.tokenAddress,
+        userAddress: accountData?.address,
+        approvedForAmount: amountToDeposit.current,
+      });
+    } else setTokenAddress(token);
   };
 
   const handleDepositChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -121,15 +124,13 @@ const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
 
   const disableApprove = checkingApproval || approvingToken;
 
-  const tokenAddresses = React.useMemo(() => tokens.map((t) => t.tokenAddress), [tokens]);
-
   return (
     <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
       <InputWithToken
         name="amountToDeposit"
         handleChange={handleDepositChange}
         handleTokenChange={handleTokenChange}
-        tokens={tokenAddresses}
+        tokens={tokenOptions}
         isRequired={true}
         className="pr-[32%]"
         label="Deposit"

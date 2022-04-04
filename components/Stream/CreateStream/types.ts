@@ -7,6 +7,7 @@ export interface TokenOption {
 
 export interface IStreamFormProps {
   tokens: IToken[];
+  tokenOptions: string[];
 }
 
 export interface ICreateProps {
