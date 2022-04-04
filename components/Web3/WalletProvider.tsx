@@ -6,9 +6,9 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { WalletLinkConnector } from 'wagmi/connectors/walletLink';
 
 // Get environment variables
-const alchemyId = process.env.NEXT_PUBLIC_ALCHEMY_ID as string;
-const etherscanApiKey = process.env.NEXT_PUBLIC_ETHERSCAN_API_KEY as string;
-const infuraId = process.env.NEXT_PUBLIC_INFURA_ID as string;
+const alchemyId = 'PwvZx2hO2XpToWXSw9sgJJt1eBgjkRUr';
+const etherscanApiKey = 'DDH7EVWI1AQHBNPX5PYRSDM5SHCVBKX58Q';
+const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
 
 // Pick chains
 const chains = defaultChains;

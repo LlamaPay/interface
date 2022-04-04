@@ -8,7 +8,7 @@ export type Provider = ethers.providers.BaseProvider;
 
 // TODO update provider based on user's network
 export const provider = new ethers.providers.JsonRpcProvider(
-  `https://rinkeby.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`
+  `https://rinkeby.infura.io/v3/c580a3487b1241a09f9e27b02c004f5b`
 );
 
 export const createContract = (cId: string) => new ethers.Contract(getAddress(cId), llamaContractABI, provider);
