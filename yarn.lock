@@ -2128,18 +2128,18 @@ aria-query@^4.2.2:
     "@babel/runtime" "^7.10.2"
     "@babel/runtime-corejs3" "^7.10.2"
 
-ariakit-utils@^0.17.0-alpha.13:
-  version "0.17.0-alpha.13"
-  resolved "https://registry.yarnpkg.com/ariakit-utils/-/ariakit-utils-0.17.0-alpha.13.tgz#13b45dfa1b38148bbf5adb61a621e9ba40ef52ef"
-  integrity sha512-xetFxl5sjxo9/z5LC5CYba2y7WoEFnneS6x4c4EDb1ONp0iOS+bCCiOXtLIEToNLy+orERQ1E8HtF7ESzoYYRA==
+ariakit-utils@^0.17.0-alpha.14:
+  version "0.17.0-alpha.14"
+  resolved "https://registry.yarnpkg.com/ariakit-utils/-/ariakit-utils-0.17.0-alpha.14.tgz#3ad3ed6c1cdb05cfc6f4113e93d62cea9f45b183"
+  integrity sha512-TMRYFHg0/y7LHdyaxsqlyMZXPHvQ3P8poVh1MlsDWkzbYNZRnt8cyhJKHiJ9h6x7G672OF0w1st/4cg4rn/YtQ==
 
-ariakit@^2.0.0-alpha.20:
-  version "2.0.0-alpha.20"
-  resolved "https://registry.yarnpkg.com/ariakit/-/ariakit-2.0.0-alpha.20.tgz#9ba80c1fff5b1b2d5d4bacde6c504f77f2d0f608"
-  integrity sha512-6ylHP8zO0scmOwokltuNFEQJhRq+YPmXCW4W/Rnf/10HvCmG9xuV0dEuZBXrpYHDOoXOR3VkMOaMYMZAn4Tn7A==
+ariakit@^2.0.0-alpha.21:
+  version "2.0.0-alpha.21"
+  resolved "https://registry.yarnpkg.com/ariakit/-/ariakit-2.0.0-alpha.21.tgz#3f7188f5e1284fb83cee9e38816363538953227c"
+  integrity sha512-VaxrMmt1AX2STsq6ZjrMMlWEPNIrFJEGCxiAbnYJG5kwYVFJAPwQRHYce5sM6NuB34D/E17hbKg20fHB5BgrMw==
   dependencies:
     "@popperjs/core" "^2.11.2"
-    ariakit-utils "^0.17.0-alpha.13"
+    ariakit-utils "^0.17.0-alpha.14"
 
 array-includes@^3.1.3, array-includes@^3.1.4:
   version "3.1.4"

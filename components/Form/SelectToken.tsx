@@ -58,7 +58,7 @@ export function SelectToken({ handleTokenChange, tokens, className }: ISelectTok
       </SelectLabel>
       <Select
         state={select}
-        className={classNames('flex w-full items-center rounded bg-green-100 p-2', className)}
+        className={classNames('flex w-full items-center rounded bg-zinc-100 p-2 dark:bg-zinc-800', className)}
         onClick={dialog.toggle}
       >
         {<Token value={select.value} shortName />}
@@ -91,7 +91,7 @@ export function SelectToken({ handleTokenChange, tokens, className }: ISelectTok
                 <ComboboxItem
                   key={token}
                   focusOnHover
-                  className="scroll-mt-0 active-item:bg-amber-200"
+                  className="scroll-mt-0 rounded active-item:bg-neutral-200 dark:active-item:bg-neutral-600"
                   onClick={() => {
                     select.setValue(token);
                     handleTokenChange(token);
@@ -107,7 +107,10 @@ export function SelectToken({ handleTokenChange, tokens, className }: ISelectTok
                 </ComboboxItem>
               ))}
             </ComboboxList>
-            <button className="m-4 mt-auto rounded bg-red-100 py-2 px-3" onClick={() => setNewTokenForm(true)}>
+            <button
+              className="m-4 mt-auto rounded bg-zinc-300 py-2 px-3 dark:bg-zinc-700"
+              onClick={() => setNewTokenForm(true)}
+            >
               or add a new token
             </button>
           </>
@@ -144,7 +147,7 @@ const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<Rea
       </header>
       <form className="m-4 mt-[10%]" onSubmit={handleSubmit}>
         <InputText name="tokenAddress" isRequired={true} label="Token Address" />
-        <SubmitButton className="mt-4 bg-gray-200 disabled:cursor-not-allowed" disabled={isLoading}>
+        <SubmitButton className="mt-4 bg-zinc-300 disabled:cursor-not-allowed dark:bg-zinc-700" disabled={isLoading}>
           Add token
         </SubmitButton>
       </form>

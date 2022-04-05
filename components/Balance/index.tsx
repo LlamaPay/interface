@@ -70,13 +70,13 @@ const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) =>
                 <td className="space-x-2 border p-1">
                   <span className="flex space-x-2">
                     <button
-                      className="rounded bg-gray-100 py-1 px-2 dark:bg-gray-700"
+                      className="rounded bg-zinc-100 py-1 px-2 dark:bg-zinc-800"
                       onClick={() => handleToken('deposit', b)}
                     >
                       Deposit
                     </button>
                     <button
-                      className="rounded bg-gray-100 py-1 px-2 disabled:cursor-not-allowed dark:bg-gray-700"
+                      className="rounded bg-zinc-100 py-1 px-2 disabled:cursor-not-allowed dark:bg-zinc-800"
                       onClick={() => handleToken('withdraw', b)}
                       disabled={Number.isNaN(b.amount) || Number(b.amount) <= 0}
                     >
