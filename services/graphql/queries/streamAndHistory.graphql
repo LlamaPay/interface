@@ -1,4 +1,4 @@
-query StreamAndHistory($id: ID!) {
+query StreamAndHistory($id: ID!, $network: String!) {
   user(id: $id) {
     streams(orderBy: createdTimestamp, orderDirection: desc) {
       ...UserStream

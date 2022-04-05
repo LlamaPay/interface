@@ -4,7 +4,7 @@ import { DialogHeader, DialogWrapper } from 'components/Dialog';
 import DepositForm from './DepositForm';
 import WithdrawForm from './WithdrawForm';
 import DepositField from './DepositField';
-import useChainExplorer from 'hooks/useChainExplorer';
+import { useChainExplorer } from 'hooks';
 import useGetAllTokens from 'queries/useGetAllTokens';
 import { IBalance } from 'types';
 import { IBalanceProps, IFormData, TokenAction } from './types';

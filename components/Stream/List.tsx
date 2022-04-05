@@ -1,17 +1,24 @@
 import * as React from 'react';
 import FallbackList from 'components/FallbackList';
 import { useStreamAndHistoryQuery } from 'services/generated/graphql';
-import { useAccount } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import { ListItem } from './ListItem';
+import { useGraphEndpoint } from 'hooks';
 
 export const List = () => {
   const [{ data: accountData }] = useAccount();
+  const [{ data: networkData }] = useNetwork();
+
+  // get subgraph endpoint
+  const endpoint = useGraphEndpoint();
+
   const { data, error, isLoading } = useStreamAndHistoryQuery(
     {
-      endpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay',
+      endpoint,
     },
     {
       id: accountData?.address.toLowerCase() ?? '',
+      network: networkData?.chain?.name ?? '',
     }
   );
 

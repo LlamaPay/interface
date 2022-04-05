@@ -1009,13 +1009,16 @@ export enum _SubgraphErrorPolicy_ {
   Deny = 'deny'
 }
 
-export type GetAllTokensQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetAllTokensQueryVariables = Exact<{
+  network: Scalars['String'];
+}>;
 
 
 export type GetAllTokensQuery = { __typename?: 'Query', tokens: Array<{ __typename?: 'Token', address: any, symbol: string, name: string, decimals: number, contract: { __typename?: 'LlamaPayContract', id: string } }> };
 
 export type StreamAndHistoryQueryVariables = Exact<{
   id: Scalars['ID'];
+  network: Scalars['String'];
 }>;
 
 
@@ -1084,7 +1087,7 @@ export const UserHistoryFragmentDoc = `
 }
     `;
 export const GetAllTokensDocument = `
-    query GetAllTokens {
+    query GetAllTokens($network: String!) {
   tokens(first: 100) {
     address
     symbol
@@ -1101,21 +1104,21 @@ export const useGetAllTokensQuery = <
       TError = unknown
     >(
       dataSource: { endpoint: string, fetchParams?: RequestInit },
-      variables?: GetAllTokensQueryVariables,
+      variables: GetAllTokensQueryVariables,
       options?: UseQueryOptions<GetAllTokensQuery, TError, TData>
     ) =>
     useQuery<GetAllTokensQuery, TError, TData>(
-      variables === undefined ? ['GetAllTokens'] : ['GetAllTokens', variables],
+      ['GetAllTokens', variables],
       fetcher<GetAllTokensQuery, GetAllTokensQueryVariables>(dataSource.endpoint, dataSource.fetchParams || {}, GetAllTokensDocument, variables),
       options
     );
 
-useGetAllTokensQuery.getKey = (variables?: GetAllTokensQueryVariables) => variables === undefined ? ['GetAllTokens'] : ['GetAllTokens', variables];
+useGetAllTokensQuery.getKey = (variables: GetAllTokensQueryVariables) => ['GetAllTokens', variables];
 ;
 
-useGetAllTokensQuery.fetcher = (dataSource: { endpoint: string, fetchParams?: RequestInit }, variables?: GetAllTokensQueryVariables) => fetcher<GetAllTokensQuery, GetAllTokensQueryVariables>(dataSource.endpoint, dataSource.fetchParams || {}, GetAllTokensDocument, variables);
+useGetAllTokensQuery.fetcher = (dataSource: { endpoint: string, fetchParams?: RequestInit }, variables: GetAllTokensQueryVariables) => fetcher<GetAllTokensQuery, GetAllTokensQueryVariables>(dataSource.endpoint, dataSource.fetchParams || {}, GetAllTokensDocument, variables);
 export const StreamAndHistoryDocument = `
-    query StreamAndHistory($id: ID!) {
+    query StreamAndHistory($id: ID!, $network: String!) {
   user(id: $id) {
     streams(orderBy: createdTimestamp, orderDirection: desc) {
       ...UserStream

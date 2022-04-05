@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useNetwork } from 'wagmi';
 
-const useChainExplorer = () => {
+export const useChainExplorer = () => {
   const [{ data: network }] = useNetwork();
 
   const chainExplorer: string | null = React.useMemo(() => {
@@ -11,5 +11,3 @@ const useChainExplorer = () => {
 
   return chainExplorer;
 };
-
-export default useChainExplorer;
