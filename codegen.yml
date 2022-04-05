@@ -8,5 +8,6 @@ generates:
       - typescript-operations
       - typescript-react-query
     config:
-      fetcher:
-        endpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay'
+      fetcher: fetch
+      exposeFetcher: true
+      exposeQueryKeys: true

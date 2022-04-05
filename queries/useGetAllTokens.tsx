@@ -6,7 +6,11 @@ import { createContract } from 'utils/contract';
 import { createERC20Contract } from 'utils/tokenUtils';
 
 const useGetAllTokens = () => {
-  const { data = null, isLoading, error } = useGetAllTokensQuery();
+  const {
+    data = null,
+    isLoading,
+    error,
+  } = useGetAllTokensQuery({ endpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay' });
 
   // format the data in memo, instead of react query's select as graphql trigger rerenders multiple times when using it
   const tokens: IToken[] | null = React.useMemo(() => {

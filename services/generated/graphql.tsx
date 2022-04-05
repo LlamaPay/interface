@@ -5,10 +5,11 @@ export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K]
 export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
 
-function fetcher<TData, TVariables>(query: string, variables?: TVariables) {
+function fetcher<TData, TVariables>(endpoint: string, requestInit: RequestInit, query: string, variables?: TVariables) {
   return async (): Promise<TData> => {
-    const res = await fetch("https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay", {
-    method: "POST",
+    const res = await fetch(endpoint, {
+      method: 'POST',
+      ...requestInit,
       body: JSON.stringify({ query, variables }),
     });
 
@@ -1099,14 +1100,20 @@ export const useGetAllTokensQuery = <
       TData = GetAllTokensQuery,
       TError = unknown
     >(
+      dataSource: { endpoint: string, fetchParams?: RequestInit },
       variables?: GetAllTokensQueryVariables,
       options?: UseQueryOptions<GetAllTokensQuery, TError, TData>
     ) =>
     useQuery<GetAllTokensQuery, TError, TData>(
       variables === undefined ? ['GetAllTokens'] : ['GetAllTokens', variables],
-      fetcher<GetAllTokensQuery, GetAllTokensQueryVariables>(GetAllTokensDocument, variables),
+      fetcher<GetAllTokensQuery, GetAllTokensQueryVariables>(dataSource.endpoint, dataSource.fetchParams || {}, GetAllTokensDocument, variables),
       options
     );
+
+useGetAllTokensQuery.getKey = (variables?: GetAllTokensQueryVariables) => variables === undefined ? ['GetAllTokens'] : ['GetAllTokens', variables];
+;
+
+useGetAllTokensQuery.fetcher = (dataSource: { endpoint: string, fetchParams?: RequestInit }, variables?: GetAllTokensQueryVariables) => fetcher<GetAllTokensQuery, GetAllTokensQueryVariables>(dataSource.endpoint, dataSource.fetchParams || {}, GetAllTokensDocument, variables);
 export const StreamAndHistoryDocument = `
     query StreamAndHistory($id: ID!) {
   user(id: $id) {
@@ -1124,11 +1131,17 @@ export const useStreamAndHistoryQuery = <
       TData = StreamAndHistoryQuery,
       TError = unknown
     >(
+      dataSource: { endpoint: string, fetchParams?: RequestInit },
       variables: StreamAndHistoryQueryVariables,
       options?: UseQueryOptions<StreamAndHistoryQuery, TError, TData>
     ) =>
     useQuery<StreamAndHistoryQuery, TError, TData>(
       ['StreamAndHistory', variables],
-      fetcher<StreamAndHistoryQuery, StreamAndHistoryQueryVariables>(StreamAndHistoryDocument, variables),
+      fetcher<StreamAndHistoryQuery, StreamAndHistoryQueryVariables>(dataSource.endpoint, dataSource.fetchParams || {}, StreamAndHistoryDocument, variables),
       options
     );
+
+useStreamAndHistoryQuery.getKey = (variables: StreamAndHistoryQueryVariables) => ['StreamAndHistory', variables];
+;
+
+useStreamAndHistoryQuery.fetcher = (dataSource: { endpoint: string, fetchParams?: RequestInit }, variables: StreamAndHistoryQueryVariables) => fetcher<StreamAndHistoryQuery, StreamAndHistoryQueryVariables>(dataSource.endpoint, dataSource.fetchParams || {}, StreamAndHistoryDocument, variables);

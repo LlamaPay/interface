@@ -6,9 +6,14 @@ import { ListItem } from './ListItem';
 
 export const List = () => {
   const [{ data: accountData }] = useAccount();
-  const { data, error, isLoading } = useStreamAndHistoryQuery({
-    id: accountData?.address.toLowerCase() ?? '',
-  });
+  const { data, error, isLoading } = useStreamAndHistoryQuery(
+    {
+      endpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay',
+    },
+    {
+      id: accountData?.address.toLowerCase() ?? '',
+    }
+  );
 
   const streams = React.useMemo(() => {
     const streams = data?.user?.streams ?? [];

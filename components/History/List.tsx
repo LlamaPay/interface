@@ -7,9 +7,14 @@ import { ListItem } from './ListItem';
 export const List = () => {
   const [{ data: accountData }] = useAccount();
   // TODO handle error and loading states
-  const { data, error, isLoading } = useStreamAndHistoryQuery({
-    id: accountData?.address.toLowerCase() ?? '',
-  });
+  const { data, error, isLoading } = useStreamAndHistoryQuery(
+    {
+      endpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay',
+    },
+    {
+      id: accountData?.address.toLowerCase() ?? '',
+    }
+  );
 
   const history = React.useMemo(() => {
     return data?.user?.historicalEvents ?? null;
