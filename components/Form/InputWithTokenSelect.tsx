@@ -38,7 +38,7 @@ export const InputWithTokenSelect = ({
     if (data) {
       setTokenAddress(data.tokenAddress);
       // don't check for allowance when not required
-      if (checkTokenApproval) {
+      if (checkTokenApproval && inputAmount.current !== '') {
         checkApproval({
           tokenDetails: data,
           userAddress: accountData?.address,

@@ -1,7 +1,7 @@
 import { ethers, providers } from 'ethers';
 import { Chain, allChains } from 'wagmi';
 
-export const FACTORY_RINKEBY = '0x0BF353cF4cffBf1C2F084E5762FA62E654c8eBB8';
+export const FACTORY_RINKEBY = '0xf0CCCd4aD7B92d038E80818C8A85d8D926cf8139';
 export const FACTORY_KOVAN = '0x5DC88ac35800312CE6186D99FCd7155E88B31fb8';
 export const FACTORY_FUJI = '0x3A7d840bAC4127db441FDA2f01A7b693736d1854';
 
