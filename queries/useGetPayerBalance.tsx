@@ -8,8 +8,8 @@ import { useNetworkProvider } from 'hooks';
 import { Provider } from 'utils/contract';
 
 // TODO update chain name based on user wallet network
-const fetchBalance = async (id: string, tokens: IToken[] | null, provider: Provider): Promise<IBalance[] | null> => {
-  if (!id || id === '' || !tokens || tokens.length < 1) return null;
+const fetchBalance = async (id: string, tokens: IToken[] | null, provider?: Provider): Promise<IBalance[] | null> => {
+  if (!id || id === '' || !tokens || tokens.length < 1 || !provider) return null;
   try {
     const res = await Promise.allSettled(tokens.map((c) => c.llamaTokenContract.getPayerBalance(id)));
 

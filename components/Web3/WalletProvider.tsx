@@ -1,19 +1,18 @@
 import * as React from 'react';
+import { chains, defaultProvider, infuraId, networkDetails } from 'utils/constants';
 import { Connector, Provider, chain } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { WalletLinkConnector } from 'wagmi/connectors/walletLink';
-import chains from 'utils/chains';
-import { chainProviders } from 'hooks/useNetworkProvider';
-
-const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
 
 const defaultChain = chain.rinkeby;
 
 // Set up connectors
 type ConnectorsConfig = { chainId?: number };
 const connectors = ({ chainId }: ConnectorsConfig) => {
-  const rpcUrl = chains.find((x) => x.id === chainId)?.rpcUrls?.[0] ?? defaultChain.rpcUrls[0];
+  const rpcUrl = defaultChain.rpcUrls[0];
+  const chainDetails = chainId && networkDetails[chainId];
+
   return [
     new InjectedConnector({
       chains,
@@ -28,7 +27,7 @@ const connectors = ({ chainId }: ConnectorsConfig) => {
     new WalletLinkConnector({
       options: {
         appName: 'LlamaPay',
-        jsonRpcUrl: `${rpcUrl}/${infuraId}`,
+        jsonRpcUrl: chainDetails ? chainDetails.rpcUrl : `${rpcUrl}/${infuraId}`,
       },
     }),
   ];
@@ -37,10 +36,10 @@ const connectors = ({ chainId }: ConnectorsConfig) => {
 // Set up providers
 type ProviderConfig = { chainId?: number; connector?: Connector };
 
-const isChainSupported = (chainId?: number) => chains.some((x) => x.id === chainId);
-
-const provider = ({ chainId }: ProviderConfig) =>
-  chainId && isChainSupported(chainId) ? chainProviders[chainId] : undefined;
+const provider = ({ chainId }: ProviderConfig) => {
+  const chainDetails = chainId && networkDetails[chainId];
+  return chainDetails ? chainDetails.chainProviders : defaultProvider;
+};
 
 type Props = {
   children?: React.ReactNode;
