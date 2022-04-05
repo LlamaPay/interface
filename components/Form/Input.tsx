@@ -6,7 +6,10 @@ export const InputAmount = ({ name, label, isRequired, className, handleChange, 
     <label>
       <span>{label}</span>
       <input
-        className={classNames('w-full rounded border px-3 py-[11px] slashed-zero', className)}
+        className={classNames(
+          'w-full rounded border border-neutral-300 px-3 py-[11px] slashed-zero dark:border-neutral-700 dark:bg-stone-800',
+          className
+        )}
         name={name}
         required={isRequired}
         autoComplete="off"
@@ -31,7 +34,10 @@ export const InputText = ({ name, label, isRequired, className, ...props }: Inpu
     <label>
       <span>{label}</span>
       <input
-        className={classNames('w-full rounded border px-3 py-[11px] slashed-zero', className)}
+        className={classNames(
+          'w-full rounded border border-neutral-300 px-3 py-[11px] slashed-zero dark:border-neutral-700 dark:bg-stone-800',
+          className
+        )}
         name={name}
         required={isRequired}
         autoComplete="off"

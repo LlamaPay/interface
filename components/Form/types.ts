@@ -20,3 +20,11 @@ export interface InputWithTokenSelectProps extends InputElement {
   setTokenAddress: React.Dispatch<React.SetStateAction<string>>;
   checkTokenApproval?: UseMutateFunction<boolean, unknown, ICheckTokenAllowance, unknown>;
 }
+
+export interface InputAmountWithDaysProps {
+  name: string;
+  selectInputName: string;
+  label: string;
+  isRequired: boolean;
+  className?: string;
+}

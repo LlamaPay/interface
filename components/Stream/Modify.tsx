@@ -2,18 +2,20 @@ import * as React from 'react';
 import { ArrowRightIcon } from '@heroicons/react/solid';
 import { DialogHeader, DialogWrapper, SetIsOpen } from 'components/Dialog';
 import BigNumber from 'bignumber.js';
+import { Contract } from 'ethers';
+
 interface ModifyProps {
   isOpen: boolean;
   setIsOpen: SetIsOpen;
   payee: string;
   payer: string;
   amtPerSec: number;
-  contract: any;
+  contract: Contract;
 }
 
-export const Modify = ({ isOpen, setIsOpen, payee, amtPerSec, contract }: ModifyProps) => {
-  const options = { month: 2419200, year: 29030400 };
+const options = { month: 2419200, year: 29030400 };
 
+export const Modify = ({ isOpen, setIsOpen, payee, amtPerSec, contract }: ModifyProps) => {
   const [newPayee, setNewPayee] = React.useState<string>('');
   const [newAmtPerSec, setNewAmtPerSec] = React.useState<number | string>('');
   const [selectedPeriod, setSelectedPeriod] = React.useState<string>('month');
@@ -29,7 +31,7 @@ export const Modify = ({ isOpen, setIsOpen, payee, amtPerSec, contract }: Modify
       }
     }
     modifyStream();
-  }, [contract, newPayee, newAmtPerSec]);
+  }, [contract, newPayee, newAmtPerSec, amtPerSec, payee]);
 
   const handleChange = (event: any) => {
     const name = event.target.name;

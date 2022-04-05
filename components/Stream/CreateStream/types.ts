@@ -24,6 +24,8 @@ export interface ICheckApproval {
 
 export interface IFormElements {
   amountToDeposit: { value: string };
+  amountToStream: { value: string };
+  streamDuration: { value: 'year' | 'month' };
   amountPerSec: { value: string };
   addressToStream: { value: string };
 }

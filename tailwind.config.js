@@ -7,6 +7,7 @@ module.exports = {
     extend: {},
   },
   plugins: [
+    require('@tailwindcss/forms'),
     plugin(({ addVariant }) => {
       addVariant('enter', '&[data-enter]');
       addVariant('leave', '&[data-leave]');

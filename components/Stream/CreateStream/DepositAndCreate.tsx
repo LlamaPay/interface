@@ -1,9 +1,10 @@
 import * as React from 'react';
 import BigNumber from 'bignumber.js';
-import { InputAmount, InputText, InputWithTokenSelect, SubmitButton } from 'components/Form';
+import { InputAmountWithDuration, InputText, InputWithTokenSelect, SubmitButton } from 'components/Form';
 import useStreamToken from 'queries/useStreamToken';
 import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval';
 import { IStreamFormProps, IFormElements } from './types';
+import { secondsByDuration } from 'utils/constants';
 
 const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
   const { mutate: streamToken, isLoading, error: errorStreamingToken } = useStreamToken();
@@ -23,18 +24,22 @@ const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
 
     const form = e.target as typeof e.target & IFormElements;
 
-    const amountPerSec = form.amountPerSec?.value;
     const amountToDeposit = form.amountToDeposit?.value;
+    const amountToStream = form.amountToStream?.value;
+    const streamDuration = form.streamDuration?.value;
     const payeeAddress = form.addressToStream?.value;
+
+    const duration = streamDuration === 'year' ? 'year' : 'month';
 
     if (tokenAddress !== '') {
       // check if token exist in all tokens list
       const tokenDetails = tokens.find((t) => t.tokenAddress === tokenAddress) ?? null;
 
       if (tokenDetails) {
-        // format amount to bignumber
-        const amtPerSec = new BigNumber(amountPerSec).multipliedBy(1e20);
-        const amtToDeposit = new BigNumber(amountToDeposit).multipliedBy(10 ** tokenDetails.decimals);
+        // format amounts to bignumbers
+        // convert amt to seconds
+        const amtPerSec = new BigNumber(amountToStream).times(1e20).div(secondsByDuration[duration]);
+        const amtToDeposit = new BigNumber(amountToDeposit).times(10 ** tokenDetails.decimals);
 
         // query mutation
 
@@ -47,7 +52,6 @@ const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
             llamaContractAddress: tokenDetails?.llamaContractAddress,
           });
         } else {
-          console.log('ABOUT TO APPROVE');
           approveToken({
             tokenAddress: tokenAddress,
             spenderAddress: tokenDetails.llamaContractAddress,
@@ -73,7 +77,12 @@ const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
 
       <InputText name="addressToStream" isRequired={true} label="Address to stream" />
 
-      <InputAmount name="amountPerSec" isRequired={true} label="Amount per sec" />
+      <InputAmountWithDuration
+        name="amountToStream"
+        isRequired={true}
+        label="Amount to stream"
+        selectInputName="streamDuration"
+      />
 
       {isApproved ? (
         <SubmitButton disabled={isLoading} className="mt-8">

@@ -24,7 +24,7 @@ function Token({ value, shortName }: { value: string; shortName?: boolean }) {
 
   // TODO show token image and symbol for verified lists, else show token address
   return (
-    <div className="flex flex-1 items-center space-x-2 overflow-x-hidden py-2 px-1">
+    <div className="flex flex-1 items-center space-x-2 overflow-x-hidden py-2 pr-1">
       <div className="h-6 w-6 flex-shrink-0 rounded-full bg-orange-400"></div>
       {data ? (
         <div className="truncate">{shortName ? data.symbol : `${data.name} (${data.symbol})`}</div>
@@ -58,11 +58,14 @@ export function SelectToken({ handleTokenChange, tokens, className }: ISelectTok
       </SelectLabel>
       <Select
         state={select}
-        className={classNames('flex w-full items-center rounded bg-zinc-100 p-2 dark:bg-zinc-800', className)}
+        className={classNames(
+          'flex w-full items-center rounded bg-zinc-100 p-2 shadow-sm dark:bg-stone-600',
+          className
+        )}
         onClick={dialog.toggle}
       >
         {<Token value={select.value} shortName />}
-        <SelectArrow />
+        <SelectArrow className="relative right-[-2px]" />
       </Select>
 
       {/* use select state as dialog state so that combobox options are displayed */}

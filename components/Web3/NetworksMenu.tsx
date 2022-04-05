@@ -30,7 +30,7 @@ export const NetworksMenu = () => {
               leaveFrom="opacity-100"
               leaveTo="opacity-0"
             >
-              <Listbox.Options className="absolute mt-1 max-h-60 w-40 overflow-auto rounded-md bg-zinc-100 py-1 text-black shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-800 dark:text-white sm:text-sm">
+              <Listbox.Options className="absolute mt-1 max-h-60 w-60 overflow-auto rounded-md bg-zinc-100 py-1 text-black shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none dark:bg-zinc-800 dark:text-white sm:text-sm">
                 <p className="py-2 px-3 text-neutral-700 dark:text-neutral-200">Select a Network</p>
                 {data.chains.map((chain) => (
                   <Listbox.Option

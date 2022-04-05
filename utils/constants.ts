@@ -62,3 +62,8 @@ export const networkDetails: INetworkDetails = {
 export const chains: Chain[] = allChains.filter(
   (chain) => chain.name === 'Rinkeby' || chain.name === 'Kovan' || chain.name === 'Avalanche Fuji Testnet'
 );
+
+export const secondsByDuration = {
+  month: 2419200,
+  year: 29030400,
+};

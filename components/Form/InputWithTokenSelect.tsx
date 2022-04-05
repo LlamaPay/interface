@@ -74,7 +74,10 @@ export const InputWithTokenSelect = ({
       <label htmlFor={name}>{label}</label>
       <div className="relative flex">
         <input
-          className={classNames('w-full rounded border px-3 py-[11px] slashed-zero', className)}
+          className={classNames(
+            'w-full rounded border border-neutral-300 px-3 py-[11px] slashed-zero dark:border-neutral-700 dark:bg-stone-800',
+            className
+          )}
           name={name}
           id={name}
           required={isRequired}
