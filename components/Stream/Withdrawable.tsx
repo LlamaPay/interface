@@ -10,7 +10,7 @@ interface WithdrawableProps {
 }
 
 function formatBalance(balance: number) {
-  return balance.toLocaleString('en-US', { maximumFractionDigits: 5 });
+  return balance.toLocaleString('en-US', { maximumFractionDigits: 4, minimumFractionDigits: 4 });
 }
 
 export const Withdrawable = ({ contract, payer, payee, amtPerSec, decimals }: WithdrawableProps) => {
