@@ -3,7 +3,7 @@ import type { UserStreamFragment } from 'services/generated/graphql';
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid';
 import { formatAddress } from 'utils/address';
 import EmptyToken from 'public/empty-token.webp';
-import Image from 'next/image';
+import Image, { StaticImageData } from 'next/image';
 import Tooltip from 'components/Tooltip';
 import { useAccount, useContract, useSigner } from 'wagmi';
 import { Modify } from './Modify';
