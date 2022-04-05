@@ -1,9 +1,15 @@
 import { Contract } from 'ethers';
 import { erc20ABI } from 'wagmi';
-import { provider } from './contract';
+import { Provider } from './contract';
 
 // Creates an instance of an ERC20 contract
-export const createERC20Contract = ({ tokenAddress }: { tokenAddress: string }): Contract => {
+export const createERC20Contract = ({
+  tokenAddress,
+  provider,
+}: {
+  tokenAddress: string;
+  provider: Provider;
+}): Contract => {
   return new Contract(tokenAddress, erc20ABI, provider);
 };
 

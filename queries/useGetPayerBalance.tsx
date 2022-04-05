@@ -4,9 +4,11 @@ import { useAccount } from 'wagmi';
 import BigNumber from 'bignumber.js';
 import { createERC20Contract } from 'utils/tokenUtils';
 import { getAddress } from 'ethers/lib/utils';
+import { useNetworkProvider } from 'hooks';
+import { Provider } from 'utils/contract';
 
 // TODO update chain name based on user wallet network
-const fetchBalance = async (id: string, tokens: IToken[] | null): Promise<IBalance[] | null> => {
+const fetchBalance = async (id: string, tokens: IToken[] | null, provider: Provider): Promise<IBalance[] | null> => {
   if (!id || id === '' || !tokens || tokens.length < 1) return null;
   try {
     const res = await Promise.allSettled(tokens.map((c) => c.llamaTokenContract.getPayerBalance(id)));
@@ -25,7 +27,7 @@ const fetchBalance = async (id: string, tokens: IToken[] | null): Promise<IBalan
           amount: amount ? amount.toFixed(0) : '',
           contractAddress: tokens[index]?.llamaContractAddress,
           tokenDecimals: tokens[index].decimals,
-          tokenContract: createERC20Contract({ tokenAddress: getAddress(tokens[index]?.tokenAddress) }),
+          tokenContract: createERC20Contract({ tokenAddress: getAddress(tokens[index]?.tokenAddress), provider }),
         };
       })
       .filter((d) => d.amount !== '0');
@@ -39,12 +41,13 @@ const fetchBalance = async (id: string, tokens: IToken[] | null): Promise<IBalan
 
 function useGetPayerBalance(contracts: IToken[] | null, tokensKey: string) {
   const [{ data: accountData }] = useAccount();
+  const { provider } = useNetworkProvider();
 
   const payerAddress = accountData?.address.toLowerCase() ?? '';
 
   const { refetch, ...data } = useQuery<IBalance[] | null>(
     ['payerBalance', payerAddress, tokensKey],
-    () => fetchBalance(payerAddress, contracts),
+    () => fetchBalance(payerAddress, contracts, provider),
     {
       refetchInterval: 10000,
     }

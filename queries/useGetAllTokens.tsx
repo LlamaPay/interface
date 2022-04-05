@@ -23,7 +23,7 @@ const useGetAllTokens = () => {
         name: c.name,
         symbol: c.symbol,
         decimals: c.decimals,
-        tokenContract: createERC20Contract({ tokenAddress: getAddress(c.address) }),
+        tokenContract: createERC20Contract({ tokenAddress: getAddress(c.address), provider }),
         llamaTokenContract: createContract(getAddress(c.contract?.id), provider),
       }));
     } else return null;
