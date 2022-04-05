@@ -150,7 +150,10 @@ const IncomingStream = ({ totalStreamed, address, ticker = 'Unknown token', toke
             </Tooltip>
           </div>
           {/* TODO handle internalization and decimals when totalStreamed is not USD */}
-          <span>{`+${totalStreamed.toLocaleString('en-US', { maximumFractionDigits: 5 })}`}</span>
+          <span>{`+${totalStreamed.toLocaleString('en-US', {
+            maximumFractionDigits: 4,
+            minimumFractionDigits: 4,
+          })}`}</span>
           <span className="text-xs text-gray-500 dark:text-gray-400">so far</span>
           <span>
             <svg
@@ -198,7 +201,10 @@ const OutgoingStream = ({ totalStreamed, address, ticker = 'Unknown token', toke
               />
             </Tooltip>
           </div>
-          <span>{`-${totalStreamed.toLocaleString('en-US', { maximumFractionDigits: 5 })}`}</span>
+          <span>{`-${totalStreamed.toLocaleString('en-US', {
+            maximumFractionDigits: 4,
+            minimumFractionDigits: 4,
+          })}`}</span>
           <span className="text-xs text-gray-500 dark:text-gray-400">so far</span>
           <span>
             <svg
