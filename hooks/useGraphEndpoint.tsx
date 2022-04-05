@@ -6,8 +6,8 @@ interface IUrls {
 
 const urls: IUrls = {
   4: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay',
-  42: 'https://thegraph.com/hosted-service/subgraph/nemusonaneko/llamapay-kovan',
-  43113: 'https://thegraph.com/hosted-service/subgraph/nemusonaneko/llamapay-fuji',
+  42: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-kovan',
+  43113: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-fuji',
 };
 
 export const useGraphEndpoint = () => {
