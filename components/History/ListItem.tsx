@@ -10,8 +10,11 @@ interface ItemProps {
 }
 
 function formatAmtPerSec(amtPerSec: number) {
-  const formatted = amtPerSec;
-  return formatted.toLocaleString('en-US', { maximumFractionDigits: 4 });
+  const formatted = amtPerSec.toLocaleString('en-US', { maximumFractionDigits: 4 });
+  if (formatted === '0') {
+    return '0...';
+  }
+  return formatted;
 }
 
 export const ListItem = ({ data }: ItemProps) => {
@@ -76,6 +79,14 @@ export const ListItem = ({ data }: ItemProps) => {
               </span>
               <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(oldAmtPerSec)}</span>
               <ChevronDoubleRightIcon className="h-4 w-4" />
+              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
+                {account === payee ? formatAddress(payer) : 'You'}
+              </span>
+              <ArrowRightIcon className="h-4 w-4" />
+              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
+                {account === payer ? formatAddress(payee) : 'You'}
+              </span>
+              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(amtPerSec)}</span>
             </>
           ) : (
             <>
@@ -108,20 +119,6 @@ export const ListItem = ({ data }: ItemProps) => {
           />
         </div>
       </div>
-      {eventType === 'StreamModified' ? (
-        <div className="ml-8 flex flex-1 items-center space-x-2">
-          <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
-            {account === payee ? formatAddress(payer) : 'You'}
-          </span>
-          <ArrowRightIcon className="h-4 w-4" />
-          <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
-            {account === payer ? formatAddress(payee) : 'You'}
-          </span>
-          <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(amtPerSec)}</span>
-        </div>
-      ) : (
-        ''
-      )}
     </>
   );
 };

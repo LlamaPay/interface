@@ -14,19 +14,19 @@ interface ModifyProps {
 export const Modify = ({ isOpen, setIsOpen, payee, amtPerSec, contract }: ModifyProps) => {
   const options = { month: 2419200, year: 29030400 };
 
-  const [newPayee, setNewPayee] = React.useState<string>(payee);
-  const [newAmtPerSec, setNewAmtPerSec] = React.useState<number | string>(amtPerSec);
+  const [newPayee, setNewPayee] = React.useState<string>('');
+  const [newAmtPerSec, setNewAmtPerSec] = React.useState<number | string>('');
   const [selectedPeriod, setSelectedPeriod] = React.useState<string>('month');
 
   // TODO CHECKS AND STUFF
   const handleModifyInput = React.useCallback(() => {
     async function modifyStream() {
       try {
-        const actualAmtPerSec = new BigNumber(newAmtPerSec).times(1e20);
-        if (selectedPeriod === 'month') actualAmtPerSec.div(options.month).toFixed(0);
-        if (selectedPeriod === 'year') actualAmtPerSec.div(options.year).toFixed(0);
+        const actualAmtPerSec = new BigNumber(newAmtPerSec).times(1e20).div(options['month']).toFixed(0);
         await contract.modifyStream(payee, amtPerSec, newPayee, actualAmtPerSec);
-      } catch {}
+      } catch (error) {
+        console.error(error);
+      }
     }
     modifyStream();
   }, [contract, newPayee, newAmtPerSec]);
