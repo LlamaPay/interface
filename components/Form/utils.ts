@@ -1,15 +1,17 @@
 import BigNumber from 'bignumber.js';
+import debounce from 'lodash.debounce';
 import { IToken } from 'types';
 
+type TokenDetails = Pick<IToken, 'decimals' | 'tokenContract' | 'llamaContractAddress'>;
+
 export interface ICheckApproval {
-  tokenDetails: IToken;
+  tokenDetails: TokenDetails;
   userAddress?: string;
   approvedForAmount: string;
   checkTokenApproval: ({}) => void;
 }
 
-// TODO implement debounce
-export function checkApproval({ tokenDetails, userAddress, approvedForAmount, checkTokenApproval }: ICheckApproval) {
+function checkTokenApproval({ tokenDetails, userAddress, approvedForAmount, checkTokenApproval }: ICheckApproval) {
   if (tokenDetails && userAddress) {
     const isAmountValid = checkIsAmountValid(approvedForAmount) && tokenDetails?.decimals;
 
@@ -25,6 +27,8 @@ export function checkApproval({ tokenDetails, userAddress, approvedForAmount, ch
     }
   }
 }
+
+export const checkApproval = debounce(checkTokenApproval, 200);
 
 // function to check if the amount entered is in the right format
 export function checkIsAmountValid(amount: string) {

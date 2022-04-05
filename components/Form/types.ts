@@ -7,10 +7,10 @@ export interface InputElement {
   label: string;
   isRequired: boolean;
   className?: string;
+  handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 export interface InputWithTokenElement extends InputElement {
-  handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleTokenChange: (token: string) => void;
   tokens: string[];
 }

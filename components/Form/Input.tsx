@@ -1,7 +1,7 @@
 import classNames from 'classnames';
 import { InputElement } from './types';
 
-export const InputAmount = ({ name, label, isRequired, className, ...props }: InputElement) => {
+export const InputAmount = ({ name, label, isRequired, className, handleChange, ...props }: InputElement) => {
   return (
     <label>
       <span>{label}</span>
@@ -19,6 +19,7 @@ export const InputAmount = ({ name, label, isRequired, className, ...props }: In
         spellCheck="false"
         inputMode="decimal"
         title="Enter numbers only."
+        onChange={handleChange}
         {...props}
       />
     </label>

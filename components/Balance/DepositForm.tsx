@@ -4,7 +4,8 @@ import { useAccount } from 'wagmi';
 import useDepositToken from 'queries/useDepositToken';
 import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval';
 import { IFormData, IFormElements } from './types';
-import { checkIsAmountValid } from 'components/Form/utils';
+import { checkApproval } from 'components/Form/utils';
+import { InputAmount, SubmitButton } from 'components/Form';
 
 const DepositForm = ({ data }: { data: IFormData }) => {
   const { mutate, isLoading } = useDepositToken();
@@ -18,74 +19,57 @@ const DepositForm = ({ data }: { data: IFormData }) => {
   const { mutate: checkTokenApproval, data: isApproved, isLoading: checkingApproval, error } = useCheckTokenApproval();
   const { mutate: approveToken, isLoading: approvingToken, error: approvalError } = useApproveToken();
 
-  // TODO implement debounce
-  function checkApproval(e: React.ChangeEvent<HTMLInputElement>) {
+  function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     amountToDeposit.current = e.target.value;
 
-    const isAmountValid = checkIsAmountValid(amountToDeposit.current) && data?.tokenDecimals;
-
-    if (accountData?.address && isAmountValid) {
-      const bigAmount = new BigNumber(amountToDeposit.current).multipliedBy(10 ** data.tokenDecimals);
-
-      checkTokenApproval({
-        token: data.tokenContract,
-        userAddress: accountData?.address,
-        approveForAddress: data.llamaContractAddress,
-        approvedForAmount: bigAmount.toFixed(0),
-      });
-    }
+    checkApproval({
+      tokenDetails: {
+        decimals: data.tokenDecimals,
+        tokenContract: data.tokenContract,
+        llamaContractAddress: data.llamaContractAddress,
+      },
+      userAddress: accountData?.address,
+      approvedForAmount: amountToDeposit.current,
+      checkTokenApproval,
+    });
   }
-
-  const handleTokenApproval = () => {
-    const isAmountValid = checkIsAmountValid(amountToDeposit.current) && data?.tokenDecimals;
-
-    if (isAmountValid) {
-      const bigAmount = new BigNumber(amountToDeposit.current).multipliedBy(10 ** data.tokenDecimals);
-
-      approveToken({
-        tokenAddress: data.tokenAddress,
-        amountToApprove: bigAmount.toFixed(0),
-        spenderAddress: data.llamaContractAddress,
-      });
-    }
-  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.target as typeof e.target & IFormElements;
-    const amount = form.amount.value;
-    // check if amount is valid
-    const isAmountValid = checkIsAmountValid(amount);
+    const amount = form.amount?.value;
 
-    if (isAmountValid) {
+    if (amount) {
       const formattedAmt = new BigNumber(amount).multipliedBy(10 ** data.tokenDecimals);
 
-      mutate({
-        amountToDeposit: formattedAmt.toFixed(0),
-        llamaContractAddress: data.llamaContractAddress,
-      });
+      if (isApproved) {
+        mutate({
+          amountToDeposit: formattedAmt.toFixed(0),
+          llamaContractAddress: data.llamaContractAddress,
+        });
+      } else {
+        approveToken({
+          tokenAddress: data.tokenAddress,
+          amountToApprove: formattedAmt.toFixed(0),
+          spenderAddress: data.llamaContractAddress,
+        });
+      }
     }
   };
 
+  const disableApprove = approvingToken || checkingApproval;
+
   return (
     <form className="mt-4 flex flex-col space-y-4" onSubmit={handleSubmit}>
-      <label className="flex flex-col space-y-1">
-        <span>{data.symbol ? `Amount (${data.symbol})` : 'Amount'}</span>
-        <input type="text" className="rounded border px-3 py-[6px]" name="amount" required onChange={checkApproval} />
-      </label>
+      <InputAmount name="amount" label={`Amount ${data.symbol}`} handleChange={handleChange} isRequired />
       {isApproved ? (
-        <button className="nav-button disabled:cursor-not-allowed" disabled={isLoading}>
+        <SubmitButton disabled={isLoading} className="mt-4">
           {isLoading ? '...' : 'Deposit'}
-        </button>
+        </SubmitButton>
       ) : (
-        <button
-          className="nav-button disabled:cursor-not-allowed"
-          disabled={checkingApproval || approvingToken}
-          onClick={handleTokenApproval}
-          type="button"
-        >
-          {checkingApproval || approvingToken ? '...' : 'Approve'}
-        </button>
+        <SubmitButton disabled={disableApprove} className="mt-4">
+          {disableApprove ? '...' : 'Approve'}
+        </SubmitButton>
       )}
     </form>
   );
