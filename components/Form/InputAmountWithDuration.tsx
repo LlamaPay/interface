@@ -44,8 +44,8 @@ export const InputAmountWithDuration = ({
           className="absolute right-1 bottom-1 top-1 my-auto flex w-full max-w-[24%] items-center truncate rounded border-0 bg-zinc-100 p-2 pr-4 shadow-sm dark:bg-stone-600"
           style={{ backgroundSize: '1.25rem', backgroundPosition: 'calc(100% - 4px) 55%' }}
         >
-          <option value="month">Month</option>
-          <option value="year">Year</option>
+          <option value="month">/ Month</option>
+          <option value="year">/ Year</option>
         </select>
       </div>
     </div>

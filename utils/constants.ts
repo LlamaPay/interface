@@ -64,6 +64,6 @@ export const chains: Chain[] = allChains.filter(
 );
 
 export const secondsByDuration = {
-  month: 2419200,
-  year: 29030400,
+  month: 2592000,
+  year: 31104000,
 };

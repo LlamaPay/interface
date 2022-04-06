@@ -1,8 +1,25 @@
+import BigNumber from 'bignumber.js';
 import { Contract, Signer } from 'ethers';
 import { getAddress } from 'ethers/lib/utils';
 import { useMutation } from 'react-query';
 import { checkHasApprovedEnough, ICheckTokenAllowance } from 'utils/tokenUtils';
 import { erc20ABI, useSigner } from 'wagmi';
+
+interface IUseApproveToken {
+  tokenAddress: string;
+  spenderAddress: string;
+  amountToApprove: string;
+}
+
+interface IApproveToken extends IUseApproveToken {
+  signer?: Signer;
+}
+
+type UseTokenForMaxAmt = Omit<IUseApproveToken, 'amountToApprove'>;
+
+type ApproveTokenForMaxAmt = Omit<IApproveToken, 'amountToApprove'>;
+
+const maxAmount = new BigNumber(2).pow(256).minus(1).toFixed(0);
 
 const checkApproval = async (data: ICheckTokenAllowance) => {
   try {
@@ -15,16 +32,6 @@ const checkApproval = async (data: ICheckTokenAllowance) => {
   }
 };
 
-interface IUseApproveToken {
-  tokenAddress: string;
-  spenderAddress: string;
-  amountToApprove: string;
-}
-
-interface IApproveToken extends IUseApproveToken {
-  signer?: Signer;
-}
-
 const approveToken = async ({ tokenAddress, signer, amountToApprove, spenderAddress }: IApproveToken) => {
   try {
     if (!signer) {
@@ -32,6 +39,20 @@ const approveToken = async ({ tokenAddress, signer, amountToApprove, spenderAddr
     } else {
       const contract = new Contract(getAddress(tokenAddress), erc20ABI, signer);
       await contract.approve(getAddress(spenderAddress), amountToApprove);
+    }
+  } catch (error: any) {
+    throw new Error(error?.reason ?? "Couldn't approve token");
+  }
+};
+
+const approveTokenForMaxAmt = async ({ tokenAddress, signer, spenderAddress }: ApproveTokenForMaxAmt) => {
+  try {
+    if (!signer) {
+      throw new Error("Couldn't get signer");
+    } else {
+      const contract = new Contract(getAddress(tokenAddress), erc20ABI, signer);
+
+      await contract.approve(getAddress(spenderAddress), maxAmount);
     }
   } catch (error: any) {
     throw new Error(error?.reason ?? "Couldn't approve token");
@@ -47,5 +68,13 @@ export function useApproveToken() {
 
   return useMutation(({ tokenAddress, amountToApprove, spenderAddress }: IUseApproveToken) =>
     approveToken({ tokenAddress, signer, amountToApprove, spenderAddress })
+  );
+}
+
+export function useApproveTokenForMaxAmt() {
+  const [{ data: signer }] = useSigner();
+
+  return useMutation(({ tokenAddress, spenderAddress }: UseTokenForMaxAmt) =>
+    approveTokenForMaxAmt({ tokenAddress, signer, spenderAddress })
   );
 }

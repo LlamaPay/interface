@@ -12,6 +12,7 @@ import useCreateLlamaPayContract from 'queries/useCreateLlamaPayContract';
 interface ISelectTokenProps {
   handleTokenChange: (token: string) => void;
   tokens: string[];
+  label?: string;
   className?: string;
 }
 
@@ -35,7 +36,7 @@ function Token({ value, shortName }: { value: string; shortName?: boolean }) {
   );
 }
 
-export function SelectToken({ handleTokenChange, tokens, className }: ISelectTokenProps) {
+export function SelectToken({ handleTokenChange, tokens, label, className }: ISelectTokenProps) {
   const [newTokenForm, setNewTokenForm] = React.useState(false);
   const combobox = useComboboxState({ list: tokens });
   // value and setValue shouldn't be passed to the select state because the
@@ -53,8 +54,8 @@ export function SelectToken({ handleTokenChange, tokens, className }: ISelectTok
 
   return (
     <>
-      <SelectLabel state={select} className="sr-only">
-        Select Token
+      <SelectLabel state={select} className={classNames(!label && 'sr-only')}>
+        {label || 'Select token'}
       </SelectLabel>
       <Select
         state={select}
