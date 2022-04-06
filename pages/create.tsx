@@ -11,7 +11,7 @@ import { useNetworkProvider } from 'hooks';
 const Create: NextPage = () => {
   const [{ data: accountData }] = useAccount();
   const { data: tokens, isLoading: tokensLoading, error: tokensError } = useGetAllTokens();
-  const { network } = useNetworkProvider();
+  const { network, unsupported } = useNetworkProvider();
 
   // pass a unique key to getpayerBalance query when tokens data changes
   // cuz initially when the component is mounted, tokens data is null
@@ -36,6 +36,8 @@ const Create: NextPage = () => {
     <Layout className="mx-auto mt-12 flex w-full max-w-7xl flex-col items-center space-y-6 xl:flex-row xl:items-start xl:justify-between xl:space-x-2 xl:space-y-0">
       {!accountData ? (
         <p className="mx-auto mt-8 text-red-500">Connect wallet to continue</p>
+      ) : unsupported ? (
+        <p className="mx-auto mt-8 text-red-500">Chain not supported</p>
       ) : (
         <>
           <Balance balances={balances} noBalances={noBalances} isLoading={isLoading} isError={isError} />

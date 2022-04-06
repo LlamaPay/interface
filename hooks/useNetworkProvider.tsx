@@ -11,5 +11,10 @@ export const useNetworkProvider = () => {
 
   const chainDetails = chainId && networkDetails[chainId];
 
-  return { provider: chainDetails ? chainDetails.rpcProvider : undefined, network: name || '', chainId };
+  return {
+    provider: chainDetails ? chainDetails.rpcProvider : null,
+    network: name,
+    chainId,
+    unsupported: data.chain?.unsupported,
+  };
 };

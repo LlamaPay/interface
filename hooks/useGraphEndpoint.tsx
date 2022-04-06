@@ -7,5 +7,5 @@ export const useGraphEndpoint = () => {
 
   const chainId: number | null = data?.chain?.id ?? null;
 
-  return chainId ? networkDetails[chainId].subgraphEndpoint : defaultSubgraphEndpoint;
+  return chainId ? networkDetails[chainId]?.subgraphEndpoint : defaultSubgraphEndpoint;
 };

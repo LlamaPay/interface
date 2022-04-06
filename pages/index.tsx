@@ -2,15 +2,18 @@ import type { NextPage } from 'next';
 import Layout from 'components/Layout';
 import { StreamList } from 'components/Stream';
 import { HistoryList } from 'components/History';
-import { useAccount } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 
 const Home: NextPage = () => {
   const [{ data: accountData }] = useAccount();
+  const [{ data: networkData }] = useNetwork();
 
   return (
     <Layout className="mx-auto mt-12 flex w-full flex-col items-center space-y-6">
       {!accountData ? (
         <p className="mx-auto mt-8 text-red-500">Connect wallet to continue</p>
+      ) : networkData.chain?.unsupported ? (
+        <p className="mx-auto mt-8 text-red-500">Chain not supported</p>
       ) : (
         <>
           <StreamList />
