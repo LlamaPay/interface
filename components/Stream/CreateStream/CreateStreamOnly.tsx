@@ -60,7 +60,7 @@ const CreateStreamOnly = ({ tokens }: IStreamFormProps) => {
         <SelectToken
           handleTokenChange={handleTokenChange}
           tokens={tokenOptions}
-          className="border border-neutral-300 py-[3px] shadow-none dark:border-neutral-700"
+          className="border border-neutral-300 bg-transparent py-[3px] shadow-none dark:border-neutral-700 dark:bg-stone-800"
           label="Token"
         />
       </span>

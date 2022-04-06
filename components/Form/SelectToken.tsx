@@ -59,10 +59,7 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
       </SelectLabel>
       <Select
         state={select}
-        className={classNames(
-          'flex w-full items-center rounded bg-zinc-100 p-2 shadow-sm dark:bg-stone-600',
-          className
-        )}
+        className={classNames('flex w-full items-center rounded p-2', className)}
         onClick={dialog.toggle}
       >
         {<Token value={select.value} shortName />}

@@ -97,7 +97,7 @@ export const InputWithTokenSelect = ({
         <SelectToken
           handleTokenChange={handleTokenChange}
           tokens={tokenOptions}
-          className="absolute right-1 bottom-1 top-1 my-auto w-full max-w-[24%]"
+          className="absolute right-1 bottom-1 top-1 my-auto w-full max-w-[24%] bg-zinc-100 shadow-sm dark:bg-stone-600"
         />
       </div>
     </div>
