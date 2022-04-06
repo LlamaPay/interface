@@ -43,7 +43,7 @@ function Token({ value, shortName, showBalance }: { value: string; shortName?: b
         )}
       </div>
       {showBalance && (
-        <div className="ml-4 whitespace-nowrap text-gray-600 dark:text-gray-400">
+        <div className="ml-4 whitespace-nowrap slashed-zero text-gray-600 dark:text-gray-400">
           {classNames(balance, data?.symbol)}
         </div>
       )}
