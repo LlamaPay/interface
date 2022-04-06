@@ -202,8 +202,8 @@ const OutgoingStream = ({ totalStreamed, address, ticker = 'Unknown token', toke
             </Tooltip>
           </div>
           <span>{`-${totalStreamed.toLocaleString('en-US', {
-            maximumFractionDigits: 4,
-            minimumFractionDigits: 4,
+            maximumFractionDigits: 5,
+            minimumFractionDigits: 5,
           })}`}</span>
           <span className="text-xs text-gray-500 dark:text-gray-400">so far</span>
           <span>
