@@ -1,4 +1,3 @@
-import BigNumber from 'bignumber.js';
 import * as React from 'react';
 
 interface WithdrawableProps {
@@ -10,7 +9,7 @@ interface WithdrawableProps {
 }
 
 function formatBalance(balance: number) {
-  return balance.toLocaleString('en-US', { maximumFractionDigits: 4, minimumFractionDigits: 4 });
+  return balance.toLocaleString('en-US', { maximumFractionDigits: 5, minimumFractionDigits: 5 });
 }
 
 export const Withdrawable = ({ contract, payer, payee, amtPerSec, decimals }: WithdrawableProps) => {
@@ -51,7 +50,7 @@ export const Withdrawable = ({ contract, payer, payee, amtPerSec, decimals }: Wi
     updateBalance();
     const interval = setInterval(() => {
       updateBalance();
-    }, 100);
+    }, 1);
     return () => clearInterval(interval);
   }, [updateBalance]);
 

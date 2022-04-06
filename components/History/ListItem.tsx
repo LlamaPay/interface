@@ -10,7 +10,7 @@ interface ItemProps {
 }
 
 function formatAmtPerSec(amtPerSec: number) {
-  const formatted = amtPerSec.toLocaleString('en-US', { maximumFractionDigits: 4 });
+  const formatted = amtPerSec.toLocaleString('en-US', { maximumFractionDigits: 5 });
   if (formatted === '0') {
     return '0...';
   }
