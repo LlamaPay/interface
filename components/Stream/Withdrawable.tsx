@@ -31,7 +31,7 @@ export const Withdrawable = ({ contract, payer, payee, amtPerSec, decimals }: Wi
       } catch (error) {
         setTimeout(() => {
           callContract();
-        }, 100);
+        }, 1000);
       }
     }
     callContract();
@@ -51,7 +51,7 @@ export const Withdrawable = ({ contract, payer, payee, amtPerSec, decimals }: Wi
     updateBalance();
     const interval = setInterval(() => {
       updateBalance();
-    }, 1000);
+    }, 100);
     return () => clearInterval(interval);
   }, [updateBalance]);
 

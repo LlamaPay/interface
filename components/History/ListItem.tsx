@@ -78,7 +78,7 @@ export const ListItem = ({ data }: ItemProps) => {
               <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
                 {account === oldPayer ? formatAddress(oldPayee) : 'You'}
               </span>
-              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(oldAmtPerSec)}</span>
+              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(oldAmtPerSec)}/sec</span>
               <ChevronDoubleRightIcon className="h-4 w-4" />
               <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
                 {account === payee ? formatAddress(payer) : 'You'}
@@ -87,7 +87,7 @@ export const ListItem = ({ data }: ItemProps) => {
               <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
                 {account === payer ? formatAddress(payee) : 'You'}
               </span>
-              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(amtPerSec)}</span>
+              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(amtPerSec)}/sec</span>
             </>
           ) : (
             <>
@@ -98,7 +98,7 @@ export const ListItem = ({ data }: ItemProps) => {
               <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
                 {account === payer ? formatAddress(payee) : 'You'}
               </span>
-              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(amtPerSec)}</span>
+              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(amtPerSec)}/sec</span>
             </>
           )}
         </div>
