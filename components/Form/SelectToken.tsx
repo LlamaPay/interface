@@ -8,6 +8,7 @@ import useGetAllTokens from 'queries/useGetAllTokens';
 import { InputText } from './Input';
 import { SubmitButton } from './Button';
 import useCreateLlamaPayContract from 'queries/useCreateLlamaPayContract';
+import useTokenBalance from 'queries/useTokenBalance';
 
 interface ISelectTokenProps {
   handleTokenChange: (token: string) => void;
@@ -16,21 +17,35 @@ interface ISelectTokenProps {
   className?: string;
 }
 
-function Token({ value, shortName }: { value: string; shortName?: boolean }) {
+function Token({ value, shortName, showBalance }: { value: string; shortName?: boolean; showBalance?: boolean }) {
   const { data: tokens } = useGetAllTokens();
 
   const data = React.useMemo(() => {
-    return tokens?.find((t) => t.name === value || t.tokenAddress === value);
+    return tokens?.find((t) => t.name === value || t.tokenAddress === value) ?? null;
   }, [value, tokens]);
+
+  const { data: balance } = useTokenBalance(data);
 
   // TODO show token image and symbol for verified lists, else show token address
   return (
-    <div className="flex flex-1 items-center space-x-2 overflow-x-hidden py-2 pr-1">
-      <div className="h-6 w-6 flex-shrink-0 rounded-full bg-orange-400"></div>
-      {data ? (
-        <div className="truncate">{shortName ? data.symbol : `${data.name} (${data.symbol})`}</div>
-      ) : (
-        <div className="truncate">{value}</div>
+    <div
+      className={classNames(
+        'balance-wrap flex flex-1 flex-row items-center justify-between',
+        shortName ? 'py-2 pr-1' : 'p-2'
+      )}
+    >
+      <div className="flex items-center space-x-2 overflow-x-hidden">
+        <div className="h-6 w-6 flex-shrink-0 rounded-full bg-orange-400"></div>
+        {data ? (
+          <div className="truncate">{shortName ? data.symbol : data.name}</div>
+        ) : (
+          <div className="truncate">{value}</div>
+        )}
+      </div>
+      {showBalance && (
+        <div className="ml-4 whitespace-nowrap text-gray-600 dark:text-gray-400">
+          {classNames(balance, data?.symbol)}
+        </div>
       )}
     </div>
   );
@@ -102,7 +117,7 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
                 >
                   {(props) => (
                     <SelectItem {...props}>
-                      <Token value={token} />
+                      <Token value={token} showBalance />
                     </SelectItem>
                   )}
                 </ComboboxItem>

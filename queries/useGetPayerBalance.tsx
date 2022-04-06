@@ -7,7 +7,6 @@ import { getAddress } from 'ethers/lib/utils';
 import { useNetworkProvider } from 'hooks';
 import { Provider } from 'utils/contract';
 
-// TODO update chain name based on user wallet network
 const fetchBalance = async (
   id: string,
   tokens: IToken[] | null,
@@ -28,7 +27,7 @@ const fetchBalance = async (
           name: tokens[index]?.name,
           address: tokens[index]?.tokenAddress,
           symbol: tokens[index]?.symbol,
-          amount: amount ? amount.toFixed(0) : '',
+          amount: amount ? amount.toFixed(5) : '',
           contractAddress: tokens[index]?.llamaContractAddress,
           tokenDecimals: tokens[index].decimals,
           tokenContract: createERC20Contract({ tokenAddress: getAddress(tokens[index]?.tokenAddress), provider }),
@@ -49,15 +48,13 @@ function useGetPayerBalance(contracts: IToken[] | null, tokensKey: string) {
 
   const payerAddress = accountData?.address.toLowerCase() ?? '';
 
-  const { refetch, ...data } = useQuery<IBalance[] | null>(
+  return useQuery<IBalance[] | null>(
     ['payerBalance', payerAddress, tokensKey],
     () => fetchBalance(payerAddress, contracts, provider),
     {
       refetchInterval: 10000,
     }
   );
-
-  return { ...data, refetch };
 }
 
 export default useGetPayerBalance;
