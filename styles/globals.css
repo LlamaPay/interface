@@ -54,4 +54,15 @@
   [data-backdrop] {
     background-color: rgb(0 0 0 / 20%);
   }
+
+  @media (max-width: 360px) {
+    .balance-wrap {
+      flex-direction: column !important;
+      align-items: start !important;
+    }
+
+    .balance-wrap > *:last-child {
+      margin-left: 2rem;
+    }
+  }
 }
