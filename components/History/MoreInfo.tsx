@@ -11,6 +11,7 @@ interface MoreInfoProps {
   oldAmtPerSec: number;
   oldPayer: string;
   oldPayee: string;
+  token: string;
   createdTime: string;
 }
 
@@ -24,6 +25,7 @@ export const MoreInfo = ({
   oldAmtPerSec,
   oldPayer,
   oldPayee,
+  token,
   createdTime,
 }: MoreInfoProps) => {
   return (
@@ -31,6 +33,8 @@ export const MoreInfo = ({
       <DialogWrapper isOpen={isOpen} setIsOpen={setIsOpen}>
         <DialogHeader title="More Info" setIsOpen={setIsOpen} />
         <div className="mt-3 flex flex-col space-y-2">
+          <p className="text-sm">Token:</p>
+          <span className=" text-sm">{token}</span>
           {eventType === 'StreamModified' ? (
             <div>
               <p className="text-sm">Old Payer:</p>
@@ -54,6 +58,10 @@ export const MoreInfo = ({
               <p className="text-sm">Amount Per Second:</p>
               <span className=" text-sm">{amtPerSec}</span>
             </div>
+          </div>
+          <div className="flex space-x-1">
+            <p className="text-sm">Created At:</p>
+            <span className=" text-sm">{createdTime.toLocaleString()}</span>
           </div>
         </div>
       </DialogWrapper>

@@ -27,6 +27,7 @@ export const ListItem = ({ data }: ItemProps) => {
   const payee = data.stream.payee.id;
   const amtPerSec = data.stream.amountPerSec / 1e20;
   const oldAmtPerSec = data.oldStream?.amountPerSec / 1e20;
+  const token = data.stream.token.address;
   let oldPayee = data.oldStream?.payee.id;
   let oldPayer = data.oldStream?.payer.id;
 
@@ -115,6 +116,7 @@ export const ListItem = ({ data }: ItemProps) => {
             oldAmtPerSec={oldAmtPerSec}
             oldPayer={oldPayee}
             oldPayee={oldPayee}
+            token={token}
             createdTime={createdTime}
           />
         </div>

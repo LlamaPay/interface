@@ -20,7 +20,6 @@ export const Modify = ({ isOpen, setIsOpen, payee, amtPerSec, contract }: Modify
   const [newAmtPerSec, setNewAmtPerSec] = React.useState<number | string>('');
   const [selectedPeriod, setSelectedPeriod] = React.useState<string>('month');
 
-  // TODO CHECKS AND STUFF
   const handleModifyInput = React.useCallback(() => {
     async function modifyStream() {
       try {
