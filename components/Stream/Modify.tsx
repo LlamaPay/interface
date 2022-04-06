@@ -13,7 +13,7 @@ interface ModifyProps {
   contract: Contract;
 }
 
-const options = { month: 2419200, year: 29030400 };
+const options = { month: 2592000, year: 31104000 };
 
 export const Modify = ({ isOpen, setIsOpen, payee, amtPerSec, contract }: ModifyProps) => {
   const [newPayee, setNewPayee] = React.useState<string>('');

@@ -31,7 +31,7 @@ export const Withdrawable = ({ contract, payer, payee, amtPerSec, decimals }: Wi
       } catch (error) {
         setTimeout(() => {
           callContract();
-        }, 1000);
+        }, 100);
       }
     }
     callContract();

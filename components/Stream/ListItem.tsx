@@ -65,7 +65,7 @@ export const ListItem = ({ data }: ItemProps) => {
 
     const interval = setInterval(() => {
       updateStreamed();
-    }, 1000);
+    }, 100);
     return () => clearInterval(interval);
   }, [updateStreamed]);
 
