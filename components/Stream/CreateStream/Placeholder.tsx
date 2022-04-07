@@ -1,4 +1,5 @@
 import { InputAmountWithDuration, InputText, SelectToken, SubmitButton } from 'components/Form';
+import { BeatLoader } from 'react-spinners';
 
 const Placeholder = () => {
   return (
@@ -21,7 +22,7 @@ const Placeholder = () => {
       />
 
       <SubmitButton disabled={true} className="mt-8">
-        Create Stream
+        <BeatLoader size={6} color="gray" />
       </SubmitButton>
     </form>
   );

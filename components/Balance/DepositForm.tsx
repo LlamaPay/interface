@@ -6,6 +6,7 @@ import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval
 import { IFormData, IFormElements } from './types';
 import { checkApproval } from 'components/Form/utils';
 import { InputAmount, SubmitButton } from 'components/Form';
+import { BeatLoader } from 'react-spinners';
 
 const DepositForm = ({ data }: { data: IFormData }) => {
   const { mutate, isLoading } = useDepositToken();
@@ -48,11 +49,27 @@ const DepositForm = ({ data }: { data: IFormData }) => {
           llamaContractAddress: data.llamaContractAddress,
         });
       } else {
-        approveToken({
-          tokenAddress: data.tokenAddress,
-          amountToApprove: formattedAmt.toFixed(0),
-          spenderAddress: data.llamaContractAddress,
-        });
+        approveToken(
+          {
+            tokenAddress: data.tokenAddress,
+            amountToApprove: formattedAmt.toFixed(0),
+            spenderAddress: data.llamaContractAddress,
+          },
+          {
+            onSettled: () => {
+              checkApproval({
+                tokenDetails: {
+                  decimals: data.tokenDecimals,
+                  tokenContract: data.tokenContract,
+                  llamaContractAddress: data.llamaContractAddress,
+                },
+                userAddress: accountData?.address,
+                approvedForAmount: amount,
+                checkTokenApproval,
+              });
+            },
+          }
+        );
       }
     }
   };
@@ -64,11 +81,11 @@ const DepositForm = ({ data }: { data: IFormData }) => {
       <InputAmount name="amount" label={`Amount ${data.symbol}`} handleChange={handleChange} isRequired />
       {isApproved ? (
         <SubmitButton disabled={isLoading} className="my-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
-          {isLoading ? '...' : 'Deposit'}
+          {isLoading ? <BeatLoader size={6} color="#171717" /> : 'Deposit'}
         </SubmitButton>
       ) : (
         <SubmitButton disabled={disableApprove} className="my-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
-          {disableApprove ? '...' : 'Approve'}
+          {disableApprove ? <BeatLoader size={6} color="#171717" /> : 'Approve'}
         </SubmitButton>
       )}
     </form>

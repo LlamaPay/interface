@@ -12,7 +12,7 @@ export interface ICheckApproval {
 }
 
 function checkTokenApproval({ tokenDetails, userAddress, approvedForAmount, checkTokenApproval }: ICheckApproval) {
-  if (tokenDetails && userAddress) {
+  if (tokenDetails && userAddress && approvedForAmount) {
     const isAmountValid = checkIsAmountValid(approvedForAmount) && tokenDetails?.decimals;
 
     if (isAmountValid) {

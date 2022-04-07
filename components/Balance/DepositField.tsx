@@ -4,9 +4,13 @@ import { InputWithTokenSelect, SubmitButton } from 'components/Form';
 import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval';
 import useDepositToken from 'queries/useDepositToken';
 import { IToken } from 'types';
+import { checkApproval } from 'components/Form/utils';
+import { useAccount } from 'wagmi';
+import { BeatLoader } from 'react-spinners';
 
 const DepositField = ({ tokens }: { tokens: IToken[] }) => {
   const { mutate: deposit, isLoading } = useDepositToken();
+  const [{ data: accountData }] = useAccount();
 
   const [tokenAddress, setTokenAddress] = React.useState(tokens[0]?.tokenAddress ?? '');
 
@@ -37,11 +41,23 @@ const DepositField = ({ tokens }: { tokens: IToken[] }) => {
           llamaContractAddress: tokenDetails.llamaContractAddress,
         });
       } else {
-        approveToken({
-          tokenAddress: tokenAddress,
-          amountToApprove: bigAmount.toFixed(0),
-          spenderAddress: tokenDetails.llamaContractAddress,
-        });
+        approveToken(
+          {
+            tokenAddress: tokenAddress,
+            amountToApprove: bigAmount.toFixed(0),
+            spenderAddress: tokenDetails.llamaContractAddress,
+          },
+          {
+            onSettled: () => {
+              checkApproval({
+                tokenDetails,
+                userAddress: accountData?.address,
+                approvedForAmount: amountToDeposit,
+                checkTokenApproval,
+              });
+            },
+          }
+        );
       }
     }
   };
@@ -59,12 +75,12 @@ const DepositField = ({ tokens }: { tokens: IToken[] }) => {
         isRequired
       />
       {isApproved ? (
-        <SubmitButton disabled={isLoading} className="dark:!staticbg-stone-600 mt-4 rounded !bg-zinc-300 py-2 px-3">
-          {isLoading ? '...' : 'Deposit'}
+        <SubmitButton disabled={isLoading} className="mt-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
+          {isLoading ? <BeatLoader size={6} color="#171717" /> : 'Deposit'}
         </SubmitButton>
       ) : (
         <SubmitButton disabled={disableApprove} className="mt-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
-          {disableApprove ? '...' : 'Approve'}
+          {disableApprove ? <BeatLoader size={6} color="#171717" /> : 'Approve'}
         </SubmitButton>
       )}
     </form>

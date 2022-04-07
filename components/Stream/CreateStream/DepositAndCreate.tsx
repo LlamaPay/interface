@@ -5,9 +5,13 @@ import useStreamToken from 'queries/useStreamToken';
 import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval';
 import { IStreamFormProps, IFormElements } from './types';
 import { secondsByDuration } from 'utils/constants';
+import { checkApproval } from 'components/Form/utils';
+import { useAccount } from 'wagmi';
+import { BeatLoader } from 'react-spinners';
 
 const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
   const { mutate: streamToken, isLoading, error: errorStreamingToken } = useStreamToken();
+  const [{ data: accountData }] = useAccount();
 
   // store address of the token to stream as ariakit/select is a controlled component
   const [tokenAddress, setTokenAddress] = React.useState(tokens[0]?.tokenAddress ?? '');
@@ -52,11 +56,23 @@ const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
             llamaContractAddress: tokenDetails?.llamaContractAddress,
           });
         } else {
-          approveToken({
-            tokenAddress: tokenAddress,
-            spenderAddress: tokenDetails.llamaContractAddress,
-            amountToApprove: amtToDeposit.toFixed(0), // approve for amount to deposit
-          });
+          approveToken(
+            {
+              tokenAddress: tokenAddress,
+              spenderAddress: tokenDetails.llamaContractAddress,
+              amountToApprove: amtToDeposit.toFixed(0), // approve for amount to deposit
+            },
+            {
+              onSettled: () => {
+                checkApproval({
+                  tokenDetails,
+                  userAddress: accountData?.address,
+                  approvedForAmount: amountToDeposit,
+                  checkTokenApproval,
+                });
+              },
+            }
+          );
         }
       }
     }
@@ -86,11 +102,11 @@ const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
 
       {isApproved ? (
         <SubmitButton disabled={isLoading} className="mt-8">
-          {isLoading ? '...' : 'Deposit and Create Stream'}
+          {isLoading ? <BeatLoader size={6} color="gray" /> : 'Deposit and Create Stream'}
         </SubmitButton>
       ) : (
         <SubmitButton disabled={disableApprove} className="mt-4">
-          {disableApprove ? '...' : 'Approve'}
+          {disableApprove ? <BeatLoader size={6} color="gray" /> : 'Approve'}
         </SubmitButton>
       )}
     </form>

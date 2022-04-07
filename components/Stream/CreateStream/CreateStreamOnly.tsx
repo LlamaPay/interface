@@ -4,6 +4,7 @@ import { InputAmountWithDuration, InputText, SelectToken, SubmitButton } from 'c
 import useStreamToken from 'queries/useStreamToken';
 import { IStreamFormProps, IFormElements } from './types';
 import { secondsByDuration } from 'utils/constants';
+import { BeatLoader } from 'react-spinners';
 
 const CreateStreamOnly = ({ tokens }: IStreamFormProps) => {
   const { mutate: streamToken, isLoading, error: errorStreamingToken } = useStreamToken();
@@ -73,7 +74,7 @@ const CreateStreamOnly = ({ tokens }: IStreamFormProps) => {
       />
 
       <SubmitButton disabled={isLoading} className="mt-8">
-        {isLoading ? '...' : 'Create Stream'}
+        {isLoading ? <BeatLoader size={6} color="gray" /> : 'Create Stream'}
       </SubmitButton>
     </form>
   );

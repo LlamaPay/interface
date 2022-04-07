@@ -38,7 +38,8 @@ const approveToken = async ({ tokenAddress, signer, amountToApprove, spenderAddr
       throw new Error("Couldn't get signer");
     } else {
       const contract = new Contract(getAddress(tokenAddress), erc20ABI, signer);
-      await contract.approve(getAddress(spenderAddress), amountToApprove);
+      const res = await contract.approve(getAddress(spenderAddress), amountToApprove);
+      return await res.wait();
     }
   } catch (error: any) {
     throw new Error(error?.reason ?? "Couldn't approve token");
@@ -51,8 +52,8 @@ const approveTokenForMaxAmt = async ({ tokenAddress, signer, spenderAddress }: A
       throw new Error("Couldn't get signer");
     } else {
       const contract = new Contract(getAddress(tokenAddress), erc20ABI, signer);
-
-      await contract.approve(getAddress(spenderAddress), maxAmount);
+      const res = await contract.approve(getAddress(spenderAddress), maxAmount);
+      return await res.wait();
     }
   } catch (error: any) {
     throw new Error(error?.reason ?? "Couldn't approve token");
