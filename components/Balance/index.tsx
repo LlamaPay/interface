@@ -1,6 +1,7 @@
 import * as React from 'react';
+import { PlusIcon } from '@heroicons/react/solid';
 import FallbackList from 'components/FallbackList';
-import { DialogHeader, DialogWrapper } from 'components/Dialog';
+import { FormDialog } from 'components/Dialog';
 import DepositForm from './DepositForm';
 import WithdrawForm from './WithdrawForm';
 import DepositField from './DepositField';
@@ -8,11 +9,13 @@ import { useChainExplorer } from 'hooks';
 import useGetAllTokens from 'queries/useGetAllTokens';
 import { IBalance } from 'types';
 import { IBalanceProps, IFormData, TokenAction } from './types';
+import { useDialogState } from 'ariakit';
 
 const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) => {
   // function that returns chain explorer url based on the chain user is connected to
   const chainExplorer = useChainExplorer();
-  const [openDialog, setOpenDialog] = React.useState(false);
+  const dialog = useDialogState();
+  const [dialogType, setDialogType] = React.useState<'token' | 'deposit' | null>(null);
 
   const formData = React.useRef<null | IFormData>(null);
 
@@ -20,7 +23,8 @@ const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) =>
   const { data: tokens } = useGetAllTokens();
 
   const handleToken = (actionType: TokenAction, balance: IBalance) => {
-    setOpenDialog(true);
+    dialog.toggle();
+    setDialogType('token');
     formData.current = {
       actionType,
       title: balance.name || balance.address, // TODO only show name of verified tokens, else show address
@@ -33,9 +37,23 @@ const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) =>
     };
   };
 
+  const dialogTitle = dialogType === 'token' ? formData.current?.title ?? null : 'Deposit';
+
   return (
     <section className="w-full max-w-lg overflow-x-auto">
-      <h1 className="mb-3 text-center text-xl">Balances</h1>
+      <span className="mb-1 flex justify-between">
+        <h1 className="text-xl">Balances</h1>
+        <button
+          className="flex items-center space-x-2 whitespace-nowrap rounded bg-zinc-100 py-1 px-2 dark:bg-zinc-800"
+          onClick={() => {
+            dialog.toggle();
+            setDialogType('deposit');
+          }}
+        >
+          <PlusIcon className="h-4 w-4" />
+          <span>Deposit</span>
+        </button>
+      </span>
 
       {isLoading || noBalances || isError ? (
         <FallbackList
@@ -45,19 +63,19 @@ const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) =>
           noDataText="No deposited tokens"
         />
       ) : (
-        <table className="border-collapse">
+        <table className="dark:border-stone-700-collapse border">
           <thead>
-            <tr className="border">
-              <th className="border font-normal">Token</th>
-              <th className="border font-normal">Amount</th>
+            <tr className="border dark:border-stone-700">
+              <th className="border font-normal dark:border-stone-700">Token</th>
+              <th className="border font-normal dark:border-stone-700">Amount</th>
               <th></th>
             </tr>
           </thead>
           <tbody>
             {balances?.map((b) => (
-              <tr key={b.address} className="border">
+              <tr key={b.address} className="border dark:border-stone-700">
                 {/* TODO handle decimals and display token name and image when not on testnet */}
-                <th className="w-full border p-1 text-left font-normal">
+                <th className="w-full border p-1 text-left font-normal dark:border-stone-700">
                   {chainExplorer ? (
                     <a href={`${chainExplorer}/address/${b.contractAddress}`} target="_blank" rel="noopener noreferrer">
                       {b.name || b.address}
@@ -66,8 +84,8 @@ const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) =>
                     <span>{b.name || b.address}</span>
                   )}
                 </th>
-                <td className="whitespace-nowrap border p-1 text-right">{`${b.amount} ${b.symbol}`}</td>
-                <td className="space-x-2 border p-1">
+                <td className="whitespace-nowrap border p-1 text-right dark:border-stone-700">{`${b.amount} ${b.symbol}`}</td>
+                <td className="space-x-2 border p-1 dark:border-stone-700">
                   <span className="flex space-x-2">
                     <button
                       className="rounded bg-zinc-100 py-1 px-2 dark:bg-zinc-800"
@@ -89,19 +107,24 @@ const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) =>
           </tbody>
         </table>
       )}
-      {tokens && <DepositField tokens={tokens} />}
-      <DialogWrapper isOpen={openDialog} setIsOpen={setOpenDialog}>
-        {formData.current && (
+
+      <FormDialog title={dialogTitle} dialog={dialog} className="h-fit">
+        {dialogType === 'token' ? (
           <>
-            <DialogHeader title={formData.current.title} setIsOpen={setOpenDialog} />
-            {formData.current.actionType === 'deposit' ? (
-              <DepositForm data={formData.current} />
-            ) : (
-              <WithdrawForm data={formData.current} />
+            {formData.current && (
+              <>
+                {formData.current.actionType === 'deposit' ? (
+                  <DepositForm data={formData.current} />
+                ) : (
+                  <WithdrawForm data={formData.current} />
+                )}
+              </>
             )}
           </>
+        ) : (
+          <>{tokens && <DepositField tokens={tokens} />}</>
         )}
-      </DialogWrapper>
+      </FormDialog>
     </section>
   );
 };

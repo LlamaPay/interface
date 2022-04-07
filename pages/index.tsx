@@ -42,7 +42,7 @@ const Home: NextPage = () => {
         <p className="mx-auto mt-8 text-red-500">Chain not supported</p>
       ) : (
         <>
-          <div className="flex w-full flex-col items-center space-y-6 border p-2 xl:flex-row xl:items-start xl:justify-between xl:space-x-2 xl:space-y-0">
+          <div className="flex w-full flex-col items-center space-y-6 border p-2 dark:border-stone-700 xl:flex-row xl:items-start xl:justify-between xl:space-x-2 xl:space-y-0">
             <Balance balances={balances} noBalances={noBalances} isLoading={isLoading} isError={isError} />
             <CreateStream tokens={tokens} noBalances={noBalances} isLoading={isLoading} isError={isError} />
           </div>

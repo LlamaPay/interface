@@ -92,7 +92,7 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
           <>
             <header className="relative mt-3 flex items-center justify-between">
               <DialogHeading className="px-4">Select a token</DialogHeading>
-              <DialogDismiss className="absolute right-2 flex items-start justify-end">
+              <DialogDismiss className="absolute right-3 flex items-start justify-end">
                 <XIcon className="h-6 w-6" />
               </DialogDismiss>
             </header>
@@ -100,7 +100,7 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
               state={combobox}
               autoSelect
               placeholder="Search name or paste address"
-              className="m-4 rounded border px-3 py-[10px] slashed-zero"
+              className="m-4 rounded border px-3 py-[10px] slashed-zero dark:border-neutral-700"
             />
             <ComboboxList state={combobox} className="m-4 mt-0 cursor-pointer list-none overflow-auto">
               {combobox.matches.map((token) => (
@@ -124,7 +124,7 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
               ))}
             </ComboboxList>
             <button
-              className="m-4 mt-auto rounded bg-zinc-300 py-2 px-3 dark:bg-zinc-700"
+              className="m-4 mt-auto rounded bg-zinc-300 py-2 px-3 dark:bg-stone-600"
               onClick={() => setNewTokenForm(true)}
             >
               or add a new token
@@ -163,7 +163,7 @@ const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<Rea
       </header>
       <form className="m-4 mt-[10%]" onSubmit={handleSubmit}>
         <InputText name="tokenAddress" isRequired={true} label="Token Address" />
-        <SubmitButton className="mt-4 bg-zinc-300 disabled:cursor-not-allowed dark:bg-zinc-700" disabled={isLoading}>
+        <SubmitButton className="mt-4 bg-zinc-300 disabled:cursor-not-allowed dark:bg-stone-600" disabled={isLoading}>
           Add token
         </SubmitButton>
       </form>

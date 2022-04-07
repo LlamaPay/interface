@@ -49,21 +49,21 @@ const DepositField = ({ tokens }: { tokens: IToken[] }) => {
   const disableApprove = checkingApproval || approvingToken;
 
   return (
-    <form onSubmit={handleSubmit} className="my-4">
+    <form onSubmit={handleSubmit}>
       <InputWithTokenSelect
         name="amountToDeposit"
-        label="Deposit"
+        label="Amount"
         tokenAddress={tokenAddress}
         setTokenAddress={setTokenAddress}
         checkTokenApproval={checkTokenApproval}
         isRequired
       />
       {isApproved ? (
-        <SubmitButton disabled={isLoading} className="mt-4">
+        <SubmitButton disabled={isLoading} className="mt-4 rounded bg-zinc-300 py-2 px-3 dark:bg-stone-600">
           {isLoading ? '...' : 'Deposit'}
         </SubmitButton>
       ) : (
-        <SubmitButton disabled={disableApprove} className="mt-4">
+        <SubmitButton disabled={disableApprove} className="mt-4 rounded bg-zinc-300 py-2 px-3 dark:bg-stone-600">
           {disableApprove ? '...' : 'Approve'}
         </SubmitButton>
       )}

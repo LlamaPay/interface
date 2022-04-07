@@ -28,11 +28,11 @@ export const List = () => {
 
   return (
     <section className="min-h-[44px] w-full">
-      <h1 className="mb-3 text-center text-xl">History</h1>
+      <h1 className="mb-1 text-xl">History</h1>
       {isLoading || !history || error ? (
         <FallbackList isLoading={isLoading} data={history} error={error} noDataText="No history yet" />
       ) : (
-        <ul className="isolate flex flex-col space-y-4 rounded border p-2">
+        <ul className="isolate flex flex-col space-y-4 rounded border p-2 dark:border-stone-700">
           {history?.map((historyEvent) => (
             <ListItem key={historyEvent.txHash} data={historyEvent} />
           ))}
