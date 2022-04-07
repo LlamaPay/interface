@@ -124,7 +124,7 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
               ))}
             </ComboboxList>
             <button
-              className="m-4 mt-auto rounded bg-zinc-300 py-2 px-3 dark:bg-stone-600"
+              className="m-4 mt-auto rounded bg-zinc-300 py-[11px] px-3 dark:bg-stone-600"
               onClick={() => setNewTokenForm(true)}
             >
               or add a new token
@@ -163,7 +163,7 @@ const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<Rea
       </header>
       <form className="m-4 mt-[10%]" onSubmit={handleSubmit}>
         <InputText name="tokenAddress" isRequired={true} label="Token Address" />
-        <SubmitButton className="mt-4 bg-zinc-300 disabled:cursor-not-allowed dark:bg-stone-600" disabled={isLoading}>
+        <SubmitButton className="mt-4 !bg-zinc-300 disabled:cursor-not-allowed dark:!bg-stone-600" disabled={isLoading}>
           Add token
         </SubmitButton>
       </form>

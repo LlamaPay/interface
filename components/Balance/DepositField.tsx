@@ -59,11 +59,11 @@ const DepositField = ({ tokens }: { tokens: IToken[] }) => {
         isRequired
       />
       {isApproved ? (
-        <SubmitButton disabled={isLoading} className="mt-4 rounded bg-zinc-300 py-2 px-3 dark:bg-stone-600">
+        <SubmitButton disabled={isLoading} className="dark:!staticbg-stone-600 mt-4 rounded !bg-zinc-300 py-2 px-3">
           {isLoading ? '...' : 'Deposit'}
         </SubmitButton>
       ) : (
-        <SubmitButton disabled={disableApprove} className="mt-4 rounded bg-zinc-300 py-2 px-3 dark:bg-stone-600">
+        <SubmitButton disabled={disableApprove} className="mt-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
           {disableApprove ? '...' : 'Approve'}
         </SubmitButton>
       )}

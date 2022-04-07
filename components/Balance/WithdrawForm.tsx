@@ -34,7 +34,7 @@ const WithdrawForm = ({ data }: { data: IFormData }) => {
     <>
       <form className="mt-4 flex flex-col space-y-4" onSubmit={handleSubmit}>
         <InputAmount name="amount" label={`Amount ${data.symbol}`} isRequired />
-        <SubmitButton disabled={isLoading} className="my-4 rounded bg-zinc-300 py-2 px-3 dark:bg-stone-600">
+        <SubmitButton disabled={isLoading} className="my-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
           Withdraw
         </SubmitButton>
       </form>
@@ -42,7 +42,7 @@ const WithdrawForm = ({ data }: { data: IFormData }) => {
       <SubmitButton
         disabled={isLoading}
         onClick={withdrawAllTokens}
-        className="my-4 rounded bg-zinc-300 py-2 px-3 dark:bg-stone-600"
+        className="my-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600"
       >
         Withdraw All
       </SubmitButton>
