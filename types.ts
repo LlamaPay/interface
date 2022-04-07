@@ -19,3 +19,14 @@ export interface IBalance {
   tokenDecimals: number;
   tokenContract: Contract;
 }
+
+export interface IPayer {
+  name: string;
+  address: string;
+  symbol: string;
+  contractAddress: string;
+  tokenDecimals: number;
+  tokenContract: Contract;
+  totalPaidPerSec: string | null;
+  lastPayerUpdate: string | null;
+}

@@ -8,6 +8,7 @@ import { CreateStream, StreamList } from 'components/Stream';
 import { useNetworkProvider } from 'hooks';
 import useGetAllTokens from 'queries/useGetAllTokens';
 import useGetPayerBalance from 'queries/useGetPayerBalance';
+import usePayers from 'queries/usePayers';
 
 const Home: NextPage = () => {
   const [{ data: accountData }] = useAccount();
@@ -28,6 +29,8 @@ const Home: NextPage = () => {
     isLoading: balancesLoading,
     error: balancesError,
   } = useGetPayerBalance(tokens, tokensKey);
+
+  const { data: payersData } = usePayers(tokens, tokensKey);
 
   const isLoading = tokensLoading || balancesLoading;
   const noBalances = !balances || balances.length === 0;
