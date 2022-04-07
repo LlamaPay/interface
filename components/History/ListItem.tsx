@@ -28,15 +28,11 @@ export const ListItem = ({ data }: ItemProps) => {
   const amtPerSec = data.stream.amountPerSec / 1e20;
   const oldAmtPerSec = data.oldStream?.amountPerSec / 1e20;
   const token = data.stream.token.address;
-  let oldPayee = data.oldStream?.payee.id;
-  let oldPayer = data.oldStream?.payer.id;
-
-  if (oldPayer === undefined || oldPayee === undefined) {
-    oldPayee = 'DNE';
-    oldPayer = 'DNE';
-  }
-
-  const createdTime = new Date(data.createdTimestamp * 1000).toLocaleString('en-CA');
+  const streamCreatedTime = data.stream.createdTimestamp;
+  const oldStreamCreatedTime = data.oldStream?.createdTimestamp;
+  const oldPayee = data.oldStream?.payee.id;
+  const oldPayer = data.oldStream?.payer.id;
+  const createdTime = data.createdTimestamp;
 
   return (
     <>
@@ -71,23 +67,29 @@ export const ListItem = ({ data }: ItemProps) => {
           )}
           {eventType === 'StreamModified' ? (
             <>
-              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
-                {account === oldPayee ? formatAddress(oldPayer) : 'You'}
-              </span>
-              <ArrowRightIcon className="h-4 w-4" />
-              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
-                {account === oldPayer ? formatAddress(oldPayee) : 'You'}
-              </span>
-              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(oldAmtPerSec)}/sec</span>
-              <ChevronDoubleRightIcon className="h-4 w-4" />
-              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
-                {account === payee ? formatAddress(payer) : 'You'}
-              </span>
-              <ArrowRightIcon className="h-4 w-4" />
-              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
-                {account === payer ? formatAddress(payee) : 'You'}
-              </span>
-              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(amtPerSec)}/sec</span>
+              {oldPayee !== undefined && oldPayer !== undefined ? (
+                <>
+                  <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
+                    {account === oldPayee ? formatAddress(oldPayer) : 'You'}
+                  </span>
+                  <ArrowRightIcon className="h-4 w-4" />
+                  <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
+                    {account === oldPayer ? formatAddress(oldPayee) : 'You'}
+                  </span>
+                  <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(oldAmtPerSec)}/sec</span>
+                  <ChevronDoubleRightIcon className="h-4 w-4" />
+                  <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
+                    {account === payee ? formatAddress(payer) : 'You'}
+                  </span>
+                  <ArrowRightIcon className="h-4 w-4" />
+                  <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
+                    {account === payer ? formatAddress(payee) : 'You'}
+                  </span>
+                  <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(amtPerSec)}/sec</span>
+                </>
+              ) : (
+                ''
+              )}
             </>
           ) : (
             <>
@@ -118,6 +120,8 @@ export const ListItem = ({ data }: ItemProps) => {
             oldPayee={oldPayee}
             token={token}
             createdTime={createdTime}
+            oldStreamCreatedTime={oldStreamCreatedTime}
+            streamCreatedTime={streamCreatedTime}
           />
         </div>
       </div>

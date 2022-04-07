@@ -48,6 +48,7 @@ fragment UserHistory on HistoryEvent {
       decimals
     }
     amountPerSec
+    createdTimestamp
   }
   oldStream {
     streamId
@@ -61,6 +62,7 @@ fragment UserHistory on HistoryEvent {
       address
     }
     amountPerSec
+    createdTimestamp
   }
   createdTimestamp
 }
