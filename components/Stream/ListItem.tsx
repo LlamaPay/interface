@@ -10,7 +10,6 @@ import { Modify } from './Modify';
 import { Cancel } from './Cancel';
 import { Push } from './Push';
 import { Withdrawable } from './Withdrawable';
-import useGetContract from 'queries/useGetContract';
 
 interface ItemProps {
   data: UserStreamFragment;
@@ -28,8 +27,6 @@ type TokenLogo = React.MutableRefObject<string | StaticImageData>;
 // TODO cleanup all hardcoded values
 export const ListItem = ({ data }: ItemProps) => {
   const [{ data: accountData }] = useAccount();
-
-  const contract = useGetContract(data.contract.address);
 
   const isIncoming = data.payer?.id !== accountData?.address.toLowerCase();
 
@@ -76,7 +73,7 @@ export const ListItem = ({ data }: ItemProps) => {
         <>
           <IncomingStream totalStreamed={totalStreamed} address={data.payer.id} tokenLogo={tokenLogo} />
           <Withdrawable
-            contract={contract}
+            contract={data.contract.address}
             payer={data.payer.id}
             payee={data.payee.id}
             amtPerSec={data.amountPerSec}
@@ -87,26 +84,31 @@ export const ListItem = ({ data }: ItemProps) => {
         <>
           <OutgoingStream totalStreamed={totalStreamed} address={data.payee.id} tokenLogo={tokenLogo} />
           <Withdrawable
-            contract={contract}
+            contract={data.contract.address}
             payer={data.payer.id}
             payee={data.payee.id}
             amtPerSec={data.amountPerSec}
             decimals={data.token.decimals}
           />
-          <Push contract={contract} payer={data.payer.id} payee={data.payee.id} amtPerSec={data.amountPerSec} />
+          <Push
+            contract={data.contract.address}
+            payer={data.payer.id}
+            payee={data.payee.id}
+            amtPerSec={data.amountPerSec}
+          />
           <button
             className="rounded-lg bg-zinc-200 p-1 text-sm dark:bg-zinc-700"
             onClick={() => setOpenModify(!openModify)}
           >
             Modify
           </button>
-          <Cancel payee={data.payee.id} contract={contract} amtPerSec={data.amountPerSec} />
+          <Cancel payee={data.payee.id} contract={data.contract.address} amtPerSec={data.amountPerSec} />
           <Modify
             isOpen={openModify}
             setIsOpen={setOpenModify}
             payee={data.payee.id}
             amtPerSec={data.amountPerSec}
-            contract={contract}
+            contract={data.contract.address}
             payer={data.payer.id}
           />
         </>

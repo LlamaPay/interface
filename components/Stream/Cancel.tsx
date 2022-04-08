@@ -1,20 +1,29 @@
+import llamaContract from 'abis/llamaContract';
 import * as React from 'react';
+import { useContract, useSigner } from 'wagmi';
 
 interface CancelProps {
-  contract: any;
+  contract: string;
   payee: string;
   amtPerSec: number;
 }
 
 export const Cancel = ({ contract, payee, amtPerSec }: CancelProps) => {
+  const [{ data: signerData }] = useSigner();
+  const call = useContract({
+    addressOrName: contract,
+    contractInterface: llamaContract,
+    signerOrProvider: signerData,
+  });
+
   const onCancel = React.useCallback(() => {
     async function cancelStream() {
       try {
-        await contract.cancelStream(payee, amtPerSec);
+        await call.cancelStream(payee, amtPerSec);
       } catch {}
     }
     cancelStream();
-  }, [contract, amtPerSec, payee]);
+  }, [call, amtPerSec, payee]);
 
   return (
     <>

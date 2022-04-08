@@ -1,21 +1,30 @@
+import llamaContract from 'abis/llamaContract';
 import * as React from 'react';
+import { useContract, useSigner } from 'wagmi';
 
 interface PushProps {
-  contract: any;
+  contract: string;
   payer: string;
   payee: string;
   amtPerSec: number;
 }
 
 export const Push = ({ contract, payer, payee, amtPerSec }: PushProps) => {
+  const [{ data: signerData }] = useSigner();
+  const call = useContract({
+    addressOrName: contract,
+    contractInterface: llamaContract,
+    signerOrProvider: signerData,
+  });
+
   const onPush = React.useCallback(() => {
     async function doPush() {
       try {
-        await contract.withdraw(payer, payee, amtPerSec);
+        await call.withdraw(payer, payee, amtPerSec);
       } catch {}
     }
     doPush();
-  }, [contract]);
+  }, [call, amtPerSec, payee, payer]);
 
   return (
     <>

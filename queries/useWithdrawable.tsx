@@ -1,26 +1,31 @@
-import { Contract } from 'ethers';
 import { useQuery } from 'react-query';
+import { useContract, useSigner } from 'wagmi';
+import { Contract } from 'ethers';
+import llamaContract from 'abis/llamaContract';
 
 async function getWithdrawableData(contract: Contract, payer: string, payee: string, amountPerSec: number) {
   try {
-    const res = await contract.withdrawable(payer, payee, amountPerSec);
+    const call = await contract.withdrawable(payer, payee, amountPerSec);
     return {
-      withdrawableAmount: res.withdrawableAmount,
-      lastUpdate: res.lastUpdate,
-      owed: res.owed,
+      withdrawableAmount: call.withdrawableAmount,
+      lastUpdate: call.lastUpdate,
+      owed: call.owed,
     };
   } catch (error) {
     return null;
   }
 }
 
-function useWithdrawable(contract: Contract, payer: string, payee: string, amountPerSec: number) {
-  return useQuery(
-    ['withdrawable', contract, payer, payee, amountPerSec],
-    () => getWithdrawableData(contract, payer, payee, amountPerSec),
-    {
-      refetchInterval: 10000,
-    }
+function useWithdrawable(contractAddress: string, payer: string, payee: string, amountPerSec: number) {
+  const [{ data: signerData }] = useSigner();
+  const contract = useContract({
+    addressOrName: contractAddress,
+    contractInterface: llamaContract,
+    signerOrProvider: signerData,
+  });
+
+  return useQuery(['withdrawable', contractAddress, payer, payee, amountPerSec], () =>
+    getWithdrawableData(contract, payer, payee, amountPerSec)
   );
 }
 

@@ -1,7 +1,8 @@
+import useWithdrawable from 'queries/useWithdrawable';
 import * as React from 'react';
 
 interface WithdrawableProps {
-  contract: any;
+  contract: string;
   payer: string;
   payee: string;
   amtPerSec: number;
@@ -13,38 +14,20 @@ function formatBalance(balance: number) {
 }
 
 export const Withdrawable = ({ contract, payer, payee, amtPerSec, decimals }: WithdrawableProps) => {
+  const callResult = useWithdrawable(contract, payer, payee, amtPerSec).data;
   const [balanceState, setBalanceState] = React.useState<number>(0);
-  const [calledBalance, setCalledBalance] = React.useState<number>();
-  const [calledLastUpdate, setCalledLastUpdate] = React.useState<number>();
-  const [isOwed, setIsOwed] = React.useState<boolean>(false);
 
-  const callBalance = React.useCallback(() => {
-    async function callContract() {
-      try {
-        const call = await contract.withdrawable(payer, payee, amtPerSec);
-        setCalledBalance(Number(call.withdrawableAmount));
-        setCalledLastUpdate(Number(call.lastUpdate));
-        if (Number(call.owed) !== 0) {
-          setIsOwed(true);
-        }
-      } catch (error) {
-        setTimeout(() => {
-          callContract();
-        }, 1000);
-      }
-    }
-    callContract();
-  }, [contract]);
-
-  callBalance();
   const updateBalance = React.useCallback(() => {
-    if (calledBalance === undefined || calledLastUpdate === undefined) return;
-    if (isOwed) {
-      setBalanceState(calledBalance / 10 ** decimals);
+    if (callResult?.withdrawableAmount === undefined || callResult.lastUpdate === undefined) return;
+    if (callResult?.owed > 0) {
+      setBalanceState(callResult?.withdrawableAmount / 10 ** decimals);
     } else {
-      setBalanceState(calledBalance / 10 ** decimals + ((Date.now() / 1e3 - calledLastUpdate) * amtPerSec) / 1e20);
+      setBalanceState(
+        callResult?.withdrawableAmount / 10 ** decimals +
+          ((Date.now() / 1e3 - callResult.lastUpdate) * amtPerSec) / 1e20
+      );
     }
-  }, [calledBalance, amtPerSec, calledLastUpdate, decimals]);
+  }, [callResult, amtPerSec, decimals]);
 
   React.useEffect(() => {
     updateBalance();
@@ -58,7 +41,7 @@ export const Withdrawable = ({ contract, payer, payee, amtPerSec, decimals }: Wi
     <div className="flex items-baseline space-x-1">
       <p>{formatBalance(balanceState)}</p>
       <span className="text-xs text-gray-500 dark:text-gray-400">withdrawable</span>
-      {isOwed ? <p>Out of Funds</p> : ''}
+      {callResult?.owed > 0 ? <p>Out of Funds</p> : ''}
     </div>
   );
 };
