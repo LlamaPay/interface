@@ -5,12 +5,12 @@ import { formatAddress } from 'utils/address';
 import EmptyToken from 'public/empty-token.webp';
 import Image, { StaticImageData } from 'next/image';
 import Tooltip from 'components/Tooltip';
-import { useAccount, useContract, useSigner } from 'wagmi';
+import { useAccount } from 'wagmi';
 import { Modify } from './Modify';
 import { Cancel } from './Cancel';
 import { Push } from './Push';
 import { Withdrawable } from './Withdrawable';
-import llamaContract from 'abis/llamaContract';
+import useGetContract from 'queries/useGetContract';
 
 interface ItemProps {
   data: UserStreamFragment;
@@ -29,13 +29,7 @@ type TokenLogo = React.MutableRefObject<string | StaticImageData>;
 export const ListItem = ({ data }: ItemProps) => {
   const [{ data: accountData }] = useAccount();
 
-  const [{ data: signerData }] = useSigner();
-
-  const contract = useContract({
-    addressOrName: data?.contract.address.toString(),
-    contractInterface: llamaContract,
-    signerOrProvider: signerData,
-  });
+  const contract = useGetContract(data.contract.address);
 
   const isIncoming = data.payer?.id !== accountData?.address.toLowerCase();
 
