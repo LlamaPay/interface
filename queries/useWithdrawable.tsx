@@ -24,8 +24,12 @@ function useWithdrawable(contractAddress: string, payer: string, payee: string, 
     signerOrProvider: signerData,
   });
 
-  return useQuery(['withdrawable', contractAddress, payer, payee, amountPerSec], () =>
-    getWithdrawableData(contract, payer, payee, amountPerSec)
+  return useQuery(
+    ['withdrawable', contractAddress, payer, payee, amountPerSec],
+    () => getWithdrawableData(contract, payer, payee, amountPerSec),
+    {
+      refetchInterval: 1000,
+    }
   );
 }
 
