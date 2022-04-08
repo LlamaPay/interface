@@ -2,7 +2,8 @@ import * as React from 'react';
 import { ArrowRightIcon } from '@heroicons/react/solid';
 import { DialogHeader, DialogWrapper, SetIsOpen } from 'components/Dialog';
 import BigNumber from 'bignumber.js';
-import { Contract } from 'ethers';
+import { useContract, useSigner } from 'wagmi';
+import llamaContract from 'abis/llamaContract';
 
 interface ModifyProps {
   isOpen: boolean;
@@ -10,12 +11,19 @@ interface ModifyProps {
   payee: string;
   payer: string;
   amtPerSec: number;
-  contract: Contract;
+  contract: string;
 }
 
 const options = { month: 2592000, year: 31104000 };
 
 export const Modify = ({ isOpen, setIsOpen, payee, amtPerSec, contract }: ModifyProps) => {
+  const [{ data: signerData }] = useSigner();
+  const call = useContract({
+    addressOrName: contract,
+    contractInterface: llamaContract,
+    signerOrProvider: signerData,
+  });
+
   const [newPayee, setNewPayee] = React.useState<string>('');
   const [newAmtPerSec, setNewAmtPerSec] = React.useState<number | string>('');
   const [selectedPeriod, setSelectedPeriod] = React.useState<string>('month');
@@ -24,13 +32,13 @@ export const Modify = ({ isOpen, setIsOpen, payee, amtPerSec, contract }: Modify
     async function modifyStream() {
       try {
         const actualAmtPerSec = new BigNumber(newAmtPerSec).times(1e20).div(options['month']).toFixed(0);
-        await contract.modifyStream(payee, amtPerSec, newPayee, actualAmtPerSec);
+        await call.modifyStream(payee, amtPerSec, newPayee, actualAmtPerSec);
       } catch (error) {
         console.error(error);
       }
     }
     modifyStream();
-  }, [contract, newPayee, newAmtPerSec, amtPerSec, payee]);
+  }, [call, newPayee, newAmtPerSec, amtPerSec, payee]);
 
   const handleChange = (event: any) => {
     const name = event.target.name;
