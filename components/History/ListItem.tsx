@@ -5,6 +5,7 @@ import { formatAddress } from 'utils/address';
 import { CheckIcon, XIcon, PencilIcon, ArrowRightIcon, ChevronDoubleRightIcon } from '@heroicons/react/solid';
 import { useAccount } from 'wagmi';
 import { MoreInfo } from './MoreInfo';
+import { useDialogState } from 'ariakit';
 interface ItemProps {
   data: UserHistoryFragment;
 }
@@ -18,7 +19,7 @@ function formatAmtPerSec(amtPerSec: number) {
 }
 
 export const ListItem = ({ data }: ItemProps) => {
-  const [openInfo, setInfo] = React.useState(false);
+  const moreInfoDialog = useDialogState();
 
   const [{ data: accountData }] = useAccount();
   const account = accountData?.address.toLowerCase();
@@ -27,12 +28,8 @@ export const ListItem = ({ data }: ItemProps) => {
   const payee = data.stream.payee.id;
   const amtPerSec = data.stream.amountPerSec / 1e20;
   const oldAmtPerSec = data.oldStream?.amountPerSec / 1e20;
-  const token = data.stream.token.address;
-  const streamCreatedTime = data.stream.createdTimestamp;
-  const oldStreamCreatedTime = data.oldStream?.createdTimestamp;
   const oldPayee = data.oldStream?.payee.id;
   const oldPayer = data.oldStream?.payer.id;
-  const createdTime = data.createdTimestamp;
 
   return (
     <>
@@ -106,26 +103,12 @@ export const ListItem = ({ data }: ItemProps) => {
         </div>
 
         <button
-          onClick={() => setInfo(!openInfo)}
+          onClick={moreInfoDialog.toggle}
           className="w-full whitespace-nowrap rounded bg-zinc-100 py-1 px-2 dark:bg-zinc-800 sm:w-min"
         >
           More Info
         </button>
-        <MoreInfo
-          isOpen={openInfo}
-          setIsOpen={setInfo}
-          eventType={eventType}
-          payer={payer}
-          payee={payee}
-          amtPerSec={amtPerSec}
-          oldAmtPerSec={oldAmtPerSec}
-          oldPayer={oldPayee}
-          oldPayee={oldPayee}
-          token={token}
-          createdTime={createdTime}
-          oldStreamCreatedTime={oldStreamCreatedTime}
-          streamCreatedTime={streamCreatedTime}
-        />
+        <MoreInfo data={data} dialog={moreInfoDialog} />
       </div>
     </>
   );

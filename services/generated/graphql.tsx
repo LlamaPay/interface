@@ -1022,11 +1022,11 @@ export type StreamAndHistoryQueryVariables = Exact<{
 }>;
 
 
-export type StreamAndHistoryQuery = { __typename?: 'Query', user?: { __typename?: 'User', streams: Array<{ __typename?: 'Stream', streamId: any, active: boolean, amountPerSec: any, createdTimestamp: any, contract: { __typename?: 'LlamaPayContract', address: any }, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number } }>, historicalEvents: Array<{ __typename?: 'HistoryEvent', txHash: any, eventType: string, createdTimestamp: any, stream: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number } }, oldStream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any } } | null }> } | null };
+export type StreamAndHistoryQuery = { __typename?: 'Query', user?: { __typename?: 'User', streams: Array<{ __typename?: 'Stream', streamId: any, active: boolean, amountPerSec: any, createdTimestamp: any, contract: { __typename?: 'LlamaPayContract', address: any }, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number, symbol: string } }>, historicalEvents: Array<{ __typename?: 'HistoryEvent', txHash: any, eventType: string, createdTimestamp: any, stream: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number, symbol: string } }, oldStream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any } } | null }> } | null };
 
-export type UserStreamFragment = { __typename?: 'Stream', streamId: any, active: boolean, amountPerSec: any, createdTimestamp: any, contract: { __typename?: 'LlamaPayContract', address: any }, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number } };
+export type UserStreamFragment = { __typename?: 'Stream', streamId: any, active: boolean, amountPerSec: any, createdTimestamp: any, contract: { __typename?: 'LlamaPayContract', address: any }, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number, symbol: string } };
 
-export type UserHistoryFragment = { __typename?: 'HistoryEvent', txHash: any, eventType: string, createdTimestamp: any, stream: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number } }, oldStream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any } } | null };
+export type UserHistoryFragment = { __typename?: 'HistoryEvent', txHash: any, eventType: string, createdTimestamp: any, stream: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number, symbol: string } }, oldStream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any } } | null };
 
 export const UserStreamFragmentDoc = `
     fragment UserStream on Stream {
@@ -1045,6 +1045,7 @@ export const UserStreamFragmentDoc = `
     address
     name
     decimals
+    symbol
   }
   active
   amountPerSec
@@ -1067,6 +1068,7 @@ export const UserHistoryFragmentDoc = `
       address
       name
       decimals
+      symbol
     }
     amountPerSec
     createdTimestamp

@@ -25,6 +25,7 @@ fragment UserStream on Stream {
     address
     name
     decimals
+    symbol
   }
   active
   amountPerSec
@@ -46,6 +47,7 @@ fragment UserHistory on HistoryEvent {
       address
       name
       decimals
+      symbol
     }
     amountPerSec
     createdTimestamp
