@@ -16,26 +16,25 @@ const fetchBalance = async (
   try {
     const res = await Promise.allSettled(tokens.map((c) => c.llamaTokenContract.getPayerBalance(id)));
 
-    // filter zero balance tokens
-    const data = res
+    const data = res.flatMap((d, index) => {
+      const amount =
+        (d.status === 'fulfilled' && new BigNumber(d.value.toString()).dividedBy(10 ** tokens[index].decimals)) ?? null;
 
-      .map((d, index) => {
-        const amount =
-          (d.status === 'fulfilled' && new BigNumber(d.value.toString()).dividedBy(10 ** tokens[index].decimals)) ??
-          null;
-        return {
-          name: tokens[index]?.name,
-          address: tokens[index]?.tokenAddress,
-          symbol: tokens[index]?.symbol,
-          amount: amount ? amount.toFixed(5) : '',
-          contractAddress: tokens[index]?.llamaContractAddress,
-          tokenDecimals: tokens[index].decimals,
-          tokenContract: createERC20Contract({ tokenAddress: getAddress(tokens[index]?.tokenAddress), provider }),
-          totalPaidPerSec: null,
-          lastPayerUpdate: null,
-        };
-      })
-      .filter((d) => d.amount !== '0');
+      // filter zero balance tokens
+      if (!amount || amount.toFixed(0) === '0') return [];
+
+      return {
+        name: tokens[index]?.name,
+        address: tokens[index]?.tokenAddress,
+        symbol: tokens[index]?.symbol,
+        amount: amount ? amount.toFixed(5) : '',
+        contractAddress: tokens[index]?.llamaContractAddress,
+        tokenDecimals: tokens[index].decimals,
+        tokenContract: createERC20Contract({ tokenAddress: getAddress(tokens[index]?.tokenAddress), provider }),
+        totalPaidPerSec: null,
+        lastPayerUpdate: null,
+      };
+    });
 
     return data;
   } catch (error) {
