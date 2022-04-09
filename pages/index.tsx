@@ -32,8 +32,22 @@ const Home: NextPage = () => {
 
   const { data: payersData } = usePayers(tokens, tokensKey);
 
+  const formattedBalances = React.useMemo(() => {
+    return (
+      balances?.map((b) => {
+        const payers = payersData?.find((p) => p.address === b.address);
+
+        return {
+          ...b,
+          totalPaidPerSec: payers?.totalPaidPerSec ?? null,
+          lastPayerUpdate: payers?.lastPayerUpdate ?? null,
+        };
+      }) ?? null
+    );
+  }, [balances, payersData]);
+
   const isLoading = tokensLoading || balancesLoading;
-  const noBalances = !balances || balances.length === 0;
+  const noBalances = !formattedBalances || formattedBalances.length === 0;
 
   const isError = tokensError || balancesError ? true : false;
 
@@ -46,7 +60,7 @@ const Home: NextPage = () => {
       ) : (
         <>
           <div className="flex w-full flex-col items-center space-y-6 border p-2 dark:border-stone-700 xl:flex-row xl:items-start xl:justify-between xl:space-x-2 xl:space-y-0">
-            <Balance balances={balances} noBalances={noBalances} isLoading={isLoading} isError={isError} />
+            <Balance balances={formattedBalances} noBalances={noBalances} isLoading={isLoading} isError={isError} />
             <CreateStream tokens={tokens} noBalances={noBalances} isLoading={isLoading} isError={isError} />
           </div>
           <StreamList />

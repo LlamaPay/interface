@@ -18,6 +18,8 @@ export interface IBalance {
   contractAddress: string;
   tokenDecimals: number;
   tokenContract: Contract;
+  totalPaidPerSec: string | null;
+  lastPayerUpdate: string | null;
 }
 
 export interface IPayer {
