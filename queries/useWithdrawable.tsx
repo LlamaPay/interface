@@ -5,7 +5,7 @@ interface IUseWithdrawableProps {
   contract: Contract;
   payer: string;
   payee: string;
-  amountPerSec: number;
+  amountPerSec: string;
   streamId: string;
 }
 
@@ -13,7 +13,7 @@ interface IGetWithdrawable {
   contract: Contract;
   payer: string;
   payee: string;
-  amountPerSec: number;
+  amountPerSec: string;
 }
 
 async function getWithdrawableData({ contract, payer, payee, amountPerSec }: IGetWithdrawable) {

@@ -36,8 +36,8 @@ export const ListItem = ({ data }: ItemProps) => {
 
   return (
     <>
-      <div className="mr-2 flex flex-1 items-center space-x-2">
-        <div className="flex flex-1 items-center space-x-2">
+      <div className="flex flex-1 flex-col space-y-2 sm:flex-row sm:items-center sm:space-x-2 sm:space-y-0">
+        <div className="flex flex-1 items-center space-x-2 truncate">
           {eventType === 'StreamModified' ? (
             <Tooltip content="Modified Stream">
               <div className="rounded bg-yellow-100 p-1 text-yellow-600">
@@ -104,26 +104,28 @@ export const ListItem = ({ data }: ItemProps) => {
             </>
           )}
         </div>
-        <div className="flex justify-end">
-          <button onClick={() => setInfo(!openInfo)} className="rounded-lg bg-zinc-200 p-1 text-sm dark:bg-zinc-700">
-            More Info
-          </button>
-          <MoreInfo
-            isOpen={openInfo}
-            setIsOpen={setInfo}
-            eventType={eventType}
-            payer={payer}
-            payee={payee}
-            amtPerSec={amtPerSec}
-            oldAmtPerSec={oldAmtPerSec}
-            oldPayer={oldPayee}
-            oldPayee={oldPayee}
-            token={token}
-            createdTime={createdTime}
-            oldStreamCreatedTime={oldStreamCreatedTime}
-            streamCreatedTime={streamCreatedTime}
-          />
-        </div>
+
+        <button
+          onClick={() => setInfo(!openInfo)}
+          className="w-full whitespace-nowrap rounded bg-zinc-100 py-1 px-2 dark:bg-zinc-800 sm:w-min"
+        >
+          More Info
+        </button>
+        <MoreInfo
+          isOpen={openInfo}
+          setIsOpen={setInfo}
+          eventType={eventType}
+          payer={payer}
+          payee={payee}
+          amtPerSec={amtPerSec}
+          oldAmtPerSec={oldAmtPerSec}
+          oldPayer={oldPayee}
+          oldPayee={oldPayee}
+          token={token}
+          createdTime={createdTime}
+          oldStreamCreatedTime={oldStreamCreatedTime}
+          streamCreatedTime={streamCreatedTime}
+        />
       </div>
     </>
   );
