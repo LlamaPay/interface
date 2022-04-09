@@ -31,6 +31,8 @@ const fetchBalance = async (
           contractAddress: tokens[index]?.llamaContractAddress,
           tokenDecimals: tokens[index].decimals,
           tokenContract: createERC20Contract({ tokenAddress: getAddress(tokens[index]?.tokenAddress), provider }),
+          totalPaidPerSec: null,
+          lastPayerUpdate: null,
         };
       })
       .filter((d) => d.amount !== '0');
