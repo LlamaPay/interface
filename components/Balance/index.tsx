@@ -10,6 +10,8 @@ import useGetAllTokens from 'queries/useGetAllTokens';
 import { IBalance } from 'types';
 import { IBalanceProps, IFormData, TokenAction } from './types';
 import { useDialogState } from 'ariakit';
+import { BalanceAndSymbol } from './BalanceAndSymbol';
+import { UntilDepleted } from './UntilDepleted';
 
 const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) => {
   // function that returns chain explorer url based on the chain user is connected to
@@ -68,6 +70,7 @@ const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) =>
             <tr className="border dark:border-stone-700">
               <th className="border font-normal dark:border-stone-700">Token</th>
               <th className="border font-normal dark:border-stone-700">Amount</th>
+              <th className="border font-normal dark:border-stone-700">Til depleted</th>
               <th></th>
             </tr>
           </thead>
@@ -84,7 +87,8 @@ const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) =>
                     <span>{b.name || b.address}</span>
                   )}
                 </th>
-                <td className="whitespace-nowrap border p-1 text-right dark:border-stone-700">{`${b.amount} ${b.symbol}`}</td>
+                <BalanceAndSymbol data={b} />
+                <UntilDepleted data={b} />
                 <td className="space-x-2 border p-1 dark:border-stone-700">
                   <span className="flex space-x-2">
                     <button
