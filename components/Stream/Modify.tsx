@@ -1,98 +1,120 @@
 import * as React from 'react';
+import { DisclosureState } from 'ariakit';
+import { PencilIcon } from '@heroicons/react/solid';
 import { ArrowRightIcon } from '@heroicons/react/solid';
-import { DialogHeader, DialogWrapper, SetIsOpen } from 'components/Dialog';
-import BigNumber from 'bignumber.js';
+import { FormDialog } from 'components/Dialog';
+import { IStream } from 'types';
+import { useAddressStore } from 'store/address';
+import { InputAmountWithDuration, InputText, SubmitButton } from 'components/Form';
 import { useContract, useSigner } from 'wagmi';
 import llamaContract from 'abis/llamaContract';
+import BigNumber from 'bignumber.js';
+import { secondsByDuration } from 'utils/constants';
 
 interface ModifyProps {
-  isOpen: boolean;
-  setIsOpen: SetIsOpen;
-  payee: string;
-  payer: string;
-  amtPerSec: number;
-  contract: string;
+  data: IStream;
+  dialog: DisclosureState;
+  title: string;
+  savedAddressName: string;
 }
 
-const options = { month: 2592000, year: 31104000 };
+interface IUpdatedFormElements {
+  updatedAddress: { value: string };
+  updatedAmount: { value: string };
+  streamDuration: { value: 'month' | 'year' };
+}
 
-export const Modify = ({ isOpen, setIsOpen, payee, amtPerSec, contract }: ModifyProps) => {
+export const Modify = ({ data, dialog, title, savedAddressName }: ModifyProps) => {
   const [{ data: signerData }] = useSigner();
+
   const call = useContract({
-    addressOrName: contract,
+    addressOrName: data.llamaContractAddress,
     contractInterface: llamaContract,
     signerOrProvider: signerData,
   });
 
-  const [newPayee, setNewPayee] = React.useState<string>('');
-  const [newAmtPerSec, setNewAmtPerSec] = React.useState<number | string>('');
-  const [selectedPeriod, setSelectedPeriod] = React.useState<string>('month');
+  const [editName, setEditName] = React.useState(false);
+  const amountPerSec = Number(data.amountPerSec) / 1e20;
 
-  const handleModifyInput = React.useCallback(() => {
-    async function modifyStream() {
-      try {
-        const actualAmtPerSec = new BigNumber(newAmtPerSec).times(1e20).div(options['month']).toFixed(0);
-        await call.modifyStream(payee, amtPerSec, newPayee, actualAmtPerSec);
-      } catch (error) {
-        console.error(error);
-      }
-    }
-    modifyStream();
-  }, [call, newPayee, newAmtPerSec, amtPerSec, payee]);
+  // const updateAddress = useAddressStore((state) => state.updateAddress);
 
-  const handleChange = (event: any) => {
-    const name = event.target.name;
-    const value = event.target.value;
-    if (name === 'payee') setNewPayee(value);
-    if (name === 'amtpersec') setNewAmtPerSec(value);
+  const [payeeAddress, setPayeeAddress] = React.useState(savedAddressName);
+
+  const updateName = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    // updateAddress(data.payeeAddress, payeeAddress);
+    setEditName(false);
   };
 
-  const handlePeriodChange = (event: any) => {
-    const name = event.target.name;
-    setSelectedPeriod(name);
+  const handleAddressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPayeeAddress(e.target.value);
+  };
+
+  const updateStream = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.target as typeof e.target & IUpdatedFormElements;
+    const updatedAddress = form.updatedAddress?.value;
+    const updatedAmount = form.updatedAmount?.value;
+    const streamDuration = form.streamDuration?.value;
+
+    const duration = streamDuration || 'month';
+
+    try {
+      const updatedAmountPerSec = new BigNumber(updatedAmount).times(1e20).div(secondsByDuration[duration]).toFixed(0);
+
+      await call.modifyStream(data.payeeAddress, data.amountPerSec, updatedAddress, updatedAmountPerSec);
+    } catch (error) {}
   };
 
   return (
-    <>
-      <DialogWrapper isOpen={isOpen} setIsOpen={setIsOpen}>
-        <DialogHeader title="Modify Stream" setIsOpen={setIsOpen} />
-        <div className="mt-3 flex flex-col space-y-2">
-          <p className="text-md">Current Stream:</p>
-          <div className=" flex space-x-2">
-            <span className=" text-sm">You</span>
-            <ArrowRightIcon className="h-5 w-4" />
-            <span className="text-sm "> {payee}</span>
+    <FormDialog dialog={dialog} title={title}>
+      <span className="space-y-4">
+        <section>
+          <h1 className="">Payee Address</h1>
+          <div className="my-1 rounded border p-2 dark:border-stone-700">
+            {editName ? (
+              <form className="flex items-center justify-between" onSubmit={updateName}>
+                <input value={payeeAddress} onChange={handleAddressChange} required className="w-full rounded p-1" />
+                <button className="ml-2 rounded bg-zinc-300 py-1 px-[6px] dark:bg-stone-600">Save</button>
+              </form>
+            ) : (
+              <p className="flex items-center justify-between">
+                <span className="truncate py-1">{payeeAddress}</span>
+                <button className="rounded bg-zinc-300 p-1 dark:bg-stone-600" onClick={() => setEditName(true)}>
+                  <span className="sr-only">Edit payee address name</span>
+                  <PencilIcon className="h-4 w-4" />
+                </button>
+              </p>
+            )}
+            <small className="truncate opacity-70">({data.payeeAddress})</small>
           </div>
-          <span className="text-sm"> Amount Per Second: {amtPerSec / 1e20}</span>
-          <p className="text-md">New Stream:</p>
-          <div className="flex items-center space-x-1">
-            <p className="text-sm">Payee:</p>
-            <input name="payee" className="w-full text-sm" onChange={handleChange} value={newPayee} />
+        </section>
+        <section>
+          <h2 className="">Current stream: </h2>
+          <div className="my-1 rounded border p-2 dark:border-stone-700">
+            <p className="flex items-center space-x-2">
+              <span>You</span>
+              <ArrowRightIcon className="h-4 w-4" />
+              <span className="truncate">{payeeAddress}</span>
+            </p>
+            <p>
+              <span>Amount / sec: </span>
+              {amountPerSec.toLocaleString('en-US', {
+                maximumFractionDigits: 7,
+                minimumFractionDigits: 7,
+              })}
+            </p>
           </div>
-          <div className="flex items-center space-x-1">
-            <p className="text-sm">Per</p>
-            <button
-              name="month"
-              onClick={handlePeriodChange}
-              className={selectedPeriod === 'month' ? 'rounded-lg bg-zinc-200 p-1 text-sm dark:bg-zinc-700' : 'text-sm'}
-            >
-              Month
-            </button>
-            <button
-              name="year"
-              onClick={handlePeriodChange}
-              className={selectedPeriod === 'year' ? 'rounded-lg bg-zinc-200 p-1 text-sm dark:bg-zinc-700' : 'text-sm'}
-            >
-              Year
-            </button>
-            <input name="amtpersec" className="w-full text-sm" onChange={handleChange} />
-          </div>
-
-          <button onClick={handleModifyInput} className="nav-button">
-            Modify Stream
-          </button>
-        </div>
-      </DialogWrapper>
-    </>
+        </section>
+        <section>
+          <h2 className="">Update stream: </h2>
+          <form className="my-1 space-y-3 rounded border p-2 dark:border-stone-700" onSubmit={updateStream}>
+            <InputText name="updatedAddress" label="Address" isRequired />
+            <InputAmountWithDuration name="updatedAmount" label="Amount" selectInputName="streamDuration" isRequired />
+            <SubmitButton className="!mt-5 !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">Update</SubmitButton>
+          </form>
+        </section>
+      </span>
+    </FormDialog>
   );
 };

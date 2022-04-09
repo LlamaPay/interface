@@ -1,17 +1,16 @@
 import llamaContract from 'abis/llamaContract';
 import * as React from 'react';
+import { IStream } from 'types';
 import { useContract, useSigner } from 'wagmi';
 
 interface CancelProps {
-  contract: string;
-  payee: string;
-  amtPerSec: number;
+  data: IStream;
 }
 
-export const Cancel = ({ contract, payee, amtPerSec }: CancelProps) => {
+export const Cancel = ({ data }: CancelProps) => {
   const [{ data: signerData }] = useSigner();
   const call = useContract({
-    addressOrName: contract,
+    addressOrName: data.llamaContractAddress,
     contractInterface: llamaContract,
     signerOrProvider: signerData,
   });
@@ -19,15 +18,15 @@ export const Cancel = ({ contract, payee, amtPerSec }: CancelProps) => {
   const onCancel = React.useCallback(() => {
     async function cancelStream() {
       try {
-        await call.cancelStream(payee, amtPerSec);
+        await call.cancelStream(data.payeeAddress, data.amountPerSec);
       } catch {}
     }
     cancelStream();
-  }, [call, amtPerSec, payee]);
+  }, [call, data]);
 
   return (
     <>
-      <button onClick={onCancel} className="rounded-lg bg-zinc-200 p-1 text-sm dark:bg-zinc-700">
+      <button onClick={onCancel} className="rounded bg-zinc-100 py-1 px-2 dark:bg-zinc-800">
         Cancel
       </button>
     </>

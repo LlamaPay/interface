@@ -1,9 +1,22 @@
 import { useQuery } from 'react-query';
-import { useContract, useSigner } from 'wagmi';
 import { Contract } from 'ethers';
-import llamaContract from 'abis/llamaContract';
 
-async function getWithdrawableData(contract: Contract, payer: string, payee: string, amountPerSec: number) {
+interface IUseWithdrawableProps {
+  contract: Contract;
+  payer: string;
+  payee: string;
+  amountPerSec: number;
+  streamId: string;
+}
+
+interface IGetWithdrawable {
+  contract: Contract;
+  payer: string;
+  payee: string;
+  amountPerSec: number;
+}
+
+async function getWithdrawableData({ contract, payer, payee, amountPerSec }: IGetWithdrawable) {
   try {
     const call = await contract.withdrawable(payer, payee, amountPerSec);
     return {
@@ -12,25 +25,15 @@ async function getWithdrawableData(contract: Contract, payer: string, payee: str
       owed: call.owed,
     };
   } catch (error) {
+    console.log(error);
     return null;
   }
 }
 
-function useWithdrawable(contractAddress: string, payer: string, payee: string, amountPerSec: number) {
-  const [{ data: signerData }] = useSigner();
-  const contract = useContract({
-    addressOrName: contractAddress,
-    contractInterface: llamaContract,
-    signerOrProvider: signerData,
+function useWithdrawable({ contract, payer, payee, amountPerSec, streamId }: IUseWithdrawableProps) {
+  return useQuery(['withdrawable', streamId], () => getWithdrawableData({ contract, payer, payee, amountPerSec }), {
+    refetchInterval: 10000,
   });
-
-  return useQuery(
-    ['withdrawable', contractAddress, payer, payee, amountPerSec],
-    () => getWithdrawableData(contract, payer, payee, amountPerSec),
-    {
-      refetchInterval: 10000,
-    }
-  );
 }
 
 export default useWithdrawable;

@@ -30,3 +30,24 @@ export interface IPayer {
   totalPaidPerSec: string | null;
   lastPayerUpdate: string | null;
 }
+
+export interface IStream {
+  llamaContractAddress: string;
+  amountPerSec: string;
+  createdTimestamp: string;
+  payerAddress: string;
+  payeeAddress: string;
+  streamId: string;
+  token: { address: string; name: string; decimals: number };
+  tokenContract: Contract;
+  llamaTokenContract: Contract;
+}
+
+export interface IHistory {
+  [key: string]: any;
+}
+
+export interface IStreamAndHistory {
+  streams: IStream[] | null;
+  history: IHistory[] | null;
+}

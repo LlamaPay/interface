@@ -10,15 +10,12 @@ const Header = () => {
   // TODO fix mobile layout
   return (
     <header>
-      <nav
-        className="flex flex-col items-baseline justify-end space-y-2 p-2 text-base sm:flex-row
-      "
-      >
+      <nav className="flex flex-col items-baseline justify-end space-y-2 p-2 text-base sm:flex-row">
         <Link href="/" passHref>
           <a className="py-2">LlamaPay</a>
         </Link>
 
-        <div className="mx-auto flex flex-1 items-baseline justify-end space-x-2">
+        <div className="mx-auto flex flex-1 flex-wrap items-baseline justify-end gap-2">
           {data ? (
             <>
               <NetworksMenu />

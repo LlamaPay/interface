@@ -28,7 +28,7 @@ export const Push = ({ contract, payer, payee, amtPerSec }: PushProps) => {
 
   return (
     <>
-      <button onClick={onPush} className="rounded-lg bg-zinc-200 p-1 text-sm dark:bg-zinc-700">
+      <button onClick={onPush} className="rounded bg-zinc-100 py-1 px-2 dark:bg-zinc-800">
         Send
       </button>
     </>

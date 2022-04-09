@@ -1,42 +1,44 @@
 import * as React from 'react';
-import type { UserStreamFragment } from 'services/generated/graphql';
 import { ArrowDownIcon, ArrowUpIcon } from '@heroicons/react/solid';
 import { formatAddress } from 'utils/address';
-import EmptyToken from 'public/empty-token.webp';
-import Image, { StaticImageData } from 'next/image';
 import Tooltip from 'components/Tooltip';
 import { useAccount } from 'wagmi';
-import { Modify } from './Modify';
-import { Cancel } from './Cancel';
-import { Push } from './Push';
+import { Modify } from '.';
+import { useDialogState } from 'ariakit';
+import { IStream } from 'types';
+import { useAddressStore } from 'store/address';
 import { Withdrawable } from './Withdrawable';
+import { Push } from './Push';
+import { Cancel } from './Cancel';
 
 interface ItemProps {
-  data: UserStreamFragment;
+  data: IStream;
 }
 
 interface StreamProps {
-  totalStreamed: number | null;
+  totalStreamed: string | null;
   address: string;
   ticker?: string;
-  tokenLogo: TokenLogo;
 }
 
-type TokenLogo = React.MutableRefObject<string | StaticImageData>;
-
-// TODO cleanup all hardcoded values
 export const ListItem = ({ data }: ItemProps) => {
   const [{ data: accountData }] = useAccount();
 
-  const isIncoming = data.payer?.id !== accountData?.address.toLowerCase();
+  const modifyDialog = useDialogState();
 
-  const [openModify, setOpenModify] = React.useState(false);
+  // check the stream type (incoming or outgoing)
+  const isIncoming = data.payerAddress !== accountData?.address.toLowerCase();
 
-  const [totalStreamed, setTotalStreamed] = React.useState<number | null>(null);
+  const [totalStreamed, setTotalStreamed] = React.useState<string | null>(null);
 
-  // TODO and handle error and loading states
-  // const { data: tokenDetails } = useTokenPrice('0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2');
+  // get address from localstorage if its saved by any other name, else use payeeAddress
+  const savedAddressName = data.payeeAddress;
 
+  // const s = useAddressStore((state) => Object.keys(state.payeeAddresses));
+
+  // console.log(s);
+
+  // format createdAt timestamp and amountPerSec and check if they are valid numbers
   const { createdAt, amountPerSec, isDataValid } = React.useMemo(() => {
     const createdAt = Number(data.createdTimestamp) * 1000;
     const amountPerSec = Number(data.amountPerSec);
@@ -44,80 +46,57 @@ export const ListItem = ({ data }: ItemProps) => {
     return { createdAt, amountPerSec, isDataValid };
   }, [data]);
 
+  // function that sets updated totalStreamed amount
   const updateStreamed = React.useCallback(() => {
     if (isDataValid) {
       const totalAmount = (((Date.now() - createdAt) / 1000) * amountPerSec) / 1e20;
-      setTotalStreamed(totalAmount);
+      setTotalStreamed(
+        totalAmount.toLocaleString('en-US', {
+          maximumFractionDigits: 5,
+          minimumFractionDigits: 5,
+        })
+      );
     } else setTotalStreamed(null);
   }, [amountPerSec, createdAt, isDataValid]);
 
   React.useEffect(() => {
+    // update streamed amount on initial render and on every other second
     updateStreamed();
-
     const interval = setInterval(() => {
       updateStreamed();
-    }, 1);
+    }, 100);
     return () => clearInterval(interval);
   }, [updateStreamed]);
 
-  // const token = tokenDetails?.coins['ethereum:0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'];
-  // const tokenAddress = React.useMemo(() => getAddress('0xc02aaa39b223fe8d0a0e5c4f27ead9083c756cc2'), []);
-
-  const tokenLogo: TokenLogo = React.useRef(
-    'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png'
-  );
-
   return (
-    <li key={data.streamId} className="flex flex-col content-center space-y-2 space-x-1 sm:flex-row sm:space-y-0">
+    <li key={data.streamId} className="flex flex-col space-y-2 space-x-1 sm:flex-row  sm:items-center sm:space-y-0">
       {isIncoming ? (
         <>
-          <IncomingStream totalStreamed={totalStreamed} address={data.payer.id} tokenLogo={tokenLogo} />
-          <Withdrawable
-            contract={data.contract.address}
-            payer={data.payer.id}
-            payee={data.payee.id}
-            amtPerSec={data.amountPerSec}
-            decimals={data.token.decimals}
-          />
+          <IncomingStream totalStreamed={totalStreamed} address={data.payerAddress} ticker={data.token.name} />
+          <Withdrawable data={data} />
         </>
       ) : (
         <>
-          <OutgoingStream totalStreamed={totalStreamed} address={data.payee.id} tokenLogo={tokenLogo} />
-          <Withdrawable
-            contract={data.contract.address}
-            payer={data.payer.id}
-            payee={data.payee.id}
-            amtPerSec={data.amountPerSec}
-            decimals={data.token.decimals}
-          />
+          <OutgoingStream totalStreamed={totalStreamed} address={savedAddressName} ticker={data.token.name} />
+          <Withdrawable data={data} />
           <Push
-            contract={data.contract.address}
-            payer={data.payer.id}
-            payee={data.payee.id}
-            amtPerSec={data.amountPerSec}
+            contract={data.llamaContractAddress}
+            payer={data.payerAddress}
+            payee={data.payeeAddress}
+            amtPerSec={Number(data.amountPerSec)}
           />
-          <button
-            className="rounded-lg bg-zinc-200 p-1 text-sm dark:bg-zinc-700"
-            onClick={() => setOpenModify(!openModify)}
-          >
+          <button className="rounded bg-zinc-100 py-1 px-2 dark:bg-zinc-800" onClick={modifyDialog.toggle}>
             Modify
           </button>
-          <Cancel payee={data.payee.id} contract={data.contract.address} amtPerSec={data.amountPerSec} />
-          <Modify
-            isOpen={openModify}
-            setIsOpen={setOpenModify}
-            payee={data.payee.id}
-            amtPerSec={data.amountPerSec}
-            contract={data.contract.address}
-            payer={data.payer.id}
-          />
+          <Cancel data={data} />
+          <Modify data={data} title="Modify" dialog={modifyDialog} savedAddressName={savedAddressName} />
         </>
       )}
     </li>
   );
 };
 
-const IncomingStream = ({ totalStreamed, address, ticker = 'Unknown token', tokenLogo }: StreamProps) => {
+const IncomingStream = ({ totalStreamed, address, ticker = 'Unknown token' }: StreamProps) => {
   return (
     <>
       <div className="mr-2 flex flex-1 items-center space-x-2">
@@ -132,24 +111,11 @@ const IncomingStream = ({ totalStreamed, address, ticker = 'Unknown token', toke
 
       {totalStreamed && (
         <div className="flex items-baseline space-x-1 slashed-zero tabular-nums">
-          <div className="relative top-[-1px] h-6 w-6 self-end">
-            <Tooltip content={ticker}>
-              <Image
-                src={tokenLogo.current}
-                onError={() => {
-                  tokenLogo.current = EmptyToken;
-                }}
-                alt={ticker}
-                width="20px"
-                height="20px"
-              />
-            </Tooltip>
-          </div>
+          <Tooltip content={ticker}>
+            <div className="h-6 w-6 flex-shrink-0 rounded-full bg-orange-400"></div>
+          </Tooltip>
           {/* TODO handle internalization and decimals when totalStreamed is not USD */}
-          <span>{`+${totalStreamed.toLocaleString('en-US', {
-            maximumFractionDigits: 5,
-            minimumFractionDigits: 5,
-          })}`}</span>
+          <span>{`+${totalStreamed}`}</span>
           <span className="text-xs text-gray-500 dark:text-gray-400">so far</span>
           <span>
             <svg
@@ -170,38 +136,26 @@ const IncomingStream = ({ totalStreamed, address, ticker = 'Unknown token', toke
   );
 };
 
-const OutgoingStream = ({ totalStreamed, address, ticker = 'Unknown token', tokenLogo }: StreamProps) => {
+const OutgoingStream = ({ totalStreamed, address, ticker = 'Unknown token' }: StreamProps) => {
   return (
     <>
-      <div className="mr-2 flex flex-1 items-center space-x-2">
+      <div className="mr-2 flex flex-1 items-center space-x-2 truncate">
         <Tooltip content="Outgoing stream">
           <div className="rounded bg-red-100 p-1 text-red-600">
             <span className="sr-only">Outgoing stream to</span>
             <ArrowUpIcon className="h-4 w-4" />
           </div>
         </Tooltip>
-        <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">{formatAddress(address)}</span>
+        <span className="truncate">{address}</span>
       </div>
       {totalStreamed && (
-        <div className="flex items-baseline space-x-1 slashed-zero tabular-nums">
-          <div className="relative top-[-1px] h-6 w-6 self-end">
-            <Tooltip content={ticker}>
-              <Image
-                src={tokenLogo.current}
-                onError={() => {
-                  tokenLogo.current = EmptyToken;
-                }}
-                alt={ticker}
-                width="20px"
-                height="20px"
-              />
-            </Tooltip>
-          </div>
-          <span>{`-${totalStreamed.toLocaleString('en-US', {
-            maximumFractionDigits: 5,
-            minimumFractionDigits: 5,
-          })}`}</span>
-          <span className="text-xs text-gray-500 dark:text-gray-400">so far</span>
+        <div className="flex items-center space-x-1 slashed-zero tabular-nums">
+          <Tooltip content={ticker}>
+            <div className="h-6 w-6 flex-shrink-0 rounded-full bg-orange-400"></div>
+          </Tooltip>
+          {/* TODO handle internalization and decimals when totalStreamed is not USD */}
+          <span>{`-${totalStreamed}`}</span>
+          <span className="items-baseline text-xs text-gray-500 dark:text-gray-400">so far</span>
           <span>
             <svg
               stroke="currentColor"
