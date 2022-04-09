@@ -67,7 +67,7 @@ export const Modify = ({ data, dialog, title, savedAddressName }: ModifyProps) =
   };
 
   return (
-    <FormDialog dialog={dialog} title={title}>
+    <FormDialog dialog={dialog} title={title} className="h-min">
       <span className="space-y-4">
         <section>
           <h1 className="">Payee Address</h1>
