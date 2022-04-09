@@ -15,7 +15,7 @@ export const Withdrawable = ({ data }: WithdrawableProps) => {
     contract: data.llamaTokenContract,
     payer: data.payerAddress,
     payee: data.payeeAddress,
-    amountPerSec: Number(data.amountPerSec),
+    amountPerSec: data.amountPerSec,
     streamId: data.streamId,
   });
   const [balanceState, setBalanceState] = React.useState<number>(0);
