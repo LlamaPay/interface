@@ -21,7 +21,7 @@ interface ModifyProps {
 interface IUpdatedFormElements {
   updatedAddress: { value: string };
   updatedAmount: { value: string };
-  streamDuration: { value: 'month' | 'year' };
+  modifiedStreamDuration: { value: 'month' | 'year' };
 }
 
 export const Modify = ({ data, dialog, title, savedAddressName }: ModifyProps) => {
@@ -55,9 +55,9 @@ export const Modify = ({ data, dialog, title, savedAddressName }: ModifyProps) =
     const form = e.target as typeof e.target & IUpdatedFormElements;
     const updatedAddress = form.updatedAddress?.value;
     const updatedAmount = form.updatedAmount?.value;
-    const streamDuration = form.streamDuration?.value;
+    const modifiedStreamDuration = form.modifiedStreamDuration?.value;
 
-    const duration = streamDuration || 'month';
+    const duration = modifiedStreamDuration || 'month';
 
     try {
       const updatedAmountPerSec = new BigNumber(updatedAmount).times(1e20).div(secondsByDuration[duration]).toFixed(0);
@@ -110,7 +110,12 @@ export const Modify = ({ data, dialog, title, savedAddressName }: ModifyProps) =
           <h2 className="">Update stream: </h2>
           <form className="my-1 space-y-3 rounded border p-2 dark:border-stone-700" onSubmit={updateStream}>
             <InputText name="updatedAddress" label="Address" isRequired />
-            <InputAmountWithDuration name="updatedAmount" label="Amount" selectInputName="streamDuration" isRequired />
+            <InputAmountWithDuration
+              name="updatedAmount"
+              label="Amount"
+              selectInputName="modifiedStreamDuration"
+              isRequired
+            />
             <SubmitButton className="!mt-5 !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">Update</SubmitButton>
           </form>
         </section>

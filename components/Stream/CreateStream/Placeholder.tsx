@@ -15,10 +15,10 @@ const Placeholder = () => {
       </span>
 
       <InputAmountWithDuration
-        name="amountToStream"
+        name="placeholderAmountToStream"
         isRequired={true}
         label="Amount to stream"
-        selectInputName="streamDuration"
+        selectInputName="placeholderStreamDuration"
       />
 
       <SubmitButton disabled={true} className="mt-8">

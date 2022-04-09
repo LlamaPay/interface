@@ -2,17 +2,25 @@ import * as React from 'react';
 import Link from 'next/link';
 import { useAccount } from 'wagmi';
 import { NetworksMenu, Account, WalletSelector } from 'components/Web3';
+import LogoLight from 'public/logo-light.svg';
+import LogoDark from 'public/logo-dark.svg';
+import Image from 'next/image';
+import { useTheme } from 'next-themes';
 
 const Header = () => {
   const [{ data }] = useAccount();
   const [openWalletSelector, setDisplaySelector] = React.useState(false);
 
-  // TODO fix mobile layout
+  const { resolvedTheme } = useTheme();
+  const isDark = resolvedTheme === 'dark';
+
   return (
     <header>
-      <nav className="flex flex-col items-baseline justify-end space-y-2 p-2 text-base sm:flex-row">
+      <nav className="flex flex-col items-center justify-end space-y-2 p-2 text-base sm:flex-row sm:space-y-0">
         <Link href="/" passHref>
-          <a className="py-2">LlamaPay</a>
+          <div className="flex h-10">
+            <Image src={isDark ? LogoLight : LogoDark} width="140px" height="40px" alt="LlamaPay logo" />
+          </div>
         </Link>
 
         <div className="mx-auto flex flex-1 flex-wrap items-baseline justify-end gap-2">
