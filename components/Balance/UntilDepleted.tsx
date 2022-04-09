@@ -7,7 +7,7 @@ interface UntilDepletedProps {
 
 function getTime(data: IBalance, balance: number) {
   const time = balance / (Number(data.totalPaidPerSec) / 10 ** (20 - Number(data.tokenDecimals)));
-  if (time === Infinity) return 'No Streams';
+  if (Number(data.totalPaidPerSec) === 0) return 'No Streams';
   if (time < 1) return 'Streams Depleted';
   const days = Math.floor(time / 86400);
   const hours = Math.floor((time - days * 86400) / 3600);
