@@ -32,9 +32,9 @@ export const ListItem = ({ data }: ItemProps) => {
   const [totalStreamed, setTotalStreamed] = React.useState<string | null>(null);
 
   // get address from localstorage if its saved by any other name, else use payeeAddress
-  const savedAddressName = data.payeeAddress;
-
-  // const s = useAddressStore((state) => Object.keys(state.payeeAddresses));
+  const savedAddressName =
+    useAddressStore((state) => state.payeeAddresses.find((p) => p.id === data.payeeAddress))?.shortName ??
+    data.payeeAddress;
 
   // console.log(s);
 

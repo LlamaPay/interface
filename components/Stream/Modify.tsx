@@ -36,13 +36,13 @@ export const Modify = ({ data, dialog, title, savedAddressName }: ModifyProps) =
   const [editName, setEditName] = React.useState(false);
   const amountPerSec = Number(data.amountPerSec) / 1e20;
 
-  // const updateAddress = useAddressStore((state) => state.updateAddress);
+  const updateAddress = useAddressStore((state) => state.updateAddress);
 
   const [payeeAddress, setPayeeAddress] = React.useState(savedAddressName);
 
   const updateName = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // updateAddress(data.payeeAddress, payeeAddress);
+    updateAddress(data.payeeAddress, payeeAddress);
     setEditName(false);
   };
 
