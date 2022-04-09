@@ -18,7 +18,7 @@ const Header = () => {
     <header>
       <nav className="flex flex-col items-center justify-end space-y-2 p-2 text-base sm:flex-row sm:space-y-0">
         <Link href="/" passHref>
-          <div className="flex h-10">
+          <div className="flex h-10 cursor-pointer">
             <Image src={isDark ? LogoLight : LogoDark} width="140px" height="40px" alt="LlamaPay logo" />
           </div>
         </Link>

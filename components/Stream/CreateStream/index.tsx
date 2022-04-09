@@ -2,10 +2,12 @@ import * as React from 'react';
 import Placeholder from './Placeholder';
 import DepositAndCreate from './DepositAndCreate';
 import CreateStreamOnly from './CreateStreamOnly';
-import { ICreateProps } from './types';
 import ErrorBoundary from './ErrorBoundary';
+import { useBalances } from 'hooks';
 
-export const CreateStream = ({ tokens, noBalances, isLoading, isError }: ICreateProps) => {
+export const CreateStream = () => {
+  const { tokens, noBalances, isLoading, isError } = useBalances();
+
   return (
     <section className="z-2 flex w-full max-w-lg flex-col">
       <h1 className="mb-3 text-center text-xl">

@@ -22,7 +22,7 @@ export const BalanceAndSymbol = ({ data }: BalanceAndSymbolProps) => {
   }, [updateBalance]);
 
   return (
-    <td className="whitespace-nowrap border p-1 text-right dark:border-stone-700">
+    <td className="whitespace-nowrap border p-1 text-right slashed-zero tabular-nums dark:border-stone-700">
       {`${balanceState.toFixed(5)} ${data.symbol}`}{' '}
     </td>
   );

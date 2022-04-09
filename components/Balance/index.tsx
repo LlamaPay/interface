@@ -5,15 +5,18 @@ import { FormDialog } from 'components/Dialog';
 import DepositForm from './DepositForm';
 import WithdrawForm from './WithdrawForm';
 import DepositField from './DepositField';
-import { useChainExplorer } from 'hooks';
+import { useBalances, useChainExplorer } from 'hooks';
 import useGetAllTokens from 'queries/useGetAllTokens';
 import { IBalance } from 'types';
-import { IBalanceProps, IFormData, TokenAction } from './types';
+import { IFormData, TokenAction } from './types';
 import { useDialogState } from 'ariakit';
 import { BalanceAndSymbol } from './BalanceAndSymbol';
 import { UntilDepleted } from './UntilDepleted';
+import classNames from 'classnames';
 
-const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) => {
+const Balance = () => {
+  const { balances, noBalances, isLoading, isError } = useBalances();
+
   // function that returns chain explorer url based on the chain user is connected to
   const chainExplorer = useChainExplorer();
   const dialog = useDialogState();
@@ -41,9 +44,11 @@ const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) =>
 
   const dialogTitle = dialogType === 'token' ? formData.current?.title ?? null : 'Deposit';
 
+  const showFallback = isLoading || noBalances || isError;
+
   return (
-    <section className="w-full max-w-lg overflow-x-auto">
-      <span className="mb-1 flex justify-between">
+    <section className={classNames('overflow-x-auto', showFallback ? 'w-full max-w-xl' : 'w-fit')}>
+      <span className="mb-1 flex items-center justify-between">
         <h1 className="text-xl">Balances</h1>
         <button
           className="flex items-center space-x-2 whitespace-nowrap rounded bg-zinc-100 py-1 px-2 dark:bg-zinc-800"
@@ -57,7 +62,7 @@ const Balance = ({ isLoading, noBalances, balances, isError }: IBalanceProps) =>
         </button>
       </span>
 
-      {isLoading || noBalances || isError ? (
+      {showFallback ? (
         <FallbackList
           isLoading={isLoading}
           data={noBalances && false}

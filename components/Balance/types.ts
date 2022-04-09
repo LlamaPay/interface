@@ -1,12 +1,4 @@
 import { Contract } from 'ethers';
-import { IBalance } from 'types';
-
-export interface IBalanceProps {
-  balances: IBalance[] | null;
-  noBalances: boolean;
-  isLoading: boolean;
-  isError: boolean;
-}
 
 export type TokenAction = 'deposit' | 'withdraw';
 

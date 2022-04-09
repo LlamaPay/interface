@@ -13,7 +13,7 @@ function getTime(data: IBalance, balance: number) {
   const hours = Math.floor((time - days * 86400) / 3600);
   const minutes = Math.floor((time - days * 86400 - hours * 3600) / 60);
   const seconds = Math.floor(time - days * 86400 - hours * 3600 - minutes * 60);
-  return `${days}D ${hours}H ${minutes}M ${seconds}S`;
+  return `${days}D ${hours}H ${minutes}M ${seconds < 10 ? `0${seconds}` : seconds}S`;
 }
 
 export const UntilDepleted = ({ data }: UntilDepletedProps) => {
@@ -33,6 +33,8 @@ export const UntilDepleted = ({ data }: UntilDepletedProps) => {
   }, [updateBalance]);
 
   return (
-    <td className="whitespace-nowrap border p-1 text-right dark:border-stone-700">{getTime(data, balanceState)}</td>
+    <td className="whitespace-nowrap border p-1 text-right tabular-nums dark:border-stone-700">
+      {getTime(data, balanceState)}
+    </td>
   );
 };
