@@ -6,7 +6,7 @@ import { FormDialog } from 'components/Dialog';
 import { IStream } from 'types';
 import { useAddressStore } from 'store/address';
 import { InputAmountWithDuration, InputText, SubmitButton } from 'components/Form';
-import { useContract, useSigner } from 'wagmi';
+import { useContractWrite } from 'wagmi';
 import llamaContract from 'abis/llamaContract';
 import BigNumber from 'bignumber.js';
 import { secondsByDuration } from 'utils/constants';
@@ -25,14 +25,13 @@ interface IUpdatedFormElements {
 }
 
 export const Modify = ({ data, dialog, title, savedAddressName }: ModifyProps) => {
-  const [{ data: signerData }] = useSigner();
-
-  const call = useContract({
-    addressOrName: data.llamaContractAddress,
-    contractInterface: llamaContract,
-    signerOrProvider: signerData,
-  });
-
+  const [{ data: modifyStreamData, error, loading }, write] = useContractWrite(
+    {
+      addressOrName: data.llamaContractAddress,
+      contractInterface: llamaContract,
+    },
+    'modifyStream'
+  );
   const [editName, setEditName] = React.useState(false);
   const amountPerSec = Number(data.amountPerSec) / 1e20;
 
@@ -59,11 +58,10 @@ export const Modify = ({ data, dialog, title, savedAddressName }: ModifyProps) =
 
     const duration = modifiedStreamDuration || 'month';
 
-    try {
-      const updatedAmountPerSec = new BigNumber(updatedAmount).times(1e20).div(secondsByDuration[duration]).toFixed(0);
-
-      await call.modifyStream(data.payeeAddress, data.amountPerSec, updatedAddress, updatedAmountPerSec);
-    } catch (error) {}
+    const updatedAmountPerSec = new BigNumber(updatedAmount).times(1e20).div(secondsByDuration[duration]).toFixed(0);
+    write({
+      args: [data.payeeAddress, data.amountPerSec, updatedAddress, updatedAmountPerSec],
+    });
   };
 
   return (
