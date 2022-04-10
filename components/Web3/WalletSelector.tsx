@@ -23,8 +23,9 @@ export const WalletSelector = ({ isOpen, setIsOpen }: Props) => {
   const handleConnect = React.useCallback(
     async (connector: Connector) => {
       const { data, error } = await connect(connector);
+      setIsOpen(false);
     },
-    [connect]
+    [connect, setIsOpen]
   );
 
   const formattedAddress = accountData && formatAddress(accountData.address);
@@ -39,7 +40,13 @@ export const WalletSelector = ({ isOpen, setIsOpen }: Props) => {
             <p className="break-words">
               {accountData.ens?.name ? `${accountData.ens?.name} (${formattedAddress})` : accountData.address}
             </p>
-            <button className="nav-button rounded p-2" onClick={disconnect}>
+            <button
+              className="nav-button rounded p-2"
+              onClick={() => {
+                disconnect();
+                setIsOpen(false);
+              }}
+            >
               Disconnect
             </button>
           </div>
