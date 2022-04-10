@@ -9,7 +9,7 @@ export const BalanceAndSymbol = ({ data }: BalanceAndSymbolProps) => {
   const [balanceState, setBalanceState] = React.useState<number | null>(null);
 
   const updateBalance = React.useCallback(() => {
-    const sub = Number(data.totalPaidPerSec) / 10 ** (20 - Number(data.tokenDecimals)) / 10;
+    const sub = Number(data.totalPaidPerSec) / 1e20;
     setBalanceState(Number(data.amount) - sub);
   }, [data]);
 
