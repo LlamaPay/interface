@@ -28,22 +28,20 @@ const useStreamsAndHistory = () => {
     if (provider && data) {
       const streams = data?.user?.streams ?? [];
 
-      const activeStreams = streams
-        .filter((s) => s.active)
-        .map((s) => ({
-          llamaContractAddress: s.contract.address,
-          amountPerSec: s.amountPerSec,
-          createdTimestamp: s.createdTimestamp,
-          payerAddress: s.payer.id,
-          payeeAddress: s.payee.id,
-          streamId: s.streamId,
-          token: s.token,
-          tokenContract: createERC20Contract({ tokenAddress: getAddress(s.token.address), provider }),
-          llamaTokenContract: createContract(getAddress(s.contract.address), provider),
-        }));
+      const formattedStreams = streams.map((s) => ({
+        llamaContractAddress: s.contract.address,
+        amountPerSec: s.amountPerSec,
+        createdTimestamp: s.createdTimestamp,
+        payerAddress: s.payer.id,
+        payeeAddress: s.payee.id,
+        streamId: s.streamId,
+        token: s.token,
+        tokenContract: createERC20Contract({ tokenAddress: getAddress(s.token.address), provider }),
+        llamaTokenContract: createContract(getAddress(s.contract.address), provider),
+      }));
 
       return {
-        streams: activeStreams.length > 0 ? activeStreams : null,
+        streams: formattedStreams.length > 0 ? formattedStreams : null,
         history: data?.user?.historicalEvents ?? null,
       };
     } else return { streams: null, history: null };

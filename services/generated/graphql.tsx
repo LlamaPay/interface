@@ -1124,7 +1124,7 @@ useGetAllTokensQuery.fetcher = (dataSource: { endpoint: string, fetchParams?: Re
 export const StreamAndHistoryDocument = `
     query StreamAndHistory($id: ID!, $network: String!) {
   user(id: $id) {
-    streams(orderBy: createdTimestamp, orderDirection: desc) {
+    streams(orderBy: createdTimestamp, orderDirection: desc, where: {active: true}) {
       ...UserStream
     }
     historicalEvents(orderBy: createdTimestamp, orderDirection: desc) {
