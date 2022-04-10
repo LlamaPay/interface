@@ -6,11 +6,11 @@ interface BalanceAndSymbolProps {
 }
 
 export const BalanceAndSymbol = ({ data }: BalanceAndSymbolProps) => {
-  const [balanceState, setBalanceState] = React.useState<number>(Number(data.amount));
+  const [balanceState, setBalanceState] = React.useState<number | null>(null);
 
   const updateBalance = React.useCallback(() => {
     const sub = Number(data.totalPaidPerSec) / 10 ** (20 - Number(data.tokenDecimals)) / 10;
-    setBalanceState((prevState) => prevState - sub);
+    setBalanceState(Number(data.amount) - sub);
   }, [data]);
 
   React.useEffect(() => {
@@ -19,11 +19,11 @@ export const BalanceAndSymbol = ({ data }: BalanceAndSymbolProps) => {
       updateBalance();
     }, 100);
     return () => clearInterval(interval);
-  }, [updateBalance]);
+  }, [updateBalance, data]);
 
   return (
     <td className="whitespace-nowrap border p-1 text-right slashed-zero tabular-nums dark:border-stone-700">
-      {`${balanceState.toFixed(5)} ${data.symbol}`}{' '}
+      {balanceState && `${balanceState.toFixed(5)} ${data.symbol}`}
     </td>
   );
 };
