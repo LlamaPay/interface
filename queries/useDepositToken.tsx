@@ -42,7 +42,7 @@ export default function useDepositToken() {
         // console.log(e);
       },
       onSettled: () => {
-        // queryClient.invalidateQueries();
+        queryClient.invalidateQueries();
       },
     }
   );

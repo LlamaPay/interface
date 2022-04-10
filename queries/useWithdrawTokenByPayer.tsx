@@ -1,5 +1,5 @@
 import { Signer } from 'ethers';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { createWriteContract } from 'utils/contract';
 import { useSigner } from 'wagmi';
 
@@ -20,9 +20,11 @@ const withdrawPayer = async ({ signer, llamaContractAddress, amountToWithdraw, w
     } else {
       const contract = createWriteContract(llamaContractAddress, signer);
       if (withdrawAll) {
-        await contract.withdrawPayerAll();
+        const res = await contract.withdrawPayerAll();
+        return await res.wait();
       } else {
-        await contract.withdrawPayer(amountToWithdraw);
+        const res = await contract.withdrawPayer(amountToWithdraw);
+        return await res.wait();
       }
     }
   } catch (error: any) {
@@ -32,9 +34,16 @@ const withdrawPayer = async ({ signer, llamaContractAddress, amountToWithdraw, w
 
 export default function useWithdrawByPayer() {
   const [{ data: signer }] = useSigner();
+  const queryClient = useQueryClient();
 
   // TODO Invalidate all queries like balances etc onSuccess
-  return useMutation(({ llamaContractAddress, amountToWithdraw, withdrawAll }: IUseWithdrawPayerToken) =>
-    withdrawPayer({ signer, llamaContractAddress, amountToWithdraw, withdrawAll })
+  return useMutation(
+    ({ llamaContractAddress, amountToWithdraw, withdrawAll }: IUseWithdrawPayerToken) =>
+      withdrawPayer({ signer, llamaContractAddress, amountToWithdraw, withdrawAll }),
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries();
+      },
+    }
   );
 }
