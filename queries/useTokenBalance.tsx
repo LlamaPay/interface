@@ -18,7 +18,6 @@ const fetchBalance = async (userAddress: string, token: IToken | null, provider:
   }
 };
 
-// TODO invalidate query when other mutation like deposit and create stream are settled
 function useTokenBalance(token: IToken | null) {
   const [{ data: accountData }] = useAccount();
   const { provider } = useNetworkProvider();

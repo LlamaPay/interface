@@ -51,7 +51,6 @@ export default function useStreamToken() {
   const [{ data: signer }] = useSigner();
   const queryClient = useQueryClient();
 
-  // TODO Invalidate all queries like balances etc onSuccess
   return useMutation<void, QueryError, IUseStreamToken>(
     ({ llamaContractAddress, payeeAddress, amountToDeposit, amountPerSec, method }: IUseStreamToken) =>
       streamToken({ llamaContractAddress, payeeAddress, amountToDeposit, amountPerSec, method, signer }),

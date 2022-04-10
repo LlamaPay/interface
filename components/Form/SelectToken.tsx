@@ -9,6 +9,7 @@ import { InputText } from './Input';
 import { SubmitButton } from './Button';
 import useCreateLlamaPayContract from 'queries/useCreateLlamaPayContract';
 import useTokenBalance from 'queries/useTokenBalance';
+import { BeatLoader } from 'react-spinners';
 
 interface ISelectTokenProps {
   handleTokenChange: (token: string) => void;
@@ -138,15 +139,35 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
 
 const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<React.SetStateAction<boolean>> }) => {
   // TODO handle loading and error states
-  const { mutate, isLoading } = useCreateLlamaPayContract();
+  const { mutate, isLoading, error } = useCreateLlamaPayContract();
+
+  const [isConfirming, setIsConfirming] = React.useState(false);
+  const [isError, setIsError] = React.useState(false);
 
   // TODO make sure this submit handler doesn't mess up DepositField submit handler like error field or loading states, as this is triggering that component forms submit func
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
 
+    setIsError(false);
+
     const form = e.target as typeof e.target & { tokenAddress: { value: string } };
     const tokenAddress = form.tokenAddress?.value;
-    mutate({ tokenAddress });
+    mutate(
+      { tokenAddress },
+      {
+        onSuccess: (res) => {
+          setIsConfirming(true);
+          res.wait().then((data: any) => {
+            if (data.status === 1) {
+              setNewTokenForm(false);
+            } else {
+              setIsError(true);
+            }
+            setIsConfirming(false);
+          });
+        },
+      }
+    );
   };
 
   return (
@@ -164,9 +185,21 @@ const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<Rea
       <form className="m-4 mt-[10%]" onSubmit={handleSubmit}>
         <InputText name="tokenAddress" isRequired={true} label="Token Address" />
         <SubmitButton className="mt-4 !bg-zinc-300 disabled:cursor-not-allowed dark:!bg-stone-600" disabled={isLoading}>
-          Add token
+          {isLoading ? (
+            <BeatLoader size={6} />
+          ) : isConfirming ? (
+            <span className=" flex items-center justify-center space-x-2">
+              <span>Confirming</span>
+              <BeatLoader size={4} />
+            </span>
+          ) : (
+            'Add token'
+          )}
         </SubmitButton>
       </form>
+      <small className="m-4 text-center text-red-500">
+        {isError ? "Couldn't add token" : error ? error.message : null}
+      </small>
     </>
   );
 };

@@ -25,7 +25,7 @@ async function getWithdrawableData({ contract, payer, payee, amountPerSec }: IGe
       owed: call.owed,
     };
   } catch (error) {
-    console.log(error);
+    // console.log(error);
     return null;
   }
 }

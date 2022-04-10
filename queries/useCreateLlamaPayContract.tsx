@@ -30,10 +30,9 @@ const create = async ({ factoryAddress, signer, tokenAddress }: IDepositToken) =
     }
 
     const contract = createFactoryWriteContract(factoryAddress, signer);
-    const res = contract.createLlamaPayContract(getAddress(tokenAddress));
-    return await res.wait();
+    return await contract.createLlamaPayContract(getAddress(tokenAddress));
   } catch (error: any) {
-    throw new Error(error?.reason ?? "Couldn't create contract");
+    throw new Error(error.message || (error?.reason ?? "Couldn't create contract"));
   }
 };
 
@@ -45,10 +44,13 @@ export default function useCreateLlamaPayContract() {
 
   const factoryAddress = chainId ? networkDetails[chainId].llamapayFactoryAddress : null;
 
-  // TODO Invalidate all queries like balances etc onSuccess
-  return useMutation(({ tokenAddress }: ICreateContract) => create({ factoryAddress, signer, tokenAddress }), {
-    onSettled: () => {
-      queryClient.invalidateQueries();
-    },
-  });
+  return useMutation<any, any, ICreateContract>(
+    ({ tokenAddress }: ICreateContract) => create({ factoryAddress, signer, tokenAddress }),
+    {
+      onSettled: () => {
+        // TODO check if this fetched alltokens query
+        queryClient.invalidateQueries();
+      },
+    }
+  );
 }

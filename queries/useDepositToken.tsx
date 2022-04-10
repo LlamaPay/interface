@@ -30,7 +30,6 @@ export default function useDepositToken() {
   const [{ data: signer }] = useSigner();
   const queryClient = useQueryClient();
 
-  // TODO Invalidate all queries like balances etc onSuccess
   return useMutation(
     ({ llamaContractAddress, amountToDeposit }: IUseDepositToken) =>
       deposit({ signer, llamaContractAddress, amountToDeposit }),
@@ -43,7 +42,7 @@ export default function useDepositToken() {
         data.wait().then((res: any) => {
           toast.dismiss(toastId);
           if (res.status === 1) {
-            toast.success('Deposited Successfully');
+            toast.success('Deposited successfully');
           } else {
             toast.error('Deposit failed');
           }

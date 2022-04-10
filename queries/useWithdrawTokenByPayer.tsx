@@ -35,20 +35,19 @@ export default function useWithdrawByPayer() {
   const [{ data: signer }] = useSigner();
   const queryClient = useQueryClient();
 
-  // TODO Invalidate all queries like balances etc onSuccess
   return useMutation(
     ({ llamaContractAddress, amountToWithdraw, withdrawAll }: IUseWithdrawPayerToken) =>
       withdrawPayer({ signer, llamaContractAddress, amountToWithdraw, withdrawAll }),
 
     {
       onSuccess: (data) => {
-        const toastId = toast.loading('Confirming');
+        const toastId = toast.loading('Confirming withdrawl');
         data.wait().then((res: any) => {
           toast.dismiss(toastId);
           if (res.status === 1) {
-            toast.success('Transaction Success');
+            toast.success('Withdrawn successfully');
           } else {
-            toast.error('Transaction failed');
+            toast.error('Withdraw failed');
           }
         });
       },
