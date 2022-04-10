@@ -17,11 +17,11 @@ function getTime(data: IBalance, balance: number) {
 }
 
 export const UntilDepleted = ({ data }: UntilDepletedProps) => {
-  const [balanceState, setBalanceState] = React.useState<number>(Number(data.amount));
+  const [balanceState, setBalanceState] = React.useState<number | null>(null);
 
   const updateBalance = React.useCallback(() => {
     const sub = Number(data.totalPaidPerSec) / 1e20;
-    setBalanceState((prevState) => prevState - sub);
+    setBalanceState(Number(data.amount) - sub);
   }, [data]);
 
   React.useEffect(() => {
@@ -34,7 +34,7 @@ export const UntilDepleted = ({ data }: UntilDepletedProps) => {
 
   return (
     <td className="whitespace-nowrap border p-1 text-right tabular-nums dark:border-stone-700">
-      {getTime(data, balanceState)}
+      {balanceState && getTime(data, balanceState)}
     </td>
   );
 };
