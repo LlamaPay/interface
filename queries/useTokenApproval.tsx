@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { Contract, Signer } from 'ethers';
 import { getAddress } from 'ethers/lib/utils';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { checkHasApprovedEnough, ICheckTokenAllowance } from 'utils/tokenUtils';
 import { erc20ABI, useSigner } from 'wagmi';
 
@@ -66,16 +66,30 @@ export function useCheckTokenApproval() {
 
 export function useApproveToken() {
   const [{ data: signer }] = useSigner();
+  const queryClient = useQueryClient();
 
-  return useMutation(({ tokenAddress, amountToApprove, spenderAddress }: IUseApproveToken) =>
-    approveToken({ tokenAddress, signer, amountToApprove, spenderAddress })
+  return useMutation(
+    ({ tokenAddress, amountToApprove, spenderAddress }: IUseApproveToken) =>
+      approveToken({ tokenAddress, signer, amountToApprove, spenderAddress }),
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries();
+      },
+    }
   );
 }
 
 export function useApproveTokenForMaxAmt() {
   const [{ data: signer }] = useSigner();
+  const queryClient = useQueryClient();
 
-  return useMutation(({ tokenAddress, spenderAddress }: UseTokenForMaxAmt) =>
-    approveTokenForMaxAmt({ tokenAddress, signer, spenderAddress })
+  return useMutation(
+    ({ tokenAddress, spenderAddress }: UseTokenForMaxAmt) =>
+      approveTokenForMaxAmt({ tokenAddress, signer, spenderAddress }),
+    {
+      onSettled: () => {
+        queryClient.invalidateQueries();
+      },
+    }
   );
 }

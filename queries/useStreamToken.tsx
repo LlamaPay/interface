@@ -1,5 +1,5 @@
 import { Signer } from 'ethers';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { createWriteContract } from 'utils/contract';
 import { useSigner } from 'wagmi';
 
@@ -13,6 +13,10 @@ interface IUseStreamToken {
 
 interface IStreamToken extends IUseStreamToken {
   signer?: Signer;
+}
+
+interface QueryError {
+  message: string;
 }
 
 const streamToken = async ({
@@ -29,23 +33,38 @@ const streamToken = async ({
     } else {
       const contract = createWriteContract(llamaContractAddress, signer);
       if (method === 'DEPOSIT_AND_CREATE' && amountToDeposit) {
-        await contract.depositAndCreate(amountToDeposit, payeeAddress, amountPerSec);
+        const res = await contract.depositAndCreate(amountToDeposit, payeeAddress, amountPerSec);
+        return await res.wait();
       } else if (method === 'CREATE_STREAM') {
-        await contract.createStream(payeeAddress, amountPerSec);
+        const res = await contract.createStream(payeeAddress, amountPerSec);
+        return await res.wait();
       } else {
-        throw new Error('Invalid method');
+        throw new Error("Invalid method called, Couldn't stream token");
       }
     }
   } catch (error: any) {
-    throw new Error(error?.reason ?? "Couldn't stream token");
+    throw new Error(error.message || (error?.reason ?? "Couldn't stream token"));
   }
 };
 
 export default function useStreamToken() {
   const [{ data: signer }] = useSigner();
+  const queryClient = useQueryClient();
 
   // TODO Invalidate all queries like balances etc onSuccess
-  return useMutation(({ llamaContractAddress, payeeAddress, amountToDeposit, amountPerSec, method }: IUseStreamToken) =>
-    streamToken({ llamaContractAddress, payeeAddress, amountToDeposit, amountPerSec, method, signer })
+  return useMutation<void, QueryError, IUseStreamToken>(
+    ({ llamaContractAddress, payeeAddress, amountToDeposit, amountPerSec, method }: IUseStreamToken) =>
+      streamToken({ llamaContractAddress, payeeAddress, amountToDeposit, amountPerSec, method, signer }),
+    {
+      onSuccess: (e) => {
+        // console.log(e);
+      },
+      onError: (e) => {
+        // console.log(e.message);
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries();
+      },
+    }
   );
 }

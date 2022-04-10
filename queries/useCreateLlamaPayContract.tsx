@@ -1,7 +1,7 @@
 import { Signer } from 'ethers';
 import { getAddress } from 'ethers/lib/utils';
 import { useNetworkProvider } from 'hooks';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { networkDetails } from 'utils/constants';
 import { createFactoryWriteContract } from 'utils/contract';
 import { useSigner } from 'wagmi';
@@ -30,7 +30,8 @@ const create = async ({ factoryAddress, signer, tokenAddress }: IDepositToken) =
     }
 
     const contract = createFactoryWriteContract(factoryAddress, signer);
-    await contract.createLlamaPayContract(getAddress(tokenAddress));
+    const res = contract.createLlamaPayContract(getAddress(tokenAddress));
+    return await res.wait();
   } catch (error: any) {
     throw new Error(error?.reason ?? "Couldn't create contract");
   }
@@ -38,11 +39,16 @@ const create = async ({ factoryAddress, signer, tokenAddress }: IDepositToken) =
 
 export default function useCreateLlamaPayContract() {
   const [{ data: signer }] = useSigner();
+  const queryClient = useQueryClient();
 
   const { chainId } = useNetworkProvider();
 
   const factoryAddress = chainId ? networkDetails[chainId].llamapayFactoryAddress : null;
 
   // TODO Invalidate all queries like balances etc onSuccess
-  return useMutation(({ tokenAddress }: ICreateContract) => create({ factoryAddress, signer, tokenAddress }));
+  return useMutation(({ tokenAddress }: ICreateContract) => create({ factoryAddress, signer, tokenAddress }), {
+    onSettled: () => {
+      queryClient.invalidateQueries();
+    },
+  });
 }

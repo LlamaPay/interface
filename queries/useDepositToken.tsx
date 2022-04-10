@@ -1,5 +1,5 @@
 import { Signer } from 'ethers';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { createWriteContract } from 'utils/contract';
 import { useSigner } from 'wagmi';
 
@@ -18,18 +18,32 @@ const deposit = async ({ signer, llamaContractAddress, amountToDeposit }: IDepos
       throw new Error("Couldn't get signer");
     } else {
       const contract = createWriteContract(llamaContractAddress, signer);
-      await contract.deposit(amountToDeposit);
+      const res = await contract.deposit(amountToDeposit);
+      return await res.wait();
     }
   } catch (error: any) {
-    throw new Error(error?.reason ?? "Couldn't deposit token");
+    throw new Error(error.message || (error?.reason ?? "Couldn't deposit token"));
   }
 };
 
 export default function useDepositToken() {
   const [{ data: signer }] = useSigner();
+  const queryClient = useQueryClient();
 
   // TODO Invalidate all queries like balances etc onSuccess
-  return useMutation(({ llamaContractAddress, amountToDeposit }: IUseDepositToken) =>
-    deposit({ signer, llamaContractAddress, amountToDeposit })
+  return useMutation(
+    ({ llamaContractAddress, amountToDeposit }: IUseDepositToken) =>
+      deposit({ signer, llamaContractAddress, amountToDeposit }),
+    {
+      onError: (e) => {
+        // console.log(e);
+      },
+      onSuccess: (e) => {
+        // console.log(e);
+      },
+      onSettled: () => {
+        // queryClient.invalidateQueries();
+      },
+    }
   );
 }

@@ -16,7 +16,7 @@ export const InputAmountWithDuration = ({
       <div className="relative flex">
         <input
           className={classNames(
-            'w-full rounded border border-neutral-300 px-3 py-[11px] slashed-zero dark:border-neutral-700 dark:bg-stone-800',
+            'w-full rounded border border-neutral-300 px-3 pl-[11px] pr-[28%] slashed-zero dark:border-neutral-700 dark:bg-stone-800',
             className
           )}
           name={name}

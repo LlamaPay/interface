@@ -72,13 +72,23 @@ export const Modify = ({ data, dialog, title, savedAddressName }: ModifyProps) =
           <div className="my-1 rounded border p-2 dark:border-stone-700">
             {editName ? (
               <form className="flex items-center justify-between" onSubmit={updateName}>
-                <input value={payeeAddress} onChange={handleAddressChange} required className="w-full rounded p-1" />
+                <input
+                  value={payeeAddress}
+                  onChange={handleAddressChange}
+                  autoFocus
+                  required
+                  className="w-full rounded p-1"
+                />
                 <button className="ml-2 rounded bg-zinc-300 py-1 px-[6px] dark:bg-stone-600">Save</button>
               </form>
             ) : (
               <p className="flex items-center justify-between">
                 <span className="truncate py-1">{payeeAddress}</span>
-                <button className="rounded bg-zinc-300 p-1 dark:bg-stone-600" onClick={() => setEditName(true)}>
+                <button
+                  className="rounded bg-zinc-300 p-1 dark:bg-stone-600"
+                  autoFocus
+                  onClick={() => setEditName(true)}
+                >
                   <span className="sr-only">Edit payee address name</span>
                   <PencilIcon className="h-4 w-4" />
                 </button>
