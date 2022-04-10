@@ -17,7 +17,6 @@ function amountStreamed(createdTime: string, streamCreatedTime: string | undefin
 export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
   const [{ data: networkData }] = useNetwork();
   const txLink = `${networkDetails[Number(networkData.chain?.id)].blockExplorer}/tx/${data.txHash}`;
-  console.log(txLink);
   return (
     <>
       <FormDialog dialog={dialog} title="More Info" className="h-min">
