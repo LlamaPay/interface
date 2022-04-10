@@ -80,13 +80,7 @@ export const ListItem = ({ data }: ItemProps) => {
             ticker={data.token.name}
           />
           <Withdrawable data={data} />
-          <Push
-            buttonName="Withdraw"
-            contract={data.llamaContractAddress}
-            payer={data.payerAddress}
-            payee={data.payeeAddress}
-            amtPerSec={data.amountPerSec}
-          />
+          <Push buttonName="Withdraw" data={data} />
         </>
       ) : (
         <>
@@ -97,13 +91,7 @@ export const ListItem = ({ data }: ItemProps) => {
             ticker={data.token.name}
           />
           <Withdrawable data={data} />
-          <Push
-            buttonName="Send"
-            contract={data.llamaContractAddress}
-            payer={data.payerAddress}
-            payee={data.payeeAddress}
-            amtPerSec={data.amountPerSec}
-          />
+          <Push buttonName="Send" data={data} />
           <button className="rounded bg-zinc-100 py-1 px-2 dark:bg-zinc-800" onClick={modifyDialog.toggle}>
             Modify
           </button>
