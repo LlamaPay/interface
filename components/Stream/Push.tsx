@@ -23,13 +23,14 @@ export const Push = ({ data, buttonName }: PushProps) => {
 
   const handleClick = () => {
     withdraw().then((data) => {
-      data.error
-        ? toast(data.error?.message)
-        : toast(buttonName === 'Withdraw' ? 'Withdrawing Payment' : 'Sending Payment');
+      const loadingToast = data.error
+        ? toast.error(data.error?.message)
+        : toast.loading(buttonName === 'Withdraw' ? 'Withdrawing Payment' : 'Sending Payment');
       data.data?.wait().then((receipt) => {
+        toast.dismiss(loadingToast);
         receipt.status === 1
-          ? toast(buttonName === 'Withdraw' ? 'Successfully Withdrawn Payment' : 'Successfully Sent Payment')
-          : toast(buttonName === 'Withdraw' ? 'Successfully Withdrawn Payment' : 'Failed to Send Payment');
+          ? toast.success(buttonName === 'Withdraw' ? 'Successfully Withdrawn Payment' : 'Successfully Sent Payment')
+          : toast.error(buttonName === 'Withdraw' ? 'Failed to Withdraw Payment' : 'Failed to Send Payment');
       });
     });
   };

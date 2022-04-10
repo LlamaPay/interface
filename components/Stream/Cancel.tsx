@@ -22,9 +22,10 @@ export const Cancel = ({ data }: CancelProps) => {
 
   const handleClick = () => {
     cancel().then((data) => {
-      data.error ? toast(data.error.message) : toast('Cancelling Stream');
+      const loadingToast = data.error ? toast.error(data.error.message) : toast.loading('Cancelling Stream');
       data.data?.wait().then((receipt) => {
-        receipt.status === 1 ? toast('Stream Cancelled') : toast('Failed to Cancel Stream');
+        toast.dismiss(loadingToast);
+        receipt.status === 1 ? toast.success('Stream Cancelled') : toast.error('Failed to Cancel Stream');
       });
     });
   };
