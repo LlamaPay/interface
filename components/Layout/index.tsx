@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import Footer from './Footer';
 import { useAccount } from 'wagmi';
 import { useNetworkProvider } from 'hooks';
+import { Toaster } from 'react-hot-toast';
 
 interface ILayoutProps {
   children: React.ReactNode;
@@ -25,6 +26,7 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
           content="LlamaPay is a multi-chain protocol that allows you to automate transactions and stream them by the second. The recipients can withdraw these funds at any time. This eliminates the need for manual transactions."
         />
       </Head>
+      <Toaster />
       <Header />
       <main className={classNames('flex-1 p-2', className)} {...props}>
         {!accountData ? (

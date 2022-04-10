@@ -1,5 +1,6 @@
 import llamaContract from 'abis/llamaContract';
 import * as React from 'react';
+import toast from 'react-hot-toast';
 import { IStream } from 'types';
 import { useContractWrite } from 'wagmi';
 
@@ -8,7 +9,7 @@ interface CancelProps {
 }
 
 export const Cancel = ({ data }: CancelProps) => {
-  const [{ data: withdrawData, error, loading }, cancel] = useContractWrite(
+  const [{}, cancel] = useContractWrite(
     {
       addressOrName: data.llamaContractAddress,
       contractInterface: llamaContract,
@@ -20,7 +21,12 @@ export const Cancel = ({ data }: CancelProps) => {
   );
 
   const handleClick = () => {
-    cancel();
+    cancel().then((data) => {
+      data.error ? toast('Error!') : toast('Cancelling');
+      data.data?.wait().then((receipt) => {
+        receipt.status === 1 ? toast('Cancelled') : toast('Failed to Cancel');
+      });
+    });
   };
 
   return (

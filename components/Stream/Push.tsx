@@ -1,5 +1,6 @@
 import llamaContract from 'abis/llamaContract';
 import * as React from 'react';
+import toast from 'react-hot-toast';
 import { IStream } from 'types';
 import { useContractWrite } from 'wagmi';
 
@@ -9,7 +10,7 @@ interface PushProps {
 }
 
 export const Push = ({ data, buttonName }: PushProps) => {
-  const [{ data: withdrawData, error, loading }, withdraw] = useContractWrite(
+  const [{}, withdraw] = useContractWrite(
     {
       addressOrName: data.llamaContractAddress,
       contractInterface: llamaContract,
@@ -21,7 +22,12 @@ export const Push = ({ data, buttonName }: PushProps) => {
   );
 
   const handleClick = () => {
-    withdraw();
+    withdraw().then((data) => {
+      data.error ? toast('Error!') : toast('Sending Tokens');
+      data.data?.wait().then((receipt) => {
+        receipt.status === 1 ? toast('Successfully Sent Tokens') : toast('Failed to Withdraw');
+      });
+    });
   };
 
   return (
