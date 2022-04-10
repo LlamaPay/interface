@@ -1,4 +1,5 @@
 import { Signer } from 'ethers';
+import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from 'react-query';
 import { createWriteContract } from 'utils/contract';
 import { useSigner } from 'wagmi';
@@ -20,15 +21,13 @@ const withdrawPayer = async ({ signer, llamaContractAddress, amountToWithdraw, w
     } else {
       const contract = createWriteContract(llamaContractAddress, signer);
       if (withdrawAll) {
-        const res = await contract.withdrawPayerAll();
-        return await res.wait();
+        return await contract.withdrawPayerAll();
       } else {
-        const res = await contract.withdrawPayer(amountToWithdraw);
-        return await res.wait();
+        return await contract.withdrawPayer(amountToWithdraw);
       }
     }
   } catch (error: any) {
-    throw new Error(error?.reason ?? "Couldn't withdraw token");
+    throw new Error(error.message || (error?.reason ?? "Couldn't withdraw token"));
   }
 };
 
@@ -40,7 +39,22 @@ export default function useWithdrawByPayer() {
   return useMutation(
     ({ llamaContractAddress, amountToWithdraw, withdrawAll }: IUseWithdrawPayerToken) =>
       withdrawPayer({ signer, llamaContractAddress, amountToWithdraw, withdrawAll }),
+
     {
+      onSuccess: (data) => {
+        const toastId = toast.loading('Confirming');
+        data.wait().then((res: any) => {
+          toast.dismiss(toastId);
+          if (res.status === 1) {
+            toast.success('Transaction Success');
+          } else {
+            toast.error('Transaction failed');
+          }
+        });
+      },
+      onError: (error: any) => {
+        toast.error(error.message);
+      },
       onSettled: () => {
         queryClient.invalidateQueries();
       },

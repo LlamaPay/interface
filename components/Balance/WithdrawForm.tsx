@@ -20,11 +20,18 @@ const WithdrawForm = ({ data, dialog }: { data: IFormData; dialog: DisclosureSta
     if (amount) {
       const formattedAmt = new BigNumber(amount).multipliedBy(1e20);
       withdrawAll.current = false;
-      mutate({
-        amountToWithdraw: formattedAmt.toFixed(0),
-        llamaContractAddress: data.llamaContractAddress,
-        withdrawAll: false,
-      });
+      mutate(
+        {
+          amountToWithdraw: formattedAmt.toFixed(0),
+          llamaContractAddress: data.llamaContractAddress,
+          withdrawAll: false,
+        },
+        {
+          onSettled: () => {
+            dialog.toggle();
+          },
+        }
+      );
     }
   };
 

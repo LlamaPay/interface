@@ -73,10 +73,10 @@ const Balance = () => {
         <table className="dark:border-stone-700-collapse border">
           <thead>
             <tr className="border dark:border-stone-700">
-              <th className="border font-normal dark:border-stone-700">Token</th>
-              <th className="border font-normal dark:border-stone-700">Amount</th>
-              <th className="border font-normal dark:border-stone-700">To Depleted</th>
-              <th className="border font-normal dark:border-stone-700">Monthly Cost</th>
+              <th className="whitespace-nowrap border px-1 font-normal dark:border-stone-700">Token</th>
+              <th className="whitespace-nowrap border px-1 font-normal dark:border-stone-700">Amount</th>
+              <th className="whitespace-nowrap border px-1 font-normal dark:border-stone-700">To Depleted</th>
+              <th className="whitespace-nowrap border px-1 font-normal dark:border-stone-700">Monthly Cost</th>
               <th></th>
             </tr>
           </thead>

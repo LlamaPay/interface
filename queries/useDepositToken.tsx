@@ -1,4 +1,5 @@
 import { Signer } from 'ethers';
+import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from 'react-query';
 import { createWriteContract } from 'utils/contract';
 import { useSigner } from 'wagmi';
@@ -18,8 +19,7 @@ const deposit = async ({ signer, llamaContractAddress, amountToDeposit }: IDepos
       throw new Error("Couldn't get signer");
     } else {
       const contract = createWriteContract(llamaContractAddress, signer);
-      const res = await contract.deposit(amountToDeposit);
-      return await res.wait();
+      return await contract.deposit(amountToDeposit);
     }
   } catch (error: any) {
     throw new Error(error.message || (error?.reason ?? "Couldn't deposit token"));
@@ -35,11 +35,19 @@ export default function useDepositToken() {
     ({ llamaContractAddress, amountToDeposit }: IUseDepositToken) =>
       deposit({ signer, llamaContractAddress, amountToDeposit }),
     {
-      onError: (e) => {
-        // console.log(e);
+      onError: (error: any) => {
+        toast.error(error.message);
       },
-      onSuccess: (e) => {
-        // console.log(e);
+      onSuccess: (data) => {
+        const toastId = toast.loading('Confirming deposit');
+        data.wait().then((res: any) => {
+          toast.dismiss(toastId);
+          if (res.status === 1) {
+            toast.success('Deposited Successfully');
+          } else {
+            toast.error('Deposit failed');
+          }
+        });
       },
       onSettled: () => {
         queryClient.invalidateQueries();
