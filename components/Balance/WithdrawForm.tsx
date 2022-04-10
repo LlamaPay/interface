@@ -4,8 +4,9 @@ import useWithdrawByPayer from 'queries/useWithdrawTokenByPayer';
 import { IFormData, IFormElements } from './types';
 import { InputAmount, SubmitButton } from 'components/Form';
 import { BeatLoader } from 'react-spinners';
+import { DisclosureState } from 'ariakit';
 
-const WithdrawForm = ({ data }: { data: IFormData }) => {
+const WithdrawForm = ({ data, dialog }: { data: IFormData; dialog: DisclosureState }) => {
   const { mutate, isLoading } = useWithdrawByPayer();
 
   const withdrawAll = React.useRef(false);
@@ -29,10 +30,17 @@ const WithdrawForm = ({ data }: { data: IFormData }) => {
 
   const withdrawAllTokens = () => {
     withdrawAll.current = true;
-    mutate({
-      llamaContractAddress: data.llamaContractAddress,
-      withdrawAll: true,
-    });
+    mutate(
+      {
+        llamaContractAddress: data.llamaContractAddress,
+        withdrawAll: true,
+      },
+      {
+        onSettled: () => {
+          dialog.toggle();
+        },
+      }
+    );
   };
 
   return (

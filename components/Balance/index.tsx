@@ -127,15 +127,15 @@ const Balance = () => {
             {formData.current && (
               <>
                 {formData.current.actionType === 'deposit' ? (
-                  <DepositForm data={formData.current} />
+                  <DepositForm data={formData.current} dialog={dialog} />
                 ) : (
-                  <WithdrawForm data={formData.current} />
+                  <WithdrawForm data={formData.current} dialog={dialog} />
                 )}
               </>
             )}
           </>
         ) : (
-          <>{tokens && <DepositField tokens={tokens} />}</>
+          <>{tokens && <DepositField tokens={tokens} dialog={dialog} />}</>
         )}
       </FormDialog>
     </section>

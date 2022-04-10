@@ -7,8 +7,9 @@ import { IFormData, IFormElements } from './types';
 import { checkApproval } from 'components/Form/utils';
 import { InputAmount, SubmitButton } from 'components/Form';
 import { BeatLoader } from 'react-spinners';
+import { DisclosureState } from 'ariakit';
 
-const DepositForm = ({ data }: { data: IFormData }) => {
+const DepositForm = ({ data, dialog }: { data: IFormData; dialog: DisclosureState }) => {
   const { mutate, isLoading } = useDepositToken();
 
   const [{ data: accountData }] = useAccount();
@@ -44,10 +45,17 @@ const DepositForm = ({ data }: { data: IFormData }) => {
       const formattedAmt = new BigNumber(amount).multipliedBy(10 ** data.tokenDecimals);
 
       if (isApproved) {
-        mutate({
-          amountToDeposit: formattedAmt.toFixed(0),
-          llamaContractAddress: data.llamaContractAddress,
-        });
+        mutate(
+          {
+            amountToDeposit: formattedAmt.toFixed(0),
+            llamaContractAddress: data.llamaContractAddress,
+          },
+          {
+            onSettled: () => {
+              dialog.toggle();
+            },
+          }
+        );
       } else {
         approveToken(
           {

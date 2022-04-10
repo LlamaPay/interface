@@ -7,8 +7,9 @@ import { IToken } from 'types';
 import { checkApproval } from 'components/Form/utils';
 import { useAccount } from 'wagmi';
 import { BeatLoader } from 'react-spinners';
+import { DisclosureState } from 'ariakit';
 
-const DepositField = ({ tokens }: { tokens: IToken[] }) => {
+const DepositField = ({ tokens, dialog }: { tokens: IToken[]; dialog: DisclosureState }) => {
   const { mutate: deposit, isLoading } = useDepositToken();
   const [{ data: accountData }] = useAccount();
 
@@ -36,10 +37,17 @@ const DepositField = ({ tokens }: { tokens: IToken[] }) => {
 
       // call deposit method only if token is approved to spend
       if (isApproved && tokenDetails.llamaContractAddress) {
-        deposit({
-          amountToDeposit: bigAmount.toFixed(0),
-          llamaContractAddress: tokenDetails.llamaContractAddress,
-        });
+        deposit(
+          {
+            amountToDeposit: bigAmount.toFixed(0),
+            llamaContractAddress: tokenDetails.llamaContractAddress,
+          },
+          {
+            onSettled: () => {
+              dialog.toggle();
+            },
+          }
+        );
       } else {
         approveToken(
           {
