@@ -16,6 +16,7 @@ interface ItemProps {
 }
 
 interface StreamProps {
+  data: IStream;
   totalStreamed: string | null;
   address: string;
   ticker?: string;
@@ -72,7 +73,12 @@ export const ListItem = ({ data }: ItemProps) => {
     <li key={data.streamId} className="flex flex-col space-y-2 space-x-1 sm:flex-row  sm:items-center sm:space-y-0">
       {isIncoming ? (
         <>
-          <IncomingStream totalStreamed={totalStreamed} address={data.payerAddress} ticker={data.token.name} />
+          <IncomingStream
+            data={data}
+            totalStreamed={totalStreamed}
+            address={data.payerAddress}
+            ticker={data.token.name}
+          />
           <Withdrawable data={data} />
           <Push
             buttonName="Withdraw"
@@ -84,7 +90,12 @@ export const ListItem = ({ data }: ItemProps) => {
         </>
       ) : (
         <>
-          <OutgoingStream totalStreamed={totalStreamed} address={savedAddressName} ticker={data.token.name} />
+          <OutgoingStream
+            data={data}
+            totalStreamed={totalStreamed}
+            address={savedAddressName}
+            ticker={data.token.name}
+          />
           <Withdrawable data={data} />
           <Push
             buttonName="Send"
@@ -104,7 +115,7 @@ export const ListItem = ({ data }: ItemProps) => {
   );
 };
 
-const IncomingStream = ({ totalStreamed, address, ticker = 'Unknown token' }: StreamProps) => {
+const IncomingStream = ({ data, totalStreamed, address, ticker = 'Unknown token' }: StreamProps) => {
   return (
     <>
       <div className="mr-2 flex flex-1 items-center space-x-2">
@@ -125,6 +136,8 @@ const IncomingStream = ({ totalStreamed, address, ticker = 'Unknown token' }: St
           {/* TODO handle internalization and decimals when totalStreamed is not USD */}
           <span>{`+${totalStreamed}`}</span>
           <span className="text-xs text-gray-500 dark:text-gray-400">so far</span>
+          <span>{`+${((Number(data.amountPerSec) * 2592000) / 1e20).toFixed(5)}`}</span>
+          <span className="text-xs text-gray-500 dark:text-gray-400">per month</span>
           <span>
             <svg
               stroke="currentColor"
@@ -144,7 +157,7 @@ const IncomingStream = ({ totalStreamed, address, ticker = 'Unknown token' }: St
   );
 };
 
-const OutgoingStream = ({ totalStreamed, address, ticker = 'Unknown token' }: StreamProps) => {
+const OutgoingStream = ({ data, totalStreamed, address, ticker = 'Unknown token' }: StreamProps) => {
   return (
     <>
       <div className="mr-2 flex flex-1 items-center space-x-2 truncate">
@@ -164,6 +177,8 @@ const OutgoingStream = ({ totalStreamed, address, ticker = 'Unknown token' }: St
           {/* TODO handle internalization and decimals when totalStreamed is not USD */}
           <span>{`-${totalStreamed}`}</span>
           <span className="items-baseline text-xs text-gray-500 dark:text-gray-400">so far</span>
+          <span>{`-${((Number(data.amountPerSec) * 2592000) / 1e20).toFixed(5)}`}</span>
+          <span className="text-xs text-gray-500 dark:text-gray-400">per month</span>
           <span>
             <svg
               stroke="currentColor"
