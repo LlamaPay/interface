@@ -74,16 +74,24 @@ export const ListItem = ({ data }: ItemProps) => {
         <>
           <IncomingStream totalStreamed={totalStreamed} address={data.payerAddress} ticker={data.token.name} />
           <Withdrawable data={data} />
+          <Push
+            buttonName="Withdraw"
+            contract={data.llamaContractAddress}
+            payer={data.payerAddress}
+            payee={data.payeeAddress}
+            amtPerSec={data.amountPerSec}
+          />
         </>
       ) : (
         <>
           <OutgoingStream totalStreamed={totalStreamed} address={savedAddressName} ticker={data.token.name} />
           <Withdrawable data={data} />
           <Push
+            buttonName="Send"
             contract={data.llamaContractAddress}
             payer={data.payerAddress}
             payee={data.payeeAddress}
-            amtPerSec={Number(data.amountPerSec)}
+            amtPerSec={data.amountPerSec}
           />
           <button className="rounded bg-zinc-100 py-1 px-2 dark:bg-zinc-800" onClick={modifyDialog.toggle}>
             Modify

@@ -3,13 +3,14 @@ import * as React from 'react';
 import { useContract, useSigner } from 'wagmi';
 
 interface PushProps {
+  buttonName: string;
   contract: string;
   payer: string;
   payee: string;
-  amtPerSec: number;
+  amtPerSec: string;
 }
 
-export const Push = ({ contract, payer, payee, amtPerSec }: PushProps) => {
+export const Push = ({ buttonName, contract, payer, payee, amtPerSec }: PushProps) => {
   const [{ data: signerData }] = useSigner();
   const call = useContract({
     addressOrName: contract,
@@ -21,7 +22,7 @@ export const Push = ({ contract, payer, payee, amtPerSec }: PushProps) => {
     async function doPush() {
       try {
         await call.withdraw(payer, payee, amtPerSec);
-      } catch {}
+      } catch (error) {}
     }
     doPush();
   }, [call, amtPerSec, payee, payer]);
@@ -29,7 +30,7 @@ export const Push = ({ contract, payer, payee, amtPerSec }: PushProps) => {
   return (
     <>
       <button onClick={onPush} className="rounded bg-zinc-100 py-1 px-2 dark:bg-zinc-800">
-        Send
+        {buttonName}
       </button>
     </>
   );
