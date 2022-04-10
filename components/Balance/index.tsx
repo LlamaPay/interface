@@ -96,7 +96,7 @@ const Balance = () => {
                 <BalanceAndSymbol data={b} />
                 <UntilDepleted data={b} />
                 <td className="whitespace-nowrap border p-1 text-right slashed-zero tabular-nums dark:border-stone-700">
-                  {((Number(b.totalPaidPerSec) * 2592000) / 10 ** (20 - Number(b.tokenDecimals))).toFixed(5)} {b.symbol}
+                  {((Number(b.totalPaidPerSec) * 2592000) / 1e20).toFixed(5)} {b.symbol}
                 </td>
                 <td className="space-x-2 border p-1 dark:border-stone-700">
                   <span className="flex space-x-2">

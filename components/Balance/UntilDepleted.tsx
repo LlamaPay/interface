@@ -6,7 +6,7 @@ interface UntilDepletedProps {
 }
 
 function getTime(data: IBalance, balance: number) {
-  const time = balance / (Number(data.totalPaidPerSec) / 10 ** (20 - Number(data.tokenDecimals)));
+  const time = balance / (Number(data.totalPaidPerSec) / 1e20);
   if (Number(data.totalPaidPerSec) === 0) return 'No Streams';
   if (time < 1) return 'Streams Depleted';
   const days = Math.floor(time / 86400);
@@ -20,7 +20,7 @@ export const UntilDepleted = ({ data }: UntilDepletedProps) => {
   const [balanceState, setBalanceState] = React.useState<number>(Number(data.amount));
 
   const updateBalance = React.useCallback(() => {
-    const sub = Number(data.totalPaidPerSec) / 10 ** (20 - Number(data.tokenDecimals));
+    const sub = Number(data.totalPaidPerSec) / 1e20;
     setBalanceState((prevState) => prevState - sub);
   }, [data]);
 

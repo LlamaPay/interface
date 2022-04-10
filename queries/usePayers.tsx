@@ -13,10 +13,7 @@ const fetchPayers = async (userAddress: string, tokens: IToken[] | null, provide
     const res = await Promise.allSettled(tokens.map((c) => c.llamaTokenContract.payers(userAddress)));
 
     const data: IPayer[] = res.map((d, index) => {
-      const amount =
-        (d.status === 'fulfilled' &&
-          new BigNumber(d.value?.totalPaidPerSec?.toString())?.dividedBy(10 ** tokens[index].decimals)) ??
-        null;
+      const amount = (d.status === 'fulfilled' && new BigNumber(d.value?.totalPaidPerSec?.toString())) ?? null;
 
       const lastPayerUpdate = d.status === 'fulfilled' ? d.value?.lastPayerUpdate ?? null : null;
 
