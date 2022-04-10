@@ -11,7 +11,7 @@ interface ItemProps {
 }
 
 function formatAmtPerSec(amtPerSec: number) {
-  const formatted = amtPerSec.toLocaleString('en-US', { maximumFractionDigits: 5 });
+  const formatted = (amtPerSec * 2592000).toLocaleString('en-US', { maximumFractionDigits: 5 });
   if (formatted === '0') {
     return '0...';
   }
@@ -73,7 +73,10 @@ export const ListItem = ({ data }: ItemProps) => {
                   <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
                     {account === oldPayer ? formatAddress(oldPayee) : 'You'}
                   </span>
-                  <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(oldAmtPerSec)}/sec</span>
+                  <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
+                    {' '}
+                    {formatAmtPerSec(oldAmtPerSec)}/month
+                  </span>
                   <ChevronDoubleRightIcon className="h-4 w-4" />
                   <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
                     {account === payee ? formatAddress(payer) : 'You'}
@@ -82,7 +85,7 @@ export const ListItem = ({ data }: ItemProps) => {
                   <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
                     {account === payer ? formatAddress(payee) : 'You'}
                   </span>
-                  <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(amtPerSec)}/sec</span>
+                  <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(amtPerSec)}/month</span>
                 </>
               ) : (
                 ''
@@ -97,7 +100,7 @@ export const ListItem = ({ data }: ItemProps) => {
               <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]">
                 {account === payer ? formatAddress(payee) : 'You'}
               </span>
-              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(amtPerSec)}/sec</span>
+              <span className="truncate sm:max-w-[32ch] md:max-w-[48ch]"> {formatAmtPerSec(amtPerSec)}/month</span>
             </>
           )}
         </div>
