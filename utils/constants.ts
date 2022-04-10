@@ -16,6 +16,7 @@ interface INetworkDetails {
     subgraphEndpoint: string;
     chainProviders: ethers.providers.BaseProvider;
     llamapayFactoryAddress: string;
+    blockExplorer: string;
   };
 }
 
@@ -38,6 +39,7 @@ export const networkDetails: INetworkDetails = {
       infura: infuraId,
     }),
     llamapayFactoryAddress: FACTORY_RINKEBY,
+    blockExplorer: 'https://rinkeby.etherscan.io/',
   },
   42: {
     rpcUrl: `https://rinkeby.infura.io/v3/${infuraId}`,
@@ -49,6 +51,7 @@ export const networkDetails: INetworkDetails = {
       infura: infuraId,
     }),
     llamapayFactoryAddress: FACTORY_KOVAN,
+    blockExplorer: 'https://kovan.etherscan.io/',
   },
   43113: {
     rpcUrl: 'https://api.avax-test.network/ext/bc/C/rpc',
@@ -56,6 +59,7 @@ export const networkDetails: INetworkDetails = {
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-fuji',
     chainProviders: new ethers.providers.JsonRpcProvider(`https://api.avax-test.network/ext/bc/C/rpc`),
     llamapayFactoryAddress: FACTORY_FUJI,
+    blockExplorer: 'https://testnet.snowtrace.io/',
   },
 };
 

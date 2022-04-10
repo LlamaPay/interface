@@ -1,6 +1,8 @@
 import { DisclosureState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
 import { UserHistoryFragment } from 'services/generated/graphql';
+import { useNetwork } from 'wagmi';
+import { networkDetails } from 'utils/constants';
 
 interface MoreInfoProps {
   data: UserHistoryFragment;
@@ -13,6 +15,9 @@ function amountStreamed(createdTime: string, streamCreatedTime: string | undefin
 }
 
 export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
+  const [{ data: networkData }] = useNetwork();
+  const txLink = `${networkDetails[Number(networkData.chain?.id)].blockExplorer}/tx/${data.txHash}`;
+  console.log(txLink);
   return (
     <>
       <FormDialog dialog={dialog} title="More Info" className="h-min">
@@ -87,6 +92,11 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
           <section>
             <h1>Event Timestamp</h1>
             <p>{new Date(Number(data.createdTimestamp) * 1e3).toLocaleString('en-CA')}</p>
+          </section>
+          <section>
+            <a href={txLink} target="_blank" rel="noreferrer noopener">
+              View on Block Explorer
+            </a>
           </section>
         </span>
       </FormDialog>
