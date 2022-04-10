@@ -20,7 +20,7 @@ export const UntilDepleted = ({ data }: UntilDepletedProps) => {
   const [balanceState, setBalanceState] = React.useState<number | null>(null);
 
   const updateBalance = React.useCallback(() => {
-    const sub = Number(data.totalPaidPerSec) / 1e20;
+    const sub = ((Date.now() / 1e3 - Number(data.lastPayerUpdate)) * Number(data.totalPaidPerSec)) / 1e20;
     setBalanceState(Number(data.amount) - sub);
   }, [data]);
 
