@@ -49,13 +49,20 @@ const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
         // query mutation
 
         if (isApproved) {
-          streamToken({
-            method: 'DEPOSIT_AND_CREATE',
-            amountPerSec: amtPerSec.toFixed(0),
-            amountToDeposit: amtToDeposit.toFixed(0),
-            payeeAddress: payeeAddress,
-            llamaContractAddress: tokenDetails?.llamaContractAddress,
-          });
+          streamToken(
+            {
+              method: 'DEPOSIT_AND_CREATE',
+              amountPerSec: amtPerSec.toFixed(0),
+              amountToDeposit: amtToDeposit.toFixed(0),
+              payeeAddress: payeeAddress,
+              llamaContractAddress: tokenDetails?.llamaContractAddress,
+            },
+            {
+              onSuccess: () => {
+                dialog.toggle();
+              },
+            }
+          );
         } else {
           approveToken(
             {
