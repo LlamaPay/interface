@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import Footer from './Footer';
 import { useAccount } from 'wagmi';
 import { useNetworkProvider } from 'hooks';
-import { CustomToast } from './customToast';
+import { CustomToast } from './CustomToast';
 
 interface ILayoutProps {
   children: React.ReactNode;

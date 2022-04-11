@@ -4,10 +4,10 @@ import { useNetwork } from 'wagmi';
 export const useChainExplorer = () => {
   const [{ data: network }] = useNetwork();
 
-  const chainExplorer: string | null = React.useMemo(() => {
+  const { name, url } = React.useMemo(() => {
     const explorers = network?.chain?.blockExplorers;
-    return explorers ? explorers[0]?.url ?? null : null;
+    return { name: explorers ? explorers[0]?.name ?? null : null, url: explorers ? explorers[0]?.url ?? null : null };
   }, [network]);
 
-  return chainExplorer;
+  return { name, url };
 };

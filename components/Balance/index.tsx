@@ -18,7 +18,7 @@ const Balance = () => {
   const { balances, noBalances, isLoading, isError } = useBalances();
 
   // function that returns chain explorer url based on the chain user is connected to
-  const chainExplorer = useChainExplorer();
+  const { url: chainExplorer } = useChainExplorer();
   const dialog = useDialogState();
   const [dialogType, setDialogType] = React.useState<'token' | 'deposit' | null>(null);
 

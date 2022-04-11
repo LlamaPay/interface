@@ -1,4 +1,5 @@
 import { Signer } from 'ethers';
+import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from 'react-query';
 import { createWriteContract } from 'utils/contract';
 import { useSigner } from 'wagmi';
@@ -19,6 +20,11 @@ interface QueryError {
   message: string;
 }
 
+interface QueryResponse {
+  hash: string;
+  wait: Awaited<Promise<() => any>>;
+}
+
 const streamToken = async ({
   llamaContractAddress,
   payeeAddress,
@@ -33,16 +39,15 @@ const streamToken = async ({
     } else {
       const contract = createWriteContract(llamaContractAddress, signer);
       if (method === 'DEPOSIT_AND_CREATE' && amountToDeposit) {
-        const res = await contract.depositAndCreate(amountToDeposit, payeeAddress, amountPerSec);
-        return await res.wait();
+        return await contract.depositAndCreate(amountToDeposit, payeeAddress, amountPerSec);
       } else if (method === 'CREATE_STREAM') {
-        const res = await contract.createStream(payeeAddress, amountPerSec);
-        return await res.wait();
+        return await contract.createStream(payeeAddress, amountPerSec);
       } else {
         throw new Error("Invalid method called, Couldn't stream token");
       }
     }
   } catch (error: any) {
+    // console.log(error);
     throw new Error(error.message || (error?.reason ?? "Couldn't stream token"));
   }
 };
@@ -51,15 +56,23 @@ export default function useStreamToken() {
   const [{ data: signer }] = useSigner();
   const queryClient = useQueryClient();
 
-  return useMutation<void, QueryError, IUseStreamToken>(
+  return useMutation<QueryResponse, QueryError, IUseStreamToken>(
     ({ llamaContractAddress, payeeAddress, amountToDeposit, amountPerSec, method }: IUseStreamToken) =>
       streamToken({ llamaContractAddress, payeeAddress, amountToDeposit, amountPerSec, method, signer }),
     {
-      onSuccess: (e) => {
-        // console.log(e);
+      onSuccess: (data) => {
+        const toastId = toast.loading('Confirming transaction');
+        data.wait().then((res: any) => {
+          toast.dismiss(toastId);
+          if (res.status === 1) {
+            toast.success('Stream created successfully');
+          } else {
+            toast.error('Failed to create stream');
+          }
+        });
       },
-      onError: (e) => {
-        // console.log(e.message);
+      onError: (error: any) => {
+        toast.error(error.message);
       },
       onSettled: () => {
         queryClient.invalidateQueries();

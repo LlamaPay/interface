@@ -84,3 +84,4 @@ export const DialogHeader = ({ title, setIsOpen }: DialogHeaderProps) => {
 };
 
 export { FormDialog } from './FormDialog';
+export { TransactionDialog } from './TransactionDialog';

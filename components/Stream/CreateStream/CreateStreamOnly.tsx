@@ -5,9 +5,11 @@ import useStreamToken from 'queries/useStreamToken';
 import { IStreamFormProps, IFormElements } from './types';
 import { secondsByDuration } from 'utils/constants';
 import { BeatLoader } from 'react-spinners';
+import { TransactionDialog } from 'components/Dialog';
+import { useDialogState } from 'ariakit';
 
 const CreateStreamOnly = ({ tokens }: IStreamFormProps) => {
-  const { mutate: streamToken, isLoading, error: errorStreamingToken } = useStreamToken();
+  const { mutate: streamToken, isLoading, data: transaction } = useStreamToken();
 
   // store address of the token to stream as ariakit/select is a controlled component
   const [tokenAddress, setTokenAddress] = React.useState(tokens[0]?.tokenAddress ?? '');
@@ -42,41 +44,53 @@ const CreateStreamOnly = ({ tokens }: IStreamFormProps) => {
         const amtPerSec = new BigNumber(amountToStream).times(1e20).div(secondsByDuration[duration]);
 
         // query mutation
-        streamToken({
-          method: 'CREATE_STREAM',
-          amountPerSec: amtPerSec.toFixed(0),
-          payeeAddress: payeeAddress,
-          llamaContractAddress: tokenDetails?.llamaContractAddress,
-        });
+        streamToken(
+          {
+            method: 'CREATE_STREAM',
+            amountPerSec: amtPerSec.toFixed(0),
+            payeeAddress: payeeAddress,
+            llamaContractAddress: tokenDetails?.llamaContractAddress,
+          },
+          {
+            onSuccess: () => {
+              dialog.toggle();
+            },
+          }
+        );
       }
     }
   };
 
   const tokenOptions = tokens.map((t) => t.name);
 
+  const dialog = useDialogState();
+
   return (
-    <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
-      <InputText name="addressToStream" isRequired={true} label="Address to stream" />
-      <span>
-        <SelectToken
-          handleTokenChange={handleTokenChange}
-          tokens={tokenOptions}
-          className="border border-neutral-300 bg-transparent py-[3px] shadow-none dark:border-neutral-700 dark:bg-stone-800"
-          label="Token"
+    <>
+      <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
+        <InputText name="addressToStream" isRequired={true} label="Address to stream" />
+        <span>
+          <SelectToken
+            handleTokenChange={handleTokenChange}
+            tokens={tokenOptions}
+            className="border border-neutral-300 bg-transparent py-[3px] shadow-none dark:border-neutral-700 dark:bg-stone-800"
+            label="Token"
+          />
+        </span>
+
+        <InputAmountWithDuration
+          name="amountToStream"
+          isRequired={true}
+          label="Amount to stream"
+          selectInputName="streamDuration"
         />
-      </span>
 
-      <InputAmountWithDuration
-        name="amountToStream"
-        isRequired={true}
-        label="Amount to stream"
-        selectInputName="streamDuration"
-      />
-
-      <SubmitButton disabled={isLoading} className="mt-8">
-        {isLoading ? <BeatLoader size={6} color="gray" /> : 'Create Stream'}
-      </SubmitButton>
-    </form>
+        <SubmitButton disabled={isLoading} className="mt-8">
+          {isLoading ? <BeatLoader size={6} color="gray" /> : 'Create Stream'}
+        </SubmitButton>
+      </form>
+      <TransactionDialog dialog={dialog} transactionHash={transaction?.hash ?? ''} />
+    </>
   );
 };
 

@@ -8,19 +8,20 @@ import { secondsByDuration } from 'utils/constants';
 import { checkApproval } from 'components/Form/utils';
 import { useAccount } from 'wagmi';
 import { BeatLoader } from 'react-spinners';
+import { TransactionDialog } from 'components/Dialog';
+import { useDialogState } from 'ariakit';
 
 const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
-  const { mutate: streamToken, isLoading, error: errorStreamingToken } = useStreamToken();
+  const { mutate: streamToken, isLoading, data: transaction } = useStreamToken();
   const [{ data: accountData }] = useAccount();
 
   // store address of the token to stream as ariakit/select is a controlled component
   const [tokenAddress, setTokenAddress] = React.useState(tokens[0]?.tokenAddress ?? '');
 
   // Token approval hooks
-  // TODO handle loading and error states, also check if transaction is succesfull on chain, until then disable button and show loading state
-  const { mutate: checkTokenApproval, data: isApproved, isLoading: checkingApproval, error } = useCheckTokenApproval();
+  const { mutate: checkTokenApproval, data: isApproved, isLoading: checkingApproval } = useCheckTokenApproval();
 
-  const { mutate: approveToken, isLoading: approvingToken, error: approvalError } = useApproveToken();
+  const { mutate: approveToken, isLoading: approvingToken } = useApproveToken();
 
   // create stream on submit
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -78,38 +79,43 @@ const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
     }
   };
 
+  const dialog = useDialogState();
+
   const disableApprove = checkingApproval || approvingToken;
 
   return (
-    <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
-      <InputWithTokenSelect
-        name="amountToDeposit"
-        label="Deposit"
-        tokenAddress={tokenAddress}
-        setTokenAddress={setTokenAddress}
-        checkTokenApproval={checkTokenApproval}
-        isRequired
-      />
+    <>
+      <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
+        <InputWithTokenSelect
+          name="amountToDeposit"
+          label="Deposit"
+          tokenAddress={tokenAddress}
+          setTokenAddress={setTokenAddress}
+          checkTokenApproval={checkTokenApproval}
+          isRequired
+        />
 
-      <InputText name="addressToStream" isRequired={true} label="Address to stream" />
+        <InputText name="addressToStream" isRequired={true} label="Address to stream" />
 
-      <InputAmountWithDuration
-        name="amountToStream"
-        isRequired={true}
-        label="Amount to stream"
-        selectInputName="streamDuration"
-      />
+        <InputAmountWithDuration
+          name="amountToStream"
+          isRequired={true}
+          label="Amount to stream"
+          selectInputName="streamDuration"
+        />
 
-      {isApproved ? (
-        <SubmitButton disabled={isLoading} className="mt-8">
-          {isLoading ? <BeatLoader size={6} color="gray" /> : 'Deposit and Create Stream'}
-        </SubmitButton>
-      ) : (
-        <SubmitButton disabled={disableApprove} className="mt-4">
-          {disableApprove ? <BeatLoader size={6} color="gray" /> : 'Approve'}
-        </SubmitButton>
-      )}
-    </form>
+        {isApproved ? (
+          <SubmitButton disabled={isLoading} className="mt-8">
+            {isLoading ? <BeatLoader size={6} color="gray" /> : 'Deposit and Create Stream'}
+          </SubmitButton>
+        ) : (
+          <SubmitButton disabled={disableApprove} className="mt-4">
+            {disableApprove ? <BeatLoader size={6} color="gray" /> : 'Approve'}
+          </SubmitButton>
+        )}
+      </form>
+      <TransactionDialog dialog={dialog} transactionHash={transaction?.hash ?? ''} />
+    </>
   );
 };
 
