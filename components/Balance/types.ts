@@ -1,3 +1,4 @@
+import { DisclosureState } from 'ariakit';
 import { Contract } from 'ethers';
 
 export type TokenAction = 'deposit' | 'withdraw';
@@ -21,4 +22,10 @@ export interface ICheckApproval {
   tokenAddress: string;
   userAddress?: string;
   approvedForAmount: string;
+}
+
+export interface IFormProps {
+  data: IFormData;
+  dialog: DisclosureState;
+  transactionDialog: DisclosureState;
 }

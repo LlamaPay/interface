@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { PlusIcon } from '@heroicons/react/solid';
 import FallbackList from 'components/FallbackList';
-import { FormDialog } from 'components/Dialog';
 import DepositForm from './DepositForm';
 import WithdrawForm from './WithdrawForm';
 import DepositField from './DepositField';
@@ -19,8 +18,11 @@ const Balance = () => {
 
   // function that returns chain explorer url based on the chain user is connected to
   const { url: chainExplorer } = useChainExplorer();
-  const dialog = useDialogState();
-  const [dialogType, setDialogType] = React.useState<'token' | 'deposit' | null>(null);
+
+  const depositFormDialog = useDialogState();
+  const depositFieldDialog = useDialogState();
+  const withdrawFormDialog = useDialogState();
+  const transactionDialog = useDialogState();
 
   const formData = React.useRef<null | IFormData>(null);
 
@@ -28,8 +30,13 @@ const Balance = () => {
   const { data: tokens } = useGetAllTokens();
 
   const handleToken = (actionType: TokenAction, balance: IBalance) => {
-    dialog.toggle();
-    setDialogType('token');
+    // dialog.toggle();
+    if (actionType === 'deposit') {
+      depositFormDialog.toggle();
+    } else {
+      withdrawFormDialog.toggle();
+    }
+
     formData.current = {
       actionType,
       title: balance.name || balance.address, // TODO only show name of verified tokens, else show address
@@ -42,8 +49,6 @@ const Balance = () => {
     };
   };
 
-  const dialogTitle = dialogType === 'token' ? formData.current?.title ?? null : 'Deposit';
-
   const showFallback = isLoading || noBalances || isError;
 
   return (
@@ -53,8 +58,7 @@ const Balance = () => {
         <button
           className="flex items-center space-x-2 whitespace-nowrap rounded bg-zinc-100 py-1 px-2 dark:bg-zinc-800"
           onClick={() => {
-            dialog.toggle();
-            setDialogType('deposit');
+            depositFieldDialog.toggle();
           }}
         >
           <PlusIcon className="h-4 w-4" />
@@ -124,23 +128,17 @@ const Balance = () => {
         </table>
       )}
 
-      <FormDialog title={dialogTitle} dialog={dialog} className="h-fit">
-        {dialogType === 'token' ? (
-          <>
-            {formData.current && (
-              <>
-                {formData.current.actionType === 'deposit' ? (
-                  <DepositForm data={formData.current} dialog={dialog} />
-                ) : (
-                  <WithdrawForm data={formData.current} dialog={dialog} />
-                )}
-              </>
-            )}
-          </>
-        ) : (
-          <>{tokens && <DepositField tokens={tokens} dialog={dialog} />}</>
-        )}
-      </FormDialog>
+      {formData.current && (
+        <>
+          {formData?.current?.actionType === 'deposit' ? (
+            <DepositForm data={formData.current} dialog={depositFormDialog} transactionDialog={transactionDialog} />
+          ) : (
+            <WithdrawForm data={formData.current} dialog={withdrawFormDialog} transactionDialog={transactionDialog} />
+          )}
+        </>
+      )}
+
+      {tokens && <DepositField tokens={tokens} dialog={depositFieldDialog} transactionDialog={transactionDialog} />}
     </section>
   );
 };

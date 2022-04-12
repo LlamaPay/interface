@@ -68,7 +68,7 @@ export function useApproveToken() {
   const [{ data: signer }] = useSigner();
   const queryClient = useQueryClient();
 
-  return useMutation(
+  return useMutation<any, any, IApproveToken>(
     ({ tokenAddress, amountToApprove, spenderAddress }: IUseApproveToken) =>
       approveToken({ tokenAddress, signer, amountToApprove, spenderAddress }),
     {
@@ -83,7 +83,7 @@ export function useApproveTokenForMaxAmt() {
   const [{ data: signer }] = useSigner();
   const queryClient = useQueryClient();
 
-  return useMutation(
+  return useMutation<any, unknown, UseTokenForMaxAmt>(
     ({ tokenAddress, spenderAddress }: UseTokenForMaxAmt) =>
       approveTokenForMaxAmt({ tokenAddress, signer, spenderAddress }),
     {

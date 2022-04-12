@@ -8,16 +8,22 @@ import { checkApproval } from 'components/Form/utils';
 import { useAccount } from 'wagmi';
 import { BeatLoader } from 'react-spinners';
 import { DisclosureState } from 'ariakit';
+import { FormDialog } from 'components/Dialog';
 
-const DepositField = ({ tokens, dialog }: { tokens: IToken[]; dialog: DisclosureState }) => {
+interface IDepositFieldprops {
+  tokens: IToken[];
+  dialog: DisclosureState;
+  transactionDialog: DisclosureState;
+}
+
+const DepositField = ({ tokens, dialog, transactionDialog }: IDepositFieldprops) => {
   const { mutate: deposit, isLoading } = useDepositToken();
   const [{ data: accountData }] = useAccount();
 
   const [tokenAddress, setTokenAddress] = React.useState(tokens[0]?.tokenAddress ?? '');
 
   // Token approval hooks
-  // TODO handle loading and error states, also check if transaction is succesfull on chain, until then disable button and show loading state
-  const { mutate: checkTokenApproval, data: isApproved, isLoading: checkingApproval, error } = useCheckTokenApproval();
+  const { mutate: checkTokenApproval, data: isApproved, isLoading: checkingApproval } = useCheckTokenApproval();
 
   const { mutate: approveToken, isLoading: approvingToken, error: approvalError } = useApproveToken();
 
@@ -73,25 +79,28 @@ const DepositField = ({ tokens, dialog }: { tokens: IToken[]; dialog: Disclosure
   const disableApprove = checkingApproval || approvingToken;
 
   return (
-    <form onSubmit={handleSubmit}>
-      <InputWithTokenSelect
-        name="amountToDeposit"
-        label="Amount"
-        tokenAddress={tokenAddress}
-        setTokenAddress={setTokenAddress}
-        checkTokenApproval={checkTokenApproval}
-        isRequired
-      />
-      {isApproved ? (
-        <SubmitButton disabled={isLoading} className="mt-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
-          {isLoading ? <BeatLoader size={6} color="#171717" /> : 'Deposit'}
-        </SubmitButton>
-      ) : (
-        <SubmitButton disabled={disableApprove} className="mt-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
-          {disableApprove ? <BeatLoader size={6} color="#171717" /> : 'Approve'}
-        </SubmitButton>
-      )}
-    </form>
+    <FormDialog title="Deposit" dialog={dialog} className="h-fit">
+      <form onSubmit={handleSubmit}>
+        <InputWithTokenSelect
+          name="amountToDeposit"
+          label="Amount"
+          tokenAddress={tokenAddress}
+          setTokenAddress={setTokenAddress}
+          checkTokenApproval={checkTokenApproval}
+          isRequired
+        />
+        {isApproved ? (
+          <SubmitButton disabled={isLoading} className="mt-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
+            {isLoading ? <BeatLoader size={6} color="#171717" /> : 'Deposit'}
+          </SubmitButton>
+        ) : (
+          <SubmitButton disabled={disableApprove} className="mt-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
+            {disableApprove ? <BeatLoader size={6} color="#171717" /> : 'Approve'}
+          </SubmitButton>
+        )}
+      </form>
+      <p className="my-4 text-center text-sm text-red-500">{approvalError && "Couldn't approve token"}</p>
+    </FormDialog>
   );
 };
 
