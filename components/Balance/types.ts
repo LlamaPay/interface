@@ -26,6 +26,5 @@ export interface ICheckApproval {
 
 export interface IFormProps {
   data: IFormData;
-  dialog: DisclosureState;
-  transactionDialog: DisclosureState;
+  formDialog: DisclosureState;
 }

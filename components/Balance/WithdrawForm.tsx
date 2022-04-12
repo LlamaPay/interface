@@ -4,10 +4,13 @@ import useWithdrawByPayer from 'queries/useWithdrawTokenByPayer';
 import { IFormElements, IFormProps } from './types';
 import { InputAmount, SubmitButton } from 'components/Form';
 import { BeatLoader } from 'react-spinners';
-import { FormDialog } from 'components/Dialog';
+import { FormDialog, TransactionDialog } from 'components/Dialog';
+import { useDialogState } from 'ariakit';
 
-const WithdrawForm = ({ data, dialog }: IFormProps) => {
-  const { mutate, isLoading } = useWithdrawByPayer();
+const WithdrawForm = ({ data, formDialog }: IFormProps) => {
+  const { mutate, isLoading, data: transaction } = useWithdrawByPayer();
+
+  const transactionDialog = useDialogState();
 
   const withdrawAll = React.useRef(false);
 
@@ -28,7 +31,8 @@ const WithdrawForm = ({ data, dialog }: IFormProps) => {
         },
         {
           onSettled: () => {
-            dialog.toggle();
+            formDialog.toggle();
+            transactionDialog.toggle();
           },
         }
       );
@@ -44,29 +48,33 @@ const WithdrawForm = ({ data, dialog }: IFormProps) => {
       },
       {
         onSettled: () => {
-          dialog.toggle();
+          formDialog.toggle();
+          transactionDialog.toggle();
         },
       }
     );
   };
 
   return (
-    <FormDialog title={data.title} dialog={dialog} className="h-fit">
-      <form className="mt-4 flex flex-col space-y-4" onSubmit={handleSubmit}>
-        <InputAmount name="amount" label={`Amount ${data.symbol}`} isRequired />
-        <SubmitButton disabled={isLoading} className="my-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
-          {isLoading && !withdrawAll.current ? <BeatLoader size={6} color="#171717" /> : 'Withdraw'}
+    <>
+      <FormDialog title={data.title} dialog={formDialog} className="h-fit">
+        <form className="mt-4 flex flex-col space-y-4" onSubmit={handleSubmit}>
+          <InputAmount name="amount" label={`Amount ${data.symbol}`} isRequired />
+          <SubmitButton disabled={isLoading} className="my-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
+            {isLoading && !withdrawAll.current ? <BeatLoader size={6} color="#171717" /> : 'Withdraw'}
+          </SubmitButton>
+        </form>
+        <p className="my-3 text-center font-light">or</p>
+        <SubmitButton
+          disabled={isLoading}
+          onClick={withdrawAllTokens}
+          className="my-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600"
+        >
+          {isLoading && withdrawAll.current ? <BeatLoader size={6} color="#171717" /> : 'Withdraw All'}
         </SubmitButton>
-      </form>
-      <p className="my-3 text-center font-light">or</p>
-      <SubmitButton
-        disabled={isLoading}
-        onClick={withdrawAllTokens}
-        className="my-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600"
-      >
-        {isLoading && withdrawAll.current ? <BeatLoader size={6} color="#171717" /> : 'Withdraw All'}
-      </SubmitButton>
-    </FormDialog>
+      </FormDialog>
+      {transaction && <TransactionDialog dialog={transactionDialog} transactionHash={transaction.hash || ''} />}
+    </>
   );
 };
 

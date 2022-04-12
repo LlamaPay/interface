@@ -22,7 +22,6 @@ const Balance = () => {
   const depositFormDialog = useDialogState();
   const depositFieldDialog = useDialogState();
   const withdrawFormDialog = useDialogState();
-  const transactionDialog = useDialogState();
 
   const formData = React.useRef<null | IFormData>(null);
 
@@ -131,14 +130,14 @@ const Balance = () => {
       {formData.current && (
         <>
           {formData?.current?.actionType === 'deposit' ? (
-            <DepositForm data={formData.current} dialog={depositFormDialog} transactionDialog={transactionDialog} />
+            <DepositForm data={formData.current} formDialog={depositFormDialog} />
           ) : (
-            <WithdrawForm data={formData.current} dialog={withdrawFormDialog} transactionDialog={transactionDialog} />
+            <WithdrawForm data={formData.current} formDialog={withdrawFormDialog} />
           )}
         </>
       )}
 
-      {tokens && <DepositField tokens={tokens} dialog={depositFieldDialog} transactionDialog={transactionDialog} />}
+      {tokens && <DepositField tokens={tokens} dialog={depositFieldDialog} />}
     </section>
   );
 };

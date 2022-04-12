@@ -38,13 +38,13 @@ export default function useDepositToken() {
         toast.error(error.message);
       },
       onSuccess: (data) => {
-        const toastId = toast.loading('Confirming deposit');
+        const toastId = toast.loading('Confirming Deposit');
         data.wait().then((res: any) => {
           toast.dismiss(toastId);
           if (res.status === 1) {
-            toast.success('Deposited successfully');
+            toast.success('Deposit Success');
           } else {
-            toast.error('Deposit failed');
+            toast.error('Deposit Failed');
           }
         });
       },

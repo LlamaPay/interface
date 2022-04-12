@@ -7,10 +7,13 @@ import { IFormElements, IFormProps } from './types';
 import { checkApproval } from 'components/Form/utils';
 import { InputAmount, SubmitButton } from 'components/Form';
 import { BeatLoader } from 'react-spinners';
-import { FormDialog } from 'components/Dialog';
+import { FormDialog, TransactionDialog } from 'components/Dialog';
+import { useDialogState } from 'ariakit';
 
-const DepositForm = ({ data, dialog }: IFormProps) => {
-  const { mutate, isLoading } = useDepositToken();
+const DepositForm = ({ data, formDialog }: IFormProps) => {
+  const { mutate, isLoading, data: transaction } = useDepositToken();
+
+  const transactionDialog = useDialogState();
 
   const [{ data: accountData }] = useAccount();
 
@@ -51,7 +54,8 @@ const DepositForm = ({ data, dialog }: IFormProps) => {
           },
           {
             onSettled: () => {
-              dialog.toggle();
+              formDialog.toggle();
+              transactionDialog.toggle();
             },
           }
         );
@@ -84,21 +88,24 @@ const DepositForm = ({ data, dialog }: IFormProps) => {
   const disableApprove = approvingToken || checkingApproval;
 
   return (
-    <FormDialog title={data.title} dialog={dialog} className="h-fit">
-      <form className="mt-4 flex flex-col space-y-4" onSubmit={handleSubmit}>
-        <InputAmount name="amount" label={`Amount ${data.symbol}`} handleChange={handleChange} isRequired />
-        {isApproved ? (
-          <SubmitButton disabled={isLoading} className="my-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
-            {isLoading ? <BeatLoader size={6} color="#171717" /> : 'Deposit'}
-          </SubmitButton>
-        ) : (
-          <SubmitButton disabled={disableApprove} className="my-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
-            {disableApprove ? <BeatLoader size={6} color="#171717" /> : 'Approve'}
-          </SubmitButton>
-        )}
-      </form>
-      <p className="my-4 text-center text-sm text-red-500">{approvalError && "Couldn't approve token"}</p>
-    </FormDialog>
+    <>
+      <FormDialog title={data.title} dialog={formDialog} className="h-fit">
+        <form className="mt-4 flex flex-col space-y-4" onSubmit={handleSubmit}>
+          <InputAmount name="amount" label={`Amount ${data.symbol}`} handleChange={handleChange} isRequired />
+          {isApproved ? (
+            <SubmitButton disabled={isLoading} className="my-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
+              {isLoading ? <BeatLoader size={6} color="#171717" /> : 'Deposit'}
+            </SubmitButton>
+          ) : (
+            <SubmitButton disabled={disableApprove} className="my-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
+              {disableApprove ? <BeatLoader size={6} color="#171717" /> : 'Approve'}
+            </SubmitButton>
+          )}
+        </form>
+        <p className="my-4 text-center text-sm text-red-500">{approvalError && "Couldn't approve token"}</p>
+      </FormDialog>
+      {transaction && <TransactionDialog dialog={transactionDialog} transactionHash={transaction.hash || ''} />}
+    </>
   );
 };
 
