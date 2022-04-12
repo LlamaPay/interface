@@ -10,6 +10,7 @@ import { useContractWrite } from 'wagmi';
 import llamaContract from 'abis/llamaContract';
 import BigNumber from 'bignumber.js';
 import { secondsByDuration } from 'utils/constants';
+import toast from 'react-hot-toast';
 
 interface ModifyProps {
   data: IStream;
@@ -25,7 +26,7 @@ interface IUpdatedFormElements {
 }
 
 export const Modify = ({ data, dialog, title, savedAddressName }: ModifyProps) => {
-  const [{ data: modifyStreamData, error, loading }, write] = useContractWrite(
+  const [{}, write] = useContractWrite(
     {
       addressOrName: data.llamaContractAddress,
       contractInterface: llamaContract,
@@ -61,6 +62,12 @@ export const Modify = ({ data, dialog, title, savedAddressName }: ModifyProps) =
     const updatedAmountPerSec = new BigNumber(updatedAmount).times(1e20).div(secondsByDuration[duration]).toFixed(0);
     write({
       args: [data.payeeAddress, data.amountPerSec, updatedAddress, updatedAmountPerSec],
+    }).then((data) => {
+      const loadingToast = data.error ? toast.error(data.error?.message) : toast.loading('Modifying Stream');
+      data.data?.wait().then((receipt) => {
+        toast.dismiss(loadingToast);
+        receipt.status === 1 ? toast.success('Successfully Modified Stream') : toast.error('Failed to Modify Stream');
+      });
     });
   };
 

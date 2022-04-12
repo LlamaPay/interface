@@ -17,6 +17,7 @@ function amountStreamed(createdTime: string, streamCreatedTime: string | undefin
 export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
   const [{ data: networkData }] = useNetwork();
   const txLink = `${networkDetails[Number(networkData.chain?.id)].blockExplorerURL}/tx/${data.txHash}`;
+  const explorerName = networkDetails[Number(networkData.chain?.id)].blockExplorerName;
   return (
     <>
       <FormDialog dialog={dialog} title="More Info" className="h-min">
@@ -93,8 +94,8 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
             <p>{new Date(Number(data.createdTimestamp) * 1e3).toLocaleString('en-CA')}</p>
           </section>
           <section>
-            <a href={txLink} target="_blank" rel="noreferrer noopener">
-              View on Block Explorer
+            <a href={txLink} target="_blank" rel="noreferrer noopener" className="underline underline-offset-4">
+              View on {explorerName}
             </a>
           </section>
         </span>
