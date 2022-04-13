@@ -3,6 +3,17 @@ import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import { TableInstance } from '@tanstack/react-table';
 
 const Table = ({ instance }: { instance: TableInstance<any> }) => {
+  const totalRows = instance.getCoreRowModel().rows.length;
+
+  const currentRows = instance.getRowModel().rows;
+
+  const firstRowId = !Number.isNaN(currentRows[0]?.id) ? Number(currentRows[0]?.id) + 1 : null;
+  const lastRowId = !Number.isNaN(currentRows[currentRows.length - 1]?.id)
+    ? Number(currentRows[currentRows.length - 1]?.id) + 1
+    : null;
+
+  const showRowNumber = firstRowId && lastRowId;
+
   return (
     <div className="w-full">
       <div className="overflow-x-auto">
@@ -71,9 +82,7 @@ const Table = ({ instance }: { instance: TableInstance<any> }) => {
           </label>
         </div>
         <div className="flex items-center justify-between space-x-8">
-          <span className="text-xs">{`1 - ${instance.getRowModel().rows.length} of ${
-            instance.getCoreRowModel().rows.length
-          }`}</span>
+          {showRowNumber && <span className="text-xs">{`${firstRowId} - ${lastRowId} of ${totalRows}`}</span>}
           <span className="space-x-5">
             <button
               className="rounded p-1"
