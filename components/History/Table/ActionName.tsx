@@ -1,4 +1,4 @@
-import { CheckIcon, PencilIcon, XIcon } from '@heroicons/react/solid';
+import { CheckIcon, CogIcon, XIcon } from '@heroicons/react/solid';
 
 export default function ActionName({ name }: { name: string }) {
   return (
@@ -6,7 +6,7 @@ export default function ActionName({ name }: { name: string }) {
       {name === 'StreamModified' ? (
         <>
           <div className="rounded bg-yellow-100 p-1 text-yellow-600">
-            <PencilIcon className="h-4 w-4" />
+            <CogIcon className="h-4 w-4" />
           </div>
 
           <span>Stream Modified</span>
