@@ -7,6 +7,8 @@ import { secondsByDuration } from 'utils/constants';
 import TotalStreamed from './TotalStreamed';
 import Withdrawable from './Withdrawable';
 import SavedName from './SavedName';
+import { formatAmountInTable } from 'utils/amount';
+import StreamActions from './StreamActions';
 
 const table = createTable<{ Row: IStream }>();
 
@@ -27,7 +29,8 @@ const defaultColumns = table.createColumns([
       </>
     ),
     cell: ({ value }) => {
-      const amount = value && ((Number(value) * secondsByDuration['month']) / 1e20).toFixed(5);
+      const isDataValid = !Number.isNaN(value);
+      const amount = isDataValid && formatAmountInTable(Number(value) / 1e20, secondsByDuration['month']);
       return <>{amount}</>;
     },
   }),
@@ -47,6 +50,15 @@ const defaultColumns = table.createColumns([
     id: 'userWithdrawable',
     header: 'Withdrawable',
     cell: ({ cell }) => (cell.row.original ? <Withdrawable data={cell.row.original} /> : <></>),
+  }),
+  table.createDisplayColumn({
+    id: 'streamActions',
+    header: '',
+    cell: ({ cell }) => {
+      if (!cell.row.original) return null;
+
+      return <StreamActions data={cell.row.original} />;
+    },
   }),
 ]);
 

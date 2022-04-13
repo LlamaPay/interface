@@ -5,8 +5,9 @@ import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { IHistory } from 'types';
 import { secondsByDuration } from 'utils/constants';
 import { formatAddress } from 'utils/address';
-import { formatAmountInHistory } from 'utils/amount';
+import { formatAmountInTable } from 'utils/amount';
 import ActionName from './ActionName';
+import HistoryActions from './HistoryActions';
 
 const table = createTable<{ Row: IHistory }>();
 
@@ -28,9 +29,17 @@ const defaultColumns = table.createColumns([
     ),
     cell: ({ value }) => {
       const isDataValid = !Number.isNaN(value);
-      const amount = isDataValid && formatAmountInHistory(Number(value) / 1e20, secondsByDuration['month']);
-
+      const amount = isDataValid && formatAmountInTable(Number(value) / 1e20, secondsByDuration['month']);
       return <>{amount}</>;
+    },
+  }),
+  table.createDisplayColumn({
+    id: 'historyActions',
+    header: '',
+    cell: ({ cell }) => {
+      if (!cell.row.original) return null;
+
+      return <HistoryActions data={cell.row.original} />;
     },
   }),
 ]);

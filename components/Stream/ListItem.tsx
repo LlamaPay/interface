@@ -96,7 +96,7 @@ export const ListItem = ({ data }: ItemProps) => {
             Modify
           </button>
           <Cancel data={data} />
-          <Modify data={data} title="Modify" dialog={modifyDialog} savedAddressName={savedAddressName} />
+          <Modify data={data} title="Modify" dialog={modifyDialog} />
         </>
       )}
     </li>

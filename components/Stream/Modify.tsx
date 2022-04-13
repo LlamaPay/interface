@@ -16,7 +16,6 @@ interface ModifyProps {
   data: IStream;
   dialog: DisclosureState;
   title: string;
-  savedAddressName: string;
 }
 
 interface IUpdatedFormElements {
@@ -25,7 +24,7 @@ interface IUpdatedFormElements {
   modifiedStreamDuration: { value: 'month' | 'year' };
 }
 
-export const Modify = ({ data, dialog, title, savedAddressName }: ModifyProps) => {
+export const Modify = ({ data, dialog, title }: ModifyProps) => {
   const [{}, write] = useContractWrite(
     {
       addressOrName: data.llamaContractAddress,
@@ -37,6 +36,10 @@ export const Modify = ({ data, dialog, title, savedAddressName }: ModifyProps) =
   const amountPerSec = Number(data.amountPerSec) / 1e20;
 
   const updateAddress = useAddressStore((state) => state.updateAddress);
+
+  const savedAddressName =
+    useAddressStore((state) => state.payeeAddresses.find((p) => p.id === data.payeeAddress))?.shortName ??
+    data.payeeAddress;
 
   const [payeeAddress, setPayeeAddress] = React.useState(savedAddressName);
 
