@@ -11,10 +11,11 @@ const Home: NextPage = () => {
       <span className="mr-auto w-full">
         <Balance />
       </span>
-      {/* <StreamList /> */}
-      {/* <StreamTable /> */}
-      {/* <HistoryList /> */}
-      <HistoryTable />
+      <StreamList />
+      <HistoryList />
+
+      {/* <StreamTable />
+      <HistoryTable /> */}
     </Layout>
   );
 };

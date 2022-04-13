@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { createTable, useTable, PaginationState, paginateRowsFn } from '@tanstack/react-table';
+import { createTable, useTable, PaginationState, paginateRowsFn, globalFilterRowsFn } from '@tanstack/react-table';
 import Table from 'components/Table';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { IHistory } from 'types';
@@ -49,6 +49,8 @@ export function HistoryTable() {
 function NewTable({ data }: { data: IHistory[] }) {
   const [columns] = React.useState<typeof defaultColumns>(() => [...defaultColumns]);
 
+  const [globalFilter, setGlobalFilter] = React.useState('');
+
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -59,11 +61,29 @@ function NewTable({ data }: { data: IHistory[] }) {
     data,
     columns,
     state: {
+      globalFilter,
       pagination,
     },
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterRowsFn: globalFilterRowsFn,
     onPaginationChange: setPagination,
     paginateRowsFn: paginateRowsFn,
   });
 
-  return <Table instance={instance} />;
+  return (
+    <section className="w-full">
+      <div className="mb-2 flex w-full items-center justify-between">
+        <h1 className="text-2xl">History</h1>
+        <label className="space-x-4">
+          <span>Search</span>
+          <input
+            value={globalFilter ?? ''}
+            onChange={(e) => setGlobalFilter(e.target.value)}
+            className="h-8 rounded border border-neutral-300 p-2 shadow-sm dark:border-neutral-700"
+          />
+        </label>
+      </div>
+      <Table instance={instance} />
+    </section>
+  );
 }
