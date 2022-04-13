@@ -9,6 +9,8 @@ import Withdrawable from './Withdrawable';
 import SavedName from './SavedName';
 import { formatAmountInTable } from 'utils/amount';
 import StreamActions from './StreamActions';
+import Link from 'next/link';
+import { PlusIcon } from '@heroicons/react/solid';
 
 const table = createTable<{ Row: IStream }>();
 
@@ -101,14 +103,20 @@ function NewTable({ data }: { data: IStream[] }) {
     <section className="w-full">
       <div className="mb-2 flex w-full items-center justify-between">
         <h1 className="text-2xl">Streams</h1>
-        <label className="space-x-4">
+        {/* <label className="space-x-4">
           <span>Search</span>
           <input
             value={globalFilter ?? ''}
             onChange={(e) => setGlobalFilter(e.target.value)}
             className="h-8 rounded border border-neutral-300 p-2 shadow-sm dark:border-neutral-700"
           />
-        </label>
+        </label> */}
+        <Link href="/create" passHref>
+          <button className="flex items-center space-x-2 whitespace-nowrap rounded bg-zinc-100 py-1 px-2 dark:bg-zinc-800">
+            <PlusIcon className="h-4 w-4" />
+            <span>Create</span>
+          </button>
+        </Link>
       </div>
       <Table instance={instance} />
     </section>

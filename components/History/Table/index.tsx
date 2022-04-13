@@ -83,14 +83,14 @@ function NewTable({ data }: { data: IHistory[] }) {
     <section className="w-full">
       <div className="mb-2 flex w-full items-center justify-between">
         <h1 className="text-2xl">History</h1>
-        <label className="space-x-4">
+        {/* <label className="space-x-4">
           <span>Search</span>
           <input
             value={globalFilter ?? ''}
             onChange={(e) => setGlobalFilter(e.target.value)}
             className="h-8 rounded border border-neutral-300 p-2 shadow-sm dark:border-neutral-700"
           />
-        </label>
+        </label> */}
       </div>
       <Table instance={instance} />
     </section>
