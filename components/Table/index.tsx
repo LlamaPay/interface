@@ -22,7 +22,7 @@ const Table = ({ instance }: { instance: TableInstance<any> }) => {
                   <th
                     {...header.getHeaderProps()}
                     key={header.id}
-                    className="whitespace-nowrap py-[6px] px-2 text-left text-sm font-semibold first-of-type:pl-1"
+                    className="whitespace-nowrap py-[6px] px-4 text-left text-sm font-semibold"
                   >
                     {header.isPlaceholder ? null : header.renderHeader()}
                   </th>
@@ -41,7 +41,7 @@ const Table = ({ instance }: { instance: TableInstance<any> }) => {
                   <td
                     {...cell.getCellProps()}
                     key={cell.id}
-                    className="truncate whitespace-nowrap border-l-[1px] border-dashed border-gray-200 px-4 py-[6px] text-sm first-of-type:border-l-0 first-of-type:pl-1 last-of-type:w-full dark:border-gray-700"
+                    className="truncate whitespace-nowrap border-l-[1px] border-dashed border-gray-200 px-4 py-[6px] text-sm first-of-type:border-l-0 last-of-type:w-full dark:border-gray-700"
                   >
                     {cell.renderCell()}
                   </td>

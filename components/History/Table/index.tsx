@@ -17,7 +17,7 @@ const defaultColumns = table.createColumns([
     cell: ({ value }) => <ActionName name={value} />,
   }),
   table.createDataColumn('addressType', {
-    header: 'Stream type',
+    header: 'Type',
     cell: ({ value }) => <span>{value === 'payer' ? 'Outgoing' : 'Incoming'}</span>,
   }),
   table.createDataColumn('addressRelated', {

@@ -32,7 +32,7 @@ export const Cancel = ({ data }: CancelProps) => {
 
   return (
     <>
-      <button onClick={handleClick} className="rounded bg-zinc-100 py-1 px-2 underline dark:bg-zinc-800">
+      <button onClick={handleClick} className="rounded py-1 px-2 underline">
         Cancel
       </button>
     </>
