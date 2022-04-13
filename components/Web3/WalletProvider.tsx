@@ -5,7 +5,7 @@ import { InjectedConnector } from 'wagmi/connectors/injected';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { WalletLinkConnector } from 'wagmi/connectors/walletLink';
 
-const defaultChain = chain.rinkeby;
+const defaultChain = chain.avalanche;
 
 // Set up connectors
 type ConnectorsConfig = { chainId?: number };

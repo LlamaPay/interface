@@ -28,7 +28,7 @@ export const defaultProvider = providers.getDefaultProvider(4, {
   infura: infuraId,
 });
 
-export const defaultSubgraphEndpoint = 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-rinkeby';
+export const defaultSubgraphEndpoint = 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-avax-mainnet';
 
 export const networkDetails: INetworkDetails = {
   4: {
@@ -82,7 +82,7 @@ export const chains: Chain[] = allChains.filter(
     chain.name === 'Rinkeby' ||
     chain.name === 'Kovan' ||
     chain.name === 'Avalanche Fuji Testnet' ||
-    chain.name === 'Avalanche'
+    chain.name === 'Avalanche Mainnet'
 );
 
 export const secondsByDuration = {
