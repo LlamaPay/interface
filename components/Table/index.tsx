@@ -1,4 +1,3 @@
-/* eslint-disable react/jsx-key */
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import { TableInstance } from '@tanstack/react-table';
 
@@ -7,12 +6,10 @@ const Table = ({ instance }: { instance: TableInstance<any> }) => {
 
   const currentRows = instance.getRowModel().rows;
 
-  const firstRowId = !Number.isNaN(currentRows[0]?.id) ? Number(currentRows[0]?.id) + 1 : null;
-  const lastRowId = !Number.isNaN(currentRows[currentRows.length - 1]?.id)
-    ? Number(currentRows[currentRows.length - 1]?.id) + 1
-    : null;
+  const firstRowId = Number(currentRows[0]?.id) + 1;
+  const lastRowId = Number(currentRows[currentRows.length - 1]?.id) + 1;
 
-  const showRowNumber = firstRowId && lastRowId;
+  const showRowNumber = !Number.isNaN(firstRowId) && !Number.isNaN(lastRowId);
 
   return (
     <div className="w-full">
@@ -20,10 +17,11 @@ const Table = ({ instance }: { instance: TableInstance<any> }) => {
         <table {...instance.getTableProps()} className="">
           <thead>
             {instance.getHeaderGroups().map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()}>
+              <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <th
                     {...header.getHeaderProps()}
+                    key={header.id}
                     className="whitespace-nowrap py-[6px] px-2 text-left text-sm font-semibold first-of-type:pl-1"
                   >
                     {header.isPlaceholder ? null : header.renderHeader()}
@@ -36,11 +34,13 @@ const Table = ({ instance }: { instance: TableInstance<any> }) => {
             {instance.getRowModel().rows.map((row) => (
               <tr
                 {...row.getRowProps()}
+                key={row.id}
                 className="bg-white odd:bg-neutral-100 dark:bg-neutral-900 dark:odd:bg-neutral-800"
               >
                 {row.getVisibleCells().map((cell) => (
                   <td
                     {...cell.getCellProps()}
+                    key={cell.id}
                     className="truncate whitespace-nowrap border-l-[1px] border-dashed border-gray-200 px-4 py-[6px] text-sm first-of-type:border-l-0 first-of-type:pl-1 last-of-type:w-full dark:border-gray-700"
                   >
                     {cell.renderCell()}
