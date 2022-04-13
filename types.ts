@@ -40,7 +40,9 @@ export interface IStream {
   payerAddress: string;
   payeeAddress: string;
   streamId: string;
-  token: { address: string; name: string; decimals: number };
+  token: { address: string; name: string; decimals: number; symbol: string };
+  tokenName: string;
+  tokenSymbol: string;
   tokenContract: Contract;
   llamaTokenContract: Contract;
 }

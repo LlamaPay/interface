@@ -22,7 +22,6 @@ fragment UserStream on Stream {
   }
   token {
     address
-    address
     name
     decimals
     symbol

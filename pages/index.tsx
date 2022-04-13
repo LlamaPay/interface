@@ -1,9 +1,9 @@
 import type { NextPage } from 'next';
 import * as React from 'react';
 import Layout from 'components/Layout';
-import { HistoryList } from 'components/History';
+import { HistoryList, HistoryTable } from 'components/History';
 import Balance from 'components/Balance';
-import { StreamList } from 'components/Stream';
+import { StreamList, StreamTable } from 'components/Stream';
 
 const Home: NextPage = () => {
   return (
@@ -12,7 +12,9 @@ const Home: NextPage = () => {
         <Balance />
       </span>
       <StreamList />
+      {/* <StreamTable /> */}
       <HistoryList />
+      {/* <HistoryTable /> */}
     </Layout>
   );
 };

@@ -36,6 +36,8 @@ const useStreamsAndHistory = () => {
         payeeAddress: s.payee.id,
         streamId: s.streamId,
         token: s.token,
+        tokenName: s.token.name,
+        tokenSymbol: s.token.symbol,
         tokenContract: createERC20Contract({ tokenAddress: getAddress(s.token.address), provider }),
         llamaTokenContract: createContract(getAddress(s.contract.address), provider),
       }));
