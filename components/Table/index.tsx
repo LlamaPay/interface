@@ -4,31 +4,32 @@ import { TableInstance } from '@tanstack/react-table';
 
 const Table = ({ instance }: { instance: TableInstance<any> }) => {
   return (
-    <>
-      <table {...instance.getTableProps()} className="w-full">
-        <thead>
-          {instance.getHeaderGroups().map((headerGroup) => (
-            <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map((header) => (
-                <th {...header.getHeaderProps()} className="whitespace-nowrap text-left text-sm font-semibold">
-                  {header.isPlaceholder ? null : header.renderHeader()}
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody {...instance.getTableBodyProps()}>
-          {instance.getRowModel().rows.map((row) => (
-            <tr {...row.getRowProps()}>
-              {row.getVisibleCells().map((cell) => (
-                <td {...cell.getCellProps()} className="truncate whitespace-nowrap text-sm">
-                  {cell.renderCell()}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-        {/* <tfoot>
+    <div className="w-full">
+      <div className="overflow-x-auto">
+        <table {...instance.getTableProps()} className="w-full">
+          <thead>
+            {instance.getHeaderGroups().map((headerGroup) => (
+              <tr {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((header) => (
+                  <th {...header.getHeaderProps()} className="whitespace-nowrap text-left text-sm font-semibold">
+                    {header.isPlaceholder ? null : header.renderHeader()}
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody {...instance.getTableBodyProps()}>
+            {instance.getRowModel().rows.map((row) => (
+              <tr {...row.getRowProps()}>
+                {row.getVisibleCells().map((cell) => (
+                  <td {...cell.getCellProps()} className="truncate whitespace-nowrap text-sm">
+                    {cell.renderCell()}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+          {/* <tfoot>
         {instance.getFooterGroups().map((footerGroup) => (
           <tr {...footerGroup.getFooterGroupProps()}>
             {footerGroup.headers.map((header) => (
@@ -37,26 +38,30 @@ const Table = ({ instance }: { instance: TableInstance<any> }) => {
           </tr>
         ))}
       </tfoot> */}
-      </table>
+        </table>
+      </div>
       <div className="h-2" />
-      <div className="flex items-center justify-between gap-2">
-        <label className="flex items-center space-x-1">
-          <span className="text-xs opacity-70">Rows per page:</span>
-          <select
-            value={instance.getState().pagination.pageSize}
-            onChange={(e) => {
-              instance.setPageSize(Number(e.target.value));
-            }}
-            className="border-0 pr-6 text-xs"
-          >
-            {[10, 20, 30, 40, 50].map((pageSize) => (
-              <option key={pageSize} value={pageSize}>
-                {pageSize}
-              </option>
-            ))}
-          </select>
-        </label>
-        <div className="flex items-center space-x-8">
+      <div className="flex w-full flex-col gap-2 sm:flex-row sm:justify-between sm:gap-5">
+        <div className="flex flex-1 items-center justify-between gap-2">
+          <button className="bg-none text-xs underline">Export CSV</button>
+          <label className="flex items-center space-x-1">
+            <span className="text-xs opacity-70">Rows per page:</span>
+            <select
+              value={instance.getState().pagination.pageSize}
+              onChange={(e) => {
+                instance.setPageSize(Number(e.target.value));
+              }}
+              className="border-0 pr-6 text-xs"
+            >
+              {[10, 20, 30, 40, 50].map((pageSize) => (
+                <option key={pageSize} value={pageSize}>
+                  {pageSize}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <div className="flex items-center justify-between space-x-8">
           <span className="text-xs">{`1 - ${instance.getRowModel().rows.length} of ${
             instance.getCoreRowModel().rows.length
           }`}</span>
@@ -74,7 +79,7 @@ const Table = ({ instance }: { instance: TableInstance<any> }) => {
           </span>
         </div>
       </div>
-    </>
+    </div>
   );
 };
 

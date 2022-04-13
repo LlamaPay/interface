@@ -58,11 +58,7 @@ export function StreamTable() {
     return null;
   }
 
-  return (
-    <div className="w-full overflow-x-auto">
-      <NewTable data={streamsAndHistory.streams || []} />
-    </div>
-  );
+  return <NewTable data={streamsAndHistory.streams || []} />;
 }
 
 function NewTable({ data }: { data: IStream[] }) {

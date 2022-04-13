@@ -43,11 +43,7 @@ export function HistoryTable() {
     return null;
   }
 
-  return (
-    <div className="w-full overflow-x-auto">
-      <NewTable data={streamsAndHistory.history || []} />
-    </div>
-  );
+  return <NewTable data={streamsAndHistory.history || []} />;
 }
 
 function NewTable({ data }: { data: IHistory[] }) {
