@@ -17,7 +17,7 @@ const defaultColumns = table.createColumns([
     cell: ({ cell }) => (cell.row.original ? <SavedName data={cell.row.original} /> : <></>),
   }),
   table.createDataColumn('tokenSymbol', {
-    header: () => <span>Token</span>,
+    header: 'Token',
   }),
   table.createDataColumn('amountPerSec', {
     header: () => (
@@ -27,12 +27,12 @@ const defaultColumns = table.createColumns([
       </>
     ),
     cell: ({ value }) => {
-      const amount = ((Number(value) * secondsByDuration['month']) / 1e20).toFixed(5);
+      const amount = value && ((Number(value) * secondsByDuration['month']) / 1e20).toFixed(5);
       return <>{amount}</>;
     },
   }),
   table.createDataColumn('createdTimestamp', {
-    header: () => <span>Total Streamed</span>,
+    header: 'Total Streamed',
     cell: ({ value, cell }) => {
       const amountPerSec = cell.row.values.amountPerSec;
 
@@ -53,10 +53,6 @@ const defaultColumns = table.createColumns([
 export function StreamTable() {
   const { data: streamsAndHistory, isLoading, error } = useStreamsAndHistory();
 
-  const data = React.useMemo(() => {
-    return streamsAndHistory.streams || [];
-  }, [streamsAndHistory]);
-
   if (isLoading || error) {
     // TODO show placeholder
     return null;
@@ -64,7 +60,7 @@ export function StreamTable() {
 
   return (
     <div className="w-full overflow-x-auto">
-      <NewTable data={data} />
+      <NewTable data={streamsAndHistory.streams || []} />
     </div>
   );
 }

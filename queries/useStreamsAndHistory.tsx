@@ -27,6 +27,7 @@ const useStreamsAndHistory = () => {
   const formattedData: IStreamAndHistory = React.useMemo(() => {
     if (provider && data) {
       const streams = data?.user?.streams ?? [];
+      const history = data?.user?.historicalEvents ?? [];
 
       const formattedStreams = streams.map((s) => ({
         llamaContractAddress: s.contract.address,
@@ -42,9 +43,15 @@ const useStreamsAndHistory = () => {
         llamaTokenContract: createContract(getAddress(s.contract.address), provider),
       }));
 
+      const formattedHistory = history.map((h) => ({
+        ...h,
+        amountPerSec: h.stream?.amountPerSec ?? null,
+        addressRelated: h.stream?.payee?.id ?? null,
+      }));
+
       return {
         streams: formattedStreams.length > 0 ? formattedStreams : null,
-        history: data?.user?.historicalEvents ?? null,
+        history: formattedHistory.length > 0 ? formattedHistory : null,
       };
     } else return { streams: null, history: null };
   }, [data, provider]);

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { IStream } from 'types';
-import formatBalance from 'utils/balance';
+import { formatBalance } from 'utils/amount';
 import useWithdrawable from 'queries/useWithdrawable';
 
 const Withdrawable = ({ data }: { data: IStream }) => {

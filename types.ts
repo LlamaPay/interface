@@ -1,4 +1,5 @@
 import { Contract } from 'ethers';
+import { UserHistoryFragment } from 'services/generated/graphql';
 
 export interface IToken {
   tokenAddress: string;
@@ -47,8 +48,9 @@ export interface IStream {
   llamaTokenContract: Contract;
 }
 
-export interface IHistory {
-  [key: string]: any;
+export interface IHistory extends UserHistoryFragment {
+  addressRelated: string;
+  amountPerSec: string;
 }
 
 export interface IStreamAndHistory {
