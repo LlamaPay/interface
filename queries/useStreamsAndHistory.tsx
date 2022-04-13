@@ -43,18 +43,26 @@ const useStreamsAndHistory = () => {
         llamaTokenContract: createContract(getAddress(s.contract.address), provider),
       }));
 
-      const formattedHistory = history.map((h) => ({
-        ...h,
-        amountPerSec: h.stream?.amountPerSec ?? null,
-        addressRelated: h.stream?.payee?.id ?? null,
-      }));
+      const formattedHistory = history.map((h) => {
+        const addressType: 'payer' | 'payee' =
+          h.stream?.payer?.id?.toLowerCase() === accountData?.address.toLowerCase() ? 'payer' : 'payee';
+
+        const addressRelated = addressType === 'payer' ? h.stream?.payee?.id ?? null : h.stream?.payer?.id ?? null;
+
+        return {
+          ...h,
+          amountPerSec: h.stream?.amountPerSec ?? null,
+          addressRelated,
+          addressType,
+        };
+      });
 
       return {
         streams: formattedStreams.length > 0 ? formattedStreams : null,
         history: formattedHistory.length > 0 ? formattedHistory : null,
       };
     } else return { streams: null, history: null };
-  }, [data, provider]);
+  }, [data, provider, accountData]);
 
   return React.useMemo(() => ({ data: formattedData, isLoading, error }), [formattedData, isLoading, error]);
 };

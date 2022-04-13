@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { createTable, useTable } from '@tanstack/react-table';
+import { createTable, useTable, PaginationState, paginateRowsFn } from '@tanstack/react-table';
 import Table from 'components/Table';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { IHistory } from 'types';
@@ -51,12 +51,22 @@ export function HistoryTable() {
 }
 
 function NewTable({ data }: { data: IHistory[] }) {
-  //   console.log(data);
   const [columns] = React.useState<typeof defaultColumns>(() => [...defaultColumns]);
+
+  const [pagination, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+    pageCount: -1, // -1 allows the table to calculate the page count for us via instance.getPageCount()
+  });
 
   const instance = useTable(table, {
     data,
     columns,
+    state: {
+      pagination,
+    },
+    onPaginationChange: setPagination,
+    paginateRowsFn: paginateRowsFn,
   });
 
   return <Table instance={instance} />;

@@ -50,6 +50,7 @@ export interface IStream {
 
 export interface IHistory extends UserHistoryFragment {
   addressRelated: string;
+  addressType: 'payer' | 'payee';
   amountPerSec: string;
 }
 
