@@ -16,7 +16,12 @@ export const CustomToast = () => {
             color: 'white',
           },
         },
-        loading: {},
+        loading: {
+          style: {
+            background: '#0066ff',
+            color: 'white',
+          },
+        },
       }}
     />
   );

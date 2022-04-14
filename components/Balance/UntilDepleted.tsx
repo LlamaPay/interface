@@ -5,8 +5,11 @@ interface UntilDepletedProps {
   data: IBalance;
 }
 
-function getTime(data: IBalance, balance: number) {
+function getTime(data: IBalance, balance: number, mouseHover: boolean) {
   const time = balance / (Number(data.totalPaidPerSec) / 1e20);
+  if (mouseHover) {
+    return new Date(Date.now() + time * 1e3).toLocaleString('en-CA');
+  }
   if (Number(data.totalPaidPerSec) === 0) return 'No Streams';
   if (time < 1) return 'Streams Depleted';
   const days = time / 86400;
@@ -15,6 +18,7 @@ function getTime(data: IBalance, balance: number) {
 
 export const UntilDepleted = ({ data }: UntilDepletedProps) => {
   const [balanceState, setBalanceState] = React.useState<number | null>(null);
+  const [mouseHover, setMouseHover] = React.useState<boolean>(false);
 
   const updateBalance = React.useCallback(() => {
     const sub = ((Date.now() / 1e3 - Number(data.lastPayerUpdate)) * Number(data.totalPaidPerSec)) / 1e20;
@@ -29,9 +33,17 @@ export const UntilDepleted = ({ data }: UntilDepletedProps) => {
     return () => clearInterval(interval);
   }, [updateBalance]);
 
+  const handleMouse = React.useCallback(() => {
+    setMouseHover(!mouseHover);
+  }, [mouseHover]);
+
   return (
-    <td className="whitespace-nowrap border px-4 py-[6px] text-sm tabular-nums dark:border-stone-700">
-      {balanceState && getTime(data, balanceState)}
+    <td
+      className="whitespace-nowrap border px-4 py-[6px] text-sm tabular-nums dark:border-stone-700"
+      onMouseEnter={handleMouse}
+      onMouseLeave={handleMouse}
+    >
+      {balanceState && getTime(data, balanceState, mouseHover)}
     </td>
   );
 };
