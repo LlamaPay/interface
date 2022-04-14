@@ -46,16 +46,9 @@ const fetchBalance = async ({ userAddress, tokens, provider }: IFetchBalance) =>
           };
         })
         ?.sort((a, b) => {
-          if (!a.balance) return -1;
-          if (!b.balance) return 1;
-
-          if (a.balance < b.balance) {
-            return 1;
-          }
-          if (a.balance > b.balance) {
-            return -1;
-          }
-          return 0;
+          if (!a.balance || Number.isNaN(a.balance)) return -1;
+          if (!b.balance || Number.isNaN(a.balance)) return 1;
+          return Number(b.balance) - Number(a.balance);
         }) ?? null;
 
     return balances;
