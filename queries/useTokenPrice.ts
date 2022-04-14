@@ -17,6 +17,7 @@ const fetchTokenPrice = async (id: string, prefix: string | null) => {
       timestamp: Date.now() / 1e3,
     })
   );
+
   return data.coins[`${prefix}:${id}`].price;
 };
 
