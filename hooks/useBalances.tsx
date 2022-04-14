@@ -36,14 +36,10 @@ export const useBalances = () => {
             lastPayerUpdate: payers?.lastPayerUpdate ?? null,
           };
         })
-        ?.sort(({ amount: first }, { amount: second }) => {
-          if (first < second) {
-            return -1;
-          }
-          if (first > second) {
-            return 1;
-          }
-          return 0;
+        ?.sort((a, b) => {
+          if (!a.amount || Number.isNaN(a.amount)) return -1;
+          if (!b.amount || Number.isNaN(a.amount)) return 1;
+          return Number(b.amount) - Number(a.amount);
         }) ?? null;
 
     return formattedBalances;
