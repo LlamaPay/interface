@@ -32,6 +32,7 @@ export const useBalances = () => {
 
           return {
             ...b,
+
             totalPaidPerSec: payers?.totalPaidPerSec ?? null,
             lastPayerUpdate: payers?.lastPayerUpdate ?? null,
           };

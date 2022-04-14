@@ -20,7 +20,7 @@ const CreateStreamOnly = ({ tokens }: IStreamFormProps) => {
 
     if (data) {
       setTokenAddress(data.tokenAddress);
-    }
+    } else setTokenAddress(token);
   };
 
   // create stream on submit
@@ -61,7 +61,7 @@ const CreateStreamOnly = ({ tokens }: IStreamFormProps) => {
     }
   };
 
-  const tokenOptions = tokens.map((t) => t.name);
+  const tokenOptions = tokens.map((t) => t.tokenAddress);
 
   const dialog = useDialogState();
 
