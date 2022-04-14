@@ -8,7 +8,11 @@ interface UntilDepletedProps {
 function getTime(data: IBalance, balance: number, mouseHover: boolean) {
   const time = balance / (Number(data.totalPaidPerSec) / 1e20);
   if (mouseHover) {
-    return new Date(Date.now() + time * 1e3).toLocaleString('en-CA');
+    return new Date(Date.now() + time * 1e3).toLocaleString('en-CA', {
+      hour12: false,
+      dateStyle: 'short',
+      timeStyle: 'short',
+    });
   }
   if (Number(data.totalPaidPerSec) === 0) return 'No Streams';
   if (time < 1) return 'Streams Depleted';

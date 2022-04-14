@@ -91,7 +91,13 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
           </section>
           <section>
             <h1>Event Timestamp</h1>
-            <p>{new Date(Number(data.createdTimestamp) * 1e3).toLocaleString('en-CA')}</p>
+            <p>
+              {new Date(Number(data.createdTimestamp) * 1e3).toLocaleString('en-CA', {
+                hour12: false,
+                dateStyle: 'short',
+                timeStyle: 'short',
+              })}
+            </p>
           </section>
           <section>
             <a href={txLink} target="_blank" rel="noreferrer noopener" className="underline underline-offset-4">
