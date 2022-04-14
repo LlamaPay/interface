@@ -1,3 +1,4 @@
+import Tooltip from 'components/Tooltip';
 import { useTokenPrice } from 'queries/useTokenPrice';
 import * as React from 'react';
 import { IStream } from 'types';
@@ -18,12 +19,9 @@ const TotalStreamed = ({ data }: { data: IStream }) => {
   }, [data]);
 
   return (
-    <div className="flex items-baseline space-x-1">
+    <Tooltip content={`${(Number(amount) * Number(price)).toFixed(2)} USD`}>
       <span className="slashed-zero tabular-nums">{amount}</span>
-      <span className="text-[10px] tabular-nums">
-        {amount && price && `${(Number(amount) * Number(price)).toFixed(2)} USD`}
-      </span>
-    </div>
+    </Tooltip>
   );
   // return ;
 };

@@ -3,6 +3,7 @@ import { IStream } from 'types';
 import { formatBalance } from 'utils/amount';
 import useWithdrawable from 'queries/useWithdrawable';
 import { useTokenPrice } from 'queries/useTokenPrice';
+import Tooltip from 'components/Tooltip';
 
 const Withdrawable = ({ data }: { data: IStream }) => {
   const { data: callResult, isLoading } = useWithdrawable({
@@ -45,10 +46,9 @@ const Withdrawable = ({ data }: { data: IStream }) => {
 
   return (
     <div className="flex items-baseline space-x-1">
-      <span className="slashed-zero tabular-nums">{balanceState && formatBalance(balanceState)}</span>
-      <span className="text-[10px] tabular-nums">
-        {balanceState && price && `${(balanceState * Number(price)).toFixed(2)} USD`}
-      </span>
+      <Tooltip content={`${balanceState && (balanceState * Number(price)).toFixed(2)} USD`}>
+        <span className="slashed-zero tabular-nums">{balanceState && formatBalance(balanceState)}</span>
+      </Tooltip>
     </div>
   );
 };

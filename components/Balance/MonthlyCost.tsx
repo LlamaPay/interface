@@ -1,3 +1,4 @@
+import Tooltip from 'components/Tooltip';
 import { useTokenPrice } from 'queries/useTokenPrice';
 import { IBalance } from 'types';
 
@@ -10,14 +11,13 @@ export const MonthlyCost = ({ data }: MonthlyCostProps) => {
   const price = useTokenPrice(data.address);
   return (
     <td className="whitespace-nowrap border px-4 py-[6px] text-right text-sm dark:border-stone-700">
-      <div className="flex, space-x-1">
+      <Tooltip content={`${price && monthlyCost && (Number(price.data) * monthlyCost).toFixed(2)} USD`}>
         <span className="slashed-zero tabular-nums">
-          {monthlyCost.toLocaleString('en-US', {
+          {`${monthlyCost.toLocaleString('en-US', {
             maximumFractionDigits: 5,
-          })}
+          })} ${data.symbol}`}
         </span>
-        <span className="text-[12px] tabular-nums">{(Number(price.data) * monthlyCost).toFixed(2)} USD</span>
-      </div>
+      </Tooltip>
     </td>
   );
 };
