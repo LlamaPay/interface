@@ -19,6 +19,7 @@ interface INetworkDetails {
     llamapayFactoryAddress: string;
     blockExplorerURL: string;
     blockExplorerName: string;
+    prefix: string;
   };
 }
 
@@ -43,6 +44,7 @@ export const networkDetails: INetworkDetails = {
     llamapayFactoryAddress: FACTORY_RINKEBY,
     blockExplorerURL: 'https://rinkeby.etherscan.io/',
     blockExplorerName: 'Etherscan',
+    prefix: 'ethereum',
   },
   42: {
     rpcUrl: `https://rinkeby.infura.io/v3/${infuraId}`,
@@ -56,6 +58,7 @@ export const networkDetails: INetworkDetails = {
     llamapayFactoryAddress: FACTORY_KOVAN,
     blockExplorerURL: 'https://kovan.etherscan.io/',
     blockExplorerName: 'Etherscan',
+    prefix: 'ethereum',
   },
   43113: {
     rpcUrl: 'https://api.avax-test.network/ext/bc/C/rpc',
@@ -65,6 +68,7 @@ export const networkDetails: INetworkDetails = {
     llamapayFactoryAddress: FACTORY_FUJI,
     blockExplorerURL: 'https://testnet.snowtrace.io/',
     blockExplorerName: 'Snowtrace',
+    prefix: 'avax',
   },
   43114: {
     rpcUrl: 'https://api.avax.network/ext/bc/C/rpc',
@@ -74,6 +78,7 @@ export const networkDetails: INetworkDetails = {
     llamapayFactoryAddress: FACTORY_AVALANCHE,
     blockExplorerURL: 'https://snowtrace.io/',
     blockExplorerName: 'Snowtrace',
+    prefix: 'avax',
   },
 };
 

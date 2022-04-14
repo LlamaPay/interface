@@ -1,3 +1,4 @@
+import { useTokenPrice } from 'queries/useTokenPrice';
 import React from 'react';
 import { IBalance } from 'types';
 
@@ -7,6 +8,7 @@ interface BalanceAndSymbolProps {
 
 export const BalanceAndSymbol = ({ data }: BalanceAndSymbolProps) => {
   const [balanceState, setBalanceState] = React.useState<number | null>(null);
+  const price = useTokenPrice(data.address);
 
   const updateBalance = React.useCallback(() => {
     const sub = ((Date.now() / 1e3 - Number(data.lastPayerUpdate)) * Number(data.totalPaidPerSec)) / 1e20;
@@ -23,10 +25,15 @@ export const BalanceAndSymbol = ({ data }: BalanceAndSymbolProps) => {
 
   return (
     <td className="whitespace-nowrap border p-1 text-right slashed-zero tabular-nums dark:border-stone-700">
-      {balanceState &&
-        `${balanceState.toLocaleString('en-US', { maximumFractionDigits: 5, minimumFractionDigits: 5 })} ${
-          data.symbol
-        }`}
+      <div className="flex space-x-1">
+        <span>
+          {balanceState &&
+            `${balanceState.toLocaleString('en-US', { maximumFractionDigits: 5, minimumFractionDigits: 5 })} ${
+              data.symbol
+            }`}
+        </span>
+        <span className="text-[12px]">{balanceState && (balanceState * Number(price.data)).toFixed(2)} USD</span>
+      </div>
     </td>
   );
 };

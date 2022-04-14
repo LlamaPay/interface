@@ -2,6 +2,7 @@ import * as React from 'react';
 import { IStream } from 'types';
 import { formatBalance } from 'utils/amount';
 import useWithdrawable from 'queries/useWithdrawable';
+import { useTokenPrice } from 'queries/useTokenPrice';
 
 const Withdrawable = ({ data }: { data: IStream }) => {
   const { data: callResult } = useWithdrawable({
@@ -12,6 +13,7 @@ const Withdrawable = ({ data }: { data: IStream }) => {
     streamId: data.streamId,
   });
   const [balanceState, setBalanceState] = React.useState<number | null>(null);
+  const price = useTokenPrice(data.token.address.toLowerCase());
 
   React.useEffect(() => {
     const id = setInterval(() => {
@@ -34,8 +36,14 @@ const Withdrawable = ({ data }: { data: IStream }) => {
   if (callResult?.owed > 0) {
     return <>Out of funds</>;
   }
-
-  return <span className="slashed-zero tabular-nums">{balanceState && formatBalance(balanceState)}</span>;
+  return (
+    <div className="flex space-x-1">
+      <span className="slashed-zero tabular-nums">{balanceState && formatBalance(balanceState)}</span>
+      <span className="text-[10px] slashed-zero tabular-nums">
+        {balanceState && (balanceState * Number(price.data)).toFixed(2)} USD
+      </span>
+    </div>
+  );
 };
 
 export default Withdrawable;

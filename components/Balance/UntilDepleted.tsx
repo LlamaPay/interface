@@ -9,11 +9,8 @@ function getTime(data: IBalance, balance: number) {
   const time = balance / (Number(data.totalPaidPerSec) / 1e20);
   if (Number(data.totalPaidPerSec) === 0) return 'No Streams';
   if (time < 1) return 'Streams Depleted';
-  const days = Math.floor(time / 86400);
-  const hours = Math.floor((time - days * 86400) / 3600);
-  const minutes = Math.floor((time - days * 86400 - hours * 3600) / 60);
-  const seconds = Math.floor(time - days * 86400 - hours * 3600 - minutes * 60);
-  return `${days}D ${hours}H ${minutes}M ${seconds < 10 ? `0${seconds}` : seconds}S`;
+  const days = time / 86400;
+  return `${days.toFixed(2)} days`;
 }
 
 export const UntilDepleted = ({ data }: UntilDepletedProps) => {
