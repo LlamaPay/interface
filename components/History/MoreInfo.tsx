@@ -94,8 +94,6 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
             <p>
               {new Date(Number(data.createdTimestamp) * 1e3).toLocaleString('en-CA', {
                 hour12: false,
-                dateStyle: 'short',
-                timeStyle: 'short',
               })}
             </p>
           </section>
