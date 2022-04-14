@@ -18,8 +18,7 @@ function getDate(data: IBalance, balance: number) {
   const time = balance / (Number(data.totalPaidPerSec) / 1e20);
   if (time < 1) return 'Streams Depleted';
   if (Number(data.totalPaidPerSec) === 0) return 'No Streams';
-  const timestamp = new Date(Date.now() + time * 3);
-  return timestamp.toLocaleString('en-CA', {
+  return new Date(Date.now() + time * 1e3).toLocaleString('en-CA', {
     hour12: false,
   });
 }
