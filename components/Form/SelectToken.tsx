@@ -4,12 +4,13 @@ import { Dialog, DialogDismiss, DialogHeading, useDialogState } from 'ariakit/di
 import { Combobox, ComboboxItem, ComboboxList, useComboboxState } from 'ariakit/combobox';
 import classNames from 'classnames';
 import { XIcon, ArrowLeftIcon } from '@heroicons/react/solid';
-import useGetAllTokens from 'queries/useGetAllTokens';
 import { InputText } from './Input';
 import { SubmitButton } from './Button';
 import useCreateLlamaPayContract from 'queries/useCreateLlamaPayContract';
-import useTokenBalance from 'queries/useTokenBalance';
 import { BeatLoader } from 'react-spinners';
+import useTokenBalances from 'queries/useTokenBalances';
+import Image from 'next/image';
+import defaultImage from 'public/empty-token.webp';
 
 interface ISelectTokenProps {
   handleTokenChange: (token: string) => void;
@@ -19,15 +20,12 @@ interface ISelectTokenProps {
 }
 
 function Token({ value, shortName, showBalance }: { value: string; shortName?: boolean; showBalance?: boolean }) {
-  const { data: tokens } = useGetAllTokens();
+  const { data: tokens } = useTokenBalances();
 
   const data = React.useMemo(() => {
-    return tokens?.find((t) => t.name === value || t.tokenAddress === value) ?? null;
+    return tokens ? tokens.find((t) => t.tokenAddress === value) : null;
   }, [value, tokens]);
 
-  const { data: balance } = useTokenBalance(data);
-
-  // TODO show token image and symbol for verified lists, else show token address
   return (
     <div
       className={classNames(
@@ -36,7 +34,11 @@ function Token({ value, shortName, showBalance }: { value: string; shortName?: b
       )}
     >
       <div className="flex items-center space-x-2 overflow-x-hidden">
-        <div className="h-6 w-6 flex-shrink-0 rounded-full bg-orange-400"></div>
+        {data ? (
+          <Image src={data.logoURI} alt={'token ' + data.tokenAddress} width="24px" height="24px" />
+        ) : (
+          <Image src={defaultImage} width="24px" height="24px" alt="Placeholder Image" />
+        )}
         {data ? (
           <div className="truncate">{shortName ? data.symbol : data.name}</div>
         ) : (
@@ -45,7 +47,7 @@ function Token({ value, shortName, showBalance }: { value: string; shortName?: b
       </div>
       {showBalance && (
         <div className="ml-4 whitespace-nowrap slashed-zero text-gray-600 dark:text-gray-400">
-          {classNames(balance, data?.symbol)}
+          {data?.balance && `${data.balance} ${data?.symbol}`}
         </div>
       )}
     </div>

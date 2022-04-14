@@ -56,7 +56,7 @@ const Balance = () => {
         <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
           <h1 className="text-2xl">Balances</h1>
           <button
-            className="flex items-center space-x-2 whitespace-nowrap rounded bg-zinc-100 py-1 px-2 text-sm shadow dark:bg-zinc-800"
+            className="flex items-center space-x-2 whitespace-nowrap rounded bg-green-100 py-1 px-2 text-sm shadow dark:bg-[#153723]"
             onClick={() => {
               depositFieldDialog.toggle();
             }}

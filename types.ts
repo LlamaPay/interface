@@ -59,3 +59,17 @@ export interface IStreamAndHistory {
   streams: IStream[] | null;
   history: IHistory[] | null;
 }
+
+export interface ITokenList {
+  chainId: number;
+  address: string;
+  name: string;
+  symbol: string;
+  decimals: number;
+  logoURI: string;
+}
+
+export interface ITokenLists extends IToken {
+  logoURI: string;
+  isVerified: boolean;
+}

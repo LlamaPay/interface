@@ -25,17 +25,28 @@ export const useBalances = () => {
   const { data: payersData } = usePayers(tokens, tokensKey);
 
   const formattedBalances = React.useMemo(() => {
-    return (
-      balances?.map((b) => {
-        const payers = payersData?.find((p) => p.address === b.address);
+    const formattedBalances =
+      balances
+        ?.map((b) => {
+          const payers = payersData?.find((p) => p.address === b.address);
 
-        return {
-          ...b,
-          totalPaidPerSec: payers?.totalPaidPerSec ?? null,
-          lastPayerUpdate: payers?.lastPayerUpdate ?? null,
-        };
-      }) ?? null
-    );
+          return {
+            ...b,
+            totalPaidPerSec: payers?.totalPaidPerSec ?? null,
+            lastPayerUpdate: payers?.lastPayerUpdate ?? null,
+          };
+        })
+        ?.sort(({ amount: first }, { amount: second }) => {
+          if (first < second) {
+            return -1;
+          }
+          if (first > second) {
+            return 1;
+          }
+          return 0;
+        }) ?? null;
+
+    return formattedBalances;
   }, [balances, payersData]);
 
   const isLoading = tokensLoading || balancesLoading;

@@ -2,9 +2,9 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { useAccount } from 'wagmi';
 import { SelectToken } from './SelectToken';
-import useGetAllTokens from 'queries/useGetAllTokens';
 import { checkApproval } from './utils';
 import { InputWithTokenSelectProps } from './types';
+import useTokenBalances from 'queries/useTokenBalances';
 
 // get checkTokenApproval function from parent compoenent becuase it makes it easier to show loading and error indicators in parent component
 // get tokenAddress/setTokenAddress from parent because select element is controlled , so when need to read tokenaddress value when form is submitted
@@ -18,8 +18,8 @@ export const InputWithTokenSelect = ({
   checkTokenApproval,
   ...props
 }: InputWithTokenSelectProps) => {
-  // get all toksn list to show in select element
-  const { data: tokens } = useGetAllTokens();
+  // get all token list to show in select element
+  const { data: tokens } = useTokenBalances();
 
   // get user account address to check against token allowance
   const [{ data: accountData }] = useAccount();
@@ -28,12 +28,12 @@ export const InputWithTokenSelect = ({
   const inputAmount = React.useRef('');
 
   // format tokens list to only include token names
-  const tokenOptions = React.useMemo(() => tokens?.map((t) => t.name) ?? [], [tokens]);
+  const tokenOptions = React.useMemo(() => tokens?.map((t) => t.tokenAddress) ?? [], [tokens]);
 
   // handle select element change
   const handleTokenChange = (token: string) => {
     // find the prop in tokens list, prop is the one used to format in tokenOptions above
-    const data = tokens?.find((t) => t.name === token);
+    const data = tokens?.find((t) => t.tokenAddress === token);
 
     if (data) {
       setTokenAddress(data.tokenAddress);

@@ -101,7 +101,7 @@ function NewTable({ data }: { data: IStream[] }) {
           />
         </label> */}
         <Link href="/create" passHref>
-          <button className="flex items-center space-x-2 whitespace-nowrap rounded bg-zinc-100 py-1 px-2 text-sm shadow dark:bg-zinc-800">
+          <button className="flex items-center space-x-2 whitespace-nowrap rounded bg-green-100 py-1 px-2 text-sm shadow dark:bg-[#153723]">
             <PlusIcon className="h-[14px] w-[14px]" />
             <span>Create</span>
           </button>
