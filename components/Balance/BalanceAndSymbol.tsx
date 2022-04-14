@@ -28,9 +28,7 @@ export const BalanceAndSymbol = ({ data }: BalanceAndSymbolProps) => {
       <div className="flex space-x-1">
         <span>
           {balanceState &&
-            `${balanceState.toLocaleString('en-US', { maximumFractionDigits: 5, minimumFractionDigits: 5 })} ${
-              data.symbol
-            }`}
+            `${balanceState.toLocaleString('en-US', { maximumFractionDigits: 5, minimumFractionDigits: 5 })}`}
         </span>
         <span className="text-[12px]">{balanceState && (balanceState * Number(price.data)).toFixed(2)} USD</span>
       </div>

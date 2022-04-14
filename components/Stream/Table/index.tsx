@@ -3,14 +3,13 @@ import { createTable, useTable, PaginationState, paginateRowsFn, globalFilterRow
 import Table from 'components/Table';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { IStream } from 'types';
-import { secondsByDuration } from 'utils/constants';
 import TotalStreamed from './TotalStreamed';
 import Withdrawable from './Withdrawable';
 import SavedName from './SavedName';
-import { formatAmountInTable } from 'utils/amount';
 import StreamActions from './StreamActions';
 import Link from 'next/link';
 import { PlusIcon } from '@heroicons/react/solid';
+import AmtPerMonth from './AmtPerMonth';
 
 const table = createTable<{ Row: IStream }>();
 
@@ -23,30 +22,20 @@ const defaultColumns = table.createColumns([
   table.createDataColumn('tokenSymbol', {
     header: 'Token',
   }),
-  table.createDataColumn('amountPerSec', {
+  table.createDisplayColumn({
+    id: 'totalStreamed',
     header: () => (
       <>
         <span>Amount</span>
         <small className="mx-1 text-xs font-normal text-gray-500 dark:text-gray-400">per month</small>
       </>
     ),
-    cell: ({ value }) => {
-      const isDataValid = !Number.isNaN(value);
-      const amount = isDataValid && formatAmountInTable(Number(value) / 1e20, secondsByDuration['month']);
-      return <>{amount}</>;
-    },
+    cell: ({ cell }) => (cell.row.original ? <AmtPerMonth data={cell.row.original} /> : <></>),
   }),
-  table.createDataColumn('createdTimestamp', {
+  table.createDisplayColumn({
+    id: 'totalStreamed',
     header: 'Total Streamed',
-    cell: ({ value, cell }) => {
-      const amountPerSec = cell.row.values.amountPerSec;
-
-      const isDataValid = !Number.isNaN(value) && !Number.isNaN(amountPerSec);
-
-      if (!isDataValid) return <></>;
-
-      return <TotalStreamed createdAt={value} amountPerSec={amountPerSec} />;
-    },
+    cell: ({ cell }) => (cell.row.original ? <TotalStreamed data={cell.row.original} /> : <></>),
   }),
   table.createDisplayColumn({
     id: 'userWithdrawable',

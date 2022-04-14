@@ -15,7 +15,6 @@ export const MonthlyCost = ({ data }: MonthlyCostProps) => {
           {monthlyCost.toLocaleString('en-US', {
             maximumFractionDigits: 5,
           })}{' '}
-          {data.symbol}
         </span>
         <span className="text-[12px]">{(Number(price.data) * monthlyCost).toFixed(2)} USD</span>
       </div>
