@@ -9,7 +9,7 @@ interface BalanceAndSymbolProps {
 
 export const BalanceAndSymbol = ({ data }: BalanceAndSymbolProps) => {
   const [balanceState, setBalanceState] = React.useState<number | null>(null);
-  const price = useTokenPrice(data.address);
+  const { data: price } = useTokenPrice(data.address);
 
   const updateBalance = React.useCallback(() => {
     const sub = ((Date.now() / 1e3 - Number(data.lastPayerUpdate)) * Number(data.totalPaidPerSec)) / 1e20;
@@ -26,7 +26,7 @@ export const BalanceAndSymbol = ({ data }: BalanceAndSymbolProps) => {
 
   return (
     <td className="whitespace-nowrap border px-4 py-[6px] text-right text-sm dark:border-stone-700">
-      <Tooltip content={`${balanceState && (balanceState * Number(price.data)).toFixed(2)} USD`}>
+      <Tooltip content={balanceState && price && `${(balanceState * Number(price)).toFixed(2)} USD`}>
         <span className="slashed-zero tabular-nums">
           {balanceState &&
             `${balanceState.toLocaleString('en-US', { maximumFractionDigits: 5, minimumFractionDigits: 5 })} ${

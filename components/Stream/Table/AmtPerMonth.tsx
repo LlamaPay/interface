@@ -9,7 +9,7 @@ const AmtPerMonth = ({ data }: { data: IStream }) => {
   const amount = (Number(data.amountPerSec) * secondsByDuration['month']) / 1e20;
   return (
     <div className="flex items-baseline space-x-1">
-      <Tooltip content={`${amount && price && `${(amount * Number(price)).toFixed(2)} USD`}`}>
+      <Tooltip content={amount && price && `${(amount * Number(price)).toFixed(2)} USD`}>
         <span className="slashed-zero tabular-nums">
           {amount.toLocaleString('en-US', { maximumFractionDigits: 5 })}
         </span>

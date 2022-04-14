@@ -3,9 +3,8 @@ import axios from 'axios';
 import { useNetwork } from 'wagmi';
 import { networkDetails } from 'utils/constants';
 
-// TODO update chain name based on user wallet network
-const fetchTokenPrice = async (id: string, prefix: string) => {
-  if (!id) return null;
+const fetchTokenPrice = async (id: string, prefix: string | null) => {
+  if (!id || !prefix) return null;
 
   // remove later this is used for testing
   // id = '0xc7198437980c041c805a1edcba50c1ce5db95118';
@@ -23,7 +22,8 @@ const fetchTokenPrice = async (id: string, prefix: string) => {
 
 export function useTokenPrice(id: string) {
   const [{ data: network }] = useNetwork();
-  const prefix = networkDetails[Number(network.chain?.id)].prefix;
-  // TODO handle errorde
+
+  const prefix = network.chain?.id ? networkDetails[Number(network.chain?.id)].prefix : null;
+
   return useQuery(['token', id], () => fetchTokenPrice(id, prefix), {});
 }
