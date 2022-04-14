@@ -1,6 +1,7 @@
 import llamaContract from 'abis/llamaContract';
 import * as React from 'react';
 import toast from 'react-hot-toast';
+import { useQueryClient } from 'react-query';
 import { IStream } from 'types';
 import { useContractWrite } from 'wagmi';
 
@@ -21,6 +22,8 @@ export const Push = ({ data, buttonName }: PushProps) => {
     }
   );
 
+  const queryClient = useQueryClient();
+
   const handleClick = () => {
     withdraw().then((data) => {
       const loadingToast = data.error
@@ -31,6 +34,8 @@ export const Push = ({ data, buttonName }: PushProps) => {
         receipt.status === 1
           ? toast.success(buttonName === 'Withdraw' ? 'Successfully Withdrawn Payment' : 'Successfully Sent Payment')
           : toast.error(buttonName === 'Withdraw' ? 'Failed to Withdraw Payment' : 'Failed to Send Payment');
+
+        queryClient.invalidateQueries();
       });
     });
   };
