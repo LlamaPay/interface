@@ -18,7 +18,9 @@ const fetchTokenPrice = async (id: string, prefix: string | null) => {
     })
   );
 
-  return data.coins[`${prefix}:${id}`].price;
+  const token = data.coins && data.coins[`${prefix}:${id}`];
+
+  return token?.price;
 };
 
 export function useTokenPrice(id: string) {
