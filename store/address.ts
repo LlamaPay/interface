@@ -2,21 +2,21 @@ import create from 'zustand';
 import { persist } from 'zustand/middleware';
 
 type AddressStore = {
-  payeeAddresses: { id: string; shortName: string }[];
+  addressBook: { id: string; shortName: string }[];
   updateAddress: (id: string, shortName: string) => void;
 };
 
 export const useAddressStore = create<AddressStore>(
   persist(
     (set) => ({
-      payeeAddresses: [{ id: 'llamapay', shortName: '1' }],
+      addressBook: [{ id: 'llamapay', shortName: '1' }],
       updateAddress: (id: string, shortName: string) =>
         set((state) => {
-          const isDuplicate = state.payeeAddresses.find((p) => p.id === id);
+          const isDuplicate = state.addressBook.find((p) => p.id === id);
 
           if (isDuplicate) {
             return {
-              payeeAddresses: state.payeeAddresses.map((item) =>
+              addressBook: state.addressBook.map((item) =>
                 item.id === id
                   ? {
                       ...item,
@@ -27,12 +27,12 @@ export const useAddressStore = create<AddressStore>(
               ),
             };
           } else {
-            return { payeeAddresses: [...state.payeeAddresses, { id, shortName }] };
+            return { addressBook: [...state.addressBook, { id, shortName }] };
           }
         }),
     }),
     {
-      name: 'payee-addresses', // unique name
+      name: 'llama-address-book', // unique name
     }
   )
 );
