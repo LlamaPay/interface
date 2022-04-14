@@ -61,7 +61,7 @@ const fetchBalance = async ({ userAddress, tokens, provider }: IFetchBalance) =>
 function useTokenBalances() {
   const [{ data: accountData }] = useAccount();
   const { provider, network } = useNetworkProvider();
-  const tokens = useTokenList();
+  const { data: tokens } = useTokenList();
 
   const userAddress = accountData?.address.toLowerCase() ?? '';
 

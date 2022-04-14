@@ -12,6 +12,7 @@ import { BalanceAndSymbol } from './BalanceAndSymbol';
 import { UntilDepleted } from './UntilDepleted';
 import { MonthlyCost } from './MonthlyCost';
 import { PlusIcon } from '@heroicons/react/solid';
+import Image from 'next/image';
 
 const Balance = () => {
   const { balances, noBalances, isLoading, isError } = useBalances();
@@ -29,7 +30,6 @@ const Balance = () => {
   const { data: tokens } = useGetAllTokens();
 
   const handleToken = (actionType: TokenAction, balance: IBalance) => {
-    // dialog.toggle();
     if (actionType === 'deposit') {
       depositFormDialog.toggle();
     } else {
@@ -96,19 +96,23 @@ const Balance = () => {
               <tbody>
                 {balances?.map((b) => (
                   <tr key={b.address} className="border dark:border-stone-700">
-                    {/* TODO handle decimals and display token name and image when not on testnet */}
                     <th className="w-full border px-4 py-[6px] text-left text-sm font-normal dark:border-stone-700">
-                      {chainExplorer ? (
-                        <a
-                          href={`${chainExplorer}/address/${b.contractAddress}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {b.name || b.address}
-                        </a>
-                      ) : (
-                        <span>{b.name || b.address}</span>
-                      )}
+                      <div className="flex items-center space-x-2">
+                        <div className="flex flex-shrink-0 items-center rounded-full">
+                          <Image src={b.logoURI} alt={'Logo of token' + b.name} width="24px" height="24px" />
+                        </div>
+                        {chainExplorer ? (
+                          <a
+                            href={`${chainExplorer}/address/${b.contractAddress}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                          >
+                            {b.name || b.address}
+                          </a>
+                        ) : (
+                          <span>{b.name || b.address}</span>
+                        )}
+                      </div>
                     </th>
                     <BalanceAndSymbol data={b} />
                     <UntilDepleted data={b} />

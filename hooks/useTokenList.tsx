@@ -4,12 +4,12 @@ import tokenLists from 'tokenLists';
 import useGetAllTokens from 'queries/useGetAllTokens';
 import { ITokenLists } from 'types';
 
-export default function useTokenList(): ITokenLists[] | null {
+export default function useTokenList() {
   const { chainId } = useNetworkProvider();
 
-  const { data: tokens } = useGetAllTokens();
+  const { data: tokens, isLoading, error } = useGetAllTokens();
 
-  return React.useMemo(() => {
+  const data: ITokenLists[] | null = React.useMemo(() => {
     if (chainId && tokens) {
       const verifiedLists = tokenLists.find((l) => l.chainId === chainId)?.list ?? [];
 
@@ -26,4 +26,6 @@ export default function useTokenList(): ITokenLists[] | null {
       });
     } else return null;
   }, [chainId, tokens]);
+
+  return { data, isLoading, error };
 }
