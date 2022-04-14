@@ -21,6 +21,7 @@ export default function useTokenList(): ITokenLists[] | null {
             verifiedToken?.logoURI ??
             'https://raw.githubusercontent.com/LlamaPay/interface/main/public/empty-token.webp',
           isVerified: verifiedToken ? true : false,
+          name: verifiedToken?.name ?? token.name,
         };
       });
     } else return null;

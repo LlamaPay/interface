@@ -17,6 +17,33 @@ const rinkeby = [
     logoURI:
       'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png',
   },
+  {
+    name: 'Llama DAI',
+    address: '0x332C7aC34580dfEF553B7726549cEc7015C4B39b',
+    symbol: 'DAI',
+    decimals: 18,
+    chainId: 4,
+    logoURI:
+      'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x6B175474E89094C44Da98b954EedeAC495271d0F/logo.png',
+  },
+  {
+    chainId: 4,
+    address: '0x0aCBd07e458F228d4869066b998a0F55F36537B2',
+    name: 'Llama USDT',
+    symbol: 'USDT',
+    decimals: 6,
+    logoURI:
+      'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xdAC17F958D2ee523a2206206994597C13D831ec7/logo.png',
+  },
+  {
+    chainId: 4,
+    address: '0x3861e9F29fcAFF738906c7a3a495583eE7Ca4C18',
+    name: 'Llama USDC',
+    symbol: 'USDC',
+    decimals: 6,
+    logoURI:
+      'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png',
+  },
 ];
 
 export default rinkeby;

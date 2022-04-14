@@ -1,4 +1,6 @@
 import { ITokenList } from 'types';
+import avaxMainnet from './avaxMainnet';
+import fuji from './fuji';
 import kovan from './kovan';
 import rinkeby from './rinkeby';
 
@@ -15,6 +17,14 @@ const tokenLists: ILists[] = [
   {
     chainId: 42,
     list: kovan,
+  },
+  {
+    chainId: 43113,
+    list: fuji,
+  },
+  {
+    chainId: 43114,
+    list: avaxMainnet,
   },
 ];
 
