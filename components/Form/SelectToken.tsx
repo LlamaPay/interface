@@ -29,16 +29,18 @@ function Token({ value, shortName, showBalance }: { value: string; shortName?: b
   return (
     <div
       className={classNames(
-        'balance-wrap flex flex-1 flex-row items-center justify-between',
-        shortName ? 'py-2 pr-1' : 'p-2'
+        'flex flex-1 flex-row items-center justify-between',
+        shortName ? 'truncate py-2 pr-1' : 'balance-wrap p-2'
       )}
     >
       <div className="flex items-center space-x-2 overflow-x-hidden">
-        {data ? (
-          <Image src={data.logoURI} alt={'token ' + data.tokenAddress} width="24px" height="24px" />
-        ) : (
-          <Image src={defaultImage} width="24px" height="24px" alt="Placeholder Image" />
-        )}
+        <div className="flex h-7 w-7 flex-shrink-0 items-center rounded-full">
+          {data ? (
+            <Image src={data.logoURI} alt={'Logo of token' + data.name} width="24px" height="24px" />
+          ) : (
+            <Image src={defaultImage} width="24px" height="24px" alt="Placeholder Image" />
+          )}
+        </div>
         {data ? (
           <div className="truncate">{shortName ? data.symbol : data.name}</div>
         ) : (

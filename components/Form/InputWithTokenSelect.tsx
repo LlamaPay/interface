@@ -94,11 +94,13 @@ export const InputWithTokenSelect = ({
           onChange={handleInputChange}
           {...props}
         />
-        <SelectToken
-          handleTokenChange={handleTokenChange}
-          tokens={tokenOptions}
-          className="absolute right-1 bottom-1 top-1 my-auto w-full max-w-[24%] bg-zinc-100 shadow-sm dark:bg-stone-600"
-        />
+        {tokens && (
+          <SelectToken
+            handleTokenChange={handleTokenChange}
+            tokens={tokenOptions}
+            className="absolute right-1 bottom-1 top-1 my-auto w-min max-w-[40%] bg-zinc-100 shadow-sm dark:bg-stone-600"
+          />
+        )}
       </div>
     </div>
   );
