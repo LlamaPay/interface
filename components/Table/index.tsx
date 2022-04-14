@@ -22,7 +22,7 @@ const Table = ({ instance }: { instance: TableInstance<any> }) => {
                   <th
                     {...header.getHeaderProps()}
                     key={header.id}
-                    className="whitespace-nowrap py-[6px] px-4 text-left text-sm font-semibold"
+                    className="whitespace-nowrap py-[6px] px-4 text-left text-sm font-[500]"
                   >
                     {header.isPlaceholder ? null : header.renderHeader()}
                   </th>

@@ -31,10 +31,16 @@ const defaultColumns = table.createColumns([
         <small className="mx-1 text-xs font-normal text-gray-500 dark:text-gray-400">per month</small>
       </>
     ),
-    cell: ({ value }) => {
+    cell: ({ value, cell }) => {
       const isDataValid = !Number.isNaN(value);
       const amount = isDataValid && formatAmountInTable(Number(value) / 1e20, secondsByDuration['month']);
-      return <>{amount}</>;
+      const symbol = cell.row.original?.stream?.token?.symbol ?? null;
+      return (
+        <>
+          <span>{amount}</span>
+          <span className="mx-1 text-xs text-gray-500 dark:text-gray-400">{symbol}</span>
+        </>
+      );
     },
   }),
   table.createDisplayColumn({

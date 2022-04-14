@@ -24,9 +24,9 @@ export const BalanceAndSymbol = ({ data }: BalanceAndSymbolProps) => {
   }, [updateBalance, data]);
 
   return (
-    <td className="whitespace-nowrap border p-1 text-right slashed-zero tabular-nums dark:border-stone-700">
-      <div className="flex space-x-1">
-        <span>
+    <td className="whitespace-nowrap border px-4 py-[6px] text-right text-sm dark:border-stone-700">
+      <div className="flex items-baseline space-x-1">
+        <span className="slashed-zero tabular-nums">
           {balanceState &&
             `${balanceState.toLocaleString('en-US', { maximumFractionDigits: 5, minimumFractionDigits: 5 })}`}
         </span>

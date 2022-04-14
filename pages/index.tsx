@@ -8,10 +8,7 @@ import { StreamTable } from 'components/Stream';
 const Home: NextPage = () => {
   return (
     <Layout className="mx-auto mt-12 flex w-full flex-col items-center space-y-6">
-      <span className="mr-auto w-full">
-        <Balance />
-      </span>
-
+      <Balance />
       <StreamTable />
       <HistoryTable />
     </Layout>

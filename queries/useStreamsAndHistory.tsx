@@ -29,19 +29,25 @@ const useStreamsAndHistory = () => {
       const streams = data?.user?.streams ?? [];
       const history = data?.user?.historicalEvents ?? [];
 
-      const formattedStreams = streams.map((s) => ({
-        llamaContractAddress: s.contract.address,
-        amountPerSec: s.amountPerSec,
-        createdTimestamp: s.createdTimestamp,
-        payerAddress: s.payer.id,
-        payeeAddress: s.payee.id,
-        streamId: s.streamId,
-        token: s.token,
-        tokenName: s.token.name,
-        tokenSymbol: s.token.symbol,
-        tokenContract: createERC20Contract({ tokenAddress: getAddress(s.token.address), provider }),
-        llamaTokenContract: createContract(getAddress(s.contract.address), provider),
-      }));
+      const formattedStreams = streams.map((s) => {
+        const streamType: 'outgoingStream' | 'incomingStream' =
+          s.payer.id?.toLowerCase() === accountData?.address.toLowerCase() ? 'outgoingStream' : 'incomingStream';
+
+        return {
+          llamaContractAddress: s.contract.address,
+          amountPerSec: s.amountPerSec,
+          createdTimestamp: s.createdTimestamp,
+          payerAddress: s.payer.id,
+          payeeAddress: s.payee.id,
+          streamId: s.streamId,
+          streamType,
+          token: s.token,
+          tokenName: s.token.name,
+          tokenSymbol: s.token.symbol,
+          tokenContract: createERC20Contract({ tokenAddress: getAddress(s.token.address), provider }),
+          llamaTokenContract: createContract(getAddress(s.contract.address), provider),
+        };
+      });
 
       const formattedHistory = history.map((h) => {
         const addressType: 'payer' | 'payee' =

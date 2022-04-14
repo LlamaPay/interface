@@ -41,6 +41,7 @@ export interface IStream {
   payerAddress: string;
   payeeAddress: string;
   streamId: string;
+  streamType: 'outgoingStream' | 'incomingStream';
   token: { address: string; name: string; decimals: number; symbol: string };
   tokenName: string;
   tokenSymbol: string;

@@ -3,13 +3,10 @@ import Tooltip from 'components/Tooltip';
 import { useAddressStore } from 'store/address';
 import { IStream } from 'types';
 import { formatAddress } from 'utils/address';
-import { useAccount } from 'wagmi';
 
 export default function SavedName({ data }: { data: IStream }) {
-  const [{ data: accountData }] = useAccount();
-
   // check the stream type (incoming or outgoing)
-  const isIncoming = data.payerAddress !== accountData?.address.toLowerCase();
+  const isIncoming = data.streamType === 'incomingStream';
 
   const address = isIncoming ? data.payerAddress : data.payeeAddress;
 

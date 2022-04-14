@@ -4,7 +4,7 @@ import { IStream } from 'types';
 
 const TotalStreamed = ({ data }: { data: IStream }) => {
   const [amount, setAmount] = React.useState<string | null>(null);
-  const price = useTokenPrice(data.token.address.toLowerCase());
+  const { data: price } = useTokenPrice(data.token.address.toLowerCase());
 
   React.useEffect(() => {
     const id = setInterval(() => {
@@ -18,10 +18,10 @@ const TotalStreamed = ({ data }: { data: IStream }) => {
   }, [data]);
 
   return (
-    <div className="flex space-x-1">
+    <div className="flex items-baseline space-x-1">
       <span className="slashed-zero tabular-nums">{amount}</span>
-      <span className="text-[10px] slashed-zero tabular-nums">
-        {amount && (Number(amount) * Number(price.data)).toFixed(2)} USD
+      <span className="text-[10px] tabular-nums">
+        {amount && price && `${(Number(amount) * Number(price)).toFixed(2)} USD`}
       </span>
     </div>
   );

@@ -5,7 +5,7 @@ import useWithdrawable from 'queries/useWithdrawable';
 import { useTokenPrice } from 'queries/useTokenPrice';
 
 const Withdrawable = ({ data }: { data: IStream }) => {
-  const { data: callResult } = useWithdrawable({
+  const { data: callResult, isLoading } = useWithdrawable({
     contract: data.llamaTokenContract,
     payer: data.payerAddress,
     payee: data.payeeAddress,
@@ -13,34 +13,41 @@ const Withdrawable = ({ data }: { data: IStream }) => {
     streamId: data.streamId,
   });
   const [balanceState, setBalanceState] = React.useState<number | null>(null);
-  const price = useTokenPrice(data.token.address.toLowerCase());
+  const { data: price } = useTokenPrice(data.token.address.toLowerCase());
+
+  const setWithdrawables = React.useCallback(() => {
+    if (callResult?.withdrawableAmount === undefined || callResult.lastUpdate === undefined) {
+      setBalanceState(null);
+    } else if (callResult?.owed > 0) {
+      setBalanceState(callResult?.withdrawableAmount / 10 ** data.token.decimals);
+    } else {
+      setBalanceState(
+        callResult?.withdrawableAmount / 10 ** data.token.decimals +
+          ((Date.now() / 1e3 - callResult.lastUpdate) * Number(data.amountPerSec)) / 1e20
+      );
+    }
+  }, [callResult, data]);
 
   React.useEffect(() => {
-    const id = setInterval(() => {
-      if (callResult?.withdrawableAmount === undefined || callResult.lastUpdate === undefined) {
-        setBalanceState(null);
-      } else if (callResult?.owed > 0) {
-        setBalanceState(callResult?.withdrawableAmount / 10 ** data.token.decimals);
-      } else {
-        setBalanceState(
-          callResult?.withdrawableAmount / 10 ** data.token.decimals +
-            ((Date.now() / 1e3 - callResult.lastUpdate) * Number(data.amountPerSec)) / 1e20
-        );
-      }
-    }, 1);
+    const id = setInterval(setWithdrawables, 1);
 
     // clear interval when component unmounts
     return () => clearInterval(id);
-  }, [callResult, data]);
+  }, [setWithdrawables]);
 
   if (callResult?.owed > 0) {
     return <>Out of funds</>;
   }
+
+  if (isLoading) {
+    return <div className="animate-shimmer h-4 w-full bg-gray-400"></div>;
+  }
+
   return (
-    <div className="flex space-x-1">
+    <div className="flex items-baseline space-x-1">
       <span className="slashed-zero tabular-nums">{balanceState && formatBalance(balanceState)}</span>
-      <span className="text-[10px] slashed-zero tabular-nums">
-        {balanceState && (balanceState * Number(price.data)).toFixed(2)} USD
+      <span className="text-[10px] tabular-nums">
+        {balanceState && price && `${(balanceState * Number(price)).toFixed(2)} USD`}
       </span>
     </div>
   );
