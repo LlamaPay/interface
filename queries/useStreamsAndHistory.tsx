@@ -21,6 +21,9 @@ const useStreamsAndHistory = () => {
     {
       id: accountData?.address.toLowerCase() ?? '',
       network: network || '',
+    },
+    {
+      refetchInterval: 10000,
     }
   );
 
