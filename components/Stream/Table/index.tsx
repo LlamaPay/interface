@@ -23,7 +23,7 @@ const defaultColumns = table.createColumns([
     header: 'Token',
   }),
   table.createDisplayColumn({
-    id: 'totalStreamed',
+    id: 'amountPerSec',
     header: () => (
       <>
         <span>Amount</span>

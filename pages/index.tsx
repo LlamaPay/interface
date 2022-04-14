@@ -1,9 +1,9 @@
 import type { NextPage } from 'next';
 import * as React from 'react';
 import Layout from 'components/Layout';
-import { HistoryList, HistoryTable } from 'components/History';
+import { HistoryTable } from 'components/History';
 import Balance from 'components/Balance';
-import { StreamList, StreamTable } from 'components/Stream';
+import { StreamTable } from 'components/Stream';
 
 const Home: NextPage = () => {
   return (
@@ -11,8 +11,6 @@ const Home: NextPage = () => {
       <span className="mr-auto w-full">
         <Balance />
       </span>
-      {/* <StreamList /> */}
-      {/* <HistoryList /> */}
 
       <StreamTable />
       <HistoryTable />
