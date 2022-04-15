@@ -3,8 +3,6 @@ import * as React from 'react';
 import Header from './Header';
 import classNames from 'classnames';
 import Footer from './Footer';
-import { useAccount } from 'wagmi';
-import { useNetworkProvider } from 'hooks';
 import { CustomToast } from './CustomToast';
 
 interface ILayoutProps {
@@ -13,10 +11,6 @@ interface ILayoutProps {
 }
 
 export default function Layout({ children, className, ...props }: ILayoutProps) {
-  const [{ data: accountData }] = useAccount();
-
-  const { unsupported } = useNetworkProvider();
-
   return (
     <>
       <Head>
@@ -29,13 +23,7 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
       <CustomToast />
       <Header />
       <main className={classNames('flex-1 p-2', className)} {...props}>
-        {!accountData ? (
-          <p className="mx-auto mt-8 text-red-500">Connect wallet to continue</p>
-        ) : unsupported ? (
-          <p className="mx-auto mt-8 text-red-500">Chain not supported</p>
-        ) : (
-          <>{children}</>
-        )}
+        {children}
       </main>
       <Footer />
     </>

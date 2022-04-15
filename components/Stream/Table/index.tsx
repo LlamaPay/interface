@@ -10,6 +10,7 @@ import StreamActions from './StreamActions';
 import Link from 'next/link';
 import { PlusIcon } from '@heroicons/react/solid';
 import AmtPerMonth from './AmtPerMonth';
+import Fallback from 'components/FallbackList';
 
 const table = createTable<{ Row: IStream }>();
 
@@ -66,14 +67,28 @@ const defaultColumns = table.createColumns([
 ]);
 
 export function StreamTable() {
-  const { data: streamsAndHistory, isLoading, error } = useStreamsAndHistory();
+  const { data, isLoading, error } = useStreamsAndHistory();
 
-  if (isLoading || error) {
-    // TODO show placeholder
-    return null;
-  }
+  const noData = !data?.streams || data.streams?.length < 1;
 
-  return <NewTable data={streamsAndHistory.streams || []} />;
+  return (
+    <section className="w-full">
+      <div className="mb-2 flex w-full items-center justify-between">
+        <h1 className="text-2xl">Streams</h1>
+        <Link href="/create" passHref>
+          <button className="flex items-center space-x-2 whitespace-nowrap rounded bg-green-100 py-1 px-2 text-sm shadow dark:bg-[#153723]">
+            <PlusIcon className="h-[14px] w-[14px]" />
+            <span>Create</span>
+          </button>
+        </Link>
+      </div>
+      {isLoading || error || noData ? (
+        <Fallback isLoading={isLoading} isError={error ? true : false} noData={noData} type="streams" />
+      ) : (
+        <NewTable data={data.streams || []} />
+      )}
+    </section>
+  );
 }
 
 function NewTable({ data }: { data: IStream[] }) {
@@ -101,10 +116,8 @@ function NewTable({ data }: { data: IStream[] }) {
   });
 
   return (
-    <section className="w-full">
-      <div className="mb-2 flex w-full items-center justify-between">
-        <h1 className="text-2xl">Streams</h1>
-        {/* <label className="space-x-4">
+    <>
+      {/* <label className="space-x-4">
           <span>Search</span>
           <input
             value={globalFilter ?? ''}
@@ -112,14 +125,7 @@ function NewTable({ data }: { data: IStream[] }) {
             className="h-8 rounded border border-neutral-300 p-2 shadow-sm dark:border-neutral-700"
           />
         </label> */}
-        <Link href="/create" passHref>
-          <button className="flex items-center space-x-2 whitespace-nowrap rounded bg-green-100 py-1 px-2 text-sm shadow dark:bg-[#153723]">
-            <PlusIcon className="h-[14px] w-[14px]" />
-            <span>Create</span>
-          </button>
-        </Link>
-      </div>
       <Table instance={instance} />
-    </section>
+    </>
   );
 }
