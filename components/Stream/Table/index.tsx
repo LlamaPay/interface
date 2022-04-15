@@ -12,6 +12,7 @@ import { PlusIcon } from '@heroicons/react/solid';
 import AmtPerMonth from './AmtPerMonth';
 import Fallback from 'components/FallbackList';
 import TokenName from './TokenName';
+import StreamAddress from './StreamAddress';
 
 const table = createTable<{ Row: IStream }>();
 
@@ -24,14 +25,7 @@ const defaultColumns = table.createColumns([
   table.createDisplayColumn({
     id: 'address',
     header: 'Address',
-    cell: ({ cell }) => {
-      if (!cell.row.original) return null;
-      if (cell.row.original?.streamType === 'incomingStream') {
-        return cell.row.original.payerAddress;
-      } else {
-        return cell.row.original?.payeeAddress;
-      }
-    },
+    cell: ({ cell }) => (cell.row.original ? <StreamAddress data={cell.row.original} /> : <></>),
   }),
   table.createDataColumn('tokenSymbol', {
     header: 'Token',
