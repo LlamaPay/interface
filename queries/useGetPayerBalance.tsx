@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-import { IBalance, IToken } from 'types';
+import { IBalance, ITokenLists } from 'types';
 import { useAccount } from 'wagmi';
 import BigNumber from 'bignumber.js';
 import { createERC20Contract } from 'utils/tokenUtils';
@@ -9,7 +9,7 @@ import { Provider } from 'utils/contract';
 
 const fetchBalance = async (
   id: string,
-  tokens: IToken[] | null,
+  tokens: ITokenLists[] | null,
   provider: Provider | null
 ): Promise<IBalance[] | null> => {
   if (!id || id === '' || !tokens || tokens.length < 1 || !provider) return null;
@@ -27,6 +27,7 @@ const fetchBalance = async (
         name: tokens[index]?.name,
         address: tokens[index]?.tokenAddress,
         symbol: tokens[index]?.symbol,
+        logoURI: tokens[index]?.logoURI,
         amount: amount ? amount.toFixed(5) : '',
         contractAddress: tokens[index]?.llamaContractAddress,
         tokenDecimals: tokens[index].decimals,
@@ -43,7 +44,7 @@ const fetchBalance = async (
   }
 };
 
-function useGetPayerBalance(contracts: IToken[] | null, tokensKey: string) {
+function useGetPayerBalance(contracts: ITokenLists[] | null, tokensKey: string) {
   const [{ data: accountData }] = useAccount();
   const { provider } = useNetworkProvider();
 

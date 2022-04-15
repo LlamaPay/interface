@@ -1,11 +1,11 @@
 import * as React from 'react';
-import useGetAllTokens from 'queries/useGetAllTokens';
 import useGetPayerBalance from 'queries/useGetPayerBalance';
 import usePayers from 'queries/usePayers';
 import { useNetworkProvider } from './useNetworkProvider';
+import useTokenList from './useTokenList';
 
 export const useBalances = () => {
-  const { data: tokens, isLoading: tokensLoading, error: tokensError } = useGetAllTokens();
+  const { data: tokens, isLoading: tokensLoading, error: tokensError } = useTokenList();
   const { network } = useNetworkProvider();
 
   // pass a unique key to getpayerBalance query when tokens data changes
@@ -32,19 +32,14 @@ export const useBalances = () => {
 
           return {
             ...b,
-
             totalPaidPerSec: payers?.totalPaidPerSec ?? null,
             lastPayerUpdate: payers?.lastPayerUpdate ?? null,
           };
         })
-        ?.sort(({ amount: first }, { amount: second }) => {
-          if (first < second) {
-            return -1;
-          }
-          if (first > second) {
-            return 1;
-          }
-          return 0;
+        ?.sort((a, b) => {
+          if (!a.amount || Number.isNaN(a.amount)) return -1;
+          if (!b.amount || Number.isNaN(a.amount)) return 1;
+          return Number(b.amount) - Number(a.amount);
         }) ?? null;
 
     return formattedBalances;
