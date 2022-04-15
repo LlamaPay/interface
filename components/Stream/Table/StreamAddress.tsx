@@ -7,23 +7,23 @@ import { useNetwork } from 'wagmi';
 
 const StreamAddress = ({ data }: { data: IStream }) => {
   const [{ data: network }] = useNetwork();
-  const [address, setAddress] = React.useState<string>('');
-  const [link, setLink] = React.useState<string>('');
 
-  React.useEffect(() => {
+  const address = React.useMemo(() => {
     if (data.streamType === 'incomingStream') {
-      setAddress(data.payerAddress);
-      setLink(`${networkDetails[Number(network.chain?.id)].blockExplorerURL}/address/${data.payerAddress}`);
+      return data.payerAddress;
     } else if (data.streamType === 'outgoingStream') {
-      setAddress(data.payeeAddress);
-      setLink(`${networkDetails[Number(network.chain?.id)].blockExplorerURL}/address/${data.payeeAddress}`);
+      return data.payeeAddress;
     }
-  }, [data, network]);
+  }, [data]);
 
   return (
     <Tooltip content={`${address}`}>
-      <a href={link} target="_blank" rel="noopener noreferrer">
-        {formatAddress(address)}
+      <a
+        href={`${networkDetails[Number(network.chain?.id)].blockExplorerURL}/address/${address}`}
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        {address ? formatAddress(address) : ''}
       </a>
     </Tooltip>
   );
