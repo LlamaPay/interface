@@ -49,5 +49,7 @@ export const useBalances = () => {
 
   const isError = tokensError || balancesError ? true : false;
 
-  return { balances: formattedBalances, tokens, isLoading, isError };
+  const noBalances = !formattedBalances || formattedBalances.length === 0;
+
+  return { balances: formattedBalances, noBalances, tokens, isLoading, isError };
 };

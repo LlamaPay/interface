@@ -15,7 +15,7 @@ import Image from 'next/image';
 import Fallback from 'components/FallbackList';
 
 const Balance = () => {
-  const { balances, isLoading, isError } = useBalances();
+  const { balances, noBalances, isLoading, isError } = useBalances();
 
   // function that returns chain explorer url based on the chain user is connected to
   const { url: chainExplorer } = useChainExplorer();
@@ -47,7 +47,7 @@ const Balance = () => {
       submit: actionType === 'deposit' ? 'Deposit' : 'Withdraw',
     };
   };
-  const noBalances = !balances || balances.length === 0;
+
   const showFallback = isLoading || noBalances || isError;
 
   return (
