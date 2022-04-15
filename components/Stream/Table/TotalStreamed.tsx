@@ -19,9 +19,11 @@ const TotalStreamed = ({ data }: { data: IStream }) => {
   }, [data]);
 
   return (
-    <Tooltip content={price && amount && `${(Number(amount) * Number(price)).toFixed(2)} USD`}>
-      <span className="slashed-zero tabular-nums">{amount}</span>
-    </Tooltip>
+    <div className="flex justify-start">
+      <Tooltip content={price && amount && `${(Number(amount) * Number(price)).toFixed(2)} USD`}>
+        <span className="slashed-zero tabular-nums">{amount}</span>
+      </Tooltip>
+    </div>
   );
   // return ;
 };

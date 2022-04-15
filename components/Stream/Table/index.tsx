@@ -19,6 +19,18 @@ const defaultColumns = table.createColumns([
     header: 'Name',
     cell: ({ cell }) => (cell.row.original ? <SavedName data={cell.row.original} /> : <></>),
   }),
+  table.createDisplayColumn({
+    id: 'address',
+    header: 'Address',
+    cell: ({ cell }) => {
+      if (!cell.row.original) return null;
+      if (cell.row.original?.streamType === 'incomingStream') {
+        return cell.row.original.payerAddress;
+      } else {
+        return cell.row.original?.payeeAddress;
+      }
+    },
+  }),
   table.createDataColumn('tokenSymbol', {
     header: 'Token',
   }),

@@ -45,7 +45,7 @@ const Withdrawable = ({ data }: { data: IStream }) => {
   }
 
   return (
-    <div className="flex items-baseline space-x-1">
+    <div className="flex justify-start">
       <Tooltip content={balanceState && price && `${(balanceState * Number(price)).toFixed(2)} USD`}>
         <span className="slashed-zero tabular-nums">{balanceState && formatBalance(balanceState)}</span>
       </Tooltip>
