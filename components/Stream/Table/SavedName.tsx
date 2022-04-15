@@ -5,6 +5,7 @@ import { FormDialog } from 'components/Dialog';
 import Tooltip from 'components/Tooltip';
 import { useAddressStore } from 'store/address';
 import { IStream } from 'types';
+import { formatAddress } from 'utils/address';
 
 export default function SavedName({ data }: { data: IStream }) {
   // check the stream type (incoming or outgoing)
@@ -16,7 +17,8 @@ export default function SavedName({ data }: { data: IStream }) {
 
   const updateAddress = useAddressStore((state) => state.updateAddress);
 
-  const name = useAddressStore((state) => state.addressBook.find((p) => p.id === address))?.shortName ?? address;
+  const name =
+    useAddressStore((state) => state.addressBook.find((p) => p.id === address))?.shortName ?? formatAddress(address);
 
   const [savedAddress, setSavedAddress] = React.useState(name);
 
