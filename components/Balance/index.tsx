@@ -1,5 +1,4 @@
 import * as React from 'react';
-import FallbackList from 'components/FallbackList';
 import DepositForm from './DepositForm';
 import WithdrawForm from './WithdrawForm';
 import DepositField from './DepositField';
@@ -13,6 +12,7 @@ import { UntilDepleted } from './UntilDepleted';
 import { MonthlyCost } from './MonthlyCost';
 import { PlusIcon } from '@heroicons/react/solid';
 import Image from 'next/image';
+import Fallback from 'components/FallbackList';
 
 const Balance = () => {
   const { balances, noBalances, isLoading, isError } = useBalances();
@@ -38,7 +38,7 @@ const Balance = () => {
 
     formData.current = {
       actionType,
-      title: balance.name || balance.address, // TODO only show name of verified tokens, else show address
+      title: balance.name || balance.address,
       symbol: balance.symbol,
       tokenDecimals: balance.tokenDecimals,
       tokenAddress: balance.address,
@@ -67,12 +67,7 @@ const Balance = () => {
         </div>
 
         {showFallback ? (
-          <FallbackList
-            isLoading={isLoading}
-            data={noBalances && false}
-            error={isError}
-            noDataText="No deposited tokens"
-          />
+          <Fallback isLoading={isLoading} isError={isError} noData={noBalances} type="balances" />
         ) : (
           <div className="overflow-x-auto">
             <table className="dark:border-stone-700-collapse border">

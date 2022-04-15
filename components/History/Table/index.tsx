@@ -8,6 +8,7 @@ import { formatAddress } from 'utils/address';
 import { formatAmountInTable } from 'utils/amount';
 import ActionName from './ActionName';
 import HistoryActions from './HistoryActions';
+import Fallback from 'components/FallbackList';
 
 const table = createTable<{ Row: IHistory }>();
 
@@ -55,14 +56,22 @@ const defaultColumns = table.createColumns([
 ]);
 
 export function HistoryTable() {
-  const { data: streamsAndHistory, isLoading, error } = useStreamsAndHistory();
+  const { data, isLoading, error } = useStreamsAndHistory();
 
-  if (isLoading || error) {
-    // TODO show placeholder
-    return null;
-  }
+  const noData = !data?.history || data.history?.length < 1;
 
-  return <NewTable data={streamsAndHistory.history || []} />;
+  return (
+    <section className="w-full">
+      <div className="mb-2 flex w-full items-center justify-between">
+        <h1 className="text-2xl">History</h1>
+      </div>
+      {isLoading || error || noData ? (
+        <Fallback isLoading={isLoading} isError={error ? true : false} noData={noData} type="history" />
+      ) : (
+        <NewTable data={data.history || []} />
+      )}
+    </section>
+  );
 }
 
 function NewTable({ data }: { data: IHistory[] }) {
@@ -90,10 +99,8 @@ function NewTable({ data }: { data: IHistory[] }) {
   });
 
   return (
-    <section className="w-full">
-      <div className="mb-2 flex w-full items-center justify-between">
-        <h1 className="text-2xl">History</h1>
-        {/* <label className="space-x-4">
+    <>
+      {/* <label className="space-x-4">
           <span>Search</span>
           <input
             value={globalFilter ?? ''}
@@ -101,8 +108,8 @@ function NewTable({ data }: { data: IHistory[] }) {
             className="h-8 rounded border border-neutral-300 p-2 shadow-sm dark:border-neutral-700"
           />
         </label> */}
-      </div>
+
       <Table instance={instance} />
-    </section>
+    </>
   );
 }
