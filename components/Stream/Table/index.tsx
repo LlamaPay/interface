@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { PlusIcon } from '@heroicons/react/solid';
 import AmtPerMonth from './AmtPerMonth';
 import Fallback from 'components/FallbackList';
+import TokenName from './TokenName';
 
 const table = createTable<{ Row: IStream }>();
 
@@ -34,6 +35,7 @@ const defaultColumns = table.createColumns([
   }),
   table.createDataColumn('tokenSymbol', {
     header: 'Token',
+    cell: ({ cell }) => (cell.row.original ? <TokenName data={cell.row.original} /> : <></>),
   }),
   table.createDisplayColumn({
     id: 'amountPerSec',
