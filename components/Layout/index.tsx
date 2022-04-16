@@ -5,6 +5,8 @@ import classNames from 'classnames';
 import Footer from './Footer';
 import CustomToast from 'components/CustomToast';
 import Banner from './Banner';
+import Hero from 'components/Hero';
+import { useRouter } from 'next/router';
 
 interface ILayoutProps {
   children: React.ReactNode;
@@ -12,6 +14,7 @@ interface ILayoutProps {
 }
 
 export default function Layout({ children, className, ...props }: ILayoutProps) {
+  const router = useRouter();
   return (
     <>
       <Head>
@@ -23,7 +26,8 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
       </Head>
       <Banner />
       <Header />
-      <main className={classNames('flex-1 p-2 pb-8 md:px-[30px] lg:px-[60px] xl:px-[120px]', className)} {...props}>
+      {router.pathname === '/' && <Hero />}
+      <main className={classNames('flex-1 px-2 pb-8 md:px-[30px] lg:px-[60px] xl:px-[120px]', className)} {...props}>
         {children}
       </main>
       <Footer />
