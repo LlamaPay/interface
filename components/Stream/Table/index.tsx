@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { createTable, useTable, PaginationState, paginateRowsFn, globalFilterRowsFn } from '@tanstack/react-table';
+import { createTable, useTable, globalFilterRowsFn } from '@tanstack/react-table';
 import Table from 'components/Table';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { IStream } from 'types';
@@ -95,23 +95,14 @@ function NewTable({ data }: { data: IStream[] }) {
 
   const [globalFilter, setGlobalFilter] = React.useState('');
 
-  const [pagination, setPagination] = React.useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 10,
-    pageCount: -1, // -1 allows the table to calculate the page count for us via instance.getPageCount()
-  });
-
   const instance = useTable(table, {
     data,
     columns,
     state: {
       globalFilter,
-      pagination,
     },
     onGlobalFilterChange: setGlobalFilter,
     globalFilterRowsFn: globalFilterRowsFn,
-    onPaginationChange: setPagination,
-    paginateRowsFn: paginateRowsFn,
   });
 
   return (
@@ -124,7 +115,7 @@ function NewTable({ data }: { data: IStream[] }) {
             className="h-8 rounded border border-neutral-300 p-2 shadow-sm dark:border-neutral-700"
           />
         </label> */}
-      <Table instance={instance} />
+      <Table instance={instance} hidePagination={true} />
     </>
   );
 }
