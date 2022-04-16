@@ -1,6 +1,6 @@
 import { Toaster } from 'react-hot-toast';
 
-export const CustomToast = () => {
+const CustomToast = () => {
   return (
     <Toaster
       toastOptions={{
@@ -26,3 +26,5 @@ export const CustomToast = () => {
     />
   );
 };
+
+export default CustomToast;

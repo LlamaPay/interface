@@ -55,6 +55,17 @@
     background-color: rgb(0 0 0 / 20%);
   }
 
+  /* banner */
+  .banner-hidden {
+    --banner-display: none !important;
+  }
+  .has-banner {
+    --banner-display: block;
+  }
+  #banner {
+    display: var(--banner-display);
+  }
+
   @media (max-width: 360px) {
     .balance-wrap {
       flex-direction: column !important;

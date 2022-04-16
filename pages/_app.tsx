@@ -8,15 +8,16 @@ import { WalletProvider } from 'components/Web3';
 
 function App({ Component, pageProps }: AppProps) {
   const [queryClient] = React.useState(() => new QueryClient());
+
   return (
-    <WalletProvider>
-      <QueryClientProvider client={queryClient}>
-        <ThemeProvider attribute="class">
+    <ThemeProvider attribute="class">
+      <WalletProvider>
+        <QueryClientProvider client={queryClient}>
           <Component {...pageProps} />
-        </ThemeProvider>
-        <ReactQueryDevtools initialIsOpen={false} />
-      </QueryClientProvider>
-    </WalletProvider>
+          <ReactQueryDevtools initialIsOpen={false} />
+        </QueryClientProvider>
+      </WalletProvider>
+    </ThemeProvider>
   );
 }
 
