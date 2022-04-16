@@ -20,7 +20,7 @@ export const BalanceAndSymbol = ({ data }: BalanceAndSymbolProps) => {
     updateBalance();
     const interval = setInterval(() => {
       updateBalance();
-    }, 100);
+    }, 1);
     return () => clearInterval(interval);
   }, [updateBalance, data]);
 
