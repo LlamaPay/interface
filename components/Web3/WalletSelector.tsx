@@ -41,7 +41,7 @@ export const WalletSelector = ({ isOpen, setIsOpen }: Props) => {
               {accountData.ens?.name ? `${accountData.ens?.name} (${formattedAddress})` : accountData.address}
             </p>
             <button
-              className="nav-button rounded p-2"
+              className="nav-button"
               onClick={() => {
                 disconnect();
                 setIsOpen(false);

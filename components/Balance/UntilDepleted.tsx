@@ -40,7 +40,7 @@ export const UntilDepleted = ({ data }: UntilDepletedProps) => {
   }, [updateBalance]);
 
   return (
-    <td className="whitespace-nowrap border px-4 py-[6px] text-sm tabular-nums dark:border-stone-700">
+    <td className="font-inter whitespace-nowrap border px-4 py-[6px] text-sm tabular-nums dark:border-stone-700">
       {balanceState && <Tooltip content={getDate(data, balanceState)}>{getTime(data, balanceState)}</Tooltip>}
     </td>
   );

@@ -20,12 +20,12 @@ export const BalanceAndSymbol = ({ data }: BalanceAndSymbolProps) => {
     updateBalance();
     const interval = setInterval(() => {
       updateBalance();
-    }, 100);
+    }, 1);
     return () => clearInterval(interval);
   }, [updateBalance, data]);
 
   return (
-    <td className="whitespace-nowrap border px-4 py-[6px] text-right text-sm dark:border-stone-700">
+    <td className="font-inter whitespace-nowrap border px-4 py-[6px] text-right text-sm dark:border-stone-700">
       <Tooltip content={balanceState && price && `${(balanceState * Number(price)).toFixed(2)} USD`}>
         <span className="slashed-zero tabular-nums">
           {balanceState &&

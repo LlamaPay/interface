@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { createTable, useTable, PaginationState, paginateRowsFn, globalFilterRowsFn } from '@tanstack/react-table';
+import { createTable, useTable, globalFilterRowsFn } from '@tanstack/react-table';
 import Table from 'components/Table';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { IStream } from 'types';
@@ -8,11 +8,11 @@ import Withdrawable from './Withdrawable';
 import SavedName from './SavedName';
 import StreamActions from './StreamActions';
 import Link from 'next/link';
-import { PlusIcon } from '@heroicons/react/solid';
 import AmtPerMonth from './AmtPerMonth';
 import Fallback from 'components/FallbackList';
 import TokenName from './TokenName';
 import StreamAddress from './StreamAddress';
+import { StreamIcon } from 'components/Icons';
 
 const table = createTable<{ Row: IStream }>();
 
@@ -69,12 +69,15 @@ export function StreamTable() {
 
   return (
     <section className="w-full">
-      <div className="mb-2 flex w-full items-center justify-between">
-        <h1 className="text-2xl">Streams</h1>
+      <div className="section-header flex w-full items-center justify-between">
+        <span className="flex items-center space-x-2">
+          <StreamIcon />
+          <h1>Streams</h1>
+        </span>
+
         <Link href="/create" passHref>
-          <button className="flex items-center space-x-2 whitespace-nowrap rounded bg-green-100 py-1 px-2 text-sm shadow dark:bg-[#153723]">
-            <PlusIcon className="h-[14px] w-[14px]" />
-            <span>Create</span>
+          <button className="whitespace-nowrap rounded-[10px] border border-[#1BDBAD] bg-[#23BD8F] py-2 px-12 text-sm font-bold text-white shadow-[0px_3px_7px_rgba(0,0,0,0.12)]">
+            Create Stream
           </button>
         </Link>
       </div>
@@ -92,23 +95,14 @@ function NewTable({ data }: { data: IStream[] }) {
 
   const [globalFilter, setGlobalFilter] = React.useState('');
 
-  const [pagination, setPagination] = React.useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 10,
-    pageCount: -1, // -1 allows the table to calculate the page count for us via instance.getPageCount()
-  });
-
   const instance = useTable(table, {
     data,
     columns,
     state: {
       globalFilter,
-      pagination,
     },
     onGlobalFilterChange: setGlobalFilter,
     globalFilterRowsFn: globalFilterRowsFn,
-    onPaginationChange: setPagination,
-    paginateRowsFn: paginateRowsFn,
   });
 
   return (
@@ -121,7 +115,7 @@ function NewTable({ data }: { data: IStream[] }) {
             className="h-8 rounded border border-neutral-300 p-2 shadow-sm dark:border-neutral-700"
           />
         </label> */}
-      <Table instance={instance} />
+      <Table instance={instance} hidePagination={true} />
     </>
   );
 }

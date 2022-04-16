@@ -15,7 +15,7 @@ export const Account = ({ showAccountInfo }: Props) => {
   const formattedAddress = formatAddress(data.address);
 
   return (
-    <button className="nav-button" onClick={showAccountInfo}>
+    <button className="nav-button bg-[#23BD8F] text-white" onClick={showAccountInfo}>
       {data.ens?.name ? `${data.ens?.name} (${formattedAddress})` : formattedAddress}
     </button>
   );

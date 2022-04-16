@@ -6,11 +6,15 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    font-family: 'Exo 2', sans-serif;
+  }
+
+  .font-inter {
     font-family: 'Inter', sans-serif;
   }
 
   @supports (font-variation-settings: normal) {
-    html {
+    .font-inter {
       font-family: 'Inter var', sans-serif;
     }
   }
@@ -27,7 +31,25 @@
 
 @layer components {
   .nav-button {
-    @apply rounded-lg bg-zinc-100 py-2 px-3 dark:bg-zinc-800;
+    @apply rounded-[10px] border border-[#1BDBAD] bg-white py-[10px] px-[17px] font-bold text-[#23BD8F] shadow-[0px_3px_7px_rgba(0,0,0,0.12)];
+  }
+
+  .primary-button {
+    @apply font-inter  whitespace-nowrap rounded bg-[#23BD8F] py-1 px-[14px] text-xs font-medium text-white;
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.14), 0px 1px 5px rgba(0, 0, 0, 0.12);
+  }
+
+  .hero-word-break::before {
+    content: '\A';
+    white-space: pre;
+  }
+
+  .section-header {
+    @apply mb-[15px] text-2xl font-bold text-[#3D3D3D];
+  }
+
+  .row-action-links {
+    @apply font-inter text-xs text-[#3D3D3D] underline opacity-80;
   }
 
   .animate-shimmer {
@@ -53,6 +75,17 @@
   /* dialog backdrop of select token component */
   [data-backdrop] {
     background-color: rgb(0 0 0 / 20%);
+  }
+
+  /* banner */
+  .banner-hidden {
+    --banner-display: none !important;
+  }
+  .has-banner {
+    --banner-display: block;
+  }
+  #banner {
+    display: var(--banner-display);
   }
 
   @media (max-width: 360px) {

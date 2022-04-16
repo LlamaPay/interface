@@ -1,7 +1,7 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import { TableInstance } from '@tanstack/react-table';
 
-const Table = ({ instance }: { instance: TableInstance<any> }) => {
+const Table = ({ instance, hidePagination }: { instance: TableInstance<any>; hidePagination?: boolean }) => {
   const totalRows = instance.getCoreRowModel().rows.length;
 
   const currentRows = instance.getRowModel().rows;
@@ -22,7 +22,7 @@ const Table = ({ instance }: { instance: TableInstance<any> }) => {
                   <th
                     {...header.getHeaderProps()}
                     key={header.id}
-                    className="whitespace-nowrap py-[6px] px-4 text-left text-sm font-[500]"
+                    className="font-inter whitespace-nowrap py-[6px] px-4 text-left text-sm font-bold text-[#3D3D3D]"
                   >
                     {header.isPlaceholder ? null : header.renderHeader()}
                   </th>
@@ -41,7 +41,7 @@ const Table = ({ instance }: { instance: TableInstance<any> }) => {
                   <td
                     {...cell.getCellProps()}
                     key={cell.id}
-                    className="truncate whitespace-nowrap border-l-[1px] border-dashed border-gray-200 px-4 py-[6px] text-sm first-of-type:border-l-0 last-of-type:w-full dark:border-gray-700"
+                    className="font-inter truncate whitespace-nowrap border-l-[1px] border-dashed border-gray-200 px-4 py-[6px] text-sm text-[#3D3D3D] first-of-type:border-l-0 last-of-type:w-full dark:border-gray-700"
                   >
                     {cell.renderCell()}
                   </td>
@@ -60,43 +60,51 @@ const Table = ({ instance }: { instance: TableInstance<any> }) => {
       </tfoot> */}
         </table>
       </div>
-      <div className="h-2" />
-      <div className="flex w-full flex-col gap-2 sm:flex-row sm:justify-between sm:gap-5">
-        <div className="flex flex-1 items-center justify-between gap-2">
-          <button className="bg-none text-xs underline">Export CSV</button>
-          <label className="flex items-center space-x-1">
-            <span className="text-xs opacity-70">Rows per page:</span>
-            <select
-              value={instance.getState().pagination.pageSize}
-              onChange={(e) => {
-                instance.setPageSize(Number(e.target.value));
-              }}
-              className="border-0 pr-6 text-xs dark:bg-black"
-            >
-              {[10, 20, 30, 40, 50].map((pageSize) => (
-                <option key={pageSize} value={pageSize}>
-                  {pageSize}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-        <div className="flex items-center justify-between space-x-8">
-          {showRowNumber && <span className="text-xs">{`${firstRowId} - ${lastRowId} of ${totalRows}`}</span>}
-          <span className="space-x-5">
-            <button
-              className="rounded p-1"
-              onClick={() => instance.previousPage()}
-              disabled={!instance.getCanPreviousPage()}
-            >
-              <ChevronLeftIcon className="h-6" />
-            </button>
-            <button className="rounded p-1" onClick={() => instance.nextPage()} disabled={!instance.getCanNextPage()}>
-              <ChevronRightIcon className="h-6" />
-            </button>
-          </span>
-        </div>
-      </div>
+      {!hidePagination && (
+        <>
+          <div className="h-2" />
+          <div className="font-inter flex w-full flex-col gap-2 sm:flex-row sm:justify-between sm:gap-5">
+            <div className="flex flex-1 items-center justify-between gap-2">
+              <button className="bg-none text-xs text-[#303030] underline">Export CSV</button>
+              <label className="flex items-center space-x-1">
+                <span className="text-xs text-[rgba(0,0,0,0.54)]">Rows per page:</span>
+                <select
+                  value={instance.getState().pagination.pageSize}
+                  onChange={(e) => {
+                    instance.setPageSize(Number(e.target.value));
+                  }}
+                  className="border-0 pr-6 text-xs text-[#333336] dark:bg-black"
+                >
+                  {[10, 20, 30, 40, 50].map((pageSize) => (
+                    <option key={pageSize} value={pageSize}>
+                      {pageSize}
+                    </option>
+                  ))}
+                </select>
+              </label>
+            </div>
+            <div className="flex items-center justify-between space-x-8 pr-1 text-[rgba(0,0,0,0.87)]">
+              {showRowNumber && <span className="text-xs">{`${firstRowId} - ${lastRowId} of ${totalRows}`}</span>}
+              <span className="space-x-5">
+                <button
+                  className="rounded p-1"
+                  onClick={() => instance.previousPage()}
+                  disabled={!instance.getCanPreviousPage()}
+                >
+                  <ChevronLeftIcon className="h-6" color="#333336" />
+                </button>
+                <button
+                  className="rounded p-1"
+                  onClick={() => instance.nextPage()}
+                  disabled={!instance.getCanNextPage()}
+                >
+                  <ChevronRightIcon className="h-6" color="#333336" />
+                </button>
+              </span>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

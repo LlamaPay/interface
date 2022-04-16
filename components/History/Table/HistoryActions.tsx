@@ -7,7 +7,7 @@ const HistoryActions = ({ data }: { data: IHistory }) => {
 
   return (
     <span className="flex">
-      <button className="ml-auto underline" onClick={dialog.toggle}>
+      <button className="row-action-links ml-auto" onClick={dialog.toggle}>
         Details
       </button>
       <MoreInfo data={data} dialog={dialog} />
