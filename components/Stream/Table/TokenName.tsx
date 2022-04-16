@@ -16,9 +16,9 @@ export default function TokenName({ data }: { data: IStream }) {
   }, [tokens, data]);
 
   return (
-    <div className="flex items-center space-x-2">
+    <div className="flex items-center gap-2">
       <div className="flex h-6 w-6 flex-shrink-0 items-center rounded-full">
-        <Image src={token?.logoURI ?? defaultImage} alt={'Logo of' + data.tokenSymbol} width="24px" height="24px" />
+        <Image src={token?.logoURI ?? defaultImage} alt={'Logo of' + data.tokenSymbol} width="18px" height="18px" />
       </div>
       {chainExplorer ? (
         <a href={`${chainExplorer}/address/${data.token.address}`} target="_blank" rel="noopener noreferrer">

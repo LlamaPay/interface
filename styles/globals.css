@@ -6,11 +6,15 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    font-family: 'Exo 2', sans-serif;
+  }
+
+  .font-inter {
     font-family: 'Inter', sans-serif;
   }
 
   @supports (font-variation-settings: normal) {
-    html {
+    .font-inter {
       font-family: 'Inter var', sans-serif;
     }
   }
@@ -27,7 +31,15 @@
 
 @layer components {
   .nav-button {
-    @apply rounded-lg bg-zinc-100 py-2 px-3 dark:bg-zinc-800;
+    @apply rounded-[10px] border border-[#1BDBAD] bg-white py-[10px] px-[17px] font-bold text-[#23BD8F] shadow-[0px_3px_7px_rgba(0,0,0,0.12)];
+  }
+
+  .section-header {
+    @apply mb-[15px] text-2xl font-bold text-[#3D3D3D];
+  }
+
+  .row-action-links {
+    @apply font-inter text-xs text-[#3D3D3D] underline opacity-80;
   }
 
   .animate-shimmer {

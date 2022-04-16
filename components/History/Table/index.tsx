@@ -66,9 +66,8 @@ export function HistoryTable() {
 
   return (
     <section className="w-full">
-      <div className="mb-2 flex w-full items-center justify-between">
-        <h1 className="text-2xl">History</h1>
-      </div>
+      <h1 className="section-header">History</h1>
+
       {isLoading || error || noData ? (
         <Fallback isLoading={isLoading} isError={error ? true : false} noData={noData} type="history" />
       ) : (

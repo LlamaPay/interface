@@ -8,7 +8,6 @@ import Withdrawable from './Withdrawable';
 import SavedName from './SavedName';
 import StreamActions from './StreamActions';
 import Link from 'next/link';
-import { PlusIcon } from '@heroicons/react/solid';
 import AmtPerMonth from './AmtPerMonth';
 import Fallback from 'components/FallbackList';
 import TokenName from './TokenName';
@@ -69,12 +68,11 @@ export function StreamTable() {
 
   return (
     <section className="w-full">
-      <div className="mb-2 flex w-full items-center justify-between">
-        <h1 className="text-2xl">Streams</h1>
+      <div className="section-header flex w-full items-center justify-between">
+        <h1>Streams</h1>
         <Link href="/create" passHref>
-          <button className="flex items-center space-x-2 whitespace-nowrap rounded bg-green-100 py-1 px-2 text-sm shadow dark:bg-[#153723]">
-            <PlusIcon className="h-[14px] w-[14px]" />
-            <span>Create</span>
+          <button className="whitespace-nowrap rounded-[10px] border border-[#1BDBAD] bg-[#23BD8F] py-2 px-12 text-sm font-bold text-white shadow-[0px_3px_7px_rgba(0,0,0,0.12)]">
+            Create Stream
           </button>
         </Link>
       </div>

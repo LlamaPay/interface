@@ -23,7 +23,7 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
       </Head>
       <Banner />
       <Header />
-      <main className={classNames('flex-1 p-2', className)} {...props}>
+      <main className={classNames('flex-1 p-2 pb-8 md:px-[30px] lg:px-[60px] xl:px-[120px]', className)} {...props}>
         {children}
       </main>
       <Footer />

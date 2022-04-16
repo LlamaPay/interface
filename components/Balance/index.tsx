@@ -10,7 +10,6 @@ import { useDialogState } from 'ariakit';
 import { BalanceAndSymbol } from './BalanceAndSymbol';
 import { UntilDepleted } from './UntilDepleted';
 import { MonthlyCost } from './MonthlyCost';
-import { PlusIcon } from '@heroicons/react/solid';
 import Image from 'next/image';
 import Fallback from 'components/FallbackList';
 
@@ -53,16 +52,15 @@ const Balance = () => {
   return (
     <span className="mr-auto w-full">
       <section className={showFallback ? 'w-full max-w-2xl' : 'w-fit'}>
-        <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
-          <h1 className="text-2xl">Balances</h1>
+        <div className="section-header flex flex-wrap items-center justify-between gap-2">
+          <h1>Balances</h1>
           <button
-            className="flex items-center space-x-2 whitespace-nowrap rounded bg-green-100 py-1 px-2 text-sm shadow dark:bg-[#153723]"
+            className="whitespace-nowrap rounded-[10px] border border-[#1BDBAD] bg-[#23BD8F] py-2 px-12 text-sm font-bold text-white shadow-[0px_3px_7px_rgba(0,0,0,0.12)]"
             onClick={() => {
               depositFieldDialog.toggle();
             }}
           >
-            <PlusIcon className="h-[14px] w-[14px]" />
-            <span>Deposit</span>
+            Deposit
           </button>
         </div>
 
