@@ -51,16 +51,16 @@ const Balance = () => {
 
   return (
     <span className="mr-auto w-full">
-      <section className={showFallback ? 'w-full max-w-2xl' : 'w-fit'}>
+      <section className={showFallback ? 'w-full max-w-2xl' : 'w-full max-w-fit'}>
         <div className="section-header flex flex-wrap items-center justify-between gap-2">
           <h1>Balances</h1>
           <button
-            className="whitespace-nowrap rounded-[10px] border border-[#1BDBAD] bg-[#23BD8F] py-2 px-12 text-sm font-bold text-white shadow-[0px_3px_7px_rgba(0,0,0,0.12)]"
+            className="primary-button"
             onClick={() => {
               depositFieldDialog.toggle();
             }}
           >
-            Deposit
+            Create a new balance
           </button>
         </div>
 
@@ -71,16 +71,16 @@ const Balance = () => {
             <table className="dark:border-stone-700-collapse border">
               <thead>
                 <tr className="border dark:border-stone-700">
-                  <th className="whitespace-nowrap border px-4 pt-[6px] pb-[5px] text-left text-sm font-[500] dark:border-stone-700">
+                  <th className="font-inter whitespace-nowrap border px-4 pt-[6px] pb-[5px] text-left text-sm font-[500] dark:border-stone-700">
                     Token
                   </th>
-                  <th className="whitespace-nowrap border px-4 pt-[6px] pb-[5px] text-left text-sm font-[500] dark:border-stone-700">
+                  <th className="font-inter whitespace-nowrap border px-4 pt-[6px] pb-[5px] text-left text-sm font-[500] dark:border-stone-700">
                     Amount
                   </th>
-                  <th className="whitespace-nowrap border px-4 pt-[6px] pb-[5px] text-left text-sm font-[500] dark:border-stone-700">
+                  <th className="font-inter whitespace-nowrap border px-4 pt-[6px] pb-[5px] text-left text-sm font-[500] dark:border-stone-700">
                     To Depleted
                   </th>
-                  <th className="whitespace-nowrap border px-4 pt-[6px] pb-[5px] text-left text-sm font-[500] dark:border-stone-700">
+                  <th className="font-inter whitespace-nowrap border px-4 pt-[6px] pb-[5px] text-left text-sm font-[500] dark:border-stone-700">
                     Monthly Cost
                   </th>
                   <th></th>
@@ -89,10 +89,10 @@ const Balance = () => {
               <tbody>
                 {balances?.map((b) => (
                   <tr key={b.address} className="border dark:border-stone-700">
-                    <th className="w-full border px-4 py-[6px] text-left text-sm font-normal dark:border-stone-700">
+                    <th className="font-inter w-full whitespace-nowrap border px-4 py-[6px] text-left text-sm font-normal dark:border-stone-700">
                       <div className="flex items-center space-x-2">
-                        <div className="flex flex-shrink-0 items-center rounded-full">
-                          <Image src={b.logoURI} alt={'Logo of token' + b.name} width="24px" height="24px" />
+                        <div className="flex h-6 w-6 flex-shrink-0 items-center rounded-full">
+                          <Image src={b.logoURI} alt={'Logo of token' + b.name} width="18px" height="18px" />
                         </div>
                         {chainExplorer ? (
                           <a
@@ -110,20 +110,17 @@ const Balance = () => {
                     <BalanceAndSymbol data={b} />
                     <UntilDepleted data={b} />
                     <MonthlyCost data={b} />
-                    <td className="space-x-2 border px-4 py-[6px] text-sm dark:border-stone-700">
-                      <span className="flex space-x-2">
+                    <td className="font-inter space-x-2 border px-4 py-[6px] text-sm opacity-80 dark:border-stone-700">
+                      <span className="flex gap-4">
                         <button
-                          className="rounded bg-zinc-100 py-1 px-2 dark:bg-zinc-800"
-                          onClick={() => handleToken('deposit', b)}
-                        >
-                          Deposit
-                        </button>
-                        <button
-                          className="rounded bg-zinc-100 py-1 px-2 disabled:cursor-not-allowed dark:bg-zinc-800"
+                          className="text-xs underline disabled:cursor-not-allowed"
                           onClick={() => handleToken('withdraw', b)}
                           disabled={Number.isNaN(b.amount) || Number(b.amount) <= 0}
                         >
                           Withdraw
+                        </button>
+                        <button className="primary-button py-1 px-[6px]" onClick={() => handleToken('deposit', b)}>
+                          Topup
                         </button>
                       </span>
                     </td>
