@@ -3,9 +3,11 @@ import { IStream } from 'types';
 import { Cancel } from '../Cancel';
 import { Modify } from '../Modify';
 import { Push } from '../Push';
+import { StreamHistory } from '../StreamHistory';
 
 const StreamActions = ({ data }: { data: IStream }) => {
-  const dialog = useDialogState();
+  const modifyDialog = useDialogState();
+  const historyDialog = useDialogState();
   const isIncoming = data.streamType === 'incomingStream';
   return (
     <span className="relative flex justify-end gap-10">
@@ -14,13 +16,17 @@ const StreamActions = ({ data }: { data: IStream }) => {
       ) : (
         <>
           <Push buttonName="Send" data={data} />
-          <button className="row-action-links" onClick={dialog.toggle}>
+          <button className="row-action-links" onClick={modifyDialog.toggle}>
             Modify
           </button>
           <Cancel data={data} />
-          <Modify data={data} title="Modify" dialog={dialog} />
+          <Modify data={data} title="Modify" dialog={modifyDialog} />
         </>
       )}
+      <button className="row-action-links" onClick={historyDialog.toggle}>
+        History
+      </button>
+      <StreamHistory data={data} title="Stream History" dialog={historyDialog} />
     </span>
   );
 };

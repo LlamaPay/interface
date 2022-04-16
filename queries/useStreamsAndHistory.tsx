@@ -49,6 +49,7 @@ const useStreamsAndHistory = () => {
           tokenSymbol: s.token.symbol,
           tokenContract: createERC20Contract({ tokenAddress: getAddress(s.token.address), provider }),
           llamaTokenContract: createContract(getAddress(s.contract.address), provider),
+          historicalEvents: s.historicalEvents,
         };
       });
 

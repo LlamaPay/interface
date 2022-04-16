@@ -48,6 +48,7 @@ export interface IStream {
   tokenSymbol: string;
   tokenContract: Contract;
   llamaTokenContract: Contract;
+  historicalEvents: { eventType: string; txHash: string; createdTimestamp: string }[];
 }
 
 export interface IHistory extends UserHistoryFragment {

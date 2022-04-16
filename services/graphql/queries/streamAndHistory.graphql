@@ -26,6 +26,11 @@ fragment UserStream on Stream {
     decimals
     symbol
   }
+  historicalEvents {
+    eventType
+    txHash
+    createdTimestamp
+  }
   active
   amountPerSec
   createdTimestamp
