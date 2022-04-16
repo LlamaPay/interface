@@ -1,8 +1,7 @@
 import { DisclosureState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
 import { UserHistoryFragment } from 'services/generated/graphql';
-import { useNetwork } from 'wagmi';
-import { networkDetails } from 'utils/constants';
+import { useChainExplorer } from 'hooks';
 
 interface MoreInfoProps {
   data: UserHistoryFragment;
@@ -15,9 +14,8 @@ function amountStreamed(createdTime: string, streamCreatedTime: string | undefin
 }
 
 export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
-  const [{ data: networkData }] = useNetwork();
-  const txLink = `${networkDetails[Number(networkData.chain?.id)].blockExplorerURL}/tx/${data.txHash}`;
-  const explorerName = networkDetails[Number(networkData.chain?.id)].blockExplorerName;
+  const { url: chainExplorer, name: explorerName } = useChainExplorer();
+  const txLink = `${chainExplorer}/tx/${data.txHash}`;
   return (
     <>
       <FormDialog dialog={dialog} title="More Info" className="h-min">

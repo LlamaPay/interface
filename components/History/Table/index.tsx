@@ -13,9 +13,13 @@ import Fallback from 'components/FallbackList';
 const table = createTable<{ Row: IHistory }>();
 
 const defaultColumns = table.createColumns([
-  table.createDataColumn('eventType', {
+  table.createDisplayColumn({
+    id: 'action',
     header: 'Action',
-    cell: ({ value }) => <ActionName name={value} />,
+    cell: ({ cell }) => {
+      if (!cell.row.original) return null;
+      return <ActionName data={cell.row.original} />;
+    },
   }),
   table.createDataColumn('addressType', {
     header: 'Type',
