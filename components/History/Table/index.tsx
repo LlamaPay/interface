@@ -9,6 +9,7 @@ import { formatAmountInTable } from 'utils/amount';
 import ActionName from './ActionName';
 import HistoryActions from './HistoryActions';
 import Fallback from 'components/FallbackList';
+import { HistoryIcon } from 'components/Icons';
 
 const table = createTable<{ Row: IHistory }>();
 
@@ -66,7 +67,10 @@ export function HistoryTable() {
 
   return (
     <section className="w-full">
-      <h1 className="section-header">History</h1>
+      <span className="section-header flex items-center space-x-2">
+        <HistoryIcon />
+        <h1>History</h1>
+      </span>
 
       {isLoading || error || noData ? (
         <Fallback isLoading={isLoading} isError={error ? true : false} noData={noData} type="history" />

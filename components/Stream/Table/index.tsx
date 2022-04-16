@@ -12,6 +12,7 @@ import AmtPerMonth from './AmtPerMonth';
 import Fallback from 'components/FallbackList';
 import TokenName from './TokenName';
 import StreamAddress from './StreamAddress';
+import { StreamIcon } from 'components/Icons';
 
 const table = createTable<{ Row: IStream }>();
 
@@ -69,7 +70,11 @@ export function StreamTable() {
   return (
     <section className="w-full">
       <div className="section-header flex w-full items-center justify-between">
-        <h1>Streams</h1>
+        <span className="flex items-center space-x-2">
+          <StreamIcon />
+          <h1>Streams</h1>
+        </span>
+
         <Link href="/create" passHref>
           <button className="whitespace-nowrap rounded-[10px] border border-[#1BDBAD] bg-[#23BD8F] py-2 px-12 text-sm font-bold text-white shadow-[0px_3px_7px_rgba(0,0,0,0.12)]">
             Create Stream

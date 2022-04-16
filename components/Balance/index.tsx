@@ -12,6 +12,7 @@ import { UntilDepleted } from './UntilDepleted';
 import { MonthlyCost } from './MonthlyCost';
 import Image from 'next/image';
 import Fallback from 'components/FallbackList';
+import { BalanceIcon } from 'components/Icons';
 
 const Balance = () => {
   const { balances, noBalances, isLoading, isError } = useBalances();
@@ -53,7 +54,11 @@ const Balance = () => {
     <span className="mr-auto w-full">
       <section className={showFallback ? 'w-full max-w-2xl' : 'w-full max-w-fit'}>
         <div className="section-header flex flex-wrap items-center justify-between gap-2">
-          <h1>Balances</h1>
+          <span className="flex items-center space-x-2">
+            <BalanceIcon />
+            <h1>Balances</h1>
+          </span>
+
           <button
             className="primary-button"
             onClick={() => {
