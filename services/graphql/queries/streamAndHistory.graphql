@@ -26,7 +26,7 @@ fragment UserStream on Stream {
     decimals
     symbol
   }
-  historicalEvents {
+  historicalEvents(orderBy: createdTimestamp, orderDirection: desc) {
     eventType
     txHash
     createdTimestamp

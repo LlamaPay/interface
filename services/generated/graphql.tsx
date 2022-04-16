@@ -1052,7 +1052,7 @@ export const UserStreamFragmentDoc = `
     decimals
     symbol
   }
-  historicalEvents {
+  historicalEvents(orderBy: createdTimestamp, orderDirection: desc) {
     eventType
     txHash
     createdTimestamp
