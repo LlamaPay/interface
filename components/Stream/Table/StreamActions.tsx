@@ -13,10 +13,10 @@ const StreamActions = ({ data }: { data: IStream }) => {
     <span className="relative flex justify-end gap-10">
       {isIncoming ? (
         <>
-          <Push buttonName="Withdraw" data={data} />
           <button className="row-action-links" onClick={historyDialog.toggle}>
             History
           </button>
+          <Push buttonName="Withdraw" data={data} />
           <StreamHistory data={data} title="Stream History" dialog={historyDialog} />
         </>
       ) : (
