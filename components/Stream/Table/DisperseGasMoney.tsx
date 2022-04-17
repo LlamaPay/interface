@@ -2,6 +2,7 @@ import { Tab } from '@headlessui/react';
 import { useDialogState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
 import React from 'react';
+import DisperseForm from './DisperseForm';
 
 export function DisperseGasMoney() {
   const disperseDialog = useDialogState();
@@ -20,22 +21,26 @@ export function DisperseGasMoney() {
             <Tab.List className="flex space-x-3">
               <Tab
                 className={({ selected }) =>
-                  selected ? 'rounded-xl bg-[#23BD8F] px-3 py-1' : 'rounded-xl bg-[#ffffff]'
+                  selected ? 'rounded-xl bg-[#23BD8F] px-3 py-1' : 'rounded-xl bg-[#ffffff] px-3 py-1'
                 }
               >
                 <span className="font-inter">Equal Amounts</span>
               </Tab>
               <Tab
                 className={({ selected }) =>
-                  selected ? 'rounded-xl bg-[#23BD8F] px-3 py-1' : 'rounded-xl bg-[#ffffff]'
+                  selected ? 'rounded-xl bg-[#23BD8F] px-3 py-1' : 'rounded-xl bg-[#ffffff] px-3 py-1'
                 }
               >
                 <span className="font-inter ">Custom Amounts</span>
               </Tab>
             </Tab.List>
             <Tab.Panels>
-              <Tab.Panel></Tab.Panel>
-              <Tab.Panel></Tab.Panel>
+              <Tab.Panel>
+                <DisperseForm custom={false} />
+              </Tab.Panel>
+              <Tab.Panel>
+                <DisperseForm custom={true} />
+              </Tab.Panel>
             </Tab.Panels>
           </Tab.Group>
         </div>
