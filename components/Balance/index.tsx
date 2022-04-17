@@ -65,7 +65,6 @@ const Balance = () => {
               depositFieldDialog.toggle();
             }}
           >
-            Create a new balance
             Deposit new token
           </button>
         </div>
