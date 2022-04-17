@@ -76,9 +76,7 @@ export function StreamTable() {
         </span>
 
         <Link href="/create" passHref>
-          <button className="whitespace-nowrap rounded-[10px] border border-[#1BDBAD] bg-[#23BD8F] py-2 px-12 text-sm font-bold text-white shadow-[0px_3px_7px_rgba(0,0,0,0.12)]">
-            Create Stream
-          </button>
+          <button className="primary-button py-2 px-8 text-sm font-bold">Create Stream</button>
         </Link>
       </div>
       {isLoading || error || noData ? (

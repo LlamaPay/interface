@@ -60,12 +60,13 @@ const Balance = () => {
           </span>
 
           <button
-            className="primary-button"
+            className="primary-button py-2 px-8 text-sm font-bold"
             onClick={() => {
               depositFieldDialog.toggle();
             }}
           >
             Create a new balance
+            Deposit new token
           </button>
         </div>
 
