@@ -13,52 +13,49 @@ export function DisperseGasMoney() {
 
   return (
     <>
-      {accountData && !unsupported ? (
-        <>
-          <button
-            onClick={disperseDialog.toggle}
-            className="whitespace-nowrap rounded-[10px] border border-[#1BDBAD] bg-[#23BD8F] py-2 px-5 text-sm font-bold text-white shadow-[0px_3px_7px_rgba(0,0,0,0.12)]"
-          >
-            Send Gas Money
-          </button>
-          <FormDialog
-            dialog={disperseDialog}
-            title="Disperse Coins to Multiple Addresses for Gas"
-            className="v-min h-min"
-          >
-            <div className="space-y-3">
-              <Tab.Group>
-                <Tab.List className="flex space-x-3">
-                  <Tab
-                    className={({ selected }) =>
-                      selected ? 'rounded-xl bg-[#23BD8F] px-3 py-1' : 'rounded-xl bg-[#ffffff] px-3 py-1'
-                    }
-                  >
-                    <span className="font-inter">Equal Amounts</span>
-                  </Tab>
-                  <Tab
-                    className={({ selected }) =>
-                      selected ? 'rounded-xl bg-[#23BD8F] px-3 py-1' : 'rounded-xl bg-[#ffffff] px-3 py-1'
-                    }
-                  >
-                    <span className="font-inter ">Custom Amounts</span>
-                  </Tab>
-                </Tab.List>
-                <Tab.Panels>
-                  <Tab.Panel>
-                    <DisperseForm custom={false} />
-                  </Tab.Panel>
-                  <Tab.Panel>
-                    <DisperseForm custom={true} />
-                  </Tab.Panel>
-                </Tab.Panels>
-              </Tab.Group>
-            </div>
-          </FormDialog>
-        </>
-      ) : (
-        <></>
-      )}
+      <button
+        onClick={disperseDialog.toggle}
+        className="whitespace-nowrap rounded-[10px] border border-[#1BDBAD] bg-[#23BD8F] py-2 px-5 text-sm font-bold text-white shadow-[0px_3px_7px_rgba(0,0,0,0.12)]"
+      >
+        Send Gas Money
+      </button>
+      <FormDialog dialog={disperseDialog} title="Disperse Coins to Multiple Addresses for Gas" className="v-min h-min">
+        <div className="space-y-3">
+          {accountData && !unsupported ? (
+            <Tab.Group>
+              <Tab.List className="flex space-x-3">
+                <Tab
+                  className={({ selected }) =>
+                    selected ? 'rounded-xl bg-[#23BD8F] px-3 py-1' : 'rounded-xl bg-[#ffffff] px-3 py-1'
+                  }
+                >
+                  <span className="font-inter">Equal Amounts</span>
+                </Tab>
+                <Tab
+                  className={({ selected }) =>
+                    selected ? 'rounded-xl bg-[#23BD8F] px-3 py-1' : 'rounded-xl bg-[#ffffff] px-3 py-1'
+                  }
+                >
+                  <span className="font-inter ">Custom Amounts</span>
+                </Tab>
+              </Tab.List>
+              <Tab.Panels>
+                <Tab.Panel>
+                  <DisperseForm custom={false} />
+                </Tab.Panel>
+                <Tab.Panel>
+                  <DisperseForm custom={true} />
+                </Tab.Panel>
+              </Tab.Panels>
+            </Tab.Group>
+          ) : (
+            <>
+              {!accountData ? <p>Connect Wallet</p> : <></>}
+              {unsupported ? <p>Unsupported Chain</p> : <></>}
+            </>
+          )}
+        </div>
+      </FormDialog>
     </>
   );
 }
