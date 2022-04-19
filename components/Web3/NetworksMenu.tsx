@@ -14,7 +14,7 @@ export const NetworksMenu = () => {
     <>
       {data && (
         <Listbox value={chain} onChange={(x) => switchNetwork(x.id)}>
-          <div className="relative z-10 mt-1">
+          <div className="relative z-10">
             <Listbox.Button className="nav-button pr-10">
               <span className="block truncate text-base">{chain.name || 'Unsupported'}</span>
               <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
