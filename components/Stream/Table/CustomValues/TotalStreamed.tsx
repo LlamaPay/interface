@@ -3,7 +3,7 @@ import { useTokenPrice } from 'queries/useTokenPrice';
 import * as React from 'react';
 import { IStream } from 'types';
 
-const TotalStreamed = ({ data }: { data: IStream }) => {
+export const TotalStreamed = ({ data }: { data: IStream }) => {
   const [amount, setAmount] = React.useState<string | null>(null);
   const { data: price } = useTokenPrice(data.token.address.toLowerCase());
 
@@ -27,5 +27,3 @@ const TotalStreamed = ({ data }: { data: IStream }) => {
   );
   // return ;
 };
-
-export default TotalStreamed;

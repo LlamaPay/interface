@@ -60,6 +60,7 @@ export interface IHistory extends UserHistoryFragment {
 export interface IStreamAndHistory {
   streams: IStream[] | null;
   history: IHistory[] | null;
+  hasBothStreamTypes: boolean;
 }
 
 export interface ITokenList {

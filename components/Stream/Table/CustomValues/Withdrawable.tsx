@@ -5,7 +5,7 @@ import useWithdrawable from 'queries/useWithdrawable';
 import { useTokenPrice } from 'queries/useTokenPrice';
 import Tooltip from 'components/Tooltip';
 
-const Withdrawable = ({ data }: { data: IStream }) => {
+export const Withdrawable = ({ data }: { data: IStream }) => {
   const { data: callResult, isLoading } = useWithdrawable({
     contract: data.llamaTokenContract,
     payer: data.payerAddress,
@@ -52,5 +52,3 @@ const Withdrawable = ({ data }: { data: IStream }) => {
     </div>
   );
 };
-
-export default Withdrawable;

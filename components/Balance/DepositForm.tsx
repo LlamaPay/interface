@@ -93,11 +93,11 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
         <form className="mt-4 flex flex-col space-y-4" onSubmit={handleSubmit}>
           <InputAmount name="amount" label={`Amount ${data.symbol}`} handleChange={handleChange} isRequired />
           {isApproved ? (
-            <SubmitButton disabled={isLoading} className="my-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
+            <SubmitButton disabled={isLoading} className="my-4 rounded !bg-green-200 py-2 px-3 dark:!bg-stone-600">
               {isLoading ? <BeatLoader size={6} color="#171717" /> : 'Deposit'}
             </SubmitButton>
           ) : (
-            <SubmitButton disabled={disableApprove} className="my-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
+            <SubmitButton disabled={disableApprove} className="my-4 rounded !bg-green-200 py-2 px-3 dark:!bg-stone-600">
               {disableApprove ? <BeatLoader size={6} color="#171717" /> : 'Approve'}
             </SubmitButton>
           )}

@@ -3,7 +3,7 @@ import { Select, SelectArrow, SelectItem, SelectLabel, useSelectState } from 'ar
 import { Dialog, DialogDismiss, DialogHeading, useDialogState } from 'ariakit/dialog';
 import { Combobox, ComboboxItem, ComboboxList, useComboboxState } from 'ariakit/combobox';
 import classNames from 'classnames';
-import { XIcon, ArrowLeftIcon } from '@heroicons/react/solid';
+import { XIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/solid';
 import { InputText } from './Input';
 import { SubmitButton } from './Button';
 import useCreateLlamaPayContract from 'queries/useCreateLlamaPayContract';
@@ -29,7 +29,7 @@ function Token({ value, shortName, showBalance }: { value: string; shortName?: b
   return (
     <div
       className={classNames(
-        'flex flex-1 flex-row items-center justify-between',
+        'font-inter flex flex-1 flex-row items-center justify-between',
         shortName ? 'truncate py-2 pr-1' : 'balance-wrap p-2'
       )}
     >
@@ -105,7 +105,7 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
               state={combobox}
               autoSelect
               placeholder="Search name or paste address"
-              className="m-4 rounded border px-3 py-[10px] slashed-zero dark:border-neutral-700"
+              className="font-inter m-4 rounded border px-3 py-[10px] slashed-zero dark:border-neutral-700"
             />
             <ComboboxList state={combobox} className="m-4 mt-0 cursor-pointer list-none overflow-auto">
               {combobox.matches.map((token) => (
@@ -129,10 +129,11 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
               ))}
             </ComboboxList>
             <button
-              className="m-4 mt-auto rounded bg-zinc-300 py-[11px] px-3 dark:bg-stone-600"
+              className="font-inter m-4 mt-auto flex items-center justify-center gap-2 rounded bg-green-200 py-[11px] px-3"
               onClick={() => setNewTokenForm(true)}
             >
-              or add a new token
+              <span>or add a new token</span>
+              <ArrowRightIcon className="h-4 w-4" />
             </button>
           </>
         )}
@@ -181,13 +182,13 @@ const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<Rea
             <ArrowLeftIcon className="h-6 w-6" />
           </button>
         </DialogHeading>
-        <DialogDismiss className="absolute right-0 top-0 flex items-start justify-end">
+        <DialogDismiss className="absolute right-[-4px] top-0 flex items-start justify-end">
           <XIcon className="h-6 w-6" />
         </DialogDismiss>
       </header>
-      <form className="m-4 mt-[10%]" onSubmit={handleSubmit}>
+      <form className="font-inter m-4 mt-[10%]" onSubmit={handleSubmit}>
         <InputText name="tokenAddress" isRequired={true} label="Token Address" />
-        <SubmitButton className="mt-4 !bg-zinc-300 disabled:cursor-not-allowed dark:!bg-stone-600" disabled={isLoading}>
+        <SubmitButton className="mt-4 !bg-green-200 disabled:cursor-not-allowed" disabled={isLoading}>
           {isLoading ? (
             <BeatLoader size={6} />
           ) : isConfirming ? (

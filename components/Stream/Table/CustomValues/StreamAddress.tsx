@@ -4,7 +4,7 @@ import { IStream } from 'types';
 import { formatAddress } from 'utils/address';
 import { useChainExplorer } from 'hooks';
 
-const StreamAddress = ({ data }: { data: IStream }) => {
+export const StreamAddress = ({ data }: { data: IStream }) => {
   const { url: chainExplorer } = useChainExplorer();
   const address = React.useMemo(() => {
     if (data.streamType === 'incomingStream') {
@@ -22,5 +22,3 @@ const StreamAddress = ({ data }: { data: IStream }) => {
     </Tooltip>
   );
 };
-
-export default StreamAddress;

@@ -13,7 +13,7 @@ export const SubmitButton = ({ disabled = false, type = 'submit', className, chi
   return (
     <button
       className={classNames(
-        'w-full rounded bg-zinc-100 px-3 py-[11px] disabled:cursor-not-allowed dark:bg-stone-800',
+        'font-inter w-full rounded bg-zinc-100 px-3 py-[11px] disabled:cursor-not-allowed dark:bg-stone-800',
         className
       )}
       type={type}

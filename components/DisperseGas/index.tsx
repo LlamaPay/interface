@@ -7,7 +7,7 @@ import { useAccount } from 'wagmi';
 import { useNetworkProvider } from 'hooks';
 import SendToPayees from './SendToPayees';
 
-export function DisperseGasMoney() {
+function DisperseGasMoney() {
   const disperseDialog = useDialogState();
   const [{ data: accountData }] = useAccount();
   const { unsupported, nativeCurrency } = useNetworkProvider();
@@ -61,3 +61,5 @@ export function DisperseGasMoney() {
     </>
   );
 }
+
+export default DisperseGasMoney;
