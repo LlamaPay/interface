@@ -10,9 +10,10 @@ import { useRouter } from 'next/router';
 interface ILayoutProps {
   children: React.ReactNode;
   className?: string;
+  noBanner: boolean;
 }
 
-export default function Layout({ children, className, ...props }: ILayoutProps) {
+export default function Layout({ children, className, noBanner, ...props }: ILayoutProps) {
   const router = useRouter();
   return (
     <>
@@ -24,7 +25,7 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
         />
       </Head>
       <Header />
-      {router.pathname === '/' && <Hero />}
+      {router.pathname === '/' && <Hero noBanner={noBanner} />}
       <main className={classNames('flex-1 px-2 pb-8 md:px-[30px] lg:px-[60px] xl:px-[120px]', className)} {...props}>
         {children}
       </main>
