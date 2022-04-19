@@ -82,7 +82,7 @@ export function StreamTable() {
               Create Stream
             </button>
           </Link>
-          <DisperseGasMoney />
+          <DisperseGasMoney data={data} />
         </div>
       </div>
       {isLoading || error || noData ? (

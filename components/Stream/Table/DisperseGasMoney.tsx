@@ -5,8 +5,14 @@ import React from 'react';
 import DisperseForm from './DisperseForm';
 import { useAccount } from 'wagmi';
 import { useNetworkProvider } from 'hooks';
+import SendToPayees from './SendToPayees';
+import { IStreamAndHistory } from 'types';
 
-export function DisperseGasMoney() {
+interface DisperseGasMoneyProps {
+  data: IStreamAndHistory;
+}
+
+export function DisperseGasMoney({ data }: DisperseGasMoneyProps) {
   const disperseDialog = useDialogState();
   const [{ data: accountData }] = useAccount();
   const { unsupported } = useNetworkProvider();
@@ -26,25 +32,25 @@ export function DisperseGasMoney() {
               <Tab.List className="flex space-x-3">
                 <Tab
                   className={({ selected }) =>
-                    selected ? 'rounded-xl bg-[#23BD8F] px-3 py-1' : 'rounded-xl bg-[#ffffff] px-3 py-1'
+                    selected ? 'rounded-xl bg-[#23BD8F] px-4 py-2' : 'rounded-xl bg-[#ffffff] px-4 py-2'
                   }
                 >
-                  <span className="font-inter">Equal Amounts</span>
+                  <span className="font-inter ">Send to Payees</span>
                 </Tab>
                 <Tab
                   className={({ selected }) =>
-                    selected ? 'rounded-xl bg-[#23BD8F] px-3 py-1' : 'rounded-xl bg-[#ffffff] px-3 py-1'
+                    selected ? 'rounded-xl bg-[#23BD8F] px-4 py-2' : 'rounded-xl bg-[#ffffff] px-4 py-2'
                   }
                 >
-                  <span className="font-inter ">Custom Amounts</span>
+                  <span className="font-inter ">Custom</span>
                 </Tab>
               </Tab.List>
               <Tab.Panels>
                 <Tab.Panel>
-                  <DisperseForm custom={false} />
+                  <SendToPayees data={data} />
                 </Tab.Panel>
                 <Tab.Panel>
-                  <DisperseForm custom={true} />
+                  <DisperseForm />
                 </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>

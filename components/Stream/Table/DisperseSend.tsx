@@ -6,12 +6,10 @@ import { DISPERSE_ADDRESS } from 'utils/constants';
 import { useContractWrite } from 'wagmi';
 
 interface DisperseSendProps {
-  custom: boolean;
   data: { [key: string]: number };
-  amount: number;
 }
 
-export default function DisperseSend({ data, custom, amount }: DisperseSendProps) {
+export default function DisperseSend({ data }: DisperseSendProps) {
   const [{}, disperseEther] = useContractWrite(
     {
       addressOrName: DISPERSE_ADDRESS,
@@ -21,21 +19,19 @@ export default function DisperseSend({ data, custom, amount }: DisperseSendProps
   );
   function sendGas() {
     let ether = new BigNumber(0);
-    let recipients: string[] = [];
-    let values: number[] = [];
-    if (custom) {
-      Object.keys(data).map((p) => {
-        recipients.push(p);
-        const value = new BigNumber(data[p]).times(1e18).toFixed(0);
-        values.push(Number(value));
-        ether = ether.plus(value);
-      });
-    } else {
-      const amountPerPayee = new BigNumber(amount / Object.keys(data).length).times(1e18).toFixed(0);
-      recipients = Object.keys(data);
-      values = Array(Object.keys(data).length).fill(amountPerPayee);
-      ether = new BigNumber(amountPerPayee).times(Object.keys(data).length);
-    }
+    const recipients: string[] = [];
+    const values: string[] = [];
+    Object.keys(data).map((p) => {
+      recipients.push(p);
+      const value = new BigNumber(data[p]).times(1e18).toFixed(0);
+      values.push(value.toString());
+      ether = ether.plus(value);
+    });
+
+    console.log(ether);
+    console.log(recipients);
+    console.log(values);
+
     disperseEther({
       args: [recipients, values],
       overrides: {
