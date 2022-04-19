@@ -2,22 +2,27 @@ import disperseContract from 'abis/disperseContract';
 import BigNumber from 'bignumber.js';
 import React from 'react';
 import toast from 'react-hot-toast';
-import { DISPERSE_ADDRESS } from 'utils/constants';
-import { useContractWrite } from 'wagmi';
+import { networkDetails } from 'utils/constants';
+import { useContractWrite, useNetwork } from 'wagmi';
 
 interface DisperseSendProps {
   data: { [key: string]: number };
 }
 
 export default function DisperseSend({ data }: DisperseSendProps) {
+  const [{ data: network }] = useNetwork();
   const [{}, disperseEther] = useContractWrite(
     {
-      addressOrName: DISPERSE_ADDRESS,
+      addressOrName: networkDetails[Number(network.chain?.id)].disperseAddress,
       contractInterface: disperseContract,
     },
     'disperseEther'
   );
   function sendGas() {
+    if (Number(network.chain?.id) === 43113) {
+      toast.error('DO NOT USE ON FUJI');
+      return;
+    }
     let ether = new BigNumber(0);
     const recipients: string[] = [];
     const values: string[] = [];
@@ -27,10 +32,6 @@ export default function DisperseSend({ data }: DisperseSendProps) {
       values.push(value.toString());
       ether = ether.plus(value);
     });
-
-    console.log(ether);
-    console.log(recipients);
-    console.log(values);
 
     disperseEther({
       args: [recipients, values],
