@@ -10,10 +10,10 @@ import { useRouter } from 'next/router';
 interface ILayoutProps {
   children: React.ReactNode;
   className?: string;
-  noBanner: boolean;
+  noBanner?: boolean;
 }
 
-export default function Layout({ children, className, noBanner, ...props }: ILayoutProps) {
+export default function Layout({ children, className, noBanner = false, ...props }: ILayoutProps) {
   const router = useRouter();
   return (
     <>
