@@ -48,7 +48,7 @@ export default function DisperseSend({ data }: DisperseSendProps) {
   }
 
   return (
-    <button onClick={sendGas} type="button" className="w-full rounded-xl bg-[#23BD8F] py-2">
+    <button onClick={sendGas} type="button" className="w-full rounded-3xl bg-[#23BD8F] py-2">
       Send
     </button>
   );

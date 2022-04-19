@@ -81,15 +81,15 @@ export default function SendToPayees() {
               min="0"
             />
           </label>
-          <button onClick={onSplitEqually} type="button" className=" w-28 rounded-xl bg-[#ffffff]  px-1 py-1 text-sm">
+          <button onClick={onSplitEqually} type="button" className=" w-28 rounded-3xl bg-[#ffffff]  px-1 py-1 text-sm">
             Split Equally
           </button>
         </div>
         <div className="flex w-48 space-x-2">
-          <button onClick={onSelectAll} type="button" className=" w-full rounded-xl bg-[#ffffff] px-1 py-1 text-sm">
+          <button onClick={onSelectAll} type="button" className=" w-full rounded-3xl bg-[#ffffff] px-1 py-1 text-sm">
             Select All
           </button>
-          <button onClick={onUnselectAll} type="button" className=" w-full rounded-xl bg-[#ffffff]  px-1 py-1 text-sm">
+          <button onClick={onUnselectAll} type="button" className=" w-full rounded-3xl bg-[#ffffff]  px-1 py-1 text-sm">
             Unselect All
           </button>
         </div>
@@ -153,7 +153,6 @@ export default function SendToPayees() {
             )}
           </>
         )}
-
         <DisperseSend data={toSend} />
       </div>
     </form>

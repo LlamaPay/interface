@@ -15,6 +15,7 @@ export const useNetworkProvider = () => {
     provider: chainDetails ? chainDetails.rpcProvider : null,
     network: name,
     chainId,
+    nativeCurrency: data.chain?.nativeCurrency,
     unsupported: data.chain?.unsupported,
   };
 };

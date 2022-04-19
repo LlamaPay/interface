@@ -146,7 +146,7 @@ const Balance = () => {
                           className="primary-button py-1 px-[6px] text-xs font-medium"
                           onClick={() => handleToken('deposit', b)}
                         >
-                          Topup
+                          Top up
                         </button>
                       </span>
                     </td>

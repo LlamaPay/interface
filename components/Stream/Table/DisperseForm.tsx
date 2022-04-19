@@ -52,7 +52,7 @@ export default function DisperseForm() {
               min="0"
             />
           </label>
-          <button onClick={onSplitEqually} type="button" className=" w-28 rounded-xl bg-[#ffffff]  px-1  text-sm">
+          <button onClick={onSplitEqually} type="button" className=" w-28 rounded-3xl bg-[#ffffff]  px-1  text-sm">
             Split Equally
           </button>
         </div>
@@ -70,7 +70,7 @@ export default function DisperseForm() {
           </label>
         </div>
 
-        <button type="button" className="w-full rounded-xl bg-[#23BD8F] py-2" onClick={handleAddPayee}>
+        <button type="button" className="w-full rounded-3xl bg-[#23BD8F] py-2" onClick={handleAddPayee}>
           Add Address
         </button>
         <table className="border">
