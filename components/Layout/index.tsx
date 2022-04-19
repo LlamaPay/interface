@@ -4,7 +4,6 @@ import Header from './Header';
 import classNames from 'classnames';
 import Footer from './Footer';
 import CustomToast from 'components/CustomToast';
-import Banner from './Banner';
 import Hero from 'components/Hero';
 import { useRouter } from 'next/router';
 
@@ -24,7 +23,6 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
           content="LlamaPay is a multi-chain protocol that allows you to automate transactions and stream them by the second. The recipients can withdraw these funds at any time. This eliminates the need for manual transactions."
         />
       </Head>
-      <Banner />
       <Header />
       {router.pathname === '/' && <Hero />}
       <main className={classNames('flex-1 px-2 pb-8 md:px-[30px] lg:px-[60px] xl:px-[120px]', className)} {...props}>
