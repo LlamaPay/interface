@@ -19,8 +19,8 @@ export default function DisperseSend({ data }: DisperseSendProps) {
     'disperseEther'
   );
   function sendGas() {
-    if (Number(network.chain?.id) === 43113) {
-      toast.error('DO NOT USE ON FUJI');
+    if (Number(network.chain?.id) === 43113 && Number(network.chain?.id) === 43114) {
+      toast.error(`DO NOT USE ON ${network.chain?.name}`);
       return;
     }
     let ether = new BigNumber(0);

@@ -80,7 +80,7 @@ export const networkDetails: INetworkDetails = {
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-avax-mainnet',
     chainProviders: new ethers.providers.JsonRpcProvider('https://api.avax.network/ext/bc/C/rpc'),
     llamapayFactoryAddress: FACTORY_AVALANCHE,
-    disperseAddress: DISPERSE_DEFAULT,
+    disperseAddress: '0x0000000000000000000000000000000000000000',
     blockExplorerURL: 'https://snowtrace.io/',
     blockExplorerName: 'Snowtrace',
     prefix: 'avax',
