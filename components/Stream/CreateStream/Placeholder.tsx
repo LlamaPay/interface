@@ -8,7 +8,7 @@ const Placeholder = () => {
       <span>
         <SelectToken
           handleTokenChange={() => null}
-          tokens={['Ethereum']}
+          tokens={[]}
           className="border border-neutral-300 py-[3px] shadow-none dark:border-neutral-700"
           label="Token"
         />

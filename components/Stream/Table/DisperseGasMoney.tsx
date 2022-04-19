@@ -19,10 +19,7 @@ export function DisperseGasMoney({ data }: DisperseGasMoneyProps) {
 
   return (
     <>
-      <button
-        onClick={disperseDialog.toggle}
-        className="whitespace-nowrap rounded-[10px] border border-[#1BDBAD] bg-[#23BD8F] py-2 px-5 text-sm font-bold text-white shadow-[0px_3px_7px_rgba(0,0,0,0.12)]"
-      >
+      <button onClick={disperseDialog.toggle} className="secondary-button">
         Send Gas Money
       </button>
       <FormDialog dialog={disperseDialog} title="Disperse Coins to Multiple Addresses for Gas" className="v-min h-min">

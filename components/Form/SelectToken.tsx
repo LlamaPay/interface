@@ -142,7 +142,6 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
 }
 
 const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<React.SetStateAction<boolean>> }) => {
-  // TODO handle loading and error states
   const { mutate, isLoading, error } = useCreateLlamaPayContract();
 
   const [isConfirming, setIsConfirming] = React.useState(false);

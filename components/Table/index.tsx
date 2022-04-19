@@ -60,12 +60,13 @@ const Table = ({ instance, hidePagination }: { instance: TableInstance<any>; hid
       </tfoot> */}
         </table>
       </div>
-      {!hidePagination && (
-        <>
-          <div className="h-2" />
-          <div className="font-inter flex w-full flex-col gap-2 sm:flex-row sm:justify-between sm:gap-5">
-            <div className="flex flex-1 items-center justify-between gap-2">
-              <button className="bg-none text-xs text-[#303030] underline">Export CSV</button>
+
+      <>
+        <div className="h-2" />
+        <div className="font-inter flex w-full flex-col gap-2 sm:flex-row sm:justify-between sm:gap-5">
+          <div className="flex flex-1 items-center justify-between gap-2">
+            <button className="bg-none text-xs text-[#303030] underline">Export CSV</button>
+            {!hidePagination && (
               <label className="flex items-center space-x-1">
                 <span className="text-xs text-[rgba(0,0,0,0.54)]">Rows per page:</span>
                 <select
@@ -82,7 +83,9 @@ const Table = ({ instance, hidePagination }: { instance: TableInstance<any>; hid
                   ))}
                 </select>
               </label>
-            </div>
+            )}
+          </div>
+          {!hidePagination && (
             <div className="flex items-center justify-between space-x-8 pr-1 text-[rgba(0,0,0,0.87)]">
               {showRowNumber && <span className="text-xs">{`${firstRowId} - ${lastRowId} of ${totalRows}`}</span>}
               <span className="space-x-5">
@@ -102,9 +105,9 @@ const Table = ({ instance, hidePagination }: { instance: TableInstance<any>; hid
                 </button>
               </span>
             </div>
-          </div>
-        </>
-      )}
+          )}
+        </div>
+      </>
     </div>
   );
 };

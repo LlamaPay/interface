@@ -17,10 +17,7 @@ const defaultColumns = table.createColumns([
   table.createDisplayColumn({
     id: 'action',
     header: 'Action',
-    cell: ({ cell }) => {
-      if (!cell.row.original) return null;
-      return <ActionName data={cell.row.original} />;
-    },
+    cell: ({ cell }) => cell.row.original && <ActionName data={cell.row.original} />,
   }),
   table.createDataColumn('addressType', {
     header: 'Type',
@@ -52,18 +49,29 @@ const defaultColumns = table.createColumns([
   table.createDisplayColumn({
     id: 'historyActions',
     header: '',
-    cell: ({ cell }) => {
-      if (!cell.row.original) return null;
-
-      return <HistoryActions data={cell.row.original} />;
-    },
+    cell: ({ cell }) => cell.row.original && <HistoryActions data={cell.row.original} />,
   }),
 ]);
 
 export function HistoryTable() {
   const { data, isLoading, error } = useStreamsAndHistory();
 
-  const noData = !data?.history || data.history?.length < 1;
+  const skipReset = React.useRef<boolean>(false);
+
+  const history = React.useMemo(() => {
+    // When data gets updated with this function, set a flag
+    // to disable table's auto resetting
+    skipReset.current = true;
+
+    if (!data?.history || data.history?.length < 1) return false;
+
+    return data.history;
+  }, [data]);
+
+  React.useEffect(() => {
+    // After the table has updated, always remove the flag
+    skipReset.current = false;
+  });
 
   return (
     <section className="w-full">
@@ -72,16 +80,16 @@ export function HistoryTable() {
         <h1>History</h1>
       </span>
 
-      {isLoading || error || noData ? (
-        <Fallback isLoading={isLoading} isError={error ? true : false} noData={noData} type="history" />
+      {isLoading || error || !history ? (
+        <Fallback isLoading={isLoading} isError={error ? true : false} noData={true} type="history" />
       ) : (
-        <NewTable data={data.history || []} />
+        <NewTable data={data.history || []} skipReset={skipReset} />
       )}
     </section>
   );
 }
 
-function NewTable({ data }: { data: IHistory[] }) {
+function NewTable({ data, skipReset }: { data: IHistory[]; skipReset: React.MutableRefObject<boolean> }) {
   const [columns] = React.useState<typeof defaultColumns>(() => [...defaultColumns]);
 
   const [globalFilter, setGlobalFilter] = React.useState('');
@@ -103,6 +111,7 @@ function NewTable({ data }: { data: IHistory[] }) {
     globalFilterRowsFn: globalFilterRowsFn,
     onPaginationChange: setPagination,
     paginateRowsFn: paginateRowsFn,
+    autoResetAll: !skipReset.current,
   });
 
   return (

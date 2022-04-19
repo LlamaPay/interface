@@ -12,7 +12,17 @@ const useGetAllTokens = () => {
 
   const { provider, network } = useNetworkProvider();
 
-  const { data = null, isLoading, error } = useGetAllTokensQuery({ endpoint }, { network: network || '' });
+  const {
+    data = null,
+    isLoading,
+    error,
+  } = useGetAllTokensQuery(
+    { endpoint },
+    { network: network || '' },
+    {
+      refetchInterval: 10000,
+    }
+  );
 
   // format the data in memo, instead of react query's select as graphql trigger rerenders multiple times when using it
   const tokens: IToken[] | null = React.useMemo(() => {

@@ -22,6 +22,10 @@ export default function SavedName({ data }: { data: IStream }) {
 
   const [savedAddress, setSavedAddress] = React.useState(name);
 
+  React.useEffect(() => {
+    setSavedAddress(name);
+  }, [name]);
+
   const updateName = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     updateAddress(address, savedAddress);
