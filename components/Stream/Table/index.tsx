@@ -13,6 +13,7 @@ import Fallback from 'components/FallbackList';
 import TokenName from './TokenName';
 import StreamAddress from './StreamAddress';
 import { StreamIcon } from 'components/Icons';
+import { DisperseGasMoney } from './DisperseGasMoney';
 
 const table = createTable<{ Row: IStream }>();
 
@@ -75,9 +76,14 @@ export function StreamTable() {
           <h1>Streams</h1>
         </span>
 
-        <Link href="/create" passHref>
-          <button className="primary-button py-2 px-8 text-sm font-bold">Create Stream</button>
-        </Link>
+        <div className="space-x-3">
+          <Link href="/create" passHref>
+            <button className="whitespace-nowrap rounded-[10px] border border-[#1BDBAD] bg-[#23BD8F] py-2 px-12 text-sm font-bold text-white shadow-[0px_3px_7px_rgba(0,0,0,0.12)]">
+              Create Stream
+            </button>
+          </Link>
+          <DisperseGasMoney data={data} />
+        </div>
       </div>
       {isLoading || error || noData ? (
         <Fallback isLoading={isLoading} isError={error ? true : false} noData={noData} type="streams" />
