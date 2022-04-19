@@ -60,7 +60,10 @@ const WithdrawForm = ({ data, formDialog }: IFormProps) => {
       <FormDialog title={data.title} dialog={formDialog} className="h-fit">
         <form className="mt-4 flex flex-col space-y-4" onSubmit={handleSubmit}>
           <InputAmount name="amount" label={`Amount ${data.symbol}`} isRequired />
-          <SubmitButton disabled={isLoading} className="my-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
+          <SubmitButton
+            disabled={isLoading}
+            className="my-4 rounded border border-transparent !bg-green-200 py-2 px-3 dark:!bg-stone-600"
+          >
             {isLoading && !withdrawAll.current ? <BeatLoader size={6} color="#171717" /> : 'Withdraw'}
           </SubmitButton>
         </form>
@@ -68,7 +71,7 @@ const WithdrawForm = ({ data, formDialog }: IFormProps) => {
         <SubmitButton
           disabled={isLoading}
           onClick={withdrawAllTokens}
-          className="my-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600"
+          className="my-4 rounded border border-green-200 !bg-white py-2 px-3 dark:!bg-stone-600"
         >
           {isLoading && withdrawAll.current ? <BeatLoader size={6} color="#171717" /> : 'Withdraw All'}
         </SubmitButton>

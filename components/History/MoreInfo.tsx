@@ -2,6 +2,7 @@ import { DisclosureState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
 import { UserHistoryFragment } from 'services/generated/graphql';
 import { useChainExplorer } from 'hooks';
+import { ExternalLinkIcon } from '@heroicons/react/outline';
 
 interface MoreInfoProps {
   data: UserHistoryFragment;
@@ -95,9 +96,15 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
               })}
             </p>
           </section>
-          <section>
-            <a href={txLink} target="_blank" rel="noreferrer noopener" className="underline underline-offset-4">
-              View on {explorerName}
+          <section className="flex">
+            <a
+              href={txLink}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="font-inter mt-4 flex w-full items-center justify-center gap-2 rounded bg-green-200 py-2 px-3"
+            >
+              <span>View on {explorerName}</span>
+              <ExternalLinkIcon className="h-4 w-4" />
             </a>
           </section>
         </span>

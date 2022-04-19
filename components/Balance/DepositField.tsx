@@ -93,17 +93,17 @@ const DepositField = ({ tokens, dialog }: IDepositFieldprops) => {
             checkTokenApproval={checkTokenApproval}
             isRequired
           />
+          <p className="my-2 text-center text-sm text-red-500">{approvalError && "Couldn't approve token"}</p>
           {isApproved ? (
-            <SubmitButton disabled={isLoading} className="mt-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
+            <SubmitButton disabled={isLoading} className="mt-4 rounded !bg-green-200 py-2 px-3 dark:!bg-stone-600">
               {isLoading ? <BeatLoader size={6} color="#171717" /> : 'Deposit'}
             </SubmitButton>
           ) : (
-            <SubmitButton disabled={disableApprove} className="mt-4 rounded !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
+            <SubmitButton disabled={disableApprove} className="mt-4 rounded !bg-green-200 py-2 px-3 dark:!bg-stone-600">
               {disableApprove ? <BeatLoader size={6} color="#171717" /> : 'Approve'}
             </SubmitButton>
           )}
         </form>
-        <p className="my-4 text-center text-sm text-red-500">{approvalError && "Couldn't approve token"}</p>
       </FormDialog>
       {transaction && <TransactionDialog dialog={transactionDialog} transactionHash={transaction.hash || ''} />}
     </>
