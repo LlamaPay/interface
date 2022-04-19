@@ -17,11 +17,11 @@ export const StreamHistory = ({ data, dialog, title }: StreamHistoryProps) => {
     <>
       <FormDialog dialog={dialog} title={title} className="v-min h-min">
         <section>
-          <table className="w-full">
+          <table className=" w-full border-collapse">
             <tbody>
               {historicalData.map((p) => (
-                <tr className="border" key={p.txHash}>
-                  <td className="font-inter border text-left text-sm">{p.eventType.replace(/([A-Z])/g, ' $1')}</td>
+                <tr className="font-inter border border-stone-700" key={p.txHash}>
+                  <td className="font-inter border text-center text-sm">{p.eventType.replace(/([A-Z])/g, ' $1')}</td>
                   <td className="font-inter border text-center text-sm">
                     {new Date(Number(p.createdTimestamp) * 1e3).toLocaleString('en-CA', { hour12: false })}
                   </td>
