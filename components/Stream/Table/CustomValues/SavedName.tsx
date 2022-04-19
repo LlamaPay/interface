@@ -7,7 +7,7 @@ import { useAddressStore } from 'store/address';
 import { IStream } from 'types';
 import { formatAddress } from 'utils/address';
 
-export default function SavedName({ data }: { data: IStream }) {
+export function SavedName({ data }: { data: IStream }) {
   // check the stream type (incoming or outgoing)
   const isIncoming = data.streamType === 'incomingStream';
 

@@ -5,7 +5,7 @@ import { IStream } from 'types';
 import defaultImage from 'public/empty-token.webp';
 import useTokenBalances from 'queries/useTokenBalances';
 
-export default function TokenName({ data }: { data: IStream }) {
+export function TokenName({ data }: { data: IStream }) {
   // function that returns chain explorer url based on the chain user is connected to
   const { url: chainExplorer } = useChainExplorer();
 

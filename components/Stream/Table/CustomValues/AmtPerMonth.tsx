@@ -4,7 +4,7 @@ import * as React from 'react';
 import { IStream } from 'types';
 import { secondsByDuration } from 'utils/constants';
 
-const AmtPerMonth = ({ data }: { data: IStream }) => {
+export const AmtPerMonth = ({ data }: { data: IStream }) => {
   const { data: price } = useTokenPrice(data.token.address.toLowerCase());
   const amount = (Number(data.amountPerSec) * secondsByDuration['month']) / 1e20;
   return (
@@ -17,5 +17,3 @@ const AmtPerMonth = ({ data }: { data: IStream }) => {
     </div>
   );
 };
-
-export default AmtPerMonth;

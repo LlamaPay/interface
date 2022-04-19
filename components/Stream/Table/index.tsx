@@ -1,19 +1,21 @@
 import * as React from 'react';
 import { createTable, useTable, globalFilterRowsFn } from '@tanstack/react-table';
-import Table from 'components/Table';
-import useStreamsAndHistory from 'queries/useStreamsAndHistory';
-import { IStream } from 'types';
-import TotalStreamed from './TotalStreamed';
-import Withdrawable from './Withdrawable';
-import SavedName from './SavedName';
-import StreamActions from './StreamActions';
 import Link from 'next/link';
-import AmtPerMonth from './AmtPerMonth';
+import Table from 'components/Table';
 import Fallback from 'components/FallbackList';
-import TokenName from './TokenName';
-import StreamAddress from './StreamAddress';
 import { StreamIcon } from 'components/Icons';
-import { DisperseGasMoney } from './DisperseGasMoney';
+import {
+  TotalStreamed,
+  Withdrawable,
+  SavedName,
+  StreamActions,
+  AmtPerMonth,
+  TokenName,
+  StreamAddress,
+} from './CustomValues';
+import DisperseGasMoney from 'components/DisperseGas';
+import { IStream } from 'types';
+import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 
 const table = createTable<{ Row: IStream }>();
 
