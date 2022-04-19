@@ -64,6 +64,7 @@ export default function useStreamToken() {
         const toastId = toast.loading('Confirming transaction');
         data.wait().then((res: any) => {
           toast.dismiss(toastId);
+          queryClient.invalidateQueries();
           if (res.status === 1) {
             toast.success('Stream created successfully');
           } else {

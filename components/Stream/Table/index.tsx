@@ -21,16 +21,16 @@ const defaultColumns = table.createColumns([
   table.createDisplayColumn({
     id: 'userName',
     header: 'Name',
-    cell: ({ cell }) => (cell.row.original ? <SavedName data={cell.row.original} /> : <></>),
+    cell: ({ cell }) => cell.row.original && <SavedName data={cell.row.original} />,
   }),
   table.createDisplayColumn({
     id: 'address',
     header: 'Address',
-    cell: ({ cell }) => (cell.row.original ? <StreamAddress data={cell.row.original} /> : <></>),
+    cell: ({ cell }) => cell.row.original && <StreamAddress data={cell.row.original} />,
   }),
   table.createDataColumn('tokenSymbol', {
     header: 'Token',
-    cell: ({ cell }) => (cell.row.original ? <TokenName data={cell.row.original} /> : <></>),
+    cell: ({ cell }) => cell.row.original && <TokenName data={cell.row.original} />,
   }),
   table.createDisplayColumn({
     id: 'amountPerSec',
@@ -40,33 +40,44 @@ const defaultColumns = table.createColumns([
         <small className="mx-1 text-xs font-normal text-gray-500 dark:text-gray-400">per month</small>
       </>
     ),
-    cell: ({ cell }) => (cell.row.original ? <AmtPerMonth data={cell.row.original} /> : <></>),
+    cell: ({ cell }) => cell.row.original && <AmtPerMonth data={cell.row.original} />,
   }),
   table.createDisplayColumn({
     id: 'totalStreamed',
     header: 'Total Streamed',
-    cell: ({ cell }) => (cell.row.original ? <TotalStreamed data={cell.row.original} /> : <></>),
+    cell: ({ cell }) => cell.row.original && <TotalStreamed data={cell.row.original} />,
   }),
   table.createDisplayColumn({
     id: 'userWithdrawable',
     header: 'Withdrawable',
-    cell: ({ cell }) => (cell.row.original ? <Withdrawable data={cell.row.original} /> : <></>),
+    cell: ({ cell }) => cell.row.original && <Withdrawable data={cell.row.original} />,
   }),
   table.createDisplayColumn({
     id: 'streamActions',
     header: '',
-    cell: ({ cell }) => {
-      if (!cell.row.original) return null;
-
-      return <StreamActions data={cell.row.original} />;
-    },
+    cell: ({ cell }) => cell.row.original && <StreamActions data={cell.row.original} />,
   }),
 ]);
 
 export function StreamTable() {
   const { data, isLoading, error } = useStreamsAndHistory();
 
-  const noData = !data?.streams || data.streams?.length < 1;
+  const skipReset = React.useRef<boolean>(false);
+
+  const streams = React.useMemo(() => {
+    // When data gets updated with this function, set a flag
+    // to disable table's auto resetting
+    skipReset.current = true;
+
+    if (!data?.streams || data.streams?.length < 1) return false;
+
+    return data.streams;
+  }, [data]);
+
+  React.useEffect(() => {
+    // After the table has updated, always remove the flag
+    skipReset.current = false;
+  });
 
   return (
     <section className="w-full">
@@ -76,25 +87,23 @@ export function StreamTable() {
           <h1>Streams</h1>
         </span>
 
-        <div className="space-x-3">
-          <Link href="/create" passHref>
-            <button className="whitespace-nowrap rounded-[10px] border border-[#1BDBAD] bg-[#23BD8F] py-2 px-12 text-sm font-bold text-white shadow-[0px_3px_7px_rgba(0,0,0,0.12)]">
-              Create Stream
-            </button>
+        <div className="flex flex-wrap gap-3">
+          <Link href="/create">
+            <a className="primary-button py-2 px-8 text-sm font-bold">Create Stream</a>
           </Link>
           <DisperseGasMoney data={data} />
         </div>
       </div>
-      {isLoading || error || noData ? (
-        <Fallback isLoading={isLoading} isError={error ? true : false} noData={noData} type="streams" />
+      {isLoading || error || !streams ? (
+        <Fallback isLoading={isLoading} isError={error ? true : false} noData={true} type="streams" />
       ) : (
-        <NewTable data={data.streams || []} />
+        <NewTable data={streams} skipReset={skipReset} />
       )}
     </section>
   );
 }
 
-function NewTable({ data }: { data: IStream[] }) {
+function NewTable({ data, skipReset }: { data: IStream[]; skipReset: React.MutableRefObject<boolean> }) {
   const [columns] = React.useState<typeof defaultColumns>(() => [...defaultColumns]);
 
   const [globalFilter, setGlobalFilter] = React.useState('');
@@ -107,6 +116,7 @@ function NewTable({ data }: { data: IStream[] }) {
     },
     onGlobalFilterChange: setGlobalFilter,
     globalFilterRowsFn: globalFilterRowsFn,
+    autoResetAll: !skipReset.current,
   });
 
   return (
