@@ -38,10 +38,10 @@ export default function DisperseSend({ data }: DisperseSendProps) {
         value: ether.toString(),
       },
     }).then((data) => {
-      const loading = data.error ? toast.error(data.error.message) : toast.loading('Sending');
+      const loading = data.error ? toast.error(data.error.message) : toast.loading('Dispersing Gas');
       data.data?.wait().then((receipt) => {
         toast.dismiss(loading);
-        receipt.status === 1 ? toast.success('Successfully Sent') : toast.error('Failed to Send');
+        receipt.status === 1 ? toast.success('Successfully Dispersed Gas') : toast.error('Failed to Disperse Gas');
       });
     });
   }

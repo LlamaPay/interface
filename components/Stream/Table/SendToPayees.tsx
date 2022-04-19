@@ -66,10 +66,7 @@ export default function SendToPayees() {
   return (
     <form>
       <div className="space-y-2">
-        <div className="flex w-48 space-x-2">
-          <button onClick={onSplitEqually} type="button" className=" w-full rounded-xl bg-[#ffffff]  px-1 py-1 text-sm">
-            Split Equally
-          </button>
+        <div className="flex w-full space-x-2">
           <label>
             <input
               type="number"
@@ -79,11 +76,14 @@ export default function SendToPayees() {
                 setAmount(Number(e.target.value));
               }}
               name="amount"
-              className="w-24"
+              className="w-32"
               placeholder="0.0"
               min="0"
             />
           </label>
+          <button onClick={onSplitEqually} type="button" className=" w-28 rounded-xl bg-[#ffffff]  px-1 py-1 text-sm">
+            Split Equally
+          </button>
         </div>
         <div className="flex w-48 space-x-2">
           <button onClick={onSelectAll} type="button" className=" w-full rounded-xl bg-[#ffffff] px-1 py-1 text-sm">

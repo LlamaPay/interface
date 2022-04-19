@@ -30,22 +30,22 @@ export function DisperseGasMoney() {
                     selected ? 'rounded-xl bg-[#23BD8F] px-4 py-2' : 'rounded-xl bg-[#ffffff] px-4 py-2'
                   }
                 >
-                  <span className="font-inter ">Send to Payees</span>
+                  <span className="font-inter ">Disperse Tokens</span>
                 </Tab>
                 <Tab
                   className={({ selected }) =>
                     selected ? 'rounded-xl bg-[#23BD8F] px-4 py-2' : 'rounded-xl bg-[#ffffff] px-4 py-2'
                   }
                 >
-                  <span className="font-inter ">Custom</span>
+                  <span className="font-inter ">Send to Payees</span>
                 </Tab>
               </Tab.List>
               <Tab.Panels>
                 <Tab.Panel>
-                  <SendToPayees />
+                  <DisperseForm />
                 </Tab.Panel>
                 <Tab.Panel>
-                  <DisperseForm />
+                  <SendToPayees />
                 </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>
