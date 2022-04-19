@@ -1,15 +1,12 @@
 import useGetInitalPayeeData from 'queries/useGetInitialPayeeData';
+import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import React from 'react';
-import { IStreamAndHistory } from 'types';
 import { formatAddress } from 'utils/address';
 import DisperseSend from './DisperseSend';
 import PayeeBalance from './PayeeBalance';
 
-interface SendToPayeesProps {
-  data: IStreamAndHistory;
-}
-
-export default function SendToPayees({ data }: SendToPayeesProps) {
+export default function SendToPayees() {
+  const { data: data, isLoading, error } = useStreamsAndHistory();
   const [tableContents, setTableContents] = React.useState<{ [key: string]: number }>(useGetInitalPayeeData(data));
   const [toSend, setToSend] = React.useState<{ [key: string]: number }>({});
   const [amountState, setAmount] = React.useState<number>(0);
@@ -97,48 +94,66 @@ export default function SendToPayees({ data }: SendToPayeesProps) {
           </button>
         </div>
 
-        <table id="payeeTable">
-          <thead>
-            <tr>
-              <th></th>
-              <th className="text-md">Address</th>
-              <th className="text-md">Payee Balance</th>
-              <th className="text-md">Amount to Send</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.keys(tableContents).map((p) => (
-              <tr key={p}>
-                <td className="w-16">
-                  <label>
-                    <input
-                      type="checkbox"
-                      name={p}
-                      onChange={(e) => onSelect(e)}
-                      checked={toSend[p] !== undefined ? true : false}
-                    ></input>
-                  </label>
-                </td>
-                <td className="text-md w-56 text-center">{formatAddress(p)}</td>
-                <td className="text-md w-48 text-center">
-                  <PayeeBalance id={p} />
-                </td>
-                <td className="text-md w-32 text-center">
-                  <input
-                    className="w-32"
-                    autoComplete="off"
-                    type="number"
-                    min="0"
-                    name={p}
-                    value={tableContents[p] === 0 ? '' : tableContents[p]}
-                    placeholder="0.0"
-                    onChange={(e) => onInputChange(e)}
-                  ></input>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {isLoading ? (
+          <p>Loading Payees</p>
+        ) : (
+          <>
+            {error ? (
+              <p>Error Loading Payees</p>
+            ) : (
+              <>
+                {' '}
+                {Object.keys(tableContents).length > 0 ? (
+                  <table id="payeeTable">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th className="text-md">Address</th>
+                        <th className="text-md">Payee Balance</th>
+                        <th className="text-md">Amount to Send</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {Object.keys(tableContents).map((p) => (
+                        <tr key={p}>
+                          <td className="w-16">
+                            <label>
+                              <input
+                                type="checkbox"
+                                name={p}
+                                onChange={(e) => onSelect(e)}
+                                checked={toSend[p] !== undefined ? true : false}
+                              ></input>
+                            </label>
+                          </td>
+                          <td className="text-md w-56 text-center">{formatAddress(p)}</td>
+                          <td className="text-md w-48 text-center">
+                            <PayeeBalance id={p} />
+                          </td>
+                          <td className="text-md w-32 text-center">
+                            <input
+                              className="w-32"
+                              autoComplete="off"
+                              type="number"
+                              min="0"
+                              name={p}
+                              value={tableContents[p] === 0 ? '' : tableContents[p]}
+                              placeholder="0.0"
+                              onChange={(e) => onInputChange(e)}
+                            ></input>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                ) : (
+                  <p>No Payees Detected</p>
+                )}
+              </>
+            )}
+          </>
+        )}
+
         <DisperseSend data={toSend} />
       </div>
     </form>

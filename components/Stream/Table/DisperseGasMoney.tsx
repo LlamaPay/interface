@@ -6,13 +6,8 @@ import DisperseForm from './DisperseForm';
 import { useAccount } from 'wagmi';
 import { useNetworkProvider } from 'hooks';
 import SendToPayees from './SendToPayees';
-import { IStreamAndHistory } from 'types';
 
-interface DisperseGasMoneyProps {
-  data: IStreamAndHistory;
-}
-
-export function DisperseGasMoney({ data }: DisperseGasMoneyProps) {
+export function DisperseGasMoney() {
   const disperseDialog = useDialogState();
   const [{ data: accountData }] = useAccount();
   const { unsupported } = useNetworkProvider();
@@ -47,7 +42,7 @@ export function DisperseGasMoney({ data }: DisperseGasMoneyProps) {
               </Tab.List>
               <Tab.Panels>
                 <Tab.Panel>
-                  <SendToPayees data={data} />
+                  <SendToPayees />
                 </Tab.Panel>
                 <Tab.Panel>
                   <DisperseForm />
