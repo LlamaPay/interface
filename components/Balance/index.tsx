@@ -60,7 +60,7 @@ const Balance = () => {
           </span>
 
           <button
-            className="primary-button py-2 px-8 text-sm font-bold"
+            className="primary-button"
             onClick={() => {
               depositFieldDialog.toggle();
             }}
@@ -73,19 +73,19 @@ const Balance = () => {
           <Fallback isLoading={isLoading} isError={isError} noData={noBalances} type="balances" />
         ) : (
           <div className="overflow-x-auto">
-            <table className="dark:border-stone-700-collapse border">
+            <table className="border-separate" style={{ borderSpacing: '0 10px' }}>
               <thead>
-                <tr className="border dark:border-stone-700">
-                  <th className="font-inter whitespace-nowrap border px-4 pt-[6px] pb-[5px] text-left text-sm font-[500] dark:border-stone-700">
+                <tr>
+                  <th className="font-inter whitespace-nowrap p-4 pb-1 text-left text-sm font-bold text-[#3D3D3D]">
                     Token
                   </th>
-                  <th className="font-inter whitespace-nowrap border px-4 pt-[6px] pb-[5px] text-left text-sm font-[500] dark:border-stone-700">
-                    Amount
+                  <th className="font-inter whitespace-nowrap p-4 pb-1 text-left text-sm font-bold text-[#3D3D3D]">
+                    Deposited
                   </th>
-                  <th className="font-inter whitespace-nowrap border px-4 pt-[6px] pb-[5px] text-left text-sm font-[500] dark:border-stone-700">
+                  <th className="font-inter whitespace-nowrap p-4 pb-1 text-left text-sm font-bold text-[#3D3D3D]">
                     To Depleted
                   </th>
-                  <th className="font-inter whitespace-nowrap border px-4 pt-[6px] pb-[5px] text-left text-sm font-[500] dark:border-stone-700">
+                  <th className="font-inter whitespace-nowrap p-4 pb-1 text-left text-sm font-bold text-[#3D3D3D]">
                     Monthly Cost
                   </th>
                   <th></th>
@@ -93,8 +93,8 @@ const Balance = () => {
               </thead>
               <tbody>
                 {balances?.map((b) => (
-                  <tr key={b.address} className="border dark:border-stone-700">
-                    <th className="font-inter w-full whitespace-nowrap border px-4 py-[6px] text-left text-sm font-normal dark:border-stone-700">
+                  <tr key={b.address}>
+                    <th className="font-inter w-full whitespace-nowrap rounded-l border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-left text-sm font-normal text-[#3D3D3D]">
                       <div className="flex items-center space-x-2">
                         <div className="flex h-6 w-6 flex-shrink-0 items-center rounded-full">
                           <Image src={b.logoURI} alt={'Logo of token' + b.name} width="18px" height="18px" />
@@ -112,19 +112,40 @@ const Balance = () => {
                         )}
                       </div>
                     </th>
-                    <BalanceAndSymbol data={b} />
-                    <UntilDepleted data={b} />
-                    <MonthlyCost data={b} />
-                    <td className="font-inter space-x-2 border px-4 py-[6px] text-sm opacity-80 dark:border-stone-700">
+                    <td
+                      className="font-inter whitespace-nowrap border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D]"
+                      style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
+                    >
+                      <BalanceAndSymbol data={b} />
+                    </td>
+                    <td
+                      className="font-inter whitespace-nowrap border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D]"
+                      style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
+                    >
+                      <UntilDepleted data={b} />
+                    </td>
+                    <td
+                      className="font-inter whitespace-nowrap border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D]"
+                      style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
+                    >
+                      <MonthlyCost data={b} />
+                    </td>
+                    <td
+                      className="font-inter space-x-2 rounded-r border border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D]"
+                      style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
+                    >
                       <span className="flex gap-4">
                         <button
-                          className="text-xs underline disabled:cursor-not-allowed"
+                          className="text-xs text-black/80 underline disabled:cursor-not-allowed"
                           onClick={() => handleToken('withdraw', b)}
                           disabled={Number.isNaN(b.amount) || Number(b.amount) <= 0}
                         >
                           Withdraw
                         </button>
-                        <button className="primary-button py-1 px-[6px]" onClick={() => handleToken('deposit', b)}>
+                        <button
+                          className="primary-button py-1 px-[6px] text-xs font-medium"
+                          onClick={() => handleToken('deposit', b)}
+                        >
                           Topup
                         </button>
                       </span>

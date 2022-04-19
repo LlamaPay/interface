@@ -1,5 +1,5 @@
-import Tooltip from 'components/Tooltip';
 import React from 'react';
+import Tooltip from 'components/Tooltip';
 import { IBalance } from 'types';
 
 interface UntilDepletedProps {
@@ -39,9 +39,5 @@ export const UntilDepleted = ({ data }: UntilDepletedProps) => {
     return () => clearInterval(interval);
   }, [updateBalance]);
 
-  return (
-    <td className="font-inter whitespace-nowrap border px-4 py-[6px] text-sm tabular-nums dark:border-stone-700">
-      {balanceState && <Tooltip content={getDate(data, balanceState)}>{getTime(data, balanceState)}</Tooltip>}
-    </td>
-  );
+  return <>{balanceState && <Tooltip content={getDate(data, balanceState)}>{getTime(data, balanceState)}</Tooltip>}</>;
 };

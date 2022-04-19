@@ -29,7 +29,7 @@ export default function SavedName({ data }: { data: IStream }) {
   };
 
   return (
-    <div className="flex items-center justify-between gap-2 truncate">
+    <div className="flex items-center gap-2 truncate">
       {isIncoming ? (
         <>
           <Tooltip content="Incoming stream">
@@ -51,7 +51,7 @@ export default function SavedName({ data }: { data: IStream }) {
           <span>{name}</span>
         </>
       )}
-      <button className="ml-4 rounded p-1 hover:bg-zinc-200 hover:dark:bg-stone-700" onClick={dialog.toggle}>
+      <button className="ml-auto rounded p-1 hover:bg-zinc-200 hover:dark:bg-stone-700" onClick={dialog.toggle}>
         <span className="sr-only">Edit payee address name</span>
         <PencilIcon className="h-4 w-4" />
       </button>

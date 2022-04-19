@@ -1,5 +1,6 @@
-import * as TooltipPrimitive from '@radix-ui/react-tooltip';
 import * as React from 'react';
+import { Button } from 'ariakit/button';
+import { Tooltip as AriaTooltip, TooltipAnchor, useTooltipState } from 'ariakit/tooltip';
 
 interface IProps {
   children: React.ReactNode;
@@ -7,17 +8,24 @@ interface IProps {
 }
 
 const Tooltip = ({ children, content }: IProps) => {
-  if (!content) return <>{children}</>;
+  const tooltip = useTooltipState({ placement: 'bottom' });
+
+  if (!content) return <span>{children}</span>;
 
   return (
-    <TooltipPrimitive.Provider>
-      <TooltipPrimitive.Root>
-        <TooltipPrimitive.Trigger>{children}</TooltipPrimitive.Trigger>
-        <TooltipPrimitive.Content>
-          <span className="rounded bg-zinc-200 p-1 text-xs shadow-sm dark:bg-zinc-700">{content}</span>
-        </TooltipPrimitive.Content>
-      </TooltipPrimitive.Root>
-    </TooltipPrimitive.Provider>
+    <>
+      <TooltipAnchor
+        state={tooltip}
+        as={Button}
+        className="focus-visible:ariakit-outline aria-disabled:opacity-50"
+        style={{ fontWeight: 'inherit' }}
+      >
+        {children}
+      </TooltipAnchor>
+      <AriaTooltip state={tooltip} className="rounded border bg-neutral-50 py-1 px-2 text-xs drop-shadow">
+        {content}
+      </AriaTooltip>
+    </>
   );
 };
 
