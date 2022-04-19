@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import useGetInitalPayeeData from 'queries/useGetInitialPayeeData';
+import React from 'react';
 import { IStreamAndHistory } from 'types';
 import { formatAddress } from 'utils/address';
-import { useAccount } from 'wagmi';
 import DisperseSend from './DisperseSend';
 import PayeeBalance from './PayeeBalance';
 
@@ -10,24 +10,9 @@ interface SendToPayeesProps {
 }
 
 export default function SendToPayees({ data }: SendToPayeesProps) {
-  const [tableContents, setTableContents] = React.useState<{ [key: string]: number }>({});
+  const [tableContents, setTableContents] = React.useState<{ [key: string]: number }>(useGetInitalPayeeData(data));
   const [toSend, setToSend] = React.useState<{ [key: string]: number }>({});
   const [amountState, setAmount] = React.useState<number>(0);
-  const [{ data: accountData }] = useAccount();
-  function getInitialData() {
-    const accountAddress = accountData?.address.toLowerCase();
-    const newTable: { [key: string]: number } = {};
-    data.streams?.forEach((p) => {
-      if (accountAddress === p.payerAddress.toLowerCase()) {
-        newTable[p.payeeAddress.toLowerCase()] = 0;
-      }
-    });
-    setTableContents(newTable);
-  }
-
-  useEffect(() => {
-    getInitialData();
-  }, []);
 
   function onSelectAll() {
     const newToSend = { ...tableContents };
