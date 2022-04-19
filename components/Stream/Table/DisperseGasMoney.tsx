@@ -6,13 +6,8 @@ import DisperseForm from './DisperseForm';
 import { useAccount } from 'wagmi';
 import { useNetworkProvider } from 'hooks';
 import SendToPayees from './SendToPayees';
-import { IStreamAndHistory } from 'types';
 
-interface DisperseGasMoneyProps {
-  data: IStreamAndHistory;
-}
-
-export function DisperseGasMoney({ data }: DisperseGasMoneyProps) {
+export function DisperseGasMoney() {
   const disperseDialog = useDialogState();
   const [{ data: accountData }] = useAccount();
   const { unsupported } = useNetworkProvider();
@@ -32,22 +27,22 @@ export function DisperseGasMoney({ data }: DisperseGasMoneyProps) {
                     selected ? 'rounded-xl bg-[#23BD8F] px-4 py-2' : 'rounded-xl bg-[#ffffff] px-4 py-2'
                   }
                 >
-                  <span className="font-inter ">Send to Payees</span>
+                  <span className="font-inter ">Disperse Tokens</span>
                 </Tab>
                 <Tab
                   className={({ selected }) =>
                     selected ? 'rounded-xl bg-[#23BD8F] px-4 py-2' : 'rounded-xl bg-[#ffffff] px-4 py-2'
                   }
                 >
-                  <span className="font-inter ">Custom</span>
+                  <span className="font-inter ">Send to Payees</span>
                 </Tab>
               </Tab.List>
               <Tab.Panels>
                 <Tab.Panel>
-                  <SendToPayees data={data} />
+                  <DisperseForm />
                 </Tab.Panel>
                 <Tab.Panel>
-                  <DisperseForm />
+                  <SendToPayees />
                 </Tab.Panel>
               </Tab.Panels>
             </Tab.Group>

@@ -39,9 +39,6 @@ export default function DisperseForm() {
     <form>
       <div className="space-y-2">
         <div className="flex w-full space-x-2">
-          <button onClick={onSplitEqually} type="button" className=" w-28 rounded-xl bg-[#ffffff]  px-1  text-sm">
-            Split Equally
-          </button>
           <label>
             <input
               type="number"
@@ -55,6 +52,9 @@ export default function DisperseForm() {
               min="0"
             />
           </label>
+          <button onClick={onSplitEqually} type="button" className=" w-28 rounded-xl bg-[#ffffff]  px-1  text-sm">
+            Split Equally
+          </button>
         </div>
         <div className="space-y-2">
           <label>

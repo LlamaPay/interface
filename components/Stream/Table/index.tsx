@@ -91,7 +91,7 @@ export function StreamTable() {
           <Link href="/create">
             <a className="primary-button py-2 px-8 text-sm font-bold">Create Stream</a>
           </Link>
-          <DisperseGasMoney data={data} />
+          <DisperseGasMoney />
         </div>
       </div>
       {isLoading || error || !streams ? (
