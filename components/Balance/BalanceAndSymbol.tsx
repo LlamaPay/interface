@@ -1,6 +1,6 @@
+import React from 'react';
 import Tooltip from 'components/Tooltip';
 import { useTokenPrice } from 'queries/useTokenPrice';
-import React from 'react';
 import { IBalance } from 'types';
 
 interface BalanceAndSymbolProps {
@@ -25,7 +25,7 @@ export const BalanceAndSymbol = ({ data }: BalanceAndSymbolProps) => {
   }, [updateBalance, data]);
 
   return (
-    <td className="font-inter whitespace-nowrap border px-4 py-[6px] text-right text-sm dark:border-stone-700">
+    <>
       <Tooltip content={balanceState && price && `${(balanceState * Number(price)).toFixed(2)} USD`}>
         <span className="slashed-zero tabular-nums">
           {balanceState &&
@@ -34,6 +34,6 @@ export const BalanceAndSymbol = ({ data }: BalanceAndSymbolProps) => {
             }`}
         </span>
       </Tooltip>
-    </td>
+    </>
   );
 };

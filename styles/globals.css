@@ -35,8 +35,12 @@
   }
 
   .primary-button {
-    @apply font-inter  whitespace-nowrap rounded bg-[#23BD8F] py-1 px-[14px] text-xs font-medium text-white;
+    @apply font-inter  whitespace-nowrap rounded bg-[#23BD8F] py-2 px-8 text-sm font-bold text-white;
     box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.14), 0px 1px 5px rgba(0, 0, 0, 0.12);
+  }
+
+  .secondary-button {
+    @apply primary-button bg-white text-[#23BD8F];
   }
 
   .hero-word-break::before {
