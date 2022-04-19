@@ -32,9 +32,15 @@ const useStreamsAndHistory = () => {
       const streams = data?.user?.streams ?? [];
       const history = data?.user?.historicalEvents ?? [];
 
+      let incomingStream = 0;
+      let outgoingStream = 0;
+
       const formattedStreams = streams.map((s) => {
         const streamType: 'outgoingStream' | 'incomingStream' =
           s.payer.id?.toLowerCase() === accountData?.address.toLowerCase() ? 'outgoingStream' : 'incomingStream';
+
+        if (streamType === 'incomingStream') incomingStream++;
+        if (streamType === 'outgoingStream') outgoingStream++;
 
         return {
           llamaContractAddress: s.contract.address,
@@ -70,8 +76,9 @@ const useStreamsAndHistory = () => {
       return {
         streams: formattedStreams.length > 0 ? formattedStreams : null,
         history: formattedHistory.length > 0 ? formattedHistory : null,
+        hasBothStreamTypes: incomingStream > 0 && outgoingStream > 0,
       };
-    } else return { streams: null, history: null };
+    } else return { streams: null, history: null, hasBothStreamTypes: false };
   }, [data, provider, accountData]);
 
   return React.useMemo(() => ({ data: formattedData, isLoading, error }), [formattedData, isLoading, error]);
