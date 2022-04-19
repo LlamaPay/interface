@@ -81,7 +81,7 @@ export function StreamTable() {
 
   return (
     <section className="w-full">
-      <div className="section-header flex w-full items-center justify-between">
+      <div className="section-header flex w-full flex-wrap items-center justify-between gap-2">
         <span className="flex items-center space-x-2">
           <StreamIcon />
           <h1>Streams</h1>
