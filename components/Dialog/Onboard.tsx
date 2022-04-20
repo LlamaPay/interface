@@ -4,8 +4,7 @@ import { Dialog } from 'ariakit/dialog';
 import classNames from 'classnames';
 import { useIsMounted } from 'hooks';
 import { Connector, useAccount, useConnect } from 'wagmi';
-import { StreamArrows } from 'components/Icons';
-import { LlamaPay } from 'components/Icons/Llamapay';
+import { StreamArrows, LlamaPay } from 'components/Icons';
 
 interface IOnboardProps {
   dialog: DisclosureState;
