@@ -6,6 +6,9 @@ import Footer from './Footer';
 import CustomToast from 'components/CustomToast';
 import Hero from 'components/Hero';
 import { useRouter } from 'next/router';
+import { useDialogState } from 'ariakit';
+import { OnboardDialog } from 'components/Dialog';
+import { useAccount } from 'wagmi';
 
 interface ILayoutProps {
   children: React.ReactNode;
@@ -15,6 +18,19 @@ interface ILayoutProps {
 
 export default function Layout({ children, className, noBanner = false, ...props }: ILayoutProps) {
   const router = useRouter();
+  const dialog = useDialogState();
+
+  const [{ data: accountData, loading }] = useAccount();
+
+  const firstRender = React.useRef(1);
+
+  React.useEffect(() => {
+    if (!loading && !accountData && !dialog.visible && firstRender.current === 1) {
+      dialog.toggle();
+      firstRender.current++;
+    }
+  }, [accountData, loading, dialog]);
+
   return (
     <>
       <Head>
@@ -25,7 +41,12 @@ export default function Layout({ children, className, noBanner = false, ...props
         />
       </Head>
       <Header />
-      {router.pathname === '/' && <Hero noBanner={noBanner} />}
+      {router.pathname === '/' && (
+        <>
+          <Hero noBanner={noBanner} /> <OnboardDialog dialog={dialog} />
+        </>
+      )}
+
       <main className={classNames('flex-1 px-2 pb-8 md:px-[30px] lg:px-[60px] xl:px-[120px]', className)} {...props}>
         {children}
       </main>

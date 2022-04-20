@@ -76,9 +76,9 @@
     }
   }
 
-  /* dialog backdrop of select token component */
+  /* dialog backdrop */
   [data-backdrop] {
-    background-color: rgb(0 0 0 / 20%);
+    background-color: rgb(217 242 244 / 70%);
   }
 
   /* banner */

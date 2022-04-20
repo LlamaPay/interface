@@ -2,11 +2,11 @@ import * as React from 'react';
 import { Connector, useAccount, useConnect } from 'wagmi';
 import { useIsMounted } from 'hooks';
 import { formatAddress } from 'utils/address';
-import { DialogHeader, DialogWrapper, SetIsOpen } from 'components/Dialog';
+import { Web3DialogWrapper, Web3DialogHeader, DialogClose } from 'components/Dialog';
 
 interface Props {
   isOpen: boolean;
-  setIsOpen: SetIsOpen;
+  setIsOpen: DialogClose;
 }
 
 export const WalletSelector = ({ isOpen, setIsOpen }: Props) => {
@@ -31,10 +31,10 @@ export const WalletSelector = ({ isOpen, setIsOpen }: Props) => {
   const formattedAddress = accountData && formatAddress(accountData.address);
 
   return (
-    <DialogWrapper isOpen={isOpen} setIsOpen={setIsOpen}>
+    <Web3DialogWrapper isOpen={isOpen} setIsOpen={setIsOpen}>
       {accountData ? (
         <>
-          <DialogHeader title="Account" setIsOpen={setIsOpen} />
+          <Web3DialogHeader title="Account" setIsOpen={setIsOpen} />
           <div className="mt-3 flex flex-col space-y-2">
             <p className="text-sm font-thin">{`Connected with ${accountData.connector?.name}`}</p>
             <p className="break-words">
@@ -53,7 +53,7 @@ export const WalletSelector = ({ isOpen, setIsOpen }: Props) => {
         </>
       ) : (
         <>
-          <DialogHeader title="Connect a Wallet" setIsOpen={setIsOpen} />
+          <Web3DialogHeader title="Connect a Wallet" setIsOpen={setIsOpen} />
           <div className="mt-3 flex flex-col space-y-2">
             {connectors.map((x) => (
               <button key={x.id} onClick={() => handleConnect(x)} className="rounded border p-2">
@@ -63,6 +63,6 @@ export const WalletSelector = ({ isOpen, setIsOpen }: Props) => {
           </div>
         </>
       )}
-    </DialogWrapper>
+    </Web3DialogWrapper>
   );
 };
