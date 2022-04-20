@@ -10,6 +10,7 @@ import ActionName from './ActionName';
 import HistoryActions from './HistoryActions';
 import Fallback from 'components/FallbackList';
 import { HistoryIcon } from 'components/Icons';
+import { downloadHistory } from 'utils/downloadCsv';
 
 const table = createTable<{ Row: IHistory }>();
 
@@ -114,6 +115,8 @@ function NewTable({ data, skipReset }: { data: IHistory[]; skipReset: React.Muta
     autoResetAll: !skipReset.current,
   });
 
+  const downloadToCSV = React.useCallback(() => downloadHistory(data), [data]);
+
   return (
     <>
       {/* <label className="space-x-4">
@@ -125,7 +128,7 @@ function NewTable({ data, skipReset }: { data: IHistory[]; skipReset: React.Muta
           />
         </label> */}
 
-      <Table instance={instance} />
+      <Table instance={instance} downloadToCSV={downloadToCSV} />
     </>
   );
 }

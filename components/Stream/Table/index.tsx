@@ -16,6 +16,7 @@ import {
 import DisperseGasMoney from 'components/DisperseGas';
 import { IStream } from 'types';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
+import { downloadStreams } from 'utils/downloadCsv';
 
 const table = createTable<{ Row: IStream }>();
 
@@ -121,6 +122,8 @@ function NewTable({ data, skipReset }: { data: IStream[]; skipReset: React.Mutab
     autoResetAll: !skipReset.current,
   });
 
+  const downloadToCSV = React.useCallback(() => downloadStreams(data), [data]);
+
   return (
     <>
       {/* <label className="space-x-4">
@@ -131,7 +134,7 @@ function NewTable({ data, skipReset }: { data: IStream[]; skipReset: React.Mutab
             className="h-8 rounded border border-neutral-300 p-2 shadow-sm dark:border-neutral-700"
           />
         </label> */}
-      <Table instance={instance} hidePagination={true} />
+      <Table instance={instance} hidePagination={true} downloadToCSV={downloadToCSV} />
     </>
   );
 }
