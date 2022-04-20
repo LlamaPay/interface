@@ -15,7 +15,7 @@ function DisperseGasMoney() {
   return (
     <>
       <button onClick={disperseDialog.toggle} className="secondary-button">
-        {` Disperse ${nativeCurrency?.symbol}`}
+        {` Disperse ${nativeCurrency?.symbol ? nativeCurrency?.symbol : 'Funds'}`}
       </button>
       <FormDialog
         dialog={disperseDialog}
