@@ -1,7 +1,13 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import { TableInstance } from '@tanstack/react-table';
 
-const Table = ({ instance, hidePagination }: { instance: TableInstance<any>; hidePagination?: boolean }) => {
+interface ITableProps {
+  instance: TableInstance<any>;
+  hidePagination?: boolean;
+  downloadToCSV: () => void;
+}
+
+const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
   const totalRows = instance.getCoreRowModel().rows.length;
 
   const currentRows = instance.getRowModel().rows;
@@ -65,7 +71,9 @@ const Table = ({ instance, hidePagination }: { instance: TableInstance<any>; hid
         <div className="h-2" />
         <div className="font-inter flex w-full flex-col gap-2 sm:flex-row sm:justify-between sm:gap-5">
           <div className="flex flex-1 items-center justify-between gap-2">
-            <button className="bg-none text-xs text-[#303030] underline">Export CSV</button>
+            <button className="bg-none text-xs text-[#303030] underline" onClick={downloadToCSV}>
+              Export CSV
+            </button>
             {!hidePagination && (
               <label className="flex items-center space-x-1">
                 <span className="text-xs text-[rgba(0,0,0,0.54)]">Rows per page:</span>
