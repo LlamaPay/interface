@@ -1,15 +1,37 @@
-import useGetInitalPayeeData from 'queries/useGetInitialPayeeData';
-import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import React from 'react';
+import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { formatAddress } from 'utils/address';
+import { useAccount } from 'wagmi';
 import DisperseSend from './DisperseSend';
 import PayeeBalance from './PayeeBalance';
 
 export default function SendToPayees() {
-  const { data: data, isLoading, error } = useStreamsAndHistory();
-  const [tableContents, setTableContents] = React.useState<{ [key: string]: number }>(useGetInitalPayeeData(data));
+  const { data, isLoading, error } = useStreamsAndHistory();
+
+  const [{ data: accountData }] = useAccount();
+
+  const initialPayeeData = React.useMemo(() => {
+    if (data && accountData) {
+      const accountAddress = accountData?.address.toLowerCase();
+      const newTable: { [key: string]: number } = {};
+      data.streams?.forEach((p) => {
+        if (accountAddress === p.payerAddress.toLowerCase()) {
+          newTable[p.payeeAddress.toLowerCase()] = 0;
+        }
+      });
+      return newTable;
+    } else return null;
+  }, [data, accountData]);
+
+  const [tableContents, setTableContents] = React.useState<{ [key: string]: number }>({});
   const [toSend, setToSend] = React.useState<{ [key: string]: number }>({});
   const [amountState, setAmount] = React.useState<number>(0);
+
+  React.useEffect(() => {
+    if (initialPayeeData && Object.keys(tableContents).length === 0 && tableContents.constructor === Object) {
+      setTableContents(initialPayeeData);
+    }
+  }, [initialPayeeData, tableContents]);
 
   function onSelectAll() {
     const newToSend = { ...tableContents };
