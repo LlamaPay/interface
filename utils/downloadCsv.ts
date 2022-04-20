@@ -1,4 +1,5 @@
 import { IHistory, IStream } from 'types';
+import { secondsByDuration } from './constants';
 
 export function download(filename: string, text: string) {
   const element = document.createElement('a');
@@ -14,15 +15,28 @@ export function download(filename: string, text: string) {
 }
 
 export const downloadStreams = (data: IStream[]) => {
-  const rows = [['Payer', 'Payee', 'Token', 'Contract', 'Amount Per Sec', 'Timestamp']];
+  const rows = [
+    [
+      'Payer Address',
+      'Payee Address',
+      'Token Address',
+      'Token Name',
+      'Contract Address',
+      'Amount Per Sec',
+      'Amount Per Month',
+      'Timestamp',
+    ],
+  ];
 
   data.forEach((d) => {
     rows.push([
       d.payerAddress,
       d.payeeAddress,
       d.token.address,
+      d.token.name,
       d.llamaContractAddress,
       d.amountPerSec,
+      ((Number(d.amountPerSec) * secondsByDuration['month']) / 1e20).toString(),
       d.createdTimestamp,
     ]);
   });
