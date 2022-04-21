@@ -101,14 +101,18 @@ const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
                   className="rounded p-1"
                   onClick={() => instance.previousPage()}
                   disabled={!instance.getCanPreviousPage()}
+                  aria-disabled={!instance.getCanPreviousPage()}
                 >
+                  <span className="sr-only">Previous</span>
                   <ChevronLeftIcon className="h-6" color="#333336" />
                 </button>
                 <button
                   className="rounded p-1"
                   onClick={() => instance.nextPage()}
                   disabled={!instance.getCanNextPage()}
+                  aria-disabled={!instance.getCanNextPage()}
                 >
+                  <span className="sr-only">Next</span>
                   <ChevronRightIcon className="h-6" color="#333336" />
                 </button>
               </span>

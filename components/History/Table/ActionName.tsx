@@ -12,6 +12,7 @@ export default function ActionName({ data }: { data: IHistory }) {
         <Tooltip content="Stream Modified">
           <div className="rounded bg-yellow-100 p-1 text-yellow-600">
             <a href={link} target="_blank" rel="noreferrer noopener">
+              <span className="sr-only">View transaction on chain explorer</span>
               <CogIcon className="h-4 w-4" />
             </a>
           </div>
@@ -20,6 +21,7 @@ export default function ActionName({ data }: { data: IHistory }) {
         <Tooltip content="Stream Created">
           <div className="rounded bg-green-100 p-1 text-green-600">
             <a href={link} target="_blank" rel="noreferrer noopener">
+              <span className="sr-only">View transaction on chain explorer</span>
               <CheckIcon className="h-4 w-4" />
             </a>
           </div>
@@ -28,6 +30,7 @@ export default function ActionName({ data }: { data: IHistory }) {
         <Tooltip content="Stream Cancelled">
           <div className="rounded bg-red-100 p-1 text-red-600">
             <a href={link} target="_blank" rel="noreferrer noopener">
+              <span className="sr-only">View transaction on chain explorer</span>
               <XIcon className="h-4 w-4" />
             </a>
           </div>
