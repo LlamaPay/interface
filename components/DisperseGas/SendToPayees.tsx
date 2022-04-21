@@ -5,12 +5,15 @@ import DisperseSend from './DisperseSend';
 import PayeeBalance from './PayeeBalance';
 import { useAddressStore } from 'store/address';
 import { formatAddress } from 'utils/address';
+import { DisclosureState } from 'ariakit';
 
-export default function SendToPayees() {
+export default function SendToPayees({ dialog }: { dialog: DisclosureState }) {
   const { data, isLoading, error } = useStreamsAndHistory();
 
   const [{ data: accountData }] = useAccount();
+
   const addresses = useAddressStore();
+
   const initialPayeeData = React.useMemo(() => {
     if (data && accountData) {
       const accountAddress = accountData?.address.toLowerCase();
@@ -29,10 +32,15 @@ export default function SendToPayees() {
   const [amountState, setAmount] = React.useState<number>(0);
 
   React.useEffect(() => {
-    if (initialPayeeData && Object.keys(tableContents).length === 0 && tableContents.constructor === Object) {
+    if (
+      dialog.mounted &&
+      initialPayeeData &&
+      Object.keys(tableContents).length === 0 &&
+      tableContents.constructor === Object
+    ) {
       setTableContents(initialPayeeData);
     }
-  }, [initialPayeeData, tableContents]);
+  }, [initialPayeeData, tableContents, dialog.mounted]);
 
   function onSelectAll() {
     const newToSend = { ...tableContents };

@@ -22,7 +22,7 @@ function DisperseGasMoney() {
       >
         <div className="space-y-3">
           {accountData && !unsupported ? (
-            <SendToPayees />
+            <SendToPayees dialog={disperseDialog} />
           ) : (
             <>
               {!accountData ? <p>Connect Wallet</p> : <></>}

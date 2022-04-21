@@ -1,5 +1,11 @@
 import * as React from 'react';
-import { createTable, useTable, globalFilterRowsFn } from '@tanstack/react-table';
+import {
+  createTable,
+  getCoreRowModelSync,
+  getGlobalFilteredRowModelSync,
+  getPaginationRowModel,
+  useTableInstance,
+} from '@tanstack/react-table';
 import Link from 'next/link';
 import Table from 'components/Table';
 import Fallback from 'components/FallbackList';
@@ -65,22 +71,11 @@ const defaultColumns = table.createColumns([
 export function StreamTable() {
   const { data, isLoading, error } = useStreamsAndHistory();
 
-  const skipReset = React.useRef<boolean>(false);
-
   const streams = React.useMemo(() => {
-    // When data gets updated with this function, set a flag
-    // to disable table's auto resetting
-    skipReset.current = true;
-
     if (!data?.streams || data.streams?.length < 1) return false;
 
     return data.streams;
   }, [data]);
-
-  React.useEffect(() => {
-    // After the table has updated, always remove the flag
-    skipReset.current = false;
-  });
 
   return (
     <section className="w-full">
@@ -100,26 +95,27 @@ export function StreamTable() {
       {isLoading || error || !streams ? (
         <Fallback isLoading={isLoading} isError={error ? true : false} noData={true} type="streams" />
       ) : (
-        <NewTable data={streams} skipReset={skipReset} />
+        <NewTable data={streams} />
       )}
     </section>
   );
 }
 
-function NewTable({ data, skipReset }: { data: IStream[]; skipReset: React.MutableRefObject<boolean> }) {
+function NewTable({ data }: { data: IStream[] }) {
   const [columns] = React.useState<typeof defaultColumns>(() => [...defaultColumns]);
 
   const [globalFilter, setGlobalFilter] = React.useState('');
 
-  const instance = useTable(table, {
+  const instance = useTableInstance(table, {
     data,
     columns,
     state: {
       globalFilter,
     },
     onGlobalFilterChange: setGlobalFilter,
-    globalFilterRowsFn: globalFilterRowsFn,
-    autoResetAll: !skipReset.current,
+    getCoreRowModel: getCoreRowModelSync(),
+    getGlobalFilteredRowModel: getGlobalFilteredRowModelSync(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   const downloadToCSV = React.useCallback(() => downloadStreams(data), [data]);
