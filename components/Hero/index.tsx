@@ -26,12 +26,12 @@ export default function Hero({ noBanner }: { noBanner: boolean }) {
       <div className="relative left-[-12px] flex-shrink-0">
         <StreamCircle />
       </div>
-      <h1 className="box-decoration-clone text-2xl font-bold sm:text-3xl lg:text-4xl">
+      <h1 className="font-exo box-decoration-clone text-2xl font-bold sm:text-3xl lg:text-4xl">
         <span className="whitespace-nowrap">Stream seamless</span>{' '}
         <span className="hero-word-break whitespace-nowrap">recurring payments</span>{' '}
         <span className="hero-word-break">in crypto!</span>
       </h1>
-      <p className="font-inter max-w-md 2xl:max-w-xl">
+      <p className="max-w-md 2xl:max-w-xl">
         Automate salary txs, streaming them by the second so employees can withdraw whenever they want and you don't
         have to deal with sending txs manually.
       </p>

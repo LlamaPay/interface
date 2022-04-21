@@ -20,7 +20,7 @@ const Header = () => {
           </Link>
 
           <a
-            className="text-lg font-medium text-[#4F4F4F]"
+            className="font-exo text-lg font-medium text-[#4F4F4F]"
             href="https://docs.llamapay.io/"
             target="_blank"
             rel="noreferrer noopener"

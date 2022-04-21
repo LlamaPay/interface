@@ -22,7 +22,7 @@ export const TransactionDialog = ({ dialog, className, transactionHash }: FormDi
         className
       )}
     >
-      <header className="relative">
+      <header className="font-exo relative">
         <DialogDismiss className="ml-auto flex items-start justify-end">
           <XIcon className="h-6 w-6" />
         </DialogDismiss>

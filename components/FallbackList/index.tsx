@@ -48,7 +48,7 @@ const Fallback = ({ isLoading, isError, noData, type }: FallbackProps) => {
   }
 
   return (
-    <div className="font-inter flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
+    <div className="flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
       {defaultMessage ||
         (isLoading ? null : isError ? <p>{errorMessage}</p> : noData ? <p>{emptyDataMessage}</p> : null)}
     </div>

@@ -70,7 +70,7 @@ export const InputWithTokenSelect = ({
   };
 
   return (
-    <div className="font-inter">
+    <div>
       <label htmlFor={name}>{label}</label>
       <div className="relative flex">
         <input

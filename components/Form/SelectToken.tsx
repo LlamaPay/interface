@@ -29,7 +29,7 @@ function Token({ value, shortName, showBalance }: { value: string; shortName?: b
   return (
     <div
       className={classNames(
-        'font-inter flex flex-1 flex-row items-center justify-between',
+        'flex flex-1 flex-row items-center justify-between',
         shortName ? 'truncate py-2 pr-1' : 'balance-wrap p-2'
       )}
     >
@@ -105,7 +105,7 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
               state={combobox}
               autoSelect
               placeholder="Search name or paste address"
-              className="font-inter m-4 rounded border px-3 py-[10px] slashed-zero dark:border-neutral-700"
+              className="m-4 rounded border px-3 py-[10px] slashed-zero dark:border-neutral-700"
             />
             <ComboboxList state={combobox} className="m-4 mt-0 cursor-pointer list-none overflow-auto">
               {combobox.matches.map((token) => (
@@ -129,7 +129,7 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
               ))}
             </ComboboxList>
             <button
-              className="font-inter m-4 mt-auto flex items-center justify-center gap-2 rounded bg-green-200 py-[11px] px-3"
+              className="m-4 mt-auto flex items-center justify-center gap-2 rounded bg-green-200 py-[11px] px-3"
               onClick={() => setNewTokenForm(true)}
             >
               <span>or add a new token</span>
@@ -186,7 +186,7 @@ const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<Rea
           <XIcon className="h-6 w-6" />
         </DialogDismiss>
       </header>
-      <form className="font-inter m-4 mt-[10%]" onSubmit={handleSubmit}>
+      <form className="m-4 mt-[10%]" onSubmit={handleSubmit}>
         <InputText name="tokenAddress" isRequired={true} label="Token Address" />
         <SubmitButton className="mt-4 !bg-green-200 disabled:cursor-not-allowed" disabled={isLoading}>
           {isLoading ? (

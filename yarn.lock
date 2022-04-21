@@ -956,6 +956,11 @@
   dependencies:
     "@floating-ui/core" "^0.6.2"
 
+"@fontsource/exo-2@^4.5.7":
+  version "4.5.7"
+  resolved "https://registry.yarnpkg.com/@fontsource/exo-2/-/exo-2-4.5.7.tgz#d65abb063bb31107f282f5f5f52a27d359aad2fe"
+  integrity sha512-Nr9rklgpgMl1lK5cA5akPjbX++2pqjOfI5/Mg2K3Bu8JgVmQReFgPxdvlJsizAl9NKjycZSGoPzMPi3QSbrPCw==
+
 "@graphql-codegen/cli@^2.6.2":
   version "2.6.2"
   resolved "https://registry.yarnpkg.com/@graphql-codegen/cli/-/cli-2.6.2.tgz#a9aa4656141ee0998cae8c7ad7d0bf9ca8e0c9ae"

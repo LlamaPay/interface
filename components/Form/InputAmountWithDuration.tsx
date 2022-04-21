@@ -11,7 +11,7 @@ export const InputAmountWithDuration = ({
   ...props
 }: InputAmountWithDaysProps) => {
   return (
-    <div className="font-inter">
+    <div>
       <label htmlFor={name}>{label}</label>
       <div className="relative flex">
         <input
