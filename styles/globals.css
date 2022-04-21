@@ -93,6 +93,14 @@
     display: var(--banner-display);
   }
 
+  #onboard-form #select-token-label {
+    @apply text-xs font-semibold text-[#303030];
+  }
+  #onboard-form #token-render-value {
+    padding-top: 6px;
+    padding-bottom: 6px;
+  }
+
   @media (max-width: 360px) {
     .balance-wrap {
       flex-direction: column !important;

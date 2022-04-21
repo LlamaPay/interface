@@ -13,7 +13,7 @@ interface IFetchBalance {
   provider: Provider | null;
 }
 
-interface ITokenBalance {
+export interface ITokenBalance {
   name: string;
   tokenAddress: string;
   decimals: number;
