@@ -101,7 +101,7 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
               href={txLink}
               target="_blank"
               rel="noreferrer noopener"
-              className="font-inter mt-4 flex w-full items-center justify-center gap-2 rounded bg-green-200 py-2 px-3"
+              className="mt-4 flex w-full items-center justify-center gap-2 rounded bg-green-200 py-2 px-3"
             >
               <span>View on {explorerName}</span>
               <ExternalLinkIcon className="h-4 w-4" />

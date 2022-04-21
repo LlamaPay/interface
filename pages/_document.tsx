@@ -8,10 +8,6 @@ export default function Document() {
         <link rel="icon" type="image/png" sizes="32x32" href="/favicons/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
         <link rel="manifest" href="/favicons/site.webmanifest" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Exo+2:wght@300;400;500;700&display=swap"
-          rel="stylesheet"
-        />
       </Head>
       <body className="bg-white text-black dark:bg-black dark:text-white">
         <Main />

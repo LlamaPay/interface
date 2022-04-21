@@ -28,7 +28,7 @@ const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
                   <th
                     {...header.getHeaderProps()}
                     key={header.id}
-                    className="font-inter whitespace-nowrap py-[6px] px-4 text-left text-sm font-bold text-[#3D3D3D]"
+                    className="whitespace-nowrap py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D]"
                   >
                     {header.isPlaceholder ? null : header.renderHeader()}
                   </th>
@@ -47,7 +47,7 @@ const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
                   <td
                     {...cell.getCellProps()}
                     key={cell.id}
-                    className="font-inter truncate whitespace-nowrap border-l-[1px] border-dashed border-gray-200 px-4 py-[6px] text-sm text-[#3D3D3D] first-of-type:border-l-0 last-of-type:w-full dark:border-gray-700"
+                    className="truncate whitespace-nowrap border-l-[1px] border-dashed border-gray-200 px-4 py-[6px] text-sm text-[#3D3D3D] first-of-type:border-l-0 last-of-type:w-full dark:border-gray-700"
                   >
                     {cell.renderCell()}
                   </td>
@@ -69,7 +69,7 @@ const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
 
       <>
         <div className="h-2" />
-        <div className="font-inter flex w-full flex-col gap-2 sm:flex-row sm:justify-between sm:gap-5">
+        <div className="flex w-full flex-col gap-2 sm:flex-row sm:justify-between sm:gap-5">
           <div className="flex flex-1 items-center justify-between gap-2">
             <button className="bg-none text-xs text-[#303030] underline" onClick={downloadToCSV}>
               Export CSV

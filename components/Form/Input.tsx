@@ -3,7 +3,7 @@ import { InputElement } from './types';
 
 export const InputAmount = ({ name, label, isRequired, className, handleChange, ...props }: InputElement) => {
   return (
-    <label className="font-inter">
+    <label>
       <span>{label}</span>
       <input
         className={classNames(
@@ -31,7 +31,7 @@ export const InputAmount = ({ name, label, isRequired, className, handleChange, 
 
 export const InputText = ({ name, label, isRequired, className, ...props }: InputElement) => {
   return (
-    <label className="font-inter">
+    <label>
       <span>{label}</span>
       <input
         className={classNames(
