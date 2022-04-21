@@ -20,12 +20,12 @@ export const StreamHistory = ({ data, dialog, title }: StreamHistoryProps) => {
           <table className=" w-full border-collapse">
             <tbody>
               {historicalData.map((p) => (
-                <tr className="font-inter border border-stone-700" key={p.txHash}>
-                  <td className="font-inter border text-center text-sm">{p.eventType.replace(/([A-Z])/g, ' $1')}</td>
-                  <td className="font-inter border text-center text-sm">
+                <tr className="border border-stone-700" key={p.txHash}>
+                  <td className="border text-center text-sm">{p.eventType.replace(/([A-Z])/g, ' $1')}</td>
+                  <td className="border text-center text-sm">
                     {new Date(Number(p.createdTimestamp) * 1e3).toLocaleString('en-CA', { hour12: false })}
                   </td>
-                  <td className="font-inter border text-center text-sm">
+                  <td className="border text-center text-sm">
                     <a
                       href={`${chainExplorer}/tx/${p.txHash}`}
                       target="_blank"

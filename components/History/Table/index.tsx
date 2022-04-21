@@ -78,7 +78,7 @@ export function HistoryTable() {
     <section className="w-full">
       <span className="section-header flex items-center space-x-2">
         <HistoryIcon />
-        <h1>History</h1>
+        <h1 className="font-exo">History</h1>
       </span>
 
       {isLoading || error || !history ? (

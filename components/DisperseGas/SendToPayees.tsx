@@ -1,15 +1,38 @@
-import useGetInitalPayeeData from 'queries/useGetInitialPayeeData';
-import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import React from 'react';
-import { formatAddress } from 'utils/address';
+import useStreamsAndHistory from 'queries/useStreamsAndHistory';
+import { useAccount } from 'wagmi';
 import DisperseSend from './DisperseSend';
 import PayeeBalance from './PayeeBalance';
+import { useAddressStore } from 'store/address';
+import { formatAddress } from 'utils/address';
 
 export default function SendToPayees() {
-  const { data: data, isLoading, error } = useStreamsAndHistory();
-  const [tableContents, setTableContents] = React.useState<{ [key: string]: number }>(useGetInitalPayeeData(data));
+  const { data, isLoading, error } = useStreamsAndHistory();
+
+  const [{ data: accountData }] = useAccount();
+  const addresses = useAddressStore();
+  const initialPayeeData = React.useMemo(() => {
+    if (data && accountData) {
+      const accountAddress = accountData?.address.toLowerCase();
+      const newTable: { [key: string]: number } = {};
+      data.streams?.forEach((p) => {
+        if (accountAddress === p.payerAddress.toLowerCase()) {
+          newTable[p.payeeAddress.toLowerCase()] = 0;
+        }
+      });
+      return newTable;
+    } else return null;
+  }, [data, accountData]);
+
+  const [tableContents, setTableContents] = React.useState<{ [key: string]: number }>({});
   const [toSend, setToSend] = React.useState<{ [key: string]: number }>({});
   const [amountState, setAmount] = React.useState<number>(0);
+
+  React.useEffect(() => {
+    if (initialPayeeData && Object.keys(tableContents).length === 0 && tableContents.constructor === Object) {
+      setTableContents(initialPayeeData);
+    }
+  }, [initialPayeeData, tableContents]);
 
   function onSelectAll() {
     const newToSend = { ...tableContents };
@@ -76,12 +99,12 @@ export default function SendToPayees() {
                 setAmount(Number(e.target.value));
               }}
               name="amount"
-              className="w-32"
+              className="w-48"
               placeholder="0.0"
               min="0"
             />
           </label>
-          <button onClick={onSplitEqually} type="button" className=" w-28 rounded-3xl bg-[#ffffff]  px-1 py-1 text-sm">
+          <button onClick={onSplitEqually} type="button" className=" w-24 rounded-3xl bg-[#ffffff]  px-1 py-1 text-sm">
             Split Equally
           </button>
         </div>
@@ -108,7 +131,7 @@ export default function SendToPayees() {
                     <thead>
                       <tr>
                         <th></th>
-                        <th className="text-md">Address</th>
+                        <th className="text-md">Name/Address</th>
                         <th className="text-md">Payee Balance</th>
                         <th className="text-md">Amount to Send</th>
                       </tr>
@@ -126,7 +149,11 @@ export default function SendToPayees() {
                               ></input>
                             </label>
                           </td>
-                          <td className="text-md w-56 text-center">{formatAddress(p)}</td>
+                          <td className="text-md w-56 text-center">
+                            {addresses.addressBook.find((e) => e.id === p)?.shortName
+                              ? addresses.addressBook.find((e) => e.id === p)?.shortName
+                              : formatAddress(p)}
+                          </td>
                           <td className="text-md w-48 text-center">
                             <PayeeBalance id={p} />
                           </td>
