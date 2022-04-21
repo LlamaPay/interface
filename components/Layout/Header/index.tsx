@@ -2,8 +2,7 @@ import * as React from 'react';
 import Link from 'next/link';
 import { useAccount } from 'wagmi';
 import { NetworksMenu, Account, WalletSelector } from 'components/Web3';
-import LogoDark from 'public/logo-dark.svg';
-import Image from 'next/image';
+import { Logo } from 'components/Icons';
 
 const Header = () => {
   const [{ data }] = useAccount();
@@ -14,9 +13,9 @@ const Header = () => {
       <nav className="flex flex-col justify-between gap-4 bg-[#D9F4E6] p-2 text-base md:flex-row md:gap-10 md:p-[30px]">
         <div className="flex flex-1 items-center justify-between">
           <Link href="/" passHref>
-            <div className="flex flex-shrink-0 cursor-pointer">
-              <Image src={LogoDark} width="124px" height="40px" alt="LlamaPay logo" />
-            </div>
+            <span>
+              <Logo />
+            </span>
           </Link>
 
           <a
