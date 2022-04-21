@@ -1,6 +1,3 @@
-@import url('@fontsource/exo-2/500.css');
-@import url('@fontsource/exo-2/600.css');
-@import url('@fontsource/exo-2/700.css');
 @import url('https://rsms.me/inter/inter.css');
 
 @tailwind base;

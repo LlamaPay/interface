@@ -5,3 +5,4 @@ export { History as HistoryIcon } from './History';
 export { StreamCircle } from './StreamCircle';
 export { StreamArrows } from './StreamArrows';
 export { LlamaPay } from './LlamaPay';
+export { Coins } from './Coins';
