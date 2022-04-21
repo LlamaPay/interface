@@ -5,6 +5,7 @@ import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval
 import useDepositToken from 'queries/useDepositToken';
 import { ITokenBalance } from 'queries/useTokenBalances';
 
+// TODO show loading and error states on dialogs without using toasts
 export function useDepositForm({ userAddress, tokens }: { userAddress: string; tokens: ITokenBalance[] }) {
   const [tokenAddress, setTokenAddress] = React.useState(tokens[0]?.tokenAddress ?? '');
 
@@ -12,7 +13,12 @@ export function useDepositForm({ userAddress, tokens }: { userAddress: string; t
 
   const { mutate: approveToken, isLoading: approvingToken, error: approvalError } = useApproveToken();
 
-  const { mutate: deposit, isLoading: confirmingDeposit, data: depositTransaction } = useDepositToken();
+  const {
+    mutate: deposit,
+    isLoading: confirmingDeposit,
+    data: depositTransaction,
+    error: depositError,
+  } = useDepositToken();
 
   // format tokens list to only include token names
   const tokenOptions = React.useMemo(() => tokens?.map((t) => t.tokenAddress) ?? [], [tokens]);
@@ -113,5 +119,7 @@ export function useDepositForm({ userAddress, tokens }: { userAddress: string; t
     tokenAddress,
     setTokenAddress,
     depositTransaction,
+    depositError,
+    isApproved,
   };
 }

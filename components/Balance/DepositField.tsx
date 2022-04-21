@@ -15,6 +15,7 @@ interface IDepositFieldprops {
   dialog: DisclosureState;
 }
 
+// update component with useDepositForm hook
 const DepositField = ({ tokens, dialog }: IDepositFieldprops) => {
   const { mutate: deposit, isLoading, data: transaction } = useDepositToken();
 
