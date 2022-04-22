@@ -13,7 +13,6 @@ export const etherscanKey = 'DDH7EVWI1AQHBNPX5PYRSDM5SHCVBKX58Q';
 interface INetworkDetails {
   [key: number]: {
     rpcUrl: string;
-    rpcProvider: ethers.providers.JsonRpcProvider;
     subgraphEndpoint: string;
     chainProviders: ethers.providers.BaseProvider;
     llamapayFactoryAddress: string;
@@ -35,7 +34,6 @@ export const defaultSubgraphEndpoint = 'https://api.thegraph.com/subgraphs/name/
 export const networkDetails: INetworkDetails = {
   4: {
     rpcUrl: `https://rinkeby.infura.io/v3/${infuraId}`,
-    rpcProvider: new ethers.providers.JsonRpcProvider(`https://rinkeby.infura.io/v3/${infuraId}`),
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-rinkeby',
     chainProviders: providers.getDefaultProvider(4, {
       alchemy: alchemyId,
@@ -50,7 +48,6 @@ export const networkDetails: INetworkDetails = {
   },
   42: {
     rpcUrl: `https://rinkeby.infura.io/v3/${infuraId}`,
-    rpcProvider: new ethers.providers.JsonRpcProvider(`https://kovan.infura.io/v3/${infuraId}`),
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-kovan',
     chainProviders: providers.getDefaultProvider(42, {
       alchemy: alchemyId,
@@ -65,7 +62,6 @@ export const networkDetails: INetworkDetails = {
   },
   43113: {
     rpcUrl: 'https://api.avax-test.network/ext/bc/C/rpc',
-    rpcProvider: new ethers.providers.JsonRpcProvider(`https://api.avax-test.network/ext/bc/C/rpc`),
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-fuji',
     chainProviders: new ethers.providers.JsonRpcProvider(`https://api.avax-test.network/ext/bc/C/rpc`),
     llamapayFactoryAddress: FACTORY_FUJI,
@@ -76,7 +72,6 @@ export const networkDetails: INetworkDetails = {
   },
   43114: {
     rpcUrl: 'https://api.avax.network/ext/bc/C/rpc',
-    rpcProvider: new ethers.providers.JsonRpcProvider('https://api.avax.network/ext/bc/C/rpc'),
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-avax-mainnet',
     chainProviders: new ethers.providers.JsonRpcProvider('https://api.avax.network/ext/bc/C/rpc'),
     llamapayFactoryAddress: FACTORY_AVALANCHE,
