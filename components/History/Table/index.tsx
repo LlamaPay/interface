@@ -103,12 +103,14 @@ function NewTable({ data }: { data: IHistory[] }) {
     columns,
     state: {
       globalFilter,
+      pagination,
     },
 
     onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModelSync(),
     getGlobalFilteredRowModel: getGlobalFilteredRowModelSync(),
     getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
   });
 
   const downloadToCSV = React.useCallback(() => downloadHistory(data), [data]);
