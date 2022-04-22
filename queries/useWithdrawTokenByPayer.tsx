@@ -41,7 +41,7 @@ export default function useWithdrawByPayer() {
 
     {
       onSuccess: (data) => {
-        const toastId = toast.loading('Confirming Withdrawl');
+        const toastId = toast.loading('Confirming Withdrawal');
         data.wait().then((res: any) => {
           toast.dismiss(toastId);
           if (res.status === 1) {
