@@ -48,7 +48,6 @@ export default function useCreateLlamaPayContract() {
     ({ tokenAddress }: ICreateContract) => create({ factoryAddress, signer, tokenAddress }),
     {
       onSettled: () => {
-        // TODO check if this fetched alltokens query
         queryClient.invalidateQueries();
       },
     }

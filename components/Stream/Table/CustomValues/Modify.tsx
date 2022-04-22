@@ -99,8 +99,8 @@ export const Modify = ({ data, dialog, title }: ModifyProps) => {
                 selectInputName="modifiedStreamDuration"
                 isRequired
               />
-              <SubmitButton className="!mt-5 !bg-zinc-300 py-2 px-3 dark:!bg-stone-600">
-                {isLoading ? <BeatLoader size={6} color="#171717" /> : 'Update'}
+              <SubmitButton className="mt-5">
+                {isLoading ? <BeatLoader size={6} color="white" /> : 'Update'}
               </SubmitButton>
             </form>
           </section>

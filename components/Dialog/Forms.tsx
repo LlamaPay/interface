@@ -6,7 +6,7 @@ import classNames from 'classnames';
 
 interface FormDialogProps {
   dialog: DisclosureState;
-  title: string | null;
+  title: string | React.ReactNode | null;
   children: React.ReactNode;
   className?: string;
 }
@@ -16,7 +16,7 @@ export const FormDialog = ({ dialog, title, className, children }: FormDialogPro
     <Dialog
       state={dialog}
       className={classNames(
-        'absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex max-h-[80vh] max-w-lg flex-col overflow-auto rounded bg-zinc-100 p-4 drop-shadow-lg dark:bg-zinc-800 sm:left-8 sm:right-8',
+        'border-color[#EAEAEA] absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex max-h-[80vh] max-w-lg flex-col overflow-auto rounded-2xl border bg-white p-4 shadow-[0px_0px_9px_-2px_rgba(0,0,0,0.16)] sm:left-8 sm:right-8',
         className
       )}
     >

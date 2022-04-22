@@ -22,7 +22,7 @@ const Placeholder = () => {
       />
 
       <SubmitButton disabled={true} className="mt-8">
-        <BeatLoader size={6} color="gray" />
+        <BeatLoader size={6} color="white" />
       </SubmitButton>
     </form>
   );

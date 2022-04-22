@@ -18,6 +18,7 @@ import HistoryActions from './HistoryActions';
 import Fallback from 'components/FallbackList';
 import { HistoryIcon } from 'components/Icons';
 import { downloadHistory } from 'utils/downloadCsv';
+import Tooltip from 'components/Tooltip';
 
 const table = createTable<{ Row: IHistory }>();
 
@@ -33,7 +34,7 @@ const defaultColumns = table.createColumns([
   }),
   table.createDataColumn('addressRelated', {
     header: 'Address related',
-    cell: ({ value }) => <>{value && formatAddress(value)}</>,
+    cell: ({ value }) => <Tooltip content={value}>{value && formatAddress(value)}</Tooltip>,
   }),
   table.createDataColumn('amountPerSec', {
     header: () => (
@@ -72,7 +73,7 @@ export function HistoryTable() {
 
   return (
     <section className="w-full">
-      <span className="section-header flex items-center space-x-2">
+      <span className="section-header flex items-center gap-[0.625rem]">
         <HistoryIcon />
         <h1 className="font-exo">History</h1>
       </span>
@@ -102,12 +103,14 @@ function NewTable({ data }: { data: IHistory[] }) {
     columns,
     state: {
       globalFilter,
+      pagination,
     },
 
     onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModelSync(),
     getGlobalFilteredRowModel: getGlobalFilteredRowModelSync(),
     getPaginationRowModel: getPaginationRowModel(),
+    onPaginationChange: setPagination,
   });
 
   const downloadToCSV = React.useCallback(() => downloadHistory(data), [data]);

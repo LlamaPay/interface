@@ -18,7 +18,7 @@ export const TransactionDialog = ({ dialog, className, transactionHash }: FormDi
     <Dialog
       state={dialog}
       className={classNames(
-        'absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex h-fit max-h-[80vh] max-w-lg flex-col overflow-auto rounded-lg bg-zinc-100 p-4 drop-shadow-lg dark:bg-zinc-800 sm:left-8 sm:right-8',
+        'border-color[#EAEAEA] absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex h-fit max-h-[80vh] max-w-lg flex-col overflow-auto rounded-2xl border bg-white p-4 shadow-[0px_0px_9px_-2px_rgba(0,0,0,0.16)] sm:left-8 sm:right-8',
         className
       )}
     >
@@ -47,14 +47,14 @@ export const TransactionDialog = ({ dialog, className, transactionHash }: FormDi
       </div>
       <h1 className="text-center">Transaction Submitted</h1>
       <a
-        className="mt-1 mb-8 text-center text-sm text-green-700 dark:text-green-500"
+        className="mt-1 mb-8 text-center text-sm text-green-700"
         href={url ? `${url}/tx/${transactionHash}` : '/'}
         target="_blank"
         rel="noopener noreferrer"
       >
         View on {name || 'Block Explorer'}
       </a>
-      <button className="mt-auto rounded-lg bg-green-200 p-3 dark:text-black" onClick={dialog.toggle}>
+      <button className="form-submit-button" onClick={dialog.toggle}>
         Close
       </button>
     </Dialog>

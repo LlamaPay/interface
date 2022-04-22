@@ -30,8 +30,9 @@ function Token({ value, shortName, showBalance }: { value: string; shortName?: b
     <div
       className={classNames(
         'flex flex-1 flex-row items-center justify-between',
-        shortName ? 'truncate py-2 pr-1' : 'balance-wrap p-2'
+        shortName ? 'truncate py-[5px]' : 'balance-wrap p-2'
       )}
+      id="token-render-value"
     >
       <div className="flex items-center space-x-2 overflow-x-hidden">
         <div className="flex h-7 w-7 flex-shrink-0 items-center rounded-full">
@@ -74,12 +75,12 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
 
   return (
     <>
-      <SelectLabel state={select} className={classNames(!label && 'sr-only')}>
+      <SelectLabel state={select} className={classNames('input-label', !label && 'sr-only')}>
         {label || 'Select token'}
       </SelectLabel>
       <Select
         state={select}
-        className={classNames('flex w-full items-center rounded p-2', className)}
+        className={classNames('input-field flex w-full items-center !py-[0px]', className)}
         onClick={dialog.toggle}
       >
         {<Token value={select.value} shortName />}
@@ -89,7 +90,7 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
       {/* use select state as dialog state so that combobox options are displayed */}
       <Dialog
         state={select}
-        className="absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex max-h-[80vh] max-w-lg flex-col overflow-auto rounded bg-zinc-100 drop-shadow-lg  dark:bg-zinc-800 sm:left-8 sm:right-8"
+        className="absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex max-h-[80vh] max-w-lg flex-col overflow-auto rounded bg-white shadow-[0px_0px_9px_-2px_rgba(0,0,0,0.16)] sm:left-8 sm:right-8"
       >
         {newTokenForm ? (
           <NewTokenForm setNewTokenForm={setNewTokenForm} />
@@ -112,7 +113,7 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
                 <ComboboxItem
                   key={token}
                   focusOnHover
-                  className="scroll-mt-0 rounded active-item:bg-neutral-200 dark:active-item:bg-neutral-600"
+                  className="scroll-mt-0 rounded active-item:bg-neutral-100 dark:active-item:bg-neutral-600"
                   onClick={() => {
                     select.setValue(token);
                     handleTokenChange(token);

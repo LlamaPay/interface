@@ -1,3 +1,5 @@
+import { DisclosureState } from 'ariakit';
+import { ITokenBalance } from 'queries/useTokenBalances';
 import { IToken } from 'types';
 
 export interface TokenOption {
@@ -6,7 +8,9 @@ export interface TokenOption {
 }
 
 export interface IStreamFormProps {
-  tokens: IToken[];
+  tokens: ITokenBalance[];
+  userAddress: string;
+  dialog: DisclosureState;
 }
 
 export interface ICreateProps {

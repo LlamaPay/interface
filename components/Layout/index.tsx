@@ -6,6 +6,8 @@ import Footer from './Footer';
 import CustomToast from 'components/CustomToast';
 import Hero from 'components/Hero';
 import { useRouter } from 'next/router';
+import { useDialogState } from 'ariakit';
+import { OnboardDialog } from 'components/Dialog';
 
 interface ILayoutProps {
   children: React.ReactNode;
@@ -15,6 +17,19 @@ interface ILayoutProps {
 
 export default function Layout({ children, className, noBanner = false, ...props }: ILayoutProps) {
   const router = useRouter();
+  const dialog = useDialogState();
+
+  // const [{ data: accountData, loading }] = useAccount();
+
+  // const firstRender = React.useRef(1);
+
+  // React.useEffect(() => {
+  //   if (!loading && !accountData && !dialog.visible && firstRender.current === 1) {
+  //     dialog.toggle();
+  //     firstRender.current++;
+  //   }
+  // }, [accountData, loading, dialog]);
+
   return (
     <>
       <Head>
@@ -25,7 +40,29 @@ export default function Layout({ children, className, noBanner = false, ...props
         />
       </Head>
       <Header />
-      {router.pathname === '/' && <Hero noBanner={noBanner} />}
+      {/* <div className="absolute top-0 bottom-0 right-0 left-0 overflow-hidden">
+        <div
+          style={{
+            background: 'linear-gradient(195deg, #EFEFEF 13.39%, rgba(196, 196, 196, 0) 75.41%)',
+            transform: 'rotate(20deg)',
+          }}
+          className="absolute left-[-60vw] top-[-80vh] -z-10 h-screen w-screen rounded-full"
+        ></div>
+        <div
+          style={{
+            background: 'linear-gradient(200.1deg, #D9F4E6 13.39%, rgba(255, 255, 255, 0) 75.41%)',
+            transform: 'rotate(90deg)',
+            top: 'calc(-50vh)',
+          }}
+          className="absolute left-[50vw] -z-10 h-[100vh] w-screen rounded-full"
+        ></div>
+      </div> */}
+      {router.pathname === '/' && (
+        <>
+          <Hero noBanner={noBanner} /> <OnboardDialog dialog={dialog} />
+        </>
+      )}
+
       <main className={classNames('flex-1 px-2 pb-8 md:px-[30px] lg:px-[60px] xl:px-[120px]', className)} {...props}>
         {children}
       </main>

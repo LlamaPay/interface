@@ -6,6 +6,7 @@ import { InputAmount, SubmitButton } from 'components/Form';
 import { BeatLoader } from 'react-spinners';
 import { FormDialog, TransactionDialog } from 'components/Dialog';
 import { useDialogState } from 'ariakit';
+import AvailableAmount from 'components/AvailableAmount';
 
 const WithdrawForm = ({ data, formDialog }: IFormProps) => {
   const { mutate, isLoading, data: transaction } = useWithdrawByPayer();
@@ -17,7 +18,7 @@ const WithdrawForm = ({ data, formDialog }: IFormProps) => {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const form = e.target as typeof e.target & IFormElements;
+    const form = e.target as HTMLFormElement & IFormElements;
     const amount = form.amount.value;
 
     if (amount) {
@@ -37,6 +38,8 @@ const WithdrawForm = ({ data, formDialog }: IFormProps) => {
         }
       );
     }
+
+    form.reset();
   };
 
   const withdrawAllTokens = () => {
@@ -59,21 +62,21 @@ const WithdrawForm = ({ data, formDialog }: IFormProps) => {
     <>
       <FormDialog title={data.title} dialog={formDialog} className="h-fit">
         <form className="mt-4 flex flex-col space-y-4" onSubmit={handleSubmit}>
-          <InputAmount name="amount" label={`Amount ${data.symbol}`} isRequired />
-          <SubmitButton
-            disabled={isLoading}
-            className="my-4 rounded border border-transparent !bg-green-200 py-2 px-3 dark:!bg-stone-600"
-          >
-            {isLoading && !withdrawAll.current ? <BeatLoader size={6} color="#171717" /> : 'Withdraw'}
+          <div>
+            <InputAmount name="amount" label={`Amount ${data.symbol}`} isRequired />
+            <AvailableAmount
+              title="Available for Withdrawl"
+              selectedToken={data.selectedToken}
+              amount={data.userBalance}
+            />
+          </div>
+          <SubmitButton disabled={isLoading}>
+            {isLoading && !withdrawAll.current ? <BeatLoader size={6} color="white" /> : 'Withdraw'}
           </SubmitButton>
         </form>
         <p className="my-3 text-center font-light">or</p>
-        <SubmitButton
-          disabled={isLoading}
-          onClick={withdrawAllTokens}
-          className="my-4 rounded border border-green-200 !bg-white py-2 px-3 dark:!bg-stone-600"
-        >
-          {isLoading && withdrawAll.current ? <BeatLoader size={6} color="#171717" /> : 'Withdraw All'}
+        <SubmitButton disabled={isLoading} onClick={withdrawAllTokens} className="bg-white text-[#23BD8F]">
+          {isLoading && withdrawAll.current ? <BeatLoader size={6} color="gray" /> : 'Withdraw All'}
         </SubmitButton>
       </FormDialog>
       {transaction && <TransactionDialog dialog={transactionDialog} transactionHash={transaction.hash || ''} />}

@@ -3,7 +3,6 @@ import DepositForm from './DepositForm';
 import WithdrawForm from './WithdrawForm';
 import DepositField from './DepositField';
 import { useBalances, useChainExplorer } from 'hooks';
-import useGetAllTokens from 'queries/useGetAllTokens';
 import { IBalance } from 'types';
 import { IFormData, TokenAction } from './types';
 import { useDialogState } from 'ariakit';
@@ -13,6 +12,8 @@ import { MonthlyCost } from './MonthlyCost';
 import Image from 'next/image';
 import Fallback from 'components/FallbackList';
 import { BalanceIcon } from 'components/Icons';
+import { useAccount } from 'wagmi';
+import useTokenBalances from 'queries/useTokenBalances';
 
 const Balance = () => {
   const { balances, noBalances, isLoading, isError } = useBalances();
@@ -26,8 +27,9 @@ const Balance = () => {
 
   const formData = React.useRef<null | IFormData>(null);
 
-  // TODO handle loading and error states
-  const { data: tokens } = useGetAllTokens();
+  const { data: tokens } = useTokenBalances();
+
+  const [{ data: accountData }] = useAccount();
 
   const handleToken = (actionType: TokenAction, balance: IBalance) => {
     if (actionType === 'deposit') {
@@ -36,14 +38,19 @@ const Balance = () => {
       withdrawFormDialog.toggle();
     }
 
+    const token = tokens?.find((t) => t.tokenAddress.toLowerCase() === balance.address.toLowerCase()) ?? null;
+
     formData.current = {
       actionType,
       title: balance.name || balance.address,
       symbol: balance.symbol,
+      selectedToken: token,
+      userBalance: balance.amount,
       tokenDecimals: balance.tokenDecimals,
       tokenAddress: balance.address,
       tokenContract: balance.tokenContract,
       llamaContractAddress: balance.contractAddress,
+      logoURI: balance.logoURI,
       submit: actionType === 'deposit' ? 'Deposit' : 'Withdraw',
     };
   };
@@ -53,14 +60,15 @@ const Balance = () => {
   return (
     <span className="mr-auto w-full">
       <section className={showFallback ? 'w-full max-w-2xl' : 'w-full max-w-fit'}>
-        <div className="section-header flex flex-wrap items-center justify-between gap-2">
-          <span className="flex items-center space-x-2">
+        <div className="section-header flex flex-wrap items-center justify-between gap-[0.625rem]">
+          <span className="flex items-center gap-[0.625rem]">
             <BalanceIcon />
             <h1 className="font-exo">Balances</h1>
           </span>
 
           <button
-            className="primary-button"
+            className="primary-button disabled:cursor-not-allowed"
+            disabled={showFallback}
             onClick={() => {
               depositFieldDialog.toggle();
             }}
@@ -129,10 +137,10 @@ const Balance = () => {
                       <MonthlyCost data={b} />
                     </td>
                     <td
-                      className="space-x-2 rounded-r border border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D]"
+                      className="rounded-r border border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D]"
                       style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
                     >
-                      <span className="flex gap-4">
+                      <span className="flex gap-3">
                         <button
                           className="text-xs text-black/80 underline disabled:cursor-not-allowed"
                           onClick={() => handleToken('withdraw', b)}
@@ -165,7 +173,9 @@ const Balance = () => {
           </>
         )}
 
-        {tokens && <DepositField tokens={tokens} dialog={depositFieldDialog} />}
+        {tokens && accountData && (
+          <DepositField tokens={tokens} userAddress={accountData.address} dialog={depositFieldDialog} />
+        )}
       </section>
     </span>
   );

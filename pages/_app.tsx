@@ -1,4 +1,8 @@
+import '@fontsource/exo-2/500.css';
+import '@fontsource/exo-2/600.css';
+import '@fontsource/exo-2/700.css';
 import 'styles/globals.css';
+
 import type { AppProps } from 'next/app';
 import * as React from 'react';
 import { QueryClient, QueryClientProvider } from 'react-query';

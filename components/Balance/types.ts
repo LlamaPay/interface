@@ -1,5 +1,6 @@
 import { DisclosureState } from 'ariakit';
 import { Contract } from 'ethers';
+import { ITokenBalance } from 'queries/useTokenBalances';
 
 export type TokenAction = 'deposit' | 'withdraw';
 
@@ -8,6 +9,9 @@ export interface IFormData {
   title: string;
   llamaContractAddress: string;
   symbol: string;
+  logoURI: string;
+  userBalance: string;
+  selectedToken: ITokenBalance | null;
   tokenDecimals: number;
   tokenAddress: string;
   tokenContract: Contract;
