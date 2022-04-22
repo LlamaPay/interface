@@ -72,7 +72,7 @@ export function HistoryTable() {
 
   return (
     <section className="w-full">
-      <span className="section-header flex items-center space-x-2">
+      <span className="section-header flex items-center gap-[0.625rem]">
         <HistoryIcon />
         <h1 className="font-exo">History</h1>
       </span>

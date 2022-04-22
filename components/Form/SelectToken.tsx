@@ -113,7 +113,7 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
                 <ComboboxItem
                   key={token}
                   focusOnHover
-                  className="scroll-mt-0 rounded active-item:bg-neutral-200 dark:active-item:bg-neutral-600"
+                  className="scroll-mt-0 rounded active-item:bg-neutral-100 dark:active-item:bg-neutral-600"
                   onClick={() => {
                     select.setValue(token);
                     handleTokenChange(token);

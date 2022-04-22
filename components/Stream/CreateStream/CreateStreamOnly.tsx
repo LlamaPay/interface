@@ -64,26 +64,26 @@ const CreateStreamOnly = ({ tokens, dialog }: IStreamFormProps) => {
 
   return (
     <>
-      <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
-        <InputText name="addressToStream" isRequired={true} label="Address to stream" />
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
+        <InputText name="addressToStream" isRequired={true} label="Enter an Address to Stream" />
         <span>
           <SelectToken
             handleTokenChange={handleTokenChange}
             tokens={tokenOptions}
             className="border border-neutral-300 bg-transparent py-[3px] shadow-none dark:border-neutral-700 dark:bg-stone-800"
-            label="Token"
+            label="Select Token from Balances"
           />
         </span>
 
         <InputAmountWithDuration
           name="amountToStream"
           isRequired={true}
-          label="Amount to stream"
+          label="Amount to Stream"
           selectInputName="streamDuration"
         />
 
-        <SubmitButton disabled={isLoading} className="mt-8">
-          {isLoading ? <BeatLoader size={6} color="gray" /> : 'Create Stream'}
+        <SubmitButton disabled={isLoading}>
+          {isLoading ? <BeatLoader size={6} color="white" /> : 'Create Stream'}
         </SubmitButton>
       </form>
       <TransactionDialog dialog={dialog} transactionHash={transaction?.hash ?? ''} />

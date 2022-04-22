@@ -80,13 +80,13 @@ export function StreamTable() {
 
   return (
     <section className="w-full">
-      <div className="section-header flex w-full flex-wrap items-center justify-between gap-2">
-        <span className="flex items-center space-x-2">
+      <div className="section-header flex w-full flex-wrap items-center justify-between gap-[0.625rem]">
+        <span className="flex items-center gap-[0.625rem]">
           <StreamIcon />
           <h1 className="font-exo">Streams</h1>
         </span>
 
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-[0.625rem]">
           <Link href="/create">
             <a className="primary-button py-2 px-8 text-sm font-bold">Create Stream</a>
           </Link>

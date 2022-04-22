@@ -49,7 +49,7 @@
   }
 
   .input-label {
-    @apply text-xs font-semibold text-[#303030];
+    @apply text-sm font-medium text-[#303030];
   }
 
   .input-field {

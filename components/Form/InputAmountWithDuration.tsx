@@ -12,13 +12,12 @@ export const InputAmountWithDuration = ({
 }: InputAmountWithDaysProps) => {
   return (
     <div>
-      <label htmlFor={name}>{label}</label>
+      <label htmlFor={name} className="input-label">
+        {label}
+      </label>
       <div className="relative flex">
         <input
-          className={classNames(
-            'w-full rounded border border-neutral-300 px-3 pl-[11px] pr-[28%] slashed-zero dark:border-neutral-700 dark:bg-stone-800',
-            className
-          )}
+          className={classNames('input-field', className)}
           name={name}
           id={name}
           required={isRequired}
@@ -41,11 +40,11 @@ export const InputAmountWithDuration = ({
           name={selectInputName}
           id={selectInputName}
           required={isRequired}
-          className="absolute right-1 bottom-1 top-1 my-auto flex w-full max-w-[24%] items-center truncate rounded border-0 bg-zinc-100 p-2 pr-4 shadow-sm dark:bg-stone-600"
+          className="absolute right-1 bottom-1 top-2 my-auto flex w-full max-w-[24%] items-center truncate rounded border-0 bg-zinc-100 p-2 pr-4 text-sm shadow-sm dark:bg-stone-600"
           style={{ backgroundSize: '1.25rem', backgroundPosition: 'calc(100% - 4px) 55%' }}
         >
-          <option value="month">/ Month</option>
-          <option value="year">/ Year</option>
+          <option value="month">Month</option>
+          <option value="year">Year</option>
         </select>
       </div>
     </div>
