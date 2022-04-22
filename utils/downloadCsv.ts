@@ -14,10 +14,18 @@ export function download(filename: string, text: string) {
   document.body.removeChild(element);
 }
 
-export const downloadStreams = (data: IStream[]) => {
+export const downloadStreams = (
+  data: IStream[],
+  names: {
+    id: string;
+    shortName: string;
+  }[]
+) => {
   const rows = [
     [
+      'Payer Name',
       'Payer Address',
+      'Payee Name',
       'Payee Address',
       'Token Address',
       'Token Name',
@@ -29,8 +37,14 @@ export const downloadStreams = (data: IStream[]) => {
   ];
 
   data.forEach((d) => {
+    let payerName = names.find((e) => e.id === d.payerAddress)?.shortName;
+    let payeeName = names.find((e) => e.id === d.payeeAddress)?.shortName;
+    if (payerName === undefined) payerName = '';
+    if (payeeName === undefined) payeeName = '';
     rows.push([
+      payerName,
       d.payerAddress,
+      payeeName,
       d.payeeAddress,
       d.token.address,
       d.token.name,

@@ -23,6 +23,7 @@ import DisperseGasMoney from 'components/DisperseGas';
 import { IStream } from 'types';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { downloadStreams } from 'utils/downloadCsv';
+import { useAddressStore } from 'store/address';
 
 const table = createTable<{ Row: IStream }>();
 
@@ -105,6 +106,7 @@ function NewTable({ data }: { data: IStream[] }) {
   const [columns] = React.useState<typeof defaultColumns>(() => [...defaultColumns]);
 
   const [globalFilter, setGlobalFilter] = React.useState('');
+  const addressStore = useAddressStore();
 
   const instance = useTableInstance(table, {
     data,
@@ -118,7 +120,10 @@ function NewTable({ data }: { data: IStream[] }) {
     getPaginationRowModel: getPaginationRowModel(),
   });
 
-  const downloadToCSV = React.useCallback(() => downloadStreams(data), [data]);
+  const downloadToCSV = React.useCallback(() => {
+    const names = addressStore.addressBook;
+    downloadStreams(data, names);
+  }, [data, addressStore]);
 
   return (
     <>
