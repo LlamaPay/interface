@@ -66,12 +66,15 @@ function useTokenBalances() {
 
   const userAddress = accountData?.address.toLowerCase() ?? '';
 
-  const listKey = React.useMemo(() => {
-    return tokens && tokens?.length > 0 ? `listsExist ${network} ${userAddress}` : `noList ${network} ${userAddress}`;
-  }, [tokens, network, userAddress]);
+  const listKey =
+    tokens && tokens?.length > 0 ? `listsExist ${network} ${userAddress}` : `noList ${network} ${userAddress}`;
 
-  const data = useQuery<ITokenBalance[] | null>(['allTokenBalances', listKey], () =>
-    fetchBalance({ userAddress, tokens, provider })
+  const data = useQuery<ITokenBalance[] | null>(
+    ['allTokenBalances', listKey],
+    () => fetchBalance({ userAddress, tokens, provider }),
+    {
+      refetchInterval: 10000,
+    }
   );
 
   return { ...data, listLoading };

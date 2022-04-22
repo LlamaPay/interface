@@ -96,9 +96,10 @@
   #onboard-form #select-token-label {
     @apply text-xs font-semibold text-[#303030];
   }
+
   #onboard-form #token-render-value {
-    padding-top: 6px;
-    padding-bottom: 6px;
+    padding-top: 5px;
+    padding-bottom: 5px;
   }
 
   @media (max-width: 360px) {

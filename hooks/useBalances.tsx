@@ -12,9 +12,7 @@ export const useBalances = () => {
   // cuz initially when the component is mounted, tokens data is null
   // and useGetPayerBalance wouldn't refetch until specified interval
   // even though tokens are updated, this way it triggers a rerender and keeps the ui in loading state until we fetch balances on updated tokens data
-  const tokensKey = React.useMemo(() => {
-    return tokens && tokens?.length > 0 ? `tokensExist ${network}` : `noTokens ${network}`;
-  }, [tokens, network]);
+  const tokensKey = tokens && tokens?.length > 0 ? `tokensExist ${network}` : `noTokens ${network}`;
 
   const {
     data: balances = null,

@@ -8,6 +8,7 @@ import { ITokenBalance } from 'queries/useTokenBalances';
 // TODO show loading and error states on dialogs without using toasts
 export function useDepositForm({ userAddress, tokens }: { userAddress: string; tokens: ITokenBalance[] }) {
   const [tokenAddress, setTokenAddress] = React.useState(tokens[0]?.tokenAddress ?? '');
+  const [selectedToken, setToken] = React.useState<ITokenBalance | null>(tokens[0] || null);
 
   const { mutate: checkTokenApproval, data: isApproved, isLoading: checkingApproval } = useCheckTokenApproval();
 
@@ -24,7 +25,7 @@ export function useDepositForm({ userAddress, tokens }: { userAddress: string; t
   const tokenOptions = React.useMemo(() => tokens?.map((t) => t.tokenAddress) ?? [], [tokens]);
 
   // store input amount in a ref to check against token allowance
-  const inputAmount = React.useRef('');
+  const [inputAmount, setInputAmount] = React.useState('');
 
   // handle select element change
   const handleTokenChange = (token: string) => {
@@ -33,12 +34,14 @@ export function useDepositForm({ userAddress, tokens }: { userAddress: string; t
 
     if (data) {
       setTokenAddress(data.tokenAddress);
+      setToken(data);
+      setInputAmount('');
       // don't check for allowance when not required
-      if (inputAmount.current !== '') {
+      if (inputAmount !== '') {
         checkApproval({
           tokenDetails: data,
           userAddress,
-          approvedForAmount: inputAmount.current,
+          approvedForAmount: inputAmount,
           checkTokenApproval,
         });
       }
@@ -50,7 +53,7 @@ export function useDepositForm({ userAddress, tokens }: { userAddress: string; t
     // don't check for allowance when not required
     if (!checkTokenApproval) return;
 
-    inputAmount.current = e.target.value;
+    setInputAmount(e.target.value);
 
     // find the prop in tokens list, prop is tokenAddress
     const data = tokens?.find((t) => t.tokenAddress === tokenAddress);
@@ -59,9 +62,26 @@ export function useDepositForm({ userAddress, tokens }: { userAddress: string; t
       checkApproval({
         tokenDetails: data,
         userAddress,
-        approvedForAmount: inputAmount.current,
+        approvedForAmount: inputAmount,
         checkTokenApproval,
       });
+    }
+  };
+
+  const fillMaxAmountOnClick = () => {
+    if (selectedToken?.balance) {
+      setInputAmount(selectedToken.balance);
+
+      const data = tokens?.find((t) => t.tokenAddress === tokenAddress);
+
+      if (data) {
+        checkApproval({
+          tokenDetails: data,
+          userAddress,
+          approvedForAmount: selectedToken.balance,
+          checkTokenApproval,
+        });
+      }
     }
   };
 
@@ -116,10 +136,11 @@ export function useDepositForm({ userAddress, tokens }: { userAddress: string; t
     handleTokenChange,
     handleInputChange,
     handleSubmit,
-    tokenAddress,
-    setTokenAddress,
     depositTransaction,
     depositError,
     isApproved,
+    selectedToken,
+    inputAmount,
+    fillMaxAmountOnClick,
   };
 }

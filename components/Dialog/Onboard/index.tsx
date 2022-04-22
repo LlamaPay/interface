@@ -80,7 +80,7 @@ export function OnboardDialog({ dialog, className }: IOnboardProps) {
           Learn More in our Docs
         </a>
       </section>
-      <section className="relative flex flex-1 flex-col overflow-clip">
+      <section className="relative flex flex-1 flex-col md:overflow-clip">
         <div
           style={{
             position: 'absolute',
