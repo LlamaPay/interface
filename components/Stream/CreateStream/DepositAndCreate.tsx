@@ -3,25 +3,66 @@ import BigNumber from 'bignumber.js';
 import { InputAmountWithDuration, InputText, InputWithTokenSelect, SubmitButton } from 'components/Form';
 import useStreamToken from 'queries/useStreamToken';
 import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval';
-import { IStreamFormProps, IFormElements } from './types';
+import { IFormElements, IStreamFormProps } from './types';
 import { secondsByDuration } from 'utils/constants';
 import { checkApproval } from 'components/Form/utils';
-import { useAccount } from 'wagmi';
 import { BeatLoader } from 'react-spinners';
 import { TransactionDialog } from 'components/Dialog';
-import { useDialogState } from 'ariakit';
 
-const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
-  const { mutate: streamToken, isLoading, data: transaction } = useStreamToken();
-  const [{ data: accountData }] = useAccount();
+const DepositAndCreate = ({ tokens, userAddress, dialog }: IStreamFormProps) => {
+  const { mutate: streamToken, isLoading: confirmingStream, data: transactionDetails } = useStreamToken();
 
-  // store address of the token to stream as ariakit/select is a controlled component
   const [tokenAddress, setTokenAddress] = React.useState(tokens[0]?.tokenAddress ?? '');
 
   // Token approval hooks
   const { mutate: checkTokenApproval, data: isApproved, isLoading: checkingApproval } = useCheckTokenApproval();
 
   const { mutate: approveToken, isLoading: approvingToken } = useApproveToken();
+
+  // format tokens list to only include token names
+  const tokenOptions = React.useMemo(() => tokens?.map((t) => t.tokenAddress) ?? [], [tokens]);
+
+  // store input amount in a ref to check against token allowance
+  const inputAmount = React.useRef('');
+
+  // handle select element change
+  const handleTokenChange = (token: string) => {
+    // find the prop in tokens list, prop is the one used to format in tokenOptions above
+    const data = tokens?.find((t) => t.tokenAddress === token);
+
+    if (data) {
+      setTokenAddress(data.tokenAddress);
+      // don't check for allowance when not required
+      if (inputAmount.current !== '') {
+        checkApproval({
+          tokenDetails: data,
+          userAddress,
+          approvedForAmount: inputAmount.current,
+          checkTokenApproval,
+        });
+      }
+    } else setTokenAddress(token);
+  };
+
+  // handle input element change
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // don't check for allowance when not required
+    if (!checkTokenApproval) return;
+
+    inputAmount.current = e.target.value;
+
+    // find the prop in tokens list, prop is tokenAddress
+    const data = tokens?.find((t) => t.tokenAddress === tokenAddress);
+
+    if (data) {
+      checkApproval({
+        tokenDetails: data,
+        userAddress,
+        approvedForAmount: inputAmount.current,
+        checkTokenApproval,
+      });
+    }
+  };
 
   // create stream on submit
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -44,10 +85,10 @@ const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
         // format amounts to bignumbers
         // convert amt to seconds
         const amtPerSec = new BigNumber(amountToStream).times(1e20).div(secondsByDuration[duration]);
+
         const amtToDeposit = new BigNumber(amountToDeposit).times(10 ** tokenDetails.decimals);
 
-        // query mutation
-
+        // query mutation for depositAndCreate method
         if (isApproved) {
           streamToken(
             {
@@ -74,7 +115,7 @@ const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
               onSettled: () => {
                 checkApproval({
                   tokenDetails,
-                  userAddress: accountData?.address,
+                  userAddress,
                   approvedForAmount: amountToDeposit,
                   checkTokenApproval,
                 });
@@ -86,8 +127,6 @@ const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
     }
   };
 
-  const dialog = useDialogState();
-
   const disableApprove = checkingApproval || approvingToken;
 
   return (
@@ -96,9 +135,9 @@ const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
         <InputWithTokenSelect
           name="amountToDeposit"
           label="Deposit"
-          tokenAddress={tokenAddress}
-          setTokenAddress={setTokenAddress}
-          checkTokenApproval={checkTokenApproval}
+          handleTokenChange={handleTokenChange}
+          handleInputChange={handleInputChange}
+          tokenOptions={tokenOptions}
           isRequired
         />
 
@@ -112,8 +151,8 @@ const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
         />
 
         {isApproved ? (
-          <SubmitButton disabled={isLoading} className="mt-8">
-            {isLoading ? <BeatLoader size={6} color="gray" /> : 'Deposit and Create Stream'}
+          <SubmitButton disabled={confirmingStream} className="mt-8">
+            {confirmingStream ? <BeatLoader size={6} color="gray" /> : 'Deposit and Create Stream'}
           </SubmitButton>
         ) : (
           <SubmitButton disabled={disableApprove} className="mt-4">
@@ -121,7 +160,7 @@ const DepositAndCreate = ({ tokens }: IStreamFormProps) => {
           </SubmitButton>
         )}
       </form>
-      <TransactionDialog dialog={dialog} transactionHash={transaction?.hash ?? ''} />
+      <TransactionDialog dialog={dialog} transactionHash={transactionDetails?.hash ?? ''} />
     </>
   );
 };

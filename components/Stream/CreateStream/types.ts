@@ -1,3 +1,4 @@
+import { DisclosureState } from 'ariakit';
 import { IToken } from 'types';
 
 export interface TokenOption {
@@ -7,6 +8,8 @@ export interface TokenOption {
 
 export interface IStreamFormProps {
   tokens: IToken[];
+  userAddress: string;
+  dialog: DisclosureState;
 }
 
 export interface ICreateProps {

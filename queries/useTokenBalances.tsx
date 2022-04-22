@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useQuery } from 'react-query';
 import { ITokenLists } from 'types';
 import { useAccount } from 'wagmi';
@@ -61,13 +62,19 @@ const fetchBalance = async ({ userAddress, tokens, provider }: IFetchBalance) =>
 function useTokenBalances() {
   const [{ data: accountData }] = useAccount();
   const { provider, network } = useNetworkProvider();
-  const { data: tokens } = useTokenList();
+  const { data: tokens, isLoading: listLoading } = useTokenList();
 
   const userAddress = accountData?.address.toLowerCase() ?? '';
 
-  return useQuery<ITokenBalance[] | null>(['allTokenBalances', network, userAddress], () =>
+  const listKey = React.useMemo(() => {
+    return tokens && tokens?.length > 0 ? `listsExist ${network} ${userAddress}` : `noList ${network} ${userAddress}`;
+  }, [tokens, network, userAddress]);
+
+  const data = useQuery<ITokenBalance[] | null>(['allTokenBalances', listKey], () =>
     fetchBalance({ userAddress, tokens, provider })
   );
+
+  return { ...data, listLoading };
 }
 
 export default useTokenBalances;

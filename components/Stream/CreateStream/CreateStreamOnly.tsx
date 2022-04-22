@@ -6,9 +6,8 @@ import { IStreamFormProps, IFormElements } from './types';
 import { secondsByDuration } from 'utils/constants';
 import { BeatLoader } from 'react-spinners';
 import { TransactionDialog } from 'components/Dialog';
-import { useDialogState } from 'ariakit';
 
-const CreateStreamOnly = ({ tokens }: IStreamFormProps) => {
+const CreateStreamOnly = ({ tokens, dialog }: IStreamFormProps) => {
   const { mutate: streamToken, isLoading, data: transaction } = useStreamToken();
 
   // store address of the token to stream as ariakit/select is a controlled component
@@ -62,8 +61,6 @@ const CreateStreamOnly = ({ tokens }: IStreamFormProps) => {
   };
 
   const tokenOptions = tokens.map((t) => t.tokenAddress);
-
-  const dialog = useDialogState();
 
   return (
     <>

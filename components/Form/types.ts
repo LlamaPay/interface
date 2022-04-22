@@ -1,6 +1,4 @@
 import * as React from 'react';
-import { UseMutateFunction } from 'react-query';
-import { ICheckTokenAllowance } from 'utils/tokenUtils';
 
 export interface InputElement {
   name: string;
@@ -16,9 +14,9 @@ export interface InputWithTokenElement extends InputElement {
 }
 
 export interface InputWithTokenSelectProps extends InputElement {
-  tokenAddress: string;
-  setTokenAddress: React.Dispatch<React.SetStateAction<string>>;
-  checkTokenApproval?: UseMutateFunction<boolean, unknown, ICheckTokenAllowance, unknown>;
+  handleTokenChange: (token: string) => void;
+  handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  tokenOptions: string[];
 }
 
 export interface InputAmountWithDaysProps {

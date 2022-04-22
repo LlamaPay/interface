@@ -3,7 +3,6 @@ import DepositForm from './DepositForm';
 import WithdrawForm from './WithdrawForm';
 import DepositField from './DepositField';
 import { useBalances, useChainExplorer } from 'hooks';
-import useGetAllTokens from 'queries/useGetAllTokens';
 import { IBalance } from 'types';
 import { IFormData, TokenAction } from './types';
 import { useDialogState } from 'ariakit';
@@ -13,6 +12,8 @@ import { MonthlyCost } from './MonthlyCost';
 import Image from 'next/image';
 import Fallback from 'components/FallbackList';
 import { BalanceIcon } from 'components/Icons';
+import { useAccount } from 'wagmi';
+import useTokenBalances from 'queries/useTokenBalances';
 
 const Balance = () => {
   const { balances, noBalances, isLoading, isError } = useBalances();
@@ -26,8 +27,9 @@ const Balance = () => {
 
   const formData = React.useRef<null | IFormData>(null);
 
-  // TODO handle loading and error states
-  const { data: tokens } = useGetAllTokens();
+  const { data: tokens } = useTokenBalances();
+
+  const [{ data: accountData }] = useAccount();
 
   const handleToken = (actionType: TokenAction, balance: IBalance) => {
     if (actionType === 'deposit') {
@@ -165,7 +167,9 @@ const Balance = () => {
           </>
         )}
 
-        {tokens && <DepositField tokens={tokens} dialog={depositFieldDialog} />}
+        {tokens && accountData && (
+          <DepositField tokens={tokens} userAddress={accountData.address} dialog={depositFieldDialog} />
+        )}
       </section>
     </span>
   );
