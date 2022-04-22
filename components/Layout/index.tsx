@@ -8,7 +8,6 @@ import Hero from 'components/Hero';
 import { useRouter } from 'next/router';
 import { useDialogState } from 'ariakit';
 import { OnboardDialog } from 'components/Dialog';
-import { useAccount } from 'wagmi';
 
 interface ILayoutProps {
   children: React.ReactNode;
@@ -20,7 +19,7 @@ export default function Layout({ children, className, noBanner = false, ...props
   const router = useRouter();
   const dialog = useDialogState();
 
-  const [{ data: accountData, loading }] = useAccount();
+  // const [{ data: accountData, loading }] = useAccount();
 
   // const firstRender = React.useRef(1);
 

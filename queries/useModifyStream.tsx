@@ -58,6 +58,7 @@ export default function useModifyStream() {
         const toastId = toast.loading('Confirming transaction');
         data.wait().then((res: any) => {
           toast.dismiss(toastId);
+          queryClient.invalidateQueries();
           if (res.status === 1) {
             toast.success('Successfully Modified Stream');
           } else {
