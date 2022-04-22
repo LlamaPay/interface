@@ -22,14 +22,14 @@ export default function Layout({ children, className, noBanner = false, ...props
 
   const [{ data: accountData, loading }] = useAccount();
 
-  const firstRender = React.useRef(1);
+  // const firstRender = React.useRef(1);
 
-  React.useEffect(() => {
-    if (!loading && !accountData && !dialog.visible && firstRender.current === 1) {
-      dialog.toggle();
-      firstRender.current++;
-    }
-  }, [accountData, loading, dialog]);
+  // React.useEffect(() => {
+  //   if (!loading && !accountData && !dialog.visible && firstRender.current === 1) {
+  //     dialog.toggle();
+  //     firstRender.current++;
+  //   }
+  // }, [accountData, loading, dialog]);
 
   return (
     <>
