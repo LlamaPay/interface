@@ -33,7 +33,7 @@ export function OnboardDialog({ dialog, className }: IOnboardProps) {
         <>
           <Coins />
           <h1 className="font-exo my-6 font-bold text-[#303030]">Works with all tokens</h1>
-          <p className="text-xs">
+          <p className="text-xs" style={{ lineHeight: '22px' }}>
             Create streams of indefinite duration and just siphon money out of a pool, which makes it possible to top
             all streams up in a single operation and just provide money as it's needed to maintain them.
           </p>
@@ -44,7 +44,7 @@ export function OnboardDialog({ dialog, className }: IOnboardProps) {
     return (
       <>
         <h1 className="font-exo text-[2rem] font-bold text-[#303030]">Welcome!</h1>
-        <p className="my-8 text-xs font-semibold">
+        <p className="my-8 text-xs font-semibold" style={{ lineHeight: '22px' }}>
           Create streams of indefinite duration and just siphon money out of a pool, which makes it possible to top all
           streams up in a single operation and just provide money as it's needed to maintain them.
         </p>

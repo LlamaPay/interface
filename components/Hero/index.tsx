@@ -8,7 +8,7 @@ export default function Hero({ noBanner }: { noBanner: boolean }) {
   if (!displayBanner) return <div className="h-[30px]"></div>;
 
   return (
-    <section className="relative mb-[30px] flex flex-row flex-wrap items-center justify-center gap-6 bg-[#D9F2F4] px-2 py-[52px] text-[#303030]">
+    <section className="relative mb-[30px] flex flex-row flex-wrap items-center justify-center gap-6 bg-[#D9F2F4]/70 px-2 py-[52px] text-[#303030]">
       <button
         className="absolute right-3 top-3 p-2"
         onClick={() => {
@@ -32,7 +32,7 @@ export default function Hero({ noBanner }: { noBanner: boolean }) {
         <span className="hero-word-break whitespace-nowrap">recurring payments</span>{' '}
         <span className="hero-word-break">in crypto!</span>
       </h1>
-      <p className="max-w-md 2xl:max-w-xl">
+      <p className="max-w-md 2xl:max-w-xl" style={{ lineHeight: '26px' }}>
         Automate salary txs, streaming them by the second so employees can withdraw whenever they want and you don't
         have to deal with sending txs manually.
       </p>
