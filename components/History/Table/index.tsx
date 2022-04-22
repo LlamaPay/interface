@@ -1,5 +1,12 @@
 import * as React from 'react';
-import { createTable, useTable, PaginationState, paginateRowsFn, globalFilterRowsFn } from '@tanstack/react-table';
+import {
+  createTable,
+  getCoreRowModelSync,
+  getGlobalFilteredRowModelSync,
+  getPaginationRowModel,
+  useTableInstance,
+  PaginationState,
+} from '@tanstack/react-table';
 import Table from 'components/Table';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { IHistory } from 'types';
@@ -57,22 +64,11 @@ const defaultColumns = table.createColumns([
 export function HistoryTable() {
   const { data, isLoading, error } = useStreamsAndHistory();
 
-  const skipReset = React.useRef<boolean>(false);
-
   const history = React.useMemo(() => {
-    // When data gets updated with this function, set a flag
-    // to disable table's auto resetting
-    skipReset.current = true;
-
     if (!data?.history || data.history?.length < 1) return false;
 
     return data.history;
   }, [data]);
-
-  React.useEffect(() => {
-    // After the table has updated, always remove the flag
-    skipReset.current = false;
-  });
 
   return (
     <section className="w-full">
@@ -84,13 +80,13 @@ export function HistoryTable() {
       {isLoading || error || !history ? (
         <Fallback isLoading={isLoading} isError={error ? true : false} noData={true} type="history" />
       ) : (
-        <NewTable data={data.history || []} skipReset={skipReset} />
+        <NewTable data={data.history || []} />
       )}
     </section>
   );
 }
 
-function NewTable({ data, skipReset }: { data: IHistory[]; skipReset: React.MutableRefObject<boolean> }) {
+function NewTable({ data }: { data: IHistory[] }) {
   const [columns] = React.useState<typeof defaultColumns>(() => [...defaultColumns]);
 
   const [globalFilter, setGlobalFilter] = React.useState('');
@@ -101,18 +97,17 @@ function NewTable({ data, skipReset }: { data: IHistory[]; skipReset: React.Muta
     pageCount: -1, // -1 allows the table to calculate the page count for us via instance.getPageCount()
   });
 
-  const instance = useTable(table, {
+  const instance = useTableInstance(table, {
     data,
     columns,
     state: {
       globalFilter,
-      pagination,
     },
+
     onGlobalFilterChange: setGlobalFilter,
-    globalFilterRowsFn: globalFilterRowsFn,
-    onPaginationChange: setPagination,
-    paginateRowsFn: paginateRowsFn,
-    autoResetAll: !skipReset.current,
+    getCoreRowModel: getCoreRowModelSync(),
+    getGlobalFilteredRowModel: getGlobalFilteredRowModelSync(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   const downloadToCSV = React.useCallback(() => downloadHistory(data), [data]);

@@ -74,6 +74,13 @@ export const Modify = ({ data, dialog, title }: ModifyProps) => {
                 <span className="truncate">{savedAddressName}</span>
               </p>
               <p>
+                <span>Amount / month: </span>
+                {(amountPerSec * secondsByDuration.month).toLocaleString('en-US', {
+                  maximumFractionDigits: 7,
+                  minimumFractionDigits: 7,
+                })}
+              </p>
+              <p>
                 <span>Amount / sec: </span>
                 {amountPerSec.toLocaleString('en-US', {
                   maximumFractionDigits: 7,

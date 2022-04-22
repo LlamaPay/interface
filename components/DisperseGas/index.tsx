@@ -12,7 +12,11 @@ function DisperseGasMoney() {
 
   return (
     <>
-      <button onClick={disperseDialog.toggle} className="secondary-button">
+      <button
+        onClick={disperseDialog.toggle}
+        className="secondary-button"
+        disabled={accountData && !unsupported ? false : true}
+      >
         {` Disperse ${nativeCurrency?.symbol ? nativeCurrency?.symbol : 'Funds'}`}
       </button>
       <FormDialog
@@ -20,16 +24,7 @@ function DisperseGasMoney() {
         title={` Disperse ${nativeCurrency?.symbol} to Your Payees`}
         className="v-min h-min"
       >
-        <div className="space-y-3">
-          {accountData && !unsupported ? (
-            <SendToPayees />
-          ) : (
-            <>
-              {!accountData ? <p>Connect Wallet</p> : <></>}
-              {unsupported ? <p>Unsupported Chain</p> : <></>}
-            </>
-          )}
-        </div>
+        <div className="space-y-3">{accountData && !unsupported ? <SendToPayees dialog={disperseDialog} /> : ''}</div>
       </FormDialog>
     </>
   );
