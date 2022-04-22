@@ -4,6 +4,7 @@ import { formatBalance } from 'utils/amount';
 import useWithdrawable from 'queries/useWithdrawable';
 import { useTokenPrice } from 'queries/useTokenPrice';
 import Tooltip from 'components/Tooltip';
+import { ExclamationCircleIcon } from '@heroicons/react/solid';
 
 export const Withdrawable = ({ data }: { data: IStream }) => {
   const { data: callResult, isLoading } = useWithdrawable({
@@ -37,7 +38,16 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
   }, [setWithdrawables]);
 
   if (callResult?.owed > 0) {
-    return <>Out of funds</>;
+    return (
+      <div className="flex space-x-1">
+        <Tooltip content={balanceState && price && `${(balanceState * Number(price)).toFixed(2)} USD`}>
+          <span className="text-red-600">{balanceState && `${formatBalance(balanceState)}`}</span>
+        </Tooltip>
+        <Tooltip content="Out of Funds">
+          <ExclamationCircleIcon className="h-5 w-5 text-red-600" />
+        </Tooltip>
+      </div>
+    );
   }
 
   if (isLoading) {
