@@ -11,15 +11,7 @@ interface ButtonProps {
 
 export const SubmitButton = ({ disabled = false, type = 'submit', className, children, ...props }: ButtonProps) => {
   return (
-    <button
-      className={classNames(
-        'w-full rounded bg-zinc-100 px-3 py-[11px] disabled:cursor-not-allowed dark:bg-stone-800',
-        className
-      )}
-      type={type}
-      disabled={disabled}
-      {...props}
-    >
+    <button className={classNames('form-submit-button', className)} type={type} disabled={disabled} {...props}>
       {children}
     </button>
   );

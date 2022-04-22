@@ -47,14 +47,14 @@ export const TransactionDialog = ({ dialog, className, transactionHash }: FormDi
       </div>
       <h1 className="text-center">Transaction Submitted</h1>
       <a
-        className="mt-1 mb-8 text-center text-sm text-green-700 dark:text-green-500"
+        className="mt-1 mb-8 text-center text-sm text-green-700"
         href={url ? `${url}/tx/${transactionHash}` : '/'}
         target="_blank"
         rel="noopener noreferrer"
       >
         View on {name || 'Block Explorer'}
       </a>
-      <button className="mt-auto rounded-lg bg-green-200 p-3 dark:text-black" onClick={dialog.toggle}>
+      <button className="form-submit-button" onClick={dialog.toggle}>
         Close
       </button>
     </Dialog>

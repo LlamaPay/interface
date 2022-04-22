@@ -44,6 +44,18 @@
     @apply primary-button bg-white text-[#23BD8F];
   }
 
+  .form-submit-button {
+    @apply w-full rounded-[10px] border border-[#1BDBAD] bg-[#23BD8F] py-2 px-3 font-semibold text-white shadow-[0px_3px_7px_rgba(0,0,0,0.12)] disabled:cursor-not-allowed;
+  }
+
+  .input-label {
+    @apply text-xs font-semibold text-[#303030];
+  }
+
+  .input-field {
+    @apply mt-[5px] w-full rounded border border-[#CBCBCB] px-3 py-[7px] slashed-zero;
+  }
+
   .hero-word-break::before {
     content: '\A';
     white-space: pre;
@@ -91,10 +103,6 @@
   }
   #banner {
     display: var(--banner-display);
-  }
-
-  #onboard-form #select-token-label {
-    @apply text-xs font-semibold text-[#303030];
   }
 
   #onboard-form #token-render-value {

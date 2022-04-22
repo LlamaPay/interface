@@ -6,7 +6,7 @@ import classNames from 'classnames';
 
 interface FormDialogProps {
   dialog: DisclosureState;
-  title: string | null;
+  title: string | React.ReactNode | null;
   children: React.ReactNode;
   className?: string;
 }

@@ -4,11 +4,25 @@ import { checkApproval } from 'components/Form/utils';
 import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval';
 import useDepositToken from 'queries/useDepositToken';
 import { ITokenBalance } from 'queries/useTokenBalances';
+import { DisclosureState } from 'ariakit';
 
 // TODO show loading and error states on dialogs without using toasts
-export function useDepositForm({ userAddress, tokens }: { userAddress: string; tokens: ITokenBalance[] }) {
+// TODO reset form on submit
+export function useDepositForm({
+  userAddress,
+  tokens,
+  transactionDialog,
+  componentDialog,
+}: {
+  userAddress: string;
+  tokens: ITokenBalance[];
+  transactionDialog?: DisclosureState;
+  componentDialog?: DisclosureState;
+}) {
   const [tokenAddress, setTokenAddress] = React.useState(tokens[0]?.tokenAddress ?? '');
-  const [selectedToken, setToken] = React.useState<ITokenBalance | null>(tokens[0] || null);
+  const [selectedToken, setSelectedToken] = React.useState<ITokenBalance | null>(tokens[0] || null);
+  // store input amount in a ref to check against token allowance
+  const [inputAmount, setInputAmount] = React.useState('');
 
   const { mutate: checkTokenApproval, data: isApproved, isLoading: checkingApproval } = useCheckTokenApproval();
 
@@ -24,9 +38,6 @@ export function useDepositForm({ userAddress, tokens }: { userAddress: string; t
   // format tokens list to only include token names
   const tokenOptions = React.useMemo(() => tokens?.map((t) => t.tokenAddress) ?? [], [tokens]);
 
-  // store input amount in a ref to check against token allowance
-  const [inputAmount, setInputAmount] = React.useState('');
-
   // handle select element change
   const handleTokenChange = (token: string) => {
     // find the prop in tokens list, prop is the one used to format in tokenOptions above
@@ -34,7 +45,7 @@ export function useDepositForm({ userAddress, tokens }: { userAddress: string; t
 
     if (data) {
       setTokenAddress(data.tokenAddress);
-      setToken(data);
+      setSelectedToken(data);
       setInputAmount('');
       // don't check for allowance when not required
       if (inputAmount !== '') {
@@ -89,7 +100,7 @@ export function useDepositForm({ userAddress, tokens }: { userAddress: string; t
     e.preventDefault();
     // read amountToDeposit from form element
     // make sure it matches the name prop on that element
-    const form = e.target as typeof e.target & { amountToDeposit: { value: string } };
+    const form = e.target as HTMLFormElement & { amountToDeposit: { value: string } };
     const amountToDeposit = form.amountToDeposit?.value;
 
     // make sure we are setting tokenAddress in the setTokenAddress and not name or symbol
@@ -101,10 +112,20 @@ export function useDepositForm({ userAddress, tokens }: { userAddress: string; t
 
       // call deposit method only if token is approved to spend
       if (isApproved && tokenDetails.llamaContractAddress) {
-        deposit({
-          amountToDeposit: bigAmount.toFixed(0),
-          llamaContractAddress: tokenDetails.llamaContractAddress,
-        });
+        deposit(
+          {
+            amountToDeposit: bigAmount.toFixed(0),
+            llamaContractAddress: tokenDetails.llamaContractAddress,
+          },
+          {
+            onSettled: () => {
+              if (transactionDialog && componentDialog) {
+                componentDialog.toggle();
+                transactionDialog.toggle();
+              }
+            },
+          }
+        );
       } else {
         approveToken(
           {

@@ -5,10 +5,12 @@ import useDepositToken from 'queries/useDepositToken';
 import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval';
 import { IFormElements, IFormProps } from './types';
 import { checkApproval } from 'components/Form/utils';
-import { InputAmount, SubmitButton } from 'components/Form';
+import { SubmitButton } from 'components/Form';
 import { BeatLoader } from 'react-spinners';
 import { FormDialog, TransactionDialog } from 'components/Dialog';
 import { useDialogState } from 'ariakit';
+import Image from 'next/image';
+import AvailableAmount from 'components/AvailableAmount';
 
 const DepositForm = ({ data, formDialog }: IFormProps) => {
   const { mutate, isLoading, data: transaction } = useDepositToken();
@@ -17,14 +19,14 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
 
   const [{ data: accountData }] = useAccount();
 
-  const amountToDeposit = React.useRef('');
+  const [inputAmount, setAmount] = React.useState('');
 
   // Token approval hooks
   const { mutate: checkTokenApproval, data: isApproved, isLoading: checkingApproval } = useCheckTokenApproval();
   const { mutate: approveToken, isLoading: approvingToken, error: approvalError } = useApproveToken();
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
-    amountToDeposit.current = e.target.value;
+    setAmount(e.target.value);
 
     checkApproval({
       tokenDetails: {
@@ -33,10 +35,27 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
         llamaContractAddress: data.llamaContractAddress,
       },
       userAddress: accountData?.address,
-      approvedForAmount: amountToDeposit.current,
+      approvedForAmount: inputAmount,
       checkTokenApproval,
     });
   }
+
+  const fillMaxAmountOnClick = () => {
+    if (data.selectedToken && data.selectedToken.balance) {
+      setAmount(data.selectedToken.balance);
+
+      checkApproval({
+        tokenDetails: {
+          decimals: data.tokenDecimals,
+          tokenContract: data.tokenContract,
+          llamaContractAddress: data.llamaContractAddress,
+        },
+        userAddress: accountData?.address,
+        approvedForAmount: inputAmount,
+        checkTokenApproval,
+      });
+    }
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -87,22 +106,70 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
 
   const disableApprove = approvingToken || checkingApproval;
 
+  const Title = () => {
+    return (
+      <div className="flex items-center gap-2">
+        <div className="flex h-6 w-6 flex-shrink-0 items-center rounded-full">
+          <Image src={data.logoURI} alt={'Logo of ' + data.title} width="24px" height="24px" />
+        </div>
+        <span>{data.title}</span>
+      </div>
+    );
+  };
+
   return (
     <>
-      <FormDialog title={data.title} dialog={formDialog} className="h-fit">
-        <form className="mt-4 flex flex-col space-y-4" onSubmit={handleSubmit}>
-          <InputAmount name="amount" label={`Amount ${data.symbol}`} handleChange={handleChange} isRequired />
+      <FormDialog title={<Title />} dialog={formDialog} className="h-fit">
+        <form className="mt-4 flex flex-col" onSubmit={handleSubmit}>
+          <div>
+            <div>
+              <label className="input-label" htmlFor="tableDFAmountToDeposit">
+                Topup Amount
+              </label>
+              <div className="relative flex">
+                <input
+                  className="input-field"
+                  name="amount"
+                  id="tableDFAmountToDeposit"
+                  required
+                  autoComplete="off"
+                  autoCorrect="off"
+                  type="text"
+                  pattern="^[0-9]*[.,]?[0-9]*$"
+                  placeholder="0.0"
+                  minLength={1}
+                  maxLength={79}
+                  spellCheck="false"
+                  inputMode="decimal"
+                  title="Enter numbers only."
+                  value={inputAmount}
+                  onChange={handleChange}
+                />
+                <button
+                  type="button"
+                  className="absolute bottom-[5px] top-[10px] right-[5px] rounded-lg border border-[#4E575F] px-2 text-xs font-bold text-[#4E575F] disabled:cursor-not-allowed"
+                  disabled={!data}
+                  onClick={fillMaxAmountOnClick}
+                >
+                  MAX
+                </button>
+              </div>
+            </div>
+            <AvailableAmount selectedToken={data.selectedToken} title="Available for Deposit" />
+          </div>
+
+          <p className="my-4 text-center text-sm text-red-500">{approvalError && "Couldn't approve token"}</p>
+
           {isApproved ? (
-            <SubmitButton disabled={isLoading} className="my-4 rounded !bg-green-200 py-2 px-3 dark:!bg-stone-600">
-              {isLoading ? <BeatLoader size={6} color="#171717" /> : 'Deposit'}
+            <SubmitButton disabled={isLoading} className="mt-4">
+              {isLoading ? <BeatLoader size={6} color="white" /> : 'Deposit'}
             </SubmitButton>
           ) : (
-            <SubmitButton disabled={disableApprove} className="my-4 rounded !bg-green-200 py-2 px-3 dark:!bg-stone-600">
-              {disableApprove ? <BeatLoader size={6} color="#171717" /> : 'Approve'}
+            <SubmitButton disabled={disableApprove} className="mt-4">
+              {disableApprove ? <BeatLoader size={6} color="white" /> : 'Approve on Wallet'}
             </SubmitButton>
           )}
         </form>
-        <p className="my-4 text-center text-sm text-red-500">{approvalError && "Couldn't approve token"}</p>
       </FormDialog>
       {transaction && <TransactionDialog dialog={transactionDialog} transactionHash={transaction.hash || ''} />}
     </>

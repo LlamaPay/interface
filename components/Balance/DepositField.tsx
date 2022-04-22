@@ -1,10 +1,11 @@
 import * as React from 'react';
-import { InputWithTokenSelect, SubmitButton } from 'components/Form';
+import { InputAmountWithMaxButton, SelectToken } from 'components/Form';
 import { BeatLoader } from 'react-spinners';
 import { DisclosureState, useDialogState } from 'ariakit';
 import { FormDialog, TransactionDialog } from 'components/Dialog';
 import { useDepositForm } from 'hooks';
 import { ITokenBalance } from 'queries/useTokenBalances';
+import AvailableAmount from 'components/AvailableAmount';
 
 interface IDepositFieldprops {
   tokens: ITokenBalance[];
@@ -26,34 +27,44 @@ const DepositField = ({ tokens, userAddress, dialog }: IDepositFieldprops) => {
     handleSubmit,
     isApproved,
     depositTransaction,
-  } = useDepositForm({ userAddress, tokens });
+    selectedToken,
+    inputAmount,
+    fillMaxAmountOnClick,
+  } = useDepositForm({ userAddress, tokens, transactionDialog, componentDialog: dialog });
 
   const disableApprove = checkingApproval || approvingToken;
 
   return (
     <>
-      <FormDialog title="Deposit" dialog={dialog} className="h-fit">
+      <FormDialog title="" dialog={dialog} className="h-fit">
         <form onSubmit={handleSubmit}>
-          <InputWithTokenSelect
-            name="amountToDeposit"
-            label="Amount"
-            handleTokenChange={handleTokenChange}
+          <div className="mb-5">
+            <SelectToken
+              label="What token do you want to deposit?"
+              tokens={tokenOptions}
+              handleTokenChange={handleTokenChange}
+            />
+            <AvailableAmount selectedToken={selectedToken} title="Available for Deposit" />
+          </div>
+
+          <InputAmountWithMaxButton
+            inputAmount={inputAmount}
             handleInputChange={handleInputChange}
-            tokenOptions={tokenOptions}
-            isRequired
+            fillMaxAmountOnClick={fillMaxAmountOnClick}
+            selectedToken={selectedToken}
+            id="bdAmountToDeposit"
           />
+
           <p className="my-2 text-center text-sm text-red-500">{approvalError && "Couldn't approve token"}</p>
+
           {isApproved ? (
-            <SubmitButton
-              disabled={confirmingDeposit}
-              className="mt-4 rounded !bg-green-200 py-2 px-3 dark:!bg-stone-600"
-            >
-              {confirmingDeposit ? <BeatLoader size={6} color="#171717" /> : 'Deposit'}
-            </SubmitButton>
+            <button disabled={confirmingDeposit} className="form-submit-button mt-5">
+              {confirmingDeposit ? <BeatLoader size={6} color="white" /> : 'Deposit'}
+            </button>
           ) : (
-            <SubmitButton disabled={disableApprove} className="mt-4 rounded !bg-green-200 py-2 px-3 dark:!bg-stone-600">
-              {disableApprove ? <BeatLoader size={6} color="#171717" /> : 'Approve'}
-            </SubmitButton>
+            <button disabled={disableApprove} className="form-submit-button mt-5">
+              {disableApprove ? <BeatLoader size={6} color="white" /> : 'Approve on Wallet'}
+            </button>
           )}
         </form>
       </FormDialog>

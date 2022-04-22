@@ -41,6 +41,7 @@ export default function useDepositToken() {
         const toastId = toast.loading('Confirming Deposit');
         data.wait().then((res: any) => {
           toast.dismiss(toastId);
+          queryClient.invalidateQueries();
           if (res.status === 1) {
             toast.success('Deposit Success');
           } else {

@@ -15,13 +15,12 @@ export const InputWithTokenSelect = ({
 }: InputWithTokenSelectProps) => {
   return (
     <div>
-      <label htmlFor={name}>{label}</label>
+      <label htmlFor={name} className="input-label">
+        {label}
+      </label>
       <div className="relative flex">
         <input
-          className={classNames(
-            'w-full rounded border border-neutral-300 px-3 pl-[11px] pr-[28%] slashed-zero dark:border-neutral-700 dark:bg-stone-800',
-            className
-          )}
+          className={classNames('input-field', className)}
           name={name}
           id={name}
           required={isRequired}
@@ -42,7 +41,7 @@ export const InputWithTokenSelect = ({
           <SelectToken
             handleTokenChange={handleTokenChange}
             tokens={tokenOptions}
-            className="absolute right-1 bottom-1 top-1 my-auto w-min max-w-[40%] bg-zinc-100 shadow-sm dark:bg-stone-600"
+            className="absolute right-[4px] bottom-[4px] top-[8px] my-auto w-min max-w-[40%] bg-zinc-100 shadow-sm dark:bg-stone-600"
           />
         )}
       </div>

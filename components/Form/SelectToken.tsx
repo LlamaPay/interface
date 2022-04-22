@@ -30,7 +30,7 @@ function Token({ value, shortName, showBalance }: { value: string; shortName?: b
     <div
       className={classNames(
         'flex flex-1 flex-row items-center justify-between',
-        shortName ? 'truncate py-2 pr-1' : 'balance-wrap p-2'
+        shortName ? 'truncate py-[5px]' : 'balance-wrap p-2'
       )}
       id="token-render-value"
     >
@@ -75,12 +75,12 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
 
   return (
     <>
-      <SelectLabel state={select} className={classNames(!label && 'sr-only')} id="select-token-label">
+      <SelectLabel state={select} className={classNames('input-label', !label && 'sr-only')}>
         {label || 'Select token'}
       </SelectLabel>
       <Select
         state={select}
-        className={classNames('flex w-full items-center rounded p-2', className)}
+        className={classNames('input-field flex w-full items-center !py-[0px]', className)}
         onClick={dialog.toggle}
       >
         {<Token value={select.value} shortName />}

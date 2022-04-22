@@ -14,7 +14,7 @@ function DisperseGasMoney() {
     <>
       <button
         onClick={disperseDialog.toggle}
-        className="secondary-button"
+        className="secondary-button disabled:cursor-not-allowed"
         disabled={accountData && !unsupported ? false : true}
       >
         {` Disperse ${nativeCurrency?.symbol ? nativeCurrency?.symbol : 'Funds'}`}

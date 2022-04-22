@@ -38,14 +38,19 @@ const Balance = () => {
       withdrawFormDialog.toggle();
     }
 
+    const token = tokens?.find((t) => t.tokenAddress.toLowerCase() === balance.address.toLowerCase()) ?? null;
+
     formData.current = {
       actionType,
       title: balance.name || balance.address,
       symbol: balance.symbol,
+      selectedToken: token,
+      userBalance: balance.amount,
       tokenDecimals: balance.tokenDecimals,
       tokenAddress: balance.address,
       tokenContract: balance.tokenContract,
       llamaContractAddress: balance.contractAddress,
+      logoURI: balance.logoURI,
       submit: actionType === 'deposit' ? 'Deposit' : 'Withdraw',
     };
   };
@@ -62,7 +67,8 @@ const Balance = () => {
           </span>
 
           <button
-            className="primary-button"
+            className="primary-button disabled:cursor-not-allowed"
+            disabled={showFallback}
             onClick={() => {
               depositFieldDialog.toggle();
             }}
