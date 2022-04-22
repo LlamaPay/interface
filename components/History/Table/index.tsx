@@ -18,6 +18,7 @@ import HistoryActions from './HistoryActions';
 import Fallback from 'components/FallbackList';
 import { HistoryIcon } from 'components/Icons';
 import { downloadHistory } from 'utils/downloadCsv';
+import Tooltip from 'components/Tooltip';
 
 const table = createTable<{ Row: IHistory }>();
 
@@ -33,7 +34,7 @@ const defaultColumns = table.createColumns([
   }),
   table.createDataColumn('addressRelated', {
     header: 'Address related',
-    cell: ({ value }) => <>{value && formatAddress(value)}</>,
+    cell: ({ value }) => <Tooltip content={value}>{value && formatAddress(value)}</Tooltip>,
   }),
   table.createDataColumn('amountPerSec', {
     header: () => (
