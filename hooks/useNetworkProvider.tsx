@@ -12,7 +12,7 @@ export const useNetworkProvider = () => {
   const chainDetails = chainId && networkDetails[chainId];
 
   return {
-    provider: chainDetails ? chainDetails.rpcProvider : null,
+    provider: chainDetails ? chainDetails.chainProviders : null,
     network: name,
     chainId,
     nativeCurrency: data.chain?.nativeCurrency,
