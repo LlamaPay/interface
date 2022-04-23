@@ -20,7 +20,7 @@ import { IStream } from 'types';
 import { downloadStreams } from 'utils/downloadCsv';
 import { useAddressStore } from 'store/address';
 
-const table = createTable<{ Row: IStream }>();
+const table = createTable().setRowType<IStream>();
 
 const defaultColumns = table.createColumns([
   table.createDisplayColumn({

@@ -17,7 +17,7 @@ import HistoryActions from './HistoryActions';
 import { downloadHistory } from 'utils/downloadCsv';
 import Tooltip from 'components/Tooltip';
 
-const table = createTable<{ Row: IHistory }>();
+const table = createTable().setRowType<IHistory>();
 
 const defaultColumns = table.createColumns([
   table.createDisplayColumn({
