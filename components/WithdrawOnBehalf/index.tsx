@@ -2,7 +2,7 @@ import { useDialogState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
 import { useNetworkProvider } from 'hooks';
 import { useAccount } from 'wagmi';
-import WithdrawOnBehalfDialog from './withdrawOnBehalfDialog';
+import WithdrawOnBehalfDialog from './WithdrawOnBehalfDialog';
 
 export default function WithdrawOnBehalf() {
   const customDialog = useDialogState();
