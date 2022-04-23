@@ -5,7 +5,7 @@ import React from 'react';
 import { secondsByDuration } from 'utils/constants';
 import { useContractRead, useContractWrite, useProvider } from 'wagmi';
 
-interface CustomWithdrawSubmitProps {
+interface WithdrawOnBehalfSubmitProps {
   contract: string;
   payer: string;
   payee: string;
@@ -13,7 +13,13 @@ interface CustomWithdrawSubmitProps {
   duration: string;
 }
 
-export default function CustomWithdrawSubmit({ contract, payer, payee, amount, duration }: CustomWithdrawSubmitProps) {
+export default function WithdrawOnBehalfSubmit({
+  contract,
+  payer,
+  payee,
+  amount,
+  duration,
+}: WithdrawOnBehalfSubmitProps) {
   const [isError, setisError] = React.useState<boolean>(true);
   const [errorMessage, setErrorMessage] = React.useState<string>('');
   const provider = useProvider();

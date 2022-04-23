@@ -1,8 +1,8 @@
 import React from 'react';
-import CustomWithdrawSubmit from './CustomWithdrawSubmit';
 import useTokenList from 'hooks/useTokenList';
+import WithdrawOnBehalfSubmit from './withdrawOnBehalfSubmit';
 
-export default function CustomWithdrawalDialog() {
+export default function WithdrawOnBehalfDialog() {
   const { data: tokens, isLoading, error } = useTokenList();
   const [contract, setContract] = React.useState<string>('');
   const [payer, setPayer] = React.useState<string>('');
@@ -54,7 +54,7 @@ export default function CustomWithdrawalDialog() {
             </select>
           </div>
         </div>
-        <CustomWithdrawSubmit contract={contract} payer={payer} payee={payee} amount={amount} duration={duration} />
+        <WithdrawOnBehalfSubmit contract={contract} payer={payer} payee={payee} amount={amount} duration={duration} />
       </div>
     </form>
   );

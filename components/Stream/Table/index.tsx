@@ -24,7 +24,7 @@ import { IStream } from 'types';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { downloadStreams } from 'utils/downloadCsv';
 import { useAddressStore } from 'store/address';
-import CustomWithdraw from 'components/CustomWithdraw';
+import CustomWithdraw from 'components/withdrawOnBehalf';
 
 const table = createTable<{ Row: IStream }>();
 

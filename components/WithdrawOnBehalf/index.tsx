@@ -2,9 +2,9 @@ import { useDialogState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
 import { useNetworkProvider } from 'hooks';
 import { useAccount } from 'wagmi';
-import CustomWithdrawalDialog from './CustomWithdrawDialog';
+import WithdrawOnBehalfDialog from './withdrawOnBehalfDialog';
 
-export default function CustomWithdraw() {
+export default function WithdrawOnBehalf() {
   const customDialog = useDialogState();
   const [{ data: accountData }] = useAccount();
   const { unsupported } = useNetworkProvider();
@@ -20,7 +20,7 @@ export default function CustomWithdraw() {
       </button>
       <FormDialog dialog={customDialog} title="Withdraw on Behalf of Another Wallet" className="v-min h-min">
         <div className="space-y-3">
-          <CustomWithdrawalDialog />
+          <WithdrawOnBehalfDialog />
         </div>
       </FormDialog>
     </>
