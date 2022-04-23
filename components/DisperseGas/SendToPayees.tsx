@@ -6,6 +6,7 @@ import PayeeBalance from './PayeeBalance';
 import { useAddressStore } from 'store/address';
 import { formatAddress } from 'utils/address';
 import { DisclosureState } from 'ariakit';
+import { IStream } from 'types';
 
 export default function SendToPayees({ dialog }: { dialog: DisclosureState }) {
   const { data, isLoading, error } = useStreamsAndHistory();
@@ -18,7 +19,7 @@ export default function SendToPayees({ dialog }: { dialog: DisclosureState }) {
     if (data && accountData) {
       const accountAddress = accountData?.address.toLowerCase();
       const newTable: { [key: string]: number } = {};
-      data.streams?.forEach((p) => {
+      data.streams?.forEach((p: IStream) => {
         if (accountAddress === p.payerAddress.toLowerCase()) {
           newTable[p.payeeAddress.toLowerCase()] = 0;
         }
