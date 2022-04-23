@@ -1,6 +1,6 @@
 import React from 'react';
 import useTokenList from 'hooks/useTokenList';
-import WithdrawOnBehalfSubmit from './withdrawOnBehalfSubmit';
+import WithdrawOnBehalfSubmit from './WithdrawOnBehalfSubmit';
 
 export default function WithdrawOnBehalfDialog() {
   const { data: tokens, isLoading, error } = useTokenList();
