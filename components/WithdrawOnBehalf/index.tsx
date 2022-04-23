@@ -24,7 +24,7 @@ export default function WithdrawOnBehalf() {
         className="secondary-button disabled:cursor-not-allowed"
         disabled={accountData && !unsupported ? false : true}
       >
-        Custom Withdraw
+        Withdraw Other Wallet
       </button>
       <FormDialog dialog={customDialog} title="Withdraw on Behalf of Another Wallet" className="v-min h-min">
         <div className="space-y-3">
