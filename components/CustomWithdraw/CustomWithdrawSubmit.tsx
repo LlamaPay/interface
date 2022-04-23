@@ -1,9 +1,9 @@
 import llamaContract from 'abis/llamaContract';
 import { BigNumber } from 'bignumber.js';
+import { ethers } from 'ethers';
 import React from 'react';
-import toast from 'react-hot-toast';
 import { secondsByDuration } from 'utils/constants';
-import { useContractRead, useContractWrite } from 'wagmi';
+import { useContractRead, useContractWrite, useProvider } from 'wagmi';
 
 interface CustomWithdrawSubmitProps {
   contract: string;
@@ -14,7 +14,9 @@ interface CustomWithdrawSubmitProps {
 }
 
 export default function CustomWithdrawSubmit({ contract, payer, payee, amount, duration }: CustomWithdrawSubmitProps) {
-  const [isStream, setIsStream] = React.useState<boolean>(true);
+  const [isError, setisError] = React.useState<boolean>(true);
+  const [errorMessage, setErrorMessage] = React.useState<string>('');
+  const provider = useProvider();
 
   const [{}, getStreamId] = useContractRead(
     {
@@ -36,12 +38,20 @@ export default function CustomWithdrawSubmit({ contract, payer, payee, amount, d
     {
       addressOrName: contract,
       contractInterface: llamaContract,
+      signerOrProvider: provider,
     },
     'withdraw'
   );
 
   function handleWithdraw() {
     let amountPerSec = '';
+
+    if (!ethers.utils.isAddress(payer) || !ethers.utils.isAddress(payee)) {
+      setisError(true);
+      setErrorMessage('Invalid Address');
+      return;
+    }
+
     if (duration === 'month') {
       amountPerSec = new BigNumber(amount * 1e20).div(secondsByDuration.month).toFixed(0);
     } else if (duration === 'year') {
@@ -51,17 +61,18 @@ export default function CustomWithdrawSubmit({ contract, payer, payee, amount, d
     getStreamId({ args: [payer, payee, amountPerSec] }).then((streamId) => {
       streamToStart({ args: [streamId.data] }).then((toStart) => {
         if (toStart.data?.toString() === '0') {
-          setIsStream(false);
-          toast.error('Stream Does Not Exist');
+          setisError(true);
+          setErrorMessage('Stream Does Not Exist');
+          return;
         } else {
-          setIsStream(true);
           withdraw({ args: [payer, payee, amountPerSec] }).then((data) => {
-            const loading = data.error ? toast.error(data.error.message) : toast.loading('Withdrawing');
             data.data?.wait().then((receipt) => {
-              toast.dismiss(loading);
-              receipt.status === 1
-                ? toast.success('Successful Withdrawn Payment')
-                : toast.error('Failed to Withdraw Payment');
+              if (receipt.status === 1) {
+                setisError(false);
+              } else {
+                setisError(true);
+                setErrorMessage('Failed to Send Transaction');
+              }
             });
           });
         }
@@ -70,7 +81,7 @@ export default function CustomWithdrawSubmit({ contract, payer, payee, amount, d
   }
   return (
     <>
-      {isStream ? '' : <p className="text-center text-sm text-red-600">Stream Does Not Exist</p>}
+      {isError ? <p className="text-center text-sm text-red-600">{errorMessage}</p> : ''}
       <button onClick={handleWithdraw} type="button" className="form-submit-button">
         Withdraw
       </button>

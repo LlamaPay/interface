@@ -15,7 +15,7 @@ export default function CustomWithdrawalDialog() {
       <div className="space-y-2">
         <div>
           <label className="input-label">Token:</label>
-          <select className="input-field" onChange={(e) => setContract(e.target.value)}>
+          <select className="input-field" required onChange={(e) => setContract(e.target.value)}>
             {tokens?.map((p) => (
               <option key={p.tokenAddress} value={p.llamaContractAddress}>
                 <p>{`${p.name} (${p.symbol})`}</p>
@@ -25,11 +25,11 @@ export default function CustomWithdrawalDialog() {
         </div>
         <div>
           <label className="input-label">Payer:</label>
-          <input className="input-field" onChange={(e) => setPayer(e.target.value)} />
+          <input className="input-field required" onChange={(e) => setPayer(e.target.value)} />
         </div>
         <div>
           <label className="input-label">Payee:</label>
-          <input className="input-field" onChange={(e) => setPayee(e.target.value)} />
+          <input className="input-field required" onChange={(e) => setPayee(e.target.value)} />
         </div>
         <div>
           <label className="input-label">Streamed Amount:</label>
