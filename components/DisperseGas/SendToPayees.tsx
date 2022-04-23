@@ -192,7 +192,7 @@ export default function SendToPayees({ dialog }: { dialog: DisclosureState }) {
             )}
           </>
         )}
-        <DisperseSend data={toSend} />
+        <DisperseSend dialog={dialog} data={toSend} />
       </div>
     </form>
   );
