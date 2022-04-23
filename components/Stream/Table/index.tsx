@@ -24,7 +24,7 @@ import { IStream } from 'types';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { downloadStreams } from 'utils/downloadCsv';
 import { useAddressStore } from 'store/address';
-import CustomWithdraw from 'components/withdrawOnBehalf';
+import WithdrawOnBehalf from 'components/WithdrawOnBehalf';
 
 const table = createTable<{ Row: IStream }>();
 
@@ -92,7 +92,7 @@ export function StreamTable() {
             <a className="primary-button py-2 px-8 text-sm font-bold">Create Stream</a>
           </Link>
           <DisperseGasMoney />
-          <CustomWithdraw />
+          <WithdrawOnBehalf />
         </div>
       </div>
       {isLoading || error || !streams ? (
