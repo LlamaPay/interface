@@ -68,11 +68,15 @@ export const Modify = ({ data, dialog, title }: ModifyProps) => {
           <section>
             <h2 className="">Current stream: </h2>
             <div className="my-1 rounded border p-2 dark:border-stone-700">
-              <p className="flex items-center space-x-2">
+              <div className="flex items-center space-x-2">
                 <span>You</span>
-                <ArrowRightIcon className="h-4 w-4" />
+                <ArrowRightIcon className="h-4 w-4 " />
                 <span className="truncate">{savedAddressName}</span>
-              </p>
+              </div>
+              <div className="inline-block space-x-2">
+                <span>Payee:</span>
+                <span className="text-sm">{data.payeeAddress}</span>
+              </div>
               <p>
                 <span>Amount / month: </span>
                 {(amountPerSec * secondsByDuration.month).toLocaleString('en-US', {
