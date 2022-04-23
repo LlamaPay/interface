@@ -1,11 +1,14 @@
 import llamaContract from 'abis/llamaContract';
+import { DisclosureState } from 'ariakit';
 import { BigNumber } from 'bignumber.js';
-import { ethers } from 'ethers';
 import React from 'react';
+import toast from 'react-hot-toast';
+import { BeatLoader } from 'react-spinners';
 import { secondsByDuration } from 'utils/constants';
-import { useContractRead, useContractWrite, useProvider } from 'wagmi';
+import { useContractWrite, useProvider } from 'wagmi';
 
 interface WithdrawOnBehalfSubmitProps {
+  dialog: DisclosureState;
   contract: string;
   payer: string;
   payee: string;
@@ -14,33 +17,15 @@ interface WithdrawOnBehalfSubmitProps {
 }
 
 export default function WithdrawOnBehalfSubmit({
+  dialog,
   contract,
   payer,
   payee,
   amount,
   duration,
 }: WithdrawOnBehalfSubmitProps) {
-  const [isError, setisError] = React.useState<boolean>(true);
-  const [errorMessage, setErrorMessage] = React.useState<string>('');
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const provider = useProvider();
-
-  const [{}, getStreamId] = useContractRead(
-    {
-      addressOrName: contract,
-      contractInterface: llamaContract,
-      signerOrProvider: provider,
-    },
-    'getStreamId'
-  );
-
-  const [{}, streamToStart] = useContractRead(
-    {
-      addressOrName: contract,
-      contractInterface: llamaContract,
-      signerOrProvider: provider,
-    },
-    'streamToStart'
-  );
 
   const [{}, withdraw] = useContractWrite(
     {
@@ -52,47 +37,28 @@ export default function WithdrawOnBehalfSubmit({
   );
 
   function handleWithdraw() {
-    setisError(false);
-    if (!ethers.utils.isAddress(payer) || !ethers.utils.isAddress(payee)) {
-      setisError(true);
-      setErrorMessage('Invalid Address');
-      return;
-    }
     let amountPerSec = '';
     if (duration === 'month') {
       amountPerSec = new BigNumber(amount * 1e20).div(secondsByDuration.month).toFixed(0);
     } else if (duration === 'year') {
       amountPerSec = new BigNumber(amount * 1e20).div(secondsByDuration.year).toFixed(0);
     }
-
-    getStreamId({ args: [payer, payee, amountPerSec] }).then((streamId) => {
-      streamToStart({ args: [streamId.data] }).then((toStart) => {
-        if (toStart.data?.toString() === '0') {
-          setisError(true);
-          setErrorMessage('Stream Does Not Exist');
-          return;
-        } else {
-          withdraw({ args: [payer, payee, amountPerSec] }).then((data) => {
-            if (data.error) {
-              setisError(true);
-              setErrorMessage(data.error.message);
-            }
-            data.data?.wait().then((receipt) => {
-              if (receipt.status !== 1) {
-                setisError(true);
-                setErrorMessage('Failed to Send Transaction');
-              }
-            });
-          });
-        }
+    setIsLoading(true);
+    withdraw({ args: [payer, payee, amountPerSec] }).then((data) => {
+      dialog.hide();
+      setIsLoading(false);
+      const loading = data.error ? toast.error(data.error.message) : toast.loading('Sending Funds');
+      data.data?.wait().then((receipt) => {
+        toast.dismiss(loading);
+        receipt.status === 1 ? toast.success('Funds Successfully Sent') : toast.error('Error Sending Funds');
       });
     });
   }
+
   return (
     <>
-      {isError ? <p className="text-center text-sm text-red-600">{errorMessage}</p> : ''}
       <button onClick={handleWithdraw} type="button" className="form-submit-button">
-        Withdraw
+        {isLoading ? <BeatLoader size={6} color="white" /> : 'Withdraw'}
       </button>
     </>
   );
