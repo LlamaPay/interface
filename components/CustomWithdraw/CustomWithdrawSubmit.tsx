@@ -22,6 +22,7 @@ export default function CustomWithdrawSubmit({ contract, payer, payee, amount, d
     {
       addressOrName: contract,
       contractInterface: llamaContract,
+      signerOrProvider: provider,
     },
     'getStreamId'
   );
@@ -30,6 +31,7 @@ export default function CustomWithdrawSubmit({ contract, payer, payee, amount, d
     {
       addressOrName: contract,
       contractInterface: llamaContract,
+      signerOrProvider: provider,
     },
     'streamToStart'
   );

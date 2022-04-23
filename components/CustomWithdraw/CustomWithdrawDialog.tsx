@@ -3,7 +3,7 @@ import CustomWithdrawSubmit from './CustomWithdrawSubmit';
 import useTokenList from 'hooks/useTokenList';
 
 export default function CustomWithdrawalDialog() {
-  const { data: tokens } = useTokenList();
+  const { data: tokens, isLoading, error } = useTokenList();
   const [contract, setContract] = React.useState<string>('');
   const [payer, setPayer] = React.useState<string>('');
   const [payee, setPayee] = React.useState<string>('');
@@ -15,13 +15,22 @@ export default function CustomWithdrawalDialog() {
       <div className="space-y-2">
         <div>
           <label className="input-label">Token:</label>
-          <select className="input-field" required onChange={(e) => setContract(e.target.value)}>
-            {tokens?.map((p) => (
-              <option key={p.tokenAddress} value={p.llamaContractAddress}>
-                <p>{`${p.name} (${p.symbol})`}</p>
+          {isLoading ? (
+            <p>Loading Token List...</p>
+          ) : error ? (
+            <p>Unable to Load Tokens</p>
+          ) : (
+            <select className="input-field" required onChange={(e) => setContract(e.target.value)}>
+              <option value="initOption" selected hidden disabled>
+                Choose Token
               </option>
-            ))}
-          </select>
+              {tokens?.map((p) => (
+                <option key={p.tokenAddress} value={p.llamaContractAddress}>
+                  <p>{`${p.name} (${p.symbol})`}</p>
+                </option>
+              ))}
+            </select>
+          )}
         </div>
         <div>
           <label className="input-label">Payer:</label>
