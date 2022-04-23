@@ -6,10 +6,7 @@ import {
   getPaginationRowModel,
   useTableInstance,
 } from '@tanstack/react-table';
-import Link from 'next/link';
 import Table from 'components/Table';
-import Fallback from 'components/FallbackList';
-import { StreamIcon } from 'components/Icons';
 import {
   TotalStreamed,
   Withdrawable,
@@ -19,9 +16,7 @@ import {
   TokenName,
   StreamAddress,
 } from './CustomValues';
-import DisperseGasMoney from 'components/DisperseGas';
 import { IStream } from 'types';
-import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { downloadStreams } from 'utils/downloadCsv';
 import { useAddressStore } from 'store/address';
 
@@ -69,40 +64,7 @@ const defaultColumns = table.createColumns([
   }),
 ]);
 
-export function StreamTable() {
-  const { data, isLoading, error } = useStreamsAndHistory();
-
-  const streams = React.useMemo(() => {
-    if (!data?.streams || data.streams?.length < 1) return false;
-
-    return data.streams;
-  }, [data]);
-
-  return (
-    <section className="w-full">
-      <div className="section-header flex w-full flex-wrap items-center justify-between gap-[0.625rem]">
-        <span className="flex items-center gap-[0.625rem]">
-          <StreamIcon />
-          <h1 className="font-exo">Streams</h1>
-        </span>
-
-        <div className="flex flex-wrap gap-[0.625rem]">
-          <Link href="/create">
-            <a className="primary-button py-2 px-8 text-sm font-bold">Create Stream</a>
-          </Link>
-          <DisperseGasMoney />
-        </div>
-      </div>
-      {isLoading || error || !streams ? (
-        <Fallback isLoading={isLoading} isError={error ? true : false} noData={true} type="streams" />
-      ) : (
-        <NewTable data={streams} />
-      )}
-    </section>
-  );
-}
-
-function NewTable({ data }: { data: IStream[] }) {
+export function StreamTable({ data }: { data: IStream[] }) {
   const [columns] = React.useState<typeof defaultColumns>(() => [...defaultColumns]);
 
   const [globalFilter, setGlobalFilter] = React.useState('');

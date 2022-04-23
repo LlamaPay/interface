@@ -8,15 +8,12 @@ import {
   PaginationState,
 } from '@tanstack/react-table';
 import Table from 'components/Table';
-import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { IHistory } from 'types';
 import { secondsByDuration } from 'utils/constants';
 import { formatAddress } from 'utils/address';
 import { formatAmountInTable } from 'utils/amount';
 import ActionName from './ActionName';
 import HistoryActions from './HistoryActions';
-import Fallback from 'components/FallbackList';
-import { HistoryIcon } from 'components/Icons';
 import { downloadHistory } from 'utils/downloadCsv';
 import Tooltip from 'components/Tooltip';
 
@@ -62,32 +59,7 @@ const defaultColumns = table.createColumns([
   }),
 ]);
 
-export function HistoryTable() {
-  const { data, isLoading, error } = useStreamsAndHistory();
-
-  const history = React.useMemo(() => {
-    if (!data?.history || data.history?.length < 1) return false;
-
-    return data.history;
-  }, [data]);
-
-  return (
-    <section className="w-full">
-      <span className="section-header flex items-center gap-[0.625rem]">
-        <HistoryIcon />
-        <h1 className="font-exo">History</h1>
-      </span>
-
-      {isLoading || error || !history ? (
-        <Fallback isLoading={isLoading} isError={error ? true : false} noData={true} type="history" />
-      ) : (
-        <NewTable data={data.history || []} />
-      )}
-    </section>
-  );
-}
-
-function NewTable({ data }: { data: IHistory[] }) {
+export function HistoryTable({ data }: { data: IHistory[] }) {
   const [columns] = React.useState<typeof defaultColumns>(() => [...defaultColumns]);
 
   const [globalFilter, setGlobalFilter] = React.useState('');

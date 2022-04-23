@@ -1,6 +1,6 @@
-export function StreamCircle() {
+export function StreamCircle({ width = '164', height = '164' }: { width?: string; height?: string }) {
   return (
-    <svg width="164" height="164" viewBox="0 0 164 164" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <svg width={width} height={height} viewBox="0 0 164 164" fill="none" xmlns="http://www.w3.org/2000/svg">
       <path
         fillRule="evenodd"
         clipRule="evenodd"
