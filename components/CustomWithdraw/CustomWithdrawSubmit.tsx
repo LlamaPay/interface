@@ -1,6 +1,6 @@
 import llamaContract from 'abis/llamaContract';
 import { BigNumber } from 'bignumber.js';
-import CustomToast from 'components/CustomToast';
+import React from 'react';
 import toast from 'react-hot-toast';
 import { secondsByDuration } from 'utils/constants';
 import { useContractRead, useContractWrite } from 'wagmi';
@@ -14,6 +14,8 @@ interface CustomWithdrawSubmitProps {
 }
 
 export default function CustomWithdrawSubmit({ contract, payer, payee, amount, duration }: CustomWithdrawSubmitProps) {
+  const [isStream, setIsStream] = React.useState<boolean>(true);
+
   const [{}, getStreamId] = useContractRead(
     {
       addressOrName: contract,
@@ -49,8 +51,10 @@ export default function CustomWithdrawSubmit({ contract, payer, payee, amount, d
     getStreamId({ args: [payer, payee, amountPerSec] }).then((streamId) => {
       streamToStart({ args: [streamId.data] }).then((toStart) => {
         if (toStart.data?.toString() === '0') {
+          setIsStream(false);
           toast.error('Stream Does Not Exist');
         } else {
+          setIsStream(true);
           withdraw({ args: [payer, payee, amountPerSec] }).then((data) => {
             const loading = data.error ? toast.error(data.error.message) : toast.loading('Withdrawing');
             data.data?.wait().then((receipt) => {
@@ -66,6 +70,7 @@ export default function CustomWithdrawSubmit({ contract, payer, payee, amount, d
   }
   return (
     <>
+      {isStream ? '' : <p className="text-center text-sm text-red-600">Stream Does Not Exist</p>}
       <button onClick={handleWithdraw} type="button" className="form-submit-button">
         Withdraw
       </button>
