@@ -44,14 +44,13 @@ export default function CustomWithdrawSubmit({ contract, payer, payee, amount, d
   );
 
   function handleWithdraw() {
-    let amountPerSec = '';
-
+    setisError(false);
     if (!ethers.utils.isAddress(payer) || !ethers.utils.isAddress(payee)) {
       setisError(true);
       setErrorMessage('Invalid Address');
       return;
     }
-
+    let amountPerSec = '';
     if (duration === 'month') {
       amountPerSec = new BigNumber(amount * 1e20).div(secondsByDuration.month).toFixed(0);
     } else if (duration === 'year') {
@@ -66,10 +65,12 @@ export default function CustomWithdrawSubmit({ contract, payer, payee, amount, d
           return;
         } else {
           withdraw({ args: [payer, payee, amountPerSec] }).then((data) => {
+            if (data.error) {
+              setisError(true);
+              setErrorMessage(data.error.message);
+            }
             data.data?.wait().then((receipt) => {
-              if (receipt.status === 1) {
-                setisError(false);
-              } else {
+              if (receipt.status !== 1) {
                 setisError(true);
                 setErrorMessage('Failed to Send Transaction');
               }
