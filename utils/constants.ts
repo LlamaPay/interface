@@ -1,8 +1,5 @@
 import { ethers, providers } from 'ethers';
 import { Chain, allChains } from 'wagmi';
-import ethereumLogo from 'public/chains/ethereum.png';
-import avaxLogo from 'public/chains/avalanche.png';
-import { StaticImageData } from 'next/image';
 
 export const FACTORY_RINKEBY = '0xEDF04002c8bDab6AdC2BD738F4e84953bb38c481';
 export const FACTORY_KOVAN = '0x7AaCc52c41DA1Ac634f1e0F1dbefFB593Bc64503';
@@ -23,7 +20,7 @@ interface INetworkDetails {
     blockExplorerURL: string;
     blockExplorerName: string;
     prefix: string;
-    logoURI: StaticImageData;
+    logoURI: string;
   };
 }
 
@@ -49,7 +46,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerURL: 'https://rinkeby.etherscan.io/',
     blockExplorerName: 'Etherscan',
     prefix: 'ethereum',
-    logoURI: ethereumLogo,
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
   },
   42: {
     rpcUrl: `https://kovan.infura.io/v3/${infuraId}`,
@@ -64,7 +61,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerURL: 'https://kovan.etherscan.io/',
     blockExplorerName: 'Etherscan',
     prefix: 'ethereum',
-    logoURI: ethereumLogo,
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
   },
   43113: {
     rpcUrl: 'https://api.avax-test.network/ext/bc/C/rpc',
@@ -75,7 +72,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerURL: 'https://testnet.snowtrace.io/',
     blockExplorerName: 'Snowtrace',
     prefix: 'avax',
-    logoURI: avaxLogo,
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchex/info/logo.png',
   },
   43114: {
     rpcUrl: 'https://api.avax.network/ext/bc/C/rpc',
@@ -86,7 +83,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerURL: 'https://snowtrace.io/',
     blockExplorerName: 'Snowtrace',
     prefix: 'avax',
-    logoURI: avaxLogo,
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchex/info/logo.png',
   },
 };
 
