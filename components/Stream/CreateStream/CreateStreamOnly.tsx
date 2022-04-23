@@ -1,66 +1,15 @@
 import * as React from 'react';
-import BigNumber from 'bignumber.js';
 import { InputAmountWithDuration, InputText, SelectToken, SubmitButton } from 'components/Form';
-import useStreamToken from 'queries/useStreamToken';
-import { IStreamFormProps, IFormElements } from './types';
-import { secondsByDuration } from 'utils/constants';
+import { IStreamFormProps } from './types';
 import { BeatLoader } from 'react-spinners';
 import { TransactionDialog } from 'components/Dialog';
+import { useCreateStreamForm } from 'hooks';
 
 const CreateStreamOnly = ({ tokens, dialog }: IStreamFormProps) => {
-  const { mutate: streamToken, isLoading, data: transaction } = useStreamToken();
-
-  // store address of the token to stream as ariakit/select is a controlled component
-  const [tokenAddress, setTokenAddress] = React.useState(tokens[0]?.tokenAddress ?? '');
-
-  const handleTokenChange = (token: string) => {
-    // find the prop in tokens list, prop is the one used to format in tokenOptions above
-    const data = tokens?.find((t) => t.name === token);
-
-    if (data) {
-      setTokenAddress(data.tokenAddress);
-    } else setTokenAddress(token);
-  };
-
-  // create stream on submit
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-
-    const form = e.target as typeof e.target & IFormElements;
-    const amountToStream = form.amountToStream.value;
-    const streamDuration = form.streamDuration?.value;
-    const payeeAddress = form.addressToStream.value;
-
-    const duration = streamDuration === 'year' ? 'year' : 'month';
-
-    if (tokenAddress !== '' && payeeAddress) {
-      // check if token exist in all tokens list
-      const tokenDetails = tokens.find((t) => t.tokenAddress === tokenAddress) ?? null;
-
-      if (tokenDetails) {
-        // format amount to bignumber
-        // convert amt to seconds
-        const amtPerSec = new BigNumber(amountToStream).times(1e20).div(secondsByDuration[duration]);
-
-        // query mutation
-        streamToken(
-          {
-            method: 'CREATE_STREAM',
-            amountPerSec: amtPerSec.toFixed(0),
-            payeeAddress: payeeAddress,
-            llamaContractAddress: tokenDetails?.llamaContractAddress,
-          },
-          {
-            onSuccess: () => {
-              dialog.toggle();
-            },
-          }
-        );
-      }
-    }
-  };
-
-  const tokenOptions = tokens.map((t) => t.tokenAddress);
+  const { tokenOptions, handleTokenChange, handleSubmit, transactionDetails, confirmingStream } = useCreateStreamForm({
+    tokens,
+    dialog,
+  });
 
   return (
     <>
@@ -82,11 +31,11 @@ const CreateStreamOnly = ({ tokens, dialog }: IStreamFormProps) => {
           selectInputName="streamDuration"
         />
 
-        <SubmitButton disabled={isLoading}>
-          {isLoading ? <BeatLoader size={6} color="white" /> : 'Create Stream'}
+        <SubmitButton disabled={confirmingStream}>
+          {confirmingStream ? <BeatLoader size={6} color="white" /> : 'Create Stream'}
         </SubmitButton>
       </form>
-      <TransactionDialog dialog={dialog} transactionHash={transaction?.hash ?? ''} />
+      <TransactionDialog dialog={dialog} transactionHash={transactionDetails?.hash ?? ''} />
     </>
   );
 };

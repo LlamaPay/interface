@@ -1,7 +1,7 @@
 const ErrorBoundary = ({ message }: { message: string }) => {
   return (
-    <div className="rounded border p-2 dark:border-zinc-800">
-      <p className="mx-2 my-4 text-center text-sm text-red-500">{message}</p>
+    <div className="flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
+      <p>{message}</p>
     </div>
   );
 };

@@ -67,7 +67,7 @@ const Balance = () => {
           </span>
 
           <button
-            className="primary-button disabled:cursor-not-allowed"
+            className="primary-button"
             disabled={showFallback}
             onClick={() => {
               depositFieldDialog.toggle();

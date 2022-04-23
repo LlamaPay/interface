@@ -6,6 +6,7 @@ import { useAccount, useConnect } from 'wagmi';
 import { Coins } from 'components/Icons';
 import ConnectWallet from './ConnectWallet';
 import DepositField from './DepostField';
+import CreateStreamField from './CreateStreamField';
 
 interface IOnboardProps {
   dialog: DisclosureState;
@@ -17,9 +18,11 @@ export function OnboardDialog({ dialog, className }: IOnboardProps) {
 
   const [{ data: accountData, loading: accountDataLoading }] = useAccount();
 
+  const [showCreateStream, setCreateStream] = React.useState(false);
+
   const mainHeader = () => {
     if (accountData) {
-      return 'Deposit Token';
+      return showCreateStream ? 'Create a new Stream' : 'Deposit Token';
     } else if (connecting || accountDataLoading) {
       return 'Initializing';
     } else {
@@ -51,6 +54,10 @@ export function OnboardDialog({ dialog, className }: IOnboardProps) {
       </>
     );
   };
+
+  if (!dialog.mounted && showCreateStream) {
+    setCreateStream(false);
+  }
 
   return (
     <Dialog
@@ -108,7 +115,17 @@ export function OnboardDialog({ dialog, className }: IOnboardProps) {
           </button>
         </header>
 
-        {accountData ? <DepositField userAddress={accountData.address} /> : <ConnectWallet />}
+        {accountData ? (
+          <>
+            {showCreateStream ? (
+              <CreateStreamField setCreateStream={setCreateStream} />
+            ) : (
+              <DepositField userAddress={accountData.address} setCreateStream={setCreateStream} />
+            )}
+          </>
+        ) : (
+          <ConnectWallet />
+        )}
       </section>
     </Dialog>
   );

@@ -5,6 +5,7 @@ import { CreateStream } from 'components/Stream';
 import { useAccount } from 'wagmi';
 import { useNetworkProvider } from 'hooks';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
+import { StreamIcon } from 'components/Icons';
 
 const Create: NextPage = () => {
   const [{ data: accountData }] = useAccount();
@@ -15,10 +16,22 @@ const Create: NextPage = () => {
 
   return (
     <Layout className="mx-auto mt-12 flex w-full flex-col items-center space-y-6">
-      {!accountData ? (
-        <p className="mx-auto mt-8 text-red-500">Connect wallet to continue</p>
-      ) : unsupported ? (
-        <p className="mx-auto mt-8 text-red-500">Chain not supported</p>
+      {!accountData || unsupported ? (
+        <section className="z-2 flex w-full max-w-lg flex-col">
+          <h1 className="font-exo mb-5 flex items-center gap-[0.625rem] text-2xl font-semibold text-[#3D3D3D]">
+            <StreamIcon />
+            <span>Create a New Stream</span>
+          </h1>
+          <div className="flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
+            <p>
+              {!accountData
+                ? 'Connect wallet to Create a New Stream'
+                : unsupported
+                ? 'Chain not supported'
+                : 'Something went wrong'}
+            </p>
+          </div>
+        </section>
       ) : (
         <CreateStream />
       )}
