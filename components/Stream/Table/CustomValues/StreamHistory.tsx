@@ -20,8 +20,8 @@ export const StreamHistory = ({ data, dialog, title }: StreamHistoryProps) => {
           <table className=" w-full border-collapse">
             <thead>
               <tr>
-                <th className="text-sm">Event Type</th>
-                <th className="text-sm">Timestamp</th>
+                <th className="px-3 text-left text-sm">Event Type</th>
+                <th className="px-3 text-left text-sm">Timestamp</th>
               </tr>
             </thead>
             <tbody>

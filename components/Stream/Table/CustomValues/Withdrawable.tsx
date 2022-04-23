@@ -41,7 +41,9 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
     return (
       <div className="flex space-x-1">
         <Tooltip content={balanceState && price && `${(balanceState * Number(price)).toFixed(2)} USD`}>
-          <span className="text-red-600">{balanceState && `${formatBalance(balanceState)}`}</span>
+          <span className="slashed-zero tabular-nums text-red-600">
+            {balanceState && `${formatBalance(balanceState)}`}
+          </span>
         </Tooltip>
         <Tooltip content="Out of Funds">
           <ExclamationCircleIcon className="h-5 w-5 text-red-600" />
