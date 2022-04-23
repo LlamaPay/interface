@@ -1,11 +1,7 @@
 import * as React from 'react';
-import { getAddress } from 'ethers/lib/utils';
-import { useGraphEndpoint, useNetworkProvider } from 'hooks';
+import { useFormatStreamAndHistory, useGraphEndpoint, useNetworkProvider } from 'hooks';
 import { useStreamAndHistoryQuery } from 'services/generated/graphql';
-import { createContract } from 'utils/contract';
-import { createERC20Contract } from 'utils/tokenUtils';
 import { useAccount } from 'wagmi';
-import { IStreamAndHistory } from 'types';
 
 const useStreamsAndHistory = () => {
   const [{ data: accountData }] = useAccount();
@@ -27,59 +23,7 @@ const useStreamsAndHistory = () => {
     }
   );
 
-  const formattedData: IStreamAndHistory = React.useMemo(() => {
-    if (provider && data) {
-      const streams = data?.user?.streams ?? [];
-      const history = data?.user?.historicalEvents ?? [];
-
-      let incomingStream = 0;
-      let outgoingStream = 0;
-
-      const formattedStreams = streams.map((s) => {
-        const streamType: 'outgoingStream' | 'incomingStream' =
-          s.payer.id?.toLowerCase() === accountData?.address.toLowerCase() ? 'outgoingStream' : 'incomingStream';
-
-        if (streamType === 'incomingStream') incomingStream++;
-        if (streamType === 'outgoingStream') outgoingStream++;
-
-        return {
-          llamaContractAddress: s.contract.address,
-          amountPerSec: s.amountPerSec,
-          createdTimestamp: s.createdTimestamp,
-          payerAddress: s.payer.id,
-          payeeAddress: s.payee.id,
-          streamId: s.streamId,
-          streamType,
-          token: s.token,
-          tokenName: s.token.name,
-          tokenSymbol: s.token.symbol,
-          tokenContract: createERC20Contract({ tokenAddress: getAddress(s.token.address), provider }),
-          llamaTokenContract: createContract(getAddress(s.contract.address), provider),
-          historicalEvents: s.historicalEvents,
-        };
-      });
-
-      const formattedHistory = history.map((h) => {
-        const addressType: 'payer' | 'payee' =
-          h.stream?.payer?.id?.toLowerCase() === accountData?.address.toLowerCase() ? 'payer' : 'payee';
-
-        const addressRelated = addressType === 'payer' ? h.stream?.payee?.id ?? null : h.stream?.payer?.id ?? null;
-
-        return {
-          ...h,
-          amountPerSec: h.stream?.amountPerSec ?? null,
-          addressRelated,
-          addressType,
-        };
-      });
-
-      return {
-        streams: formattedStreams.length > 0 ? formattedStreams : null,
-        history: formattedHistory.length > 0 ? formattedHistory : null,
-        hasBothStreamTypes: incomingStream > 0 && outgoingStream > 0,
-      };
-    } else return { streams: null, history: null, hasBothStreamTypes: false };
-  }, [data, provider, accountData]);
+  const formattedData = useFormatStreamAndHistory({ data, address: accountData?.address, provider });
 
   return React.useMemo(() => ({ data: formattedData, isLoading, error }), [formattedData, isLoading, error]);
 };

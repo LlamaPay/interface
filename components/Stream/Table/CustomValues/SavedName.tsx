@@ -6,12 +6,16 @@ import Tooltip from 'components/Tooltip';
 import { useAddressStore } from 'store/address';
 import { IStream } from 'types';
 import { formatAddress } from 'utils/address';
+import Link from 'next/link';
+import { useNetworkProvider } from 'hooks';
 
 export function SavedName({ data }: { data: IStream }) {
   // check the stream type (incoming or outgoing)
   const isIncoming = data.streamType === 'incomingStream';
 
   const address = isIncoming ? data.payerAddress : data.payeeAddress;
+
+  const { chainId } = useNetworkProvider();
 
   const dialog = useDialogState();
 
@@ -34,27 +38,29 @@ export function SavedName({ data }: { data: IStream }) {
 
   return (
     <div className="flex items-center gap-2 truncate">
-      {isIncoming ? (
-        <>
-          <Tooltip content="Incoming stream">
-            <div className="rounded bg-green-100 p-1 text-green-600">
-              <span className="sr-only">Incoming stream from</span>
-              <ArrowDownIcon className="h-4 w-4" />
-            </div>
-          </Tooltip>
-          <span>{name}</span>
-        </>
-      ) : (
-        <>
-          <Tooltip content="Outgoing stream">
-            <div className="rounded bg-red-100 p-1 text-red-600">
-              <span className="sr-only">Outgoing stream to</span>
-              <ArrowUpIcon className="h-4 w-4" />
-            </div>
-          </Tooltip>
-          <span>{name}</span>
-        </>
-      )}
+      <Link href={`/streams?chainId=${chainId}&address=${data.payeeAddress}`} passHref>
+        {isIncoming ? (
+          <a className="flex cursor-pointer items-center gap-2 truncate">
+            <Tooltip content="Incoming stream">
+              <div className="rounded bg-green-100 p-1 text-green-600">
+                <span className="sr-only">Incoming stream from</span>
+                <ArrowDownIcon className="h-4 w-4" />
+              </div>
+            </Tooltip>
+            <span>{name}</span>
+          </a>
+        ) : (
+          <a className="flex cursor-pointer items-center gap-2 truncate">
+            <Tooltip content="Outgoing stream">
+              <div className="rounded bg-red-100 p-1 text-red-600">
+                <span className="sr-only">Outgoing stream to</span>
+                <ArrowUpIcon className="h-4 w-4" />
+              </div>
+            </Tooltip>
+            <span>{name}</span>
+          </a>
+        )}
+      </Link>
       <button className="ml-auto rounded p-1 hover:bg-zinc-200 hover:dark:bg-stone-700" onClick={dialog.toggle}>
         <span className="sr-only">Edit payee address name</span>
         <PencilIcon className="h-4 w-4" />

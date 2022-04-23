@@ -37,7 +37,7 @@ function Token({ value, shortName, showBalance }: { value: string; shortName?: b
       <div className="flex items-center space-x-2 overflow-x-hidden">
         <div className="flex h-7 w-7 flex-shrink-0 items-center rounded-full">
           {data ? (
-            <Image src={data.logoURI} alt={'Logo of token' + data.name} width="24px" height="24px" />
+            <Image src={data.logoURI} alt={'Logo of token ' + data.name} width="24px" height="24px" />
           ) : (
             <Image src={defaultImage} width="24px" height="24px" alt="Placeholder Image" />
           )}
