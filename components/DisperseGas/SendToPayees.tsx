@@ -111,20 +111,20 @@ export default function SendToPayees({ dialog }: { dialog: DisclosureState }) {
                 setAmount(Number(e.target.value));
               }}
               name="amount"
-              className="w-48"
+              className="input-field w-48"
               placeholder="0.0"
               min="0"
             />
           </label>
-          <button onClick={onSplitEqually} type="button" className=" w-24 rounded-3xl bg-zinc-100  px-1 py-1 text-sm">
+          <button onClick={onSplitEqually} type="button" className=" w-24 rounded-3xl bg-white  px-1 py-1 text-sm">
             Split Equally
           </button>
         </div>
         <div className="flex w-48 space-x-2">
-          <button onClick={onSelectAll} type="button" className=" w-full rounded-3xl bg-zinc-100 px-1 py-1 text-sm">
+          <button onClick={onSelectAll} type="button" className=" w-full rounded-3xl bg-white px-1 py-1 text-sm">
             Select All
           </button>
-          <button onClick={onUnselectAll} type="button" className=" w-full rounded-3xl bg-zinc-100  px-1 py-1 text-sm">
+          <button onClick={onUnselectAll} type="button" className=" w-full rounded-3xl bg-white  px-1 py-1 text-sm">
             Unselect All
           </button>
         </div>
@@ -171,7 +171,7 @@ export default function SendToPayees({ dialog }: { dialog: DisclosureState }) {
                           </td>
                           <td className="text-md w-32 text-center">
                             <input
-                              className="w-32"
+                              className="input-field w-32"
                               autoComplete="off"
                               type="number"
                               min="0"
