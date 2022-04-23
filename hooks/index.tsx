@@ -5,3 +5,4 @@ export { useNetworkProvider } from './useNetworkProvider';
 export { useBalances } from './useBalances';
 export { useDepositForm } from './useDepositForm';
 export { useCreateStreamForm } from './useCreateStreamForm';
+export { useFormatStreamAndHistory } from './useFormatStreamAndHistory';

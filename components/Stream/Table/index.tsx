@@ -3,7 +3,6 @@ import {
   createTable,
   getCoreRowModelSync,
   getGlobalFilteredRowModelSync,
-  getPaginationRowModel,
   useTableInstance,
 } from '@tanstack/react-table';
 import Table from 'components/Table';
@@ -20,9 +19,48 @@ import { IStream } from 'types';
 import { downloadStreams } from 'utils/downloadCsv';
 import { useAddressStore } from 'store/address';
 
+const defaultTable = createTable().setRowType<IStream>();
+
+const defaultTableColumns = defaultTable.createColumns([
+  defaultTable.createDisplayColumn({
+    id: 'userName',
+    header: 'Name',
+    cell: ({ cell }) => cell.row.original && <SavedName data={cell.row.original} />,
+  }),
+  defaultTable.createDisplayColumn({
+    id: 'address',
+    header: 'Address',
+    cell: ({ cell }) => cell.row.original && <StreamAddress data={cell.row.original} />,
+  }),
+  defaultTable.createDataColumn('tokenSymbol', {
+    header: 'Token',
+    cell: ({ cell }) => cell.row.original && <TokenName data={cell.row.original} />,
+  }),
+  defaultTable.createDisplayColumn({
+    id: 'amountPerSec',
+    header: () => (
+      <>
+        <span>Amount</span>
+        <small className="mx-1 text-xs font-normal text-gray-500 dark:text-gray-400">per month</small>
+      </>
+    ),
+    cell: ({ cell }) => cell.row.original && <AmtPerMonth data={cell.row.original} />,
+  }),
+  defaultTable.createDisplayColumn({
+    id: 'totalStreamed',
+    header: 'Total Streamed',
+    cell: ({ cell }) => cell.row.original && <TotalStreamed data={cell.row.original} />,
+  }),
+  defaultTable.createDisplayColumn({
+    id: 'userWithdrawable',
+    header: 'Withdrawable',
+    cell: ({ cell }) => cell.row.original && <Withdrawable data={cell.row.original} />,
+  }),
+]);
+
 const table = createTable().setRowType<IStream>();
 
-const defaultColumns = table.createColumns([
+const streamTableColumns = table.createColumns([
   table.createDisplayColumn({
     id: 'userName',
     header: 'Name',
@@ -65,7 +103,7 @@ const defaultColumns = table.createColumns([
 ]);
 
 export function StreamTable({ data }: { data: IStream[] }) {
-  const [columns] = React.useState<typeof defaultColumns>(() => [...defaultColumns]);
+  const [columns] = React.useState<typeof streamTableColumns>(() => [...streamTableColumns]);
 
   const [globalFilter, setGlobalFilter] = React.useState('');
   const addressStore = useAddressStore();
@@ -79,7 +117,6 @@ export function StreamTable({ data }: { data: IStream[] }) {
     onGlobalFilterChange: setGlobalFilter,
     getCoreRowModel: getCoreRowModelSync(),
     getGlobalFilteredRowModel: getGlobalFilteredRowModelSync(),
-    getPaginationRowModel: getPaginationRowModel(),
   });
 
   const downloadToCSV = React.useCallback(() => {
@@ -100,4 +137,23 @@ export function StreamTable({ data }: { data: IStream[] }) {
       <Table instance={instance} hidePagination={true} downloadToCSV={downloadToCSV} />
     </>
   );
+}
+
+export function DefaultStreamTable({ data }: { data: IStream[] }) {
+  const [columns] = React.useState<typeof defaultTableColumns>(() => [...defaultTableColumns]);
+
+  const [globalFilter, setGlobalFilter] = React.useState('');
+
+  const instance = useTableInstance(defaultTable, {
+    data,
+    columns,
+    state: {
+      globalFilter,
+    },
+    onGlobalFilterChange: setGlobalFilter,
+    getCoreRowModel: getCoreRowModelSync(),
+    getGlobalFilteredRowModel: getGlobalFilteredRowModelSync(),
+  });
+
+  return <Table instance={instance} hidePagination={true} />;
 }

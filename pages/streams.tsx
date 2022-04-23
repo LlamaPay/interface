@@ -11,6 +11,7 @@ import Image, { StaticImageData } from 'next/image';
 import { getAddress } from 'ethers/lib/utils';
 import { AltStreamSection } from 'components/Stream';
 import { AltHistorySection } from 'components/History';
+import { useFormatStreamAndHistory, useNetworkProvider } from 'hooks';
 
 interface StreamsProps {
   subgraphEndpoint: string;
@@ -32,6 +33,10 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, network, l
       refetchInterval: 10000,
     }
   );
+
+  const { provider } = useNetworkProvider();
+
+  const streamsAndHistory = useFormatStreamAndHistory({ data, address, provider });
 
   return (
     <Layout className="mx-auto mt-12 flex w-full flex-col gap-10">
@@ -58,8 +63,8 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, network, l
           </div>
         )}
       </section>
-      <AltStreamSection isLoading={isLoading} isError={isError} data={data} />
-      <AltHistorySection isLoading={isLoading} isError={isError} data={data} />
+      <AltStreamSection isLoading={isLoading} isError={isError} data={streamsAndHistory} />
+      <AltHistorySection isLoading={isLoading} isError={isError} data={streamsAndHistory} />
     </Layout>
   );
 };
