@@ -32,7 +32,7 @@ export const CreateStream = () => {
         <Placeholder />
       ) : error ? (
         <ErrorBoundary message="Something went wrong" />
-      ) : !noBalances ? (
+      ) : noBalances ? (
         <DepositAndCreate tokens={tokens} userAddress={accountData?.address ?? ''} dialog={transactionDialog} />
       ) : (
         <CreateStreamOnly tokens={tokens} userAddress={accountData?.address ?? ''} dialog={transactionDialog} />
