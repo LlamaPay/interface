@@ -1,11 +1,9 @@
 import { networkDetails, defaultSubgraphEndpoint } from 'utils/constants';
-import { useNetwork } from 'wagmi';
+import { useNetworkProvider } from './useNetworkProvider';
 
 export const useGraphEndpoint = () => {
   // get users network
-  const [{ data }] = useNetwork();
-
-  const chainId: number | null = data?.chain?.id ?? null;
+  const { chainId } = useNetworkProvider();
 
   return chainId ? networkDetails[chainId]?.subgraphEndpoint : defaultSubgraphEndpoint;
 };

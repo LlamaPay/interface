@@ -18,7 +18,7 @@ export default function AvailableAmount({
         <div className="flex h-[14px] w-[14px] flex-shrink-0 items-center rounded-full">
           <Image
             src={selectedToken?.logoURI ?? defaultImage}
-            alt={selectedToken ? 'Logo of token' + selectedToken.name : 'Fallback'}
+            alt={selectedToken ? 'Logo of token ' + selectedToken.name : 'Fallback'}
             width="14px"
             height="14px"
           />

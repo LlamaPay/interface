@@ -20,6 +20,7 @@ interface INetworkDetails {
     blockExplorerURL: string;
     blockExplorerName: string;
     prefix: string;
+    logoURI: string;
   };
 }
 
@@ -45,9 +46,10 @@ export const networkDetails: INetworkDetails = {
     blockExplorerURL: 'https://rinkeby.etherscan.io/',
     blockExplorerName: 'Etherscan',
     prefix: 'ethereum',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
   },
   42: {
-    rpcUrl: `https://rinkeby.infura.io/v3/${infuraId}`,
+    rpcUrl: `https://kovan.infura.io/v3/${infuraId}`,
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-kovan',
     chainProviders: providers.getDefaultProvider(42, {
       alchemy: alchemyId,
@@ -59,6 +61,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerURL: 'https://kovan.etherscan.io/',
     blockExplorerName: 'Etherscan',
     prefix: 'ethereum',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
   },
   43113: {
     rpcUrl: 'https://api.avax-test.network/ext/bc/C/rpc',
@@ -69,6 +72,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerURL: 'https://testnet.snowtrace.io/',
     blockExplorerName: 'Snowtrace',
     prefix: 'avax',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchex/info/logo.png',
   },
   43114: {
     rpcUrl: 'https://api.avax.network/ext/bc/C/rpc',
@@ -79,6 +83,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerURL: 'https://snowtrace.io/',
     blockExplorerName: 'Snowtrace',
     prefix: 'avax',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchex/info/logo.png',
   },
 };
 

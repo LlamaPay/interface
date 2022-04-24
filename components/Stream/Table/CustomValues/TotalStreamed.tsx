@@ -25,5 +25,4 @@ export const TotalStreamed = ({ data }: { data: IStream }) => {
       </Tooltip>
     </div>
   );
-  // return ;
 };

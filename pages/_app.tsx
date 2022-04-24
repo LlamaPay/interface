@@ -5,7 +5,7 @@ import 'styles/globals.css';
 
 import type { AppProps } from 'next/app';
 import * as React from 'react';
-import { QueryClient, QueryClientProvider } from 'react-query';
+import { QueryClient, QueryClientProvider, Hydrate } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { WalletProvider } from 'components/Web3';
 
@@ -15,8 +15,10 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <WalletProvider>
       <QueryClientProvider client={queryClient}>
-        <Component {...pageProps} />
-        <ReactQueryDevtools initialIsOpen={false} />
+        <Hydrate state={pageProps.dehydratedState}>
+          <Component {...pageProps} />
+          <ReactQueryDevtools initialIsOpen={false} />
+        </Hydrate>
       </QueryClientProvider>
     </WalletProvider>
   );

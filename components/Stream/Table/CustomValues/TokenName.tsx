@@ -1,15 +1,15 @@
 import * as React from 'react';
 import { useChainExplorer } from 'hooks';
 import Image from 'next/image';
-import { IStream } from 'types';
 import defaultImage from 'public/empty-token.webp';
-import useTokenBalances from 'queries/useTokenBalances';
+import useTokenList from 'hooks/useTokenList';
+import { IStream } from 'types';
 
 export function TokenName({ data }: { data: IStream }) {
   // function that returns chain explorer url based on the chain user is connected to
   const { url: chainExplorer } = useChainExplorer();
 
-  const { data: tokens } = useTokenBalances();
+  const { data: tokens } = useTokenList();
 
   const token = React.useMemo(() => {
     return tokens ? tokens.find((t) => t.tokenAddress.toLowerCase() === data.token.address.toLowerCase()) : null;

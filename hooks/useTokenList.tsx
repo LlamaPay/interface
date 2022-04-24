@@ -10,11 +10,12 @@ export default function useTokenList() {
   const { data: tokens, isLoading, error } = useGetAllTokens();
 
   const data: ITokenLists[] | null = React.useMemo(() => {
-    if (chainId && tokens) {
-      const verifiedLists = tokenLists.find((l) => l.chainId === chainId)?.list ?? [];
+    if (tokens) {
+      const verifiedLists = tokenLists.find((l) => l.chainId.toString() === chainId?.toString())?.list ?? [];
 
       return tokens.map((token) => {
-        const verifiedToken = verifiedLists.find((t) => t.address === token.tokenAddress);
+        const verifiedToken = verifiedLists.find((t) => t.address.toLowerCase() === token.tokenAddress.toLowerCase());
+
         return {
           ...token,
           logoURI:

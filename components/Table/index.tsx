@@ -4,7 +4,7 @@ import { TableInstance } from '@tanstack/react-table';
 interface ITableProps {
   instance: TableInstance<any>;
   hidePagination?: boolean;
-  downloadToCSV: () => void;
+  downloadToCSV?: () => void;
 }
 
 const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
@@ -71,9 +71,11 @@ const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
         <div className="h-2" />
         <div className="flex w-full flex-col gap-2 sm:flex-row sm:justify-between sm:gap-5">
           <div className="flex flex-1 items-center justify-between gap-2">
-            <button className="bg-none text-xs text-[#303030] underline" onClick={downloadToCSV}>
-              Export CSV
-            </button>
+            {downloadToCSV && (
+              <button className="bg-none text-xs text-[#303030] underline" onClick={downloadToCSV}>
+                Export CSV
+              </button>
+            )}
             {!hidePagination && (
               <label className="flex items-center space-x-1">
                 <span className="text-xs text-[rgba(0,0,0,0.54)]">Rows per page:</span>

@@ -103,7 +103,7 @@ const Balance = () => {
                     <th className="w-full whitespace-nowrap rounded-l border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-left text-sm font-normal text-[#3D3D3D]">
                       <div className="flex items-center space-x-2">
                         <div className="flex h-6 w-6 flex-shrink-0 items-center rounded-full">
-                          <Image src={b.logoURI} alt={'Logo of token' + b.name} width="18px" height="18px" />
+                          <Image src={b.logoURI} alt={'Logo of token ' + b.name} width="18px" height="18px" />
                         </div>
                         {chainExplorer ? (
                           <a

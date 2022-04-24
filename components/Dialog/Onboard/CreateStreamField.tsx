@@ -10,10 +10,10 @@ import useTokenList from 'hooks/useTokenList';
 export default function CreateStreamField({
   setCreateStream,
 }: {
-  tokens: ITokenBalance[];
   setCreateStream: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   const { isLoading: listLoading } = useTokenList();
+
   const { data: tokens, isLoading: tokensLoading } = useTokenBalances();
 
   if (tokensLoading || listLoading) {

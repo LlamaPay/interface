@@ -1,15 +1,19 @@
 import disperseContract from 'abis/disperseContract';
+import { DisclosureState } from 'ariakit';
 import BigNumber from 'bignumber.js';
 import React from 'react';
 import toast from 'react-hot-toast';
+import { BeatLoader } from 'react-spinners';
 import { networkDetails } from 'utils/constants';
 import { useContractWrite, useNetwork } from 'wagmi';
 
 interface DisperseSendProps {
+  dialog: DisclosureState;
   data: { [key: string]: number };
 }
 
-export default function DisperseSend({ data }: DisperseSendProps) {
+export default function DisperseSend({ dialog, data }: DisperseSendProps) {
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [{ data: network }] = useNetwork();
   const [{}, disperseEther] = useContractWrite(
     {
@@ -28,13 +32,15 @@ export default function DisperseSend({ data }: DisperseSendProps) {
       values.push(value.toString());
       ether = ether.plus(value);
     });
-
+    setIsLoading(true);
     disperseEther({
       args: [recipients, values],
       overrides: {
         value: ether.toString(),
       },
     }).then((data) => {
+      dialog.hide();
+      setIsLoading(false);
       const loading = data.error ? toast.error(data.error.message) : toast.loading('Dispersing Gas');
       data.data?.wait().then((receipt) => {
         toast.dismiss(loading);
@@ -45,7 +51,7 @@ export default function DisperseSend({ data }: DisperseSendProps) {
 
   return (
     <button onClick={sendGas} type="button" className="form-submit-button !mt-8">
-      Send
+      {isLoading ? <BeatLoader size={6} color="white" /> : 'Send'}
     </button>
   );
 }
