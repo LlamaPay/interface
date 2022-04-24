@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Select, SelectItem, SelectItemCheck, SelectLabel, SelectPopover, useSelectState } from 'ariakit/select';
+import { Select, SelectItem, SelectLabel, SelectPopover, useSelectState } from 'ariakit/select';
 import { SelectorIcon, CheckIcon } from '@heroicons/react/solid';
 import { useNetwork } from 'wagmi';
 import classNames from 'classnames';
@@ -22,10 +22,10 @@ export const NetworksMenu = () => {
       <SelectLabel state={select} className="sr-only">
         Network
       </SelectLabel>
-      <Select state={select} className="nav-button flex items-center">
+      <Select state={select} className="nav-button flex items-center justify-between gap-2">
         <>
-          {chain.name ?? 'Unsupported'}
-          <SelectorIcon className="h-5 w-5 text-gray-400" aria-hidden="true" />
+          <span>{chain.name ?? 'Unsupported'}</span>
+          <SelectorIcon className="relative right-[-4px] h-4 w-4 text-gray-400" aria-hidden="true" />
         </>
       </Select>
       {select.mounted && (
@@ -42,7 +42,7 @@ export const NetworksMenu = () => {
             >
               <div className="h-5 w-5">
                 <CheckIcon
-                  className={classNames('relative top-[-1px] h-5 w-5', chain.id !== value.id && 'hidden')}
+                  className={classNames('relative h-5 w-5', chain.id !== value.id && 'hidden')}
                   aria-hidden="true"
                 />
               </div>
