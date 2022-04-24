@@ -11,7 +11,7 @@ const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
   const [openWalletSelector, setDisplaySelector] = React.useState(false);
 
   return (
-    <header className="flex items-center justify-between gap-4 overflow-x-auto bg-[#D9F4E6] px-2 py-4 text-base md:p-[30px]">
+    <header className="flex items-center justify-between gap-4 bg-[#D9F4E6] px-2 py-4 text-base md:p-[30px]">
       <Link href="/" passHref>
         <a className="flex-1">
           <Logo />
@@ -30,7 +30,7 @@ const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
           </button>
         )}
 
-        <Menu onboardDialog={onboardDialog} className="" />
+        <Menu onboardDialog={onboardDialog} />
       </nav>
       <WalletSelector isOpen={openWalletSelector} setIsOpen={setDisplaySelector} />
     </header>
