@@ -5,6 +5,7 @@ import useWithdrawable from 'queries/useWithdrawable';
 import { useTokenPrice } from 'queries/useTokenPrice';
 import Tooltip from 'components/Tooltip';
 import { ExclamationCircleIcon } from '@heroicons/react/solid';
+import { useLocale } from 'hooks';
 
 export const Withdrawable = ({ data }: { data: IStream }) => {
   const { data: callResult, isLoading } = useWithdrawable({
@@ -15,7 +16,10 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
     streamId: data.streamId,
   });
   const [balanceState, setBalanceState] = React.useState<number | null>(null);
+
   const { data: price } = useTokenPrice(data.token.address.toLowerCase());
+
+  const { locale } = useLocale();
 
   const setWithdrawables = React.useCallback(() => {
     if (callResult?.withdrawableAmount === undefined || callResult.lastUpdate === undefined) {
@@ -42,7 +46,7 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
       <div className="flex space-x-1">
         <Tooltip content={balanceState && price && `${(balanceState * Number(price)).toFixed(2)} USD`}>
           <span className="slashed-zero tabular-nums text-red-600">
-            {balanceState && `${formatBalance(balanceState)}`}
+            {balanceState && `${formatBalance(balanceState, locale)}`}
           </span>
         </Tooltip>
         <Tooltip content="Out of Funds">
@@ -59,7 +63,7 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
   return (
     <div className="flex justify-start">
       <Tooltip content={balanceState && price && `${(balanceState * Number(price)).toFixed(2)} USD`}>
-        <span className="slashed-zero tabular-nums">{balanceState && formatBalance(balanceState)}</span>
+        <span className="slashed-zero tabular-nums">{balanceState && formatBalance(balanceState, locale)}</span>
       </Tooltip>
     </div>
   );

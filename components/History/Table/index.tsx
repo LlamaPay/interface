@@ -16,6 +16,8 @@ import ActionName from './ActionName';
 import HistoryActions from './HistoryActions';
 import { downloadHistory } from 'utils/downloadCsv';
 import Tooltip from 'components/Tooltip';
+import { useLocale } from 'hooks';
+import Amount from './Amount';
 
 const table = createTable().setRowType<IHistory>();
 
@@ -40,17 +42,7 @@ const defaultColumns = table.createColumns([
         <small className="mx-1 text-xs font-normal text-gray-500 dark:text-gray-400">per month</small>
       </>
     ),
-    cell: ({ value, cell }) => {
-      const isDataValid = !Number.isNaN(value);
-      const amount = isDataValid && formatAmountInTable(Number(value) / 1e20, secondsByDuration['month']);
-      const symbol = cell.row.original?.stream?.token?.symbol ?? null;
-      return (
-        <>
-          <span>{amount}</span>
-          <span className="mx-1 text-xs text-gray-500 dark:text-gray-400">{symbol}</span>
-        </>
-      );
-    },
+    cell: ({ value, cell }) => <Amount data={cell.row.original} value={value} />,
   }),
   table.createDisplayColumn({
     id: 'historyActions',

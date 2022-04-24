@@ -1,6 +1,7 @@
 import React from 'react';
 import Tooltip from 'components/Tooltip';
 import { IBalance } from 'types';
+import { useLocale } from 'hooks';
 
 interface UntilDepletedProps {
   data: IBalance;
@@ -14,17 +15,19 @@ function getTime(data: IBalance, balance: number) {
   return `${days.toFixed(2)} days`;
 }
 
-function getDate(data: IBalance, balance: number) {
+function getDate(data: IBalance, balance: number, locale: string) {
   const time = balance / (Number(data.totalPaidPerSec) / 1e20);
   if (time < 1) return 'Streams Depleted';
   if (Number(data.totalPaidPerSec) === 0) return 'No Streams';
-  return new Date(Date.now() + time * 1e3).toLocaleString('en-CA', {
+  return new Date(Date.now() + time * 1e3).toLocaleString(locale, {
     hour12: false,
   });
 }
 
 export const UntilDepleted = ({ data }: UntilDepletedProps) => {
   const [balanceState, setBalanceState] = React.useState<number | null>(null);
+
+  const { locale } = useLocale();
 
   const updateBalance = React.useCallback(() => {
     const sub = ((Date.now() / 1e3 - Number(data.lastPayerUpdate)) * Number(data.totalPaidPerSec)) / 1e20;
@@ -39,5 +42,9 @@ export const UntilDepleted = ({ data }: UntilDepletedProps) => {
     return () => clearInterval(interval);
   }, [updateBalance]);
 
-  return <>{balanceState && <Tooltip content={getDate(data, balanceState)}>{getTime(data, balanceState)}</Tooltip>}</>;
+  return (
+    <>
+      {balanceState && <Tooltip content={getDate(data, balanceState, locale)}>{getTime(data, balanceState)}</Tooltip>}
+    </>
+  );
 };

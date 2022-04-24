@@ -1,6 +1,6 @@
 import { DisclosureState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
-import { useChainExplorer } from 'hooks';
+import { useChainExplorer, useLocale } from 'hooks';
 import React from 'react';
 import { IStream } from 'types';
 
@@ -12,7 +12,11 @@ interface StreamHistoryProps {
 
 export const StreamHistory = ({ data, dialog, title }: StreamHistoryProps) => {
   const historicalData = data.historicalEvents;
+
   const { url: chainExplorer, name: explorerName } = useChainExplorer();
+
+  const { locale } = useLocale();
+
   return (
     <>
       <FormDialog dialog={dialog} title={title} className="v-min h-min">
@@ -29,7 +33,7 @@ export const StreamHistory = ({ data, dialog, title }: StreamHistoryProps) => {
                 <tr className="border border-stone-700" key={p.txHash}>
                   <td className="border px-3 text-left text-sm">{p.eventType.replace(/([A-Z])/g, ' $1')}</td>
                   <td className="border px-3 text-left text-sm">
-                    {new Date(Number(p.createdTimestamp) * 1e3).toLocaleString('en-CA', { hour12: false })}
+                    {new Date(Number(p.createdTimestamp) * 1e3).toLocaleString(locale, { hour12: false })}
                   </td>
                   <td className="border text-center text-sm">
                     <a

@@ -1,7 +1,7 @@
 import { DisclosureState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
 import { UserHistoryFragment } from 'services/generated/graphql';
-import { useChainExplorer } from 'hooks';
+import { useChainExplorer, useLocale } from 'hooks';
 import { ExternalLinkIcon } from '@heroicons/react/outline';
 
 interface MoreInfoProps {
@@ -16,7 +16,11 @@ function amountStreamed(createdTime: string, streamCreatedTime: string | undefin
 
 export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
   const { url: chainExplorer, name: explorerName } = useChainExplorer();
+
   const txLink = `${chainExplorer}/tx/${data.txHash}`;
+
+  const { locale } = useLocale();
+
   return (
     <>
       <FormDialog dialog={dialog} title="More Info" className="h-min">
@@ -91,7 +95,7 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
           <section>
             <h1>Event Timestamp</h1>
             <p>
-              {new Date(Number(data.createdTimestamp) * 1e3).toLocaleString('en-CA', {
+              {new Date(Number(data.createdTimestamp) * 1e3).toLocaleString(locale, {
                 hour12: false,
               })}
             </p>

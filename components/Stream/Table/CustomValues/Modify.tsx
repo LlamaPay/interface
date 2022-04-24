@@ -9,6 +9,7 @@ import BigNumber from 'bignumber.js';
 import { secondsByDuration } from 'utils/constants';
 import useModifyStream from 'queries/useModifyStream';
 import { BeatLoader } from 'react-spinners';
+import { useLocale } from 'hooks';
 
 interface ModifyProps {
   data: IStream;
@@ -61,6 +62,8 @@ export const Modify = ({ data, dialog, title }: ModifyProps) => {
     );
   };
 
+  const { locale } = useLocale();
+
   return (
     <>
       <FormDialog dialog={dialog} title={title} className="h-min">
@@ -79,14 +82,14 @@ export const Modify = ({ data, dialog, title }: ModifyProps) => {
               </div>
               <p>
                 <span>Amount / month: </span>
-                {(amountPerSec * secondsByDuration.month).toLocaleString('en-US', {
+                {(amountPerSec * secondsByDuration.month).toLocaleString(locale, {
                   maximumFractionDigits: 7,
                   minimumFractionDigits: 7,
                 })}
               </p>
               <p>
                 <span>Amount / sec: </span>
-                {amountPerSec.toLocaleString('en-US', {
+                {amountPerSec.toLocaleString(locale, {
                   maximumFractionDigits: 7,
                   minimumFractionDigits: 7,
                 })}
