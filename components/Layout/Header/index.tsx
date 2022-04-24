@@ -5,7 +5,7 @@ import { NetworksMenu, Account, WalletSelector } from 'components/Web3';
 import { Logo } from 'components/Icons';
 import { DisclosureState } from 'ariakit';
 
-const Header = ({ onBoardDialog }: { onBoardDialog: DisclosureState }) => {
+const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
   const [{ data }] = useAccount();
   const [openWalletSelector, setDisplaySelector] = React.useState(false);
 
@@ -27,7 +27,7 @@ const Header = ({ onBoardDialog }: { onBoardDialog: DisclosureState }) => {
           >
             Docs
           </a>
-          <button className="font-exo text-lg font-medium text-[#4F4F4F]" onClick={onBoardDialog.toggle}>
+          <button className="font-exo text-lg font-medium text-[#4F4F4F]" onClick={onboardDialog.toggle}>
             Get Started
           </button>
         </div>

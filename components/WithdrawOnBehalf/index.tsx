@@ -37,13 +37,18 @@ export default function WithdrawOnBehalf() {
                 ) : error ? (
                   <p>Unable to Load Tokens</p>
                 ) : (
-                  <select className="input-field" required onChange={(e) => setContract(e.target.value)}>
-                    <option value="initOption" selected hidden disabled>
+                  <select
+                    className="input-field"
+                    required
+                    value={contract}
+                    onChange={(e) => setContract(e.target.value)}
+                  >
+                    <option value="" hidden disabled>
                       Choose Token
                     </option>
                     {tokens?.map((p) => (
                       <option key={p.tokenAddress} value={p.llamaContractAddress}>
-                        <p>{`${p.name} (${p.symbol})`}</p>
+                        {`${p.name} (${p.symbol})`}
                       </option>
                     ))}
                   </select>

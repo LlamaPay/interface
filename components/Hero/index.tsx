@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { StreamCircle } from 'components/Icons';
 import { closeBanner } from 'utils/banner';
+import { DisclosureState } from 'ariakit';
 
-export default function Hero({ noBanner }: { noBanner: boolean }) {
+export default function Hero({ noBanner, onboardDialog }: { noBanner: boolean; onboardDialog: DisclosureState }) {
   const [displayBanner, setBanner] = React.useState(!noBanner);
 
   if (!displayBanner) return <div className="h-[30px]"></div>;
@@ -27,14 +28,18 @@ export default function Hero({ noBanner }: { noBanner: boolean }) {
       <div className="relative left-[-12px] flex-shrink-0">
         <StreamCircle />
       </div>
-      <h1 className="font-exo box-decoration-clone text-2xl font-bold sm:text-3xl lg:text-4xl">
-        <span className="whitespace-nowrap">Stream seamless</span>{' '}
-        <span className="hero-word-break whitespace-nowrap">recurring payments</span>{' '}
-        <span className="hero-word-break">in crypto!</span>
-      </h1>
-      <p className="max-w-md 2xl:max-w-xl" style={{ lineHeight: '26px' }}>
-        Automate salary txs, streaming them by the second so employees can withdraw whenever they want and you don't
-        have to deal with sending txs manually.
+      <h1 className="font-exo max-w-[22rem] text-4xl font-bold">Stream seamless recurring payments in crypto!</h1>
+      <p
+        className="relative flex max-w-md flex-col items-start justify-start gap-6 lg:top-[20px] 2xl:max-w-xl"
+        style={{ lineHeight: '26px' }}
+      >
+        <span>
+          Automate salary txs, streaming them by the second so employees can withdraw whenever they want and you don't
+          have to deal with sending txs manually.
+        </span>
+        <button className="nav-button px-10" onClick={onboardDialog.toggle}>
+          Get Started
+        </button>
       </p>
     </section>
   );
