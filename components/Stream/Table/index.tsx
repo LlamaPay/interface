@@ -18,7 +18,6 @@ import {
 import { IStream } from 'types';
 import { downloadStreams } from 'utils/downloadCsv';
 import { useAddressStore } from 'store/address';
-import WithdrawOnBehalf from 'components/WithdrawOnBehalf';
 
 const defaultTable = createTable().setRowType<IStream>();
 

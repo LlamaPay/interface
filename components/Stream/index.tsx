@@ -3,6 +3,7 @@ import Link from 'next/link';
 import Fallback from 'components/FallbackList';
 import { StreamIcon } from 'components/Icons';
 import DisperseGasMoney from 'components/DisperseGas';
+import WithdrawOnBehalf from 'components/WithdrawOnBehalf';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { StreamTable, DefaultStreamTable } from './Table';
 import { IStreamAndHistory } from 'types';
@@ -23,6 +24,7 @@ export function StreamSection() {
             <a className="primary-button py-2 px-8 text-sm font-bold">Create Stream</a>
           </Link>
           <DisperseGasMoney />
+          <WithdrawOnBehalf />
         </div>
       </div>
       {isLoading || error || !data?.streams || data.streams?.length < 1 ? (
