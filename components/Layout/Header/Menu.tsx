@@ -26,7 +26,7 @@ export default function HeaderMenu({ onboardDialog }: { onboardDialog: Disclosur
 
       <Menu label="Language">
         {locales.map((locale) => (
-          <MenuItem label={locale} key={locale} onClick={() => updateLocale(locale)} />
+          <MenuItem label={locale.name} key={locale.id} onClick={() => updateLocale(locale.id)} />
         ))}
       </Menu>
       <MenuItem

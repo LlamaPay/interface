@@ -78,7 +78,7 @@ export const Modify = ({ data, dialog, title }: ModifyProps) => {
               </div>
               <div className="inline-block space-x-2">
                 <span>Payee:</span>
-                <span className="text-sm">{data.payeeAddress}</span>
+                <span className="truncate">{data.payeeAddress}</span>
               </div>
               <p>
                 <span>Amount / month: </span>

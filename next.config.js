@@ -6,7 +6,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const nextConfig = {
   reactStrictMode: false,
   i18n: {
-    locales: ['en-US', 'fr'],
+    locales: ['en-US', 'en-GB', 'fr'],
     defaultLocale: 'en-US',
   },
   images: {
