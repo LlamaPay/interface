@@ -9,7 +9,7 @@ export default function Hero({ noBanner, onboardDialog }: { noBanner: boolean; o
   if (!displayBanner) return <div className="h-[30px]"></div>;
 
   return (
-    <section className="relative mb-[30px] flex flex-row flex-wrap items-center justify-center gap-6 bg-[#D9F2F4]/70 px-2 py-[52px] text-[#303030]">
+    <section className="relative -z-10 mb-[30px] flex flex-row flex-wrap items-center justify-center gap-6 bg-[#D9F2F4]/70 px-2 py-[52px] text-[#303030]">
       <button
         className="absolute right-3 top-3 p-2"
         onClick={() => {
@@ -37,7 +37,10 @@ export default function Hero({ noBanner, onboardDialog }: { noBanner: boolean; o
           Automate salary txs, streaming them by the second so employees can withdraw whenever they want and you don't
           have to deal with sending txs manually.
         </span>
-        <button className="nav-button px-10" onClick={onboardDialog.toggle}>
+        <button
+          className="shadow-1 rounded-[10px] border border-[#1BDBAD] bg-white py-[10px] px-10 font-bold text-[#23BD8F]"
+          onClick={onboardDialog.toggle}
+        >
           Get Started
         </button>
       </p>

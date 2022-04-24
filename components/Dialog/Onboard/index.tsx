@@ -63,7 +63,7 @@ export function OnboardDialog({ dialog, className }: IOnboardProps) {
     <Dialog
       state={dialog}
       className={classNames(
-        'border-color[#EAEAEA] absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex max-h-[80vh] max-w-3xl flex-col overflow-auto rounded-2xl border bg-white shadow-[0px_0px_9px_-2px_rgba(0,0,0,0.16)] sm:left-8 sm:right-8 sm:flex-row',
+        'absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex max-h-[80vh] max-w-3xl flex-col overflow-auto rounded-2xl border border-[#EAEAEA] bg-white shadow-[0px_0px_9px_-2px_rgba(0,0,0,0.16)] sm:left-8 sm:right-8 sm:flex-row',
         className
       )}
       id="onboard-form"

@@ -90,7 +90,7 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
       {/* use select state as dialog state so that combobox options are displayed */}
       <Dialog
         state={select}
-        className="absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex max-h-[80vh] max-w-lg flex-col overflow-auto rounded bg-white shadow-[0px_0px_9px_-2px_rgba(0,0,0,0.16)] sm:left-8 sm:right-8"
+        className="shadow-2 absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex max-h-[80vh] max-w-lg flex-col overflow-auto rounded bg-white sm:left-8 sm:right-8"
       >
         {newTokenForm ? (
           <NewTokenForm setNewTokenForm={setNewTokenForm} />
