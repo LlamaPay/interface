@@ -118,7 +118,7 @@ export function OnboardDialog({ dialog, className }: IOnboardProps) {
         {accountData ? (
           <>
             {showCreateStream ? (
-              <CreateStreamField setCreateStream={setCreateStream} tokens={[]} />
+              <CreateStreamField setCreateStream={setCreateStream} />
             ) : (
               <DepositField userAddress={accountData.address} setCreateStream={setCreateStream} />
             )}
