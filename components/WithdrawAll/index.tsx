@@ -10,16 +10,6 @@ export default function WithdrawAll() {
   const [{ data: accountData }] = useAccount();
   const { mutate: withdrawAll } = useWithdrawAll();
   const { unsupported } = useNetworkProvider();
-  const [isPayer, setIsPayer] = React.useState<boolean>(true);
-
-  React.useEffect(() => {
-    const streamAsPayer = data.streams?.find((e) => e.payerAddress === accountData?.address.toLowerCase());
-    if (streamAsPayer === undefined) {
-      setIsPayer(false);
-    } else {
-      setIsPayer(true);
-    }
-  }, []);
 
   const handleClick = React.useCallback(() => {
     const iface = new Interface(['function withdraw(address from, address to, uint216 amountPerSec)']);
@@ -42,7 +32,6 @@ export default function WithdrawAll() {
         onClick={handleClick}
         className="secondary-button disabled:cursor-not-allowed"
         disabled={accountData && !unsupported ? false : true}
-        hidden={isPayer ? false : true}
       >
         Send all
       </button>
