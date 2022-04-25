@@ -5,7 +5,6 @@ import Balance from 'components/Balance';
 import { HistorySection } from 'components/History';
 import { StreamSection } from 'components/Stream';
 import { NO_BANNER } from 'utils/banner';
-import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface HomePageProps {
   noBanner: boolean;
@@ -31,7 +30,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, locale }) =>
   // Pass data to the page via props
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common', 'header', 'heroBanner'])),
+      messages: (await import(`../translations/${locale}.json`)).default,
       noBanner: req.cookies[NO_BANNER] ?? false,
     },
   };

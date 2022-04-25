@@ -2,13 +2,13 @@ import * as React from 'react';
 import { StreamCircle } from 'components/Icons';
 import { closeBanner } from 'utils/banner';
 import { DisclosureState } from 'ariakit';
-import { useTranslation } from 'next-i18next';
+import { useTranslations } from 'next-intl';
 
 export default function Hero({ noBanner, onboardDialog }: { noBanner: boolean; onboardDialog: DisclosureState }) {
   const [displayBanner, setBanner] = React.useState(!noBanner);
 
-  const { t } = useTranslation('heroBanner');
-  const { t: common } = useTranslation('common');
+  const t1 = useTranslations('Common');
+  const t2 = useTranslations('Banner');
 
   if (!displayBanner) return <div className="h-[30px]"></div>;
 
@@ -21,7 +21,7 @@ export default function Hero({ noBanner, onboardDialog }: { noBanner: boolean; o
           setBanner(false);
         }}
       >
-        <span className="sr-only">{t('close')}</span>
+        <span className="sr-only">{t2('close')}</span>
         <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path
             d="M14 1.41L12.59 0L7 5.59L1.41 0L0 1.41L5.59 7L0 12.59L1.41 14L7 8.41L12.59 14L14 12.59L8.41 7L14 1.41Z"
@@ -32,17 +32,17 @@ export default function Hero({ noBanner, onboardDialog }: { noBanner: boolean; o
       <div className="relative left-[-12px] flex-shrink-0">
         <StreamCircle />
       </div>
-      <h1 className="font-exo max-w-[16ch] text-4xl font-bold">{t('heading')}</h1>
+      <h1 className="font-exo max-w-[16ch] text-4xl font-bold">{t2('heading')}</h1>
       <p
         className="relative flex max-w-md flex-col items-start justify-start gap-6 lg:top-[20px] 2xl:max-w-xl"
         style={{ lineHeight: '26px' }}
       >
-        <span>{t('description')}</span>
+        <span>{t2('description')}</span>
         <button
           className="shadow-1 rounded-[10px] border border-[#1BDBAD] bg-white py-[10px] px-10 font-bold text-[#23BD8F]"
           onClick={onboardDialog.toggle}
         >
-          {common('getStarted')}
+          {t1('getStarted')}
         </button>
       </p>
     </section>

@@ -5,14 +5,14 @@ import { NetworksMenu, Account, WalletSelector } from 'components/Web3';
 import { Logo } from 'components/Icons';
 import { DisclosureState, useDialogState } from 'ariakit';
 import Menu from './Menu';
-import { useTranslation } from 'next-i18next';
+import { useTranslations } from 'next-intl';
 
 const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
   const [{ data }] = useAccount();
 
   const walletDailog = useDialogState();
 
-  const { t } = useTranslation('header');
+  const t = useTranslations('Header');
 
   return (
     <header className="flex items-center justify-between gap-4 bg-[#D9F4E6] px-2 py-4 text-base md:p-[30px]">

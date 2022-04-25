@@ -2,13 +2,13 @@ import { BookOpenIcon, PlayIcon } from '@heroicons/react/outline';
 import { DisclosureState } from 'ariakit';
 import { Menu, MenuItem } from 'components/NestedMenu';
 import { useLocale } from 'hooks';
-import { useTranslation } from 'next-i18next';
+import { useTranslations } from 'next-intl';
 
 export default function HeaderMenu({ onboardDialog }: { onboardDialog: DisclosureState }) {
   const { locales, updateLocale } = useLocale();
 
-  const { t: common } = useTranslation('common');
-  const { t } = useTranslation('header');
+  const t1 = useTranslations('Common');
+  const t2 = useTranslations('Header');
 
   return (
     <Menu
@@ -21,14 +21,14 @@ export default function HeaderMenu({ onboardDialog }: { onboardDialog: Disclosur
       <MenuItem
         label={
           <>
-            <span>{common('getStarted')}</span>
+            <span>{t1('getStarted')}</span>
             <PlayIcon className="h-4 w-4" />
           </>
         }
         onClick={onboardDialog.toggle}
       />
 
-      <Menu label={t('language')}>
+      <Menu label={t2('language')}>
         {locales.map((locale) => (
           <MenuItem label={locale.name} key={locale.id} onClick={() => updateLocale(locale.id)} />
         ))}
@@ -41,7 +41,7 @@ export default function HeaderMenu({ onboardDialog }: { onboardDialog: Disclosur
             rel="noreferrer noopener"
             className="flex w-full items-center justify-between gap-4 font-normal"
           >
-            <span>{t('docs')}</span>
+            <span>{t2('docs')}</span>
             <BookOpenIcon className="h-4 w-4" />
           </a>
         }

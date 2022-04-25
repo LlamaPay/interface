@@ -8,21 +8,23 @@ import * as React from 'react';
 import { QueryClient, QueryClientProvider, Hydrate } from 'react-query';
 import { ReactQueryDevtools } from 'react-query/devtools';
 import { WalletProvider } from 'components/Web3';
-import { appWithTranslation } from 'next-i18next';
+import { NextIntlProvider } from 'next-intl';
 
 function App({ Component, pageProps }: AppProps) {
   const [queryClient] = React.useState(() => new QueryClient());
 
   return (
-    <WalletProvider>
-      <QueryClientProvider client={queryClient}>
-        <Hydrate state={pageProps.dehydratedState}>
-          <Component {...pageProps} />
-          <ReactQueryDevtools initialIsOpen={false} />
-        </Hydrate>
-      </QueryClientProvider>
-    </WalletProvider>
+    <NextIntlProvider messages={pageProps.messages}>
+      <WalletProvider>
+        <QueryClientProvider client={queryClient}>
+          <Hydrate state={pageProps.dehydratedState}>
+            <Component {...pageProps} />
+            <ReactQueryDevtools initialIsOpen={false} />
+          </Hydrate>
+        </QueryClientProvider>
+      </WalletProvider>
+    </NextIntlProvider>
   );
 }
 
-export default appWithTranslation(App);
+export default App;
