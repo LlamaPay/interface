@@ -31,7 +31,7 @@ export default function WithdrawAll() {
       <button
         onClick={handleClick}
         className="secondary-button disabled:cursor-not-allowed"
-        disabled={!unsupported ? false : true}
+        disabled={accountData && !unsupported ? false : true}
       >
         Send all
       </button>
