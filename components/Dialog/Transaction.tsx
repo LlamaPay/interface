@@ -15,13 +15,7 @@ export const TransactionDialog = ({ dialog, className, transactionHash }: FormDi
   const { url, name } = useChainExplorer();
 
   return (
-    <Dialog
-      state={dialog}
-      className={classNames(
-        'shadow-2 absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex h-fit max-h-[80vh] max-w-lg flex-col overflow-auto rounded-2xl border border-[#EAEAEA] bg-white p-4 sm:left-8 sm:right-8',
-        className
-      )}
-    >
+    <Dialog state={dialog} className={classNames('dialog', className)}>
       <header className="font-exo relative">
         <DialogDismiss className="ml-auto flex items-start justify-end">
           <XIcon className="h-6 w-6" />

@@ -5,9 +5,9 @@ import classNames from 'classnames';
 import Footer from './Footer';
 import CustomToast from 'components/CustomToast';
 import Hero from 'components/Hero';
+import OnboardDialog from 'components/Onboard';
 import { useRouter } from 'next/router';
 import { useDialogState } from 'ariakit';
-import { OnboardDialog } from 'components/Dialog';
 
 interface ILayoutProps {
   children: React.ReactNode;

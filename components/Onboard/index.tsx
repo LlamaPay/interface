@@ -13,7 +13,7 @@ interface IOnboardProps {
   className?: string;
 }
 
-export function OnboardDialog({ dialog, className }: IOnboardProps) {
+export default function OnboardDialog({ dialog, className }: IOnboardProps) {
   const [{ loading: connecting }] = useConnect();
 
   const [{ data: accountData, loading: accountDataLoading }] = useAccount();

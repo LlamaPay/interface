@@ -3,13 +3,14 @@ import Link from 'next/link';
 import { useAccount } from 'wagmi';
 import { NetworksMenu, Account, WalletSelector } from 'components/Web3';
 import { Logo } from 'components/Icons';
-import { DisclosureState } from 'ariakit';
+import { DisclosureState, useDialogState } from 'ariakit';
 import Menu from './Menu';
 import { useTranslation } from 'next-i18next';
 
 const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
   const [{ data }] = useAccount();
-  const [openWalletSelector, setDisplaySelector] = React.useState(false);
+
+  const walletDailog = useDialogState();
 
   const { t } = useTranslation('header');
 
@@ -25,17 +26,17 @@ const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
         {data ? (
           <>
             <NetworksMenu />
-            <Account showAccountInfo={() => setDisplaySelector(!openWalletSelector)} />
+            <Account showAccountInfo={walletDailog.toggle} />
           </>
         ) : (
-          <button className="nav-button" onClick={() => setDisplaySelector(!openWalletSelector)}>
+          <button className="nav-button" onClick={walletDailog.toggle}>
             {t('connectWallet')}
           </button>
         )}
 
         <Menu onboardDialog={onboardDialog} />
       </nav>
-      <WalletSelector isOpen={openWalletSelector} setIsOpen={setDisplaySelector} />
+      <WalletSelector dialog={walletDailog} />
     </header>
   );
 };
