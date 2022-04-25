@@ -5,6 +5,7 @@ import Balance from 'components/Balance';
 import { HistorySection } from 'components/History';
 import { StreamSection } from 'components/Stream';
 import { NO_BANNER } from 'utils/banner';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 interface HomePageProps {
   noBanner: boolean;
@@ -20,9 +21,20 @@ const Home: NextPage<HomePageProps> = ({ noBanner }) => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+export const getServerSideProps: GetServerSideProps = async ({ req, locale }) => {
+  if (!locale) {
+    return {
+      props: {},
+    };
+  }
+
   // Pass data to the page via props
-  return { props: { noBanner: req.cookies[NO_BANNER] ?? false } };
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common', 'header', 'heroBanner'])),
+      noBanner: req.cookies[NO_BANNER] ?? false,
+    },
+  };
 };
 
 export default Home;

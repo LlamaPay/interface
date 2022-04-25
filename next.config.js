@@ -1,3 +1,5 @@
+const { i18n } = require('./next-i18next.config');
+
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
 });
@@ -5,10 +7,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: false,
-  i18n: {
-    locales: ['en-US', 'en-GB', 'fr'],
-    defaultLocale: 'en-US',
-  },
+  i18n,
   images: {
     domains: ['raw.githubusercontent.com'],
   },

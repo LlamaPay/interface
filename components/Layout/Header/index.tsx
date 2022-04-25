@@ -5,10 +5,13 @@ import { NetworksMenu, Account, WalletSelector } from 'components/Web3';
 import { Logo } from 'components/Icons';
 import { DisclosureState } from 'ariakit';
 import Menu from './Menu';
+import { useTranslation } from 'next-i18next';
 
 const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
   const [{ data }] = useAccount();
   const [openWalletSelector, setDisplaySelector] = React.useState(false);
+
+  const { t } = useTranslation('header');
 
   return (
     <header className="flex items-center justify-between gap-4 bg-[#D9F4E6] px-2 py-4 text-base md:p-[30px]">
@@ -26,7 +29,7 @@ const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
           </>
         ) : (
           <button className="nav-button" onClick={() => setDisplaySelector(!openWalletSelector)}>
-            Connect Wallet
+            {t('connectWallet')}
           </button>
         )}
 
