@@ -1,4 +1,4 @@
-import type { NextPage } from 'next';
+import type { GetServerSideProps, NextPage } from 'next';
 import * as React from 'react';
 import Layout from 'components/Layout';
 import { CreateStream } from 'components/Stream';
@@ -37,6 +37,15 @@ const Create: NextPage = () => {
       )}
     </Layout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+  // Pass data to the page via props
+  return {
+    props: {
+      messages: (await import(`../translations/${locale}.json`)).default,
+    },
+  };
 };
 
 export default Create;

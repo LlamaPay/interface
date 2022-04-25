@@ -69,7 +69,7 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, network, l
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query }) => {
+export const getServerSideProps: GetServerSideProps = async ({ query, locale }) => {
   const { chainId, address } = query;
 
   const userAddress = typeof address === 'string' ? address?.toLowerCase() : '';
@@ -99,6 +99,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query }) => {
       network: chain?.name ?? '',
       logoURI: network?.logoURI ?? defaultImage,
       dehydratedState: dehydrate(queryClient),
+      messages: (await import(`../translations/${locale}.json`)).default,
     },
   };
 };

@@ -21,12 +21,6 @@ const Home: NextPage<HomePageProps> = ({ noBanner }) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ req, locale }) => {
-  if (!locale) {
-    return {
-      props: {},
-    };
-  }
-
   // Pass data to the page via props
   return {
     props: {
