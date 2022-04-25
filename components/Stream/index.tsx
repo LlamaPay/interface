@@ -7,6 +7,7 @@ import WithdrawOnBehalf from 'components/WithdrawOnBehalf';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { StreamTable, DefaultStreamTable } from './Table';
 import { IStreamAndHistory } from 'types';
+import WithdrawAll from 'components/WithdrawAll';
 
 export function StreamSection() {
   const { data, isLoading, error } = useStreamsAndHistory();
@@ -25,6 +26,7 @@ export function StreamSection() {
           </Link>
           <DisperseGasMoney />
           <WithdrawOnBehalf />
+          <WithdrawAll />
         </div>
       </div>
       {isLoading || error || !data?.streams || data.streams?.length < 1 ? (

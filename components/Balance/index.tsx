@@ -85,9 +85,7 @@ const Balance = () => {
               <thead>
                 <tr>
                   <th className="whitespace-nowrap p-4 pb-1 text-left text-sm font-semibold text-[#3D3D3D]">Token</th>
-                  <th className="whitespace-nowrap p-4 pb-1 text-left text-sm font-semibold text-[#3D3D3D]">
-                    Deposited
-                  </th>
+                  <th className="whitespace-nowrap p-4 pb-1 text-left text-sm font-semibold text-[#3D3D3D]">Balance</th>
                   <th className="whitespace-nowrap p-4 pb-1 text-left text-sm font-semibold text-[#3D3D3D]">
                     To Depleted
                   </th>
