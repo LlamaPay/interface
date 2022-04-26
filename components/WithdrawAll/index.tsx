@@ -5,6 +5,12 @@ import useBatchCalls from 'queries/useBatchCalls';
 import React from 'react';
 import { useAccount } from 'wagmi';
 
+const WithdrawInterface = new Interface(['function withdraw(address from, address to, uint216 amountPerSec)']);
+
+interface ICall {
+  [key: string]: string[];
+}
+
 export default function WithdrawAll() {
   const { data } = useStreamsAndHistory();
   const [{ data: accountData }] = useAccount();
@@ -12,29 +18,36 @@ export default function WithdrawAll() {
   const { unsupported } = useNetworkProvider();
 
   const handleClick = () => {
-    const iface = new Interface(['function withdraw(address from, address to, uint216 amountPerSec)']);
-    const calls: { [key: string]: string[] } = {};
-    data.streams?.map((p) => {
-      if (accountData?.address.toLowerCase() === p.payerAddress.toLowerCase()) {
-        const arr = calls[p.llamaContractAddress] ?? [];
-        arr.push(iface.encodeFunctionData('withdraw', [p.payerAddress, p.payeeAddress, p.amountPerSec]));
-        calls[p.llamaContractAddress] = arr;
-      }
-    });
+    const calls: ICall =
+      data.streams?.reduce((acc: ICall, current) => {
+        if (accountData?.address.toLowerCase() === current.payerAddress.toLowerCase()) {
+          const callData = calls[current.llamaContractAddress] ?? [];
+
+          callData.push(
+            WithdrawInterface.encodeFunctionData('withdraw', [
+              current.payerAddress,
+              current.payeeAddress,
+              current.amountPerSec,
+            ])
+          );
+
+          return (acc = { ...acc, [current.llamaContractAddress]: callData });
+        }
+        return acc;
+      }, {}) ?? {};
+
     Object.keys(calls).map((p) => {
       batchCall({ llamaContractAddress: p, calls: calls[p] });
     });
   };
 
   return (
-    <>
-      <button
-        onClick={handleClick}
-        className="secondary-button disabled:cursor-not-allowed"
-        disabled={accountData && !unsupported ? false : true}
-      >
-        Send All
-      </button>
-    </>
+    <button
+      onClick={handleClick}
+      className="secondary-button disabled:cursor-not-allowed"
+      disabled={!accountData || unsupported}
+    >
+      Send All
+    </button>
   );
 }

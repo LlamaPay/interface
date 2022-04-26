@@ -30,7 +30,7 @@ export default function useBatchCalls() {
   const [{ data: signer }] = useSigner();
   const queryClient = useQueryClient();
   return useMutation(
-    ({ llamaContractAddress, calls }: IBatchCalls) => batchCalls({ signer, llamaContractAddress, calls }),
+    ({ llamaContractAddress, calls }: IUseBatchCalls) => batchCalls({ signer, llamaContractAddress, calls }),
     {
       onError: (error: any) => {
         toast.error(error.message);
