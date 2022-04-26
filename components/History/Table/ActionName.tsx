@@ -1,4 +1,4 @@
-import { CashIcon, CheckIcon, CogIcon, XIcon } from '@heroicons/react/solid';
+import { CashIcon, CogIcon, PlusIcon, XIcon } from '@heroicons/react/solid';
 import Tooltip from 'components/Tooltip';
 import { useChainExplorer } from 'hooks';
 import { IHistory } from 'types';
@@ -22,7 +22,7 @@ export default function ActionName({ data }: { data: IHistory }) {
           <div className="rounded bg-green-100 p-1 text-green-600">
             <a href={link} target="_blank" rel="noreferrer noopener">
               <span className="sr-only">View transaction on chain explorer</span>
-              <CheckIcon className="h-4 w-4" />
+              <PlusIcon className="h-4 w-4" />
             </a>
           </div>
         </Tooltip>
