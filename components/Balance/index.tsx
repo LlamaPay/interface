@@ -68,7 +68,7 @@ const Balance = () => {
 
           <button
             className="primary-button"
-            disabled={showFallback}
+            disabled={isLoading}
             onClick={() => {
               depositFieldDialog.toggle();
             }}
