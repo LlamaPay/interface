@@ -9,7 +9,7 @@ const localeNames: ILocale[] = [
     id: 'en',
   },
   {
-    name: 'French',
+    name: 'Français',
     id: 'fr',
   },
 ];

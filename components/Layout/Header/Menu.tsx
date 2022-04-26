@@ -30,12 +30,7 @@ export default function HeaderMenu({ onboardDialog }: { onboardDialog: Disclosur
 
       <Menu label={t2('language')}>
         {locales.map((locale) => (
-          <MenuItem
-            label={locale.name}
-            key={locale.id}
-            className="cursor-pointer py-1"
-            onClick={() => updateLocale(locale.id)}
-          />
+          <MenuItem label={locale.name} key={locale.id} onClick={() => updateLocale(locale.id)} />
         ))}
       </Menu>
       <MenuItem
