@@ -24,9 +24,9 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
   return (
     <>
       <FormDialog dialog={dialog} title="More Info" className="h-min">
-        <span className="space-y-4">
+        <span className="space-y-4 text-[#3D3D3D]">
           <section>
-            <h1>Token:</h1>
+            <h1 className="font-medium text-[#303030]">Token:</h1>
             <div className="my-1 rounded border p-2 dark:border-stone-700">
               <div className="flex space-x-1">
                 <p>{data.stream.token.name}</p>
@@ -34,9 +34,10 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
               </div>
             </div>
           </section>
-          {data.eventType === 'StreamModified' ? (
+
+          {data.eventType === 'StreamModified' && (
             <section>
-              <h1>Old Stream</h1>
+              <h1 className="font-medium text-[#303030]">Old Stream</h1>
               <div className="my-1 rounded border p-2 dark:border-stone-700">
                 <div className="flex space-x-1">
                   <p>Payer:</p>
@@ -62,51 +63,48 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
                 </div>
               </div>
             </section>
-          ) : (
-            ''
           )}
+
           <section>
-            <h1>{data.eventType === 'StreamModified' ? 'New Stream' : 'Stream'}</h1>
+            <h1 className="font-medium text-[#303030]">
+              {data.eventType === 'StreamModified' ? 'New Stream' : 'Stream'}
+            </h1>
             <div className="my-1 rounded border p-2 dark:border-stone-700">
               <div className="flex space-x-1">
                 <p>Payer:</p>
                 <p>{data.stream.payer.id}</p>
               </div>
+
               <div className="flex space-x-1">
                 <p>Payee:</p>
                 <p>{data.stream.payee.id}</p>
               </div>
+
               <div className="flex space-x-1">
                 <p>Amount Per Sec:</p>
                 <p>{(data.stream.amountPerSec / 1e20).toFixed(5)}</p>
               </div>
-              {/* {data.eventType === 'Withdraw' ? (
-                <div className="flex space-x-1">
-                  <p>Amount Withdrawn:</p>
-                </div>
-              ) : (
-                ''
-              )} */}
-              {data.eventType === 'StreamCancelled' ? (
+
+              {data.eventType === 'StreamCancelled' && (
                 <div className="flex space-x-1">
                   <p>Total Streamed:</p>
                   <p>
                     {amountStreamed(data.createdTimestamp, data.stream?.createdTimestamp, data.stream?.amountPerSec)}
                   </p>
                 </div>
-              ) : (
-                ''
               )}
             </div>
           </section>
+
           <section>
-            <h1>Event Timestamp</h1>
+            <h1 className="font-medium text-[#303030]">Event Timestamp</h1>
             <p>
               {new Date(Number(data.createdTimestamp) * 1e3).toLocaleString(locale, {
                 hour12: false,
               })}
             </p>
           </section>
+
           <section className="flex">
             <a
               href={txLink}

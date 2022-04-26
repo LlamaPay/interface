@@ -67,9 +67,9 @@ export const Modify = ({ data, dialog, title }: ModifyProps) => {
   return (
     <>
       <FormDialog dialog={dialog} title={title} className="h-min">
-        <span className="space-y-4">
+        <span className="space-y-4 text-[#303030]">
           <section>
-            <h2 className="">Current stream: </h2>
+            <h2 className="font-medium text-[#3D3D3D]">Current stream: </h2>
             <div className="my-1 rounded border p-2 dark:border-stone-700">
               <div className="flex items-center space-x-2">
                 <span>You</span>
@@ -97,7 +97,7 @@ export const Modify = ({ data, dialog, title }: ModifyProps) => {
             </div>
           </section>
           <section>
-            <h2 className="">Update stream: </h2>
+            <h2 className="font-medium text-[#3D3D3D]">Update stream: </h2>
             <form className="my-1 space-y-3 rounded border p-2 dark:border-stone-700" onSubmit={updateStream}>
               <InputText name="updatedAddress" label="Address" isRequired />
               <InputAmountWithDuration
