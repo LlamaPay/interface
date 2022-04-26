@@ -9,14 +9,11 @@ import {
 } from '@tanstack/react-table';
 import Table from 'components/Table';
 import { IHistory } from 'types';
-import { secondsByDuration } from 'utils/constants';
 import { formatAddress } from 'utils/address';
-import { formatAmountInTable } from 'utils/amount';
 import ActionName from './ActionName';
 import HistoryActions from './HistoryActions';
 import { downloadHistory } from 'utils/downloadCsv';
 import Tooltip from 'components/Tooltip';
-import { useLocale } from 'hooks';
 import Amount from './Amount';
 
 const table = createTable().setRowType<IHistory>();
