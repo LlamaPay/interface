@@ -70,5 +70,6 @@ fragment UserHistory on HistoryEvent {
     amountPerSec
     createdTimestamp
   }
+  #amountWithdrawn
   createdTimestamp
 }

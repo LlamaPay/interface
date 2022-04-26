@@ -80,6 +80,13 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
                 <p>Amount Per Sec:</p>
                 <p>{(data.stream.amountPerSec / 1e20).toFixed(5)}</p>
               </div>
+              {/* {data.eventType === 'Withdraw' ? (
+                <div className="flex space-x-1">
+                  <p>Amount Withdrawn:</p>
+                </div>
+              ) : (
+                ''
+              )} */}
               {data.eventType === 'StreamCancelled' ? (
                 <div className="flex space-x-1">
                   <p>Total Streamed:</p>

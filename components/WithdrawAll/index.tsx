@@ -33,7 +33,7 @@ export default function WithdrawAll() {
         className="secondary-button disabled:cursor-not-allowed"
         disabled={accountData && !unsupported ? false : true}
       >
-        Send all
+        Send All
       </button>
     </>
   );
