@@ -1,14 +1,14 @@
 import { Interface } from 'ethers/lib/utils';
 import { useNetworkProvider } from 'hooks';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
-import useWithdrawAll from 'queries/useWithdrawAll';
+import useBatchCalls from 'queries/useBatchCalls';
 import React from 'react';
 import { useAccount } from 'wagmi';
 
 export default function WithdrawAll() {
   const { data } = useStreamsAndHistory();
   const [{ data: accountData }] = useAccount();
-  const { mutate: withdrawAll } = useWithdrawAll();
+  const { mutate: batchCall } = useBatchCalls();
   const { unsupported } = useNetworkProvider();
 
   const handleClick = React.useCallback(() => {
@@ -22,9 +22,9 @@ export default function WithdrawAll() {
       }
     });
     Object.keys(calls).map((p) => {
-      withdrawAll({ llamaContractAddress: p, calldata: calls[p] });
+      batchCall({ llamaContractAddress: p, calldata: calls[p] });
     });
-  }, [data, accountData, withdrawAll]);
+  }, [data, accountData, batchCall]);
 
   return (
     <>

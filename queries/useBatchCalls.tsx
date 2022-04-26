@@ -4,16 +4,16 @@ import { useMutation, useQueryClient } from 'react-query';
 import { createWriteContract } from 'utils/contract';
 import { useSigner } from 'wagmi';
 
-interface IUseWithdrawAll {
+interface IUseBatchCalls {
   llamaContractAddress: string;
   calldata: string[];
 }
 
-interface IWithdrawAll extends IUseWithdrawAll {
+interface IBatchCalls extends IUseBatchCalls {
   signer?: Signer;
 }
 
-async function withdrawAll({ signer, llamaContractAddress, calldata }: IWithdrawAll) {
+async function batchCalls({ signer, llamaContractAddress, calldata }: IBatchCalls) {
   try {
     if (!signer) {
       throw new Error("Couldn't get signer");
@@ -26,24 +26,24 @@ async function withdrawAll({ signer, llamaContractAddress, calldata }: IWithdraw
   }
 }
 
-export default function useWithdrawAll() {
+export default function useBatchCalls() {
   const [{ data: signer }] = useSigner();
   const queryClient = useQueryClient();
   return useMutation(
-    ({ llamaContractAddress, calldata }: IWithdrawAll) => withdrawAll({ signer, llamaContractAddress, calldata }),
+    ({ llamaContractAddress, calldata }: IBatchCalls) => batchCalls({ signer, llamaContractAddress, calldata }),
     {
       onError: (error: any) => {
         toast.error(error.message);
       },
       onSuccess: (data) => {
-        const toastId = toast.loading('Sending Tokens');
+        const toastId = toast.loading('Executing Batch Transactions');
         data.wait().then((res: any) => {
           toast.dismiss(toastId);
           queryClient.invalidateQueries();
           if (res.status === 1) {
-            toast.success('Sent Tokens');
+            toast.success('Successfully Executed Batch Transactions');
           } else {
-            toast.error('Failed to Send Tokens');
+            toast.error('Failed to Execute Batch Transactions');
           }
         });
       },
