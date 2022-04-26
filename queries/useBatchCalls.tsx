@@ -6,20 +6,20 @@ import { useSigner } from 'wagmi';
 
 interface IUseBatchCalls {
   llamaContractAddress: string;
-  calldata: string[];
+  calls: string[];
 }
 
 interface IBatchCalls extends IUseBatchCalls {
   signer?: Signer;
 }
 
-async function batchCalls({ signer, llamaContractAddress, calldata }: IBatchCalls) {
+async function batchCalls({ signer, llamaContractAddress, calls }: IBatchCalls) {
   try {
     if (!signer) {
       throw new Error("Couldn't get signer");
     } else {
       const contract = createWriteContract(llamaContractAddress, signer);
-      return await contract.batch(calldata, true);
+      return await contract.batch(calls, true);
     }
   } catch (error: any) {
     throw new Error(error.message || (error?.reason ?? 'Sending Tokens'));
@@ -30,7 +30,7 @@ export default function useBatchCalls() {
   const [{ data: signer }] = useSigner();
   const queryClient = useQueryClient();
   return useMutation(
-    ({ llamaContractAddress, calldata }: IBatchCalls) => batchCalls({ signer, llamaContractAddress, calldata }),
+    ({ llamaContractAddress, calls }: IBatchCalls) => batchCalls({ signer, llamaContractAddress, calls }),
     {
       onError: (error: any) => {
         toast.error(error.message);

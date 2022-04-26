@@ -22,7 +22,7 @@ export default function WithdrawAll() {
       }
     });
     Object.keys(calls).map((p) => {
-      batchCall({ llamaContractAddress: p, calldata: calls[p] });
+      batchCall({ llamaContractAddress: p, calls: calls[p] });
     });
   }, [data, accountData, batchCall]);
 
