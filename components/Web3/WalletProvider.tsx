@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { chains, defaultProvider, infuraId, networkDetails } from 'utils/constants';
+import { GnosisConnector } from 'utils/GnosisConnector';
 import { Connector, Provider, chain } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
@@ -29,6 +30,9 @@ const connectors = ({ chainId }: ConnectorsConfig) => {
         appName: 'LlamaPay',
         jsonRpcUrl: chainDetails ? chainDetails.rpcUrl : `${rpcUrl}/${infuraId}`,
       },
+    }),
+    new GnosisConnector({
+      chains,
     }),
   ];
 };
