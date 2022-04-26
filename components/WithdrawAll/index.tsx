@@ -4,6 +4,7 @@ import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import useBatchCalls from 'queries/useBatchCalls';
 import React from 'react';
 import { useAccount } from 'wagmi';
+import { CashIcon } from '@heroicons/react/outline';
 
 const WithdrawInterface = new Interface(['function withdraw(address from, address to, uint216 amountPerSec)']);
 
@@ -42,8 +43,13 @@ export default function WithdrawAll() {
   };
 
   return (
-    <button onClick={handleClick} disabled={!accountData || unsupported}>
-      Send All
+    <button
+      onClick={handleClick}
+      disabled={!accountData || unsupported}
+      className="flex w-full items-center justify-between gap-4 whitespace-nowrap"
+    >
+      <span>Send All</span>
+      <CashIcon className="h-4 w-4" />
     </button>
   );
 }

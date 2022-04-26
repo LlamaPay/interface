@@ -6,3 +6,5 @@ export { StreamCircle } from './StreamCircle';
 export { StreamArrows } from './StreamArrows';
 export { LlamaPay } from './LlamaPay';
 export { Coins } from './Coins';
+export { FuelIcon } from './Fuel';
+export { WalletIcon } from './Wallet';

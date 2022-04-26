@@ -2,6 +2,7 @@ import { DotsVerticalIcon } from '@heroicons/react/solid';
 import { useDialogState } from 'ariakit';
 import { Menu, MenuButton, MenuItem, useMenuState } from 'ariakit/menu';
 import DisperseGasMoney from 'components/DisperseGas';
+import { FuelIcon, WalletIcon } from 'components/Icons';
 import WithdrawAll from 'components/WithdrawAll';
 import WithdrawOnBehalf from 'components/WithdrawOnBehalf';
 import { useNetworkProvider } from 'hooks';
@@ -28,18 +29,20 @@ export default function StreamMenu() {
       </MenuButton>
       <Menu state={menu} className="shadow-2 z-10 min-w-[10rem] rounded-xl border border-[#EAEAEA] bg-white p-2">
         <MenuItem
-          className="flex scroll-m-2 items-center justify-between gap-4 p-2 text-base font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40"
+          className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40"
           onClick={disperseGasGialog.toggle}
         >
-          {` Disperse ${nativeCurrency?.symbol ? nativeCurrency?.symbol : 'Funds'}`}
+          <span>{` Disperse ${nativeCurrency?.symbol ? nativeCurrency?.symbol : 'Funds'}`}</span>
+          <FuelIcon />
         </MenuItem>
         <MenuItem
-          className="flex scroll-m-2 items-center justify-between gap-4 p-2 text-base font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40"
+          className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40"
           onClick={withdrawOnBehalfDialog.toggle}
         >
-          Withdraw Another Wallet
+          <span>Withdraw Another Wallet</span>
+          <WalletIcon />
         </MenuItem>
-        <MenuItem className="flex scroll-m-2 items-center justify-between gap-4 p-2 text-base font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40">
+        <MenuItem className="flex scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40">
           <WithdrawAll />
         </MenuItem>
       </Menu>
