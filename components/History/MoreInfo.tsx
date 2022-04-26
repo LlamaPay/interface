@@ -3,6 +3,8 @@ import { FormDialog } from 'components/Dialog';
 import { UserHistoryFragment } from 'services/generated/graphql';
 import { useChainExplorer, useLocale } from 'hooks';
 import { ExternalLinkIcon } from '@heroicons/react/outline';
+import { secondsByDuration } from 'utils/constants';
+import { formatAmountInTable } from 'utils/amount';
 
 interface MoreInfoProps {
   data: UserHistoryFragment;
@@ -26,7 +28,7 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
       <FormDialog dialog={dialog} title="More Info" className="h-min">
         <span className="space-y-4 text-[#3D3D3D]">
           <section>
-            <h1 className="font-medium text-[#303030]">Token:</h1>
+            <h1 className="font-medium text-[#303030]">Token</h1>
             <div className="my-1 rounded border p-2 dark:border-stone-700">
               <div className="flex space-x-1">
                 <p>{data.stream.token.name}</p>
@@ -48,8 +50,15 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
                   <p>{data.oldStream?.payee.id}</p>
                 </div>
                 <div className="flex space-x-1">
-                  <p>Amount Per Sec:</p>
-                  <p>{(data.oldStream?.amountPerSec / 1e20).toFixed(5)}</p>
+                  <p>Amount:</p>
+                  <p>
+                    {!Number.isNaN(data.oldStream?.amountPerSec) &&
+                      `${formatAmountInTable(
+                        Number(data.oldStream?.amountPerSec) / 1e20,
+                        secondsByDuration['month'],
+                        locale
+                      )} ${data.oldStream?.token?.symbol ?? ''}`}
+                  </p>
                 </div>
                 <div className="flex space-x-1">
                   <p>Total Streamed:</p>
@@ -81,8 +90,16 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
               </div>
 
               <div className="flex space-x-1">
-                <p>Amount Per Sec:</p>
-                <p>{(data.stream.amountPerSec / 1e20).toFixed(5)}</p>
+                <p>Amount:</p>
+
+                <p>
+                  {!Number.isNaN(data.stream.amountPerSec) &&
+                    `${formatAmountInTable(
+                      Number(data.stream.amountPerSec) / 1e20,
+                      secondsByDuration['month'],
+                      locale
+                    )} ${data.stream.token.symbol}`}
+                </p>
               </div>
 
               {data.eventType === 'StreamCancelled' && (

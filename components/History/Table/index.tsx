@@ -9,12 +9,11 @@ import {
 } from '@tanstack/react-table';
 import Table from 'components/Table';
 import { IHistory } from 'types';
-import { formatAddress } from 'utils/address';
 import ActionName from './ActionName';
 import HistoryActions from './HistoryActions';
 import { downloadHistory } from 'utils/downloadCsv';
-import Tooltip from 'components/Tooltip';
 import Amount from './Amount';
+import { SavedName } from './SavedName';
 
 const table = createTable().setRowType<IHistory>();
 
@@ -29,16 +28,11 @@ const defaultColumns = table.createColumns([
     cell: ({ value }) => <span>{value === 'payer' ? 'Outgoing' : 'Incoming'}</span>,
   }),
   table.createDataColumn('addressRelated', {
-    header: 'Address related',
-    cell: ({ value }) => <Tooltip content={value}>{value && formatAddress(value)}</Tooltip>,
+    header: 'Address / Name',
+    cell: ({ value }) => <SavedName value={value} />,
   }),
   table.createDataColumn('amountPerSec', {
-    header: () => (
-      <>
-        <span>Amount</span>
-        <small className="mx-1 text-xs font-normal text-gray-500 dark:text-gray-400">per month</small>
-      </>
-    ),
+    header: 'Amount',
     cell: ({ value, cell }) => <Amount data={cell.row.original} value={value} />,
   }),
   table.createDisplayColumn({

@@ -80,19 +80,11 @@ export const Modify = ({ data, dialog, title }: ModifyProps) => {
                 <span>Payee:</span>
                 <span className="truncate">{data.payeeAddress}</span>
               </div>
-              <p>
-                <span>Amount / month: </span>
-                {(amountPerSec * secondsByDuration.month).toLocaleString(locale, {
-                  maximumFractionDigits: 7,
-                  minimumFractionDigits: 7,
-                })}
-              </p>
-              <p>
-                <span>Amount / sec: </span>
-                {amountPerSec.toLocaleString(locale, {
-                  maximumFractionDigits: 7,
-                  minimumFractionDigits: 7,
-                })}
+              <p className="whitespace-nowrap">
+                {`Amount: ${(amountPerSec * secondsByDuration.month).toLocaleString(locale, {
+                  maximumFractionDigits: 5,
+                  minimumFractionDigits: 5,
+                })} ${data.token?.symbol ?? ''}`}
               </p>
             </div>
           </section>

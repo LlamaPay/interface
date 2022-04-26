@@ -22,7 +22,8 @@ export function SavedName({ data }: { data: IStream }) {
   const updateAddress = useAddressStore((state) => state.updateAddress);
 
   const name =
-    useAddressStore((state) => state.addressBook.find((p) => p.id === address))?.shortName ?? formatAddress(address);
+    useAddressStore((state) => state.addressBook.find((p) => p.id?.toLowerCase() === address.toLowerCase()))
+      ?.shortName ?? formatAddress(address);
 
   const [savedAddress, setSavedAddress] = React.useState(name);
 

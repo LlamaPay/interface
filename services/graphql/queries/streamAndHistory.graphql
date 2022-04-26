@@ -66,6 +66,7 @@ fragment UserHistory on HistoryEvent {
     }
     token {
       address
+      symbol
     }
     amountPerSec
     createdTimestamp
