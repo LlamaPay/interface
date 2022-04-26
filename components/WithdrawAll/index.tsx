@@ -21,7 +21,7 @@ export default function WithdrawAll() {
     const calls: ICall =
       data.streams?.reduce((acc: ICall, current) => {
         if (accountData?.address.toLowerCase() === current.payerAddress.toLowerCase()) {
-          const callData = calls[current.llamaContractAddress] ?? [];
+          const callData = acc[current.llamaContractAddress] ?? [];
 
           callData.push(
             WithdrawInterface.encodeFunctionData('withdraw', [
