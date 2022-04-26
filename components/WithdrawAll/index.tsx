@@ -11,7 +11,7 @@ export default function WithdrawAll() {
   const { mutate: batchCall } = useBatchCalls();
   const { unsupported } = useNetworkProvider();
 
-  const handleClick = React.useCallback(() => {
+  const handleClick = () => {
     const iface = new Interface(['function withdraw(address from, address to, uint216 amountPerSec)']);
     const calls: { [key: string]: string[] } = {};
     data.streams?.map((p) => {
@@ -24,7 +24,7 @@ export default function WithdrawAll() {
     Object.keys(calls).map((p) => {
       batchCall({ llamaContractAddress: p, calls: calls[p] });
     });
-  }, [data, accountData, batchCall]);
+  };
 
   return (
     <>
