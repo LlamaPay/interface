@@ -1,32 +1,20 @@
-import { useDialogState } from 'ariakit';
+import { DisclosureState, useDialogState } from 'ariakit';
 import { FormDialog, TransactionDialog } from 'components/Dialog';
-import { useNetworkProvider } from 'hooks';
 import useTokenList from 'hooks/useTokenList';
 import React from 'react';
-import { useAccount } from 'wagmi';
+
 import WithdrawOnBehalfForm, { Fallback } from './Form';
 
-export default function WithdrawOnBehalf() {
-  const formDialog = useDialogState();
+export default function WithdrawOnBehalf({ dialog }: { dialog: DisclosureState }) {
   const transactionDialog = useDialogState();
 
-  const [{ data: accountData }] = useAccount();
-  const { unsupported } = useNetworkProvider();
   const { data: tokens, isLoading, error } = useTokenList();
 
   const [transactionHash, setTransactionHash] = React.useState('');
 
   return (
     <>
-      <button
-        onClick={formDialog.toggle}
-        className="secondary-button disabled:cursor-not-allowed"
-        disabled={accountData && !unsupported ? false : true}
-      >
-        Withdraw Another Wallet
-      </button>
-
-      <FormDialog dialog={formDialog} title="Withdraw on Behalf of Another Wallet" className="v-min h-min">
+      <FormDialog dialog={dialog} title="Withdraw on Behalf of Another Wallet" className="v-min h-min">
         {isLoading ? (
           <Fallback />
         ) : error || !tokens ? (
@@ -36,7 +24,7 @@ export default function WithdrawOnBehalf() {
         ) : (
           <WithdrawOnBehalfForm
             tokens={tokens}
-            formDialog={formDialog}
+            formDialog={dialog}
             transactionDialog={transactionDialog}
             setTransactionHash={setTransactionHash}
           />

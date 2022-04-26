@@ -8,6 +8,7 @@ import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { StreamTable, DefaultStreamTable } from './Table';
 import { IStreamAndHistory } from 'types';
 import WithdrawAll from 'components/WithdrawAll';
+import StreamMenu from './Menu';
 
 export function StreamSection() {
   const { data, isLoading, error } = useStreamsAndHistory();
@@ -24,9 +25,8 @@ export function StreamSection() {
           <Link href="/create">
             <a className="primary-button py-2 px-8 text-sm font-bold">Create Stream</a>
           </Link>
-          <DisperseGasMoney />
-          <WithdrawOnBehalf />
-          <WithdrawAll />
+
+          <StreamMenu />
         </div>
       </div>
       {isLoading || error || !data?.streams || data.streams?.length < 1 ? (
