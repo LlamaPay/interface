@@ -176,7 +176,12 @@ const DepositAndCreate = ({ tokens, userAddress, dialog }: IStreamFormProps) => 
           id="bdAmountToDeposit"
         />
 
-        <InputText name="addressToStream" isRequired={true} label="Enter an Address to Stream" />
+        <InputText
+          name="addressToStream"
+          isRequired={true}
+          label="Enter an Address to Stream"
+          placeholder="Enter Recipient Address"
+        />
 
         <InputAmountWithDuration
           name="amountToStream"

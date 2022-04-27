@@ -31,6 +31,7 @@ export interface IFormElements {
   amountToStream: { value: string };
   streamDuration: { value: 'year' | 'month' };
   addressToStream: { value: string };
+  shortName: { value: string };
 }
 
 export interface ICreateStreamForm {

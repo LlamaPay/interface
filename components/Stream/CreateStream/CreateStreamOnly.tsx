@@ -14,7 +14,20 @@ const CreateStreamOnly = ({ tokens, dialog }: IStreamFormProps) => {
   return (
     <>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-        <InputText name="addressToStream" isRequired={true} label="Enter an Address to Stream" />
+        <InputText
+          name="addressToStream"
+          isRequired={true}
+          label="Enter an Address to Stream"
+          placeholder="Enter Recipient Address"
+        />
+
+        <InputText
+          name="shortName"
+          isRequired={false}
+          label="Associate a Name to the Address?"
+          placeholder="Add a name for fast identification"
+        />
+
         <span>
           <SelectToken
             handleTokenChange={handleTokenChange}

@@ -4,7 +4,20 @@ import { BeatLoader } from 'react-spinners';
 const Placeholder = () => {
   return (
     <form className="flex flex-col gap-4">
-      <InputText name="addressToStream" isRequired={true} label="Address to stream" />
+      <InputText
+        name="addressToStream"
+        isRequired={true}
+        label="Address to stream"
+        placeholder="Enter Recipient Address"
+      />
+
+      <InputText
+        name="shortName"
+        isRequired={false}
+        label="Associate a Name to the Address?"
+        placeholder="Add a name for fast identification"
+      />
+
       <span>
         <SelectToken
           handleTokenChange={() => null}

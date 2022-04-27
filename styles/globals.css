@@ -65,7 +65,7 @@
   }
 
   .input-field {
-    @apply mt-[5px] w-full rounded border border-[#CBCBCB] px-3 py-[7px] slashed-zero;
+    @apply mt-[5px] w-full rounded border border-[#CBCBCB] px-3 py-[7px] slashed-zero placeholder:text-sm placeholder:text-[#666666];
   }
 
   .hero-word-break::before {

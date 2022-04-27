@@ -107,9 +107,9 @@ const WithdrawOnBehalfForm = ({
         />
       </span>
 
-      <InputText name="payerAddress" label="Payer:" isRequired />
+      <InputText name="payerAddress" label="Payer" placeholder="Enter Payer Address" isRequired />
 
-      <InputText name="payeeAddress" label="Payee:" isRequired />
+      <InputText name="payeeAddress" label="Payee" placeholder="Enter Payee Address" isRequired />
 
       <InputAmountWithDuration
         name="streamedAmount"

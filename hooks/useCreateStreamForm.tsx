@@ -5,6 +5,7 @@ import { DisclosureState } from 'ariakit';
 import useStreamToken from 'queries/useStreamToken';
 import { IFormElements } from 'components/Stream/CreateStream/types';
 import { secondsByDuration } from 'utils/constants';
+import { useAddressStore } from 'store/address';
 
 export function useCreateStreamForm({ tokens, dialog }: { tokens: ITokenBalance[]; dialog?: DisclosureState }) {
   const { mutate: streamToken, isLoading: confirmingStream, data: transactionDetails } = useStreamToken();
@@ -21,6 +22,8 @@ export function useCreateStreamForm({ tokens, dialog }: { tokens: ITokenBalance[
     } else setTokenAddress(token);
   };
 
+  const updateAddress = useAddressStore((state) => state.updateAddress);
+
   // create stream on submit
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,7 +31,13 @@ export function useCreateStreamForm({ tokens, dialog }: { tokens: ITokenBalance[
     const form = e.target as typeof e.target & IFormElements;
     const amountToStream = form.amountToStream.value;
     const streamDuration = form.streamDuration?.value;
-    const payeeAddress = form.addressToStream.value;
+    const payeeAddress = form.addressToStream?.value;
+
+    // save address to local storage
+    const shortName = form.shortName?.value;
+    if (shortName && shortName !== '') {
+      updateAddress(payeeAddress, shortName);
+    }
 
     const duration = streamDuration === 'year' ? 'year' : 'month';
 

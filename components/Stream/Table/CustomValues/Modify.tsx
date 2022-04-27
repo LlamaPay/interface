@@ -94,13 +94,15 @@ export const Modify = ({ data, dialog, title }: ModifyProps) => {
               className="flex flex-col gap-4 rounded border px-2 pt-[2px] dark:border-stone-700"
               onSubmit={updateStream}
             >
-              <InputText name="updatedAddress" label="Address" isRequired />
+              <InputText name="updatedAddress" label="Address" isRequired placeholder="Enter Recipient Address" />
+
               <InputAmountWithDuration
                 name="updatedAmount"
                 label="Amount"
                 selectInputName="modifiedStreamDuration"
                 isRequired
               />
+
               <SubmitButton className="my-2">
                 {isLoading ? <BeatLoader size={6} color="white" /> : 'Update'}
               </SubmitButton>
