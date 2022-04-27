@@ -43,7 +43,11 @@ const defaultColumns = table.createColumns([
     header: 'Address / Name',
     cell: ({ cell }) => {
       if (cell.row.original === undefined) return;
-      return cell.row.original.eventType === 'Deposit' ? 'You' : <SavedName value={cell.row.original.addressRelated} />;
+      return cell.row.original.eventType === 'Deposit' ? (
+        'You'
+      ) : (
+        <SavedName value={cell.row.original.addressRelated !== null ? cell.row.original.addressRelated : ''} />
+      );
     },
   }),
   table.createDisplayColumn({
