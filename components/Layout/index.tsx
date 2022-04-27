@@ -49,7 +49,7 @@ export default function Layout({ children, className, noBanner = false, ...props
       </div> */}
       {router.pathname === '/' && <Hero noBanner={noBanner} onboardDialog={onboardDialog} />}
 
-      <main className={classNames('flex-1 px-2 pb-8 md:px-[30px] lg:px-[60px] xl:px-[120px]', className)} {...props}>
+      <main className={classNames('flex-1', className)} {...props}>
         {children}
       </main>
       <OnboardDialog dialog={onboardDialog} />

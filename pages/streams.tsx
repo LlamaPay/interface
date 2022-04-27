@@ -39,8 +39,8 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, network, l
   const streamsAndHistory = useFormatStreamAndHistory({ data, address, provider });
 
   return (
-    <Layout className="mx-auto mt-12 flex w-full flex-col gap-10">
-      <section className="section-header w-fit">
+    <Layout className="mx-auto mt-12 flex w-full flex-col gap-[30px]">
+      <section className="app-section section-header w-fit">
         <h1 className="font-exo px-2 py-1 text-3xl">Streams and History</h1>
         {network && (
           <div className="mt-[5px] flex flex-wrap items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F]">
@@ -63,8 +63,10 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, network, l
           </div>
         )}
       </section>
-      <AltStreamSection isLoading={isLoading} isError={isError} data={streamsAndHistory} />
-      <AltHistorySection isLoading={isLoading} isError={isError} data={streamsAndHistory} />
+      <section className="app-section flex h-full flex-1 flex-col gap-[50px] bg-[#D9F2F4]/10 py-[22px]">
+        <AltStreamSection isLoading={isLoading} isError={isError} data={streamsAndHistory} />
+        <AltHistorySection isLoading={isLoading} isError={isError} data={streamsAndHistory} />
+      </section>
     </Layout>
   );
 };

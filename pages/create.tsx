@@ -15,7 +15,7 @@ const Create: NextPage = () => {
   useStreamsAndHistory();
 
   return (
-    <Layout className="mx-auto mt-12 flex w-full flex-col items-center space-y-6">
+    <Layout className="app-section mx-auto mt-12 flex w-full flex-col items-center space-y-6 pb-8">
       {!accountData || unsupported ? (
         <section className="z-2 flex w-full max-w-lg flex-col">
           <h1 className="font-exo mb-5 flex items-center gap-[0.625rem] text-2xl font-semibold text-[#3D3D3D]">

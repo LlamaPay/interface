@@ -58,8 +58,8 @@ const Balance = () => {
   const showFallback = isLoading || noBalances || isError;
 
   return (
-    <span className="mr-auto w-full">
-      <section className={showFallback ? 'w-full max-w-2xl' : 'w-full max-w-fit'}>
+    <div className="mr-auto w-full">
+      <div className={showFallback ? 'w-full max-w-2xl' : 'w-full max-w-fit'}>
         <div className="section-header flex w-full flex-wrap items-center justify-between gap-[0.625rem]">
           <span className="flex items-center gap-[0.625rem]">
             <BalanceIcon />
@@ -178,8 +178,8 @@ const Balance = () => {
         {tokens && accountData && (
           <DepositField tokens={tokens} userAddress={accountData.address} dialog={depositFieldDialog} />
         )}
-      </section>
-    </span>
+      </div>
+    </div>
   );
 };
 

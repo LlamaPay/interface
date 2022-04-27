@@ -15,7 +15,7 @@ const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
   const t = useTranslations('Header');
 
   return (
-    <header className="flex items-center justify-between gap-4 bg-[#D9F4E6] px-2 py-4 text-base md:p-[30px]">
+    <header className="flex items-center justify-between gap-10 overflow-x-auto bg-[#D9F4E6] px-2 py-4 text-base md:p-[30px]">
       <Link href="/" passHref>
         <a className="flex-1">
           <Logo />

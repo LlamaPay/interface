@@ -26,11 +26,15 @@
   }
 
   #__next {
-    @apply isolate flex min-h-screen flex-col slashed-zero;
+    @apply isolate flex min-h-full flex-col slashed-zero;
   }
 }
 
 @layer components {
+  .app-section {
+    @apply px-2 md:px-[30px] lg:px-[60px] xl:px-[120px];
+  }
+
   .shadow-1 {
     @apply shadow-[0px_3px_7px_rgba(0,0,0,0.12)];
   }
