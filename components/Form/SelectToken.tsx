@@ -162,7 +162,8 @@ const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<Rea
       {
         onSuccess: (res) => {
           setIsConfirming(true);
-          res.wait().then((data: any) => {
+
+          res.wait().then((data) => {
             if (data.status === 1) {
               setNewTokenForm(false);
             } else {

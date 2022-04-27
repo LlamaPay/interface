@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { InputAmountWithDuration, InputText, SelectToken } from 'components/Form';
 import { BeatLoader } from 'react-spinners';
-import { ITokenLists } from 'types';
+import { ITokenLists, ITransaction } from 'types';
 import { useContractWrite, useProvider } from 'wagmi';
 import llamaContract from 'abis/llamaContract';
 import { useQueryClient } from 'react-query';
@@ -67,7 +67,7 @@ const WithdrawOnBehalfForm = ({
       // format amount to bignumber
       const amountPerSec = new BigNumber(Number(streamedAmount) * 1e20).div(secondsByDuration[duration]).toFixed(0);
 
-      withdraw({ args: [payerAddress, payeeAddress, amountPerSec] }).then(({ data, error }: any) => {
+      withdraw({ args: [payerAddress, payeeAddress, amountPerSec] }).then(({ data, error }: ITransaction) => {
         if (data) {
           setTransactionHash(data.hash ?? null);
 
@@ -77,7 +77,7 @@ const WithdrawOnBehalfForm = ({
 
           const toastId = toast.loading('Sending Funds');
 
-          data.wait().then((receipt: any) => {
+          data.wait().then((receipt) => {
             toast.dismiss(toastId);
 
             queryClient.invalidateQueries();
@@ -87,7 +87,7 @@ const WithdrawOnBehalfForm = ({
         }
 
         if (error) {
-          setError(error.message);
+          setError(error.message || 'Transaction Failed');
         }
       });
     }

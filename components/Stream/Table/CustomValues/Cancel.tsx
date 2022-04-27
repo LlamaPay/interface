@@ -4,7 +4,7 @@ import { useDialogState } from 'ariakit';
 import { TransactionDialog } from 'components/Dialog';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
-import { IStream } from 'types';
+import { IStream, ITransaction } from 'types';
 import { useContractWrite } from 'wagmi';
 
 interface CancelProps {
@@ -30,11 +30,7 @@ export const Cancel = ({ data }: CancelProps) => {
   const queryClient = useQueryClient();
 
   const handleClick = () => {
-    cancel().then(({ data, error }: any) => {
-      if (error) {
-        toast.error(error.message);
-      }
-
+    cancel().then(({ data, error }: ITransaction) => {
       if (data) {
         setTransactionHash(data.hash ?? null);
 
@@ -42,13 +38,17 @@ export const Cancel = ({ data }: CancelProps) => {
 
         const toastId = toast.loading('Cancelling Stream');
 
-        data.wait().then((receipt: any) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastId);
 
           receipt.status === 1 ? toast.success('Stream Cancelled') : toast.error('Failed to Cancel Stream');
 
           queryClient.invalidateQueries();
         });
+      }
+
+      if (error) {
+        toast.error(error.message || 'Transaction Failed');
       }
     });
   };
@@ -58,7 +58,7 @@ export const Cancel = ({ data }: CancelProps) => {
       <button onClick={handleClick} className="row-action-links text-[#E40000]">
         Cancel
       </button>
-      {transactionHash && <TransactionDialog dialog={transactionDialog} transactionHash={transactionHash || ''} />}
+      {transactionHash && <TransactionDialog dialog={transactionDialog} transactionHash={transactionHash} />}
     </>
   );
 };

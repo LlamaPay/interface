@@ -1,6 +1,7 @@
 import { Signer } from 'ethers';
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from 'react-query';
+import { ITransactionError, ITransactionSuccess } from 'types';
 import { createWriteContract } from 'utils/contract';
 import { useSigner } from 'wagmi';
 
@@ -22,22 +23,23 @@ async function batchCalls({ signer, llamaContractAddress, calls }: IBatchCalls) 
       return await contract.batch(calls, true);
     }
   } catch (error: any) {
-    throw new Error(error.message || (error?.reason ?? 'Sending Tokens'));
+    throw new Error(error.message || (error?.reason ?? 'Transactions Failed'));
   }
 }
 
 export default function useBatchCalls() {
   const [{ data: signer }] = useSigner();
   const queryClient = useQueryClient();
-  return useMutation(
+  return useMutation<ITransactionSuccess, ITransactionError, IUseBatchCalls, unknown>(
     ({ llamaContractAddress, calls }: IUseBatchCalls) => batchCalls({ signer, llamaContractAddress, calls }),
     {
-      onError: (error: any) => {
-        toast.error(error.message);
+      onError: (error) => {
+        toast.error(error.message || 'Transactions Failed');
       },
       onSuccess: (data) => {
         const toastId = toast.loading('Executing Batch Transactions');
-        data.wait().then((res: any) => {
+
+        data.wait().then((res) => {
           toast.dismiss(toastId);
           queryClient.invalidateQueries();
           if (res.status === 1) {

@@ -1,6 +1,7 @@
 import { Signer } from 'ethers';
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from 'react-query';
+import { ITransactionError, ITransactionSuccess } from 'types';
 import { createWriteContract } from 'utils/contract';
 import { useSigner } from 'wagmi';
 
@@ -14,15 +15,6 @@ interface IUseModifyStream {
 
 interface IModifyStream extends IUseModifyStream {
   signer?: Signer;
-}
-
-interface QueryError {
-  message: string;
-}
-
-interface QueryResponse {
-  hash: string;
-  wait: Awaited<Promise<() => any>>;
 }
 
 const modifyStream = async ({
@@ -41,7 +33,6 @@ const modifyStream = async ({
       return await contract.modifyStream(payeeAddress, amountPerSec, updatedAddress, updatedAmountPerSec);
     }
   } catch (error: any) {
-    // console.log(error);
     throw new Error(error.message || (error?.reason ?? "Couldn't modify stream"));
   }
 };
@@ -50,13 +41,13 @@ export default function useModifyStream() {
   const [{ data: signer }] = useSigner();
   const queryClient = useQueryClient();
 
-  return useMutation<QueryResponse, QueryError, IUseModifyStream>(
+  return useMutation<ITransactionSuccess, ITransactionError, IUseModifyStream, unknown>(
     ({ llamaContractAddress, payeeAddress, amountPerSec, updatedAddress, updatedAmountPerSec }: IUseModifyStream) =>
       modifyStream({ llamaContractAddress, payeeAddress, amountPerSec, updatedAddress, updatedAmountPerSec, signer }),
     {
       onSuccess: (data) => {
         const toastId = toast.loading('Confirming transaction');
-        data.wait().then((res: any) => {
+        data.wait().then((res) => {
           toast.dismiss(toastId);
           queryClient.invalidateQueries();
           if (res.status === 1) {
@@ -66,8 +57,8 @@ export default function useModifyStream() {
           }
         });
       },
-      onError: (error: any) => {
-        toast.error(error.message);
+      onError: (error) => {
+        toast.error(error.message || "Couldn't modify stream");
       },
       onSettled: () => {
         queryClient.invalidateQueries();
