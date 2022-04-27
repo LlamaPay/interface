@@ -1,4 +1,4 @@
-import { CashIcon, CogIcon, InboxInIcon, PlusIcon, XIcon } from '@heroicons/react/solid';
+import { CashIcon, CogIcon, InboxInIcon, PauseIcon, PlayIcon, PlusIcon, XIcon } from '@heroicons/react/solid';
 import Tooltip from 'components/Tooltip';
 import { useChainExplorer } from 'hooks';
 import { IHistory } from 'types';
@@ -50,6 +50,24 @@ export default function ActionName({ data }: { data: IHistory }) {
             <a href={link} target="_blank" rel="noreferrer noopener">
               <span className="sr-only">View transaction on chain explorer</span>
               <InboxInIcon className="h-4 w-4" />
+            </a>
+          </div>
+        </Tooltip>
+      ) : data.eventType === 'StreamPaused' ? (
+        <Tooltip content="Pause">
+          <div className="rounded bg-yellow-100 p-1 text-yellow-600">
+            <a href={link} target="_blank" rel="noreferrer noopener">
+              <span className="sr-only">View transaction on chain explorer</span>
+              <PauseIcon className="h-4 w-4" />
+            </a>
+          </div>
+        </Tooltip>
+      ) : data.eventType === 'StreamResumed' ? (
+        <Tooltip content="Resume">
+          <div className="rounded bg-green-100 p-1 text-green-600">
+            <a href={link} target="_blank" rel="noreferrer noopener">
+              <span className="sr-only">View transaction on chain explorer</span>
+              <PlayIcon className="h-4 w-4" />
             </a>
           </div>
         </Tooltip>

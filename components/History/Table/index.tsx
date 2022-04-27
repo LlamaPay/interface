@@ -29,13 +29,7 @@ const defaultColumns = table.createColumns([
     cell: ({ cell }) => {
       if (cell.row.original === undefined) return;
       const event = cell.row.original.eventType;
-      return event === 'Deposit'
-        ? 'Deposit'
-        : event === 'Withdraw'
-        ? 'Withdraw'
-        : cell.row.original.addressType === 'payer'
-        ? 'Outgoing'
-        : 'Incoming';
+      return event === 'Deposit' ? 'Deposit' : cell.row.original.addressType === 'payer' ? 'Outgoing' : 'Incoming';
     },
   }),
   table.createDisplayColumn({
