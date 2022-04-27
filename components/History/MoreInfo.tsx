@@ -81,24 +81,24 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
             <div className="my-1 rounded border p-2 dark:border-stone-700">
               <div className="flex space-x-1">
                 <p>Payer:</p>
-                <p>{data.stream.payer.id}</p>
+                <p>{data.stream?.payer.id}</p>
               </div>
 
               <div className="flex space-x-1">
                 <p>Payee:</p>
-                <p>{data.stream.payee.id}</p>
+                <p>{data.stream?.payee.id}</p>
               </div>
 
               <div className="flex space-x-1">
                 <p>Amount:</p>
 
                 <p>
-                  {!Number.isNaN(data.stream.amountPerSec) &&
+                  {!Number.isNaN(data.stream?.amountPerSec) &&
                     `${formatAmountInTable(
-                      Number(data.stream.amountPerSec) / 1e20,
+                      Number(data.stream?.amountPerSec) / 1e20,
                       secondsByDuration['month'],
                       locale
-                    )} ${data.stream.token.symbol}`}
+                    )} ${data.stream?.token.symbol}`}
                 </p>
               </div>
 
