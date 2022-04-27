@@ -1,5 +1,5 @@
 overwrite: true
-schema: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay'
+schema: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-kovan'
 documents: './services/graphql/**/*.graphql'
 generates:
   ./services/generated/graphql.tsx:
