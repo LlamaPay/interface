@@ -31,8 +31,8 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
             <h1 className="font-medium text-[#303030]">Token</h1>
             <div className="my-1 rounded border p-2 dark:border-stone-700">
               <div className="flex space-x-1">
-                <p>{data.stream.token.name}</p>
-                <p>({data.stream.token.symbol})</p>
+                <p>{data.stream?.token.name}</p>
+                <p>({data.stream?.token.symbol})</p>
               </div>
             </div>
           </section>
