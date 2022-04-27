@@ -10,7 +10,7 @@ const HistoryActions = ({ data }: { data: IHistory }) => {
       <button className="row-action-links ml-auto" onClick={dialog.toggle}>
         Details
       </button>
-      {/* <MoreInfo data={data} dialog={dialog} /> */}
+      {data.stream ? <MoreInfo data={data} dialog={dialog} /> : ''}
     </span>
   );
 };
