@@ -46,9 +46,25 @@ const defaultColumns = table.createColumns([
       return cell.row.original.eventType === 'Deposit' ? 'You' : <SavedName value={cell.row.original.addressRelated} />;
     },
   }),
-  table.createDataColumn('amountPerSec', {
+  table.createDisplayColumn({
+    id: 'amount',
     header: 'Amount',
-    cell: ({ value, cell }) => <Amount data={cell.row.original} value={value} />,
+    cell: ({ cell }) => {
+      if (cell.row.original == undefined) return;
+      const info = cell.row.original;
+      if (info.eventType === 'Deposit' || info.eventType === 'Withdraw') {
+        return (
+          <>
+            <span>{`${(Number(info.amount) / 10 ** Number(info.token.decimals)).toLocaleString('en-US', {
+              maximumFractionDigits: 5,
+            })}`}</span>
+            <span className="mx-1 text-xs text-gray-500 dark:text-gray-400">{info.token.symbol}</span>
+          </>
+        );
+      } else {
+        return <Amount value={info.amountPerSec} data={info} />;
+      }
+    },
   }),
   table.createDisplayColumn({
     id: 'historyActions',

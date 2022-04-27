@@ -55,6 +55,7 @@ export type HistoryEvent = {
   id: Scalars['ID'];
   oldStream?: Maybe<Stream>;
   stream?: Maybe<Stream>;
+  token: Token;
   txHash: Scalars['Bytes'];
   users: Array<User>;
 };
@@ -163,6 +164,26 @@ export type HistoryEvent_Filter = {
   stream_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   stream_starts_with?: InputMaybe<Scalars['String']>;
   stream_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  token?: InputMaybe<Scalars['String']>;
+  token_contains?: InputMaybe<Scalars['String']>;
+  token_contains_nocase?: InputMaybe<Scalars['String']>;
+  token_ends_with?: InputMaybe<Scalars['String']>;
+  token_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  token_gt?: InputMaybe<Scalars['String']>;
+  token_gte?: InputMaybe<Scalars['String']>;
+  token_in?: InputMaybe<Array<Scalars['String']>>;
+  token_lt?: InputMaybe<Scalars['String']>;
+  token_lte?: InputMaybe<Scalars['String']>;
+  token_not?: InputMaybe<Scalars['String']>;
+  token_not_contains?: InputMaybe<Scalars['String']>;
+  token_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  token_not_ends_with?: InputMaybe<Scalars['String']>;
+  token_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  token_not_in?: InputMaybe<Array<Scalars['String']>>;
+  token_not_starts_with?: InputMaybe<Scalars['String']>;
+  token_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  token_starts_with?: InputMaybe<Scalars['String']>;
+  token_starts_with_nocase?: InputMaybe<Scalars['String']>;
   txHash?: InputMaybe<Scalars['Bytes']>;
   txHash_contains?: InputMaybe<Scalars['Bytes']>;
   txHash_in?: InputMaybe<Array<Scalars['Bytes']>>;
@@ -185,6 +206,7 @@ export enum HistoryEvent_OrderBy {
   Id = 'id',
   OldStream = 'oldStream',
   Stream = 'stream',
+  Token = 'token',
   TxHash = 'txHash',
   Users = 'users'
 }
@@ -1106,11 +1128,11 @@ export type StreamAndHistoryQueryVariables = Exact<{
 }>;
 
 
-export type StreamAndHistoryQuery = { __typename?: 'Query', user?: { __typename?: 'User', streams: Array<{ __typename?: 'Stream', streamId: any, active: boolean, paused: boolean, lastPaused: any, amountPerSec: any, createdTimestamp: any, contract: { __typename?: 'LlamaPayContract', address: any }, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number, symbol: string }, historicalEvents: Array<{ __typename?: 'HistoryEvent', eventType: string, txHash: any, createdTimestamp: any }> }>, historicalEvents: Array<{ __typename?: 'HistoryEvent', txHash: any, eventType: string, amount?: any | null, createdTimestamp: any, stream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number, symbol: string } } | null, oldStream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, symbol: string } } | null }> } | null };
+export type StreamAndHistoryQuery = { __typename?: 'Query', user?: { __typename?: 'User', streams: Array<{ __typename?: 'Stream', streamId: any, active: boolean, paused: boolean, lastPaused: any, amountPerSec: any, createdTimestamp: any, contract: { __typename?: 'LlamaPayContract', address: any }, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number, symbol: string }, historicalEvents: Array<{ __typename?: 'HistoryEvent', eventType: string, txHash: any, createdTimestamp: any }> }>, historicalEvents: Array<{ __typename?: 'HistoryEvent', txHash: any, eventType: string, amount?: any | null, createdTimestamp: any, stream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number, symbol: string } } | null, oldStream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, symbol: string } } | null, token: { __typename?: 'Token', symbol: string, decimals: number } }> } | null };
 
 export type UserStreamFragment = { __typename?: 'Stream', streamId: any, active: boolean, paused: boolean, lastPaused: any, amountPerSec: any, createdTimestamp: any, contract: { __typename?: 'LlamaPayContract', address: any }, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number, symbol: string }, historicalEvents: Array<{ __typename?: 'HistoryEvent', eventType: string, txHash: any, createdTimestamp: any }> };
 
-export type UserHistoryFragment = { __typename?: 'HistoryEvent', txHash: any, eventType: string, amount?: any | null, createdTimestamp: any, stream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number, symbol: string } } | null, oldStream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, symbol: string } } | null };
+export type UserHistoryFragment = { __typename?: 'HistoryEvent', txHash: any, eventType: string, amount?: any | null, createdTimestamp: any, stream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number, symbol: string } } | null, oldStream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, symbol: string } } | null, token: { __typename?: 'Token', symbol: string, decimals: number } };
 
 export const UserStreamFragmentDoc = `
     fragment UserStream on Stream {
@@ -1177,6 +1199,10 @@ export const UserHistoryFragmentDoc = `
     }
     amountPerSec
     createdTimestamp
+  }
+  token {
+    symbol
+    decimals
   }
   amount
   createdTimestamp
