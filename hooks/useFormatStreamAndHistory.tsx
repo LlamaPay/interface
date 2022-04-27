@@ -47,7 +47,7 @@ export function useFormatStreamAndHistory({
           paused: s.paused,
           pausedAmount: s.pausedAmount,
           lastPaused: s.lastPaused,
-          reason: s.reason ? s.reason : null,
+          reason: s.reason ?? s.reason,
         };
       });
 
