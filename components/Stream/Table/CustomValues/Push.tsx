@@ -33,7 +33,7 @@ export const Push = ({ data, buttonName }: PushProps) => {
   const handleClick = () => {
     withdraw().then(({ data, error }: any) => {
       if (data) {
-        setTransactionHash(data.hash ?? '');
+        setTransactionHash(data.hash ?? null);
 
         transactionDialog.toggle();
 
@@ -51,7 +51,7 @@ export const Push = ({ data, buttonName }: PushProps) => {
       }
 
       if (error) {
-        toast.error(data.error?.message);
+        toast.error(error.message);
       }
     });
   };

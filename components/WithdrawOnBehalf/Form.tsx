@@ -69,7 +69,7 @@ const WithdrawOnBehalfForm = ({
 
       withdraw({ args: [payerAddress, payeeAddress, amountPerSec] }).then(({ data, error }: any) => {
         if (data) {
-          setTransactionHash(data.hash ?? '');
+          setTransactionHash(data.hash ?? null);
 
           formDialog.hide();
 
@@ -97,7 +97,7 @@ const WithdrawOnBehalfForm = ({
   const tokenOptions = React.useMemo(() => tokens?.map((t) => t.tokenAddress) ?? [], [tokens]);
 
   return (
-    <form onSubmit={handleWithdraw} className="flex flex-col space-y-4">
+    <form onSubmit={handleWithdraw} className="flex flex-col gap-4">
       <span>
         <SelectToken
           handleTokenChange={handleTokenChange}
@@ -118,7 +118,9 @@ const WithdrawOnBehalfForm = ({
         selectInputName="streamDuration"
       />
 
-      <button className="form-submit-button">{loading ? <BeatLoader size={6} color="white" /> : 'Withdraw'}</button>
+      <button className="form-submit-button mt-2">
+        {loading ? <BeatLoader size={6} color="white" /> : 'Withdraw'}
+      </button>
 
       {error && <p className="text-center text-sm text-red-500">{error}</p>}
     </form>
@@ -127,7 +129,7 @@ const WithdrawOnBehalfForm = ({
 
 export const Fallback = () => {
   return (
-    <form className="flex flex-col space-y-4">
+    <form className="flex flex-col gap-4">
       <span>
         <SelectToken
           handleTokenChange={() => null}
@@ -148,7 +150,7 @@ export const Fallback = () => {
         selectInputName="streamDuration"
       />
 
-      <button className="form-submit-button" disabled>
+      <button className="form-submit-button mt-2" disabled>
         <BeatLoader size={6} color="white" />
       </button>
     </form>

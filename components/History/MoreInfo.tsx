@@ -122,17 +122,15 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
             </p>
           </section>
 
-          <section className="flex">
-            <a
-              href={txLink}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="form-submit-button mt-4 flex items-center justify-center gap-2"
-            >
-              <span>View on {explorerName}</span>
-              <ExternalLinkIcon className="h-4 w-4" />
-            </a>
-          </section>
+          <a
+            href={txLink}
+            target="_blank"
+            rel="noreferrer noopener"
+            className="form-submit-button mt-4 flex items-center justify-center gap-2"
+          >
+            <span>View on {explorerName}</span>
+            <ExternalLinkIcon className="h-4 w-4" />
+          </a>
         </span>
       </FormDialog>
     </>

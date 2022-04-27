@@ -1,5 +1,7 @@
-import llamaContract from 'abis/llamaContract';
 import * as React from 'react';
+import llamaContract from 'abis/llamaContract';
+import { useDialogState } from 'ariakit';
+import { TransactionDialog } from 'components/Dialog';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import { IStream } from 'types';
@@ -21,16 +23,33 @@ export const Cancel = ({ data }: CancelProps) => {
     }
   );
 
+  const [transactionHash, setTransactionHash] = React.useState<string | null>(null);
+
+  const transactionDialog = useDialogState();
+
   const queryClient = useQueryClient();
 
   const handleClick = () => {
-    cancel().then((data) => {
-      const loadingToast = data.error ? toast.error(data.error.message) : toast.loading('Cancelling Stream');
-      data.data?.wait().then((receipt) => {
-        toast.dismiss(loadingToast);
-        receipt.status === 1 ? toast.success('Stream Cancelled') : toast.error('Failed to Cancel Stream');
-        queryClient.invalidateQueries();
-      });
+    cancel().then(({ data, error }: any) => {
+      if (error) {
+        toast.error(error.message);
+      }
+
+      if (data) {
+        setTransactionHash(data.hash ?? null);
+
+        transactionDialog.toggle();
+
+        const toastId = toast.loading('Cancelling Stream');
+
+        data.wait().then((receipt: any) => {
+          toast.dismiss(toastId);
+
+          receipt.status === 1 ? toast.success('Stream Cancelled') : toast.error('Failed to Cancel Stream');
+
+          queryClient.invalidateQueries();
+        });
+      }
     });
   };
 
@@ -39,6 +58,7 @@ export const Cancel = ({ data }: CancelProps) => {
       <button onClick={handleClick} className="row-action-links text-[#E40000]">
         Cancel
       </button>
+      {transactionHash && <TransactionDialog dialog={transactionDialog} transactionHash={transactionHash || ''} />}
     </>
   );
 };
