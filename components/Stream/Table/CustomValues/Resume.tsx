@@ -16,7 +16,7 @@ export default function Resume({ data }: ResumeProps) {
     },
     'createStreamWithReason',
     {
-      args: [data.payeeAddress, data.amountPerSec, data.reason],
+      args: [data.payeeAddress, data.amountPerSec, data.reason ? data.reason : ''],
     }
   );
 
