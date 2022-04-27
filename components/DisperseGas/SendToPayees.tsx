@@ -8,7 +8,15 @@ import { formatAddress } from 'utils/address';
 import { DisclosureState } from 'ariakit';
 import { IStream } from 'types';
 
-export default function SendToPayees({ dialog }: { dialog: DisclosureState }) {
+export default function SendToPayees({
+  dialog,
+  setTransactionHash,
+  transactionDialog,
+}: {
+  dialog: DisclosureState;
+  setTransactionHash: React.Dispatch<React.SetStateAction<string>>;
+  transactionDialog: DisclosureState;
+}) {
   const { data, isLoading, error } = useStreamsAndHistory();
 
   const [{ data: accountData }] = useAccount();
@@ -177,7 +185,6 @@ export default function SendToPayees({ dialog }: { dialog: DisclosureState }) {
                               type="number"
                               min="0"
                               name={p}
-                              value={tableContents[p] === 0 ? '' : tableContents[p]}
                               placeholder="0.0"
                               onChange={(e) => onInputChange(e)}
                             ></input>
@@ -193,7 +200,12 @@ export default function SendToPayees({ dialog }: { dialog: DisclosureState }) {
             )}
           </>
         )}
-        <DisperseSend dialog={dialog} data={toSend} />
+        <DisperseSend
+          dialog={dialog}
+          data={toSend}
+          setTransactionHash={setTransactionHash}
+          transactionDialog={transactionDialog}
+        />
       </div>
     </form>
   );

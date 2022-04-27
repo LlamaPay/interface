@@ -10,9 +10,11 @@ import { useContractWrite, useNetwork } from 'wagmi';
 interface DisperseSendProps {
   dialog: DisclosureState;
   data: { [key: string]: number };
+  setTransactionHash: React.Dispatch<React.SetStateAction<string>>;
+  transactionDialog: DisclosureState;
 }
 
-export default function DisperseSend({ dialog, data }: DisperseSendProps) {
+export default function DisperseSend({ dialog, data, setTransactionHash, transactionDialog }: DisperseSendProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [{ data: network }] = useNetwork();
   const [{}, disperseEther] = useContractWrite(
@@ -39,9 +41,11 @@ export default function DisperseSend({ dialog, data }: DisperseSendProps) {
         value: ether.toString(),
       },
     }).then((data) => {
-      dialog.hide();
       setIsLoading(false);
       const loading = data.error ? toast.error(data.error.message) : toast.loading('Dispersing Gas');
+      setTransactionHash(data.data?.hash ?? '');
+      transactionDialog.show();
+      dialog.hide();
       data.data?.wait().then((receipt) => {
         toast.dismiss(loading);
         receipt.status === 1 ? toast.success('Successfully Dispersed Gas') : toast.error('Failed to Disperse Gas');
@@ -50,8 +54,10 @@ export default function DisperseSend({ dialog, data }: DisperseSendProps) {
   }
 
   return (
-    <button onClick={sendGas} type="button" className="form-submit-button !mt-8">
-      {isLoading ? <BeatLoader size={6} color="white" /> : 'Send'}
-    </button>
+    <>
+      <button onClick={sendGas} type="button" className="form-submit-button !mt-8">
+        {isLoading ? <BeatLoader size={6} color="white" /> : 'Send'}
+      </button>
+    </>
   );
 }
