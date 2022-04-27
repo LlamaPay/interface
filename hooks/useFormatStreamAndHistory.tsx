@@ -44,6 +44,10 @@ export function useFormatStreamAndHistory({
           tokenContract: createERC20Contract({ tokenAddress: getAddress(s.token.address), provider }),
           llamaTokenContract: createContract(getAddress(s.contract.address), provider),
           historicalEvents: s.historicalEvents,
+          paused: s.paused,
+          pausedAmount: s.pausedAmount,
+          lastPaused: s.lastPaused,
+          reason: s.reason,
         };
       });
 

@@ -32,7 +32,9 @@ fragment UserStream on Stream {
     createdTimestamp
   }
   active
+  reason
   paused
+  pausedAmount
   lastPaused
   amountPerSec
   createdTimestamp

@@ -9,9 +9,17 @@ export const TotalStreamed = ({ data }: { data: IStream }) => {
 
   React.useEffect(() => {
     const id = setInterval(() => {
-      const totalAmount =
-        (((Date.now() - Number(data.createdTimestamp) * 1000) / 1000) * Number(data.amountPerSec)) / 1e20;
-      setAmount(totalAmount.toFixed(5));
+      if (data.paused) {
+        const totalAmount =
+          ((Number(data.lastPaused) - Number(data.createdTimestamp)) * Number(data.amountPerSec)) / 1e20;
+        setAmount(totalAmount.toFixed(5));
+      } else {
+        const totalAmount =
+          (((Date.now() - Number(data.createdTimestamp) * 1000) / 1000) * Number(data.amountPerSec) -
+            Number(data.pausedAmount)) /
+          1e20;
+        setAmount(totalAmount.toFixed(5));
+      }
     }, 1);
 
     // clear interval when component unmounts
