@@ -52,11 +52,11 @@ export interface IStream {
   paused: boolean;
   pausedAmount: string;
   lastPaused: string;
-  reason: string;
+  reason: string | null | undefined;
 }
 
 export interface IHistory extends UserHistoryFragment {
-  addressRelated: string;
+  addressRelated: string | null;
   addressType: 'payer' | 'payee';
   amountPerSec: string;
 }

@@ -34,7 +34,7 @@ export default function Resume({ data }: ResumeProps) {
   const queryClient = useQueryClient();
 
   function onResume() {
-    if (data.reason !== null) {
+    if (data.reason !== null && data.reason !== undefined) {
       createStreamWithReason().then((data) => {
         const loading = data.error ? toast.error(data.error.message) : toast.loading('Resuming Stream');
         data.data?.wait().then((receipt) => {
