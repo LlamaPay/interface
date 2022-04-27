@@ -3,7 +3,7 @@ import { BeatLoader } from 'react-spinners';
 
 const Placeholder = () => {
   return (
-    <form className="flex flex-col space-y-4">
+    <form className="flex flex-col gap-4">
       <InputText name="addressToStream" isRequired={true} label="Address to stream" />
       <span>
         <SelectToken
@@ -21,7 +21,7 @@ const Placeholder = () => {
         selectInputName="placeholderStreamDuration"
       />
 
-      <SubmitButton disabled={true} className="mt-8">
+      <SubmitButton disabled={true} className="mt-2">
         <BeatLoader size={6} color="white" />
       </SubmitButton>
     </form>

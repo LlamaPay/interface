@@ -31,7 +31,7 @@ const CreateStreamOnly = ({ tokens, dialog }: IStreamFormProps) => {
           selectInputName="streamDuration"
         />
 
-        <SubmitButton disabled={confirmingStream}>
+        <SubmitButton disabled={confirmingStream} className="mt-2">
           {confirmingStream ? <BeatLoader size={6} color="white" /> : 'Create Stream'}
         </SubmitButton>
       </form>
