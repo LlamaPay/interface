@@ -32,6 +32,8 @@ fragment UserStream on Stream {
     createdTimestamp
   }
   active
+  # paused
+  # lastPaused
   amountPerSec
   createdTimestamp
 }
@@ -71,6 +73,6 @@ fragment UserHistory on HistoryEvent {
     amountPerSec
     createdTimestamp
   }
-  #amountWithdrawn
+  # amount
   createdTimestamp
 }

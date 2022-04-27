@@ -23,13 +23,28 @@ const defaultColumns = table.createColumns([
     header: 'Action',
     cell: ({ cell }) => cell.row.original && <ActionName data={cell.row.original} />,
   }),
-  table.createDataColumn('addressType', {
+  table.createDisplayColumn({
+    id: 'type',
     header: 'Type',
-    cell: ({ value }) => <span>{value === 'payer' ? 'Outgoing' : 'Incoming'}</span>,
+    cell: ({ cell }) => {
+      if (cell.row.original === undefined) return;
+      const event = cell.row.original.eventType;
+      return event === 'Deposit'
+        ? 'Deposit'
+        : event === 'Withdraw'
+        ? 'Withdraw'
+        : cell.row.original.addressType === 'payer'
+        ? 'Outgoing'
+        : 'Incoming';
+    },
   }),
-  table.createDataColumn('addressRelated', {
+  table.createDisplayColumn({
+    id: 'addressName',
     header: 'Address / Name',
-    cell: ({ value }) => <SavedName value={value} />,
+    cell: ({ cell }) => {
+      if (cell.row.original === undefined) return;
+      return cell.row.original.eventType === 'Deposit' ? 'You' : <SavedName value={cell.row.original.addressRelated} />;
+    },
   }),
   table.createDataColumn('amountPerSec', {
     header: 'Amount',
