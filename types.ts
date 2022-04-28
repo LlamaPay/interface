@@ -80,3 +80,19 @@ export interface ITokenLists extends IToken {
   logoURI: string;
   isVerified: boolean;
 }
+
+export interface ITransactionSuccess {
+  hash: string;
+  wait: () => Promise<{
+    status?: number | undefined;
+  }>;
+}
+
+export interface ITransactionError {
+  message?: string;
+}
+
+export interface ITransaction {
+  data?: ITransactionSuccess;
+  error?: ITransactionError;
+}

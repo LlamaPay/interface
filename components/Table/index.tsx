@@ -55,20 +55,11 @@ const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
               </tr>
             ))}
           </tbody>
-          {/* <tfoot>
-        {instance.getFooterGroups().map((footerGroup) => (
-          <tr {...footerGroup.getFooterGroupProps()}>
-            {footerGroup.headers.map((header) => (
-              <th {...header.getFooterProps()}>{header.isPlaceholder ? null : header.renderFooter()}</th>
-            ))}
-          </tr>
-        ))}
-      </tfoot> */}
         </table>
       </div>
 
       <>
-        <div className="h-2" />
+        <div className={hidePagination ? 'h-4' : 'h-2'} />
         <div className="flex w-full flex-col gap-2 sm:flex-row sm:justify-between sm:gap-5">
           <div className="flex flex-1 items-center justify-between gap-2">
             {downloadToCSV && (

@@ -130,7 +130,7 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
               ))}
             </ComboboxList>
             <button
-              className="m-4 mt-auto flex items-center justify-center gap-2 rounded bg-green-200 py-[11px] px-3"
+              className="nav-button m-4 mt-auto flex items-center justify-center gap-2 rounded"
               onClick={() => setNewTokenForm(true)}
             >
               <span>or add a new token</span>
@@ -162,7 +162,8 @@ const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<Rea
       {
         onSuccess: (res) => {
           setIsConfirming(true);
-          res.wait().then((data: any) => {
+
+          res.wait().then((data) => {
             if (data.status === 1) {
               setNewTokenForm(false);
             } else {
@@ -189,7 +190,7 @@ const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<Rea
       </header>
       <form className="m-4 mt-[10%]" onSubmit={handleSubmit}>
         <InputText name="tokenAddress" isRequired={true} label="Token Address" />
-        <SubmitButton className="!mt-4" disabled={isLoading}>
+        <SubmitButton className="!mt-4 rounded" disabled={isLoading}>
           {isLoading ? (
             <BeatLoader size={6} />
           ) : isConfirming ? (

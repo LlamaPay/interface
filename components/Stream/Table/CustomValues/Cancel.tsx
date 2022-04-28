@@ -1,11 +1,13 @@
-import llamaContract from 'abis/llamaContract';
-import { Interface } from 'ethers/lib/utils';
-import useBatchCalls from 'queries/useBatchCalls';
 import * as React from 'react';
+import llamaContract from 'abis/llamaContract';
+import { useDialogState } from 'ariakit';
+import { TransactionDialog } from 'components/Dialog';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
-import { IStream } from 'types';
+import { IStream, ITransaction } from 'types';
 import { useContractWrite } from 'wagmi';
+import { Interface } from 'ethers/lib/utils';
+import useBatchCalls from 'queries/useBatchCalls';
 
 interface CancelProps {
   data: IStream;
@@ -25,6 +27,10 @@ export const Cancel = ({ data }: CancelProps) => {
       args: [data.payeeAddress, data.amountPerSec],
     }
   );
+
+  const [transactionHash, setTransactionHash] = React.useState<string | null>(null);
+
+  const transactionDialog = useDialogState();
 
   const queryClient = useQueryClient();
   const { mutate: batchCall } = useBatchCalls();
@@ -55,6 +61,7 @@ export const Cancel = ({ data }: CancelProps) => {
       <button onClick={handleClick} className="row-action-links text-[#E40000]">
         Cancel
       </button>
+      {transactionHash && <TransactionDialog dialog={transactionDialog} transactionHash={transactionHash} />}
     </>
   );
 };

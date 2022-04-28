@@ -62,13 +62,14 @@ export function DepositForm({
   const disableApprove = checkingApproval || approvingToken;
 
   return (
-    <>
-      <form className="mx-auto mt-12 mb-7 flex w-full flex-1 flex-col gap-8 px-7 sm:mt-[104px]" onSubmit={handleSubmit}>
+    <div className="mx-auto flex w-full flex-1 flex-col overflow-auto px-7 pt-12 pb-7 sm:pt-[104px]">
+      <form className="flex flex-1 flex-col gap-8" onSubmit={handleSubmit}>
         <div>
           <SelectToken
             label="What token do you want to deposit?"
             tokens={tokenOptions}
             handleTokenChange={handleTokenChange}
+            className="bg-white"
           />
           <AvailableAmount selectedToken={selectedToken} title="Available for Deposit" />
         </div>
@@ -104,16 +105,15 @@ export function DepositForm({
           </button>
         )}
       </form>
-      <div className="m-7">
-        <button
-          className="form-submit-button mx-auto flex w-full max-w-xs items-center justify-center gap-2 bg-white text-[#23BD8F]"
-          onClick={() => setCreateStream(true)}
-        >
-          <span>Create a Stream</span>
-          <ArrowRightIcon className="h-4 w-4" />
-        </button>
-      </div>
-    </>
+
+      <button
+        className="form-submit-button mx-auto mt-7 flex w-full max-w-xs items-center justify-center gap-2 bg-white text-[#23BD8F]"
+        onClick={() => setCreateStream(true)}
+      >
+        <span>Create a Stream</span>
+        <ArrowRightIcon className="h-4 w-4" />
+      </button>
+    </div>
   );
 }
 

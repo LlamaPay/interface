@@ -2,6 +2,7 @@ import BigNumber from 'bignumber.js';
 import { Contract, Signer } from 'ethers';
 import { getAddress } from 'ethers/lib/utils';
 import { useMutation, useQueryClient } from 'react-query';
+import { ITransactionError, ITransactionSuccess } from 'types';
 import { checkHasApprovedEnough, ICheckTokenAllowance } from 'utils/tokenUtils';
 import { erc20ABI, useSigner } from 'wagmi';
 
@@ -68,7 +69,7 @@ export function useApproveToken() {
   const [{ data: signer }] = useSigner();
   const queryClient = useQueryClient();
 
-  return useMutation<any, any, IApproveToken>(
+  return useMutation<ITransactionSuccess, ITransactionError, IApproveToken>(
     ({ tokenAddress, amountToApprove, spenderAddress }: IUseApproveToken) =>
       approveToken({ tokenAddress, signer, amountToApprove, spenderAddress }),
     {
@@ -83,7 +84,7 @@ export function useApproveTokenForMaxAmt() {
   const [{ data: signer }] = useSigner();
   const queryClient = useQueryClient();
 
-  return useMutation<any, unknown, UseTokenForMaxAmt>(
+  return useMutation<ITransactionSuccess, ITransactionError, UseTokenForMaxAmt>(
     ({ tokenAddress, spenderAddress }: UseTokenForMaxAmt) =>
       approveTokenForMaxAmt({ tokenAddress, signer, spenderAddress }),
     {

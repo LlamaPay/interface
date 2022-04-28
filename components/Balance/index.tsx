@@ -58,9 +58,9 @@ const Balance = () => {
   const showFallback = isLoading || noBalances || isError;
 
   return (
-    <span className="mr-auto w-full">
-      <section className={showFallback ? 'w-full max-w-2xl' : 'w-full max-w-fit'}>
-        <div className="section-header flex flex-wrap items-center justify-between gap-[0.625rem]">
+    <div className="mr-auto w-full">
+      <div className={showFallback ? 'w-full max-w-2xl' : 'w-full max-w-fit'}>
+        <div className="section-header flex w-full flex-wrap items-center justify-between gap-[0.625rem]">
           <span className="flex items-center gap-[0.625rem]">
             <BalanceIcon />
             <h1 className="font-exo">Balances</h1>
@@ -80,16 +80,20 @@ const Balance = () => {
         {showFallback ? (
           <Fallback isLoading={isLoading} isError={isError} noData={noBalances} type="balances" />
         ) : (
-          <div className="overflow-x-auto">
+          <div className="mt-[-10px] overflow-x-auto">
             <table className="border-separate" style={{ borderSpacing: '0 10px' }}>
               <thead>
                 <tr>
-                  <th className="whitespace-nowrap p-4 pb-1 text-left text-sm font-semibold text-[#3D3D3D]">Token</th>
-                  <th className="whitespace-nowrap p-4 pb-1 text-left text-sm font-semibold text-[#3D3D3D]">Balance</th>
-                  <th className="whitespace-nowrap p-4 pb-1 text-left text-sm font-semibold text-[#3D3D3D]">
+                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D]">
+                    Token
+                  </th>
+                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D]">
+                    Balance
+                  </th>
+                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D]">
                     To Depleted
                   </th>
-                  <th className="whitespace-nowrap p-4 pb-1 text-left text-sm font-semibold text-[#3D3D3D]">
+                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D]">
                     Monthly Cost
                   </th>
                   <th></th>
@@ -174,8 +178,8 @@ const Balance = () => {
         {tokens && accountData && (
           <DepositField tokens={tokens} userAddress={accountData.address} dialog={depositFieldDialog} />
         )}
-      </section>
-    </span>
+      </div>
+    </div>
   );
 };
 

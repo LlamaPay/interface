@@ -2,6 +2,7 @@ import { Signer } from 'ethers';
 import { getAddress } from 'ethers/lib/utils';
 import { useNetworkProvider } from 'hooks';
 import { useMutation, useQueryClient } from 'react-query';
+import { ITransactionError, ITransactionSuccess } from 'types';
 import { networkDetails } from 'utils/constants';
 import { createFactoryWriteContract } from 'utils/contract';
 import { useSigner } from 'wagmi';
@@ -44,7 +45,7 @@ export default function useCreateLlamaPayContract() {
 
   const factoryAddress = chainId ? networkDetails[chainId].llamapayFactoryAddress : null;
 
-  return useMutation<any, any, ICreateContract>(
+  return useMutation<ITransactionSuccess, ITransactionError, ICreateContract, unknown>(
     ({ tokenAddress }: ICreateContract) => create({ factoryAddress, signer, tokenAddress }),
     {
       onSettled: () => {

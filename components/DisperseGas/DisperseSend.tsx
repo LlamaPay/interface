@@ -42,10 +42,16 @@ export default function DisperseSend({ dialog, data, setTransactionHash, transac
       },
     }).then((data) => {
       setIsLoading(false);
-      const loading = data.error ? toast.error(data.error.message) : toast.loading('Dispersing Gas');
-      setTransactionHash(data.data?.hash ?? '');
-      transactionDialog.show();
-      dialog.hide();
+      let loading: any;
+      if (data.error) {
+        dialog.hide();
+        loading = toast.error(data.error.message);
+      } else {
+        loading = toast.loading('Dispersing Gas');
+        setTransactionHash(data.data?.hash ?? '');
+        dialog.hide();
+        transactionDialog.show();
+      }
       data.data?.wait().then((receipt) => {
         toast.dismiss(loading);
         receipt.status === 1 ? toast.success('Successfully Dispersed Gas') : toast.error('Failed to Disperse Gas');

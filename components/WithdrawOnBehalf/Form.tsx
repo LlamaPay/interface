@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { InputAmountWithDuration, InputText, SelectToken } from 'components/Form';
 import { BeatLoader } from 'react-spinners';
-import { ITokenLists } from 'types';
+import { ITokenLists, ITransaction } from 'types';
 import { useContractWrite, useProvider } from 'wagmi';
 import llamaContract from 'abis/llamaContract';
 import { useQueryClient } from 'react-query';
@@ -67,9 +67,9 @@ const WithdrawOnBehalfForm = ({
       // format amount to bignumber
       const amountPerSec = new BigNumber(Number(streamedAmount) * 1e20).div(secondsByDuration[duration]).toFixed(0);
 
-      withdraw({ args: [payerAddress, payeeAddress, amountPerSec] }).then(({ data, error }: any) => {
+      withdraw({ args: [payerAddress, payeeAddress, amountPerSec] }).then(({ data, error }: ITransaction) => {
         if (data) {
-          setTransactionHash(data.hash ?? '');
+          setTransactionHash(data.hash ?? null);
 
           formDialog.hide();
 
@@ -77,7 +77,7 @@ const WithdrawOnBehalfForm = ({
 
           const toastId = toast.loading('Sending Funds');
 
-          data.wait().then((receipt: any) => {
+          data.wait().then((receipt) => {
             toast.dismiss(toastId);
 
             queryClient.invalidateQueries();
@@ -87,7 +87,7 @@ const WithdrawOnBehalfForm = ({
         }
 
         if (error) {
-          setError(error.message);
+          setError(error.message || 'Transaction Failed');
         }
       });
     }
@@ -97,7 +97,7 @@ const WithdrawOnBehalfForm = ({
   const tokenOptions = React.useMemo(() => tokens?.map((t) => t.tokenAddress) ?? [], [tokens]);
 
   return (
-    <form onSubmit={handleWithdraw} className="flex flex-col space-y-4">
+    <form onSubmit={handleWithdraw} className="flex flex-col gap-4">
       <span>
         <SelectToken
           handleTokenChange={handleTokenChange}
@@ -107,9 +107,9 @@ const WithdrawOnBehalfForm = ({
         />
       </span>
 
-      <InputText name="payerAddress" label="Payer:" isRequired />
+      <InputText name="payerAddress" label="Payer" placeholder="Enter Payer Address" isRequired />
 
-      <InputText name="payeeAddress" label="Payee:" isRequired />
+      <InputText name="payeeAddress" label="Payee" placeholder="Enter Payee Address" isRequired />
 
       <InputAmountWithDuration
         name="streamedAmount"
@@ -118,7 +118,9 @@ const WithdrawOnBehalfForm = ({
         selectInputName="streamDuration"
       />
 
-      <button className="form-submit-button">{loading ? <BeatLoader size={6} color="white" /> : 'Withdraw'}</button>
+      <button className="form-submit-button mt-2">
+        {loading ? <BeatLoader size={6} color="white" /> : 'Withdraw'}
+      </button>
 
       {error && <p className="text-center text-sm text-red-500">{error}</p>}
     </form>
@@ -127,7 +129,7 @@ const WithdrawOnBehalfForm = ({
 
 export const Fallback = () => {
   return (
-    <form className="flex flex-col space-y-4">
+    <form className="flex flex-col gap-4">
       <span>
         <SelectToken
           handleTokenChange={() => null}
@@ -148,7 +150,7 @@ export const Fallback = () => {
         selectInputName="streamDuration"
       />
 
-      <button className="form-submit-button" disabled>
+      <button className="form-submit-button mt-2" disabled>
         <BeatLoader size={6} color="white" />
       </button>
     </form>

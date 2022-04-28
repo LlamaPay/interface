@@ -158,7 +158,7 @@ const DepositAndCreate = ({ tokens, userAddress, dialog }: IStreamFormProps) => 
 
   return (
     <>
-      <form className="flex flex-col space-y-4" onSubmit={handleSubmit}>
+      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
         <div>
           <SelectToken
             label="What token do you want to Deposit and Create a Stream?"
@@ -176,7 +176,12 @@ const DepositAndCreate = ({ tokens, userAddress, dialog }: IStreamFormProps) => 
           id="bdAmountToDeposit"
         />
 
-        <InputText name="addressToStream" isRequired={true} label="Enter an Address to Stream" />
+        <InputText
+          name="addressToStream"
+          isRequired={true}
+          label="Enter an Address to Stream"
+          placeholder="Enter Recipient Address"
+        />
 
         <InputAmountWithDuration
           name="amountToStream"
@@ -186,7 +191,7 @@ const DepositAndCreate = ({ tokens, userAddress, dialog }: IStreamFormProps) => 
         />
 
         {isApproved ? (
-          <SubmitButton disabled={confirmingStream} className="mt-8">
+          <SubmitButton disabled={confirmingStream} className="mt-4">
             {confirmingStream ? <BeatLoader size={6} color="white" /> : 'Deposit and Create Stream'}
           </SubmitButton>
         ) : (

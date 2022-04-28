@@ -4,7 +4,7 @@ import { useDialogState } from 'ariakit';
 import { TransactionDialog } from 'components/Dialog';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
-import { IStream } from 'types';
+import { IStream, ITransaction } from 'types';
 import { useContractWrite } from 'wagmi';
 
 interface PushProps {
@@ -13,7 +13,7 @@ interface PushProps {
 }
 
 export const Push = ({ data, buttonName }: PushProps) => {
-  const [transactionHash, setTransactionHash] = React.useState(null);
+  const [transactionHash, setTransactionHash] = React.useState<string | null>(null);
 
   const [{}, withdraw] = useContractWrite(
     {
@@ -31,15 +31,15 @@ export const Push = ({ data, buttonName }: PushProps) => {
   const transactionDialog = useDialogState();
 
   const handleClick = () => {
-    withdraw().then(({ data, error }: any) => {
+    withdraw().then(({ data, error }: ITransaction) => {
       if (data) {
-        setTransactionHash(data.hash ?? '');
+        setTransactionHash(data.hash ?? null);
 
         transactionDialog.toggle();
 
         const toastId = toast.loading(buttonName === 'Withdraw' ? 'Withdrawing Payment' : 'Sending Payment');
 
-        data.wait().then((receipt: any) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastId);
 
           queryClient.invalidateQueries();
@@ -51,7 +51,7 @@ export const Push = ({ data, buttonName }: PushProps) => {
       }
 
       if (error) {
-        toast.error(data.error?.message);
+        toast.error(error.message || 'Transaction Failed');
       }
     });
   };
@@ -62,7 +62,7 @@ export const Push = ({ data, buttonName }: PushProps) => {
         {buttonName}
       </button>
 
-      {transactionHash && <TransactionDialog dialog={transactionDialog} transactionHash={transactionHash || ''} />}
+      {transactionHash && <TransactionDialog dialog={transactionDialog} transactionHash={transactionHash} />}
     </>
   );
 };

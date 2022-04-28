@@ -69,7 +69,7 @@ export const Modify = ({ data, dialog, title }: ModifyProps) => {
       <FormDialog dialog={dialog} title={title} className="h-min">
         <span className="space-y-4 text-[#303030]">
           <section>
-            <h2 className="font-medium text-[#3D3D3D]">Current stream: </h2>
+            <h2 className="font-medium text-[#3D3D3D]">Current Stream</h2>
             <div className="my-1 rounded border p-2 dark:border-stone-700">
               <div className="flex items-center space-x-2">
                 <span>You</span>
@@ -89,16 +89,21 @@ export const Modify = ({ data, dialog, title }: ModifyProps) => {
             </div>
           </section>
           <section>
-            <h2 className="font-medium text-[#3D3D3D]">Update stream: </h2>
-            <form className="my-1 space-y-3 rounded border p-2 dark:border-stone-700" onSubmit={updateStream}>
-              <InputText name="updatedAddress" label="Address" isRequired />
+            <h2 className="my-1 font-medium text-[#3D3D3D]">Update Stream</h2>
+            <form
+              className="flex flex-col gap-4 rounded border px-2 pt-[2px] dark:border-stone-700"
+              onSubmit={updateStream}
+            >
+              <InputText name="updatedAddress" label="Address" isRequired placeholder="Enter Recipient Address" />
+
               <InputAmountWithDuration
                 name="updatedAmount"
                 label="Amount"
                 selectInputName="modifiedStreamDuration"
                 isRequired
               />
-              <SubmitButton className="mt-5">
+
+              <SubmitButton className="my-2">
                 {isLoading ? <BeatLoader size={6} color="white" /> : 'Update'}
               </SubmitButton>
             </form>
