@@ -1,10 +1,13 @@
 import { ethers, providers } from 'ethers';
 import { Chain, allChains } from 'wagmi';
 
-export const FACTORY_RINKEBY = '0xEDF04002c8bDab6AdC2BD738F4e84953bb38c481';
-export const FACTORY_KOVAN = '0xD43bB75Cc924e8475dFF2604b962f39089e4f842';
-export const FACTORY_FUJI = '0xf0CCCd4aD7B92d038E80818C8A85d8D926cf8139';
-export const FACTORY_AVALANCHE = '0xedf04002c8bdab6adc2bd738f4e84953bb38c481';
+// FACTORIES
+export const FACTORY_RINKEBY = '0xde1C04855c2828431ba637675B6929A684f84C7F';
+export const FACTORY_KOVAN = '0x1986317FBEDF12160A8690717202ca15233ecD4A';
+export const FACTORY_FUJI = '0xc4705f96030D347F421Fbe01d9A19F18B26a7d30';
+export const FACTORY_AVALANCHE = '0x7d507b4c2d7e54da5731f643506996da8525f4a3';
+export const FACTORY_POLYGON = '0xde1C04855c2828431ba637675B6929A684f84C7F';
+
 export const DISPERSE_DEFAULT = '0xD152f549545093347A162Dce210e7293f1452150';
 export const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
 export const alchemyId = 'PwvZx2hO2XpToWXSw9sgJJt1eBgjkRUr';
@@ -76,7 +79,7 @@ export const networkDetails: INetworkDetails = {
   },
   43114: {
     rpcUrl: 'https://api.avax.network/ext/bc/C/rpc',
-    subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-avax-mainnet',
+    subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-avalanche-mainnet',
     chainProviders: new ethers.providers.JsonRpcProvider('https://api.avax.network/ext/bc/C/rpc'),
     llamapayFactoryAddress: FACTORY_AVALANCHE,
     disperseAddress: '0x6F9fB43274e9011804Bf516e78CaF5e89856301A',
@@ -85,6 +88,17 @@ export const networkDetails: INetworkDetails = {
     prefix: 'avax',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchex/info/logo.png',
   },
+  137: {
+    rpcUrl: 'https://polygon-rpc.com/',
+    subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-polygon',
+    chainProviders: new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/'),
+    llamapayFactoryAddress: FACTORY_POLYGON,
+    disperseAddress: DISPERSE_DEFAULT,
+    blockExplorerURL: 'https://polygonscan.com/',
+    blockExplorerName: 'Polygonscan',
+    prefix: 'polygon',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/polygon/info/logo.png',
+  },
 };
 
 export const chains: Chain[] = allChains.filter(
@@ -92,7 +106,8 @@ export const chains: Chain[] = allChains.filter(
     chain.name === 'Rinkeby' ||
     chain.name === 'Kovan' ||
     chain.name === 'Avalanche Fuji Testnet' ||
-    chain.name === 'Avalanche Mainnet'
+    chain.name === 'Avalanche Mainnet' ||
+    chain.name === 'Polygon'
 );
 
 export const secondsByDuration = {
