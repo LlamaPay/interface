@@ -30,7 +30,24 @@ const defaultColumns = table.createColumns([
     cell: ({ cell }) => {
       if (cell.row.original === undefined) return;
       const event = cell.row.original.eventType;
-      return event === 'Deposit' ? 'Deposit' : cell.row.original.addressType === 'payer' ? 'Outgoing' : 'Incoming';
+      switch (event) {
+        case 'Deposit':
+          return 'Deposit';
+        case 'StreamPaused':
+          return 'Pause';
+        case 'Withdraw':
+          return 'Withdraw';
+        case 'StreamCreated':
+          return cell.row.original.addressType === 'payer' ? 'Create Stream' : 'Receive Stream';
+        case 'StreamCancelled':
+          return 'Cancel Stream';
+        case 'StreamModified':
+          return 'Modify Stream';
+        case 'PayerWithdraw':
+          return 'Withdraw';
+        default:
+          return '';
+      }
     },
   }),
   table.createDisplayColumn({
@@ -38,7 +55,8 @@ const defaultColumns = table.createColumns([
     header: 'Address / Name',
     cell: ({ cell }) => {
       if (cell.row.original === undefined) return;
-      return cell.row.original.eventType === 'Deposit' ? (
+      const eventType = cell.row.original.eventType;
+      return eventType === 'Deposit' || eventType === 'PayerWithdraw' ? (
         'You'
       ) : (
         <SavedName value={cell.row.original.addressRelated !== null ? cell.row.original.addressRelated : ''} />
@@ -51,7 +69,7 @@ const defaultColumns = table.createColumns([
     cell: ({ cell }) => {
       if (cell.row.original == undefined) return;
       const info = cell.row.original;
-      if (info.eventType === 'Deposit' || info.eventType === 'Withdraw') {
+      if (info.eventType === 'Deposit' || info.eventType === 'Withdraw' || info.eventType === 'PayerWithdraw') {
         return (
           <>
             <span>{`${(Number(info.amount) / 10 ** Number(info.token.decimals)).toLocaleString('en-US', {

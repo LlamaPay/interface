@@ -35,7 +35,7 @@ export default function ActionName({ data }: { data: IHistory }) {
             </a>
           </div>
         </Tooltip>
-      ) : data.eventType === 'Withdraw' ? (
+      ) : data.eventType === 'Withdraw' || data.eventType === 'PayerWithdraw' ? (
         <Tooltip content="Withdraw">
           <div className="rounded bg-green-100 p-1 text-green-600">
             <a href={link} target="_blank" rel="noreferrer noopener">
