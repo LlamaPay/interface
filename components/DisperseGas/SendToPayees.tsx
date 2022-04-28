@@ -186,6 +186,7 @@ export default function SendToPayees({
                               min="0"
                               name={p}
                               placeholder="0.0"
+                              value={tableContents[p]}
                               onChange={(e) => onInputChange(e)}
                             ></input>
                           </td>
