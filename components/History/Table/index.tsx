@@ -14,6 +14,7 @@ import HistoryActions from './HistoryActions';
 import { downloadHistory } from 'utils/downloadCsv';
 import Amount from './Amount';
 import { SavedName } from './SavedName';
+import HistoryAge from './HistoryAge';
 
 const table = createTable().setRowType<IHistory>();
 
@@ -62,6 +63,14 @@ const defaultColumns = table.createColumns([
       } else {
         return <Amount value={info.amountPerSec} data={info} />;
       }
+    },
+  }),
+  table.createDisplayColumn({
+    id: 'age',
+    header: 'Age',
+    cell: ({ cell }) => {
+      if (cell.row.original == undefined) return;
+      return <HistoryAge data={cell.row.original} />;
     },
   }),
   table.createDisplayColumn({
