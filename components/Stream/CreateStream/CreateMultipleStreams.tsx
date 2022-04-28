@@ -20,6 +20,10 @@ type FormValues = {
   }[];
 };
 
+interface ICall {
+  [key: string]: string[];
+}
+
 const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
   const updateAddress = useAddressStore((state) => state.updateAddress);
 
@@ -53,27 +57,51 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
   });
 
   const onSubmit = (data: FormValues) => {
-    data.streams.forEach((item) => {
-      // save addresses to local storage
+    // data.streams.forEach((item) => {
+    //   // save addresses to local storage
+    //   if (item.shortName && item.shortName !== '') {
+    //     updateAddress(item.addressToStream?.toLowerCase(), item.shortName);
+    //   }
+
+    //   const duration = item.streamDuration === 'year' ? 'year' : 'month';
+
+    //   const tokenDetails = tokens.find((t) => t.tokenAddress?.toString() === item.tokenAddress?.toString()) ?? null;
+
+    //   if (tokenDetails) {
+    //     // format amount to bignumber
+    //     // convert amt to seconds
+    //     const amountPerSec = new BigNumber(item.amountToStream).times(1e20).div(secondsByDuration[duration]).toFixed(0);
+    //     const calls = [
+    //       LlamaContractInterface.encodeFunctionData('createStream', [getAddress(item.addressToStream), amountPerSec]),
+    //     ];
+
+    //     batchCall({ llamaContractAddress: tokenDetails.llamaContractAddress, calls });
+    //   }
+    // });
+
+    const calls: ICall = data.streams.reduce((calls: ICall, item) => {
       if (item.shortName && item.shortName !== '') {
         updateAddress(item.addressToStream?.toLowerCase(), item.shortName);
       }
-
       const duration = item.streamDuration === 'year' ? 'year' : 'month';
 
       const tokenDetails = tokens.find((t) => t.tokenAddress?.toString() === item.tokenAddress?.toString()) ?? null;
+      if (tokenDetails === null) return calls;
+      // format amount to bignumber
+      // convert amt to seconds
+      const amountPerSec = new BigNumber(item.amountToStream).times(1e20).div(secondsByDuration[duration]).toFixed(0);
+      const llamaContractAddress = tokenDetails.llamaContractAddress;
+      const call = LlamaContractInterface.encodeFunctionData('createStream', [
+        getAddress(item.addressToStream),
+        amountPerSec,
+      ]);
+      const callData = calls[llamaContractAddress] ?? [];
+      callData.push(call);
+      return (calls = { ...calls, [llamaContractAddress]: callData });
+    }, {});
 
-      if (tokenDetails) {
-        // format amount to bignumber
-        // convert amt to seconds
-        const amountPerSec = new BigNumber(item.amountToStream).times(1e20).div(secondsByDuration[duration]).toFixed(0);
-
-        const calls = [
-          LlamaContractInterface.encodeFunctionData('createStream', [getAddress(item.addressToStream), amountPerSec]),
-        ];
-
-        batchCall({ llamaContractAddress: tokenDetails.llamaContractAddress, calls });
-      }
+    Object.keys(calls).map((p) => {
+      batchCall({ llamaContractAddress: p, calls: calls[p] });
     });
   };
 
