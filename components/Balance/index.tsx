@@ -80,8 +80,8 @@ const Balance = () => {
         {showFallback ? (
           <Fallback isLoading={isLoading} isError={isError} noData={noBalances} type="balances" />
         ) : (
-          <div className="overflow-x-auto">
-            <table className="border-separate" style={{ borderSpacing: 0 }}>
+          <div className="mt-[-10px] overflow-x-auto">
+            <table className="border-separate" style={{ borderSpacing: '0 10px' }}>
               <thead>
                 <tr>
                   <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D]">
