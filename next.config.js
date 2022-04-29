@@ -9,7 +9,7 @@ const nextConfig = {
     defaultLocale: 'en',
   },
   images: {
-    domains: ['raw.githubusercontent.com'],
+    domains: ['raw.githubusercontent.com', 'assets.coingecko.com'],
   },
 };
 

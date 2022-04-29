@@ -27,5 +27,6 @@ export const useNetworkProvider = () => {
     chainId,
     nativeCurrency: data.chain?.nativeCurrency,
     unsupported: data.chain?.unsupported,
+    tokenListId: networkDetails[chainId ?? 0]?.tokenListId,
   };
 };

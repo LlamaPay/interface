@@ -32,6 +32,7 @@ interface INetworkDetails {
     blockExplorerName: string;
     prefix: string;
     logoURI: string;
+    tokenListId?: string;
   };
 }
 
@@ -95,6 +96,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerName: 'Snowtrace',
     prefix: 'avax',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchex/info/logo.png',
+    tokenListId: 'avalanche',
   },
   137: {
     rpcUrl: 'https://polygon-rpc.com/',
@@ -106,6 +108,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerName: 'Polygonscan',
     prefix: 'polygon',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/polygon/info/logo.png',
+    tokenListId: 'polygon-pos',
   },
   250: {
     rpcUrl: 'https://rpcapi.fantom.network',
@@ -117,6 +120,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerName: 'FTMScan',
     prefix: 'fantom',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/fantom/info/logo.png',
+    tokenListId: 'fantom',
   },
   1: {
     rpcUrl: 'https://rpc.ankr.com/eth',
@@ -128,6 +132,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerName: 'Etherscan',
     prefix: 'ethereum',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
+    tokenListId: 'ethereum',
   },
   10: {
     rpcUrl: 'https://mainnet.optimism.io',
@@ -139,6 +144,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerName: 'Etherscan',
     prefix: 'optimism',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/optimism/info/logo.png',
+    tokenListId: 'optimistic-ethereum',
   },
   42161: {
     rpcUrl: 'https://rpc.ankr.com/arbitrum',
@@ -150,6 +156,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerName: 'Arbiscan',
     prefix: 'arbitrum',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/arbitrum/info/logo.png',
+    tokenListId: 'arbitrum-one',
   },
   56: {
     rpcUrl: 'https://bsc-dataseed.binance.org',
@@ -161,6 +168,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerName: 'BscScan',
     prefix: 'bsc',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png',
+    tokenListId: 'binance-smart-chain',
   },
   100: {
     rpcUrl: 'https://rpc.gnosischain.com/',
@@ -172,6 +180,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerName: 'Blockscout',
     prefix: 'xdai',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/xdai/info/logo.png',
+    tokenListId: 'xdai',
   },
 };
 
