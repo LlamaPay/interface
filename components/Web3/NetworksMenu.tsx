@@ -34,7 +34,8 @@ export const NetworksMenu = () => {
           className="shadow-2 z-10 w-fit min-w-[10rem] rounded-xl border border-[#EAEAEA] bg-white p-2"
         >
           {data.chains.map((value) => (
-            <SelectItem
+            <>
+              {value.testnet ? "" : <SelectItem
               key={value.id}
               value={value.id?.toString()}
               className="flex scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-[#666666] outline-none active-item:text-black active:text-black aria-disabled:opacity-40"
@@ -47,7 +48,8 @@ export const NetworksMenu = () => {
                 />
               </div>
               {value.name}
-            </SelectItem>
+            </SelectItem>}
+            </>
           ))}
         </SelectPopover>
       )}
