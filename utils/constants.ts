@@ -200,6 +200,10 @@ const formattedChains = defaultChains.map((chain) => {
     return { ...chain, name: 'Polygon' };
   }
 
+  if (chain.name === 'Avalanche Fuji Testnet') {
+    return { ...chain, name: 'Fuji' };
+  }
+
   return chain;
 });
 

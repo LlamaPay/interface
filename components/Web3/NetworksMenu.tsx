@@ -47,6 +47,7 @@ export const NetworksMenu = () => {
               objectFit="contain"
               width="20px"
               height="20px"
+              priority
             />
           </div>
           <span>{chain.name ?? 'Unsupported'}</span>
@@ -76,6 +77,7 @@ export const NetworksMenu = () => {
                       objectFit="contain"
                       width="20px"
                       height="20px"
+                      priority
                     />
                   </div>
                   <span>{value.name}</span>
@@ -102,6 +104,7 @@ export const NetworksMenu = () => {
                       objectFit="contain"
                       width="20px"
                       height="20px"
+                      priority
                     />
                   </div>
                   <span>{value.name}</span>
