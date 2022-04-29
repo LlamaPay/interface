@@ -63,8 +63,6 @@ function useTokenBalances() {
   const { provider, network } = useNetworkProvider();
   const { data: tokens, isLoading: listLoading } = useTokenList();
 
-  console.log(tokens);
-
   const userAddress = accountData?.address.toLowerCase() ?? '';
 
   const listKey =
