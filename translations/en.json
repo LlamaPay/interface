@@ -1,6 +1,7 @@
 {
   "Common": {
-    "getStarted": "Get Started"
+    "getStarted": "Get Started",
+    "changeTheme": "Change Theme"
   },
   "Header": {
     "connectWallet": "Connect Wallet",
