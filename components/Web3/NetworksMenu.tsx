@@ -42,8 +42,8 @@ export const NetworksMenu = () => {
         <>
           <div className="flex h-5 w-5 items-center rounded-full">
             <Image
-              src={network.logoURI || defaultImage}
-              alt={'Logo of ' + network.prefix}
+              src={network?.logoURI || defaultImage}
+              alt={'Logo of ' + network?.prefix}
               objectFit="contain"
               width="20px"
               height="20px"
