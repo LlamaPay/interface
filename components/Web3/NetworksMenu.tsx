@@ -1,8 +1,10 @@
 import * as React from 'react';
 import { Select, SelectItem, SelectLabel, SelectPopover, useSelectState } from 'ariakit/select';
-import { SelectorIcon, CheckIcon } from '@heroicons/react/solid';
+import { SelectorIcon } from '@heroicons/react/solid';
 import { useNetwork } from 'wagmi';
-import classNames from 'classnames';
+import { chainDetails } from 'utils/network';
+import Image from 'next/image';
+import defaultImage from 'public/empty-token.webp';
 
 export const NetworksMenu = () => {
   const [{ data }, switchNetwork] = useNetwork();
@@ -14,6 +16,8 @@ export const NetworksMenu = () => {
     sameWidth: true,
     gutter: 8,
   });
+
+  const { network } = chainDetails(chain?.id?.toString());
 
   if (!data || !chain || !switchNetwork) return null;
 
@@ -27,6 +31,15 @@ export const NetworksMenu = () => {
       </SelectLabel>
       <Select state={select} className="nav-button flex items-center justify-between gap-2">
         <>
+          <div className="flex h-5 w-5 items-center rounded-full">
+            <Image
+              src={network.logoURI || defaultImage}
+              alt={'Logo of ' + network.prefix}
+              objectFit="contain"
+              width="20px"
+              height="20px"
+            />
+          </div>
           <span>{chain.name ?? 'Unsupported'}</span>
           <SelectorIcon className="relative right-[-4px] h-4 w-4 text-gray-400" aria-hidden="true" />
         </>
@@ -36,22 +49,28 @@ export const NetworksMenu = () => {
           state={select}
           className="shadow-2 z-10 w-fit min-w-[10rem] rounded-xl border border-[#EAEAEA] bg-white p-2"
         >
-          {mainnets.map((value) => (
-            <SelectItem
-              key={value.id}
-              value={value.id?.toString()}
-              className="flex scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-[#666666] outline-none active-item:text-black active:text-black aria-disabled:opacity-40 cursor-pointer"
-              onClick={() => switchNetwork(value.id)}
-            >
-              <div className="h-5 w-5">
-                <CheckIcon
-                  className={classNames('relative h-5 w-5', chain.id !== value.id && 'hidden')}
-                  aria-hidden="true"
-                />
-              </div>
-              {value.name}
-            </SelectItem>
-          ))}
+          {mainnets.map((value) => {
+            const { network } = chainDetails(value?.id?.toString());
+            return (
+              <SelectItem
+                key={value.id}
+                value={value.id?.toString()}
+                className="flex cursor-pointer scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-[#666666] outline-none active-item:text-black active:text-black aria-disabled:opacity-40"
+                onClick={() => switchNetwork(value.id)}
+              >
+                <div className="flex h-5 w-5 items-center rounded-full">
+                  <Image
+                    src={network.logoURI || defaultImage}
+                    alt={'Logo of ' + value.name}
+                    objectFit="contain"
+                    width="20px"
+                    height="20px"
+                  />
+                </div>
+                <span>{value.name}</span>
+              </SelectItem>
+            );
+          })}
         </SelectPopover>
       )}
     </>

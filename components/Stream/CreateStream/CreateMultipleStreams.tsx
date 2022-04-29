@@ -220,6 +220,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
         >
           Add Stream
         </button>
+
         <SubmitButton className="flex-1" disabled={isLoading}>
           {isLoading ? <BeatLoader size={6} color="white" /> : 'Create Stream'}
         </SubmitButton>

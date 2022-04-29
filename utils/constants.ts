@@ -175,8 +175,24 @@ export const defaultChains: Chain[] = allChains.filter(
     chain.name === 'Arbitrum One'
 );
 
+const formattedChains = defaultChains.map((chain) => {
+  if (chain.name === 'Mainnet') {
+    return { ...chain, name: 'Ethereum' };
+  }
+
+  if (chain.name === 'Avalanche Mainnet') {
+    return { ...chain, name: 'Avalanche' };
+  }
+
+  if (chain.name === 'Polygon Mainnet') {
+    return { ...chain, name: 'Polygon' };
+  }
+
+  return chain;
+});
+
 export const chains: Chain[] = [
-  ...defaultChains,
+  ...formattedChains,
   {
     id: 250,
     name: 'Fantom',

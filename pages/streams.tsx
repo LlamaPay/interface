@@ -2,16 +2,15 @@ import type { GetServerSideProps, NextPage } from 'next';
 import * as React from 'react';
 import Layout from 'components/Layout';
 import { BalanceIcon } from 'components/Icons';
-import { networkDetails } from 'utils/constants';
 import { dehydrate, QueryClient } from 'react-query';
 import { useStreamAndHistoryQuery } from 'services/generated/graphql';
-import { allChains } from 'wagmi';
 import defaultImage from 'public/empty-token.webp';
 import Image, { StaticImageData } from 'next/image';
 import { getAddress } from 'ethers/lib/utils';
 import { AltStreamSection } from 'components/Stream';
 import { AltHistorySection } from 'components/History';
 import { useFormatStreamAndHistory, useNetworkProvider } from 'hooks';
+import { chainDetails } from 'utils/network';
 
 interface StreamsProps {
   subgraphEndpoint: string;
@@ -105,14 +104,5 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
     },
   };
 };
-
-function chainDetails(chainId: unknown) {
-  const id = typeof chainId === 'string' ? Number(chainId) : 0;
-
-  const network = networkDetails[id];
-  const chain = allChains.find((c) => c.id === id);
-
-  return { network, chain };
-}
 
 export default Streams;
