@@ -14,6 +14,7 @@ export const FACTORY_MAINNET = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_OPTIMISM = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_ARBITRUM = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_BSC = '0xde1C04855c2828431ba637675B6929A684f84C7F';
+export const FACTORY_XDAI = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 
 export const DISPERSE_DEFAULT = '0xD152f549545093347A162Dce210e7293f1452150';
 export const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
@@ -161,6 +162,17 @@ export const networkDetails: INetworkDetails = {
     prefix: 'bsc',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png',
   },
+  100: {
+    rpcUrl: 'https://rpc.gnosischain.com/',
+    subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-xdai',
+    chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.gnosischain.com/'),
+    llamapayFactoryAddress: FACTORY_XDAI,
+    disperseAddress: DISPERSE_DEFAULT,
+    blockExplorerURL: 'https://blockscout.com/xdai/mainnet/',
+    blockExplorerName: 'Blockscout',
+    prefix: 'xdai',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/xdai/info/logo.png',
+  },
 };
 
 export const defaultChains: Chain[] = allChains.filter(
@@ -214,6 +226,18 @@ export const chains: Chain[] = [
       {
         name: 'BscScan',
         url: 'https://www.bscscan.com/',
+      },
+    ],
+  },
+  {
+    id: 100,
+    name: 'Gnosis',
+    nativeCurrency: { name: 'xDAI', symbol: 'xDAI', decimals: 18 },
+    rpcUrls: ['https://rpc.gnosischain.com/'],
+    blockExplorers: [
+      {
+        name: 'Blockscout',
+        url: 'https://blockscout.com/xdai/mainnet/',
       },
     ],
   },
