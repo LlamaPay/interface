@@ -14,7 +14,7 @@ export default function Amount({ value, data }: { value: string; data?: IHistory
   return (
     <>
       <span>{amount}</span>
-      <span className="mx-1 text-xs text-gray-500 dark:text-gray-400">{symbol}</span>
+      <span className="mx-1 text-xs text-gray-500 dark:text-gray-400">{symbol} / month</span>
     </>
   );
 }

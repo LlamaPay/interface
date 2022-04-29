@@ -48,12 +48,14 @@ export type Block_Height = {
 
 export type HistoryEvent = {
   __typename?: 'HistoryEvent';
+  amount?: Maybe<Scalars['BigInt']>;
   createdBlock: Scalars['BigInt'];
   createdTimestamp: Scalars['BigInt'];
   eventType: Scalars['String'];
   id: Scalars['ID'];
   oldStream?: Maybe<Stream>;
-  stream: Stream;
+  stream?: Maybe<Stream>;
+  token: Token;
   txHash: Scalars['Bytes'];
   users: Array<User>;
 };
@@ -70,6 +72,14 @@ export type HistoryEventUsersArgs = {
 export type HistoryEvent_Filter = {
   /** Filter for the block changed event. */
   _change_block?: InputMaybe<BlockChangedFilter>;
+  amount?: InputMaybe<Scalars['BigInt']>;
+  amount_gt?: InputMaybe<Scalars['BigInt']>;
+  amount_gte?: InputMaybe<Scalars['BigInt']>;
+  amount_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  amount_lt?: InputMaybe<Scalars['BigInt']>;
+  amount_lte?: InputMaybe<Scalars['BigInt']>;
+  amount_not?: InputMaybe<Scalars['BigInt']>;
+  amount_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   createdBlock?: InputMaybe<Scalars['BigInt']>;
   createdBlock_gt?: InputMaybe<Scalars['BigInt']>;
   createdBlock_gte?: InputMaybe<Scalars['BigInt']>;
@@ -154,6 +164,26 @@ export type HistoryEvent_Filter = {
   stream_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   stream_starts_with?: InputMaybe<Scalars['String']>;
   stream_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  token?: InputMaybe<Scalars['String']>;
+  token_contains?: InputMaybe<Scalars['String']>;
+  token_contains_nocase?: InputMaybe<Scalars['String']>;
+  token_ends_with?: InputMaybe<Scalars['String']>;
+  token_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  token_gt?: InputMaybe<Scalars['String']>;
+  token_gte?: InputMaybe<Scalars['String']>;
+  token_in?: InputMaybe<Array<Scalars['String']>>;
+  token_lt?: InputMaybe<Scalars['String']>;
+  token_lte?: InputMaybe<Scalars['String']>;
+  token_not?: InputMaybe<Scalars['String']>;
+  token_not_contains?: InputMaybe<Scalars['String']>;
+  token_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  token_not_ends_with?: InputMaybe<Scalars['String']>;
+  token_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  token_not_in?: InputMaybe<Array<Scalars['String']>>;
+  token_not_starts_with?: InputMaybe<Scalars['String']>;
+  token_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  token_starts_with?: InputMaybe<Scalars['String']>;
+  token_starts_with_nocase?: InputMaybe<Scalars['String']>;
   txHash?: InputMaybe<Scalars['Bytes']>;
   txHash_contains?: InputMaybe<Scalars['Bytes']>;
   txHash_in?: InputMaybe<Array<Scalars['Bytes']>>;
@@ -169,12 +199,14 @@ export type HistoryEvent_Filter = {
 };
 
 export enum HistoryEvent_OrderBy {
+  Amount = 'amount',
   CreatedBlock = 'createdBlock',
   CreatedTimestamp = 'createdTimestamp',
   EventType = 'eventType',
   Id = 'id',
   OldStream = 'oldStream',
   Stream = 'stream',
+  Token = 'token',
   TxHash = 'txHash',
   Users = 'users'
 }
@@ -501,8 +533,12 @@ export type Stream = {
   createdTimestamp: Scalars['BigInt'];
   historicalEvents: Array<HistoryEvent>;
   id: Scalars['ID'];
+  lastPaused: Scalars['BigInt'];
+  paused: Scalars['Boolean'];
+  pausedAmount: Scalars['BigInt'];
   payee: User;
   payer: User;
+  reason?: Maybe<Scalars['String']>;
   streamId: Scalars['Bytes'];
   token: Token;
   users: Array<User>;
@@ -585,6 +621,26 @@ export type Stream_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  lastPaused?: InputMaybe<Scalars['BigInt']>;
+  lastPaused_gt?: InputMaybe<Scalars['BigInt']>;
+  lastPaused_gte?: InputMaybe<Scalars['BigInt']>;
+  lastPaused_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  lastPaused_lt?: InputMaybe<Scalars['BigInt']>;
+  lastPaused_lte?: InputMaybe<Scalars['BigInt']>;
+  lastPaused_not?: InputMaybe<Scalars['BigInt']>;
+  lastPaused_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  paused?: InputMaybe<Scalars['Boolean']>;
+  pausedAmount?: InputMaybe<Scalars['BigInt']>;
+  pausedAmount_gt?: InputMaybe<Scalars['BigInt']>;
+  pausedAmount_gte?: InputMaybe<Scalars['BigInt']>;
+  pausedAmount_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  pausedAmount_lt?: InputMaybe<Scalars['BigInt']>;
+  pausedAmount_lte?: InputMaybe<Scalars['BigInt']>;
+  pausedAmount_not?: InputMaybe<Scalars['BigInt']>;
+  pausedAmount_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  paused_in?: InputMaybe<Array<Scalars['Boolean']>>;
+  paused_not?: InputMaybe<Scalars['Boolean']>;
+  paused_not_in?: InputMaybe<Array<Scalars['Boolean']>>;
   payee?: InputMaybe<Scalars['String']>;
   payee_contains?: InputMaybe<Scalars['String']>;
   payee_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -625,6 +681,26 @@ export type Stream_Filter = {
   payer_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   payer_starts_with?: InputMaybe<Scalars['String']>;
   payer_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  reason?: InputMaybe<Scalars['String']>;
+  reason_contains?: InputMaybe<Scalars['String']>;
+  reason_contains_nocase?: InputMaybe<Scalars['String']>;
+  reason_ends_with?: InputMaybe<Scalars['String']>;
+  reason_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  reason_gt?: InputMaybe<Scalars['String']>;
+  reason_gte?: InputMaybe<Scalars['String']>;
+  reason_in?: InputMaybe<Array<Scalars['String']>>;
+  reason_lt?: InputMaybe<Scalars['String']>;
+  reason_lte?: InputMaybe<Scalars['String']>;
+  reason_not?: InputMaybe<Scalars['String']>;
+  reason_not_contains?: InputMaybe<Scalars['String']>;
+  reason_not_contains_nocase?: InputMaybe<Scalars['String']>;
+  reason_not_ends_with?: InputMaybe<Scalars['String']>;
+  reason_not_ends_with_nocase?: InputMaybe<Scalars['String']>;
+  reason_not_in?: InputMaybe<Array<Scalars['String']>>;
+  reason_not_starts_with?: InputMaybe<Scalars['String']>;
+  reason_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  reason_starts_with?: InputMaybe<Scalars['String']>;
+  reason_starts_with_nocase?: InputMaybe<Scalars['String']>;
   streamId?: InputMaybe<Scalars['Bytes']>;
   streamId_contains?: InputMaybe<Scalars['Bytes']>;
   streamId_in?: InputMaybe<Array<Scalars['Bytes']>>;
@@ -667,8 +743,12 @@ export enum Stream_OrderBy {
   CreatedTimestamp = 'createdTimestamp',
   HistoricalEvents = 'historicalEvents',
   Id = 'id',
+  LastPaused = 'lastPaused',
+  Paused = 'paused',
+  PausedAmount = 'pausedAmount',
   Payee = 'payee',
   Payer = 'payer',
+  Reason = 'reason',
   StreamId = 'streamId',
   Token = 'token',
   Users = 'users'
@@ -809,6 +889,8 @@ export type Token = {
   __typename?: 'Token';
   address: Scalars['Bytes'];
   contract: LlamaPayContract;
+  createdBlock: Scalars['BigInt'];
+  createdTimestamp: Scalars['BigInt'];
   decimals: Scalars['Int'];
   id: Scalars['ID'];
   name: Scalars['String'];
@@ -844,6 +926,22 @@ export type Token_Filter = {
   contract_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   contract_starts_with?: InputMaybe<Scalars['String']>;
   contract_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  createdBlock?: InputMaybe<Scalars['BigInt']>;
+  createdBlock_gt?: InputMaybe<Scalars['BigInt']>;
+  createdBlock_gte?: InputMaybe<Scalars['BigInt']>;
+  createdBlock_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  createdBlock_lt?: InputMaybe<Scalars['BigInt']>;
+  createdBlock_lte?: InputMaybe<Scalars['BigInt']>;
+  createdBlock_not?: InputMaybe<Scalars['BigInt']>;
+  createdBlock_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  createdTimestamp?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_gt?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_gte?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  createdTimestamp_lt?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_lte?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_not?: InputMaybe<Scalars['BigInt']>;
+  createdTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   decimals?: InputMaybe<Scalars['Int']>;
   decimals_gt?: InputMaybe<Scalars['Int']>;
   decimals_gte?: InputMaybe<Scalars['Int']>;
@@ -905,6 +1003,8 @@ export type Token_Filter = {
 export enum Token_OrderBy {
   Address = 'address',
   Contract = 'contract',
+  CreatedBlock = 'createdBlock',
+  CreatedTimestamp = 'createdTimestamp',
   Decimals = 'decimals',
   Id = 'id',
   Name = 'name',
@@ -1028,11 +1128,11 @@ export type StreamAndHistoryQueryVariables = Exact<{
 }>;
 
 
-export type StreamAndHistoryQuery = { __typename?: 'Query', user?: { __typename?: 'User', streams: Array<{ __typename?: 'Stream', streamId: any, active: boolean, amountPerSec: any, createdTimestamp: any, contract: { __typename?: 'LlamaPayContract', address: any }, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number, symbol: string }, historicalEvents: Array<{ __typename?: 'HistoryEvent', eventType: string, txHash: any, createdTimestamp: any }> }>, historicalEvents: Array<{ __typename?: 'HistoryEvent', txHash: any, eventType: string, createdTimestamp: any, stream: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number, symbol: string } }, oldStream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, symbol: string } } | null }> } | null };
+export type StreamAndHistoryQuery = { __typename?: 'Query', user?: { __typename?: 'User', streams: Array<{ __typename?: 'Stream', streamId: any, active: boolean, reason?: string | null, paused: boolean, pausedAmount: any, lastPaused: any, amountPerSec: any, createdTimestamp: any, contract: { __typename?: 'LlamaPayContract', address: any }, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number, symbol: string }, historicalEvents: Array<{ __typename?: 'HistoryEvent', eventType: string, txHash: any, createdTimestamp: any }> }>, historicalEvents: Array<{ __typename?: 'HistoryEvent', txHash: any, eventType: string, amount?: any | null, createdTimestamp: any, stream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number, symbol: string } } | null, oldStream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, symbol: string } } | null, token: { __typename?: 'Token', symbol: string, decimals: number } }> } | null };
 
-export type UserStreamFragment = { __typename?: 'Stream', streamId: any, active: boolean, amountPerSec: any, createdTimestamp: any, contract: { __typename?: 'LlamaPayContract', address: any }, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number, symbol: string }, historicalEvents: Array<{ __typename?: 'HistoryEvent', eventType: string, txHash: any, createdTimestamp: any }> };
+export type UserStreamFragment = { __typename?: 'Stream', streamId: any, active: boolean, reason?: string | null, paused: boolean, pausedAmount: any, lastPaused: any, amountPerSec: any, createdTimestamp: any, contract: { __typename?: 'LlamaPayContract', address: any }, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number, symbol: string }, historicalEvents: Array<{ __typename?: 'HistoryEvent', eventType: string, txHash: any, createdTimestamp: any }> };
 
-export type UserHistoryFragment = { __typename?: 'HistoryEvent', txHash: any, eventType: string, createdTimestamp: any, stream: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number, symbol: string } }, oldStream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, symbol: string } } | null };
+export type UserHistoryFragment = { __typename?: 'HistoryEvent', txHash: any, eventType: string, amount?: any | null, createdTimestamp: any, stream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number, symbol: string } } | null, oldStream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, symbol: string } } | null, token: { __typename?: 'Token', symbol: string, decimals: number } };
 
 export const UserStreamFragmentDoc = `
     fragment UserStream on Stream {
@@ -1058,6 +1158,10 @@ export const UserStreamFragmentDoc = `
     createdTimestamp
   }
   active
+  reason
+  paused
+  pausedAmount
+  lastPaused
   amountPerSec
   createdTimestamp
 }
@@ -1098,6 +1202,11 @@ export const UserHistoryFragmentDoc = `
     amountPerSec
     createdTimestamp
   }
+  token {
+    symbol
+    decimals
+  }
+  amount
   createdTimestamp
 }
     `;

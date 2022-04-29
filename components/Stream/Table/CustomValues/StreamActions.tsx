@@ -3,6 +3,8 @@ import classNames from 'classnames';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { IStream } from 'types';
 import { Cancel, Modify, Push, StreamHistory } from '.';
+import Pause from './Pause';
+import Resume from './Resume';
 
 export const StreamActions = ({ data }: { data: IStream }) => {
   const modifyDialog = useDialogState();
@@ -27,6 +29,7 @@ export const StreamActions = ({ data }: { data: IStream }) => {
           <button className="row-action-links" onClick={modifyDialog.toggle}>
             Modify
           </button>
+          {data.paused ? <Resume data={data} /> : <Pause data={data} />}
           <button
             className={classNames('row-action-links', streamsAndHistory.hasBothStreamTypes && 'pr-[2ch]')}
             onClick={historyDialog.toggle}

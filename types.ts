@@ -49,10 +49,14 @@ export interface IStream {
   tokenContract: Contract;
   llamaTokenContract: Contract;
   historicalEvents: { eventType: string; txHash: string; createdTimestamp: string }[];
+  paused: boolean;
+  pausedAmount: string;
+  lastPaused: string;
+  reason: string | null | undefined;
 }
 
 export interface IHistory extends UserHistoryFragment {
-  addressRelated: string;
+  addressRelated: string | null;
   addressType: 'payer' | 'payee';
   amountPerSec: string;
 }
