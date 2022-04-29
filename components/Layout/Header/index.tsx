@@ -15,7 +15,13 @@ const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
   const t = useTranslations('Header');
 
   return (
-    <header className="flex items-center justify-between gap-10 overflow-x-auto bg-[#D9F4E6] px-2 py-4 text-base md:p-[30px]">
+    <header
+      className="flex items-center justify-between gap-10 bg-[#D9F4E6] text-base"
+      style={{
+        paddingInline: 'clamp(0.5rem, 2.5vw, 2rem)',
+        paddingBlock: 'clamp(1rem, 2.5vh, 2rem)',
+      }}
+    >
       <Link href="/" passHref>
         <a className="flex-1">
           <Logo />
@@ -29,12 +35,12 @@ const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
             <Account showAccountInfo={walletDailog.toggle} />
           </>
         ) : (
-          <button className="nav-button" onClick={walletDailog.toggle}>
+          <button className="nav-button hidden md:block" onClick={walletDailog.toggle}>
             {t('connectWallet')}
           </button>
         )}
 
-        <Menu onboardDialog={onboardDialog} />
+        <Menu onboardDialog={onboardDialog} walletDialog={walletDailog} />
       </nav>
       <WalletSelector dialog={walletDailog} />
     </header>

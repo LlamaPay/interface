@@ -35,10 +35,10 @@ export const NetworksMenu = () => {
 
   return (
     <>
-      <SelectLabel state={select} className="sr-only">
+      <SelectLabel state={select} className="hidden sm:sr-only">
         Network
       </SelectLabel>
-      <Select state={select} className="nav-button flex items-center justify-between gap-2">
+      <Select state={select} className="nav-button hidden items-center justify-between gap-2 sm:flex">
         <>
           <div className="flex h-5 w-5 items-center rounded-full">
             <Image
