@@ -58,6 +58,7 @@ const Form = ({
           isRequired={false}
           label="Associate a Name to the Address?"
           placeholder="Add a name for fast identification"
+          optional
         />
 
         <span>

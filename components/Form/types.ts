@@ -7,6 +7,7 @@ export interface InputElement {
   className?: string;
   handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
+  optional?: boolean;
 }
 
 export interface InputWithTokenElement extends InputElement {
