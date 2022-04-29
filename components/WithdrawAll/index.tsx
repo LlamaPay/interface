@@ -1,12 +1,10 @@
-import { Interface } from 'ethers/lib/utils';
 import { useNetworkProvider } from 'hooks';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import useBatchCalls from 'queries/useBatchCalls';
 import React from 'react';
 import { useAccount } from 'wagmi';
 import { CashIcon } from '@heroicons/react/outline';
-
-const WithdrawInterface = new Interface(['function withdraw(address from, address to, uint216 amountPerSec)']);
+import { LlamaContractInterface } from 'utils/contract';
 
 interface ICall {
   [key: string]: string[];
@@ -25,7 +23,7 @@ export default function WithdrawAll() {
           const callData = acc[current.llamaContractAddress] ?? [];
 
           callData.push(
-            WithdrawInterface.encodeFunctionData('withdraw', [
+            LlamaContractInterface.encodeFunctionData('withdraw', [
               current.payerAddress,
               current.payeeAddress,
               current.amountPerSec,

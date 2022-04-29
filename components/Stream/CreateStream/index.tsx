@@ -1,21 +1,18 @@
 import * as React from 'react';
 import Placeholder from './Placeholder';
-import CreateStreamOnly from './CreateStreamOnly';
 import ErrorBoundary from './ErrorBoundary';
 import { useBalances } from 'hooks';
 import { useAccount } from 'wagmi';
-import { useDialogState } from 'ariakit';
 import { StreamIcon } from 'components/Icons';
 import useTokenBalances from 'queries/useTokenBalances';
+import CreateMultipleStreams from './CreateMultipleStreams';
 
 export const CreateStream = () => {
-  const [{ data: accountData, loading: accountDataLoading }] = useAccount();
+  const [{ loading: accountDataLoading }] = useAccount();
 
   const { isLoading, isError } = useBalances();
 
   const { data: tokens, isLoading: tokenBalancesLoading, isError: tokenBalancesError } = useTokenBalances();
-
-  const transactionDialog = useDialogState();
 
   const loading = accountDataLoading || isLoading || tokenBalancesLoading;
 
@@ -32,7 +29,7 @@ export const CreateStream = () => {
       ) : error ? (
         <ErrorBoundary message="Something went wrong" />
       ) : (
-        <CreateStreamOnly tokens={tokens} userAddress={accountData?.address ?? ''} dialog={transactionDialog} />
+        <CreateMultipleStreams tokens={tokens} />
       )}
     </section>
   );

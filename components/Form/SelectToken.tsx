@@ -57,7 +57,10 @@ function Token({ value, shortName, showBalance }: { value: string; shortName?: b
   );
 }
 
-export function SelectToken({ handleTokenChange, tokens, label, className }: ISelectTokenProps) {
+export const SelectToken = React.forwardRef<HTMLButtonElement, ISelectTokenProps>(function S(
+  { handleTokenChange, tokens, label, className },
+  ref
+) {
   const [newTokenForm, setNewTokenForm] = React.useState(false);
   const combobox = useComboboxState({ list: tokens });
   // value and setValue shouldn't be passed to the select state because the
@@ -82,6 +85,7 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
         state={select}
         className={classNames('input-field flex w-full items-center !py-[0px]', className)}
         onClick={dialog.toggle}
+        ref={ref}
       >
         {<Token value={select.value} shortName />}
         <SelectArrow className="relative right-[-2px]" />
@@ -141,7 +145,7 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
       </Dialog>
     </>
   );
-}
+});
 
 const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<React.SetStateAction<boolean>> }) => {
   const { mutate, isLoading, error } = useCreateLlamaPayContract();
