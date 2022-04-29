@@ -1,13 +1,19 @@
 import { ethers, providers } from 'ethers';
 import { Chain, allChains } from 'wagmi';
 
-// FACTORIES
+// TESTNETS
 export const FACTORY_RINKEBY = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_KOVAN = '0x1986317FBEDF12160A8690717202ca15233ecD4A';
 export const FACTORY_FUJI = '0xc4705f96030D347F421Fbe01d9A19F18B26a7d30';
+
+// LIVE
 export const FACTORY_AVALANCHE = '0x7d507b4c2d7e54da5731f643506996da8525f4a3';
 export const FACTORY_POLYGON = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_FANTOM = '0xde1C04855c2828431ba637675B6929A684f84C7F';
+export const FACTORY_MAINNET = '0xde1C04855c2828431ba637675B6929A684f84C7F';
+export const FACTORY_OPTIMISM = '0xde1C04855c2828431ba637675B6929A684f84C7F';
+export const FACTORY_ARBITRUM = '0xde1C04855c2828431ba637675B6929A684f84C7F';
+export const FACTORY_BSC = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 
 export const DISPERSE_DEFAULT = '0xD152f549545093347A162Dce210e7293f1452150';
 export const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
@@ -108,8 +114,52 @@ export const networkDetails: INetworkDetails = {
     disperseAddress: DISPERSE_DEFAULT,
     blockExplorerURL: 'https://https://ftmscan.com.com/',
     blockExplorerName: 'FTMScan',
-    prefix: 'Fantom',
+    prefix: 'fantom',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/fantom/info/logo.png',
+  },
+  1: {
+    rpcUrl: 'https://rpc.ankr.com/eth',
+    subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-mainnet',
+    chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/eth'),
+    llamapayFactoryAddress: FACTORY_MAINNET,
+    disperseAddress: DISPERSE_DEFAULT,
+    blockExplorerURL: 'https://etherscan.io/',
+    blockExplorerName: 'Etherscan',
+    prefix: 'ethereum',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
+  },
+  10: {
+    rpcUrl: 'https://mainnet.optimism.io',
+    subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-optimism',
+    chainProviders: new ethers.providers.JsonRpcProvider('https://mainnet.optimism.io'),
+    llamapayFactoryAddress: FACTORY_OPTIMISM,
+    disperseAddress: DISPERSE_DEFAULT,
+    blockExplorerURL: 'https://optimistic.etherscan.io/',
+    blockExplorerName: 'Etherscan',
+    prefix: 'optimism',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/optimism/info/logo.png',
+  },
+  42161: {
+    rpcUrl: 'https://rpc.ankr.com/arbitrum',
+    subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-arbitrum',
+    chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/arbitrum'),
+    llamapayFactoryAddress: FACTORY_ARBITRUM,
+    disperseAddress: '0x6F9fB43274e9011804Bf516e78CaF5e89856301A',
+    blockExplorerURL: 'https://arbiscan.io/',
+    blockExplorerName: 'Arbiscan',
+    prefix: 'arbitrum',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/arbitrum/info/logo.png',
+  },
+  56: {
+    rpcUrl: 'https://bsc-dataseed.binance.org',
+    subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bsc',
+    chainProviders: new ethers.providers.JsonRpcProvider('https://bsc-dataseed.binance.org'),
+    llamapayFactoryAddress: FACTORY_BSC,
+    disperseAddress: DISPERSE_DEFAULT,
+    blockExplorerURL: 'https://www.bscscan.com/',
+    blockExplorerName: 'BscScan',
+    prefix: 'bsc',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png',
   },
 };
 
@@ -119,7 +169,10 @@ export const defaultChains: Chain[] = allChains.filter(
     chain.name === 'Kovan' ||
     chain.name === 'Avalanche Fuji Testnet' ||
     chain.name === 'Avalanche Mainnet' ||
-    chain.name === 'Polygon Mainnet'
+    chain.name === 'Polygon Mainnet' ||
+    chain.name === 'Mainnet' ||
+    chain.name === 'Optimism' ||
+    chain.name === 'Arbitrum One'
 );
 
 export const chains: Chain[] = [
@@ -133,6 +186,18 @@ export const chains: Chain[] = [
       {
         name: 'FTMScan',
         url: 'https://ftmscan.com',
+      },
+    ],
+  },
+  {
+    id: 56,
+    name: 'BSC',
+    nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
+    rpcUrls: ['https://bsc-dataseed.binance.org'],
+    blockExplorers: [
+      {
+        name: 'BscScan',
+        url: 'https://www.bscscan.com/',
       },
     ],
   },
