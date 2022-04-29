@@ -7,6 +7,7 @@ export const FACTORY_KOVAN = '0x1986317FBEDF12160A8690717202ca15233ecD4A';
 export const FACTORY_FUJI = '0xc4705f96030D347F421Fbe01d9A19F18B26a7d30';
 export const FACTORY_AVALANCHE = '0x7d507b4c2d7e54da5731f643506996da8525f4a3';
 export const FACTORY_POLYGON = '0xde1C04855c2828431ba637675B6929A684f84C7F';
+export const FACTORY_FANTOM = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 
 export const DISPERSE_DEFAULT = '0xD152f549545093347A162Dce210e7293f1452150';
 export const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
@@ -99,16 +100,43 @@ export const networkDetails: INetworkDetails = {
     prefix: 'polygon',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/polygon/info/logo.png',
   },
+  250: {
+    rpcUrl: 'https://rpcapi.fantom.network',
+    subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-fantom',
+    chainProviders: new ethers.providers.JsonRpcProvider('https://rpcapi.fantom.network	'),
+    llamapayFactoryAddress: FACTORY_FANTOM,
+    disperseAddress: DISPERSE_DEFAULT,
+    blockExplorerURL: 'https://https://ftmscan.com.com/',
+    blockExplorerName: 'FTMScan',
+    prefix: 'Fantom',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/fantom/info/logo.png',
+  },
 };
 
-export const chains: Chain[] = allChains.filter(
+export const defaultChains: Chain[] = allChains.filter(
   (chain) =>
     chain.name === 'Rinkeby' ||
     chain.name === 'Kovan' ||
     chain.name === 'Avalanche Fuji Testnet' ||
     chain.name === 'Avalanche Mainnet' ||
-    chain.name === 'Polygon'
+    chain.name === 'Polygon Mainnet'
 );
+
+export const chains: Chain[] = [
+  ...defaultChains,
+  {
+    id: 250,
+    name: 'Fantom',
+    nativeCurrency: { name: 'Fantom', symbol: 'FTM', decimals: 18 },
+    rpcUrls: ['https://rpc.ftm.tools'],
+    blockExplorers: [
+      {
+        name: 'FTMScan',
+        url: 'https://ftmscan.com',
+      },
+    ],
+  },
+];
 
 export const secondsByDuration = {
   month: 2592000,
