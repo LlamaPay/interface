@@ -29,7 +29,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
 
   const tokenOptions = tokens.map((t) => t.tokenAddress);
 
-  const { mutate: batchCall } = useBatchCalls();
+  const { mutate: batchCall, isLoading } = useBatchCalls();
 
   const {
     register,
@@ -220,8 +220,8 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
         >
           Add Stream
         </button>
-        <SubmitButton className="flex-1" disabled={false}>
-          {false ? <BeatLoader size={6} color="white" /> : 'Create Stream'}
+        <SubmitButton className="flex-1" disabled={isLoading}>
+          {isLoading ? <BeatLoader size={6} color="white" /> : 'Create Stream'}
         </SubmitButton>
       </div>
     </form>
