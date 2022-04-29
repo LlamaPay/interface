@@ -17,6 +17,7 @@ const HistoryActions = ({ data }: { data: IHistory }) => {
       </>
     );
   }
+  return null
 };
 
 export default HistoryActions;
