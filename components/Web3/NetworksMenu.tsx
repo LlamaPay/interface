@@ -17,6 +17,9 @@ export const NetworksMenu = () => {
 
   if (!data || !chain || !switchNetwork) return null;
 
+  const mainnets = data.chains.filter((chain) => !chain.testnet);
+  // const testnets = data.chains.filter((chain) => chain.testnet);
+
   return (
     <>
       <SelectLabel state={select} className="sr-only">
@@ -33,9 +36,8 @@ export const NetworksMenu = () => {
           state={select}
           className="shadow-2 z-10 w-fit min-w-[10rem] rounded-xl border border-[#EAEAEA] bg-white p-2"
         >
-          {data.chains.map((value) => (
-            <>
-              {value.testnet ? "" : <SelectItem
+          {mainnets.map((value) => (
+            <SelectItem
               key={value.id}
               value={value.id?.toString()}
               className="flex scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-[#666666] outline-none active-item:text-black active:text-black aria-disabled:opacity-40"
@@ -48,8 +50,7 @@ export const NetworksMenu = () => {
                 />
               </div>
               {value.name}
-            </SelectItem>}
-            </>
+            </SelectItem>
           ))}
         </SelectPopover>
       )}
