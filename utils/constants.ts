@@ -171,9 +171,9 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'binance-smart-chain',
   },
   100: {
-    rpcUrl: 'https://rpc.gnosischain.com/',
+    rpcUrl: 'https://xdai-rpc.gateway.pokt.network',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-xdai',
-    chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.gnosischain.com/'),
+    chainProviders: new ethers.providers.JsonRpcProvider('https://xdai-rpc.gateway.pokt.network'),
     llamapayFactoryAddress: FACTORY_XDAI,
     disperseAddress: DISPERSE_DEFAULT,
     blockExplorerURL: 'https://blockscout.com/xdai/mainnet/',
@@ -246,7 +246,7 @@ export const chains: Chain[] = [
     id: 100,
     name: 'Gnosis',
     nativeCurrency: { name: 'xDAI', symbol: 'xDAI', decimals: 18 },
-    rpcUrls: ['https://rpc.gnosischain.com/'],
+    rpcUrls: ['https://xdai-rpc.gateway.pokt.network'],
     blockExplorers: [
       {
         name: 'Blockscout',
