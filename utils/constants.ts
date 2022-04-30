@@ -3,7 +3,7 @@ import { Chain, allChains } from 'wagmi';
 
 // TESTNETS
 export const FACTORY_RINKEBY = '0xde1C04855c2828431ba637675B6929A684f84C7F';
-export const FACTORY_KOVAN = '0x1986317FBEDF12160A8690717202ca15233ecD4A';
+export const FACTORY_KOVAN = '0xd43bb75cc924e8475dff2604b962f39089e4f842';
 export const FACTORY_FUJI = '0xc4705f96030D347F421Fbe01d9A19F18B26a7d30';
 
 // LIVE
@@ -17,6 +17,8 @@ export const FACTORY_BSC = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_XDAI = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 
 export const DISPERSE_DEFAULT = '0xD152f549545093347A162Dce210e7293f1452150';
+export const DISPERSE_AVALANCHE = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
+export const DISPERSE_ARBITRUM = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 export const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
 export const alchemyId = 'PwvZx2hO2XpToWXSw9sgJJt1eBgjkRUr';
 export const etherscanKey = 'DDH7EVWI1AQHBNPX5PYRSDM5SHCVBKX58Q';
@@ -91,7 +93,7 @@ export const networkDetails: INetworkDetails = {
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-avalanche-mainnet',
     chainProviders: new ethers.providers.JsonRpcProvider('https://api.avax.network/ext/bc/C/rpc'),
     llamapayFactoryAddress: FACTORY_AVALANCHE,
-    disperseAddress: '0x6F9fB43274e9011804Bf516e78CaF5e89856301A',
+    disperseAddress: DISPERSE_AVALANCHE,
     blockExplorerURL: 'https://snowtrace.io/',
     blockExplorerName: 'Snowtrace',
     prefix: 'avax',
@@ -151,7 +153,7 @@ export const networkDetails: INetworkDetails = {
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-arbitrum',
     chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/arbitrum'),
     llamapayFactoryAddress: FACTORY_ARBITRUM,
-    disperseAddress: '0x6F9fB43274e9011804Bf516e78CaF5e89856301A',
+    disperseAddress: DISPERSE_ARBITRUM,
     blockExplorerURL: 'https://arbiscan.io/',
     blockExplorerName: 'Arbiscan',
     prefix: 'arbitrum',
