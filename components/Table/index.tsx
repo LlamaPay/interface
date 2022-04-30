@@ -1,5 +1,6 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import { TableInstance } from '@tanstack/react-table';
+import { useTranslations } from 'next-intl';
 
 interface ITableProps {
   instance: TableInstance<any>;
@@ -16,6 +17,8 @@ const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
   const lastRowId = Number(currentRows[currentRows.length - 1]?.id) + 1;
 
   const showRowNumber = !Number.isNaN(firstRowId) && !Number.isNaN(lastRowId);
+
+  const t = useTranslations('Table');
 
   return (
     <div className="w-full">
@@ -56,12 +59,12 @@ const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
           <div className="flex flex-1 items-center justify-between gap-2">
             {downloadToCSV && (
               <button className="bg-none text-xs text-[#303030] underline" onClick={downloadToCSV}>
-                Export CSV
+                {t('exportCSV')}
               </button>
             )}
             {!hidePagination && (
               <label className="flex items-center space-x-1">
-                <span className="text-xs text-[rgba(0,0,0,0.54)]">Rows per page:</span>
+                <span className="text-xs text-[rgba(0,0,0,0.54)]">{`${t('rowsPerPage')}:`}</span>
                 <select
                   value={instance.getState().pagination.pageSize}
                   onChange={(e) => {
@@ -88,7 +91,7 @@ const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
                   disabled={!instance.getCanPreviousPage()}
                   aria-disabled={!instance.getCanPreviousPage()}
                 >
-                  <span className="sr-only">Previous</span>
+                  <span className="sr-only">{t('previous')}</span>
                   <ChevronLeftIcon className="h-6" color="#333336" />
                 </button>
                 <button
@@ -97,7 +100,7 @@ const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
                   disabled={!instance.getCanNextPage()}
                   aria-disabled={!instance.getCanNextPage()}
                 >
-                  <span className="sr-only">Next</span>
+                  <span className="sr-only">{t('next')}</span>
                   <ChevronRightIcon className="h-6" color="#333336" />
                 </button>
               </span>

@@ -4,7 +4,7 @@ import { GnosisConnector } from 'utils/GnosisConnector';
 import { Connector, Provider, chain } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
-import { WalletLinkConnector } from 'wagmi/connectors/walletLink';
+import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 
 const defaultChain = chain.avalanche;
 
@@ -25,7 +25,7 @@ const connectors = ({ chainId }: ConnectorsConfig) => {
         qrcode: true,
       },
     }),
-    new WalletLinkConnector({
+    new CoinbaseWalletConnector({
       options: {
         appName: 'LlamaPay',
         jsonRpcUrl: chainDetails ? chainDetails.rpcUrl : `${rpcUrl}/${infuraId}`,

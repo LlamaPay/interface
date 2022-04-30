@@ -1,6 +1,8 @@
 {
   "Common": {
-    "getStarted": "Get Started"
+    "getStarted": "Get Started",
+    "networkNotSupported": "Network not supported",
+    "error": "Couldn't load data"
   },
   "Header": {
     "connectWallet": "Connect Wallet",
@@ -11,5 +13,36 @@
     "heading": "Automate recurring salary payments in crypto!",
     "description": "Automate salary txs, streaming them by the second so employees can withdraw whenever they want and you don't have to deal with sending txs manually.",
     "close": "Close Banner"
+  },
+  "Balances": {
+    "heading": "Balances",
+    "connectWallet": "Connect wallet to view your balances",
+    "deposit": "Deposit new token",
+    "noData": "Create a Balance First",
+    "error": "Couldn't load balances"
+  },
+  "Streams": {
+    "heading": "Streams",
+    "connectWallet": "Connect wallet to view your streams",
+    "create": "Create Stream",
+    "noData": "Create a Stream to see a list of your Streams created here",
+    "error": "Couldn't load streams"
+  },
+  "History": {
+    "heading": "History",
+    "connectWallet": "Connect wallet to view your streams history",
+    "noData": "To check the movements of your streams, Create a Stream first",
+    "error": "Couldn't load historical data"
+  },
+  "Payees": {
+    "connectWallet": "Connect wallet to view payees list",
+    "noData": "Create a stream to view payees list",
+    "error": "Couldn't load payees"
+  },
+  "Table": {
+    "exportCSV": "Export CSV",
+    "rowsPerPage": "Rows per page",
+    "next": "Next",
+    "previous": "Previous"
   }
 }

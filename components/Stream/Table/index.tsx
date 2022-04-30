@@ -51,6 +51,11 @@ const defaultTableColumns = defaultTable.createColumns([
     header: 'Withdrawable',
     cell: ({ cell }) => cell.row.original && <Withdrawable data={cell.row.original} />,
   }),
+  defaultTable.createDisplayColumn({
+    id: 'streamActions',
+    header: '',
+    cell: ({ cell }) => cell.row.original && <StreamActions data={cell.row.original} historyOnly />,
+  }),
 ]);
 
 const table = createTable().setRowType<IStream>();

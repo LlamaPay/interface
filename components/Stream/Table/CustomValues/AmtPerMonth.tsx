@@ -13,7 +13,11 @@ export const AmtPerMonth = ({ data }: { data: IStream }) => {
 
   return (
     <div className="flex justify-start">
-      <Tooltip content={amount && price && `${(amount * Number(price)).toFixed(2)} USD`}>
+      <Tooltip
+        content={
+          amount && price && `${(amount * Number(price)).toLocaleString(locale, { maximumFractionDigits: 5 })} USD`
+        }
+      >
         <span className="slashed-zero tabular-nums">{amount.toLocaleString(locale, { maximumFractionDigits: 5 })}</span>
       </Tooltip>
     </div>

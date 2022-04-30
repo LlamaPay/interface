@@ -1,6 +1,8 @@
 {
   "Common": {
-    "getStarted": "Commencer"
+    "getStarted": "Commencer",
+    "networkNotSupported": "Réseau non pris en charge",
+    "error": "Impossible de charger les données"
   },
   "Header": {
     "connectWallet": "Connecter le portefeuille",
@@ -8,8 +10,39 @@
     "docs": "Docs"
   },
   "Banner": {
-    "heading": "Diffusez des paiements récurrents transparents en crypto!",
-    "description": "Automatisez les txs sur les salaires, en les diffusant à la seconde afin que les employés puissent se retirer quand ils le souhaitent et vous n'avez pas à vous occuper de l'envoi manuel des txs.",
+    "heading": "Distribuez des paiements récurrents et transparents en crypto!",
+    "description": "Automatisez vos transactions de versement de salaire. Plus besoin de manuellement réaliser les Txs, la rémunération sera automatiquement diffusée chaque seconde.\nLes employés seront libres de retirer leur salaire au moment qu’ils préfèrent.",
     "close": "Fermer la bannière"
+  },
+  "Balances": {
+    "heading": "Soldes",
+    "connectWallet": "Connectez le portefeuille pour voir vos soldes",
+    "deposit": "Déposer un nouveau jeton",
+    "noData": "Créer d'abord un solde",
+    "error": "Impossible de charger les soldes"
+  },
+  "Streams": {
+    "heading": "Ruisseaux",
+    "connectWallet": "Connectez votre portefeuille pour voir vos flux",
+    "create": "Créer un flux",
+    "noData": "Créez un flux pour voir une liste de vos flux créés ici",
+    "error": "Impossible de charger les flux"
+  },
+  "History": {
+    "heading": "Histoire",
+    "connectWallet": "Connectez le portefeuille pour afficher l'historique de vos flux",
+    "noData": "Pour vérifier les mouvements de vos flux, créez d'abord un flux",
+    "error": "Impossible de charger les données historiques"
+  },
+  "Payees": {
+    "connectWallet": "Connectez le portefeuille pour voir la liste des bénéficiaires",
+    "noData": "Créer un flux pour afficher la liste des bénéficiaires",
+    "error": "Impossible de charger les bénéficiaires"
+  },
+  "Table": {
+    "exportCSV": "Exporter CSV",
+    "rowsPerPage": "Lignes par page",
+    "next": "Suivant",
+    "previous": "Précédent"
   }
 }

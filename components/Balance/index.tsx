@@ -15,6 +15,7 @@ import { BalanceIcon } from 'components/Icons';
 import { useAccount } from 'wagmi';
 import useTokenBalances from 'queries/useTokenBalances';
 import { BeatLoader } from 'react-spinners';
+import { useTranslations } from 'next-intl';
 
 const Balance = () => {
   const { balances, noBalances, isLoading, isError } = useBalances();
@@ -31,6 +32,8 @@ const Balance = () => {
   const { data: tokens, isLoading: tokensLoading } = useTokenBalances();
 
   const [{ data: accountData }] = useAccount();
+
+  const t = useTranslations('Balances');
 
   const handleToken = (actionType: TokenAction, balance: IBalance) => {
     if (actionType === 'deposit') {
@@ -64,7 +67,7 @@ const Balance = () => {
         <div className="section-header flex w-full flex-wrap items-center justify-between gap-[0.625rem]">
           <span className="flex items-center gap-[0.625rem]">
             <BalanceIcon />
-            <h1 className="font-exo">Balances</h1>
+            <h1 className="font-exo">{t('heading')}</h1>
           </span>
 
           <button
@@ -74,7 +77,7 @@ const Balance = () => {
               depositFieldDialog.toggle();
             }}
           >
-            {isLoading || tokensLoading ? <BeatLoader size={6} color="white" /> : <>Deposit new token</>}
+            {isLoading || tokensLoading ? <BeatLoader size={6} color="white" /> : <>{t('deposit')}</>}
           </button>
         </div>
 
