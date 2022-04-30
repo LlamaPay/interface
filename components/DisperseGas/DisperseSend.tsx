@@ -6,6 +6,7 @@ import toast from 'react-hot-toast';
 import { BeatLoader } from 'react-spinners';
 import { networkDetails } from 'utils/constants';
 import { useContractWrite, useNetwork } from 'wagmi';
+import { useQueryClient } from 'react-query';
 
 interface DisperseSendProps {
   dialog: DisclosureState;
@@ -23,6 +24,8 @@ export default function DisperseSend({ dialog, data, setTransactionHash, transac
     },
     'disperseEther'
   );
+
+  const queryClient = useQueryClient();
 
   function sendGas() {
     let ether = new BigNumber(0);
@@ -53,6 +56,7 @@ export default function DisperseSend({ dialog, data, setTransactionHash, transac
         data.data?.wait().then((receipt) => {
           toast.dismiss(toastId);
           receipt.status === 1 ? toast.success('Successfully Dispersed Gas') : toast.error('Failed to Disperse Gas');
+          queryClient.invalidateQueries();
         });
       }
     });
