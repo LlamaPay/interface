@@ -35,6 +35,8 @@ const defaultColumns = table.createColumns([
           return 'Deposit';
         case 'StreamPaused':
           return 'Pause';
+        case 'StreamResumed':
+          return 'Resume';
         case 'Withdraw':
           return 'Withdraw';
         case 'StreamCreated':
