@@ -38,17 +38,9 @@ const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
           </thead>
           <tbody {...instance.getTableBodyProps()}>
             {instance.getRowModel().rows.map((row) => (
-              <tr
-                {...row.getRowProps()}
-                key={row.id}
-                className="bg-white odd:bg-neutral-100 dark:bg-neutral-900 dark:odd:bg-neutral-800"
-              >
+              <tr {...row.getRowProps()} key={row.id} className="table-row">
                 {row.getVisibleCells().map((cell) => (
-                  <td
-                    {...cell.getCellProps()}
-                    key={cell.id}
-                    className="truncate whitespace-nowrap border-l-[1px] border-dashed border-gray-200 px-4 py-[6px] text-sm text-[#3D3D3D] first-of-type:border-l-0 last-of-type:w-full dark:border-gray-700"
-                  >
+                  <td {...cell.getCellProps()} key={cell.id} className="table-description truncate">
                     {cell.renderCell()}
                   </td>
                 ))}

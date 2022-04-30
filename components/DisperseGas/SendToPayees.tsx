@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { useAccount } from 'wagmi';
 import DisperseSend from './DisperseSend';
@@ -7,6 +7,8 @@ import { useAddressStore } from 'store/address';
 import { formatAddress } from 'utils/address';
 import { DisclosureState } from 'ariakit';
 import { IStream } from 'types';
+import AvailableToDisperse from './AvailableToDisperse';
+import Fallback from 'components/FallbackList';
 
 export default function SendToPayees({
   dialog,
@@ -103,111 +105,121 @@ export default function SendToPayees({
     setToSend(newToSend);
   }
 
+  const showFallback = isLoading || error || Object.keys(tableContents).length < 1;
+
   return (
-    <form>
-      <div className="space-y-2">
-        <div className="flex w-48 space-x-2">
-          <p>Balance:</p>
-          <PayeeBalance id={accountData?.address ? accountData?.address.toLowerCase() : ''} />
-        </div>
-        <div className="flex w-full space-x-2">
-          <label>
+    <form className="flex flex-col gap-2">
+      <div className="mb-5">
+        <div className="flex w-full flex-wrap items-center space-x-2">
+          <label className="flex-1">
+            <span className="sr-only">Enter Amount to Disperse</span>
             <input
-              type="number"
-              autoComplete="off"
               onChange={(e) => {
                 if (Number(e.target.value) < 0) setAmount(0);
                 setAmount(Number(e.target.value));
               }}
-              name="amount"
-              className="input-field w-48"
+              autoComplete="off"
+              autoCorrect="off"
+              type="text"
+              pattern="^[0-9]*[.,]?[0-9]*$"
               placeholder="0.0"
-              min="0"
+              minLength={1}
+              maxLength={79}
+              spellCheck="false"
+              inputMode="decimal"
+              title="Enter numbers only."
+              className="input-field mt-0 flex-1"
             />
           </label>
-          <button onClick={onSplitEqually} type="button" className=" w-24 rounded-3xl bg-white  px-1 py-1 text-sm">
+          <button
+            onClick={onSplitEqually}
+            type="button"
+            className="rounded border border-[#1BDBAD] bg-white py-2 px-4 text-sm font-normal text-[#23BD8F]"
+          >
             Split Equally
           </button>
         </div>
-        <div className="flex w-48 space-x-2">
-          <button onClick={onSelectAll} type="button" className=" w-full rounded-3xl bg-white px-1 py-1 text-sm">
-            Select All
-          </button>
-          <button onClick={onUnselectAll} type="button" className=" w-full rounded-3xl bg-white  px-1 py-1 text-sm">
-            Unselect All
-          </button>
-        </div>
-
-        {isLoading ? (
-          <p>Loading Payees</p>
-        ) : (
-          <>
-            {error ? (
-              <p>Error Loading Payees</p>
-            ) : (
-              <>
-                {' '}
-                {Object.keys(tableContents).length > 0 ? (
-                  <table id="payeeTable">
-                    <thead>
-                      <tr>
-                        <th></th>
-                        <th className="text-md">Name/Address</th>
-                        <th className="text-md">Payee Balance</th>
-                        <th className="text-md">Amount to Send</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {Object.keys(tableContents).map((p) => (
-                        <tr key={p}>
-                          <td className="w-16">
-                            <label>
-                              <input
-                                type="checkbox"
-                                name={p}
-                                onChange={(e) => onSelect(e)}
-                                checked={toSend[p] !== undefined ? true : false}
-                              ></input>
-                            </label>
-                          </td>
-                          <td className="text-md w-56 text-center">
-                            {addresses.addressBook.find((e) => e.id === p)?.shortName
-                              ? addresses.addressBook.find((e) => e.id === p)?.shortName
-                              : formatAddress(p)}
-                          </td>
-                          <td className="text-md w-48 text-center">
-                            <PayeeBalance id={p} />
-                          </td>
-                          <td className="text-md w-32 text-center">
-                            <input
-                              className="input-field w-32"
-                              autoComplete="off"
-                              type="number"
-                              min="0"
-                              name={p}
-                              placeholder="0.0"
-                              value={tableContents[p]}
-                              onChange={(e) => onInputChange(e)}
-                            ></input>
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                ) : (
-                  <p>No Payees Detected</p>
-                )}
-              </>
-            )}
-          </>
-        )}
-        <DisperseSend
-          dialog={dialog}
-          data={toSend}
-          setTransactionHash={setTransactionHash}
-          transactionDialog={transactionDialog}
-        />
+        {accountData?.address && <AvailableToDisperse id={accountData.address.toLowerCase()} />}
       </div>
+      <div className="flex space-x-2">
+        <button onClick={onSelectAll} type="button" className="rounded-3xl border bg-white px-3 py-[6px] text-xs">
+          Select All
+        </button>
+        <button onClick={onUnselectAll} type="button" className="rounded-3xl border bg-white px-3 py-[6px] text-xs">
+          Unselect All
+        </button>
+      </div>
+
+      {showFallback ? (
+        <Fallback
+          isLoading={isLoading}
+          isError={error ? true : false}
+          noData={Object.keys(tableContents).length < 1}
+          type="payeesList"
+        />
+      ) : (
+        <div className="overflow-x-auto">
+          <table className="border">
+            <thead>
+              <tr>
+                <th className="table-description text-sm font-semibold !text-[#3D3D3D]"></th>
+                <th className="table-description text-sm font-semibold !text-[#3D3D3D]">Name/Address</th>
+                <th className="table-description text-sm font-semibold !text-[#3D3D3D]">Payee Balance</th>
+                <th className="table-description text-right text-sm font-semibold !text-[#3D3D3D]">Amount to Send</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.keys(tableContents).map((p) => (
+                <tr key={p} className="table-row">
+                  <td className="table-description">
+                    <label>
+                      <input
+                        type="checkbox"
+                        name={p}
+                        onChange={(e) => onSelect(e)}
+                        checked={toSend[p] !== undefined ? true : false}
+                      ></input>
+                    </label>
+                  </td>
+                  <td className="table-description">
+                    {addresses.addressBook.find((e) => e.id === p)?.shortName
+                      ? addresses.addressBook.find((e) => e.id === p)?.shortName
+                      : formatAddress(p)}
+                  </td>
+                  <td className="table-description">
+                    <PayeeBalance id={p} />
+                  </td>
+                  <td className="table-description">
+                    <input
+                      className="input-field m-0 min-w-[8rem] py-1"
+                      autoComplete="off"
+                      autoCorrect="off"
+                      type="text"
+                      pattern="^[0-9]*[.,]?[0-9]*$"
+                      placeholder="0.0"
+                      minLength={1}
+                      maxLength={79}
+                      spellCheck="false"
+                      inputMode="decimal"
+                      title="Enter numbers only."
+                      name={p}
+                      value={tableContents[p]}
+                      onChange={(e) => onInputChange(e)}
+                    ></input>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      <DisperseSend
+        dialog={dialog}
+        data={toSend}
+        setTransactionHash={setTransactionHash}
+        transactionDialog={transactionDialog}
+      />
     </form>
   );
 }

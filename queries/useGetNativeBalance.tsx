@@ -12,8 +12,8 @@ export function useGetNativeBalance(id: string) {
 
   const { locale } = useLocale();
 
-  if (error) return <p>Failed to Get Balance</p>;
-  if (loading) return <p>Loading Balance</p>;
+  if (error) return <>Failed to Get Balance</>;
+  if (loading) return <div className="animate-shimmer h-5 w-full"></div>;
 
-  return <p>{`${(Number(data?.value) / 1e18).toLocaleString(locale, { maximumFractionDigits: 5 })} ${nativeCoin}`}</p>;
+  return <>{`${(Number(data?.value) / 1e18).toLocaleString(locale, { maximumFractionDigits: 5 })} ${nativeCoin}`}</>;
 }

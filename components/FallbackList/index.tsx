@@ -5,7 +5,7 @@ interface FallbackProps {
   isLoading?: boolean;
   isError: boolean;
   noData: boolean;
-  type: 'streams' | 'history' | 'balances';
+  type: 'streams' | 'history' | 'balances' | 'payeesList';
 }
 
 const Fallback = ({ isLoading, isError, noData, type }: FallbackProps) => {
@@ -41,6 +41,15 @@ const Fallback = ({ isLoading, isError, noData, type }: FallbackProps) => {
       emptyDataMessage = 'Create a Balance First';
       defaultMessage = !accountData
         ? 'Connect wallet to view your balances'
+        : unsupported
+        ? 'Network not supported'
+        : null;
+      break;
+    case 'payeesList':
+      errorMessage = "Couldn't load payees";
+      emptyDataMessage = 'Create a stream to view payees list';
+      defaultMessage = !accountData
+        ? 'Connect wallet to view payees list'
         : unsupported
         ? 'Network not supported'
         : null;
