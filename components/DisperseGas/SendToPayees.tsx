@@ -25,7 +25,7 @@ export default function SendToPayees({
 
   const addresses = useAddressStore();
 
-  const initialPayeeData = React.useMemo(() => {
+  const { initialPayeeData, noStreams } = React.useMemo(() => {
     if (data && accountData) {
       const accountAddress = accountData?.address.toLowerCase();
       const newTable: { [key: string]: number } = {};
@@ -34,8 +34,8 @@ export default function SendToPayees({
           newTable[p.payeeAddress.toLowerCase()] = 0;
         }
       });
-      return newTable;
-    } else return null;
+      return { newTable, noStreams: Object.keys(newTable).length === 0 && newTable.constructor === Object };
+    } else return { initialPayeeData: null, noStreams: true };
   }, [data, accountData]);
 
   const [tableContents, setTableContents] = React.useState<{ [key: string]: number }>({});
@@ -43,15 +43,10 @@ export default function SendToPayees({
   const [amountState, setAmount] = React.useState<number>(0);
 
   React.useEffect(() => {
-    if (
-      dialog.mounted &&
-      initialPayeeData &&
-      Object.keys(tableContents).length === 0 &&
-      tableContents.constructor === Object
-    ) {
+    if (dialog.mounted && initialPayeeData && !noStreams) {
       setTableContents(initialPayeeData);
     }
-  }, [initialPayeeData, tableContents, dialog.mounted]);
+  }, [initialPayeeData, tableContents, dialog.mounted, noStreams]);
 
   function onSelectAll() {
     const newToSend = { ...tableContents };
