@@ -8,8 +8,8 @@
     "docs": "Docs"
   },
   "Banner": {
-    "heading": "Diffusez des paiements récurrents transparents en crypto!",
-    "description": "Automatisez les txs sur les salaires, en les diffusant à la seconde afin que les employés puissent se retirer quand ils le souhaitent et vous n'avez pas à vous occuper de l'envoi manuel des txs.",
+    "heading": "Distribuez des paiements récurrents et transparents en crypto!",
+    "description": "Automatisez vos transactions de versement de salaire. Plus besoin de manuellement réaliser les Txs, la rémunération sera automatiquement diffusée chaque seconde.\nLes employés seront libres de retirer leur salaire au moment qu’ils préfèrent.",
     "close": "Fermer la bannière"
   }
 }
