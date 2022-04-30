@@ -36,7 +36,7 @@ export function useCreateStreamForm({ tokens, dialog }: { tokens: ITokenBalance[
     // save address to local storage
     const shortName = form.shortName?.value;
     if (shortName && shortName !== '') {
-      updateAddress(payeeAddress, shortName);
+      updateAddress(payeeAddress.toLowerCase(), shortName);
     }
 
     const duration = streamDuration === 'year' ? 'year' : 'month';

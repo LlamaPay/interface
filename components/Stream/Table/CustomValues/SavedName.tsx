@@ -33,7 +33,7 @@ export function SavedName({ data }: { data: IStream }) {
 
   const updateName = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    updateAddress(address, savedAddress);
+    updateAddress(address.toLowerCase(), savedAddress);
     dialog.toggle();
   };
 
@@ -83,7 +83,7 @@ export function SavedName({ data }: { data: IStream }) {
             />
           </label>
           <small className="truncate opacity-70">({address})</small>
-          <button className="mt-4 w-full rounded-lg bg-green-200 p-3 dark:text-black">Update</button>
+          <button className="form-submit-button mt-5">Update</button>
         </form>
       </FormDialog>
     </div>
