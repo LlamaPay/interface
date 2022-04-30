@@ -4,16 +4,19 @@ import Fallback from 'components/FallbackList';
 import { HistoryIcon } from 'components/Icons';
 import { HistoryTable } from './Table';
 import { IStreamAndHistory } from 'types';
+import { useTranslations } from 'next-intl';
 
 export function HistorySection() {
   const { data, isLoading, error } = useStreamsAndHistory();
+
+  const t = useTranslations('History');
 
   return (
     <section className="w-full">
       <div className="section-header">
         <span className="flex items-center gap-[0.625rem]">
           <HistoryIcon />
-          <h1 className="font-exo">History</h1>
+          <h1 className="font-exo">{t('heading')}</h1>
         </span>
       </div>
 

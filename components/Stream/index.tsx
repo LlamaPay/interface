@@ -6,21 +6,24 @@ import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { StreamTable, DefaultStreamTable } from './Table';
 import { IStreamAndHistory } from 'types';
 import StreamMenu from './Menu';
+import { useTranslations } from 'next-intl';
 
 export function StreamSection() {
   const { data, isLoading, error } = useStreamsAndHistory();
+
+  const t = useTranslations('Streams');
 
   return (
     <section className="w-full">
       <div className="section-header flex w-full flex-wrap items-center justify-between gap-[0.625rem]">
         <span className="flex items-center gap-[0.625rem]">
           <StreamIcon />
-          <h1 className="font-exo">Streams</h1>
+          <h1 className="font-exo">{t('heading')}</h1>
         </span>
 
         <div className="flex flex-wrap gap-[0.625rem]">
           <Link href="/create">
-            <a className="primary-button py-2 px-8 text-sm font-bold">Create Stream</a>
+            <a className="primary-button py-2 px-8 text-sm font-bold">{t('create')}</a>
           </Link>
 
           <StreamMenu />
