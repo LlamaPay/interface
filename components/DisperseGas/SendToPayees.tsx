@@ -55,6 +55,7 @@ export default function SendToPayees({
     const address = e.target.name;
     const newtableContents = { ...tableContents };
     const value = Number(e.target.value);
+    if (Number.isNaN(value)) return;
     newtableContents[address] = value;
     setTableContents(newtableContents);
     if (toSend[address] !== undefined) {
