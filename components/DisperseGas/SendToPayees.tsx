@@ -17,19 +17,22 @@ export default function SendToPayees({
   setTransactionHash: React.Dispatch<React.SetStateAction<string>>;
   transactionDialog: DisclosureState;
   initialPayeeData: {
-    [key: string]: number;
+    [key: string]: string;
   };
 }) {
   const [{ data: accountData }] = useAccount();
 
   const addresses = useAddressStore();
 
-  const [tableContents, setTableContents] = React.useState<{ [key: string]: number }>(initialPayeeData);
+  const [tableContents, setTableContents] = React.useState<{ [key: string]: string }>(initialPayeeData);
   const [toSend, setToSend] = React.useState<{ [key: string]: number }>({});
   const [amountState, setAmount] = React.useState<number>(0);
 
   function onSelectAll() {
-    const newToSend = { ...tableContents };
+    const newToSend: { [key: string]: number } = {};
+    Object.keys(tableContents).forEach((p) => {
+      newToSend[p] = Number(newToSend[p]);
+    });
     setToSend(newToSend);
   }
 
@@ -43,7 +46,7 @@ export default function SendToPayees({
     const address = e.target.name;
     const newToSend = { ...toSend };
     if (checked) {
-      newToSend[address] = tableContents[address];
+      newToSend[address] = Number(tableContents[address]);
     } else {
       delete newToSend[address];
     }
@@ -54,13 +57,12 @@ export default function SendToPayees({
     e.preventDefault();
     const address = e.target.name;
     const newtableContents = { ...tableContents };
-    const value = Number(e.target.value);
-    if (Number.isNaN(value)) return;
+    const value = e.target.value;
     newtableContents[address] = value;
     setTableContents(newtableContents);
     if (toSend[address] !== undefined) {
       const newToSend = { ...toSend };
-      newToSend[address] = value;
+      newToSend[address] = Number(value);
       setToSend(newToSend);
     }
   }
@@ -72,9 +74,9 @@ export default function SendToPayees({
     Object.keys(tableContents).map((p) => {
       if (toSend[p] !== undefined) {
         newToSend[p] = amountPerPayee;
-        newtableContents[p] = amountPerPayee;
+        newtableContents[p] = amountPerPayee.toString();
       } else {
-        newtableContents[p] = 0;
+        newtableContents[p] = '0';
       }
     });
     setTableContents(newtableContents);
@@ -166,7 +168,7 @@ export default function SendToPayees({
                     minLength={1}
                     maxLength={79}
                     spellCheck="false"
-                    inputMode="decimal"
+                    inputMode="text"
                     title="Enter numbers only."
                     name={p}
                     value={tableContents[p]}

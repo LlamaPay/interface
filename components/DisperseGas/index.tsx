@@ -19,10 +19,10 @@ function DisperseGasMoney({ dialog }: { dialog: DisclosureState }) {
   const { initialPayeeData, noStreams } = React.useMemo(() => {
     if (data && accountData) {
       const accountAddress = accountData?.address.toLowerCase();
-      const newTable: { [key: string]: number } = {};
+      const newTable: { [key: string]: string } = {};
       data.streams?.forEach((p: IStream) => {
         if (accountAddress === p.payerAddress.toLowerCase()) {
-          newTable[p.payeeAddress.toLowerCase()] = 0;
+          newTable[p.payeeAddress.toLowerCase()] = '0';
         }
       });
       return {
