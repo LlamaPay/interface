@@ -5,15 +5,11 @@ export interface ILocale {
 
 const localeNames: ILocale[] = [
   {
-    name: 'English (US)',
-    id: 'en-US',
+    name: 'English',
+    id: 'en',
   },
   {
-    name: 'English (UK)',
-    id: 'en-GB',
-  },
-  {
-    name: 'French',
+    name: 'Français',
     id: 'fr',
   },
 ];

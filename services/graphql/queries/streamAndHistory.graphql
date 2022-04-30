@@ -32,6 +32,10 @@ fragment UserStream on Stream {
     createdTimestamp
   }
   active
+  reason
+  paused
+  pausedAmount
+  lastPaused
   amountPerSec
   createdTimestamp
 }
@@ -66,9 +70,15 @@ fragment UserHistory on HistoryEvent {
     }
     token {
       address
+      symbol
     }
     amountPerSec
     createdTimestamp
   }
+  token {
+    symbol
+    decimals
+  }
+  amount
   createdTimestamp
 }

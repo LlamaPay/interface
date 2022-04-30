@@ -1,3 +1,4 @@
+import { useLocale, useNetworkProvider } from 'hooks';
 import { useGetNativeBalance } from 'queries/useGetNativeBalance';
 
 interface PayeeBalanceProps {
@@ -5,5 +6,18 @@ interface PayeeBalanceProps {
 }
 
 export default function PayeeBalance({ id }: PayeeBalanceProps) {
-  return useGetNativeBalance(id);
+  const { data, isLoading, isError } = useGetNativeBalance(id);
+  const network = useNetworkProvider();
+  const balance = Number(data) / 10 ** Number(network.nativeCurrency?.decimals);
+  const { locale } = useLocale();
+
+  return (
+    <>
+      {isLoading
+        ? 'Loading'
+        : isError
+        ? 'Error'
+        : `${balance.toLocaleString(locale, { maximumFractionDigits: 5 })} ${network.nativeCurrency?.symbol}`}
+    </>
+  );
 }

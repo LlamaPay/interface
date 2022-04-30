@@ -26,10 +26,13 @@ export const InputAmount = ({ name, label, isRequired, className, handleChange, 
   );
 };
 
-export const InputText = ({ name, label, isRequired, className, ...props }: InputElement) => {
+export const InputText = ({ name, label, isRequired, className, optional, ...props }: InputElement) => {
   return (
     <label>
-      <span className="input-label">{label}</span>
+      <span className="input-label">
+        <span>{label}</span>
+        {optional && <small className="mx-2 text-neutral-500">(optional)</small>}
+      </span>
       <input
         className={classNames('input-field', className)}
         name={name}

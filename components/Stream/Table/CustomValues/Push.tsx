@@ -1,8 +1,10 @@
-import llamaContract from 'abis/llamaContract';
 import * as React from 'react';
+import llamaContract from 'abis/llamaContract';
+import { useDialogState } from 'ariakit';
+import { TransactionDialog } from 'components/Dialog';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
-import { IStream } from 'types';
+import { IStream, ITransaction } from 'types';
 import { useContractWrite } from 'wagmi';
 
 interface PushProps {
@@ -11,6 +13,8 @@ interface PushProps {
 }
 
 export const Push = ({ data, buttonName }: PushProps) => {
+  const [transactionHash, setTransactionHash] = React.useState<string | null>(null);
+
   const [{}, withdraw] = useContractWrite(
     {
       addressOrName: data.llamaContractAddress,
@@ -24,19 +28,31 @@ export const Push = ({ data, buttonName }: PushProps) => {
 
   const queryClient = useQueryClient();
 
-  const handleClick = () => {
-    withdraw().then((data) => {
-      const loadingToast = data.error
-        ? toast.error(data.error?.message)
-        : toast.loading(buttonName === 'Withdraw' ? 'Withdrawing Payment' : 'Sending Payment');
-      data.data?.wait().then((receipt) => {
-        toast.dismiss(loadingToast);
-        receipt.status === 1
-          ? toast.success(buttonName === 'Withdraw' ? 'Successfully Withdrawn Payment' : 'Successfully Sent Payment')
-          : toast.error(buttonName === 'Withdraw' ? 'Failed to Withdraw Payment' : 'Failed to Send Payment');
+  const transactionDialog = useDialogState();
 
-        queryClient.invalidateQueries();
-      });
+  const handleClick = () => {
+    withdraw().then(({ data, error }: ITransaction) => {
+      if (data) {
+        setTransactionHash(data.hash ?? null);
+
+        transactionDialog.toggle();
+
+        const toastId = toast.loading(buttonName === 'Withdraw' ? 'Withdrawing Payment' : 'Sending Payment');
+
+        data.wait().then((receipt) => {
+          toast.dismiss(toastId);
+
+          queryClient.invalidateQueries();
+
+          receipt.status === 1
+            ? toast.success(buttonName === 'Withdraw' ? 'Successfully Withdrawn Payment' : 'Successfully Sent Payment')
+            : toast.error(buttonName === 'Withdraw' ? 'Failed to Withdraw Payment' : 'Failed to Send Payment');
+        });
+      }
+
+      if (error) {
+        toast.error(error.message || 'Transaction Failed');
+      }
     });
   };
 
@@ -45,6 +61,8 @@ export const Push = ({ data, buttonName }: PushProps) => {
       <button onClick={handleClick} className="row-action-links">
         {buttonName}
       </button>
+
+      {transactionHash && <TransactionDialog dialog={transactionDialog} transactionHash={transactionHash} />}
     </>
   );
 };

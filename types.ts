@@ -49,10 +49,14 @@ export interface IStream {
   tokenContract: Contract;
   llamaTokenContract: Contract;
   historicalEvents: { eventType: string; txHash: string; createdTimestamp: string }[];
+  paused: boolean;
+  pausedAmount: string;
+  lastPaused: string;
+  reason: string | null | undefined;
 }
 
 export interface IHistory extends UserHistoryFragment {
-  addressRelated: string;
+  addressRelated: string | null;
   addressType: 'payer' | 'payee';
   amountPerSec: string;
 }
@@ -75,4 +79,20 @@ export interface ITokenList {
 export interface ITokenLists extends IToken {
   logoURI: string;
   isVerified: boolean;
+}
+
+export interface ITransactionSuccess {
+  hash: string;
+  wait: () => Promise<{
+    status?: number | undefined;
+  }>;
+}
+
+export interface ITransactionError {
+  message?: string;
+}
+
+export interface ITransaction {
+  data?: ITransactionSuccess;
+  error?: ITransactionError;
 }

@@ -11,6 +11,7 @@ import { BeatLoader } from 'react-spinners';
 import useTokenBalances from 'queries/useTokenBalances';
 import Image from 'next/image';
 import defaultImage from 'public/empty-token.webp';
+import { useQueryClient } from 'react-query';
 
 interface ISelectTokenProps {
   handleTokenChange: (token: string) => void;
@@ -57,7 +58,10 @@ function Token({ value, shortName, showBalance }: { value: string; shortName?: b
   );
 }
 
-export function SelectToken({ handleTokenChange, tokens, label, className }: ISelectTokenProps) {
+export const SelectToken = React.forwardRef<HTMLButtonElement, ISelectTokenProps>(function S(
+  { handleTokenChange, tokens, label, className },
+  ref
+) {
   const [newTokenForm, setNewTokenForm] = React.useState(false);
   const combobox = useComboboxState({ list: tokens });
   // value and setValue shouldn't be passed to the select state because the
@@ -82,6 +86,7 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
         state={select}
         className={classNames('input-field flex w-full items-center !py-[0px]', className)}
         onClick={dialog.toggle}
+        ref={ref}
       >
         {<Token value={select.value} shortName />}
         <SelectArrow className="relative right-[-2px]" />
@@ -130,7 +135,7 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
               ))}
             </ComboboxList>
             <button
-              className="m-4 mt-auto flex items-center justify-center gap-2 rounded bg-green-200 py-[11px] px-3"
+              className="nav-button m-4 mt-auto flex items-center justify-center gap-2 rounded"
               onClick={() => setNewTokenForm(true)}
             >
               <span>or add a new token</span>
@@ -141,13 +146,15 @@ export function SelectToken({ handleTokenChange, tokens, label, className }: ISe
       </Dialog>
     </>
   );
-}
+});
 
 const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<React.SetStateAction<boolean>> }) => {
   const { mutate, isLoading, error } = useCreateLlamaPayContract();
 
   const [isConfirming, setIsConfirming] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
+
+  const queryClient = useQueryClient();
 
   // TODO make sure this submit handler doesn't mess up DepositField submit handler like error field or loading states, as this is triggering that component forms submit func
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
@@ -162,7 +169,10 @@ const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<Rea
       {
         onSuccess: (res) => {
           setIsConfirming(true);
-          res.wait().then((data: any) => {
+
+          res.wait().then((data) => {
+            queryClient.invalidateQueries();
+
             if (data.status === 1) {
               setNewTokenForm(false);
             } else {
@@ -189,13 +199,13 @@ const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<Rea
       </header>
       <form className="m-4 mt-[10%]" onSubmit={handleSubmit}>
         <InputText name="tokenAddress" isRequired={true} label="Token Address" />
-        <SubmitButton className="!mt-4" disabled={isLoading}>
+        <SubmitButton className="!mt-4 rounded" disabled={isLoading}>
           {isLoading ? (
-            <BeatLoader size={6} />
+            <BeatLoader size={6} color="white" />
           ) : isConfirming ? (
             <span className="flex items-center justify-center space-x-2">
               <span>Confirming</span>
-              <BeatLoader size={4} />
+              <BeatLoader size={4} color="white" />
             </span>
           ) : (
             'Add token'

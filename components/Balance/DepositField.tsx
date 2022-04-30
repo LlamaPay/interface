@@ -55,7 +55,7 @@ const DepositField = ({ tokens, userAddress, dialog }: IDepositFieldprops) => {
             id="bdAmountToDeposit"
           />
 
-          <p className="my-2 text-center text-sm text-red-500">{approvalError && "Couldn't approve token"}</p>
+          <p className="my-2 text-center text-sm text-red-500">{approvalError?.message}</p>
 
           {isApproved ? (
             <button disabled={confirmingDeposit} className="form-submit-button mt-5">

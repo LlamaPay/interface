@@ -1,6 +1,7 @@
 import { Signer } from 'ethers';
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from 'react-query';
+import { ITransactionError, ITransactionSuccess } from 'types';
 import { createWriteContract } from 'utils/contract';
 import { useSigner } from 'wagmi';
 
@@ -14,15 +15,6 @@ interface IUseStreamToken {
 
 interface IStreamToken extends IUseStreamToken {
   signer?: Signer;
-}
-
-interface QueryError {
-  message: string;
-}
-
-interface QueryResponse {
-  hash: string;
-  wait: Awaited<Promise<() => any>>;
 }
 
 const streamToken = async ({
@@ -47,7 +39,6 @@ const streamToken = async ({
       }
     }
   } catch (error: any) {
-    // console.log(error);
     throw new Error(error.message || (error?.reason ?? "Couldn't stream token"));
   }
 };
@@ -56,13 +47,13 @@ export default function useStreamToken() {
   const [{ data: signer }] = useSigner();
   const queryClient = useQueryClient();
 
-  return useMutation<QueryResponse, QueryError, IUseStreamToken>(
+  return useMutation<ITransactionSuccess, ITransactionError, IUseStreamToken>(
     ({ llamaContractAddress, payeeAddress, amountToDeposit, amountPerSec, method }: IUseStreamToken) =>
       streamToken({ llamaContractAddress, payeeAddress, amountToDeposit, amountPerSec, method, signer }),
     {
       onSuccess: (data) => {
         const toastId = toast.loading('Confirming transaction');
-        data.wait().then((res: any) => {
+        data.wait().then((res) => {
           toast.dismiss(toastId);
           queryClient.invalidateQueries();
           if (res.status === 1) {
@@ -72,8 +63,8 @@ export default function useStreamToken() {
           }
         });
       },
-      onError: (error: any) => {
-        toast.error(error.message);
+      onError: (error) => {
+        toast.error(error.message || "Couldn't stream token");
       },
       onSettled: () => {
         queryClient.invalidateQueries();

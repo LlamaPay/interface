@@ -1,0 +1,15 @@
+{
+  "Common": {
+    "getStarted": "Get Started"
+  },
+  "Header": {
+    "connectWallet": "Connect Wallet",
+    "language": "Language",
+    "docs": "Docs"
+  },
+  "Banner": {
+    "heading": "Automate recurring salary payments in crypto!",
+    "description": "Automate salary txs, streaming them by the second so employees can withdraw whenever they want and you don't have to deal with sending txs manually.",
+    "close": "Close Banner"
+  }
+}

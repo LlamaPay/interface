@@ -6,16 +6,14 @@ interface Props {
 }
 
 export const Account = ({ showAccountInfo }: Props) => {
-  const [{ data }] = useAccount({
-    fetchEns: true,
-  });
+  const [{ data }] = useAccount();
 
   if (!data) return null;
 
   const formattedAddress = formatAddress(data.address);
 
   return (
-    <button className="nav-button bg-[#23BD8F] text-white" onClick={showAccountInfo}>
+    <button className="nav-button hidden bg-[#23BD8F] text-white md:block" onClick={showAccountInfo}>
       {data.ens?.name ? `${data.ens?.name} (${formattedAddress})` : formattedAddress}
     </button>
   );

@@ -38,12 +38,7 @@ const defaultTableColumns = defaultTable.createColumns([
   }),
   defaultTable.createDisplayColumn({
     id: 'amountPerSec',
-    header: () => (
-      <>
-        <span>Amount</span>
-        <small className="mx-1 text-xs font-normal text-gray-500 dark:text-gray-400">per month</small>
-      </>
-    ),
+    header: 'Amount',
     cell: ({ cell }) => cell.row.original && <AmtPerMonth data={cell.row.original} />,
   }),
   defaultTable.createDisplayColumn({
@@ -77,12 +72,7 @@ const streamTableColumns = table.createColumns([
   }),
   table.createDisplayColumn({
     id: 'amountPerSec',
-    header: () => (
-      <>
-        <span>Amount</span>
-        <small className="mx-1 text-xs font-normal text-gray-500 dark:text-gray-400">per month</small>
-      </>
-    ),
+    header: 'Amount',
     cell: ({ cell }) => cell.row.original && <AmtPerMonth data={cell.row.original} />,
   }),
   table.createDisplayColumn({

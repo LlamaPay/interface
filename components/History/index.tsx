@@ -10,10 +10,12 @@ export function HistorySection() {
 
   return (
     <section className="w-full">
-      <span className="section-header flex items-center gap-[0.625rem]">
-        <HistoryIcon />
-        <h1 className="font-exo">History</h1>
-      </span>
+      <div className="section-header">
+        <span className="flex items-center gap-[0.625rem]">
+          <HistoryIcon />
+          <h1 className="font-exo">History</h1>
+        </span>
+      </div>
 
       {isLoading || error || !data?.history || data.history?.length < 1 ? (
         <Fallback isLoading={isLoading} isError={error ? true : false} noData={true} type="history" />

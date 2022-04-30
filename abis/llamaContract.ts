@@ -4,6 +4,24 @@ const llamaContract = [
     anonymous: false,
     inputs: [
       { indexed: true, internalType: 'address', name: 'from', type: 'address' },
+      { indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' },
+    ],
+    name: 'PayerDeposit',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: 'address', name: 'from', type: 'address' },
+      { indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' },
+    ],
+    name: 'PayerWithdraw',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: 'address', name: 'from', type: 'address' },
       { indexed: true, internalType: 'address', name: 'to', type: 'address' },
       { indexed: false, internalType: 'uint216', name: 'amountPerSec', type: 'uint216' },
       { indexed: false, internalType: 'bytes32', name: 'streamId', type: 'bytes32' },
@@ -26,6 +44,18 @@ const llamaContract = [
     anonymous: false,
     inputs: [
       { indexed: true, internalType: 'address', name: 'from', type: 'address' },
+      { indexed: true, internalType: 'address', name: 'to', type: 'address' },
+      { indexed: false, internalType: 'uint216', name: 'amountPerSec', type: 'uint216' },
+      { indexed: false, internalType: 'bytes32', name: 'streamId', type: 'bytes32' },
+      { indexed: false, internalType: 'string', name: 'reason', type: 'string' },
+    ],
+    name: 'StreamCreatedWithReason',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: 'address', name: 'from', type: 'address' },
       { indexed: true, internalType: 'address', name: 'oldTo', type: 'address' },
       { indexed: false, internalType: 'uint216', name: 'oldAmountPerSec', type: 'uint216' },
       { indexed: false, internalType: 'bytes32', name: 'oldStreamId', type: 'bytes32' },
@@ -34,6 +64,29 @@ const llamaContract = [
       { indexed: false, internalType: 'bytes32', name: 'newStreamId', type: 'bytes32' },
     ],
     name: 'StreamModified',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: 'address', name: 'from', type: 'address' },
+      { indexed: true, internalType: 'address', name: 'to', type: 'address' },
+      { indexed: false, internalType: 'uint216', name: 'amountPerSec', type: 'uint216' },
+      { indexed: false, internalType: 'bytes32', name: 'streamId', type: 'bytes32' },
+    ],
+    name: 'StreamPaused',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: true, internalType: 'address', name: 'from', type: 'address' },
+      { indexed: true, internalType: 'address', name: 'to', type: 'address' },
+      { indexed: false, internalType: 'uint216', name: 'amountPerSec', type: 'uint216' },
+      { indexed: false, internalType: 'bytes32', name: 'streamId', type: 'bytes32' },
+      { indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' },
+    ],
+    name: 'Withdraw',
     type: 'event',
   },
   {
@@ -81,6 +134,17 @@ const llamaContract = [
     type: 'function',
   },
   {
+    inputs: [
+      { internalType: 'address', name: 'to', type: 'address' },
+      { internalType: 'uint216', name: 'amountPerSec', type: 'uint216' },
+      { internalType: 'string', name: 'reason', type: 'string' },
+    ],
+    name: 'createStreamWithReason',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [{ internalType: 'uint256', name: 'amount', type: 'uint256' }],
     name: 'deposit',
     outputs: [],
@@ -100,19 +164,14 @@ const llamaContract = [
   },
   {
     inputs: [
+      { internalType: 'uint256', name: 'amountToDeposit', type: 'uint256' },
       { internalType: 'address', name: 'to', type: 'address' },
-      { internalType: 'uint256', name: 'amount', type: 'uint256' },
+      { internalType: 'uint216', name: 'amountPerSec', type: 'uint216' },
+      { internalType: 'string', name: 'reason', type: 'string' },
     ],
-    name: 'emergencyRug',
+    name: 'depositAndCreateWithReason',
     outputs: [],
     stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [],
-    name: 'factory',
-    outputs: [{ internalType: 'address', name: '', type: 'address' }],
-    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -141,6 +200,16 @@ const llamaContract = [
       { internalType: 'uint216', name: 'amountPerSec', type: 'uint216' },
     ],
     name: 'modifyStream',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'address', name: 'to', type: 'address' },
+      { internalType: 'uint216', name: 'amountPerSec', type: 'uint216' },
+    ],
+    name: 'pauseStream',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

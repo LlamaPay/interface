@@ -9,15 +9,12 @@ import {
 } from '@tanstack/react-table';
 import Table from 'components/Table';
 import { IHistory } from 'types';
-import { secondsByDuration } from 'utils/constants';
-import { formatAddress } from 'utils/address';
-import { formatAmountInTable } from 'utils/amount';
 import ActionName from './ActionName';
 import HistoryActions from './HistoryActions';
 import { downloadHistory } from 'utils/downloadCsv';
-import Tooltip from 'components/Tooltip';
-import { useLocale } from 'hooks';
 import Amount from './Amount';
+import { SavedName } from './SavedName';
+import HistoryAge from './HistoryAge';
 
 const table = createTable().setRowType<IHistory>();
 
@@ -27,22 +24,72 @@ const defaultColumns = table.createColumns([
     header: 'Action',
     cell: ({ cell }) => cell.row.original && <ActionName data={cell.row.original} />,
   }),
-  table.createDataColumn('addressType', {
+  table.createDisplayColumn({
+    id: 'type',
     header: 'Type',
-    cell: ({ value }) => <span>{value === 'payer' ? 'Outgoing' : 'Incoming'}</span>,
+    cell: ({ cell }) => {
+      if (cell.row.original === undefined) return;
+      const event = cell.row.original.eventType;
+      switch (event) {
+        case 'Deposit':
+          return 'Deposit';
+        case 'StreamPaused':
+          return 'Pause';
+        case 'Withdraw':
+          return 'Withdraw';
+        case 'StreamCreated':
+          return cell.row.original.addressType === 'payer' ? 'Create Stream' : 'Receive Stream';
+        case 'StreamCancelled':
+          return 'Cancel Stream';
+        case 'StreamModified':
+          return 'Modify Stream';
+        case 'PayerWithdraw':
+          return 'Withdraw';
+        default:
+          return '';
+      }
+    },
   }),
-  table.createDataColumn('addressRelated', {
-    header: 'Address related',
-    cell: ({ value }) => <Tooltip content={value}>{value && formatAddress(value)}</Tooltip>,
+  table.createDisplayColumn({
+    id: 'addressName',
+    header: 'Address / Name',
+    cell: ({ cell }) => {
+      if (cell.row.original === undefined) return;
+      const eventType = cell.row.original.eventType;
+      return eventType === 'Deposit' || eventType === 'PayerWithdraw' ? (
+        'You'
+      ) : (
+        <SavedName value={cell.row.original.addressRelated !== null ? cell.row.original.addressRelated : ''} />
+      );
+    },
   }),
-  table.createDataColumn('amountPerSec', {
-    header: () => (
-      <>
-        <span>Amount</span>
-        <small className="mx-1 text-xs font-normal text-gray-500 dark:text-gray-400">per month</small>
-      </>
-    ),
-    cell: ({ value, cell }) => <Amount data={cell.row.original} value={value} />,
+  table.createDisplayColumn({
+    id: 'amount',
+    header: 'Amount',
+    cell: ({ cell }) => {
+      if (cell.row.original == undefined) return;
+      const info = cell.row.original;
+      if (info.eventType === 'Deposit' || info.eventType === 'Withdraw' || info.eventType === 'PayerWithdraw') {
+        return (
+          <>
+            <span>{`${(Number(info.amount) / 10 ** Number(info.token.decimals)).toLocaleString('en-US', {
+              maximumFractionDigits: 5,
+            })}`}</span>
+            <span className="mx-1 text-xs text-gray-500 dark:text-gray-400">{info.token.symbol}</span>
+          </>
+        );
+      } else {
+        return <Amount value={info.amountPerSec} data={info} />;
+      }
+    },
+  }),
+  table.createDisplayColumn({
+    id: 'age',
+    header: 'Age',
+    cell: ({ cell }) => {
+      if (cell.row.original == undefined) return;
+      return <HistoryAge data={cell.row.original} />;
+    },
   }),
   table.createDisplayColumn({
     id: 'historyActions',

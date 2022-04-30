@@ -44,9 +44,23 @@ const Form = ({
   });
 
   return (
-    <>
-      <form className="mx-auto mt-12 mb-7 flex w-full flex-1 flex-col gap-8 px-7 sm:mt-[104px]" onSubmit={handleSubmit}>
-        <InputText name="addressToStream" isRequired={true} label="Enter an Address to Stream" />
+    <div className="mx-auto flex w-full flex-1 flex-col overflow-auto px-7 pt-12 pb-7 sm:pt-[104px]">
+      <form className="flex flex-1 flex-col gap-8" onSubmit={handleSubmit}>
+        <InputText
+          name="addressToStream"
+          isRequired={true}
+          label="Enter an Address to Stream"
+          placeholder="Enter Recipient Address"
+        />
+
+        <InputText
+          name="shortName"
+          isRequired={false}
+          label="Associate a Name to the Address?"
+          placeholder="Add a name for fast identification"
+          optional
+        />
+
         <span>
           <SelectToken
             handleTokenChange={handleTokenChange}
@@ -67,15 +81,14 @@ const Form = ({
           {confirmingStream ? <BeatLoader size={6} color="white" /> : 'Create Stream'}
         </SubmitButton>
       </form>
-      <div className="m-7">
-        <button
-          className="form-submit-button mx-auto flex w-full max-w-xs items-center justify-center gap-2 bg-white text-[#23BD8F]"
-          onClick={() => setCreateStream(false)}
-        >
-          <ArrowLeftIcon className="h-4 w-4" />
-          <span>Deposit Token</span>
-        </button>
-      </div>
-    </>
+
+      <button
+        className="form-submit-button mx-auto mt-7 flex w-full max-w-xs items-center justify-center gap-2 bg-white text-[#23BD8F]"
+        onClick={() => setCreateStream(false)}
+      >
+        <ArrowLeftIcon className="h-4 w-4" />
+        <span>Deposit Token</span>
+      </button>
+    </div>
   );
 };

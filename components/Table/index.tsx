@@ -38,37 +38,20 @@ const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
           </thead>
           <tbody {...instance.getTableBodyProps()}>
             {instance.getRowModel().rows.map((row) => (
-              <tr
-                {...row.getRowProps()}
-                key={row.id}
-                className="bg-white odd:bg-neutral-100 dark:bg-neutral-900 dark:odd:bg-neutral-800"
-              >
+              <tr {...row.getRowProps()} key={row.id} className="table-row">
                 {row.getVisibleCells().map((cell) => (
-                  <td
-                    {...cell.getCellProps()}
-                    key={cell.id}
-                    className="truncate whitespace-nowrap border-l-[1px] border-dashed border-gray-200 px-4 py-[6px] text-sm text-[#3D3D3D] first-of-type:border-l-0 last-of-type:w-full dark:border-gray-700"
-                  >
+                  <td {...cell.getCellProps()} key={cell.id} className="table-description truncate">
                     {cell.renderCell()}
                   </td>
                 ))}
               </tr>
             ))}
           </tbody>
-          {/* <tfoot>
-        {instance.getFooterGroups().map((footerGroup) => (
-          <tr {...footerGroup.getFooterGroupProps()}>
-            {footerGroup.headers.map((header) => (
-              <th {...header.getFooterProps()}>{header.isPlaceholder ? null : header.renderFooter()}</th>
-            ))}
-          </tr>
-        ))}
-      </tfoot> */}
         </table>
       </div>
 
       <>
-        <div className="h-2" />
+        <div className={hidePagination ? 'h-4' : 'h-2'} />
         <div className="flex w-full flex-col gap-2 sm:flex-row sm:justify-between sm:gap-5">
           <div className="flex flex-1 items-center justify-between gap-2">
             {downloadToCSV && (

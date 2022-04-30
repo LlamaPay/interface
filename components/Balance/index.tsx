@@ -14,6 +14,7 @@ import Fallback from 'components/FallbackList';
 import { BalanceIcon } from 'components/Icons';
 import { useAccount } from 'wagmi';
 import useTokenBalances from 'queries/useTokenBalances';
+import { BeatLoader } from 'react-spinners';
 
 const Balance = () => {
   const { balances, noBalances, isLoading, isError } = useBalances();
@@ -27,7 +28,7 @@ const Balance = () => {
 
   const formData = React.useRef<null | IFormData>(null);
 
-  const { data: tokens } = useTokenBalances();
+  const { data: tokens, isLoading: tokensLoading } = useTokenBalances();
 
   const [{ data: accountData }] = useAccount();
 
@@ -58,9 +59,9 @@ const Balance = () => {
   const showFallback = isLoading || noBalances || isError;
 
   return (
-    <span className="mr-auto w-full">
-      <section className={showFallback ? 'w-full max-w-2xl' : 'w-full max-w-fit'}>
-        <div className="section-header flex flex-wrap items-center justify-between gap-[0.625rem]">
+    <div className="mr-auto w-full">
+      <div className={showFallback ? 'w-full max-w-2xl' : 'w-full max-w-fit'}>
+        <div className="section-header flex w-full flex-wrap items-center justify-between gap-[0.625rem]">
           <span className="flex items-center gap-[0.625rem]">
             <BalanceIcon />
             <h1 className="font-exo">Balances</h1>
@@ -68,30 +69,32 @@ const Balance = () => {
 
           <button
             className="primary-button"
-            disabled={showFallback}
+            disabled={isLoading || tokensLoading}
             onClick={() => {
               depositFieldDialog.toggle();
             }}
           >
-            Deposit new token
+            {isLoading || tokensLoading ? <BeatLoader size={6} color="white" /> : <>Deposit new token</>}
           </button>
         </div>
 
         {showFallback ? (
           <Fallback isLoading={isLoading} isError={isError} noData={noBalances} type="balances" />
         ) : (
-          <div className="overflow-x-auto">
+          <div className="mt-[-10px] overflow-x-auto">
             <table className="border-separate" style={{ borderSpacing: '0 10px' }}>
               <thead>
                 <tr>
-                  <th className="whitespace-nowrap p-4 pb-1 text-left text-sm font-semibold text-[#3D3D3D]">Token</th>
-                  <th className="whitespace-nowrap p-4 pb-1 text-left text-sm font-semibold text-[#3D3D3D]">
-                    Deposited
+                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D]">
+                    Token
                   </th>
-                  <th className="whitespace-nowrap p-4 pb-1 text-left text-sm font-semibold text-[#3D3D3D]">
+                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D]">
+                    Balance
+                  </th>
+                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D]">
                     To Depleted
                   </th>
-                  <th className="whitespace-nowrap p-4 pb-1 text-left text-sm font-semibold text-[#3D3D3D]">
+                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D]">
                     Monthly Cost
                   </th>
                   <th></th>
@@ -176,8 +179,8 @@ const Balance = () => {
         {tokens && accountData && (
           <DepositField tokens={tokens} userAddress={accountData.address} dialog={depositFieldDialog} />
         )}
-      </section>
-    </span>
+      </div>
+    </div>
   );
 };
 

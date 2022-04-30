@@ -1,6 +1,7 @@
 import { Signer } from 'ethers';
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from 'react-query';
+import { ITransactionError, ITransactionSuccess } from 'types';
 import { createWriteContract } from 'utils/contract';
 import { useSigner } from 'wagmi';
 
@@ -35,14 +36,14 @@ export default function useWithdrawByPayer() {
   const [{ data: signer }] = useSigner();
   const queryClient = useQueryClient();
 
-  return useMutation(
+  return useMutation<ITransactionSuccess, ITransactionError, IUseWithdrawPayerToken, unknown>(
     ({ llamaContractAddress, amountToWithdraw, withdrawAll }: IUseWithdrawPayerToken) =>
       withdrawPayer({ signer, llamaContractAddress, amountToWithdraw, withdrawAll }),
 
     {
       onSuccess: (data) => {
         const toastId = toast.loading('Confirming Withdrawal');
-        data.wait().then((res: any) => {
+        data.wait().then((res) => {
           toast.dismiss(toastId);
           queryClient.invalidateQueries();
           if (res.status === 1) {
@@ -52,8 +53,8 @@ export default function useWithdrawByPayer() {
           }
         });
       },
-      onError: (error: any) => {
-        toast.error(error.message);
+      onError: (error) => {
+        toast.error(error.message || "Couldn't withdraw token");
       },
       onSettled: () => {
         queryClient.invalidateQueries();

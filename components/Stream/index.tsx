@@ -2,11 +2,10 @@ import * as React from 'react';
 import Link from 'next/link';
 import Fallback from 'components/FallbackList';
 import { StreamIcon } from 'components/Icons';
-import DisperseGasMoney from 'components/DisperseGas';
-import WithdrawOnBehalf from 'components/WithdrawOnBehalf';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { StreamTable, DefaultStreamTable } from './Table';
 import { IStreamAndHistory } from 'types';
+import StreamMenu from './Menu';
 
 export function StreamSection() {
   const { data, isLoading, error } = useStreamsAndHistory();
@@ -23,8 +22,8 @@ export function StreamSection() {
           <Link href="/create">
             <a className="primary-button py-2 px-8 text-sm font-bold">Create Stream</a>
           </Link>
-          <DisperseGasMoney />
-          <WithdrawOnBehalf />
+
+          <StreamMenu />
         </div>
       </div>
       {isLoading || error || !data?.streams || data.streams?.length < 1 ? (

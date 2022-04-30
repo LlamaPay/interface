@@ -4,13 +4,12 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  reactStrictMode: false,
   i18n: {
-    locales: ['en-US', 'en-GB', 'fr'],
-    defaultLocale: 'en-US',
+    locales: ['en', 'fr'],
+    defaultLocale: 'en',
   },
   images: {
-    domains: ['raw.githubusercontent.com'],
+    domains: ['raw.githubusercontent.com', 'assets.coingecko.com'],
   },
 };
 

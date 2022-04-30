@@ -3,15 +3,25 @@ import Link from 'next/link';
 import { useAccount } from 'wagmi';
 import { NetworksMenu, Account, WalletSelector } from 'components/Web3';
 import { Logo } from 'components/Icons';
-import { DisclosureState } from 'ariakit';
+import { DisclosureState, useDialogState } from 'ariakit';
 import Menu from './Menu';
+import { useTranslations } from 'next-intl';
 
 const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
   const [{ data }] = useAccount();
-  const [openWalletSelector, setDisplaySelector] = React.useState(false);
+
+  const walletDailog = useDialogState();
+
+  const t = useTranslations('Header');
 
   return (
-    <header className="flex items-center justify-between gap-4 bg-[#D9F4E6] px-2 py-4 text-base md:p-[30px]">
+    <header
+      className="flex items-center justify-between gap-10 bg-[#D9F4E6] text-base"
+      style={{
+        paddingInline: 'clamp(0.5rem, 2.5vw, 2rem)',
+        paddingBlock: 'clamp(1rem, 2.5vh, 2rem)',
+      }}
+    >
       <Link href="/" passHref>
         <a className="flex-1">
           <Logo />
@@ -22,17 +32,17 @@ const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
         {data ? (
           <>
             <NetworksMenu />
-            <Account showAccountInfo={() => setDisplaySelector(!openWalletSelector)} />
+            <Account showAccountInfo={walletDailog.toggle} />
           </>
         ) : (
-          <button className="nav-button" onClick={() => setDisplaySelector(!openWalletSelector)}>
-            Connect Wallet
+          <button className="nav-button hidden md:block" onClick={walletDailog.toggle}>
+            {t('connectWallet')}
           </button>
         )}
 
-        <Menu onboardDialog={onboardDialog} />
+        <Menu onboardDialog={onboardDialog} walletDialog={walletDailog} />
       </nav>
-      <WalletSelector isOpen={openWalletSelector} setIsOpen={setDisplaySelector} />
+      <WalletSelector dialog={walletDailog} />
     </header>
   );
 };
