@@ -11,6 +11,7 @@ import { BeatLoader } from 'react-spinners';
 import useTokenBalances from 'queries/useTokenBalances';
 import Image from 'next/image';
 import defaultImage from 'public/empty-token.webp';
+import { useQueryClient } from 'react-query';
 
 interface ISelectTokenProps {
   handleTokenChange: (token: string) => void;
@@ -153,6 +154,8 @@ const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<Rea
   const [isConfirming, setIsConfirming] = React.useState(false);
   const [isError, setIsError] = React.useState(false);
 
+  const queryClient = useQueryClient();
+
   // TODO make sure this submit handler doesn't mess up DepositField submit handler like error field or loading states, as this is triggering that component forms submit func
   const handleSubmit = (e: React.ChangeEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -168,6 +171,8 @@ const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<Rea
           setIsConfirming(true);
 
           res.wait().then((data) => {
+            queryClient.invalidateQueries();
+
             if (data.status === 1) {
               setNewTokenForm(false);
             } else {
@@ -196,11 +201,11 @@ const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<Rea
         <InputText name="tokenAddress" isRequired={true} label="Token Address" />
         <SubmitButton className="!mt-4 rounded" disabled={isLoading}>
           {isLoading ? (
-            <BeatLoader size={6} />
+            <BeatLoader size={6} color="white" />
           ) : isConfirming ? (
             <span className="flex items-center justify-center space-x-2">
               <span>Confirming</span>
-              <BeatLoader size={4} />
+              <BeatLoader size={4} color="white" />
             </span>
           ) : (
             'Add token'

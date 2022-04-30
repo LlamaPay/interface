@@ -83,10 +83,10 @@ export function DepositForm({
         />
 
         {!isApproved && approvalError && (
-          <p className="mb-auto mt-4 text-center text-xs text-red-500">Couldn't approve token</p>
+          <p className="mb-auto mt-4 text-center text-xs text-red-500">{approvalError?.message}</p>
         )}
         {isApproved && depositError && (
-          <p className="mb-auto mt-4 text-center text-xs text-red-500">Couldn't deposit token amount</p>
+          <p className="mb-auto mt-4 text-center text-xs text-red-500">{depositError?.message}</p>
         )}
 
         {isApproved ? (

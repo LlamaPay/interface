@@ -43,7 +43,7 @@ const approveToken = async ({ tokenAddress, signer, amountToApprove, spenderAddr
       return await res.wait();
     }
   } catch (error: any) {
-    throw new Error(error?.reason ?? "Couldn't approve token");
+    throw new Error(error.message || (error?.reason ?? "Couldn't approve token"));
   }
 };
 
@@ -57,7 +57,7 @@ const approveTokenForMaxAmt = async ({ tokenAddress, signer, spenderAddress }: A
       return await res.wait();
     }
   } catch (error: any) {
-    throw new Error(error?.reason ?? "Couldn't approve token");
+    throw new Error(error.message || (error?.reason ?? "Couldn't approve token"));
   }
 };
 
