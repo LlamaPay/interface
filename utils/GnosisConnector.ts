@@ -6,40 +6,26 @@ import { Chain, Connector, ConnectorNotFoundError, normalizeChainId } from 'wagm
 
 const __IS_SERVER__ = typeof window === 'undefined';
 
-type SafeConnectOptions = SafeOpts & {
-  doNotAutoConnect?: boolean;
-};
-
-export class GnosisConnector extends Connector<SafeAppProvider, SafeConnectOptions | undefined> {
+export class GnosisConnector extends Connector<SafeAppProvider, SafeOpts | undefined> {
   readonly id = 'gnosis';
   readonly name = 'Gnosis';
-  ready = !__IS_SERVER__;
+  readonly ready = !__IS_SERVER__;
 
-  provider?: SafeAppProvider;
-  sdk?: SafeAppsSDK;
-  safe?: SafeInfo;
+  #provider?: SafeAppProvider;
+  #sdk?: SafeAppsSDK;
+  #safe?: SafeInfo;
 
-  constructor(config: { chains?: Chain[]; options?: SafeConnectOptions }) {
+  constructor(config: { chains?: Chain[]; options?: SafeOpts }) {
     super({ ...config, options: config?.options });
-    this.isSafeApp()
-      .then((isSafeApp) => {
-        if (isSafeApp) {
-          this.ready = true;
-          this.sdk = new SafeAppsSDK(config.options);
-          // Auto connect on safe environment
-          if (config.options?.doNotAutoConnect) {
-            return;
-          }
-          this.connect();
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    if (!__IS_SERVER__) {
+      this.#sdk = new SafeAppsSDK(config.options);
+      // Auto connect on safe environment
+      this.connect();
+    }
   }
 
   async connect() {
-    const runningAsSafeApp = await this.isSafeApp();
+    const runningAsSafeApp = await this.#isSafeApp();
 
     if (!runningAsSafeApp) {
       throw new Error("You're not running in a Gnosis Safe APP");
@@ -73,53 +59,49 @@ export class GnosisConnector extends Connector<SafeAppProvider, SafeConnectOptio
   }
 
   async getAccount() {
-    if (!this.safe) {
+    if (!this.#safe) {
       throw new ConnectorNotFoundError();
     }
 
-    return getAddress(this.safe.safeAddress);
+    return getAddress(this.#safe.safeAddress);
   }
 
   async getChainId() {
-    if (!this.provider) {
+    if (!this.#provider) {
       throw new ConnectorNotFoundError();
     }
 
-    return normalizeChainId(this.provider.chainId);
+    return normalizeChainId(this.#provider.chainId);
   }
 
-  async getSafeInfo(): Promise<SafeInfo> {
-    if (!this.sdk) {
+  async #getSafeInfo(): Promise<SafeInfo> {
+    if (!this.#sdk) {
       throw new ConnectorNotFoundError();
     }
-    if (!this.safe) {
-      this.safe = await this.sdk.safe.getInfo();
+    if (!this.#safe) {
+      this.#safe = await this.#sdk.safe.getInfo();
     }
-    return this.safe;
+    return this.#safe;
   }
 
-  async isSafeApp(): Promise<boolean> {
-    if (__IS_SERVER__) {
-      return false;
-    }
-
+  async #isSafeApp(): Promise<boolean> {
     // check if we're in an iframe
     if (window?.parent === window) {
       return false;
     }
-    const safe = await Promise.race([this.getSafeInfo(), new Promise<void>((resolve) => setTimeout(resolve, 300))]);
+    const safe = await Promise.race([this.#getSafeInfo(), new Promise<void>((resolve) => setTimeout(resolve, 300))]);
     return !!safe;
   }
 
   getProvider() {
-    if (!this.provider) {
-      const safe = this.safe;
-      if (!safe || !this.sdk) {
+    if (!this.#provider) {
+      const safe = this.#safe;
+      if (!safe || !this.#sdk) {
         throw new Error('Could not load Safe information');
       }
-      this.provider = new SafeAppProvider(safe, this.sdk);
+      this.#provider = new SafeAppProvider(safe, this.#sdk);
     }
-    return this.provider;
+    return this.#provider;
   }
 
   async getSigner() {

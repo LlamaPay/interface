@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@fontsource/exo-2": "^4.5.7",
+    "@gnosis.pm/safe-apps-provider": "^0.11.0",
+    "@gnosis.pm/safe-apps-sdk": "^7.3.0",
     "@heroicons/react": "^1.0.6",
     "@tanstack/react-table": "^8.0.0-alpha.48",
     "ariakit": "^2.0.0-next.24",
