@@ -66,7 +66,9 @@ function useTokenBalances() {
   const userAddress = accountData?.address.toLowerCase() ?? '';
 
   const listKey =
-    tokens && tokens?.length > 0 ? `listsExist ${network} ${userAddress}` : `noList ${network} ${userAddress}`;
+    tokens && tokens?.length > 0
+      ? `listsExist ${network} ${userAddress} ${listLoading}`
+      : `noList ${network} ${userAddress} ${listLoading}`;
 
   const data = useQuery<ITokenBalance[] | null>(
     ['allTokenBalances', listKey],

@@ -35,6 +35,10 @@
     @apply px-2 md:px-[30px] lg:px-[60px] xl:px-[120px];
   }
 
+  .app-section > * {
+    @apply mx-auto w-full max-w-7xl;
+  }
+
   .shadow-1 {
     @apply shadow-[0px_3px_7px_rgba(0,0,0,0.12)];
   }

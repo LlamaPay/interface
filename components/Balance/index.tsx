@@ -14,6 +14,7 @@ import Fallback from 'components/FallbackList';
 import { BalanceIcon } from 'components/Icons';
 import { useAccount } from 'wagmi';
 import useTokenBalances from 'queries/useTokenBalances';
+import { BeatLoader } from 'react-spinners';
 
 const Balance = () => {
   const { balances, noBalances, isLoading, isError } = useBalances();
@@ -27,7 +28,7 @@ const Balance = () => {
 
   const formData = React.useRef<null | IFormData>(null);
 
-  const { data: tokens } = useTokenBalances();
+  const { data: tokens, isLoading: tokensLoading } = useTokenBalances();
 
   const [{ data: accountData }] = useAccount();
 
@@ -68,12 +69,12 @@ const Balance = () => {
 
           <button
             className="primary-button"
-            disabled={isLoading}
+            disabled={isLoading || tokensLoading}
             onClick={() => {
               depositFieldDialog.toggle();
             }}
           >
-            Deposit new token
+            {isLoading || tokensLoading ? <BeatLoader size={6} color="white" /> : <>Deposit new token</>}
           </button>
         </div>
 
