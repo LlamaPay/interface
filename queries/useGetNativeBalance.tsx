@@ -1,9 +1,10 @@
 import { BaseProvider } from '@ethersproject/providers';
 import { BigNumber } from 'ethers';
+import { useNetworkProvider } from 'hooks';
 import { useQuery } from 'react-query';
-import { useProvider } from 'wagmi';
 
-async function fetchBalance(id: string, provider: BaseProvider) {
+async function fetchBalance(id: string, provider: BaseProvider | null) {
+  if (!provider) return null;
   try {
     const balance = await provider.getBalance(id);
     return balance;
@@ -13,7 +14,7 @@ async function fetchBalance(id: string, provider: BaseProvider) {
 }
 
 export function useGetNativeBalance(id: string) {
-  const provider = useProvider();
+  const { provider, network } = useNetworkProvider();
 
-  return useQuery<BigNumber | null>(['balance', id], () => fetchBalance(id, provider));
+  return useQuery<BigNumber | null>(['nativebalance', network, id], () => fetchBalance(id, provider));
 }
