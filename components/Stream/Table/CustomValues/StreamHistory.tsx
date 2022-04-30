@@ -1,4 +1,5 @@
-import { DisclosureState } from 'ariakit';
+import { useDialogState } from 'ariakit';
+import classNames from 'classnames';
 import { FormDialog } from 'components/Dialog';
 import { useChainExplorer, useLocale } from 'hooks';
 import React from 'react';
@@ -6,12 +7,14 @@ import { IStream } from 'types';
 
 interface StreamHistoryProps {
   data: IStream;
-  dialog: DisclosureState;
   title: string;
+  className?: string | boolean;
 }
 
-export const StreamHistory = ({ data, dialog, title }: StreamHistoryProps) => {
+export const StreamHistory = ({ data, title, className }: StreamHistoryProps) => {
   const historicalData = data.historicalEvents;
+
+  const dialog = useDialogState();
 
   const { url: chainExplorer, name: explorerName } = useChainExplorer();
 
@@ -19,6 +22,9 @@ export const StreamHistory = ({ data, dialog, title }: StreamHistoryProps) => {
 
   return (
     <>
+      <button className={classNames('row-action-links', className)} onClick={dialog.toggle}>
+        History
+      </button>
       <FormDialog dialog={dialog} title={title} className="v-min h-min">
         <section className="text-[#303030]">
           <table className=" w-full border-separate" style={{ borderSpacing: 0 }}>

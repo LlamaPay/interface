@@ -1,27 +1,31 @@
 import { useDialogState } from 'ariakit';
-import classNames from 'classnames';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { IStream } from 'types';
 import { Cancel, Modify, Push, StreamHistory } from '.';
 import Pause from './Pause';
 import Resume from './Resume';
 
-export const StreamActions = ({ data }: { data: IStream }) => {
+export const StreamActions = ({ data, historyOnly }: { data: IStream; historyOnly?: boolean }) => {
   const modifyDialog = useDialogState();
-  const historyDialog = useDialogState();
+
   const isIncoming = data.streamType === 'incomingStream';
 
   const { data: streamsAndHistory } = useStreamsAndHistory();
+
+  if (historyOnly) {
+    return (
+      <span className="relative flex justify-end gap-10">
+        <StreamHistory data={data} title="Stream History" />
+      </span>
+    );
+  }
 
   return (
     <span className="relative flex justify-end gap-10">
       {isIncoming ? (
         <>
-          <button className="row-action-links" onClick={historyDialog.toggle}>
-            History
-          </button>
+          <StreamHistory data={data} title="Stream History" />
           <Push buttonName="Withdraw" data={data} />
-          <StreamHistory data={data} title="Stream History" dialog={historyDialog} />
         </>
       ) : (
         <>
@@ -30,13 +34,11 @@ export const StreamActions = ({ data }: { data: IStream }) => {
             Modify
           </button>
           {data.paused ? <Resume data={data} /> : <Pause data={data} />}
-          <button
-            className={classNames('row-action-links', streamsAndHistory.hasBothStreamTypes && 'pr-[2ch]')}
-            onClick={historyDialog.toggle}
-          >
-            History
-          </button>
-          <StreamHistory data={data} title="Stream History" dialog={historyDialog} />
+          <StreamHistory
+            data={data}
+            title="Stream History"
+            className={streamsAndHistory.hasBothStreamTypes && 'pr-[2ch]'}
+          />
           <Cancel data={data} />
           <Modify data={data} title="Modify" dialog={modifyDialog} />
         </>
