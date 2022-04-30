@@ -36,7 +36,7 @@ export const StreamHistory = ({ data, title, className }: StreamHistoryProps) =>
             </thead>
             <tbody>
               {historicalData.map((p) => (
-                <tr className="border-stone-700" key={p.txHash}>
+                <tr className="border-stone-700" key={p.txHash + p.eventType}>
                   <td className="rounded-l border border-r-0 px-4 py-[6px] text-left text-sm">
                     {p.eventType.replace(/([A-Z])/g, ' $1')}
                   </td>
