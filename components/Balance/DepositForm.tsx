@@ -18,7 +18,6 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
   const transactionDialog = useDialogState();
 
   const [{ data: accountData }] = useAccount();
-  const connector = accountData?.connector?.id ?? '';
 
   const [inputAmount, setAmount] = React.useState('');
 
@@ -65,21 +64,8 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
 
     if (amount) {
       const formattedAmt = new BigNumber(amount).multipliedBy(10 ** data.tokenDecimals);
-      if (connector === 'gnosis') {
-        gnosisMutate(
-          {
-            amountToDeposit: formattedAmt.toFixed(0),
-            llamaContractAddress: data.llamaContractAddress,
-            tokenContractAddress: data.tokenAddress,
-          },
-          {
-            onSettled: () => {
-              formDialog.toggle();
-              transactionDialog.toggle();
-            },
-          }
-        );
-      } else if (isApproved) {
+
+      if (isApproved) {
         mutate(
           {
             amountToDeposit: formattedAmt.toFixed(0),
