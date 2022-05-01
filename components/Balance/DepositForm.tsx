@@ -80,8 +80,7 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
             },
           }
         );
-      }
-      if (isApproved) {
+      } else if (isApproved) {
         mutate(
           {
             amountToDeposit: formattedAmt.toFixed(0),
