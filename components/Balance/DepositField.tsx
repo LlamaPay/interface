@@ -34,7 +34,6 @@ const DepositField = ({ tokens, userAddress, dialog }: IDepositFieldprops) => {
   } = useDepositForm({ userAddress, tokens, transactionDialog, componentDialog: dialog });
 
   const disableApprove = checkingApproval || approvingToken;
-  const [{ data: accountData }] = useAccount();
 
   return (
     <>
@@ -59,7 +58,7 @@ const DepositField = ({ tokens, userAddress, dialog }: IDepositFieldprops) => {
 
           <p className="my-2 text-center text-sm text-red-500">{approvalError?.message}</p>
 
-          {isApproved || accountData?.connector?.id === 'gnosis' ? (
+          {isApproved || process.env.NEXT_PUBLIC_SAFE === 'true' ? (
             <button disabled={confirmingDeposit} className="form-submit-button mt-5">
               {confirmingDeposit ? <BeatLoader size={6} color="white" /> : 'Deposit'}
             </button>

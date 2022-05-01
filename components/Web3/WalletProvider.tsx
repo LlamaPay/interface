@@ -14,7 +14,11 @@ const connectors = ({ chainId }: ConnectorsConfig) => {
   const rpcUrl = defaultChain.rpcUrls[0];
   const chainDetails = chainId && networkDetails[chainId];
 
-  return [
+  return process.env.NEXT_PUBLIC_SAFE === 'true'? [
+    new GnosisConnector({
+      chains,
+    })
+  ]:[
     new InjectedConnector({
       chains,
       options: { shimDisconnect: true },
@@ -30,9 +34,6 @@ const connectors = ({ chainId }: ConnectorsConfig) => {
         appName: 'LlamaPay',
         jsonRpcUrl: chainDetails ? chainDetails.rpcUrl : `${rpcUrl}/${infuraId}`,
       },
-    }),
-    new GnosisConnector({
-      chains,
     }),
   ];
 };
