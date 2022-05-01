@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DisclosureState, useDialogState } from 'ariakit';
+import { useDialogState } from 'ariakit';
 import { ArrowRightIcon } from '@heroicons/react/solid';
 import { FormDialog, TransactionDialog } from 'components/Dialog';
 import { IStream } from 'types';
@@ -13,8 +13,6 @@ import { useLocale } from 'hooks';
 
 interface ModifyProps {
   data: IStream;
-  dialog: DisclosureState;
-  title: string;
 }
 
 interface IUpdatedFormElements {
@@ -23,8 +21,10 @@ interface IUpdatedFormElements {
   modifiedStreamDuration: { value: 'month' | 'year' };
 }
 
-export const Modify = ({ data, dialog, title }: ModifyProps) => {
+export const Modify = ({ data }: ModifyProps) => {
   const amountPerSec = Number(data.amountPerSec) / 1e20;
+
+  const dialog = useDialogState();
 
   const { mutate: modifyStream, isLoading, data: transaction } = useModifyStream();
 
@@ -66,7 +66,10 @@ export const Modify = ({ data, dialog, title }: ModifyProps) => {
 
   return (
     <>
-      <FormDialog dialog={dialog} title={title} className="h-min">
+      <button className="row-action-links" onClick={dialog.toggle}>
+        Modify
+      </button>
+      <FormDialog dialog={dialog} title="Modify" className="h-min">
         <span className="space-y-4 text-[#303030]">
           <section>
             <h2 className="font-medium text-[#3D3D3D]">Current Stream</h2>

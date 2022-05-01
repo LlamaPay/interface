@@ -20,15 +20,9 @@ export function useFormatStreamAndHistory({
       const streams = data?.user?.streams ?? [];
       const history = data?.user?.historicalEvents ?? [];
 
-      let incomingStream = 0;
-      let outgoingStream = 0;
-
       const formattedStreams = streams.map((s) => {
         const streamType: 'outgoingStream' | 'incomingStream' =
           s.payer.id?.toLowerCase() === address.toLowerCase() ? 'outgoingStream' : 'incomingStream';
-
-        if (streamType === 'incomingStream') incomingStream++;
-        if (streamType === 'outgoingStream') outgoingStream++;
 
         return {
           llamaContractAddress: s.contract.address,
@@ -68,8 +62,7 @@ export function useFormatStreamAndHistory({
       return {
         streams: formattedStreams.length > 0 ? formattedStreams : null,
         history: formattedHistory.length > 0 ? formattedHistory : null,
-        hasBothStreamTypes: incomingStream > 0 && outgoingStream > 0,
       };
-    } else return { streams: null, history: null, hasBothStreamTypes: false };
+    } else return { streams: null, history: null };
   }, [data, provider, address]);
 }

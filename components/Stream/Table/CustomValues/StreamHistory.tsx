@@ -7,11 +7,10 @@ import { IStream } from 'types';
 
 interface StreamHistoryProps {
   data: IStream;
-  title: string;
   className?: string | boolean;
 }
 
-export const StreamHistory = ({ data, title, className }: StreamHistoryProps) => {
+export const StreamHistory = ({ data, className }: StreamHistoryProps) => {
   const historicalData = data.historicalEvents;
 
   const dialog = useDialogState();
@@ -25,7 +24,7 @@ export const StreamHistory = ({ data, title, className }: StreamHistoryProps) =>
       <button className={classNames('row-action-links', className)} onClick={dialog.toggle}>
         History
       </button>
-      <FormDialog dialog={dialog} title={title} className="v-min h-min">
+      <FormDialog dialog={dialog} title="Stream History" className="v-min h-min">
         <section className="text-[#303030]">
           <table className=" w-full border-separate" style={{ borderSpacing: '0 2px' }}>
             <thead>

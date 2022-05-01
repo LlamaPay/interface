@@ -8,7 +8,7 @@ interface PauseProps {
   data: IStream;
 }
 
-export default function Pause({ data }: PauseProps) {
+export function Pause({ data }: PauseProps) {
   const [{}, pauseStream] = useContractWrite(
     {
       addressOrName: data.llamaContractAddress,

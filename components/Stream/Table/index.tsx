@@ -10,10 +10,15 @@ import {
   TotalStreamed,
   Withdrawable,
   SavedName,
-  StreamActions,
   AmtPerMonth,
   TokenName,
   StreamAddress,
+  Resume,
+  Pause,
+  Push,
+  Modify,
+  StreamHistory,
+  Cancel,
 } from './CustomValues';
 import { IStream } from 'types';
 import { downloadStreams } from 'utils/downloadCsv';
@@ -52,9 +57,14 @@ const defaultTableColumns = defaultTable.createColumns([
     cell: ({ cell }) => cell.row.original && <Withdrawable data={cell.row.original} />,
   }),
   defaultTable.createDisplayColumn({
-    id: 'streamActions',
+    id: 'history',
     header: '',
-    cell: ({ cell }) => cell.row.original && <StreamActions data={cell.row.original} historyOnly />,
+    cell: ({ cell }) =>
+      cell.row.original && (
+        <span className="flex justify-end">
+          <StreamHistory data={cell.row.original} />
+        </span>
+      ),
   }),
 ]);
 
@@ -91,9 +101,67 @@ const streamTableColumns = table.createColumns([
     cell: ({ cell }) => cell.row.original && <Withdrawable data={cell.row.original} />,
   }),
   table.createDisplayColumn({
-    id: 'streamActions',
+    id: 'send',
     header: '',
-    cell: ({ cell }) => cell.row.original && <StreamActions data={cell.row.original} />,
+    cell: ({ cell }) => {
+      const data = cell.row.original;
+
+      if (!data || data.streamType === 'incomingStream') return null;
+
+      return (
+        <div className="w-full">
+          <Push buttonName="Send" data={data} />
+        </div>
+      );
+    },
+  }),
+  table.createDisplayColumn({
+    id: 'modify',
+    header: '',
+    cell: ({ cell }) => {
+      const data = cell.row.original;
+
+      if (!data || data.streamType === 'incomingStream') return null;
+
+      return <Modify data={data} />;
+    },
+  }),
+  table.createDisplayColumn({
+    id: 'pauseOrResume',
+    header: '',
+    cell: ({ cell }) => {
+      const data = cell.row.original;
+
+      if (!data || data.streamType === 'incomingStream') return null;
+
+      return <>{data.paused ? <Resume data={data} /> : <Pause data={data} />}</>;
+    },
+  }),
+  table.createDisplayColumn({
+    id: 'history',
+    header: '',
+    cell: ({ cell }) => {
+      const data = cell.row.original;
+
+      if (!data) return null;
+
+      return <StreamHistory data={data} />;
+    },
+  }),
+  table.createDisplayColumn({
+    id: 'cancelOrWithdraw',
+    header: '',
+    cell: ({ cell }) => {
+      const data = cell.row.original;
+
+      if (!data) return null;
+
+      return (
+        <>
+          {data.streamType === 'incomingStream' ? <Push buttonName="Withdraw" data={data} /> : <Cancel data={data} />}
+        </>
+      );
+    },
   }),
 ]);
 
@@ -129,7 +197,7 @@ export function StreamTable({ data }: { data: IStream[] }) {
             className="h-8 rounded border border-neutral-300 p-2 shadow-sm dark:border-neutral-700"
           />
         </label> */}
-      <Table instance={instance} hidePagination={true} downloadToCSV={downloadToCSV} />
+      <Table instance={instance} hidePagination={true} downloadToCSV={downloadToCSV} maxWidthColumn={7} />
     </>
   );
 }

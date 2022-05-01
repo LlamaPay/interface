@@ -1,14 +1,16 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import { TableInstance } from '@tanstack/react-table';
+import classNames from 'classnames';
 import { useTranslations } from 'next-intl';
 
 interface ITableProps {
   instance: TableInstance<any>;
+  maxWidthColumn?: number;
   hidePagination?: boolean;
   downloadToCSV?: () => void;
 }
 
-const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
+const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV }: ITableProps) => {
   const totalRows = instance.getCoreRowModel().rows.length;
 
   const currentRows = instance.getRowModel().rows;
@@ -42,8 +44,16 @@ const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
           <tbody {...instance.getTableBodyProps()}>
             {instance.getRowModel().rows.map((row) => (
               <tr {...row.getRowProps()} key={row.id} className="table-row">
-                {row.getVisibleCells().map((cell) => (
-                  <td {...cell.getCellProps()} key={cell.id} className="table-description truncate">
+                {row.getVisibleCells().map((cell, index) => (
+                  <td
+                    {...cell.getCellProps()}
+                    key={cell.id}
+                    className={classNames(
+                      'table-description',
+                      index + 1 === maxWidthColumn && 'w-full text-right',
+                      maxWidthColumn && index + 1 > maxWidthColumn && 'border-l-0'
+                    )}
+                  >
                     {cell.renderCell()}
                   </td>
                 ))}
