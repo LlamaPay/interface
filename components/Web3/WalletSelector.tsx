@@ -28,7 +28,7 @@ export const WalletSelector = ({ dialog }: Props) => {
     [connect, dialog]
   );
 
-  if(process.env.NEXT_PUBLIC_SAFE === 'true'){
+  if(process.env.NEXT_PUBLIC_SAFE === 'true' && typeof window !== 'undefined'){
     connect(connectors[0]);
   }
 
