@@ -21,7 +21,7 @@ export const TotalStreamed = ({ data }: { data: IStream }) => {
           (((Date.now() - Number(data.createdTimestamp) * 1000) / 1000) * Number(data.amountPerSec) -
             Number(data.pausedAmount)) /
           1e20;
-        setAmount(totalAmount.toLocaleString(locale, { maximumFractionDigits: 5 }));
+        setAmount(totalAmount.toLocaleString(locale, { maximumFractionDigits: 5, minimumFractionDigits: 5 }));
       }
     }, 1);
 
