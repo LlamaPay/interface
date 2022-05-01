@@ -5,11 +5,6 @@ import useGetAllTokens from 'queries/useGetAllTokens';
 import { ITokenLists } from 'types';
 import { useGetTokenList } from 'queries/useGetTokenList';
 
-interface ITokenList {
-  address: string;
-  logoURI: string;
-}
-
 export default function useTokenList() {
   const { chainId } = useNetworkProvider();
 
