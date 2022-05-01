@@ -1,7 +1,5 @@
 import { useSafeAppsSDK } from '@gnosis.pm/safe-apps-react-sdk';
-import { SendTransactionsResponse } from '@gnosis.pm/safe-apps-sdk';
 import SafeAppsSDK from '@gnosis.pm/safe-apps-sdk/dist/src/sdk';
-import { TransactionDetails } from '@gnosis.pm/safe-react-gateway-sdk';
 import { Signer } from 'ethers';
 import { useMutation } from 'react-query';
 import { ERC20Interface, LlamaContractInterface } from 'utils/contract';
@@ -38,7 +36,7 @@ async function deposit({ signer, sdk, llamaContractAddress, tokenContractAddress
         },
       ];
 
-      return await sdk.txs.send({ txs: transactions });
+      await sdk.txs.send({ txs: transactions });
     }
   } catch (error: any) {
     throw new Error(error.message || (error?.reason ?? "Couldn't deposit token"));

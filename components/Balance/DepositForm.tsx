@@ -11,16 +11,13 @@ import { FormDialog, TransactionDialog } from 'components/Dialog';
 import { useDialogState } from 'ariakit';
 import Image from 'next/image';
 import AvailableAmount from 'components/AvailableAmount';
-import useDepositGnosis from 'queries/useDepositGnosis';
 
 const DepositForm = ({ data, formDialog }: IFormProps) => {
   const { mutate, isLoading, data: transaction } = useDepositToken();
-  const { mutate: gnosisMutate } = useDepositGnosis();
 
   const transactionDialog = useDialogState();
 
   const [{ data: accountData }] = useAccount();
-  const connector = accountData?.connector?.id ?? '';
 
   const [inputAmount, setAmount] = React.useState('');
 
@@ -67,21 +64,7 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
 
     if (amount) {
       const formattedAmt = new BigNumber(amount).multipliedBy(10 ** data.tokenDecimals);
-      if (connector === 'gnosis') {
-        gnosisMutate(
-          {
-            amountToDeposit: formattedAmt.toFixed(0),
-            llamaContractAddress: data.llamaContractAddress,
-            tokenContractAddress: data.tokenAddress,
-          },
-          {
-            onSettled: () => {
-              formDialog.toggle();
-              transactionDialog.toggle();
-            },
-          }
-        );
-      } else if (isApproved) {
+      if (isApproved) {
         mutate(
           {
             amountToDeposit: formattedAmt.toFixed(0),
