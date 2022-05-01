@@ -14,13 +14,14 @@ export default function useTokenList() {
 
   const data: ITokenLists[] | null = React.useMemo(() => {
     if (tokens) {
-      const verifiedLists =
-        (!tokenListLoading && tokenList
-          ? tokenList
-          : tokenLists.find((l) => l.chainId.toString() === chainId?.toString())?.list) ?? [];
+      const verifiedLists = (!tokenListLoading && tokenList ? tokenList : chainId ? tokenLists[chainId] : null) ?? null;
+
+      if (!verifiedLists) return null;
 
       return tokens.map((token) => {
-        const verifiedToken = verifiedLists[token.tokenAddress.toLowerCase()];
+        // always convert addresses to lowercase
+        const address = token.tokenAddress.toLowerCase();
+        const verifiedToken = verifiedLists[address];
 
         return {
           ...token,

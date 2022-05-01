@@ -67,12 +67,13 @@ export interface IStreamAndHistory {
 }
 
 export interface ITokenList {
-  chainId: number;
-  address: string;
-  name: string;
-  symbol: string;
-  decimals: number;
-  logoURI: string;
+  [key: string]: {
+    chainId: number;
+    name: string;
+    symbol: string;
+    decimals: number;
+    logoURI: string;
+  };
 }
 
 export interface ITokenLists extends IToken {
