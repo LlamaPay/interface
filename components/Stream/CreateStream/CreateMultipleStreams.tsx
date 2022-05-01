@@ -9,6 +9,7 @@ import { LlamaContractInterface } from 'utils/contract';
 import { getAddress } from 'ethers/lib/utils';
 import BigNumber from 'bignumber.js';
 import { secondsByDuration } from 'utils/constants';
+import useCreateStream from 'queries/useCreateStream';
 
 type FormValues = {
   streams: {
@@ -29,7 +30,8 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
 
   const tokenOptions = tokens.map((t) => t.tokenAddress);
 
-  const { mutate: batchCall, isLoading } = useBatchCalls();
+  const { mutate: batchCall, isLoading: batchLoading } = useBatchCalls();
+  const { mutate: createStream, isLoading: createStreamLoading } = useCreateStream();
 
   const {
     register,
@@ -57,33 +59,50 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
   });
 
   const onSubmit = (data: FormValues) => {
-    const calls: ICall = data.streams.reduce((calls: ICall, item) => {
+    if (data.streams.length === 1) {
+      const item = data.streams[0];
       if (item.shortName && item.shortName !== '') {
         updateAddress(item.addressToStream?.toLowerCase(), item.shortName);
       }
       const duration = item.streamDuration === 'year' ? 'year' : 'month';
-
       const tokenDetails = tokens.find((t) => t.tokenAddress?.toString() === item.tokenAddress?.toString()) ?? null;
-      if (tokenDetails === null) return calls;
-      // format amount to bignumber
-      // convert amt to seconds
+      if (tokenDetails === null) return;
       const amountPerSec = new BigNumber(item.amountToStream).times(1e20).div(secondsByDuration[duration]).toFixed(0);
       const llamaContractAddress = tokenDetails.llamaContractAddress;
+      createStream({
+        llamaPayAddress: llamaContractAddress,
+        payeeAddress: item.addressToStream,
+        amtPerSec: amountPerSec,
+      });
+    } else {
+      const calls: ICall = data.streams.reduce((calls: ICall, item) => {
+        if (item.shortName && item.shortName !== '') {
+          updateAddress(item.addressToStream?.toLowerCase(), item.shortName);
+        }
+        const duration = item.streamDuration === 'year' ? 'year' : 'month';
 
-      const call = LlamaContractInterface.encodeFunctionData('createStream', [
-        getAddress(item.addressToStream),
-        amountPerSec,
-      ]);
+        const tokenDetails = tokens.find((t) => t.tokenAddress?.toString() === item.tokenAddress?.toString()) ?? null;
+        if (tokenDetails === null) return calls;
+        // format amount to bignumber
+        // convert amt to seconds
+        const amountPerSec = new BigNumber(item.amountToStream).times(1e20).div(secondsByDuration[duration]).toFixed(0);
+        const llamaContractAddress = tokenDetails.llamaContractAddress;
 
-      const callData = calls[llamaContractAddress] ?? [];
-      callData.push(call);
+        const call = LlamaContractInterface.encodeFunctionData('createStream', [
+          getAddress(item.addressToStream),
+          amountPerSec,
+        ]);
 
-      return (calls = { ...calls, [llamaContractAddress]: callData });
-    }, {});
+        const callData = calls[llamaContractAddress] ?? [];
+        callData.push(call);
 
-    Object.keys(calls).map((p) => {
-      batchCall({ llamaContractAddress: p, calls: calls[p] });
-    });
+        return (calls = { ...calls, [llamaContractAddress]: callData });
+      }, {});
+
+      Object.keys(calls).map((p) => {
+        batchCall({ llamaContractAddress: p, calls: calls[p] });
+      });
+    }
   };
 
   return (
@@ -221,8 +240,8 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
           Add Stream
         </button>
 
-        <SubmitButton className="flex-1" disabled={isLoading}>
-          {isLoading ? <BeatLoader size={6} color="white" /> : 'Create Stream'}
+        <SubmitButton className="flex-1" disabled={createStreamLoading || batchLoading}>
+          {createStreamLoading || batchLoading ? <BeatLoader size={6} color="white" /> : 'Create Stream'}
         </SubmitButton>
       </div>
     </form>
