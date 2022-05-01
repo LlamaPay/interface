@@ -28,6 +28,10 @@ export const WalletSelector = ({ dialog }: Props) => {
     [connect, dialog]
   );
 
+  if(process.env.NEXT_PUBLIC_SAFE === 'true'){
+    connect(connectors[0]);
+  }
+
   const formattedAddress = accountData && formatAddress(accountData.address);
 
   return (

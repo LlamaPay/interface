@@ -41,7 +41,6 @@ export class GnosisConnector extends Connector<SafeAppProvider, SafeOpts | undef
 
     const account = await this.getAccount();
     const id = await this.getChainId();
-    console.log("connected", account)
 
     return {
       account,
