@@ -3,6 +3,7 @@ import llamaContractABI from 'abis/llamaContract';
 import factoryABI from 'abis/llamaFactory';
 import { ethers, Signer } from 'ethers';
 import { getAddress, Interface } from 'ethers/lib/utils';
+import { erc20ABI } from 'wagmi';
 
 export type Provider = ethers.providers.BaseProvider;
 
@@ -16,3 +17,4 @@ export const createFactoryWriteContract = (factoryAddress: string, signer: Signe
   new ethers.Contract(getAddress(factoryAddress), factoryABI, signer);
 
 export const LlamaContractInterface = new Interface(llamaContract);
+export const ERC20Interface = new Interface(erc20ABI);
