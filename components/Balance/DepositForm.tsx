@@ -11,11 +11,9 @@ import { FormDialog, TransactionDialog } from 'components/Dialog';
 import { useDialogState } from 'ariakit';
 import Image from 'next/image';
 import AvailableAmount from 'components/AvailableAmount';
-import useDepositGnosis from 'queries/useDepositGnosis';
 
 const DepositForm = ({ data, formDialog }: IFormProps) => {
   const { mutate, isLoading, data: transaction } = useDepositToken();
-  const { mutate: gnosisMutate, isLoading: gnosisLoading, data: gnosisTransaction } = useDepositGnosis();
 
   const transactionDialog = useDialogState();
 
