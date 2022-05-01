@@ -9,7 +9,7 @@ import { LlamaContractInterface } from 'utils/contract';
 import { getAddress } from 'ethers/lib/utils';
 import BigNumber from 'bignumber.js';
 import { secondsByDuration } from 'utils/constants';
-import useCreateStream from 'queries/useCreateStream';
+import useStreamToken from 'queries/useStreamToken';
 
 type FormValues = {
   streams: {
@@ -31,7 +31,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
   const tokenOptions = tokens.map((t) => t.tokenAddress);
 
   const { mutate: batchCall, isLoading: batchLoading } = useBatchCalls();
-  const { mutate: createStream, isLoading: createStreamLoading } = useCreateStream();
+  const { mutate: streamToken, isLoading: createStreamLoading } = useStreamToken();
 
   const {
     register,
@@ -64,21 +64,26 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
       if (item.shortName && item.shortName !== '') {
         updateAddress(item.addressToStream?.toLowerCase(), item.shortName);
       }
+
       const duration = item.streamDuration === 'year' ? 'year' : 'month';
       const tokenDetails = tokens.find((t) => t.tokenAddress?.toString() === item.tokenAddress?.toString()) ?? null;
+
       if (tokenDetails === null) return;
+
       const amountPerSec = new BigNumber(item.amountToStream).times(1e20).div(secondsByDuration[duration]).toFixed(0);
-      const llamaContractAddress = tokenDetails.llamaContractAddress;
-      createStream({
-        llamaPayAddress: llamaContractAddress,
+
+      streamToken({
+        method: 'CREATE_STREAM',
+        llamaContractAddress: tokenDetails.llamaContractAddress,
         payeeAddress: item.addressToStream,
-        amtPerSec: amountPerSec,
+        amountPerSec,
       });
     } else {
       const calls: ICall = data.streams.reduce((calls: ICall, item) => {
         if (item.shortName && item.shortName !== '') {
           updateAddress(item.addressToStream?.toLowerCase(), item.shortName);
         }
+
         const duration = item.streamDuration === 'year' ? 'year' : 'month';
 
         const tokenDetails = tokens.find((t) => t.tokenAddress?.toString() === item.tokenAddress?.toString()) ?? null;
