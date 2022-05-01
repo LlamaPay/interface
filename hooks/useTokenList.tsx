@@ -25,9 +25,7 @@ export default function useTokenList() {
           : tokenLists.find((l) => l.chainId.toString() === chainId?.toString())?.list) ?? [];
 
       return tokens.map((token) => {
-        const verifiedToken = verifiedLists.find(
-          (t: ITokenList) => t.address.toLowerCase() === token.tokenAddress.toLowerCase()
-        );
+        const verifiedToken = verifiedLists[token.tokenAddress.toLowerCase()];
 
         return {
           ...token,

@@ -6,9 +6,9 @@ import { useNetworkProvider } from 'hooks';
 const fetchTokenList = async (id?: string) => {
   if (!id) return null;
 
-  const { data } = await axios.get(`https://api.llama.fi/tokenlist/${id}`);
+  const { data } = await axios.get(`https://defillama-datasets.s3.eu-central-1.amazonaws.com/tokenlist/${id}.json`);
 
-  return data?.coins ?? [];
+  return data ?? {};
 };
 
 export function useGetTokenList() {
