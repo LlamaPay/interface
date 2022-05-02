@@ -6,7 +6,6 @@ import { InjectedConnector } from 'wagmi/connectors/injected';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import SafeProvider from '@gnosis.pm/safe-apps-react-sdk';
-import SafeContextProvider from './SafeProvider';
 
 const defaultChain = chain.avalanche;
 
@@ -60,6 +59,7 @@ export const WalletProvider = ({ children }: Props) => {
       {children}
     </Provider>
   );
+  const SafeContextProvider = SafeProvider as any
   return process.env.NEXT_PUBLIC_SAFE === 'true' && typeof window !== "undefined" ? (
     <SafeContextProvider>{basicProvider}</SafeContextProvider>
   ) : (
