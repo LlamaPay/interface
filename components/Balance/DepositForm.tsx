@@ -71,7 +71,7 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
         mutateGnosis({
           llamaContractAddress: data.llamaContractAddress,
           tokenContractAddress: data.tokenAddress,
-          amountToDeposit: amount,
+          amountToDeposit: formattedAmt.toFixed(0),
         });
       } else if (isApproved) {
         mutate(
