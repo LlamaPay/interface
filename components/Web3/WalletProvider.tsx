@@ -5,7 +5,6 @@ import { Connector, Provider, chain } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
-import SafeProvider from '@gnosis.pm/safe-apps-react-sdk';
 
 const defaultChain = chain.avalanche;
 
