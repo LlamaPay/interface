@@ -1,9 +1,7 @@
 import { useSafeAppsSDK } from '@gnosis.pm/safe-apps-react-sdk';
 import SafeAppsSDK from '@gnosis.pm/safe-apps-sdk/dist/src/sdk';
-import { Signer } from 'ethers';
 import { useMutation } from 'react-query';
 import { ERC20Interface, LlamaContractInterface } from 'utils/contract';
-import { useSigner } from 'wagmi';
 
 interface IUseDepositGnosis {
   llamaContractAddress: string;
@@ -12,14 +10,13 @@ interface IUseDepositGnosis {
 }
 
 interface IDepositGnosis extends IUseDepositGnosis {
-  signer?: Signer;
   sdk?: SafeAppsSDK;
 }
 
-async function deposit({ signer, sdk, llamaContractAddress, tokenContractAddress, amountToDeposit }: IDepositGnosis) {
+async function deposit({ sdk, llamaContractAddress, tokenContractAddress, amountToDeposit }: IDepositGnosis) {
   try {
-    if (!signer || !sdk) {
-      throw new Error("Couldn't get signer or SDK");
+    if (!sdk) {
+      throw new Error("Couldn't get SDK");
     } else {
       const approve = ERC20Interface.encodeFunctionData('approve', [llamaContractAddress, amountToDeposit]);
       const deposit = LlamaContractInterface.encodeFunctionData('deposit', [amountToDeposit]);
@@ -44,12 +41,11 @@ async function deposit({ signer, sdk, llamaContractAddress, tokenContractAddress
 }
 
 export default function useDepositGnosis() {
-  const [{ data: signer }] = useSigner();
   const { sdk } = useSafeAppsSDK();
 
   return useMutation(
     ({ llamaContractAddress, tokenContractAddress, amountToDeposit }: IUseDepositGnosis) =>
-      deposit({ signer, sdk, llamaContractAddress, tokenContractAddress, amountToDeposit }),
+      deposit({ sdk, llamaContractAddress, tokenContractAddress, amountToDeposit }),
     {}
   );
 }
