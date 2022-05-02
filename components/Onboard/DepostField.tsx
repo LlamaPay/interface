@@ -89,7 +89,7 @@ export function DepositForm({
           <p className="mb-auto mt-4 text-center text-xs text-red-500">{depositError?.message}</p>
         )}
 
-        {isApproved ? (
+        {isApproved || process.env.NEXT_PUBLIC_SAFE === 'true' ? (
           <button className="form-submit-button" disabled={confirmingDeposit}>
             {confirmingDeposit ? <BeatLoader size={6} color="white" /> : 'Deposit'}
           </button>

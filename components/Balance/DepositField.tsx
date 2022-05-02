@@ -6,7 +6,6 @@ import { FormDialog, TransactionDialog } from 'components/Dialog';
 import { useDepositForm } from 'hooks';
 import { ITokenBalance } from 'queries/useTokenBalances';
 import AvailableAmount from 'components/AvailableAmount';
-import { useAccount } from 'wagmi';
 
 interface IDepositFieldprops {
   tokens: ITokenBalance[];
