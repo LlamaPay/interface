@@ -80,7 +80,6 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
 
     if (amount) {
       const formattedAmt = new BigNumber(amount).multipliedBy(10 ** data.tokenDecimals);
-
       if (process.env.NEXT_PUBLIC_SAFE === 'true') {
         // mutateGnosis({
         //   amountToDeposit: formattedAmt.toFixed(0),
@@ -99,10 +98,15 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
             data: approve,
           },
           {
-            to: data.llamaContractAddress,
+            to: data.tokenAddress,
             value: '0',
-            data: deposit,
+            data: approve,
           },
+          // {
+          //   to: data.llamaContractAddress,
+          //   value: '0',
+          //   data: deposit,
+          // },
         ];
         depositGnosis(transactions);
       } else if (isApproved) {
@@ -119,6 +123,7 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
           }
         );
       } else {
+        console.log("isn't approved");
         approveToken(
           {
             tokenAddress: data.tokenAddress,
