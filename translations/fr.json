@@ -25,7 +25,8 @@
     "month": "Month",
     "year": "Year",
     "close": "Close",
-    "menu": "Menu"
+    "menu": "Menu",
+    "streamsAndHistory": "Streams and History"
   },
   "Header": {
     "connectWallet": "Connecter le portefeuille",
@@ -77,6 +78,7 @@
     "heading": "Histoire",
     "connectWallet": "Connectez le portefeuille pour afficher l'historique de vos flux",
     "noData": "Pour vérifier les mouvements de vos flux, créez d'abord un flux",
+    "noHistoricalData": "No historical data",
     "error": "Impossible de charger les données historiques",
     "you": "You",
     "details": "Details",

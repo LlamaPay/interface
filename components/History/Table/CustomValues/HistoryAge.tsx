@@ -21,7 +21,7 @@ function formatTime(timestamp: string): string {
   }
 }
 
-export default function HistoryAge({ data }: { data: IHistory }) {
+export function HistoryAge({ data }: { data: IHistory }) {
   const { locale } = useLocale();
   const { url } = useChainExplorer();
 

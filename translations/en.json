@@ -25,7 +25,8 @@
     "month": "Month",
     "year": "Year",
     "close": "Close",
-    "menu": "Menu"
+    "menu": "Menu",
+    "streamsAndHistory": "Streams and History"
   },
   "Header": {
     "connectWallet": "Connect Wallet",
@@ -77,6 +78,7 @@
     "heading": "History",
     "connectWallet": "Connect wallet to view your streams history",
     "noData": "To check the movements of your streams, Create a Stream first",
+    "noHistoricalData": "No historical data",
     "error": "Couldn't load historical data",
     "you": "You",
     "details": "Details",

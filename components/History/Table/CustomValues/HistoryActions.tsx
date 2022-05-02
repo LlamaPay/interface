@@ -1,9 +1,9 @@
 import { useDialogState } from 'ariakit';
 import { useTranslations } from 'next-intl';
 import { IHistory } from 'types';
-import { MoreInfo } from '../MoreInfo';
+import { MoreInfo } from './MoreInfo';
 
-const HistoryActions = ({ data }: { data: IHistory }) => {
+export const HistoryActions = ({ data }: { data: IHistory }) => {
   const dialog = useDialogState();
 
   const t = useTranslations('History');
@@ -21,5 +21,3 @@ const HistoryActions = ({ data }: { data: IHistory }) => {
     </>
   );
 };
-
-export default HistoryActions;

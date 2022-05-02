@@ -4,13 +4,13 @@ import { useChainExplorer } from 'hooks';
 import { useTranslations } from 'next-intl';
 import { IHistory } from 'types';
 
-export default function ActionName({ data }: { data: IHistory }) {
+export function ActionName({ data }: { data: IHistory }) {
   const { url: chainExplorer } = useChainExplorer();
 
   const link = `${chainExplorer}/tx/${data.txHash}`;
 
-  const t0 = useTranslations('Common')
-  const t1 = useTranslations('History')
+  const t0 = useTranslations('Common');
+  const t1 = useTranslations('History');
 
   return (
     <div className="flex justify-center">

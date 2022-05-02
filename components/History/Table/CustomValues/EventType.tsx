@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
 
-export default function EventType({ event, addressType }: { event: string; addressType: string }) {
+export function EventType({ event, addressType }: { event: string; addressType: string }) {
   let eventType = '';
 
   const t0 = useTranslations('Common');
