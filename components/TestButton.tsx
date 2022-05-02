@@ -12,8 +12,14 @@ export default function TestButton() {
   }
 
   return (
-    <button className="primary-button" onClick={yeet}>
-      Pls work
-    </button>
+    <>
+      {process.env.NEXT_PUBLIC_SAFE === 'true' ? (
+        <button className="primary-button" onClick={yeet}>
+          Pls work
+        </button>
+      ) : (
+        ''
+      )}
+    </>
   );
 }
