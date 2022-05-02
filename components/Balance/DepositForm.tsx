@@ -12,10 +12,14 @@ import { useDialogState } from 'ariakit';
 import Image from 'next/image';
 import AvailableAmount from 'components/AvailableAmount';
 import useDepositGnosis from 'queries/useDepositGnosis';
+import SDK from '@gnosis.pm/safe-apps-sdk';
+import { useSafeAppsSDK } from '@gnosis.pm/safe-apps-react-sdk';
+import { ERC20Interface, LlamaContractInterface } from 'utils/contract';
 
 const DepositForm = ({ data, formDialog }: IFormProps) => {
   const { mutate, isLoading, data: transaction } = useDepositToken();
-  const { mutate: mutateGnosis } = useDepositGnosis();
+  // const { mutate: mutateGnosis } = useDepositGnosis();
+  const { sdk } = useSafeAppsSDK();
 
   const transactionDialog = useDialogState();
 
@@ -26,6 +30,16 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
   // Token approval hooks
   const { mutate: checkTokenApproval, data: isApproved, isLoading: checkingApproval } = useCheckTokenApproval();
   const { mutate: approveToken, isLoading: approvingToken, error: approvalError } = useApproveToken();
+
+  async function depositGnosis(
+    transactions: {
+      to: string;
+      value: string;
+      data: string;
+    }[]
+  ) {
+    await sdk.txs.send({ txs: transactions });
+  }
 
   function handleChange(e: React.ChangeEvent<HTMLInputElement>) {
     setAmount(e.target.value);
@@ -66,51 +80,67 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
 
     if (amount) {
       const formattedAmt = new BigNumber(amount).multipliedBy(10 ** data.tokenDecimals);
-      mutateGnosis({
-        amountToDeposit: formattedAmt.toFixed(0),
-        llamaContractAddress: data.llamaContractAddress,
-        tokenContractAddress: data.tokenAddress,
-      });
+
       if (process.env.NEXT_PUBLIC_SAFE === 'true') {
-        console.log('mutate gnosis');
-        
-      // } else if (isApproved) {
-      //   mutate(
-      //     {
-      //       amountToDeposit: formattedAmt.toFixed(0),
-      //       llamaContractAddress: data.llamaContractAddress,
-      //     },
-      //     {
-      //       onSettled: () => {
-      //         formDialog.toggle();
-      //         transactionDialog.toggle();
-      //       },
-      //     }
-      //   );
-      // } else {
-      //   console.log('failed');
-      //   approveToken(
-      //     {
-      //       tokenAddress: data.tokenAddress,
-      //       amountToApprove: formattedAmt.toFixed(0),
-      //       spenderAddress: data.llamaContractAddress,
-      //     },
-      //     {
-      //       onSettled: () => {
-      //         checkApproval({
-      //           tokenDetails: {
-      //             decimals: data.tokenDecimals,
-      //             tokenContract: data.tokenContract,
-      //             llamaContractAddress: data.llamaContractAddress,
-      //           },
-      //           userAddress: accountData?.address,
-      //           approvedForAmount: amount,
-      //           checkTokenApproval,
-      //         });
-      //       },
-      //     }
-      //   );
-      // }
+        // mutateGnosis({
+        //   amountToDeposit: formattedAmt.toFixed(0),
+        //   llamaContractAddress: data.llamaContractAddress,
+        //   tokenContractAddress: data.tokenAddress,
+        // });
+        const approve = ERC20Interface.encodeFunctionData('approve', [
+          data.llamaContractAddress,
+          formattedAmt.toFixed(0),
+        ]);
+        const deposit = LlamaContractInterface.encodeFunctionData('deposit', [formattedAmt.toFixed(0)]);
+        const transactions = [
+          {
+            to: data.tokenAddress,
+            value: '0',
+            data: approve,
+          },
+          {
+            to: data.llamaContractAddress,
+            value: '0',
+            data: deposit,
+          },
+        ];
+        depositGnosis(transactions);
+      } else if (isApproved) {
+        mutate(
+          {
+            amountToDeposit: formattedAmt.toFixed(0),
+            llamaContractAddress: data.llamaContractAddress,
+          },
+          {
+            onSettled: () => {
+              formDialog.toggle();
+              transactionDialog.toggle();
+            },
+          }
+        );
+      } else {
+        approveToken(
+          {
+            tokenAddress: data.tokenAddress,
+            amountToApprove: formattedAmt.toFixed(0),
+            spenderAddress: data.llamaContractAddress,
+          },
+          {
+            onSettled: () => {
+              checkApproval({
+                tokenDetails: {
+                  decimals: data.tokenDecimals,
+                  tokenContract: data.tokenContract,
+                  llamaContractAddress: data.llamaContractAddress,
+                },
+                userAddress: accountData?.address,
+                approvedForAmount: amount,
+                checkTokenApproval,
+              });
+            },
+          }
+        );
+      }
     }
   };
 
