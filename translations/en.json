@@ -2,7 +2,20 @@
   "Common": {
     "getStarted": "Get Started",
     "networkNotSupported": "Network not supported",
-    "error": "Couldn't load data"
+    "error": "Couldn't load data",
+    "token": "Token",
+    "amount": "Amount",
+    "deposit": "Deposit",
+    "withdraw": "Withdraw",
+    "pause": "Pause",
+    "resume": "Resume",
+    "or": "or",
+    "name": "Name",
+    "address": "Address",
+    "history": "History",
+    "edit": "Edit",
+    "update": "Update",
+    "month": "month"
   },
   "Header": {
     "connectWallet": "Connect Wallet",
@@ -16,23 +29,55 @@
   },
   "Balances": {
     "heading": "Balances",
+    "balance": "Balance",
     "connectWallet": "Connect wallet to view your balances",
     "deposit": "Deposit new token",
     "noData": "Create a Balance First",
-    "error": "Couldn't load balances"
+    "error": "Couldn't load balances",
+    "toDepleted": "To Depleted",
+    "monthlyCost": "Monthly Cost",
+    "topup": "Top up",
+    "streamsDepleted": "Streams Depleted",
+    "noStreams": "No Streams",
+    "days": "days"
   },
   "Streams": {
     "heading": "Streams",
+    "activeStreams": "Active Streams",
     "connectWallet": "Connect wallet to view your streams",
     "create": "Create Stream",
+    "error": "Couldn't load streams",
     "noData": "Create a Stream to see a list of your Streams created here",
-    "error": "Couldn't load streams"
+    "noActiveStreams": "No active streams",
+    "totalStreamed": "Total Streamed",
+    "withdrawable": "Withdrawable",
+    "send": "Send",
+    "modify": "Modify",
+    "paused": "Paused",
+    "cancel": "Cancel",
+    "outOfFunds": "Out of Funds",
+    "outgoingStream": "Outgoing Stream",
+    "incomingStream": "Incoming Stream",
+    "disperse": "Disperse",
+    "withdrawAnotherWallet": "Withdraw Another Wallet",
+    "sendAll": "Send All",
+    "editName": "Edit payee address name"
   },
   "History": {
     "heading": "History",
     "connectWallet": "Connect wallet to view your streams history",
     "noData": "To check the movements of your streams, Create a Stream first",
-    "error": "Couldn't load historical data"
+    "error": "Couldn't load historical data",
+    "you": "You",
+    "details": "Details",
+    "createStream": "Create Stream",
+    "modifyStream": "Modify Stream",
+    "cancelStream": "Cancel Stream",
+    "receiveStream": "Receive Stream",
+    "streamCreated": "Stream Created",
+    "streamModified": "Stream Modified",
+    "streamCancelled": "Stream Cancelled",
+    "viewTransactionOnExplorer": "View transaction on chain explorer"
   },
   "Payees": {
     "connectWallet": "Connect wallet to view payees list",
@@ -44,5 +89,15 @@
     "rowsPerPage": "Rows per page",
     "next": "Next",
     "previous": "Previous"
+  },
+  "Forms": {
+    "tokenToDeposit": "What token do you want to deposit?",
+    "availableForDeposit": "Available for Deposit",
+    "amountToDeposit": "How much do you want to Deposit in total?",
+    "max": "MAX",
+    "approveOnWallet": "Approve on Wallet",
+    "availableForWithdrawl": "Available for Withdrawl",
+    "withdrawAll": "Withdraw All",
+    "topupAmount": "Topup Amount"
   }
 }

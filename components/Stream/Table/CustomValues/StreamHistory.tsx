@@ -2,6 +2,7 @@ import { useDialogState } from 'ariakit';
 import classNames from 'classnames';
 import { FormDialog } from 'components/Dialog';
 import { useChainExplorer, useLocale } from 'hooks';
+import { useTranslations } from 'next-intl';
 import React from 'react';
 import { IStream } from 'types';
 
@@ -19,10 +20,12 @@ export const StreamHistory = ({ data, className }: StreamHistoryProps) => {
 
   const { locale } = useLocale();
 
+  const t = useTranslations('Common')
+
   return (
     <>
       <button className={classNames('row-action-links', className)} onClick={dialog.toggle}>
-        History
+        {t('history')}
       </button>
       <FormDialog dialog={dialog} title="Stream History" className="v-min h-min">
         <section className="text-[#303030]">

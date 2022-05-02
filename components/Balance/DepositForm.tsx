@@ -12,12 +12,16 @@ import { useDialogState } from 'ariakit';
 import Image from 'next/image';
 import AvailableAmount from 'components/AvailableAmount';
 import useDepositGnosis from 'queries/useDepositGnosis';
+import { useTranslations } from 'next-intl';
 
 const DepositForm = ({ data, formDialog }: IFormProps) => {
   const { mutate, isLoading, data: transaction } = useDepositToken();
   const { mutate: mutateGnosis } = useDepositGnosis();
 
   const transactionDialog = useDialogState();
+
+  const t0 = useTranslations('Common')
+  const t1 = useTranslations('Forms')
 
   const [{ data: accountData }] = useAccount();
 
@@ -132,7 +136,7 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
           <div>
             <div>
               <label className="input-label" htmlFor="tableDFAmountToDeposit">
-                Topup Amount
+                {t1('topupAmount')}
               </label>
               <div className="relative flex">
                 <input
@@ -159,22 +163,22 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
                   disabled={!data}
                   onClick={fillMaxAmountOnClick}
                 >
-                  MAX
+                  {t1('max')}
                 </button>
               </div>
             </div>
-            <AvailableAmount selectedToken={data.selectedToken} title="Available for Deposit" />
+            <AvailableAmount selectedToken={data.selectedToken} title={t1('availableForDeposit')} />
           </div>
 
           <p className="my-4 text-center text-sm text-red-500">{approvalError && "Couldn't approve token"}</p>
 
           {isApproved ? (
             <SubmitButton disabled={isLoading} className="mt-4">
-              {isLoading ? <BeatLoader size={6} color="white" /> : 'Deposit'}
+              {isLoading ? <BeatLoader size={6} color="white" /> : t0('deposit')}
             </SubmitButton>
           ) : (
             <SubmitButton disabled={disableApprove} className="mt-4">
-              {disableApprove ? <BeatLoader size={6} color="white" /> : 'Approve on Wallet'}
+              {disableApprove ? <BeatLoader size={6} color="white" /> : t1('approveOnWallet')}
             </SubmitButton>
           )}
         </form>

@@ -2,7 +2,20 @@
   "Common": {
     "getStarted": "Commencer",
     "networkNotSupported": "Réseau non pris en charge",
-    "error": "Impossible de charger les données"
+    "error": "Impossible de charger les données",
+    "token": "Token",
+    "amount": "Amount",
+    "deposit": "Deposit",
+    "withdraw": "Withdraw",
+    "pause": "Pause",
+    "resume": "Resume",
+    "or": "or",
+    "name": "Name",
+    "address": "Address",
+    "history": "History",
+    "edit": "Edit",
+    "update": "Update",
+    "month": "month"
   },
   "Header": {
     "connectWallet": "Connecter le portefeuille",
@@ -16,23 +29,55 @@
   },
   "Balances": {
     "heading": "Soldes",
+    "balance": "Balance",
     "connectWallet": "Connectez le portefeuille pour voir vos soldes",
     "deposit": "Déposer un nouveau jeton",
     "noData": "Créer d'abord un solde",
-    "error": "Impossible de charger les soldes"
+    "error": "Impossible de charger les soldes",
+    "toDepleted": "To Depleted",
+    "monthlyCost": "Monthly Cost",
+    "topup": "Top up",
+    "streamsDepleted": "Streams Depleted",
+    "noStreams": "No Streams",
+    "days": "days"
   },
   "Streams": {
     "heading": "Ruisseaux",
+    "activeStreams": "Active Streams",
     "connectWallet": "Connectez votre portefeuille pour voir vos flux",
     "create": "Créer un flux",
+    "error": "Impossible de charger les flux",
     "noData": "Créez un flux pour voir une liste de vos flux créés ici",
-    "error": "Impossible de charger les flux"
+    "noActiveStreams": "No active streams",
+    "totalStreamed": "Total Streamed",
+    "withdrawable": "Withdrawable",
+    "send": "Send",
+    "modify": "Modify",
+    "paused": "Paused",
+    "cancel": "Cancel",
+    "outOfFunds": "Out of Funds",
+    "outgoingStream": "Outgoing Stream",
+    "incomingStream": "Incoming Stream",
+    "disperse": "Disperse",
+    "withdrawAnotherWallet": "Withdraw Another Wallet",
+    "sendAll": "Send All",
+    "editName": "Edit payee address name"
   },
   "History": {
     "heading": "Histoire",
     "connectWallet": "Connectez le portefeuille pour afficher l'historique de vos flux",
     "noData": "Pour vérifier les mouvements de vos flux, créez d'abord un flux",
-    "error": "Impossible de charger les données historiques"
+    "error": "Impossible de charger les données historiques",
+    "you": "You",
+    "details": "Details",
+    "createStream": "Create Stream",
+    "modifyStream": "Modify Stream",
+    "cancelStream": "Cancel Stream",
+    "receiveStream": "Receive Stream",
+    "streamCreated": "Stream Created",
+    "streamModified": "Stream Modified",
+    "streamCancelled": "Stream Cancelled",
+    "viewTransactionOnExplorer": "View transaction on chain explorer"
   },
   "Payees": {
     "connectWallet": "Connectez le portefeuille pour voir la liste des bénéficiaires",
@@ -44,5 +89,15 @@
     "rowsPerPage": "Lignes par page",
     "next": "Suivant",
     "previous": "Précédent"
+  },
+  "Forms": {
+    "tokenToDeposit": "What token do you want to deposit?",
+    "availableForDeposit": "Available for Deposit",
+    "amountToDeposit": "How much do you want to Deposit in total?",
+    "max": "MAX",
+    "approveOnWallet": "Approve on Wallet",
+    "availableForWithdrawl": "Available for Withdrawl",
+    "withdrawAll": "Withdraw All",
+    "topupAmount": "Topup Amount"
   }
 }

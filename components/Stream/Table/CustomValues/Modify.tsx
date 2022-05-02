@@ -10,6 +10,7 @@ import { secondsByDuration } from 'utils/constants';
 import useModifyStream from 'queries/useModifyStream';
 import { BeatLoader } from 'react-spinners';
 import { useLocale } from 'hooks';
+import { useTranslations } from 'next-intl';
 
 interface ModifyProps {
   data: IStream;
@@ -64,10 +65,12 @@ export const Modify = ({ data }: ModifyProps) => {
 
   const { locale } = useLocale();
 
+  const t = useTranslations('Streams')
+
   return (
     <>
       <button className="row-action-links" onClick={dialog.toggle}>
-        Modify
+       {t('modify')}
       </button>
       <FormDialog dialog={dialog} title="Modify" className="h-min">
         <span className="space-y-4 text-[#303030]">

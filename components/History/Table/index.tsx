@@ -15,6 +15,7 @@ import { downloadHistory } from 'utils/downloadCsv';
 import Amount from './Amount';
 import { SavedName } from './SavedName';
 import HistoryAge from './HistoryAge';
+import EventType from './EventType';
 
 const table = createTable().setRowType<IHistory>();
 
@@ -27,30 +28,7 @@ const defaultColumns = table.createColumns([
   table.createDisplayColumn({
     id: 'type',
     header: 'Type',
-    cell: ({ cell }) => {
-      if (cell.row.original === undefined) return;
-      const event = cell.row.original.eventType;
-      switch (event) {
-        case 'Deposit':
-          return 'Deposit';
-        case 'StreamPaused':
-          return 'Pause';
-        case 'StreamResumed':
-          return 'Resume';
-        case 'Withdraw':
-          return 'Withdraw';
-        case 'StreamCreated':
-          return cell.row.original.addressType === 'payer' ? 'Create Stream' : 'Receive Stream';
-        case 'StreamCancelled':
-          return 'Cancel Stream';
-        case 'StreamModified':
-          return 'Modify Stream';
-        case 'PayerWithdraw':
-          return 'Withdraw';
-        default:
-          return '';
-      }
-    },
+    cell: ({ cell }) => cell.row.original && <EventType event={cell.row.original.eventType} addressType={cell.row.original.addressType} />,
   }),
   table.createDisplayColumn({
     id: 'addressName',

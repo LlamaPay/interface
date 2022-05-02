@@ -33,7 +33,8 @@ const Balance = () => {
 
   const [{ data: accountData }] = useAccount();
 
-  const t = useTranslations('Balances');
+  const t0 = useTranslations('Common');
+  const t1 = useTranslations('Balances');
 
   const handleToken = (actionType: TokenAction, balance: IBalance) => {
     if (actionType === 'deposit') {
@@ -67,7 +68,7 @@ const Balance = () => {
         <div className="section-header flex w-full flex-wrap items-center justify-between gap-[0.625rem]">
           <span className="flex items-center gap-[0.625rem]">
             <BalanceIcon />
-            <h1 className="font-exo">{t('heading')}</h1>
+            <h1 className="font-exo">{t1('heading')}</h1>
           </span>
 
           <button
@@ -77,7 +78,7 @@ const Balance = () => {
               depositFieldDialog.toggle();
             }}
           >
-            {isLoading || tokensLoading ? <BeatLoader size={6} color="white" /> : <>{t('deposit')}</>}
+            {isLoading || tokensLoading ? <BeatLoader size={6} color="white" /> : <>{t1('deposit')}</>}
           </button>
         </div>
 
@@ -89,16 +90,16 @@ const Balance = () => {
               <thead>
                 <tr>
                   <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D]">
-                    Token
+                    {t0('token')}
                   </th>
                   <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D]">
-                    Balance
+                    {t1('balance')}
                   </th>
                   <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D]">
-                    To Depleted
+                    {t1('toDepleted')}
                   </th>
                   <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D]">
-                    Monthly Cost
+                    {t1('monthlyCost')}
                   </th>
                   <th></th>
                 </tr>
@@ -152,13 +153,13 @@ const Balance = () => {
                           onClick={() => handleToken('withdraw', b)}
                           disabled={Number.isNaN(b.amount) || Number(b.amount) <= 0}
                         >
-                          Withdraw
+                         {t0('withdraw')}
                         </button>
                         <button
                           className="primary-button py-1 px-[6px] text-xs font-medium"
                           onClick={() => handleToken('deposit', b)}
                         >
-                          Top up
+                          {t1('topup')}
                         </button>
                       </span>
                     </td>

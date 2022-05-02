@@ -1,4 +1,5 @@
 import llamaContract from 'abis/llamaContract';
+import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import { IStream } from 'types';
@@ -55,9 +56,11 @@ export function Resume({ data }: ResumeProps) {
     }
   }
 
+  const t = useTranslations('Common');
+
   return (
     <button onClick={onResume} className="row-action-links">
-      Resume
+      {t('resume')}
     </button>
   );
 }

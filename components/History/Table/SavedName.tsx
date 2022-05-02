@@ -8,6 +8,7 @@ export function SavedName({ value }: { value: string }) {
   const name =
     useAddressStore((state) => state.addressBook.find((p) => p.id?.toLowerCase() === value?.toLowerCase()))
       ?.shortName ?? formatAddress(value);
+
   const { url: chainExplorer } = useChainExplorer();
 
   return (

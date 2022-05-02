@@ -1,11 +1,15 @@
 import { useLocale } from 'hooks';
+import { useTranslations } from 'next-intl';
 import { IHistory } from 'types';
 import { formatAmountInTable } from 'utils/amount';
 import { secondsByDuration } from 'utils/constants';
 
 export default function Amount({ value, data }: { value: string; data?: IHistory }) {
   const isDataValid = !Number.isNaN(value);
+
   const { locale } = useLocale();
+
+  const t = useTranslations('Common')
 
   const amount = isDataValid && formatAmountInTable(Number(value) / 1e20, secondsByDuration['month'], locale);
 
@@ -14,7 +18,7 @@ export default function Amount({ value, data }: { value: string; data?: IHistory
   return (
     <>
       <span>{amount}</span>
-      <span className="mx-1 text-xs text-gray-500 dark:text-gray-400">{symbol} / month</span>
+      <span className="mx-1 text-xs text-gray-500 dark:text-gray-400">{symbol} / {t('month')}</span>
     </>
   );
 }
