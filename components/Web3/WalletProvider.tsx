@@ -6,6 +6,7 @@ import { InjectedConnector } from 'wagmi/connectors/injected';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 import SafeProvider from '@gnosis.pm/safe-apps-react-sdk';
+import SafeContextProvider from './SafeProvider';
 
 const defaultChain = chain.avalanche;
 
@@ -15,28 +16,30 @@ const connectors = ({ chainId }: ConnectorsConfig) => {
   const rpcUrl = defaultChain.rpcUrls[0];
   const chainDetails = chainId && networkDetails[chainId];
 
-  return process.env.NEXT_PUBLIC_SAFE === 'true'? [
-    new GnosisConnector({
-      chains,
-    })
-  ]:[
-    new InjectedConnector({
-      chains,
-      options: { shimDisconnect: true },
-    }),
-    new WalletConnectConnector({
-      options: {
-        infuraId,
-        qrcode: true,
-      },
-    }),
-    new CoinbaseWalletConnector({
-      options: {
-        appName: 'LlamaPay',
-        jsonRpcUrl: chainDetails ? chainDetails.rpcUrl : `${rpcUrl}/${infuraId}`,
-      },
-    }),
-  ];
+  return process.env.NEXT_PUBLIC_SAFE === 'true'
+    ? [
+        new GnosisConnector({
+          chains,
+        }),
+      ]
+    : [
+        new InjectedConnector({
+          chains,
+          options: { shimDisconnect: true },
+        }),
+        new WalletConnectConnector({
+          options: {
+            infuraId,
+            qrcode: true,
+          },
+        }),
+        new CoinbaseWalletConnector({
+          options: {
+            appName: 'LlamaPay',
+            jsonRpcUrl: chainDetails ? chainDetails.rpcUrl : `${rpcUrl}/${infuraId}`,
+          },
+        }),
+      ];
 };
 
 // Set up providers
@@ -52,12 +55,14 @@ type Props = {
 };
 
 export const WalletProvider = ({ children }: Props) => {
-  const basicProvider = <Provider autoConnect connectors={connectors} provider={provider}>
-    {children}
-  </Provider>
-  const SafeProviderFixed = SafeProvider as any
-  return (
-    process.env.NEXT_PUBLIC_SAFE === 'true'?
-    <SafeProviderFixed>{basicProvider}</SafeProviderFixed>:basicProvider
+  const basicProvider = (
+    <Provider autoConnect connectors={connectors} provider={provider}>
+      {children}
+    </Provider>
+  );
+  return process.env.NEXT_PUBLIC_SAFE === 'true' ? (
+    <SafeContextProvider>{basicProvider}</SafeContextProvider>
+  ) : (
+    basicProvider
   );
 };
