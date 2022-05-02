@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { useTranslations } from 'next-intl';
 import { InputElement } from './types';
 
 export const InputAmount = ({ name, label, isRequired, className, handleChange, ...props }: InputElement) => {
@@ -27,11 +28,12 @@ export const InputAmount = ({ name, label, isRequired, className, handleChange, 
 };
 
 export const InputText = ({ name, label, isRequired, className, optional, ...props }: InputElement) => {
+  const t = useTranslations('Forms')
   return (
     <label>
       <span className="input-label">
         <span>{label}</span>
-        {optional && <small className="mx-2 text-neutral-500">(optional)</small>}
+        {optional && <small className="mx-2 text-neutral-500">{`(${t('optional')})`}</small>}
       </span>
       <input
         className={classNames('input-field', className)}

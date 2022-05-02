@@ -22,7 +22,8 @@
     "history": "History",
     "edit": "Edit",
     "update": "Update",
-    "month": "month",
+    "month": "Month",
+    "year": "Year",
     "close": "Close",
     "menu": "Menu"
   },
@@ -107,6 +108,29 @@
     "approveOnWallet": "Approve on Wallet",
     "availableForWithdrawl": "Available for Withdrawl",
     "withdrawAll": "Withdraw All",
-    "topupAmount": "Topup Amount"
+    "topupAmount": "Topup Amount",
+    "optional": "optional",
+    "addressToStream": "Enter an Address to Stream",
+    "recipientAddress": "Enter Recipient Address",
+    "associateName": "Associate a Name to the Address?",
+    "fastIdentification": "Add a name for fast identification",
+    "selectTokenFromBalances": "Select Token from Balances",
+    "amountToStream": "Amount to Stream",
+    "streamDuration": "Stream duration",
+    "createStream": "Create Stream"
+  },
+  "OnboardWalletConnect": {
+    "header": "Connect your wallet",
+    "initializing": "Initializing",
+    "footer": "Connecting a wallet doesn't move funds",
+    "welcome": "Welcome!",
+    "description": "Create streams of indefinite duration and just siphon money out of a pool, which makes it possible to top all streams up in a single operation and just provide money as it's needed to maintain them.",
+    "learnMore": "Learn More in our Docs"
+  },
+  "Onboard": {
+    "worksWithAllTokens": "Works with all tokens",
+    "depositToken": "Deposit Token",
+    "createAStream": "Create a Stream",
+    "createANewStream": "Create a new Stream"
   }
 }

@@ -7,6 +7,7 @@ import { Coins } from 'components/Icons';
 import ConnectWallet from './ConnectWallet';
 import DepositField from './DepostField';
 import CreateStreamField from './CreateStreamField';
+import { useTranslations } from 'next-intl';
 
 interface IOnboardProps {
   dialog: DisclosureState;
@@ -20,13 +21,17 @@ export default function OnboardDialog({ dialog, className }: IOnboardProps) {
 
   const [showCreateStream, setCreateStream] = React.useState(false);
 
+  const t0 = useTranslations('Common')
+  const t1 = useTranslations('OnboardWalletConnect')
+  const t2 = useTranslations('Onboard')
+
   const mainHeader = () => {
     if (accountData) {
-      return showCreateStream ? 'Create a new Stream' : 'Deposit Token';
+      return showCreateStream ? t2('createANewStream') : t2('depositToken');
     } else if (connecting || accountDataLoading) {
-      return 'Initializing';
+      return t1('initializing');
     } else {
-      return 'Connect your wallet';
+      return t1('header');
     }
   };
 
@@ -35,10 +40,9 @@ export default function OnboardDialog({ dialog, className }: IOnboardProps) {
       return (
         <>
           <Coins />
-          <h1 className="font-exo my-6 font-bold text-[#303030]">Works with all tokens</h1>
+          <h1 className="font-exo my-6 font-bold text-[#303030]">{t2('worksWithAllTokens')}</h1>
           <p className="text-xs" style={{ lineHeight: '22px' }}>
-            Create streams of indefinite duration and just siphon money out of a pool, which makes it possible to top
-            all streams up in a single operation and just provide money as it's needed to maintain them.
+          {t1('description')}
           </p>
         </>
       );
@@ -46,10 +50,9 @@ export default function OnboardDialog({ dialog, className }: IOnboardProps) {
 
     return (
       <>
-        <h1 className="font-exo text-[2rem] font-bold text-[#303030]">Welcome!</h1>
-        <p className="my-8 text-xs font-semibold" style={{ lineHeight: '22px' }}>
-          Create streams of indefinite duration and just siphon money out of a pool, which makes it possible to top all
-          streams up in a single operation and just provide money as it's needed to maintain them.
+        <h1 className="font-exo text-[2rem] font-bold text-[#303030] break-words">{t1('welcome')}</h1>
+        <p className="my-8 text-xs font-semibold break-words" style={{ lineHeight: '22px' }}>
+          {t1('description')}
         </p>
       </>
     );
@@ -70,6 +73,7 @@ export default function OnboardDialog({ dialog, className }: IOnboardProps) {
     >
       <section className="border-color[#EAEAEA] relative flex w-full flex-col justify-center bg-[#F9FDFB] p-7 sm:max-w-[16rem] sm:border-r">
         <button onClick={dialog.toggle} className="absolute top-4 right-4 sm:hidden">
+          <span className='sr-only'>{t0('close')}</span>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path
               d="M14 1.41L12.59 0L7 5.59L1.41 0L0 1.41L5.59 7L0 12.59L1.41 14L7 8.41L12.59 14L14 12.59L8.41 7L14 1.41Z"
@@ -84,7 +88,7 @@ export default function OnboardDialog({ dialog, className }: IOnboardProps) {
           target="_blank"
           rel="noreferrer noopener"
         >
-          Learn More in our Docs
+          {t1('learnMore')}
         </a>
       </section>
       <section className="relative flex flex-1 flex-col md:overflow-clip">
@@ -106,6 +110,7 @@ export default function OnboardDialog({ dialog, className }: IOnboardProps) {
         <header className="border-color[#EAEAEA] z-10 flex items-baseline p-5 sm:border-b">
           <h1 className="font-exo flex-1 text-center text-2xl font-semibold">{mainHeader()}</h1>
           <button onClick={dialog.toggle} className="absolute top-[30px] right-[30px] hidden sm:inline">
+          <span className='sr-only'>{t0('close')}</span>
             <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path
                 d="M14 1.41L12.59 0L7 5.59L1.41 0L0 1.41L5.59 7L0 12.59L1.41 14L7 8.41L12.59 14L14 12.59L8.41 7L14 1.41Z"

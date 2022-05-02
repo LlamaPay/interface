@@ -7,6 +7,7 @@ import { BeatLoader } from 'react-spinners';
 import { useDepositForm } from 'hooks';
 import AvailableAmount from 'components/AvailableAmount';
 import { ArrowRightIcon } from '@heroicons/react/solid';
+import { useTranslations } from 'next-intl';
 
 const DepositField = ({
   userAddress,
@@ -61,17 +62,21 @@ export function DepositForm({
 
   const disableApprove = checkingApproval || approvingToken;
 
+  const t0 = useTranslations('Common')
+  const t1 = useTranslations('Forms')
+  const t2 = useTranslations('Onboard')
+
   return (
     <div className="mx-auto flex w-full flex-1 flex-col overflow-auto px-7 pt-12 pb-7 sm:pt-[104px]">
       <form className="flex flex-1 flex-col gap-8" onSubmit={handleSubmit}>
         <div>
           <SelectToken
-            label="What token do you want to deposit?"
+            label={t1('tokenToDeposit')}
             tokens={tokenOptions}
             handleTokenChange={handleTokenChange}
             className="bg-white"
           />
-          <AvailableAmount selectedToken={selectedToken} title="Available for Deposit" />
+          <AvailableAmount selectedToken={selectedToken} title={t1('availableForDeposit')} />
         </div>
 
         <InputAmountWithMaxButton
@@ -91,7 +96,7 @@ export function DepositForm({
 
         {isApproved || process.env.NEXT_PUBLIC_SAFE === 'true' ? (
           <button className="form-submit-button" disabled={confirmingDeposit}>
-            {confirmingDeposit ? <BeatLoader size={6} color="white" /> : 'Deposit'}
+            {confirmingDeposit ? <BeatLoader size={6} color="white" /> : t0('deposit')}
           </button>
         ) : (
           <button className="form-submit-button" disabled={disableApprove}>
@@ -100,7 +105,7 @@ export function DepositForm({
             ) : approvingToken ? (
               <BeatLoader size={6} color="white" />
             ) : (
-              'Approve on Wallet'
+              t1('approveOnWallet')
             )}
           </button>
         )}
@@ -110,7 +115,7 @@ export function DepositForm({
         className="form-submit-button mx-auto mt-7 flex w-full max-w-xs items-center justify-center gap-2 bg-white text-[#23BD8F]"
         onClick={() => setCreateStream(true)}
       >
-        <span>Create a Stream</span>
+        <span>{t2('createAStream')}</span>
         <ArrowRightIcon className="h-4 w-4" />
       </button>
     </div>
