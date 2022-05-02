@@ -22,7 +22,9 @@ async function deposit({ signer, sdk, llamaContractAddress, tokenContractAddress
       throw new Error("Couldn't get signer or SDK");
     } else {
       const approve = ERC20Interface.encodeFunctionData('approve', [llamaContractAddress, amountToDeposit]);
+      console.log(approve);
       const deposit = LlamaContractInterface.encodeFunctionData('deposit', [amountToDeposit]);
+      console.log(deposit);
       const transactions = [
         {
           to: tokenContractAddress,
@@ -36,7 +38,9 @@ async function deposit({ signer, sdk, llamaContractAddress, tokenContractAddress
         },
       ];
 
-      await sdk.txs.send({ txs: transactions });
+      const tx = await sdk.txs.send({ txs: transactions });
+      console.log(tx);
+      return tx;
     }
   } catch (error: any) {
     throw new Error(error.message || (error?.reason ?? "Couldn't deposit token"));
@@ -46,6 +50,8 @@ async function deposit({ signer, sdk, llamaContractAddress, tokenContractAddress
 export default function useDepositGnosis() {
   const [{ data: signer }] = useSigner();
   const { sdk } = useSafeAppsSDK();
+
+  console.log(sdk);
 
   return useMutation(
     ({ llamaContractAddress, tokenContractAddress, amountToDeposit }: IUseDepositGnosis) =>

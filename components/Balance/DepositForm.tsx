@@ -67,19 +67,11 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
     if (amount) {
       const formattedAmt = new BigNumber(amount).multipliedBy(10 ** data.tokenDecimals);
       if (process.env.NEXT_PUBLIC_SAFE === 'true') {
-        mutateGnosis(
-          {
-            amountToDeposit: formattedAmt.toFixed(0),
-            llamaContractAddress: data.llamaContractAddress,
-            tokenContractAddress: data.tokenAddress,
-          },
-          {
-            onSettled: () => {
-              formDialog.toggle();
-              transactionDialog.toggle();
-            },
-          }
-        );
+        mutateGnosis({
+          amountToDeposit: formattedAmt.toFixed(0),
+          llamaContractAddress: data.llamaContractAddress,
+          tokenContractAddress: data.tokenAddress,
+        });
       } else if (isApproved) {
         mutate(
           {
