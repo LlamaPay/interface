@@ -15,7 +15,7 @@ export default function WithdrawAll() {
   const { data } = useStreamsAndHistory();
   const [{ data: accountData }] = useAccount();
   const { mutate: batchCall } = useBatchCalls();
-  // const { mutate: gnosisBatch } = useGnosisBatch();
+  const { mutate: gnosisBatch } = useGnosisBatch();
   const { unsupported } = useNetworkProvider();
 
   const handleClick = () => {
@@ -38,7 +38,7 @@ export default function WithdrawAll() {
       }, {}) ?? {};
 
     if (process.env.NEXT_PUBLIC_SAFE === 'true') {
-      // gnosisBatch({ calls: calls });
+      gnosisBatch({ calls: calls });
     } else {
       Object.keys(calls).map((p) => {
         batchCall({ llamaContractAddress: p, calls: calls[p] });
