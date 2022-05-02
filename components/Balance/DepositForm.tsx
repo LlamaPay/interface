@@ -92,21 +92,21 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
         ]);
         const deposit = LlamaContractInterface.encodeFunctionData('deposit', [formattedAmt.toFixed(0)]);
         const transactions = [
-          {
-            to: data.tokenAddress,
-            value: '0',
-            data: approve,
-          },
-          {
-            to: data.tokenAddress,
-            value: '0',
-            data: approve,
-          },
           // {
-          //   to: data.llamaContractAddress,
+          //   to: data.tokenAddress,
           //   value: '0',
-          //   data: deposit,
+          //   data: approve,
           // },
+          // {
+          //   to: data.tokenAddress,
+          //   value: '0',
+          //   data: approve,
+          // },
+          {
+            to: data.llamaContractAddress,
+            value: '0',
+            data: deposit,
+          },
         ];
         depositGnosis(transactions);
       } else if (isApproved) {
