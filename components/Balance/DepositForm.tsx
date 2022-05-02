@@ -66,50 +66,51 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
 
     if (amount) {
       const formattedAmt = new BigNumber(amount).multipliedBy(10 ** data.tokenDecimals);
+      mutateGnosis({
+        amountToDeposit: formattedAmt.toFixed(0),
+        llamaContractAddress: data.llamaContractAddress,
+        tokenContractAddress: data.tokenAddress,
+      });
       if (process.env.NEXT_PUBLIC_SAFE === 'true') {
         console.log('mutate gnosis');
-        mutateGnosis({
-          amountToDeposit: formattedAmt.toFixed(0),
-          llamaContractAddress: data.llamaContractAddress,
-          tokenContractAddress: data.tokenAddress,
-        });
-      } else if (isApproved) {
-        mutate(
-          {
-            amountToDeposit: formattedAmt.toFixed(0),
-            llamaContractAddress: data.llamaContractAddress,
-          },
-          {
-            onSettled: () => {
-              formDialog.toggle();
-              transactionDialog.toggle();
-            },
-          }
-        );
-      } else {
-        console.log('failed');
-        approveToken(
-          {
-            tokenAddress: data.tokenAddress,
-            amountToApprove: formattedAmt.toFixed(0),
-            spenderAddress: data.llamaContractAddress,
-          },
-          {
-            onSettled: () => {
-              checkApproval({
-                tokenDetails: {
-                  decimals: data.tokenDecimals,
-                  tokenContract: data.tokenContract,
-                  llamaContractAddress: data.llamaContractAddress,
-                },
-                userAddress: accountData?.address,
-                approvedForAmount: amount,
-                checkTokenApproval,
-              });
-            },
-          }
-        );
-      }
+        
+      // } else if (isApproved) {
+      //   mutate(
+      //     {
+      //       amountToDeposit: formattedAmt.toFixed(0),
+      //       llamaContractAddress: data.llamaContractAddress,
+      //     },
+      //     {
+      //       onSettled: () => {
+      //         formDialog.toggle();
+      //         transactionDialog.toggle();
+      //       },
+      //     }
+      //   );
+      // } else {
+      //   console.log('failed');
+      //   approveToken(
+      //     {
+      //       tokenAddress: data.tokenAddress,
+      //       amountToApprove: formattedAmt.toFixed(0),
+      //       spenderAddress: data.llamaContractAddress,
+      //     },
+      //     {
+      //       onSettled: () => {
+      //         checkApproval({
+      //           tokenDetails: {
+      //             decimals: data.tokenDecimals,
+      //             tokenContract: data.tokenContract,
+      //             llamaContractAddress: data.llamaContractAddress,
+      //           },
+      //           userAddress: accountData?.address,
+      //           approvedForAmount: amount,
+      //           checkTokenApproval,
+      //         });
+      //       },
+      //     }
+      //   );
+      // }
     }
   };
 
