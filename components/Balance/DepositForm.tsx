@@ -67,6 +67,7 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
     if (amount) {
       const formattedAmt = new BigNumber(amount).multipliedBy(10 ** data.tokenDecimals);
       if (process.env.NEXT_PUBLIC_SAFE === 'true') {
+        console.log('mutate gnosis');
         mutateGnosis({
           amountToDeposit: formattedAmt.toFixed(0),
           llamaContractAddress: data.llamaContractAddress,
@@ -86,6 +87,7 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
           }
         );
       } else {
+        console.log('failed');
         approveToken(
           {
             tokenAddress: data.tokenAddress,
