@@ -5,6 +5,7 @@ import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval
 import useDepositToken from 'queries/useDepositToken';
 import { ITokenBalance } from 'queries/useTokenBalances';
 import { DisclosureState } from 'ariakit';
+import useDepositGnosis from 'queries/useDepositGnosis';
 
 // TODO show loading and error states on dialogs without using toasts
 // TODO reset form on submit
@@ -27,6 +28,8 @@ export function useDepositForm({
   const { mutate: checkTokenApproval, data: isApproved, isLoading: checkingApproval } = useCheckTokenApproval();
 
   const { mutate: approveToken, isLoading: approvingToken, error: approvalError } = useApproveToken();
+
+  const { mutate: depositGnosis } = useDepositGnosis();
 
   const {
     mutate: deposit,
@@ -111,7 +114,13 @@ export function useDepositForm({
       const bigAmount = new BigNumber(amountToDeposit).multipliedBy(10 ** tokenDetails?.decimals);
 
       // call deposit method only if token is approved to spend
-      if (isApproved && tokenDetails.llamaContractAddress) {
+      if (process.env.NEXT_PUBLIC_SAFE === 'true') {
+        depositGnosis({
+          llamaContractAddress: tokenDetails.llamaContractAddress,
+          tokenContractAddress: tokenDetails.tokenAddress,
+          amountToDeposit: bigAmount.toFixed(0),
+        });
+      } else if (isApproved && tokenDetails.llamaContractAddress) {
         deposit(
           {
             amountToDeposit: bigAmount.toFixed(0),

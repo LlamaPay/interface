@@ -11,9 +11,11 @@ import { FormDialog, TransactionDialog } from 'components/Dialog';
 import { useDialogState } from 'ariakit';
 import Image from 'next/image';
 import AvailableAmount from 'components/AvailableAmount';
+import useDepositGnosis from 'queries/useDepositGnosis';
 
 const DepositForm = ({ data, formDialog }: IFormProps) => {
   const { mutate, isLoading, data: transaction } = useDepositToken();
+  const { mutate: mutateGnosis } = useDepositGnosis();
 
   const transactionDialog = useDialogState();
 
@@ -64,7 +66,14 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
 
     if (amount) {
       const formattedAmt = new BigNumber(amount).multipliedBy(10 ** data.tokenDecimals);
-      if (isApproved) {
+
+      if (process.env.NEXT_PUBLIC_SAFE === 'true') {
+        mutateGnosis({
+          llamaContractAddress: data.llamaContractAddress,
+          tokenContractAddress: data.tokenAddress,
+          amountToDeposit: amount,
+        });
+      } else if (isApproved) {
         mutate(
           {
             amountToDeposit: formattedAmt.toFixed(0),
