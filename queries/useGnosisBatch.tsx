@@ -1,4 +1,3 @@
-import { useSafeAppsSDK } from '@gnosis.pm/safe-apps-react-sdk';
 import SafeAppsSDK from '@gnosis.pm/safe-apps-sdk/dist/src/sdk';
 import { useMutation } from 'react-query';
 
@@ -39,7 +38,7 @@ async function batchCall({ sdk, calls }: IGnosisBatch) {
 }
 
 export default function useGnosisBatch() {
-  const { sdk } = useSafeAppsSDK();
+  const sdk = typeof window !== 'undefined' ? new SafeAppsSDK() : undefined;
 
   return useMutation(({ calls }: IUseGnosisBatch) => batchCall({ sdk, calls }));
 }
