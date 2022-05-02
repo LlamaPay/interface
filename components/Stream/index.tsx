@@ -7,6 +7,7 @@ import { StreamTable, DefaultStreamTable } from './Table';
 import { IStreamAndHistory } from 'types';
 import StreamMenu from './Menu';
 import { useTranslations } from 'next-intl';
+import TestButton from 'components/TestButton';
 
 export function StreamSection() {
   const { data, isLoading, error } = useStreamsAndHistory();
@@ -25,7 +26,7 @@ export function StreamSection() {
           <Link href="/create">
             <a className="primary-button py-2 px-8 text-sm font-bold">{t('create')}</a>
           </Link>
-
+          <TestButton />
           <StreamMenu />
         </div>
       </div>
