@@ -38,7 +38,7 @@ export default function WithdrawAll() {
       }, {}) ?? {};
 
     if (process.env.NEXT_PUBLIC_SAFE === 'true') {
-      gnosisBatch({ calls: calls });
+      // gnosisBatch({ calls: calls });
     } else {
       Object.keys(calls).map((p) => {
         batchCall({ llamaContractAddress: p, calls: calls[p] });
