@@ -15,7 +15,7 @@ export default function WithdrawAll() {
   const { data } = useStreamsAndHistory();
   const [{ data: accountData }] = useAccount();
   const { mutate: batchCall } = useBatchCalls();
-  const { mutate: gnosisBatch } = useGnosisBatch();
+  // const { mutate: gnosisBatch } = useGnosisBatch();
   const { unsupported } = useNetworkProvider();
 
   const handleClick = () => {
