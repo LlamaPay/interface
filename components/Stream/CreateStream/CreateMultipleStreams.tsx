@@ -9,6 +9,7 @@ import { LlamaContractInterface } from 'utils/contract';
 import { getAddress } from 'ethers/lib/utils';
 import BigNumber from 'bignumber.js';
 import { secondsByDuration } from 'utils/constants';
+import useStreamToken from 'queries/useStreamToken';
 
 type FormValues = {
   streams: {
@@ -29,7 +30,8 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
 
   const tokenOptions = tokens.map((t) => t.tokenAddress);
 
-  const { mutate: batchCall, isLoading } = useBatchCalls();
+  const { mutate: batchCall, isLoading: batchLoading } = useBatchCalls();
+  const { mutate: streamToken, isLoading: createStreamLoading } = useStreamToken();
 
   const {
     register,
@@ -57,33 +59,55 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
   });
 
   const onSubmit = (data: FormValues) => {
-    const calls: ICall = data.streams.reduce((calls: ICall, item) => {
+    if (data.streams.length === 1) {
+      const item = data.streams[0];
       if (item.shortName && item.shortName !== '') {
         updateAddress(item.addressToStream?.toLowerCase(), item.shortName);
       }
+
       const duration = item.streamDuration === 'year' ? 'year' : 'month';
-
       const tokenDetails = tokens.find((t) => t.tokenAddress?.toString() === item.tokenAddress?.toString()) ?? null;
-      if (tokenDetails === null) return calls;
-      // format amount to bignumber
-      // convert amt to seconds
+
+      if (tokenDetails === null) return;
+
       const amountPerSec = new BigNumber(item.amountToStream).times(1e20).div(secondsByDuration[duration]).toFixed(0);
-      const llamaContractAddress = tokenDetails.llamaContractAddress;
 
-      const call = LlamaContractInterface.encodeFunctionData('createStream', [
-        getAddress(item.addressToStream),
+      streamToken({
+        method: 'CREATE_STREAM',
+        llamaContractAddress: tokenDetails.llamaContractAddress,
+        payeeAddress: item.addressToStream,
         amountPerSec,
-      ]);
+      });
+    } else {
+      const calls: ICall = data.streams.reduce((calls: ICall, item) => {
+        if (item.shortName && item.shortName !== '') {
+          updateAddress(item.addressToStream?.toLowerCase(), item.shortName);
+        }
 
-      const callData = calls[llamaContractAddress] ?? [];
-      callData.push(call);
+        const duration = item.streamDuration === 'year' ? 'year' : 'month';
 
-      return (calls = { ...calls, [llamaContractAddress]: callData });
-    }, {});
+        const tokenDetails = tokens.find((t) => t.tokenAddress?.toString() === item.tokenAddress?.toString()) ?? null;
+        if (tokenDetails === null) return calls;
+        // format amount to bignumber
+        // convert amt to seconds
+        const amountPerSec = new BigNumber(item.amountToStream).times(1e20).div(secondsByDuration[duration]).toFixed(0);
+        const llamaContractAddress = tokenDetails.llamaContractAddress;
 
-    Object.keys(calls).map((p) => {
-      batchCall({ llamaContractAddress: p, calls: calls[p] });
-    });
+        const call = LlamaContractInterface.encodeFunctionData('createStream', [
+          getAddress(item.addressToStream),
+          amountPerSec,
+        ]);
+
+        const callData = calls[llamaContractAddress] ?? [];
+        callData.push(call);
+
+        return (calls = { ...calls, [llamaContractAddress]: callData });
+      }, {});
+
+      Object.keys(calls).map((p) => {
+        batchCall({ llamaContractAddress: p, calls: calls[p] });
+      });
+    }
   };
 
   return (
@@ -221,8 +245,8 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
           Add Stream
         </button>
 
-        <SubmitButton className="flex-1" disabled={isLoading}>
-          {isLoading ? <BeatLoader size={6} color="white" /> : 'Create Stream'}
+        <SubmitButton className="flex-1" disabled={createStreamLoading || batchLoading}>
+          {createStreamLoading || batchLoading ? <BeatLoader size={6} color="white" /> : 'Create Stream'}
         </SubmitButton>
       </div>
     </form>

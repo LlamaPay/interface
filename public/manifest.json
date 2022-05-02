@@ -1,5 +1,5 @@
 {
   "name": "LlamaPay",
   "description": "Automate transactions and stream them by the second.",
-  "iconPath": "public/favicon.svg"
+  "iconPath": "/favicons/favicon.svg"
 }

@@ -8,7 +8,7 @@ interface ResumeProps {
   data: IStream;
 }
 
-export default function Resume({ data }: ResumeProps) {
+export function Resume({ data }: ResumeProps) {
   const [{}, createStreamWithReason] = useContractWrite(
     {
       addressOrName: data.llamaContractAddress,

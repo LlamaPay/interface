@@ -1,7 +1,14 @@
 import { useQuery } from 'react-query';
 import axios from 'axios';
-
 import { useNetworkProvider } from 'hooks';
+
+interface ITokenList {
+  [key: string]: {
+    name: string;
+    symbol: string;
+    logoURI: string;
+  };
+}
 
 const fetchTokenList = async (id?: string) => {
   if (!id) return null;
@@ -14,7 +21,7 @@ const fetchTokenList = async (id?: string) => {
 export function useGetTokenList() {
   const { tokenListId } = useNetworkProvider();
 
-  return useQuery(['tokenlist', tokenListId], () => fetchTokenList(tokenListId), {
+  return useQuery<ITokenList>(['tokenlist', tokenListId], () => fetchTokenList(tokenListId), {
     refetchInterval: 10000,
   });
 }
