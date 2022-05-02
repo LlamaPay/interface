@@ -60,7 +60,7 @@ export const WalletProvider = ({ children }: Props) => {
       {children}
     </Provider>
   );
-  return process.env.NEXT_PUBLIC_SAFE === 'true' ? (
+  return process.env.NEXT_PUBLIC_SAFE === 'true' && typeof window === "undefined" ? (
     <SafeContextProvider>{basicProvider}</SafeContextProvider>
   ) : (
     basicProvider
