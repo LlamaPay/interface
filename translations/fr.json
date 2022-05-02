@@ -1,7 +1,14 @@
 {
   "Common": {
     "getStarted": "Commencer",
+    "connectWallet": "Connect a Wallet",
+    "account": "Account",
+    "connectedWith": "Connected with",
+    "connectedAs": "Connected as",
+    "network": "Network",
     "networkNotSupported": "Réseau non pris en charge",
+    "unsupported": "Unsupported",
+    "disconnect": "Disconnect",
     "error": "Impossible de charger les données",
     "token": "Token",
     "amount": "Amount",
@@ -15,7 +22,9 @@
     "history": "History",
     "edit": "Edit",
     "update": "Update",
-    "month": "month"
+    "month": "month",
+    "close": "Close",
+    "menu": "Menu"
   },
   "Header": {
     "connectWallet": "Connecter le portefeuille",

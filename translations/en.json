@@ -1,7 +1,14 @@
 {
   "Common": {
     "getStarted": "Get Started",
+    "connectWallet": "Connect a Wallet",
+    "account": "Account",
+    "connectedWith": "Connected with",
+    "connectedAs": "Connected as",
+    "network": "Network",
     "networkNotSupported": "Network not supported",
+    "unsupported": "Unsupported",
+    "disconnect": "Disconnect",
     "error": "Couldn't load data",
     "token": "Token",
     "amount": "Amount",
@@ -15,7 +22,9 @@
     "history": "History",
     "edit": "Edit",
     "update": "Update",
-    "month": "month"
+    "month": "month",
+    "close": "Close",
+    "menu": "Menu"
   },
   "Header": {
     "connectWallet": "Connect Wallet",

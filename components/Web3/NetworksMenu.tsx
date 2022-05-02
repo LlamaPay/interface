@@ -14,6 +14,7 @@ import { useNetwork } from 'wagmi';
 import { chainDetails } from 'utils/network';
 import Image from 'next/image';
 import defaultImage from 'public/empty-token.webp';
+import { useTranslations } from 'next-intl';
 
 export const NetworksMenu = () => {
   const [{ data }, switchNetwork] = useNetwork();
@@ -28,6 +29,8 @@ export const NetworksMenu = () => {
 
   const { network } = chainDetails(chain?.id?.toString());
 
+  const t = useTranslations('Common')
+
   if (!data || !chain || !switchNetwork) return null;
 
   const mainnets = data.chains.filter((chain) => !chain.testnet);
@@ -36,7 +39,7 @@ export const NetworksMenu = () => {
   return (
     <>
       <SelectLabel state={select} className="hidden sm:sr-only">
-        Network
+        {t('network')}
       </SelectLabel>
       <Select state={select} className="nav-button hidden items-center justify-between gap-2 sm:flex">
         <>
@@ -50,7 +53,7 @@ export const NetworksMenu = () => {
               priority
             />
           </div>
-          <span>{chain.name ?? 'Unsupported'}</span>
+          <span>{chain.name ?? t('unsupported')}</span>
           <SelectorIcon className="relative right-[-4px] h-4 w-4 text-gray-400" aria-hidden="true" />
         </>
       </Select>
