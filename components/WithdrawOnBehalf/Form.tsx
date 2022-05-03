@@ -10,6 +10,7 @@ import { secondsByDuration } from 'utils/constants';
 import { DisclosureState } from 'ariakit';
 import toast from 'react-hot-toast';
 import { getAddress } from 'ethers/lib/utils';
+import { useTranslations } from 'next-intl';
 
 const WithdrawOnBehalfForm = ({
   tokens,
@@ -96,6 +97,9 @@ const WithdrawOnBehalfForm = ({
   // format tokens list to only include token names
   const tokenOptions = React.useMemo(() => tokens?.map((t) => t.tokenAddress) ?? [], [tokens]);
 
+  const t0 = useTranslations('Common');
+  const t1 = useTranslations('Forms');
+
   return (
     <form onSubmit={handleWithdraw} className="flex flex-col gap-4">
       <span>
@@ -103,23 +107,23 @@ const WithdrawOnBehalfForm = ({
           handleTokenChange={handleTokenChange}
           tokens={tokenOptions}
           className="border border-neutral-300 py-[3px] shadow-none dark:border-neutral-700"
-          label="Token"
+          label={t1('token')}
         />
       </span>
 
-      <InputText name="payerAddress" label="Payer" placeholder="Enter Payer Address" isRequired />
+      <InputText name="payerAddress" label={t1('payer')} placeholder={t1('enterPayerAddress')} isRequired />
 
-      <InputText name="payeeAddress" label="Payee" placeholder="Enter Payee Address" isRequired />
+      <InputText name="payeeAddress" label={t1('payee')} placeholder={t1('enterPayeeAddress')} isRequired />
 
       <InputAmountWithDuration
         name="streamedAmount"
         isRequired={true}
-        label="Streamed Amount"
+        label={t1('streamedAmount')}
         selectInputName="streamDuration"
       />
 
       <button className="form-submit-button mt-2">
-        {loading ? <BeatLoader size={6} color="white" /> : 'Withdraw'}
+        {loading ? <BeatLoader size={6} color="white" /> : t0('withdraw')}
       </button>
 
       {error && <p className="text-center text-sm text-red-500">{error}</p>}
@@ -128,6 +132,8 @@ const WithdrawOnBehalfForm = ({
 };
 
 export const Fallback = () => {
+  const t1 = useTranslations('Forms');
+
   return (
     <form className="flex flex-col gap-4">
       <span>
@@ -139,14 +145,14 @@ export const Fallback = () => {
         />
       </span>
 
-      <InputText name="payerAddress" label="Payer:" isRequired />
+      <InputText name="payerAddress" label={t1('payer')} placeholder={t1('enterPayerAddress')} isRequired />
 
-      <InputText name="payeeAddress" label="Payee:" isRequired />
+      <InputText name="payeeAddress" label={t1('payee')} placeholder={t1('enterPayeeAddress')} isRequired />
 
       <InputAmountWithDuration
         name="streamedAmount"
         isRequired={true}
-        label="Streamed Amount"
+        label={t1('streamedAmount')}
         selectInputName="streamDuration"
       />
 
