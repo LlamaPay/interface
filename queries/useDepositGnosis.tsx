@@ -1,4 +1,3 @@
-import { useSafeAppsSDK } from '@gnosis.pm/safe-apps-react-sdk';
 import SafeAppsSDK from '@gnosis.pm/safe-apps-sdk/dist/src/sdk';
 import { useMutation } from 'react-query';
 import { ERC20Interface, LlamaContractInterface } from 'utils/contract';
@@ -41,7 +40,7 @@ async function deposit({ sdk, llamaContractAddress, tokenContractAddress, amount
 }
 
 export default function useDepositGnosis() {
-  const { sdk } = useSafeAppsSDK();
+  const sdk = typeof window !== 'undefined' ? new SafeAppsSDK() : undefined;
 
   return useMutation(
     ({ llamaContractAddress, tokenContractAddress, amountToDeposit }: IUseDepositGnosis) =>

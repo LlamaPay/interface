@@ -10,6 +10,7 @@ import { getAddress } from 'ethers/lib/utils';
 import BigNumber from 'bignumber.js';
 import { secondsByDuration } from 'utils/constants';
 import useStreamToken from 'queries/useStreamToken';
+import useGnosisBatch from 'queries/useGnosisBatch';
 
 type FormValues = {
   streams: {
@@ -32,6 +33,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
 
   const { mutate: batchCall, isLoading: batchLoading } = useBatchCalls();
   const { mutate: streamToken, isLoading: createStreamLoading } = useStreamToken();
+  const { mutate: gnosisBatch, isLoading: gnosisLoading } = useGnosisBatch();
 
   const {
     register,
@@ -104,9 +106,13 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
         return (calls = { ...calls, [llamaContractAddress]: callData });
       }, {});
 
-      Object.keys(calls).map((p) => {
-        batchCall({ llamaContractAddress: p, calls: calls[p] });
-      });
+      if (process.env.NEXT_PUBLIC_SAFE === 'true') {
+        gnosisBatch({ calls: calls });
+      } else {
+        Object.keys(calls).map((p) => {
+          batchCall({ llamaContractAddress: p, calls: calls[p] });
+        });
+      }
     }
   };
 
@@ -245,7 +251,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
           Add Stream
         </button>
 
-        <SubmitButton className="flex-1" disabled={createStreamLoading || batchLoading}>
+        <SubmitButton className="flex-1" disabled={createStreamLoading || batchLoading || gnosisLoading}>
           {createStreamLoading || batchLoading ? <BeatLoader size={6} color="white" /> : 'Create Stream'}
         </SubmitButton>
       </div>

@@ -5,6 +5,7 @@ import React from 'react';
 import { useAccount } from 'wagmi';
 import { CashIcon } from '@heroicons/react/outline';
 import { LlamaContractInterface } from 'utils/contract';
+import useGnosisBatch from 'queries/useGnosisBatch';
 
 interface ICall {
   [key: string]: string[];
@@ -14,6 +15,7 @@ export default function WithdrawAll() {
   const { data } = useStreamsAndHistory();
   const [{ data: accountData }] = useAccount();
   const { mutate: batchCall } = useBatchCalls();
+  const { mutate: gnosisBatch } = useGnosisBatch();
   const { unsupported } = useNetworkProvider();
 
   const handleClick = () => {
@@ -35,9 +37,13 @@ export default function WithdrawAll() {
         return acc;
       }, {}) ?? {};
 
-    Object.keys(calls).map((p) => {
-      batchCall({ llamaContractAddress: p, calls: calls[p] });
-    });
+    if (process.env.NEXT_PUBLIC_SAFE === 'true') {
+      gnosisBatch({ calls: calls });
+    } else {
+      Object.keys(calls).map((p) => {
+        batchCall({ llamaContractAddress: p, calls: calls[p] });
+      });
+    }
   };
 
   return (
