@@ -162,7 +162,9 @@
     "searchNameOrAddress": "Search name or paste address",
     "orAddANewToken": "or add a new token",
     "tokenAddress": "Token Address",
-    "addToken": "Add Token"
+    "addToken": "Add Token",
+    "addAnotherStream": "Add another stream",
+    "confirmStreams": "Confirm Streams"
   },
   "OnboardWalletConnect": {
     "header": "Connect your wallet",

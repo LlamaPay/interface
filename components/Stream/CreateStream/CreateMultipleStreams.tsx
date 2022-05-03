@@ -252,11 +252,11 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
             })
           }
         >
-          Add another stream
+          {t1('addAnotherStream')}
         </button>
 
         <SubmitButton className="flex-1" disabled={createStreamLoading || batchLoading || gnosisLoading}>
-          {createStreamLoading || batchLoading ? <BeatLoader size={6} color="white" /> : 'Confirm Streams'}
+          {createStreamLoading || batchLoading ? <BeatLoader size={6} color="white" /> : t1('confirmStreams')}
         </SubmitButton>
       </div>
     </form>
