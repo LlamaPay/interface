@@ -35,7 +35,7 @@ const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV }: ITab
                     key={header.id}
                     className="whitespace-nowrap py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D]"
                   >
-                    {header.isPlaceholder ? null : header.renderHeader()}
+                    {header.isPlaceholder ? null : header.renderHeader() ? t(header.id) : ''}
                   </th>
                 ))}
               </tr>

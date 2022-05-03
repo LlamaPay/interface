@@ -10,6 +10,7 @@ import { getAddress } from 'ethers/lib/utils';
 import BigNumber from 'bignumber.js';
 import { secondsByDuration } from 'utils/constants';
 import useStreamToken from 'queries/useStreamToken';
+import { useTranslations } from 'next-intl';
 import useGnosisBatch from 'queries/useGnosisBatch';
 
 type FormValues = {
@@ -34,6 +35,9 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
   const { mutate: batchCall, isLoading: batchLoading } = useBatchCalls();
   const { mutate: streamToken, isLoading: createStreamLoading } = useStreamToken();
   const { mutate: gnosisBatch, isLoading: gnosisLoading } = useGnosisBatch();
+
+  const t0 = useTranslations('Common');
+  const t1 = useTranslations('Forms');
 
   const {
     register,
@@ -124,9 +128,9 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
             {index > 0 && <hr className="mb-0 mt-2 border-dashed" />}
 
             <label>
-              <span className="input-label">Enter an Address to Stream</span>
+              <span className="input-label">{t1('addressToStream')}</span>
               <input
-                placeholder="Enter Recipient Address"
+                placeholder={t1('recipientAddress')}
                 {...register(`streams.${index}.addressToStream` as const, {
                   required: true,
                   pattern: /^0x[a-fA-F0-9]{40}$/,
@@ -138,20 +142,20 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                 spellCheck="false"
               />
               {errors?.streams?.[index]?.addressToStream?.type === 'required' && (
-                <p className="mt-1 text-xs text-red-500">This field is required</p>
+                <p className="mt-1 text-xs text-red-500">{t1('requiredField')}</p>
               )}
               {errors?.streams?.[index]?.addressToStream?.type === 'pattern' && (
-                <p className="mt-1 text-xs text-red-500">Enter valid address</p>
+                <p className="mt-1 text-xs text-red-500">{t1('validAddress')}</p>
               )}
             </label>
 
             <label>
               <span className="input-label">
-                <span>Associate a Name to the Address?</span>
-                <small className="mx-2 text-neutral-500">(optional)</small>
+                <span>{t1('associateName')}</span>
+                <small className="mx-2 text-neutral-500">{`(${t1('optional')})`}</small>
               </span>
               <input
-                placeholder="Add a name for fast identification"
+                placeholder={t1('fastIdentification')}
                 {...register(`streams.${index}.shortName` as const)}
                 className="input-field"
                 autoComplete="off"
@@ -171,7 +175,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                     handleTokenChange={field.onChange}
                     tokens={tokenOptions}
                     className="border border-neutral-300 bg-transparent py-[3px] shadow-none dark:border-neutral-700 dark:bg-stone-800"
-                    label="Select Token from Balances"
+                    label={t1('selectTokenFromBalances')}
                     {...field}
                   />
                 )}
@@ -181,7 +185,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
             <div>
               <div>
                 <label htmlFor={`stream-amount-${index}`} className="input-label">
-                  Amount to Stream
+                  {t1('amountToStream')}
                 </label>
                 <div className="relative flex">
                   <input
@@ -199,7 +203,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                   />
 
                   <label {...register(`streams.${index}.streamDuration` as const)} className="sr-only">
-                    Stream duration
+                    {t1('streamDuration')}
                   </label>
                   <select
                     {...register(`streams.${index}.streamDuration` as const, {
@@ -208,16 +212,16 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                     className="absolute right-1 bottom-1 top-2 my-auto flex w-full max-w-[24%] items-center truncate rounded border-0 bg-zinc-100 p-2 pr-4 text-sm shadow-sm dark:bg-stone-600"
                     style={{ backgroundSize: '1.25rem', backgroundPosition: 'calc(100% - 4px) 55%' }}
                   >
-                    <option value="month">Month</option>
-                    <option value="year">Year</option>
+                    <option value="month">{t0('month')}</option>
+                    <option value="year">{t0('year')}</option>
                   </select>
                 </div>
               </div>
               {errors?.streams?.[index]?.amountToStream?.type === 'required' && (
-                <p className="mt-1 text-xs text-red-500">This field is required</p>
+                <p className="mt-1 text-xs text-red-500">{t1('requiredField')}</p>
               )}
               {errors?.streams?.[index]?.amountToStream?.type === 'pattern' && (
-                <p className="mt-1 text-xs text-red-500">Enter a valid number</p>
+                <p className="mt-1 text-xs text-red-500">{t1('validNumber')}</p>
               )}
             </div>
 

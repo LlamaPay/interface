@@ -6,6 +6,7 @@ import { FuelIcon, WalletIcon } from 'components/Icons';
 import WithdrawAll from 'components/WithdrawAll';
 import WithdrawOnBehalf from 'components/WithdrawOnBehalf';
 import { useNetworkProvider } from 'hooks';
+import { useTranslations } from 'next-intl';
 import { useAccount } from 'wagmi';
 
 export default function StreamMenu() {
@@ -16,6 +17,8 @@ export default function StreamMenu() {
 
   const disperseGasGialog = useDialogState();
   const withdrawOnBehalfDialog = useDialogState();
+
+  const t = useTranslations('Streams')
 
   return (
     <>
@@ -32,14 +35,14 @@ export default function StreamMenu() {
           className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40"
           onClick={disperseGasGialog.toggle}
         >
-          <span>{` Disperse ${nativeCurrency?.symbol ? nativeCurrency?.symbol : 'Funds'}`}</span>
+          <span>{`${t('disperse')} ${nativeCurrency?.symbol ? nativeCurrency?.symbol : 'Funds'}`}</span>
           <FuelIcon />
         </MenuItem>
         <MenuItem
           className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40"
           onClick={withdrawOnBehalfDialog.toggle}
         >
-          <span>Withdraw Another Wallet</span>
+          <span>{t('withdrawAnotherWallet')}</span>
           <WalletIcon />
         </MenuItem>
         <MenuItem className="flex scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40">

@@ -5,6 +5,7 @@ import { useChainExplorer, useLocale } from 'hooks';
 import { ExternalLinkIcon } from '@heroicons/react/outline';
 import { secondsByDuration } from 'utils/constants';
 import { formatAmountInTable } from 'utils/amount';
+import { useTranslations } from 'next-intl';
 
 interface MoreInfoProps {
   data: UserHistoryFragment;
@@ -23,12 +24,15 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
 
   const { locale } = useLocale();
 
+  const t0 = useTranslations('Common');
+  const t1 = useTranslations('Streams');
+
   return (
     <>
-      <FormDialog dialog={dialog} title="More Info" className="h-min">
+      <FormDialog dialog={dialog} title={t0('moreInfo')} className="h-min">
         <span className="space-y-4 text-[#3D3D3D]">
           <section>
-            <h1 className="font-medium text-[#303030]">Token</h1>
+            <h1 className="font-medium text-[#303030]">{t0('token')}</h1>
             <div className="my-1 rounded border p-2 dark:border-stone-700">
               <div className="flex space-x-1">
                 <p>{data.stream?.token.name}</p>
@@ -39,18 +43,18 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
 
           {data.eventType === 'StreamModified' && (
             <section>
-              <h1 className="font-medium text-[#303030]">Old Stream</h1>
+              <h1 className="font-medium text-[#303030]">{t0('oldStream')}</h1>
               <div className="my-1 rounded border p-2 dark:border-stone-700">
                 <div className="flex space-x-1">
-                  <p>Payer:</p>
+                  <p>{t0('payer')}:</p>
                   <p>{data.oldStream?.payer.id}</p>
                 </div>
                 <div className="flex space-x-1">
-                  <p>Payee:</p>
+                  <p>{t0('payee')}:</p>
                   <p>{data.oldStream?.payee.id}</p>
                 </div>
                 <div className="flex space-x-1">
-                  <p>Amount:</p>
+                  <p>{t0('amount')}:</p>
                   <p>
                     {!Number.isNaN(data.oldStream?.amountPerSec) &&
                       `${formatAmountInTable(
@@ -61,7 +65,7 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
                   </p>
                 </div>
                 <div className="flex space-x-1">
-                  <p>Total Streamed:</p>
+                  <p>{t1('totalStreamed')}:</p>
                   <p>
                     {amountStreamed(
                       data.createdTimestamp,
@@ -76,21 +80,21 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
 
           <section>
             <h1 className="font-medium text-[#303030]">
-              {data.eventType === 'StreamModified' ? 'New Stream' : 'Stream'}
+              {data.eventType === 'StreamModified' ? t0('newStream') : t0('stream')}
             </h1>
             <div className="my-1 rounded border p-2 dark:border-stone-700">
               <div className="flex space-x-1">
-                <p>Payer:</p>
+                <p>{t0('payer')}:</p>
                 <p>{data.stream?.payer.id}</p>
               </div>
 
               <div className="flex space-x-1">
-                <p>Payee:</p>
+                <p>{t0('payee')}:</p>
                 <p>{data.stream?.payee.id}</p>
               </div>
 
               <div className="flex space-x-1">
-                <p>Amount:</p>
+                <p>{t0('amount')}:</p>
 
                 <p>
                   {!Number.isNaN(data.stream?.amountPerSec) &&
@@ -104,7 +108,7 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
 
               {data.eventType === 'StreamCancelled' && (
                 <div className="flex space-x-1">
-                  <p>Total Streamed:</p>
+                  <p>{t1('totalStreamed')}:</p>
                   <p>
                     {amountStreamed(data.createdTimestamp, data.stream?.createdTimestamp, data.stream?.amountPerSec)}
                   </p>
@@ -114,7 +118,7 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
           </section>
 
           <section>
-            <h1 className="font-medium text-[#303030]">Event Timestamp</h1>
+            <h1 className="font-medium text-[#303030]">{t0('eventTimestamp')}</h1>
             <p>
               {new Date(Number(data.createdTimestamp) * 1e3).toLocaleString(locale, {
                 hour12: false,
@@ -128,7 +132,7 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
             rel="noreferrer noopener"
             className="form-submit-button mt-4 flex items-center justify-center gap-2"
           >
-            <span>View on {explorerName}</span>
+            <span>{t0('viewOnExplorer', { explorer: explorerName })}</span>
             <ExternalLinkIcon className="h-4 w-4" />
           </a>
         </span>

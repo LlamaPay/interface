@@ -1,6 +1,7 @@
 import * as React from 'react';
 import classNames from 'classnames';
 import { InputAmountWithDaysProps } from './types';
+import { useTranslations } from 'next-intl';
 
 export const InputAmountWithDuration = ({
   name,
@@ -10,6 +11,10 @@ export const InputAmountWithDuration = ({
   className,
   ...props
 }: InputAmountWithDaysProps) => {
+
+  const t0 = useTranslations('Common')
+  const t1 = useTranslations('Forms')
+
   return (
     <div>
       <label htmlFor={name} className="input-label">
@@ -34,7 +39,7 @@ export const InputAmountWithDuration = ({
           {...props}
         />
         <label htmlFor={selectInputName} className="sr-only">
-          Stream duration
+          {t1('streamDuration')}
         </label>
         <select
           name={selectInputName}
@@ -43,10 +48,11 @@ export const InputAmountWithDuration = ({
           className="absolute right-1 bottom-1 top-2 my-auto flex w-full max-w-[24%] items-center truncate rounded border-0 bg-zinc-100 p-2 pr-4 text-sm shadow-sm dark:bg-stone-600"
           style={{ backgroundSize: '1.25rem', backgroundPosition: 'calc(100% - 4px) 55%' }}
         >
-          <option value="month">Month</option>
-          <option value="year">Year</option>
+          <option value="month">{t0('month')}</option>
+          <option value="year">{t0('year')}</option>
         </select>
       </div>
     </div>
   );
 };
+  

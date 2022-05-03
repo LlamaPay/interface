@@ -6,6 +6,7 @@ import { useAddressStore } from 'store/address';
 import { formatAddress } from 'utils/address';
 import { DisclosureState } from 'ariakit';
 import AvailableToDisperse from './AvailableToDisperse';
+import { useTranslations } from 'next-intl';
 
 export default function SendToPayees({
   dialog,
@@ -82,12 +83,14 @@ export default function SendToPayees({
     setToSend(newToSend);
   }
 
+  const t = useTranslations('Disperse');
+
   return (
     <form className="flex flex-col gap-2">
       <div className="mb-5">
         <div className="flex w-full flex-wrap items-center space-x-2">
           <label className="flex-1">
-            <span className="sr-only">Enter Amount to Disperse</span>
+            <span className="sr-only">{t('amountToDisperse')}</span>
             <input
               onChange={(e) => {
                 if (Number(e.target.value) < 0) setAmount(0);
@@ -111,17 +114,17 @@ export default function SendToPayees({
             type="button"
             className="rounded border border-[#1BDBAD] bg-white py-2 px-4 text-sm font-normal text-[#23BD8F]"
           >
-            Split Equally
+            {t('splitEqually')}
           </button>
         </div>
         {accountData?.address && <AvailableToDisperse id={accountData.address.toLowerCase()} />}
       </div>
       <div className="flex space-x-2">
         <button onClick={onSelectAll} type="button" className="rounded-3xl border bg-white px-3 py-[6px] text-xs">
-          Select All
+          {t('selectAll')}
         </button>
         <button onClick={onUnselectAll} type="button" className="rounded-3xl border bg-white px-3 py-[6px] text-xs">
-          Unselect All
+          {t('unselectAll')}
         </button>
       </div>
 
@@ -130,9 +133,9 @@ export default function SendToPayees({
           <thead>
             <tr>
               <th className="table-description text-sm font-semibold !text-[#3D3D3D]"></th>
-              <th className="table-description text-sm font-semibold !text-[#3D3D3D]">Name/Address</th>
-              <th className="table-description text-sm font-semibold !text-[#3D3D3D]">Payee Balance</th>
-              <th className="table-description text-right text-sm font-semibold !text-[#3D3D3D]">Amount to Send</th>
+              <th className="table-description text-sm font-semibold !text-[#3D3D3D]">{t('nameOrAddress')}</th>
+              <th className="table-description text-sm font-semibold !text-[#3D3D3D]">{t('payeeBalance')}</th>
+              <th className="table-description text-sm font-semibold !text-[#3D3D3D]">{t('amountToSend')}</th>
             </tr>
           </thead>
           <tbody>

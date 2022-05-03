@@ -6,6 +6,7 @@ import { useTokenPrice } from 'queries/useTokenPrice';
 import Tooltip from 'components/Tooltip';
 import { ExclamationCircleIcon, ExclamationIcon } from '@heroicons/react/solid';
 import { useLocale } from 'hooks';
+import { useTranslations } from 'next-intl';
 
 export const Withdrawable = ({ data }: { data: IStream }) => {
   const { data: callResult, isLoading } = useWithdrawable({
@@ -21,6 +22,8 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
   const { data: price } = useTokenPrice(data.token.address.toLowerCase());
 
   const { locale } = useLocale();
+
+  const t = useTranslations('Streams')
 
   const setWithdrawables = React.useCallback(() => {
     if (callResult?.withdrawableAmount === undefined || callResult.lastUpdate === undefined) {
@@ -50,7 +53,7 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
             {balanceState && `${formatBalance(balanceState, locale)}`}
           </span>
         </Tooltip>
-        <Tooltip content="Out of Funds">
+        <Tooltip content={t('outOfFunds')}>
           <ExclamationCircleIcon className="h-5 w-5 text-red-600" />
         </Tooltip>
       </div>
@@ -60,7 +63,7 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
   if (data.paused) {
     return (
       <div className="flex space-x-1">
-        <span className="slashed-zero tabular-nums text-yellow-600">Paused</span>
+        <span className="slashed-zero tabular-nums text-yellow-600">{t('paused')}</span>
         <ExclamationIcon className="h-5 w-5 text-yellow-600" />
       </div>
     );

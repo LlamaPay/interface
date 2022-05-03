@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { ITokenBalance } from 'queries/useTokenBalances';
 
@@ -10,6 +11,8 @@ export default function AvailableAmount({
   title: string;
   amount?: string;
 }) {
+  const t = useTranslations('Common');
+
   if (!selectedToken) return null;
 
   return (
@@ -17,7 +20,12 @@ export default function AvailableAmount({
       <span>{title}</span>
       <div className="flex items-center gap-2 truncate">
         <div className="flex h-[14px] w-[14px] flex-shrink-0 items-center rounded-full">
-          <Image src={selectedToken.logoURI} alt={'Logo of token ' + selectedToken.name} width="14px" height="14px" />
+          <Image
+            src={selectedToken.logoURI}
+            alt={t('logoAlt', { name: selectedToken.name })}
+            width="14px"
+            height="14px"
+          />
         </div>
         <p>{selectedToken && `${amount || selectedToken.balance} ${selectedToken.symbol}`}</p>
       </div>

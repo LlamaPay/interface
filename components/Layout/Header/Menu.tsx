@@ -35,19 +35,24 @@ export default function HeaderMenu({
 
   const isSm = size && size.width && size.width < 640;
 
+  const t = useTranslations('Common');
+
   return (
     <Menu
       label={
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-          <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
-        </svg>
+        <>
+          <span className="sr-only">{t('menu')}</span>
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
+          </svg>
+        </>
       }
     >
       {address ? (
         <MenuItem
           label={
             <div className="flex flex-col gap-1 p-2">
-              <span className="text-xs text-neutral-500">Connected as</span>
+              <span className="text-xs text-neutral-500">{t('connectedAs')}</span>
               <p className="font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40">
                 {address}
               </p>
@@ -62,7 +67,7 @@ export default function HeaderMenu({
 
       {networkData && chain && switchNetwork && isSm && (
         <Menu
-          label={chain?.name ?? 'Unsupported'}
+          label={chain?.name ?? t('unsupported')}
           className="flex items-center justify-between p-2 font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 sm:hidden"
         >
           {mainnets.map((value) => {
@@ -75,7 +80,7 @@ export default function HeaderMenu({
                     <div className="flex h-5 w-5 items-center rounded-full">
                       <Image
                         src={network.logoURI || defaultImage}
-                        alt={'Logo of ' + value.name}
+                        alt={t('logoAlt', { name: value.name })}
                         objectFit="contain"
                         width="20px"
                         height="20px"

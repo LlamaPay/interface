@@ -6,6 +6,7 @@ import { useAccount } from 'wagmi';
 import { CashIcon } from '@heroicons/react/outline';
 import { LlamaContractInterface } from 'utils/contract';
 import useGnosisBatch from 'queries/useGnosisBatch';
+import { useTranslations } from 'next-intl';
 
 interface ICall {
   [key: string]: string[];
@@ -46,13 +47,15 @@ export default function WithdrawAll() {
     }
   };
 
+  const t = useTranslations('Streams');
+
   return (
     <button
       onClick={handleClick}
       disabled={!accountData || unsupported}
       className="flex w-full items-center justify-between gap-4 whitespace-nowrap"
     >
-      <span>Send All</span>
+      <span>{t('sendAll')}</span>
       <CashIcon className="h-4 w-4" />
     </button>
   );

@@ -33,7 +33,8 @@ const Balance = () => {
 
   const [{ data: accountData }] = useAccount();
 
-  const t = useTranslations('Balances');
+  const t0 = useTranslations('Common');
+  const t1 = useTranslations('Balances');
 
   const handleToken = (actionType: TokenAction, balance: IBalance) => {
     if (actionType === 'deposit') {
@@ -61,23 +62,25 @@ const Balance = () => {
 
   const showFallback = isLoading || noBalances || isError;
 
+  const t = useTranslations('Common');
+
   return (
     <div className="mr-auto w-full">
       <div className={showFallback ? 'w-full max-w-2xl' : 'w-full max-w-fit'}>
         <div className="section-header flex w-full flex-wrap items-center justify-between gap-[0.625rem]">
           <span className="flex items-center gap-[0.625rem]">
             <BalanceIcon />
-            <h1 className="font-exo">{t('heading')}</h1>
+            <h1 className="font-exo">{t1('heading')}</h1>
           </span>
 
           <button
             className="primary-button"
-            disabled={isLoading || tokensLoading}
+            disabled={isLoading || tokensLoading || !accountData}
             onClick={() => {
               depositFieldDialog.toggle();
             }}
           >
-            {isLoading || tokensLoading ? <BeatLoader size={6} color="white" /> : <>{t('deposit')}</>}
+            {isLoading || tokensLoading ? <BeatLoader size={6} color="white" /> : <>{t1('deposit')}</>}
           </button>
         </div>
 
@@ -89,16 +92,16 @@ const Balance = () => {
               <thead>
                 <tr>
                   <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D]">
-                    Token
+                    {t0('token')}
                   </th>
                   <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D]">
-                    Balance
+                    {t1('balance')}
                   </th>
                   <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D]">
-                    To Depleted
+                    {t1('toDepleted')}
                   </th>
                   <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D]">
-                    Monthly Cost
+                    {t1('monthlyCost')}
                   </th>
                   <th></th>
                 </tr>
@@ -109,7 +112,7 @@ const Balance = () => {
                     <th className="w-full whitespace-nowrap rounded-l border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-left text-sm font-normal text-[#3D3D3D]">
                       <div className="flex items-center space-x-2">
                         <div className="flex h-6 w-6 flex-shrink-0 items-center rounded-full">
-                          <Image src={b.logoURI} alt={'Logo of token ' + b.name} width="18px" height="18px" />
+                          <Image src={b.logoURI} alt={t('logoAlt', { name: b.name })} width="18px" height="18px" />
                         </div>
                         {chainExplorer ? (
                           <a
@@ -152,13 +155,13 @@ const Balance = () => {
                           onClick={() => handleToken('withdraw', b)}
                           disabled={Number.isNaN(b.amount) || Number(b.amount) <= 0}
                         >
-                          Withdraw
+                          {t0('withdraw')}
                         </button>
                         <button
                           className="primary-button py-1 px-[6px] text-xs font-medium"
                           onClick={() => handleToken('deposit', b)}
                         >
-                          Top up
+                          {t1('topup')}
                         </button>
                       </span>
                     </td>

@@ -7,6 +7,7 @@ import { BeatLoader } from 'react-spinners';
 import { networkDetails } from 'utils/constants';
 import { useContractWrite, useNetwork } from 'wagmi';
 import { useQueryClient } from 'react-query';
+import { useTranslations } from 'next-intl';
 
 interface DisperseSendProps {
   dialog: DisclosureState;
@@ -62,9 +63,11 @@ export default function DisperseSend({ dialog, data, setTransactionHash, transac
     });
   }
 
+  const t = useTranslations('Streams');
+
   return (
     <button onClick={sendGas} type="button" className="form-submit-button mt-5">
-      {loading ? <BeatLoader size={6} color="white" /> : 'Send'}
+      {loading ? <BeatLoader size={6} color="white" /> : t('send')}
     </button>
   );
 }

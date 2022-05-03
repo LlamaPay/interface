@@ -23,7 +23,7 @@ const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
       }}
     >
       <Link href="/" passHref>
-        <a className="flex-1">
+        <a>
           <Logo />
         </a>
       </Link>

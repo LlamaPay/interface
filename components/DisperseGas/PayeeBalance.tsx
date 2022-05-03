@@ -13,11 +13,13 @@ export default function PayeeBalance({ id }: PayeeBalanceProps) {
 
   return (
     <>
-      {isLoading
-        ? 'Loading'
-        : isError
-        ? 'Error'
-        : `${balance.toLocaleString(locale, { maximumFractionDigits: 5 })} ${network.nativeCurrency?.symbol}`}
+      {isLoading ? (
+        <div className="animate-shimmer h-5 w-full"></div>
+      ) : isError ? (
+        '-'
+      ) : (
+        `${balance.toLocaleString(locale, { maximumFractionDigits: 5 })} ${network.nativeCurrency?.symbol}`
+      )}
     </>
   );
 }

@@ -38,20 +38,22 @@ export function AltHistorySection({
   isError: boolean;
   data?: IStreamAndHistory;
 }) {
+  const t = useTranslations('History');
+
   return (
     <section className="w-full">
       <div className="section-header">
         <span className="flex items-center gap-[0.625rem]">
           <HistoryIcon />
-          <h1 className="font-exo">History</h1>
+          <h1 className="font-exo">{t('heading')}</h1>
         </span>
       </div>
       {isLoading || isError || !data?.history || data.history?.length < 1 ? (
         <div className="flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
           {isLoading ? null : isError ? (
-            <p>Couldn't load history</p>
+            <p>{t('error')}</p>
           ) : !data?.history || data.history?.length < 1 ? (
-            <p>No historical data</p>
+            <p>{t('noHistoricalData')}</p>
           ) : null}
         </div>
       ) : (

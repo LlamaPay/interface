@@ -8,6 +8,7 @@ import { IStream } from 'types';
 import { useContractWrite } from 'wagmi';
 import { Interface } from 'ethers/lib/utils';
 import useBatchCalls from 'queries/useBatchCalls';
+import { useTranslations } from 'next-intl';
 
 interface CancelProps {
   data: IStream;
@@ -63,10 +64,12 @@ export const Cancel = ({ data }: CancelProps) => {
     }
   };
 
+  const t = useTranslations('Streams')
+
   return (
     <>
       <button onClick={handleClick} className="row-action-links w-full text-right text-[#E40000]">
-        Cancel
+        {t('cancel')}
       </button>
       {transactionHash && <TransactionDialog dialog={transactionDialog} transactionHash={transactionHash} />}
     </>

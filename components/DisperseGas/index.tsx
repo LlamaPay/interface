@@ -7,6 +7,7 @@ import SendToPayees from './SendToPayees';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { IStream } from 'types';
 import DisperseFallback from './Fallback';
+import { useTranslations } from 'next-intl';
 
 function DisperseGasMoney({ dialog }: { dialog: DisclosureState }) {
   const [{ data: accountData, loading }] = useAccount();
@@ -15,6 +16,8 @@ function DisperseGasMoney({ dialog }: { dialog: DisclosureState }) {
   const [transactionHash, setTransactionHash] = React.useState<string>('');
 
   const { data, isLoading, error } = useStreamsAndHistory();
+
+  const t = useTranslations('Disperse');
 
   const { initialPayeeData, noStreams } = React.useMemo(() => {
     if (data && accountData) {
@@ -36,7 +39,11 @@ function DisperseGasMoney({ dialog }: { dialog: DisclosureState }) {
 
   return (
     <>
-      <FormDialog dialog={dialog} title={` Disperse ${nativeCurrency?.symbol} to Your Payees`} className="v-min h-min">
+      <FormDialog
+        dialog={dialog}
+        title={t('disperseTokentoYourPayees', { token: nativeCurrency?.symbol ?? '' })}
+        className="v-min h-min"
+      >
         <div className="space-y-3">
           {showFallback ? (
             <DisperseFallback isLoading={isLoading} isError={error ? true : false} noData={noStreams} />
