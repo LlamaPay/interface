@@ -100,7 +100,19 @@
     "exportCSV": "Exporter CSV",
     "rowsPerPage": "Lignes par page",
     "next": "Suivant",
-    "previous": "Précédent"
+    "previous": "Précédent",
+    "userName": "Name",
+    "address": "Address",
+    "tokenSymbol": "Token",
+    "amountPerSec": "Amount",
+    "totalStreamed": "Total Streamed",
+    "userWithdrawable": "Withdrawable",
+    "history": "History",
+    "action": "Action",
+    "type": "Type",
+    "addressName": "Address / Name",
+    "amount": "Amount",
+    "age": "Age"
   },
   "Forms": {
     "tokenToDeposit": "What token do you want to deposit?",
