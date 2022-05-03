@@ -51,7 +51,7 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, network, l
                 <div className="flex items-center rounded-full">
                   <Image
                     src={logoURI || defaultImage}
-                    alt={'Logo of ' + network}
+                    alt={t('logoAlt', { name: network })}
                     objectFit="contain"
                     width="24px"
                     height="24px"

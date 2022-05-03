@@ -20,8 +20,8 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
 
   const transactionDialog = useDialogState();
 
-  const t0 = useTranslations('Common')
-  const t1 = useTranslations('Forms')
+  const t0 = useTranslations('Common');
+  const t1 = useTranslations('Forms');
 
   const [{ data: accountData }] = useAccount();
 
@@ -118,11 +118,13 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
 
   const disableApprove = approvingToken || checkingApproval;
 
+  const t = useTranslations('Common');
+
   const Title = () => {
     return (
       <div className="flex items-center gap-2">
         <div className="flex h-6 w-6 flex-shrink-0 items-center rounded-full">
-          <Image src={data.logoURI} alt={'Logo of ' + data.title} width="24px" height="24px" />
+          <Image src={data.logoURI} alt={t('logoAlt', { name: data.title })} width="24px" height="24px" />
         </div>
         <span>{data.title}</span>
       </div>

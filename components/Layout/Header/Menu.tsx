@@ -35,13 +35,13 @@ export default function HeaderMenu({
 
   const isSm = size && size.width && size.width < 640;
 
-  const t = useTranslations('Common')
+  const t = useTranslations('Common');
 
   return (
     <Menu
       label={
         <>
-          <span className='sr-only'>{t('menu')}</span>
+          <span className="sr-only">{t('menu')}</span>
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
             <path d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z" />
           </svg>
@@ -80,7 +80,7 @@ export default function HeaderMenu({
                     <div className="flex h-5 w-5 items-center rounded-full">
                       <Image
                         src={network.logoURI || defaultImage}
-                        alt={'Logo of ' + value.name}
+                        alt={t('logoAlt', { name: value.name })}
                         objectFit="contain"
                         width="20px"
                         height="20px"

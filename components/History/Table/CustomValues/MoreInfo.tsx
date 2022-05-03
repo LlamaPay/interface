@@ -5,6 +5,7 @@ import { useChainExplorer, useLocale } from 'hooks';
 import { ExternalLinkIcon } from '@heroicons/react/outline';
 import { secondsByDuration } from 'utils/constants';
 import { formatAmountInTable } from 'utils/amount';
+import { useTranslations } from 'next-intl';
 
 interface MoreInfoProps {
   data: UserHistoryFragment;
@@ -22,6 +23,8 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
   const txLink = `${chainExplorer}/tx/${data.txHash}`;
 
   const { locale } = useLocale();
+
+  const t0 = useTranslations('Common');
 
   return (
     <>
@@ -128,7 +131,7 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
             rel="noreferrer noopener"
             className="form-submit-button mt-4 flex items-center justify-center gap-2"
           >
-            <span>View on {explorerName}</span>
+            <span>{t0('viewOnExplorer', { explorer: explorerName })}</span>
             <ExternalLinkIcon className="h-4 w-4" />
           </a>
         </span>

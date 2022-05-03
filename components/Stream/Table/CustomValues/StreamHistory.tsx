@@ -20,7 +20,7 @@ export const StreamHistory = ({ data, className }: StreamHistoryProps) => {
 
   const { locale } = useLocale();
 
-  const t = useTranslations('Common')
+  const t = useTranslations('Common');
 
   return (
     <>
@@ -51,7 +51,9 @@ export const StreamHistory = ({ data, className }: StreamHistoryProps) => {
                       target="_blank"
                       rel="noreferrer noopener"
                       className="underline"
-                    >{`View on ${explorerName}`}</a>
+                    >
+                      {t('viewOnExplorer', { explorer: explorerName })}
+                    </a>
                   </td>
                 </tr>
               ))}

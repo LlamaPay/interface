@@ -12,6 +12,7 @@ import useTokenBalances from 'queries/useTokenBalances';
 import Image from 'next/image';
 import defaultImage from 'public/empty-token.webp';
 import { useQueryClient } from 'react-query';
+import { useTranslations } from 'next-intl';
 
 interface ISelectTokenProps {
   handleTokenChange: (token: string) => void;
@@ -27,6 +28,8 @@ function Token({ value, shortName, showBalance }: { value: string; shortName?: b
     return tokens ? tokens.find((t) => t.tokenAddress === value) : null;
   }, [value, tokens]);
 
+  const t = useTranslations('Common');
+
   return (
     <div
       className={classNames(
@@ -38,9 +41,9 @@ function Token({ value, shortName, showBalance }: { value: string; shortName?: b
       <div className="flex items-center space-x-2 overflow-x-hidden">
         <div className="flex h-7 w-7 flex-shrink-0 items-center rounded-full">
           {data ? (
-            <Image src={data.logoURI} alt={'Logo of token ' + data.name} width="24px" height="24px" />
+            <Image src={data.logoURI} alt={t('logoAlt', { name: data.name })} width="24px" height="24px" />
           ) : (
-            <Image src={defaultImage} width="24px" height="24px" alt="Placeholder Image" />
+            <Image src={defaultImage} width="24px" height="24px" alt={t('logoAlt', { name: 'fallback token' })} />
           )}
         </div>
         {data ? (

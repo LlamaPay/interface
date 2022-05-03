@@ -26,7 +26,10 @@
     "year": "Year",
     "close": "Close",
     "menu": "Menu",
-    "streamsAndHistory": "Streams and History"
+    "streamsAndHistory": "Streams and History",
+    "logoAlt": "Logo of {name}",
+    "transactionSubmitted": "Transaction Submitted",
+    "viewOnExplorer": "View on {explorer}"
   },
   "Header": {
     "connectWallet": "Connecter le portefeuille",

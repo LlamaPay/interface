@@ -62,6 +62,8 @@ const Balance = () => {
 
   const showFallback = isLoading || noBalances || isError;
 
+  const t = useTranslations('Common');
+
   return (
     <div className="mr-auto w-full">
       <div className={showFallback ? 'w-full max-w-2xl' : 'w-full max-w-fit'}>
@@ -110,7 +112,7 @@ const Balance = () => {
                     <th className="w-full whitespace-nowrap rounded-l border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-left text-sm font-normal text-[#3D3D3D]">
                       <div className="flex items-center space-x-2">
                         <div className="flex h-6 w-6 flex-shrink-0 items-center rounded-full">
-                          <Image src={b.logoURI} alt={'Logo of token ' + b.name} width="18px" height="18px" />
+                          <Image src={b.logoURI} alt={t('logoAlt', { name: b.name })} width="18px" height="18px" />
                         </div>
                         {chainExplorer ? (
                           <a
@@ -153,7 +155,7 @@ const Balance = () => {
                           onClick={() => handleToken('withdraw', b)}
                           disabled={Number.isNaN(b.amount) || Number(b.amount) <= 0}
                         >
-                         {t0('withdraw')}
+                          {t0('withdraw')}
                         </button>
                         <button
                           className="primary-button py-1 px-[6px] text-xs font-medium"
