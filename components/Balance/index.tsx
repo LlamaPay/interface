@@ -75,7 +75,7 @@ const Balance = () => {
 
           <button
             className="primary-button"
-            disabled={isLoading || tokensLoading}
+            disabled={isLoading || tokensLoading || !accountData}
             onClick={() => {
               depositFieldDialog.toggle();
             }}

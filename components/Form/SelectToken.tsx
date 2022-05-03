@@ -80,10 +80,13 @@ export const SelectToken = React.forwardRef<HTMLButtonElement, ISelectTokenProps
 
   const dialog = useDialogState();
 
+  const t0 = useTranslations('Common');
+  const t1 = useTranslations('Forms');
+
   return (
     <>
       <SelectLabel state={select} className={classNames('input-label', !label && 'sr-only')}>
-        {label || 'Select token'}
+        {label || t1('selectToken')}
       </SelectLabel>
       <Select
         state={select}
@@ -105,15 +108,16 @@ export const SelectToken = React.forwardRef<HTMLButtonElement, ISelectTokenProps
         ) : (
           <>
             <header className="relative mt-3 flex items-center justify-between">
-              <DialogHeading className="px-4">Select a token</DialogHeading>
+              <DialogHeading className="px-4">{t1('selectToken')}</DialogHeading>
               <DialogDismiss className="absolute right-3 flex items-start justify-end">
+                <span className="sr-only">{t0('close')}</span>
                 <XIcon className="h-6 w-6" />
               </DialogDismiss>
             </header>
             <Combobox
               state={combobox}
               autoSelect
-              placeholder="Search name or paste address"
+              placeholder={t1('searchNameOrAddress')}
               className="m-4 rounded border px-3 py-[10px] slashed-zero dark:border-neutral-700"
             />
             <ComboboxList state={combobox} className="m-4 mt-0 cursor-pointer list-none overflow-auto">
@@ -141,7 +145,7 @@ export const SelectToken = React.forwardRef<HTMLButtonElement, ISelectTokenProps
               className="nav-button m-4 mt-auto flex items-center justify-center gap-2 rounded"
               onClick={() => setNewTokenForm(true)}
             >
-              <span>or add a new token</span>
+              <span>{t1('orAddANewToken')}</span>
               <ArrowRightIcon className="h-4 w-4" />
             </button>
           </>
@@ -188,30 +192,34 @@ const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<Rea
     );
   };
 
+  const t0 = useTranslations('Common');
+  const t1 = useTranslations('Forms');
+
   return (
     <>
       <header className="relative m-4 mt-3 flex items-center justify-between">
         <DialogHeading className="px-4">
           <button className="absolute left-0" onClick={() => setNewTokenForm(false)}>
+            <span className="sr-only">{t0('goBack')}</span>
             <ArrowLeftIcon className="h-6 w-6" />
           </button>
         </DialogHeading>
         <DialogDismiss className="absolute right-[-4px] top-0 flex items-start justify-end">
+          <span className="sr-only">{t0('close')}</span>
           <XIcon className="h-6 w-6" />
         </DialogDismiss>
       </header>
       <form className="m-4 mt-[10%]" onSubmit={handleSubmit}>
-        <InputText name="tokenAddress" isRequired={true} label="Token Address" />
+        <InputText name="tokenAddress" isRequired={true} label={t1('tokenAddress')} />
         <SubmitButton className="!mt-4 rounded" disabled={isLoading}>
           {isLoading ? (
             <BeatLoader size={6} color="white" />
           ) : isConfirming ? (
             <span className="flex items-center justify-center space-x-2">
-              <span>Confirming</span>
-              <BeatLoader size={4} color="white" />
+              <BeatLoader size={6} color="white" />
             </span>
           ) : (
-            'Add token'
+            t1('addToken')
           )}
         </SubmitButton>
       </form>

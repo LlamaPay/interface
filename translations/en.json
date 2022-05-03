@@ -25,6 +25,7 @@
     "month": "Month",
     "year": "Year",
     "close": "Close",
+    "goBack": "Go Back",
     "menu": "Menu",
     "streamsAndHistory": "Streams and History",
     "logoAlt": "Logo of {name}",
@@ -156,7 +157,12 @@
     "enterPayeeAddress": "Enter Payee Address",
     "streamedAmount": "Streamed Amount",
     "currentStream": "Current Stream",
-    "updateStream": "Update Stream"
+    "updateStream": "Update Stream",
+    "selectToken": "Select a token",
+    "searchNameOrAddress": "Search name or paste address",
+    "orAddANewToken": "or add a new token",
+    "tokenAddress": "Token Address",
+    "addToken": "Add Token"
   },
   "OnboardWalletConnect": {
     "header": "Connect your wallet",
