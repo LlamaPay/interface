@@ -225,38 +225,42 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
               )}
             </div>
 
-            <button
-              type="button"
-              className="w-fit rounded-[10px] border border-red-400 py-[6px] px-6 text-sm font-normal shadow-sm disabled:cursor-not-allowed disabled:opacity-50"
-              disabled={fields.length <= 1}
-              onClick={() => remove(index)}
-            >
-              {t1('delete')}
-            </button>
+            <div>
+              <button
+                type="button"
+                className="w-fit rounded-[10px] border border-green-400 py-[6px] px-6 text-sm font-normal shadow-sm disabled:cursor-not-allowed disabled:opacity-50"
+                style={{ marginRight: '0.6em' }}
+                disabled={false}
+                onClick={() =>
+                  append({
+                    addressToStream: '',
+                    shortName: '',
+                    tokenAddress: tokens[0]?.tokenAddress ?? '',
+                    amountToStream: '',
+                    streamDuration: 'month',
+                  })
+                }
+              >
+                Add another stream
+              </button>
+              {fields.length > 1 &&
+                <button
+                  type="button"
+                  className="w-fit rounded-[10px] border border-red-400 py-[6px] px-6 text-sm font-normal shadow-sm disabled:cursor-not-allowed disabled:opacity-50"
+                  disabled={fields.length <= 1}
+                  onClick={() => remove(index)}
+                >
+                  Delete
+                </button>
+              }
+            </div>
           </section>
         );
       })}
 
       <div className="mt-2 flex flex-col gap-3 sm:flex-row">
-        <button
-          type="button"
-          className="form-submit-button flex-1 rounded-[10px] bg-white text-[#23BD8F]"
-          disabled={false}
-          onClick={() =>
-            append({
-              addressToStream: '',
-              shortName: '',
-              tokenAddress: tokens[0]?.tokenAddress ?? '',
-              amountToStream: '',
-              streamDuration: 'month',
-            })
-          }
-        >
-          {t1('addAnotherStream')}
-        </button>
-
         <SubmitButton className="flex-1" disabled={createStreamLoading || batchLoading || gnosisLoading}>
-          {createStreamLoading || batchLoading ? <BeatLoader size={6} color="white" /> : t1('confirmStreams')}
+          {createStreamLoading || batchLoading ? <BeatLoader size={6} color="white" /> : 'Create Stream' + (fields.length <= 1 ? "" : "s")}
         </SubmitButton>
       </div>
     </form>
