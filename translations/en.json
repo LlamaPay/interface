@@ -29,7 +29,18 @@
     "streamsAndHistory": "Streams and History",
     "logoAlt": "Logo of {name}",
     "transactionSubmitted": "Transaction Submitted",
-    "viewOnExplorer": "View on {explorer}"
+    "viewOnExplorer": "View on {explorer}",
+    "eventTimestamp": "Event Timestamp",
+    "moreInfo": "More Info",
+    "oldStream": "Old Stream",
+    "newStream": "New Stream",
+    "stream": "Stream",
+    "payer": "Payer",
+    "payee": "Payee",
+    "streamHistory": "Stream History",
+    "eventType": "Event Type",
+    "timestamp": "Timestamp",
+    "you": "You"
   },
   "Header": {
     "connectWallet": "Connect Wallet",
@@ -83,7 +94,6 @@
     "noData": "To check the movements of your streams, Create a Stream first",
     "noHistoricalData": "No historical data",
     "error": "Couldn't load historical data",
-    "you": "You",
     "details": "Details",
     "createStream": "Create Stream",
     "modifyStream": "Modify Stream",
@@ -92,7 +102,7 @@
     "streamCreated": "Stream Created",
     "streamModified": "Stream Modified",
     "streamCancelled": "Stream Cancelled",
-    "viewTransactionOnExplorer": "View transaction on chain explorer"
+    "viewTransactionOnExplorer": "View transaction on {name}"
   },
   "Payees": {
     "connectWallet": "Connect wallet to view payees list",
@@ -142,12 +152,11 @@
     "validNumber": "Enter a valid number",
     "withdrawOnBehalf": "Withdraw on Behalf of Another Wallet",
     "tokensError": "Couldn't load tokens list",
-    "token": "Token",
-    "payer": "Payer",
-    "payee": "Payee",
     "enterPayerAddress": "Enter Payer Address",
     "enterPayeeAddress": "Enter Payee Address",
-    "streamedAmount": "Streamed Amount"
+    "streamedAmount": "Streamed Amount",
+    "currentStream": "Current Stream",
+    "updateStream": "Update Stream"
   },
   "OnboardWalletConnect": {
     "header": "Connect your wallet",

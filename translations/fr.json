@@ -29,7 +29,18 @@
     "streamsAndHistory": "Streams and History",
     "logoAlt": "Logo of {name}",
     "transactionSubmitted": "Transaction Submitted",
-    "viewOnExplorer": "View on {explorer}"
+    "viewOnExplorer": "View on {explorer}",
+    "eventTimestamp": "Event Timestamp",
+    "moreInfo": "More Info",
+    "oldStream": "Old Stream",
+    "newStream": "New Stream",
+    "stream": "Stream",
+    "payer": "Payer",
+    "payee": "Payee",
+    "streamHistory": "Stream History",
+    "eventType": "Event Type",
+    "timestamp": "Timestamp",
+    "you": "You"
   },
   "Header": {
     "connectWallet": "Connecter le portefeuille",
@@ -83,7 +94,6 @@
     "noData": "Pour vérifier les mouvements de vos flux, créez d'abord un flux",
     "noHistoricalData": "No historical data",
     "error": "Impossible de charger les données historiques",
-    "you": "You",
     "details": "Details",
     "createStream": "Create Stream",
     "modifyStream": "Modify Stream",
@@ -142,12 +152,11 @@
     "validNumber": "Enter a valid number",
     "withdrawOnBehalf": "Withdraw on Behalf of Another Wallet",
     "tokensError": "Couldn't load tokens list",
-    "token": "Token",
-    "payer": "Payer",
-    "payee": "Payee",
     "enterPayerAddress": "Enter Payer Address",
     "enterPayeeAddress": "Enter Payee Address",
-    "streamedAmount": "Streamed Amount"
+    "streamedAmount": "Streamed Amount",
+    "currentStream": "Current Stream",
+    "updateStream": "Update Stream"
   },
   "OnboardWalletConnect": {
     "header": "Connect your wallet",

@@ -6,7 +6,7 @@ import { useAddressStore } from 'store/address';
 import { formatAddress } from 'utils/address';
 
 export function SavedName({ value, eventType }: { value: string; eventType: string }) {
-  const t = useTranslations('History');
+  const t = useTranslations('Common');
 
   const you = eventType === 'Deposit' || eventType === 'PayerWithdraw' ? t('you') : false;
 

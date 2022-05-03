@@ -65,29 +65,31 @@ export const Modify = ({ data }: ModifyProps) => {
 
   const { locale } = useLocale();
 
-  const t = useTranslations('Streams')
+  const t0 = useTranslations('Common');
+  const t1 = useTranslations('Streams');
+  const t2 = useTranslations('Forms');
 
   return (
     <>
       <button className="row-action-links" onClick={dialog.toggle}>
-       {t('modify')}
+        {t1('modify')}
       </button>
-      <FormDialog dialog={dialog} title="Modify" className="h-min">
+      <FormDialog dialog={dialog} title={t1('modify')} className="h-min">
         <span className="space-y-4 text-[#303030]">
           <section>
-            <h2 className="font-medium text-[#3D3D3D]">Current Stream</h2>
+            <h2 className="font-medium text-[#3D3D3D]">{t2('currentStream')}</h2>
             <div className="my-1 rounded border p-2 dark:border-stone-700">
               <div className="flex items-center space-x-2">
-                <span>You</span>
+                <span>{t0('you')}</span>
                 <ArrowRightIcon className="h-4 w-4 " />
                 <span className="truncate">{savedAddressName}</span>
               </div>
               <div className="inline-block space-x-2">
-                <span>Payee:</span>
+                <span>{t0('payee')}:</span>
                 <span className="truncate">{data.payeeAddress}</span>
               </div>
               <p className="whitespace-nowrap">
-                {`Amount: ${(amountPerSec * secondsByDuration.month).toLocaleString(locale, {
+                {`${t0('amount')}: ${(amountPerSec * secondsByDuration.month).toLocaleString(locale, {
                   maximumFractionDigits: 5,
                   minimumFractionDigits: 5,
                 })} ${data.token?.symbol ?? ''}`}
@@ -95,22 +97,22 @@ export const Modify = ({ data }: ModifyProps) => {
             </div>
           </section>
           <section>
-            <h2 className="my-1 font-medium text-[#3D3D3D]">Update Stream</h2>
+            <h2 className="my-1 font-medium text-[#3D3D3D]">{t2('updateStream')}</h2>
             <form
               className="flex flex-col gap-4 rounded border px-2 pt-[2px] dark:border-stone-700"
               onSubmit={updateStream}
             >
-              <InputText name="updatedAddress" label="Address" isRequired placeholder="Enter Recipient Address" />
+              <InputText name="updatedAddress" label={t0('address')} isRequired placeholder={t2('recipientAddress')} />
 
               <InputAmountWithDuration
                 name="updatedAmount"
-                label="Amount"
+                label={t0('amount')}
                 selectInputName="modifiedStreamDuration"
                 isRequired
               />
 
               <SubmitButton className="my-2">
-                {isLoading ? <BeatLoader size={6} color="white" /> : 'Update'}
+                {isLoading ? <BeatLoader size={6} color="white" /> : t0('update')}
               </SubmitButton>
             </form>
           </section>

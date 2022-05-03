@@ -18,7 +18,7 @@ export function ActionName({ data }: { data: IHistory }) {
         <Tooltip content={t1('streamModified')}>
           <div className="rounded bg-yellow-100 p-1 text-yellow-600">
             <a href={link} target="_blank" rel="noreferrer noopener">
-              <span className="sr-only">{t1('viewTransactionOnExplorer')}</span>
+              <span className="sr-only">{t1('viewTransactionOnExplorer', { name: 'chain explorer' })}</span>
               <CogIcon className="h-4 w-4" />
             </a>
           </div>
@@ -27,7 +27,7 @@ export function ActionName({ data }: { data: IHistory }) {
         <Tooltip content={t1('streamCreated')}>
           <div className="rounded bg-green-100 p-1 text-green-600">
             <a href={link} target="_blank" rel="noreferrer noopener">
-              <span className="sr-only">{t1('viewTransactionOnExplorer')}</span>
+              <span className="sr-only">{t1('viewTransactionOnExplorer', { name: 'chain explorer' })}</span>
               <PlusIcon className="h-4 w-4" />
             </a>
           </div>
@@ -36,7 +36,7 @@ export function ActionName({ data }: { data: IHistory }) {
         <Tooltip content={t1('streamCancelled')}>
           <div className="rounded bg-red-100 p-1 text-red-600">
             <a href={link} target="_blank" rel="noreferrer noopener">
-              <span className="sr-only">{t1('viewTransactionOnExplorer')}</span>
+              <span className="sr-only">{t1('viewTransactionOnExplorer', { name: 'chain explorer' })}</span>
               <XIcon className="h-4 w-4" />
             </a>
           </div>
@@ -45,7 +45,7 @@ export function ActionName({ data }: { data: IHistory }) {
         <Tooltip content="Withdraw">
           <div className="rounded bg-green-100 p-1 text-green-600">
             <a href={link} target="_blank" rel="noreferrer noopener">
-              <span className="sr-only">{t1('viewTransactionOnExplorer')}</span>
+              <span className="sr-only">{t1('viewTransactionOnExplorer', { name: 'chain explorer' })}</span>
               <CashIcon className="h-4 w-4" />
             </a>
           </div>
@@ -54,7 +54,7 @@ export function ActionName({ data }: { data: IHistory }) {
         <Tooltip content={t0('deposit')}>
           <div className="rounded bg-green-100 p-1 text-green-600">
             <a href={link} target="_blank" rel="noreferrer noopener">
-              <span className="sr-only">{t1('viewTransactionOnExplorer')}</span>
+              <span className="sr-only">{t1('viewTransactionOnExplorer', { name: 'chain explorer' })}</span>
               <InboxInIcon className="h-4 w-4" />
             </a>
           </div>
@@ -63,7 +63,7 @@ export function ActionName({ data }: { data: IHistory }) {
         <Tooltip content={t0('pause')}>
           <div className="rounded bg-yellow-100 p-1 text-yellow-600">
             <a href={link} target="_blank" rel="noreferrer noopener">
-              <span className="sr-only">{t1('viewTransactionOnExplorer')}</span>
+              <span className="sr-only">{t1('viewTransactionOnExplorer', { name: 'chain explorer' })}</span>
               <PauseIcon className="h-4 w-4" />
             </a>
           </div>
@@ -72,7 +72,7 @@ export function ActionName({ data }: { data: IHistory }) {
         <Tooltip content={t0('resume')}>
           <div className="rounded bg-green-100 p-1 text-green-600">
             <a href={link} target="_blank" rel="noreferrer noopener">
-              <span className="sr-only">{t1('viewTransactionOnExplorer')}</span>
+              <span className="sr-only">{t1('viewTransactionOnExplorer', { name: 'chain explorer' })}</span>
               <PlayIcon className="h-4 w-4" />
             </a>
           </div>

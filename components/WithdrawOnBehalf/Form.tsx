@@ -107,13 +107,13 @@ const WithdrawOnBehalfForm = ({
           handleTokenChange={handleTokenChange}
           tokens={tokenOptions}
           className="border border-neutral-300 py-[3px] shadow-none dark:border-neutral-700"
-          label={t1('token')}
+          label={t0('token')}
         />
       </span>
 
-      <InputText name="payerAddress" label={t1('payer')} placeholder={t1('enterPayerAddress')} isRequired />
+      <InputText name="payerAddress" label={t0('payer')} placeholder={t1('enterPayerAddress')} isRequired />
 
-      <InputText name="payeeAddress" label={t1('payee')} placeholder={t1('enterPayeeAddress')} isRequired />
+      <InputText name="payeeAddress" label={t0('payee')} placeholder={t1('enterPayeeAddress')} isRequired />
 
       <InputAmountWithDuration
         name="streamedAmount"
@@ -132,6 +132,7 @@ const WithdrawOnBehalfForm = ({
 };
 
 export const Fallback = () => {
+  const t0 = useTranslations('Common');
   const t1 = useTranslations('Forms');
 
   return (
@@ -141,13 +142,13 @@ export const Fallback = () => {
           handleTokenChange={() => null}
           tokens={[]}
           className="border border-neutral-300 py-[3px] shadow-none dark:border-neutral-700"
-          label="Token"
+          label={t0('token')}
         />
       </span>
 
-      <InputText name="payerAddress" label={t1('payer')} placeholder={t1('enterPayerAddress')} isRequired />
+      <InputText name="payerAddress" label={t0('payer')} placeholder={t1('enterPayerAddress')} isRequired />
 
-      <InputText name="payeeAddress" label={t1('payee')} placeholder={t1('enterPayeeAddress')} isRequired />
+      <InputText name="payeeAddress" label={t0('payee')} placeholder={t1('enterPayeeAddress')} isRequired />
 
       <InputAmountWithDuration
         name="streamedAmount"
