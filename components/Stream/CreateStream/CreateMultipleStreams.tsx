@@ -11,6 +11,7 @@ import BigNumber from 'bignumber.js';
 import { secondsByDuration } from 'utils/constants';
 import useStreamToken from 'queries/useStreamToken';
 import { useTranslations } from 'next-intl';
+import useGnosisBatch from 'queries/useGnosisBatch';
 
 type FormValues = {
   streams: {
@@ -33,6 +34,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
 
   const { mutate: batchCall, isLoading: batchLoading } = useBatchCalls();
   const { mutate: streamToken, isLoading: createStreamLoading } = useStreamToken();
+  const { mutate: gnosisBatch, isLoading: gnosisLoading } = useGnosisBatch();
 
   const t0 = useTranslations('Common');
   const t1 = useTranslations('Forms');
@@ -108,9 +110,13 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
         return (calls = { ...calls, [llamaContractAddress]: callData });
       }, {});
 
-      Object.keys(calls).map((p) => {
-        batchCall({ llamaContractAddress: p, calls: calls[p] });
-      });
+      if (process.env.NEXT_PUBLIC_SAFE === 'true') {
+        gnosisBatch({ calls: calls });
+      } else {
+        Object.keys(calls).map((p) => {
+          batchCall({ llamaContractAddress: p, calls: calls[p] });
+        });
+      }
     }
   };
 
@@ -246,11 +252,11 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
             })
           }
         >
-          {t1('addStream')}
+          Add another stream
         </button>
 
-        <SubmitButton className="flex-1" disabled={createStreamLoading || batchLoading}>
-          {createStreamLoading || batchLoading ? <BeatLoader size={6} color="white" /> : t1('createStream')}
+        <SubmitButton className="flex-1" disabled={createStreamLoading || batchLoading || gnosisLoading}>
+          {createStreamLoading || batchLoading ? <BeatLoader size={6} color="white" /> : 'Confirm Streams'}
         </SubmitButton>
       </div>
     </form>
