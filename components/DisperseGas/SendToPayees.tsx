@@ -41,7 +41,6 @@ export default function SendToPayees({
   }
 
   function onSelect(e: React.ChangeEvent<HTMLInputElement>) {
-    e.preventDefault();
     const checked = e.target.checked;
     const address = e.target.name;
     const newToSend = { ...toSend };
