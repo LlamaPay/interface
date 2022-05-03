@@ -119,7 +119,12 @@
     "selectTokenFromBalances": "Select Token from Balances",
     "amountToStream": "Amount to Stream",
     "streamDuration": "Stream duration",
-    "createStream": "Create Stream"
+    "createStream": "Create Stream",
+    "delete": "Delete",
+    "addStream": "Add Stream",
+    "requiredField": "This field is required",
+    "validAddress": "Enter valid address",
+    "validNumber": "Enter a valid number"
   },
   "OnboardWalletConnect": {
     "header": "Connect your wallet",
@@ -134,5 +139,11 @@
     "depositToken": "Deposit Token",
     "createAStream": "Create a Stream",
     "createANewStream": "Create a new Stream"
+  },
+  "CreateStream": {
+    "createANewStream": "Create a New Stream",
+    "connectWallet": "Connect Wallet to Create a New Stream",
+    "notSupported": "Chain not supported",
+    "sus": "Something went wrong"
   }
 }
