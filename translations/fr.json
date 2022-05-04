@@ -8,7 +8,7 @@
     "network": "Réseau",
     "networkNotSupported": "Réseau non pris en charge",
     "unsupported": "Non pris en charge",
-    "disconnect": "Déconnecté",
+    "disconnect": "Se déconnecter",
     "error": "Impossible de charger les données",
     "token": "Jeton",
     "amount": "Montant",
@@ -85,7 +85,7 @@
     "outgoingStream": "Flux sortant",
     "incomingStream": "Flux rentrant",
     "incomingStreamFrom": "Flux rentrant pour",
-    "disperse": "Disperse",
+    "disperse": "Distribuer",
     "withdrawAnotherWallet": "Retirer sur un autre portefeuille",
     "sendAll": "Tout envoyer",
     "editName": "Modifier le nom du récipient"
@@ -134,7 +134,7 @@
     "availableForDeposit": "Disponible à déposer",
     "amountToDeposit": "Combien voulez-vous déposer au total ?",
     "max": "MAX",
-    "approveOnWallet": "Approuver sur le portefeuille",
+    "approveOnWallet": "Approuver",
     "availableForWithdrawl": "Disponible à retirer",
     "withdrawAll": "Tout retirer",
     "topupAmount": "Recharger",
@@ -183,7 +183,7 @@
   },
   "CreateStream": {
     "createANewStream": "Créer un nouveau flux",
-    "connectWallet": "Connecter un portefeuille pour créer un nouveau flux",
+    "connectWallet": "Connectez un portefeuille pour créer un nouveau flux",
     "notSupported": "Réseau non supporté",
     "sus": "Quelque chose s'est mal passé"
   },
