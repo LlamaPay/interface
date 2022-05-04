@@ -23,7 +23,7 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
 
   const { locale } = useLocale();
 
-  const t = useTranslations('Streams')
+  const t = useTranslations('Streams');
 
   const setWithdrawables = React.useCallback(() => {
     if (callResult?.withdrawableAmount === undefined || callResult.lastUpdate === undefined) {
@@ -63,8 +63,19 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
   if (data.paused) {
     return (
       <div className="flex space-x-1">
-        <span className="slashed-zero tabular-nums text-yellow-600">{t('paused')}</span>
-        <ExclamationIcon className="h-5 w-5 text-yellow-600" />
+        {balanceState ? (
+          <>
+            <span className="slashed-zero tabular-nums">{`${formatBalance(balanceState, locale)}`}</span>
+            <Tooltip content={t('paused')}>
+              <ExclamationIcon className="h-5 w-5 text-yellow-600" />
+            </Tooltip>
+          </>
+        ) : (
+          <>
+            <span className="slashed-zero tabular-nums text-yellow-600">{t('paused')}</span>
+            <ExclamationIcon className="h-5 w-5 text-yellow-600" />
+          </>
+        )}
       </div>
     );
   }
