@@ -8,7 +8,14 @@ import { BalanceIcon, StreamIcon } from 'components/Icons';
 import { InputText, SubmitButton } from 'components/Form';
 import { useStreamAndHistoryQuery } from 'services/generated/graphql';
 import { BeatLoader } from 'react-spinners';
-import { AmtPerMonth, Push, TokenName, Withdrawable } from 'components/Stream/Table/CustomValues';
+import {
+  AmtPerMonth,
+  Push,
+  SavedName,
+  StreamAddress,
+  TokenName,
+  Withdrawable,
+} from 'components/Stream/Table/CustomValues';
 import { getAddress } from 'ethers/lib/utils';
 import { CashIcon } from '@heroicons/react/solid';
 import useBatchCalls from 'queries/useBatchCalls';
@@ -60,7 +67,6 @@ const Withdraw: NextPage = () => {
     data,
     address: addressToFetch || undefined,
     provider,
-    incomingStreams: true,
   });
 
   const sendAllOnClick = () => {
@@ -114,8 +120,9 @@ const Withdraw: NextPage = () => {
       {!showFallback && addressToFetch && !isLoading && (
         <section className="mt-20">
           <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-            <h2 className="flex items-center gap-[0.625rem] text-[#3D3D3D]">
+            <h2 className="flex flex-wrap items-center gap-[0.625rem] text-[#3D3D3D]">
               <BalanceIcon />
+              <span>Streams of</span>
               <a
                 href={`${chainExplorer}/address/${addressToFetch}`}
                 target="_blank"
@@ -146,7 +153,10 @@ const Withdraw: NextPage = () => {
                 <thead>
                   <tr>
                     <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D]">
-                      {t1('incomingStreamFrom')}
+                      {t2('name')}
+                    </th>
+                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D]">
+                      {t2('address')}
                     </th>
                     <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D]">
                       {t2('token')}
@@ -164,13 +174,10 @@ const Withdraw: NextPage = () => {
                   {formattedData.streams.map((stream) => (
                     <tr key={stream.streamId} className="border">
                       <td className="table-description border-solid">
-                        <a
-                          href={`${chainExplorer}/address/${stream.payerAddress}`}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                        >
-                          {getAddress(stream.payerAddress)}
-                        </a>
+                        <SavedName data={stream} />
+                      </td>
+                      <td className="table-description border-solid">
+                        <StreamAddress data={stream} />
                       </td>
                       <td className="table-description border-solid">
                         <TokenName data={stream} />
