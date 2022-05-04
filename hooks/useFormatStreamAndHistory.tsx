@@ -10,10 +10,12 @@ export function useFormatStreamAndHistory({
   data,
   address,
   provider,
+  incomingStreams,
 }: {
   data?: StreamAndHistoryQuery;
   address?: string;
   provider: Provider | null;
+  incomingStreams?: boolean;
 }): IStreamAndHistory {
   return React.useMemo(() => {
     if (provider && data && address) {
@@ -45,6 +47,14 @@ export function useFormatStreamAndHistory({
         };
       });
 
+      if (incomingStreams) {
+        const data = formattedStreams?.filter((s) => s.streamType === 'incomingStream') ?? [];
+        return {
+          streams: data.length > 0 ? data : null,
+          history: null,
+        };
+      }
+
       const formattedHistory = history.map((h) => {
         const addressType: 'payer' | 'payee' =
           h.stream?.payer?.id?.toLowerCase() === address.toLowerCase() ? 'payer' : 'payee';
@@ -64,5 +74,5 @@ export function useFormatStreamAndHistory({
         history: formattedHistory.length > 0 ? formattedHistory : null,
       };
     } else return { streams: null, history: null };
-  }, [data, provider, address]);
+  }, [data, provider, address, incomingStreams]);
 }

@@ -4,9 +4,9 @@ import { Menu, MenuButton, MenuItem, useMenuState } from 'ariakit/menu';
 import DisperseGasMoney from 'components/DisperseGas';
 import { FuelIcon, WalletIcon } from 'components/Icons';
 import WithdrawAll from 'components/WithdrawAll';
-import WithdrawOnBehalf from 'components/WithdrawOnBehalf';
 import { useNetworkProvider } from 'hooks';
 import { useTranslations } from 'next-intl';
+import { useRouter } from 'next/router';
 import { useAccount } from 'wagmi';
 
 export default function StreamMenu() {
@@ -16,9 +16,10 @@ export default function StreamMenu() {
   const [{ data: accountData }] = useAccount();
 
   const disperseGasGialog = useDialogState();
-  const withdrawOnBehalfDialog = useDialogState();
 
-  const t = useTranslations('Streams')
+  const t = useTranslations('Streams');
+
+  const router = useRouter();
 
   return (
     <>
@@ -40,7 +41,7 @@ export default function StreamMenu() {
         </MenuItem>
         <MenuItem
           className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40"
-          onClick={withdrawOnBehalfDialog.toggle}
+          onClick={() => router.push('/withdraw')}
         >
           <span>{t('withdrawAnotherWallet')}</span>
           <WalletIcon />
@@ -51,7 +52,6 @@ export default function StreamMenu() {
       </Menu>
 
       <DisperseGasMoney dialog={disperseGasGialog} />
-      <WithdrawOnBehalf dialog={withdrawOnBehalfDialog} />
     </>
   );
 }

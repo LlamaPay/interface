@@ -16,8 +16,8 @@ const WithdrawForm = ({ data, formDialog }: IFormProps) => {
 
   const withdrawAll = React.useRef(false);
 
-  const t0 = useTranslations('Common')
-  const t1 = useTranslations('Forms')
+  const t0 = useTranslations('Common');
+  const t1 = useTranslations('Forms');
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -78,7 +78,7 @@ const WithdrawForm = ({ data, formDialog }: IFormProps) => {
             {isLoading && !withdrawAll.current ? <BeatLoader size={6} color="white" /> : t0('withdraw')}
           </SubmitButton>
         </form>
-        <p className="my-3 text-center font-light">{t0('or')}</p>
+        <p className="my-3 text-center font-light text-[#303030]">{t0('or')}</p>
         <SubmitButton disabled={isLoading} onClick={withdrawAllTokens} className="bg-white text-[#23BD8F]">
           {isLoading && withdrawAll.current ? <BeatLoader size={6} color="gray" /> : t1('withdrawAll')}
         </SubmitButton>
@@ -86,6 +86,6 @@ const WithdrawForm = ({ data, formDialog }: IFormProps) => {
       {transaction && <TransactionDialog dialog={transactionDialog} transactionHash={transaction.hash || ''} />}
     </>
   );
-};  
+};
 
 export default WithdrawForm;

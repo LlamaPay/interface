@@ -84,6 +84,7 @@
     "outOfFunds": "Out of Funds",
     "outgoingStream": "Outgoing Stream",
     "incomingStream": "Incoming Stream",
+    "incomingStreamFrom": "Incoming Stream from",
     "disperse": "Disperse",
     "withdrawAnotherWallet": "Withdraw Another Wallet",
     "sendAll": "Send All",
@@ -196,5 +197,14 @@
     "nameOrAddress": "Name/Address",
     "payeeBalance": "Payee Balance",
     "amountToSend": "Amount to Send"
+  },
+  "Withdraw": {
+    "connectWallet": "Connect to withdraw amount on behalf of another wallet",
+    "sus": "Something went wrong",
+    "networkNotSupported": "Network not supported",
+    "addressToFetchStreams": "Enter an Address to Fetch Streams",
+    "noData": "This user has no incoming streams",
+    "error": "Couldn't fetch streams for this user",
+    "sendAll": "Send All"
   }
 }
