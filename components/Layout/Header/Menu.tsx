@@ -62,7 +62,7 @@ export default function HeaderMenu({
           onClick={walletDialog.toggle}
         />
       ) : (
-        <MenuItem label="Connect Wallet" onClick={walletDialog.toggle} />
+        <MenuItem label={t('connectWallet')} className="md:hidden" onClick={walletDialog.toggle} />
       )}
 
       {networkData && chain && switchNetwork && isSm && (
