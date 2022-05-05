@@ -50,7 +50,7 @@
   },
   "Banner": {
     "heading": "Automatiza pagamentos recorrentes de salários em criptomoedas!",
-    "description": "Automate salary txs, streaming them by the second so employees can withdraw whenever they want and you don't have to deal with sending txs manually.",
+    "description": "Automatiza transações salariais, criando fluxos de dinheiro para que os empregados possam levantá-lo quando quiserem e para que tu não tenhas de lidar com transações manuais.",
     "close": "Fechar"
   },
   "Balances": {
@@ -58,7 +58,7 @@
     "balance": "Saldo",
     "connectWallet": "Conecta a tua carteira para veres o teu saldo",
     "deposit": "Deposita um novo token",
-    "noData": "Create um saldo antes",
+    "noData": "Adiciona um token antes",
     "error": "Não foi possível carregar os saldos",
     "toDepleted": "Esgotado",
     "monthlyCost": "Custo Mensal",
@@ -71,7 +71,7 @@
     "heading": "Fluxos",
     "activeStreams": "Fluxos Activos",
     "connectWallet": "Conecta a carteira para ver os teus fluxos",
-    "create": "Cria um fluxo",
+    "create": "Criar Fluxo",
     "error": "Não foi possível carregar fluxos",
     "noData": "Cria um fluxo para veres aqui uma lista dos fluxos criados",
     "noActiveStreams": "Sem fluxos activos",
@@ -172,11 +172,11 @@
     "initializing": "Inicializar",
     "footer": "Conectar uma carteira não movimenta fundos",
     "welcome": "Bem-vindo!",
-    "description": "Create streams of indefinite duration and just siphon money out of a pool, which makes it possible to top all streams up in a single operation and just provide money as it's needed to maintain them.",
+    "description": "Cria fluxos de duração indeterminada, usando reservas de dinheiro, permitindo recarregá-los todos numa única operação e fornecer capital de maneira simples à medida que for necessário.",
     "learnMore": "Sabe mais nos nossos Docs"
   },
   "Onboard": {
-    "worksWithAllTokens": "Works with all tokens",
+    "worksWithAllTokens": "Funciona com todos os tokens",
     "depositToken": "Depositar Token",
     "createAStream": "Cria um Fluxo",
     "createANewStream": "Cria um novo Fluxo"
