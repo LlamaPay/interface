@@ -5,7 +5,7 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   i18n: {
-    locales: ['en', 'fr', 'pt'],
+    locales: ['en', 'fr', 'pt', 'es', 'el'],
     defaultLocale: 'en',
   },
   images: {
