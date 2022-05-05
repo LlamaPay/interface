@@ -12,6 +12,10 @@ const localeNames: ILocale[] = [
     name: 'Français',
     id: 'fr',
   },
+  {
+    name: 'Portuguese',
+    id: 'pt',
+  },
 ];
 
 export default localeNames;
