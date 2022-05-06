@@ -29,7 +29,7 @@
     "menu": "メニュー",
     "streamsAndHistory": "ストリーム及び歴史",
     "logoAlt": "{name}のロゴ",
-    "transactionSubmitted": "Transaction Submitted",
+    "transactionSubmitted": "トランザクションが提出されました",
     "viewOnExplorer": "{explorer}で表示",
     "eventTimestamp": "エベントのタイムスタンプ",
     "moreInfo": "詳しい情報",
@@ -39,7 +39,7 @@
     "payer": "受取人",
     "payee": "支払人",
     "streamHistory": "ストリームの歴史",
-    "eventType": "Event Type",
+    "eventType": "エベントの種類",
     "timestamp": "タイムスタンプ",
     "you": "貴方"
   },
@@ -49,9 +49,9 @@
     "docs": "ドキュメンテーション"
   },
   "Banner": {
-    "heading": "Automate recurring salary payments in crypto!",
-    "description": "Automate salary txs, streaming them by the second so employees can withdraw whenever they want and you don't have to deal with sending txs manually.",
-    "close": "Close Banner"
+    "heading": "暗号通貨の通常給与を自動化します！",
+    "description": "通常給与を自動化して秒ごとにストリームすれば社員が都合の良い時に引き出すできるようになる！手動なトランザクションが必要ありません！",
+    "close": "バナーを閉める"
   },
   "Balances": {
     "heading": "全てのバランス",
@@ -60,10 +60,10 @@
     "deposit": "トークンを入金",
     "noData": "まずはバランスを作るべき",
     "error": "バランスを読み込めませんでした",
-    "toDepleted": "To Depleted",
-    "monthlyCost": "Monthly Cost",
-    "topup": "Top up",
-    "streamsDepleted": "Streams Depleted",
+    "toDepleted": "残っています",
+    "monthlyCost": "月額費用",
+    "topup": "補充",
+    "streamsDepleted": "ストリームが尽くされました",
     "noStreams": "ストリームがありません",
     "days": "日"
   },
@@ -93,7 +93,7 @@
   "History": {
     "heading": "歴史",
     "connectWallet": "ウォレットを接続してストリームの歴史を表示",
-    "noData": "To check the movements of your streams, Create a Stream first",
+    "noData": "ストリームを作ればここにストリームの歴史がすべて表示されます",
     "noHistoricalData": "歴史的データがありません",
     "error": "歴史的データを読み込めませんでした",
     "details": "詳しい情報",
@@ -113,7 +113,7 @@
   },
   "Table": {
     "exportCSV": "CSVで書き出す",
-    "rowsPerPage": "Rows per page",
+    "rowsPerPage": "1ページあたりの行数",
     "next": "次",
     "previous": "前",
     "userName": "名",
@@ -137,12 +137,12 @@
     "approveOnWallet": "ウォレットで認める",
     "availableForWithdrawl": "引き出し可能",
     "withdrawAll": "全てを引き出す",
-    "topupAmount": "Topup Amount",
+    "topupAmount": "補充金額",
     "optional": "無必要",
-    "addressToStream": "Enter an Address to Stream",
+    "addressToStream": "ストリームのアドレスを入力",
     "recipientAddress": "受信者のアドレスを入力",
     "associateName": "アドレスと名を結ぶ？",
-    "fastIdentification": "Add a name for fast identification",
+    "fastIdentification": "便利な名を結ぶ",
     "selectTokenFromBalances": "金額の中からトークンを選択",
     "amountToStream": "ストリームする金額",
     "streamDuration": "ストリーム時間",
@@ -169,10 +169,10 @@
   },
   "OnboardWalletConnect": {
     "header": "ウォレットを接続",
-    "initializing": "Initializing",
+    "initializing": "初期化中",
     "footer": "ウォレットを接続するだけでお金が移れません",
     "welcome": "ようこそ！",
-    "description": "Create streams of indefinite duration and just siphon money out of a pool, which makes it possible to top all streams up in a single operation and just provide money as it's needed to maintain them.",
+    "description": "一つのプールからいくつかの有効期限がないストリームを作ります！すべてのストリームを一挙に補充できるようになって余分な金額がかかりません。",
     "learnMore": "ドキュメンテーションでもっと学ぶ"
   },
   "Onboard": {
@@ -190,7 +190,7 @@
   "Disperse": {
     "disperseTokentoYourPayees": "受取人に{token}を解散",
     "amountToDisperse": "解散金額",
-    "splitEqually": "Split Equally",
+    "splitEqually": "等しく解散",
     "availableToDisperse": "解散できる金額",
     "selectAll": "すべて選択",
     "unselectAll": "すべて選択解除",
@@ -199,7 +199,7 @@
     "amountToSend": "送信な金額"
   },
   "Withdraw": {
-    "connectWallet": "Connect to withdraw amount on behalf of another wallet",
+    "connectWallet": "ウォレットを接続して他のウォレットのために引き出す",
     "sus": "原因不明の問題が起こりました",
     "networkNotSupported": "このネットワークと互換されていません",
     "addressToFetchStreams": "アドレスを入力してストリームを表示",
