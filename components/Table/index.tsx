@@ -8,10 +8,9 @@ interface ITableProps {
   maxWidthColumn?: number;
   hidePagination?: boolean;
   downloadToCSV?: () => void;
-  downloadToInvoice?: () => void;
 }
 
-const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV, downloadToInvoice }: ITableProps) => {
+const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV }: ITableProps) => {
   const totalRows = instance.getCoreRowModel().rows.length;
 
   const currentRows = instance.getRowModel().rows;
@@ -68,18 +67,7 @@ const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV, downlo
         <div className={hidePagination ? 'h-4' : 'h-2'} />
         <div className="flex w-full flex-col gap-2 sm:flex-row sm:justify-between sm:gap-5">
           <div className="flex flex-1 items-center justify-between gap-2">
-            {downloadToCSV && downloadToInvoice && (
-              <div className="flex gap-2">
-                <button className="bg-none text-xs text-[#303030] underline" onClick={downloadToCSV}>
-                  {t('exportCSV')}
-                </button>
-                <button className="bg-none text-xs text-[#303030] underline" onClick={downloadToInvoice}>
-                  {/* add translation */}
-                  Export Invoice
-                </button>
-              </div>
-            )}
-            {downloadToCSV && !downloadToInvoice && (
+            {downloadToCSV && (
               <button className="bg-none text-xs text-[#303030] underline" onClick={downloadToCSV}>
                 {t('exportCSV')}
               </button>

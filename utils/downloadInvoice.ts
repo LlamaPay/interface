@@ -2,35 +2,44 @@ import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
 import { IHistory } from 'types';
 
-export function downloadInvoice(data: IHistory[], locale: string, reqAddress: string) {
-  const doc = new jsPDF('landscape', 'px', 'a4');
+export function downloadInvoice(data: IHistory, locale: string, reqAddress: string) {
+  const doc = new jsPDF('portrait', 'mm', 'a4');
+  doc.setFontSize(24);
+  doc.text('Invoice', 5, 10);
   doc.setFontSize(12);
-  doc.text(`Invoice for: ${reqAddress}`, 30, 25);
-  doc.text(`Generated: ${new Date(Date.now()).toLocaleString(locale)}`, 30, 35);
+  doc.text(`Generated for: ${reqAddress}`, 10, 25);
+  doc.text(`Paid on: ${new Date(data.createdTimestamp * 1e3).toLocaleString(locale)}`, 10, 35);
 
-  const tableBody: string[][] = [];
+  doc.text('From:', 10, 50);
+  doc.text(`${data.stream?.payee.id}`, 15, 55);
 
-  data.forEach((p) => {
-    if (p.eventType !== 'Withdraw') return;
-    tableBody.push([
-      p.stream?.token.name ?? '',
-      p.addressType === 'payer' ? 'Send' : 'Receive',
-      p.stream?.payer.id ?? '',
-      p.stream?.payee.id ?? '',
-      (p.amount / 10 ** Number(p.stream?.token.decimals)).toLocaleString(locale, {
-        maximumFractionDigits: 5,
-      }),
-      new Date(p.createdTimestamp * 1e3).toLocaleString(locale, {
-        hour12: false,
-      }),
-    ]);
-  });
+  doc.text('Billed To:', 10, 65);
+  doc.text(`${data.stream?.payer.id}`, 15, 70);
+
+  doc.text('Payment Method:', 10, 85);
+  doc.text(`${data.stream?.token.name ?? ''} (${data.stream?.token.symbol ?? ''})`, 15, 90);
 
   autoTable(doc, {
-    head: [['Token', 'Type', 'Sender', 'Receiver', 'Amount', 'Time']],
-    margin: { top: 40 },
-    body: tableBody,
+    head: [['Description', 'Quantity', 'Amount']],
+    margin: { top: 105 },
+    body: [
+      [
+        'Salary Payment',
+        '1',
+        `${(data.amount / 10 ** data.token.decimals).toLocaleString(locale, { maximumFractionDigits: 5 })} ${
+          data.stream?.token.symbol ?? ''
+        }`,
+      ],
+    ],
   });
 
+  doc.setFontSize(10);
+  doc.text(
+    `Total Paid: ${(data.amount / 10 ** data.token.decimals).toLocaleString(locale, { maximumFractionDigits: 5 })} ${
+      data.stream?.token.symbol ?? ''
+    }`,
+    130,
+    125
+  );
   doc.save('invoice.pdf');
 }
