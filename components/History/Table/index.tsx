@@ -11,6 +11,9 @@ import Table from 'components/Table';
 import { IHistory } from 'types';
 import { ActionName, HistoryActions, Amount, SavedName, HistoryAge, EventType } from './CustomValues';
 import { downloadHistory } from 'utils/downloadCsv';
+import { downloadInvoice } from 'utils/downloadInvoice';
+import { useLocale } from 'hooks';
+import { useAccount } from 'wagmi';
 
 const table = createTable().setRowType<IHistory>();
 
@@ -57,6 +60,8 @@ export function HistoryTable({ data }: { data: IHistory[] }) {
   const [columns] = React.useState<typeof defaultColumns>(() => [...defaultColumns]);
 
   const [globalFilter, setGlobalFilter] = React.useState('');
+  const { locale } = useLocale();
+  const [{ data: accountData }] = useAccount();
 
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
@@ -80,6 +85,10 @@ export function HistoryTable({ data }: { data: IHistory[] }) {
   });
 
   const downloadToCSV = React.useCallback(() => downloadHistory(data), [data]);
+  const downloadToInvoice = React.useCallback(
+    () => downloadInvoice(data, locale, accountData?.address ?? ''),
+    [data, locale, accountData]
+  );
 
   return (
     <>
@@ -91,8 +100,7 @@ export function HistoryTable({ data }: { data: IHistory[] }) {
             className="h-8 rounded border border-neutral-300 p-2 shadow-sm dark:border-neutral-700"
           />
         </label> */}
-
-      <Table instance={instance} downloadToCSV={downloadToCSV} />
+      <Table instance={instance} downloadToCSV={downloadToCSV} downloadToInvoice={downloadToInvoice} />
     </>
   );
 }
