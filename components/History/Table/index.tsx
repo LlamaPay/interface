@@ -11,9 +11,6 @@ import Table from 'components/Table';
 import { IHistory } from 'types';
 import { ActionName, HistoryActions, Amount, SavedName, HistoryAge, EventType } from './CustomValues';
 import { downloadHistory } from 'utils/downloadCsv';
-import { downloadInvoice } from 'utils/downloadInvoice';
-import { useLocale } from 'hooks';
-import { useAccount } from 'wagmi';
 
 const table = createTable().setRowType<IHistory>();
 
@@ -60,8 +57,6 @@ export function HistoryTable({ data }: { data: IHistory[] }) {
   const [columns] = React.useState<typeof defaultColumns>(() => [...defaultColumns]);
 
   const [globalFilter, setGlobalFilter] = React.useState('');
-  const { locale } = useLocale();
-  const [{ data: accountData }] = useAccount();
 
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
