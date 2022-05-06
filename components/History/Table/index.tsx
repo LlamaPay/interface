@@ -85,10 +85,6 @@ export function HistoryTable({ data }: { data: IHistory[] }) {
   });
 
   const downloadToCSV = React.useCallback(() => downloadHistory(data), [data]);
-  const downloadToInvoice = React.useCallback(
-    () => downloadInvoice(data, locale, accountData?.address ?? ''),
-    [data, locale, accountData]
-  );
 
   return (
     <>
@@ -100,7 +96,7 @@ export function HistoryTable({ data }: { data: IHistory[] }) {
             className="h-8 rounded border border-neutral-300 p-2 shadow-sm dark:border-neutral-700"
           />
         </label> */}
-      <Table instance={instance} downloadToCSV={downloadToCSV} downloadToInvoice={downloadToInvoice} />
+      <Table instance={instance} downloadToCSV={downloadToCSV} />
     </>
   );
 }
