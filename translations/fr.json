@@ -39,7 +39,7 @@
     "payer": "Payeur",
     "payee": "Bénéficiaire",
     "streamHistory": "Historique du flux",
-    "eventType": "Type",
+    "eventType": "Taper",
     "timestamp": "Horodatage",
     "you": "Vous"
   },
@@ -55,7 +55,7 @@
   },
   "Balances": {
     "heading": "Soldes",
-    "balance": "Balance",
+    "balance": "Solde",
     "connectWallet": "Connectez votre portefeuille pour voir vos soldes",
     "deposit": "Déposer un nouveau jeton",
     "noData": "Aucun jeton déposé",
@@ -124,7 +124,7 @@
     "userWithdrawable": "Disponible au retrait",
     "history": "Historique",
     "action": "Action",
-    "type": "Type",
+    "type": "Taper",
     "addressName": "Addresse / Nom",
     "amount": "Montant",
     "age": "Ancienneté"
