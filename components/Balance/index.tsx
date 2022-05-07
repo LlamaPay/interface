@@ -151,7 +151,7 @@ const Balance = () => {
                     >
                       <span className="flex gap-3">
                         <button
-                          className="text-xs text-black/80 underline disabled:cursor-not-allowed"
+                          className="whitespace-nowrap text-xs text-black/80 underline disabled:cursor-not-allowed"
                           onClick={() => handleToken('withdraw', b)}
                           disabled={Number.isNaN(b.amount) || Number(b.amount) <= 0}
                         >
