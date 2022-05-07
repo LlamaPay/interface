@@ -152,7 +152,7 @@
     "requiredField": "Ce champ est requis",
     "validAddress": "Entrez une adresse valide",
     "validNumber": "Entrez un numéro valide",
-    "withdrawOnBehalf": "Retirer en tant qu'une autre adresse",
+    "withdrawOnBehalf": "Retirer via une adresse différente",
     "tokensError": "Impossible de charger la liste des jetons",
     "enterPayerAddress": "Entrez l'adresse du Bénéficiaire",
     "enterPayeeAddress": "Entrez l'adresse du récipient",
