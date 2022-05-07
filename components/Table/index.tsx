@@ -32,7 +32,7 @@ const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV }: ITab
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="whitespace-nowrap py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D]"
+                    className="whitespace-nowrap py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D] dark:text-white"
                   >
                     {header.isPlaceholder ? null : header.renderHeader()}
                   </th>
@@ -66,7 +66,7 @@ const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV }: ITab
         <div className="flex w-full flex-col gap-2 sm:flex-row sm:justify-between sm:gap-5">
           <div className="flex flex-1 items-center justify-between gap-2">
             {downloadToCSV && (
-              <button className="bg-none text-xs text-[#303030] underline" onClick={downloadToCSV}>
+              <button className="bg-none text-xs text-[#303030] underline dark:text-white" onClick={downloadToCSV}>
                 {t('exportCSV')}
               </button>
             )}
@@ -78,7 +78,7 @@ const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV }: ITab
                   onChange={(e) => {
                     instance.setPageSize(Number(e.target.value));
                   }}
-                  className="border-0 pr-6 text-xs text-[#333336] dark:bg-black"
+                  className="border-0 pr-6 text-xs text-[#333336] dark:bg-black dark:text-white"
                 >
                   {[10, 20, 30, 40, 50].map((pageSize) => (
                     <option key={pageSize} value={pageSize}>

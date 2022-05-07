@@ -38,8 +38,8 @@ export function SavedName({ data }: { data: IStream }) {
     dialog.toggle();
   };
 
-  const t0 = useTranslations('Common')
-  const t1 = useTranslations('Streams')
+  const t0 = useTranslations('Common');
+  const t1 = useTranslations('Streams');
 
   return (
     <div className="flex items-center gap-2 truncate">
@@ -52,7 +52,7 @@ export function SavedName({ data }: { data: IStream }) {
                 <ArrowDownIcon className="h-4 w-4" />
               </div>
             </Tooltip>
-            <span>{name}</span>
+            <span className="dark:text-white">{name}</span>
           </a>
         ) : (
           <a className="flex cursor-pointer items-center gap-2 truncate">
@@ -62,13 +62,13 @@ export function SavedName({ data }: { data: IStream }) {
                 <ArrowUpIcon className="h-4 w-4" />
               </div>
             </Tooltip>
-            <span>{name}</span>
+            <span className="dark:text-white">{name}</span>
           </a>
         )}
       </Link>
       <button className="ml-auto rounded p-1 hover:bg-zinc-200 hover:dark:bg-stone-700" onClick={dialog.toggle}>
         <span className="sr-only">{t1('editName')}</span>
-        <PencilIcon className="h-4 w-4" />
+        <PencilIcon className="h-4 w-4 dark:text-white" />
       </button>
       <FormDialog dialog={dialog} title="" className="h-fit">
         <form onSubmit={updateName}>

@@ -34,7 +34,7 @@ export function HistoryAge({ data }: { data: IHistory }) {
           hour12: false,
         })}
       >
-        <a href={`${url}/tx/${data.txHash}`} target="_blank" rel="noopener noreferrer">
+        <a href={`${url}/tx/${data.txHash}`} target="_blank" rel="noopener noreferrer" className="dark:text-white">
           {formatTime(data.createdTimestamp)}
         </a>
       </Tooltip>

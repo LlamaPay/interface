@@ -25,28 +25,33 @@ export default function StreamMenu() {
     <>
       <MenuButton
         state={menu}
-        className="secondary-button shadow-1 cursor-pointer px-2 aria-disabled:cursor-not-allowed aria-disabled:opacity-50"
+        className="secondary-button shadow-1 cursor-pointer px-2 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 dark:bg-[#202020]"
         disabled={!accountData || unsupported}
         style={{ pointerEvents: 'initial' }}
       >
         <DotsVerticalIcon className="h-4 w-4" />
       </MenuButton>
-      <Menu state={menu} className="shadow-2 z-10 min-w-[10rem] rounded-xl border border-[#EAEAEA] bg-white p-2">
+      <Menu
+        state={menu}
+        className="shadow-2 z-10 min-w-[10rem] rounded-xl border border-[#EAEAEA] bg-white p-2 dark:border-[#252525] dark:bg-[#202020]"
+      >
         <MenuItem
-          className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40"
+          className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white"
           onClick={disperseGasGialog.toggle}
         >
-          <span>{`${t('disperse')} ${nativeCurrency?.symbol ? nativeCurrency?.symbol : 'Funds'}`}</span>
+          <span className="dark:text-white">{`${t('disperse')} ${
+            nativeCurrency?.symbol ? nativeCurrency?.symbol : 'Funds'
+          }`}</span>
           <FuelIcon />
         </MenuItem>
         <MenuItem
-          className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40"
+          className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white"
           onClick={() => router.push('/withdraw')}
         >
-          <span>{t('withdrawAnotherWallet')}</span>
+          <span className="dark:text-white">{t('withdrawAnotherWallet')}</span>
           <WalletIcon />
         </MenuItem>
-        <MenuItem className="flex scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40">
+        <MenuItem className="flex scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020]">
           <WithdrawAll />
         </MenuItem>
       </Menu>

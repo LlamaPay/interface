@@ -38,7 +38,7 @@ export function Pause({ data }: PauseProps) {
 
   return (
     <>
-      <button onClick={onPause} className="row-action-links">
+      <button onClick={onPause} className="row-action-links dark:text-white">
         {t('pause')}
       </button>
     </>

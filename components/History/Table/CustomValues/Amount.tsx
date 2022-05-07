@@ -11,9 +11,12 @@ export function Amount({ value, data }: { value: string; data: IHistory }) {
   if (data.eventType === 'Deposit' || data.eventType === 'Withdraw' || data.eventType === 'PayerWithdraw') {
     return (
       <>
-        <span>{`${intl.formatNumber(Number(data.amount) / 10 ** Number(data.token.decimals), {
-          maximumFractionDigits: 5,
-        })}`}</span>
+        <span className="dark:text-white">{`${intl.formatNumber(
+          Number(data.amount) / 10 ** Number(data.token.decimals),
+          {
+            maximumFractionDigits: 5,
+          }
+        )}`}</span>
 
         <span className="mx-1 text-xs text-gray-500 dark:text-gray-400">{data.token.symbol}</span>
       </>
@@ -28,7 +31,7 @@ export function Amount({ value, data }: { value: string; data: IHistory }) {
 
   return (
     <>
-      <span>{amount}</span>
+      <span className="dark:text-white">{amount}</span>
       <span className="mx-1 text-xs text-gray-500 dark:text-gray-400">
         {symbol} / {t('month')?.toLowerCase()}
       </span>

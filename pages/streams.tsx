@@ -45,7 +45,7 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, network, l
       <section className="app-section">
         <div>
           <div className="section-header ml-0 w-fit">
-            <h1 className="font-exo px-2 py-1 text-3xl">{t('streamsAndHistory')}</h1>
+            <h1 className="font-exo px-2 py-1 text-3xl dark:text-white">{t('streamsAndHistory')}</h1>
             {network && (
               <div className="mt-[5px] flex flex-wrap items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F]">
                 <div className="flex items-center rounded-full">

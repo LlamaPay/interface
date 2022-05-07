@@ -59,7 +59,7 @@ export function Resume({ data }: ResumeProps) {
   const t = useTranslations('Common');
 
   return (
-    <button onClick={onResume} className="row-action-links">
+    <button onClick={onResume} className="row-action-links dark:text-white">
       {t('resume')}
     </button>
   );

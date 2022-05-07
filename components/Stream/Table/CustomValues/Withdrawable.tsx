@@ -80,6 +80,8 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
   }
 
   return (
-    <p className="flex justify-start slashed-zero tabular-nums">{balanceState && formatBalance(balanceState, intl)}</p>
+    <p className="flex justify-start slashed-zero tabular-nums dark:text-white">
+      {balanceState && formatBalance(balanceState, intl)}
+    </p>
   );
 };

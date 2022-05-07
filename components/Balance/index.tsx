@@ -70,7 +70,7 @@ const Balance = () => {
         <div className="section-header flex w-full flex-wrap items-center justify-between gap-[0.625rem]">
           <span className="flex items-center gap-[0.625rem]">
             <BalanceIcon />
-            <h1 className="font-exo">{t1('heading')}</h1>
+            <h1 className="font-exo dark:text-white">{t1('heading')}</h1>
           </span>
 
           <button
@@ -91,16 +91,16 @@ const Balance = () => {
             <table className="border-separate" style={{ borderSpacing: '0 10px' }}>
               <thead>
                 <tr>
-                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D]">
+                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D] dark:text-white">
                     {t0('token')}
                   </th>
-                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D]">
+                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D] dark:text-white">
                     {t1('balance')}
                   </th>
-                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D]">
+                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D] dark:text-white">
                     {t1('toDepleted')}
                   </th>
-                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D]">
+                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D] dark:text-white">
                     {t1('monthlyCost')}
                   </th>
                   <th></th>
@@ -109,7 +109,7 @@ const Balance = () => {
               <tbody>
                 {balances?.map((b) => (
                   <tr key={b.address}>
-                    <th className="w-full whitespace-nowrap rounded-l border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-left text-sm font-normal text-[#3D3D3D]">
+                    <th className="w-full whitespace-nowrap rounded-l border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-left text-sm font-normal text-[#3D3D3D] dark:border-[#3e3e42] dark:bg-[#333336] dark:text-white">
                       <div className="flex items-center space-x-2">
                         <div className="flex h-6 w-6 flex-shrink-0 items-center rounded-full">
                           <Image src={b.logoURI} alt={t('logoAlt', { name: b.name })} width="18px" height="18px" />
@@ -128,30 +128,30 @@ const Balance = () => {
                       </div>
                     </th>
                     <td
-                      className="whitespace-nowrap border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D]"
+                      className="whitespace-nowrap border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D] dark:border-[#3e3e42] dark:bg-[#333336] dark:text-white"
                       style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
                     >
                       <BalanceAndSymbol data={b} />
                     </td>
                     <td
-                      className="whitespace-nowrap border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D]"
+                      className="whitespace-nowrap border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D] dark:border-[#3e3e42] dark:bg-[#333336] dark:text-white"
                       style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
                     >
                       <UntilDepleted data={b} />
                     </td>
                     <td
-                      className="whitespace-nowrap border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D]"
+                      className="whitespace-nowrap border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D] dark:border-[#3e3e42] dark:bg-[#333336] dark:text-white"
                       style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
                     >
                       <MonthlyCost data={b} />
                     </td>
                     <td
-                      className="rounded-r border border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D]"
+                      className="rounded-r border border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D] dark:border-[#3e3e42] dark:bg-[#333336] dark:text-white"
                       style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
                     >
                       <span className="flex gap-3">
                         <button
-                          className="whitespace-nowrap text-xs text-black/80 underline disabled:cursor-not-allowed"
+                          className="whitespace-nowrap text-xs text-black/80 underline disabled:cursor-not-allowed dark:text-white"
                           onClick={() => handleToken('withdraw', b)}
                           disabled={Number.isNaN(b.amount) || Number(b.amount) <= 0}
                         >

@@ -23,7 +23,7 @@ export const CreateStream = () => {
 
   return (
     <section className="z-2 flex w-full max-w-lg flex-col">
-      <h1 className="font-exo mb-5 flex items-center gap-[0.625rem] text-2xl font-semibold text-[#3D3D3D]">
+      <h1 className="font-exo mb-5 flex items-center gap-[0.625rem] text-2xl font-semibold text-[#3D3D3D] dark:text-white">
         <StreamIcon />
         <span>{t('createANewStream')}</span>
       </h1>

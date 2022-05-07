@@ -12,8 +12,10 @@ export const AmtPerMonth = ({ data }: { data: IStream }) => {
 
   return (
     <>
-      <span className="slashed-zero tabular-nums">{intl.formatNumber(amount, { maximumFractionDigits: 5 })}</span>
-      <span className="mx-1 text-xs text-gray-500 dark:text-gray-400">{`/ ${t('month')?.toLowerCase()}`}</span>
+      <span className="slashed-zero tabular-nums dark:text-white">
+        {intl.formatNumber(amount, { maximumFractionDigits: 5 })}
+      </span>
+      <span className="mx-1 text-xs text-gray-500 dark:text-white">{`/ ${t('month')?.toLowerCase()}`}</span>
     </>
   );
 };

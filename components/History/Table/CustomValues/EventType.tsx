@@ -35,5 +35,5 @@ export function EventType({ event, addressType }: { event: string; addressType: 
       eventType = '';
   }
 
-  return <>{eventType}</>;
+  return <span className="dark:text-white">{eventType}</span>;
 }
