@@ -4,10 +4,11 @@ import { useDialogState } from 'ariakit';
 import { TransactionDialog } from 'components/Dialog';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
-import { IStream, ITransaction } from 'types';
+import { IStream } from 'types';
 import { useContractWrite } from 'wagmi';
 import { Interface } from 'ethers/lib/utils';
 import useBatchCalls from 'queries/useBatchCalls';
+import { useTranslations } from 'next-intl';
 
 interface CancelProps {
   data: IStream;
@@ -45,21 +46,30 @@ export const Cancel = ({ data }: CancelProps) => {
         ],
       });
     } else {
-      cancel().then((data) => {
-        const loadingToast = data.error ? toast.error(data.error.message) : toast.loading('Cancelling Stream');
-        data.data?.wait().then((receipt) => {
-          toast.dismiss(loadingToast);
-          receipt.status === 1 ? toast.success('Stream Cancelled') : toast.error('Failed to Cancel Stream');
-          queryClient.invalidateQueries();
-        });
+      cancel().then(({ data, error }) => {
+        if (error) {
+          toast.error(error.message);
+        }
+
+        if (data) {
+          setTransactionHash(data.hash);
+          const toastid = toast.loading('Cancelling Stream');
+          data?.wait().then((receipt) => {
+            toast.dismiss(toastid);
+            receipt.status === 1 ? toast.success('Stream Cancelled') : toast.error('Failed to Cancel Stream');
+            queryClient.invalidateQueries();
+          });
+        }
       });
     }
   };
 
+  const t = useTranslations('Streams')
+
   return (
     <>
-      <button onClick={handleClick} className="row-action-links text-[#E40000]">
-        Cancel
+      <button onClick={handleClick} className="row-action-links w-full text-right text-[#E40000]">
+        {t('cancel')}
       </button>
       {transactionHash && <TransactionDialog dialog={transactionDialog} transactionHash={transactionHash} />}
     </>

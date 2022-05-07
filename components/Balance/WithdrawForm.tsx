@@ -7,6 +7,7 @@ import { BeatLoader } from 'react-spinners';
 import { FormDialog, TransactionDialog } from 'components/Dialog';
 import { useDialogState } from 'ariakit';
 import AvailableAmount from 'components/AvailableAmount';
+import { useTranslations } from 'next-intl';
 
 const WithdrawForm = ({ data, formDialog }: IFormProps) => {
   const { mutate, isLoading, data: transaction } = useWithdrawByPayer();
@@ -14,6 +15,9 @@ const WithdrawForm = ({ data, formDialog }: IFormProps) => {
   const transactionDialog = useDialogState();
 
   const withdrawAll = React.useRef(false);
+
+  const t0 = useTranslations('Common');
+  const t1 = useTranslations('Forms');
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -63,20 +67,20 @@ const WithdrawForm = ({ data, formDialog }: IFormProps) => {
       <FormDialog title={data.title} dialog={formDialog} className="h-fit">
         <form className="mt-4 flex flex-col space-y-4" onSubmit={handleSubmit}>
           <div>
-            <InputAmount name="amount" label={`Amount ${data.symbol}`} isRequired />
+            <InputAmount name="amount" label={`${t0('amount')} ${data.symbol}`} isRequired />
             <AvailableAmount
-              title="Available for Withdrawl"
+              title={t1('availableForWithdrawl')}
               selectedToken={data.selectedToken}
               amount={data.userBalance}
             />
           </div>
           <SubmitButton disabled={isLoading}>
-            {isLoading && !withdrawAll.current ? <BeatLoader size={6} color="white" /> : 'Withdraw'}
+            {isLoading && !withdrawAll.current ? <BeatLoader size={6} color="white" /> : t0('withdraw')}
           </SubmitButton>
         </form>
-        <p className="my-3 text-center font-light">or</p>
+        <p className="my-3 text-center font-light text-[#303030]">{t0('or')}</p>
         <SubmitButton disabled={isLoading} onClick={withdrawAllTokens} className="bg-white text-[#23BD8F]">
-          {isLoading && withdrawAll.current ? <BeatLoader size={6} color="gray" /> : 'Withdraw All'}
+          {isLoading && withdrawAll.current ? <BeatLoader size={6} color="gray" /> : t1('withdrawAll')}
         </SubmitButton>
       </FormDialog>
       {transaction && <TransactionDialog dialog={transactionDialog} transactionHash={transaction.hash || ''} />}

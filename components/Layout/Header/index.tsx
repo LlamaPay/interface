@@ -12,7 +12,7 @@ const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
 
   const walletDailog = useDialogState();
 
-  const t = useTranslations('Header');
+  const t = useTranslations('Common');
 
   return (
     <header
@@ -23,7 +23,7 @@ const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
       }}
     >
       <Link href="/" passHref>
-        <a className="flex-1">
+        <a>
           <Logo />
         </a>
       </Link>

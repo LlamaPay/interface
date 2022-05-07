@@ -1,9 +1,9 @@
-export function formatBalance(balance: number, locale: string) {
-  return balance.toLocaleString(locale, { maximumFractionDigits: 5, minimumFractionDigits: 5 });
+export function formatBalance(balance: number, intl: any) {
+  return intl.formatNumber(balance, { maximumFractionDigits: 5, minimumFractionDigits: 5 });
 }
 
-export function formatAmountInTable(amtPerSec: number, duration: number, locale: string) {
-  const formatted = (amtPerSec * duration).toLocaleString(locale, { maximumFractionDigits: 5 });
+export function formatAmountInTable(amtPerSec: number, duration: number, intl: any) {
+  const formatted = intl.formatNumber(amtPerSec * duration, { maximumFractionDigits: 5 });
   if (formatted === '0') {
     return '0...';
   }

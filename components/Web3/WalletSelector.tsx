@@ -4,6 +4,7 @@ import { useIsMounted } from 'hooks';
 import { formatAddress } from 'utils/address';
 import { Dialog, DialogHeading, DisclosureState } from 'ariakit';
 import { XIcon } from '@heroicons/react/solid';
+import { useTranslations } from 'next-intl';
 
 interface Props {
   dialog: DisclosureState;
@@ -28,51 +29,59 @@ export const WalletSelector = ({ dialog }: Props) => {
     [connect, dialog]
   );
 
+  React.useEffect(() => {
+    if (process.env.NEXT_PUBLIC_SAFE === 'true' && typeof window !== 'undefined') {
+      connect(connectors[0]);
+    }
+  }, [connect, connectors]);
+
   const formattedAddress = accountData && formatAddress(accountData.address);
+
+  const t = useTranslations('Common');
 
   return (
     <Dialog state={dialog} className="dialog">
       {accountData ? (
         <>
           <DialogHeading className="text-base font-medium leading-6 text-neutral-700 dark:text-neutral-200">
-            <span>Account</span>
+            <span>{t('account')}</span>
             <button
-              className="absolute top-6 right-4 rounded hover:bg-neutral-200 dark:hover:bg-zinc-800"
+              className="absolute top-[18px] right-4 rounded hover:bg-neutral-200 dark:hover:bg-zinc-800"
               onClick={dialog.toggle}
             >
-              <span className="sr-only">Close</span>
+              <span className="sr-only">{t('close')}</span>
               <XIcon className="h-5 w-5" />
             </button>
           </DialogHeading>
-          <div className="mt-3 flex flex-col space-y-2">
-            <p className="text-sm font-thin">{`Connected with ${accountData.connector?.name}`}</p>
+          <div className="mt-3 flex flex-col gap-2">
+            <p className="text-sm font-thin">{`${t('connectedWith')} ${accountData.connector?.name}`}</p>
             <p className="break-words">
               {accountData.ens?.name ? `${accountData.ens?.name} (${formattedAddress})` : accountData.address}
             </p>
             <button
-              className="nav-button"
+              className="nav-button mt-5"
               onClick={() => {
                 disconnect();
                 dialog.toggle();
               }}
             >
-              Disconnect
+              {t('disconnect')}
             </button>
           </div>
         </>
       ) : (
         <>
           <DialogHeading className="text-base font-medium leading-6 text-neutral-700 dark:text-neutral-200">
-            <span>Connect a Wallet</span>
+            <span>{t('connectWallet')}</span>
             <button
-              className="absolute top-6 right-4 rounded hover:bg-neutral-200 dark:hover:bg-zinc-800"
+              className="absolute top-[18px] right-4 rounded hover:bg-neutral-200 dark:hover:bg-zinc-800"
               onClick={dialog.toggle}
             >
-              <span className="sr-only">Close</span>
+              <span className="sr-only">{t('close')}</span>
               <XIcon className="h-5 w-5" />
             </button>
           </DialogHeading>
-          <div className="mt-3 flex flex-col space-y-2">
+          <div className="mt-3 flex flex-col gap-2">
             {connectors.map((x) => (
               <button key={x.id} onClick={() => handleConnect(x)} className="rounded border p-2">
                 {isMounted ? x.name : x.id === 'injected' ? x.id : x.name}

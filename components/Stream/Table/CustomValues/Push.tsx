@@ -6,9 +6,10 @@ import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import { IStream, ITransaction } from 'types';
 import { useContractWrite } from 'wagmi';
+import { useTranslations } from 'next-intl';
 
 interface PushProps {
-  buttonName: string;
+  buttonName: 'Send' | 'Withdraw';
   data: IStream;
 }
 
@@ -56,10 +57,13 @@ export const Push = ({ data, buttonName }: PushProps) => {
     });
   };
 
+  const t0 = useTranslations('Common');
+  const t1 = useTranslations('Streams');
+
   return (
     <>
       <button onClick={handleClick} className="row-action-links">
-        {buttonName}
+        {buttonName === 'Withdraw' ? t0('withdraw') : t1('send')}
       </button>
 
       {transactionHash && <TransactionDialog dialog={transactionDialog} transactionHash={transactionHash} />}

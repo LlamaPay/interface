@@ -10,7 +10,23 @@ const localeNames: ILocale[] = [
   },
   {
     name: 'Français',
-    id: 'fr',
+    id: 'fr-FR',
+  },
+  {
+    name: 'Português',
+    id: 'pt-PT',
+  },
+  {
+    name: 'Español',
+    id: 'es-ES',
+  },
+  {
+    name: 'Ελληνικά',
+    id: 'el-GR',
+  },
+  {
+    name: '日本語',
+    id: 'ja-JP',
   },
 ];
 

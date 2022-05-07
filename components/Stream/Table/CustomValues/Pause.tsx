@@ -1,4 +1,5 @@
 import llamaContract from 'abis/llamaContract';
+import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import { IStream } from 'types';
@@ -8,7 +9,7 @@ interface PauseProps {
   data: IStream;
 }
 
-export default function Pause({ data }: PauseProps) {
+export function Pause({ data }: PauseProps) {
   const [{}, pauseStream] = useContractWrite(
     {
       addressOrName: data.llamaContractAddress,
@@ -33,10 +34,12 @@ export default function Pause({ data }: PauseProps) {
     });
   }
 
+  const t = useTranslations('Common');
+
   return (
     <>
       <button onClick={onPause} className="row-action-links">
-        Pause
+        {t('pause')}
       </button>
     </>
   );

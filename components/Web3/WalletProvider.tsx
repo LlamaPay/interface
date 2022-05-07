@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { chains, defaultProvider, infuraId, networkDetails } from 'utils/constants';
+import { GnosisConnector } from 'utils/GnosisConnector';
 import { Connector, Provider, chain } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
-import { WalletLinkConnector } from 'wagmi/connectors/walletLink';
+import { CoinbaseWalletConnector } from 'wagmi/connectors/coinbaseWallet';
 
 const defaultChain = chain.avalanche;
 
@@ -13,24 +14,30 @@ const connectors = ({ chainId }: ConnectorsConfig) => {
   const rpcUrl = defaultChain.rpcUrls[0];
   const chainDetails = chainId && networkDetails[chainId];
 
-  return [
-    new InjectedConnector({
-      chains,
-      options: { shimDisconnect: true },
-    }),
-    new WalletConnectConnector({
-      options: {
-        infuraId,
-        qrcode: true,
-      },
-    }),
-    new WalletLinkConnector({
-      options: {
-        appName: 'LlamaPay',
-        jsonRpcUrl: chainDetails ? chainDetails.rpcUrl : `${rpcUrl}/${infuraId}`,
-      },
-    }),
-  ];
+  return process.env.NEXT_PUBLIC_SAFE === 'true'
+    ? [
+        new GnosisConnector({
+          chains,
+        }),
+      ]
+    : [
+        new InjectedConnector({
+          chains,
+          options: { shimDisconnect: true },
+        }),
+        new WalletConnectConnector({
+          options: {
+            infuraId,
+            qrcode: true,
+          },
+        }),
+        new CoinbaseWalletConnector({
+          options: {
+            appName: 'LlamaPay',
+            jsonRpcUrl: chainDetails ? chainDetails.rpcUrl : `${rpcUrl}/${infuraId}`,
+          },
+        }),
+      ];
 };
 
 // Set up providers
@@ -46,9 +53,10 @@ type Props = {
 };
 
 export const WalletProvider = ({ children }: Props) => {
-  return (
+  const basicProvider = (
     <Provider autoConnect connectors={connectors} provider={provider}>
       {children}
     </Provider>
   );
+  return basicProvider;
 };

@@ -6,6 +6,7 @@ import { FormDialog, TransactionDialog } from 'components/Dialog';
 import { useDepositForm } from 'hooks';
 import { ITokenBalance } from 'queries/useTokenBalances';
 import AvailableAmount from 'components/AvailableAmount';
+import { useTranslations } from 'next-intl';
 
 interface IDepositFieldprops {
   tokens: ITokenBalance[];
@@ -15,6 +16,9 @@ interface IDepositFieldprops {
 
 const DepositField = ({ tokens, userAddress, dialog }: IDepositFieldprops) => {
   const transactionDialog = useDialogState();
+
+  const t0 = useTranslations('Common')
+  const t1 = useTranslations('Forms')
 
   const {
     checkingApproval,
@@ -40,11 +44,11 @@ const DepositField = ({ tokens, userAddress, dialog }: IDepositFieldprops) => {
         <form onSubmit={handleSubmit}>
           <div className="mb-5">
             <SelectToken
-              label="What token do you want to deposit?"
+              label={t1('tokenToDeposit')}
               tokens={tokenOptions}
               handleTokenChange={handleTokenChange}
             />
-            <AvailableAmount selectedToken={selectedToken} title="Available for Deposit" />
+            <AvailableAmount selectedToken={selectedToken} title={t1('availableForDeposit')} />
           </div>
 
           <InputAmountWithMaxButton
@@ -55,15 +59,15 @@ const DepositField = ({ tokens, userAddress, dialog }: IDepositFieldprops) => {
             id="bdAmountToDeposit"
           />
 
-          <p className="my-2 text-center text-sm text-red-500">{approvalError && "Couldn't approve token"}</p>
+          <p className="my-2 text-center text-sm text-red-500">{approvalError?.message}</p>
 
-          {isApproved ? (
+          {isApproved || process.env.NEXT_PUBLIC_SAFE === 'true' ? (
             <button disabled={confirmingDeposit} className="form-submit-button mt-5">
-              {confirmingDeposit ? <BeatLoader size={6} color="white" /> : 'Deposit'}
+              {confirmingDeposit ? <BeatLoader size={6} color="white" /> : t0('deposit')}
             </button>
           ) : (
             <button disabled={disableApprove} className="form-submit-button mt-5">
-              {disableApprove ? <BeatLoader size={6} color="white" /> : 'Approve on Wallet'}
+              {disableApprove ? <BeatLoader size={6} color="white" /> : t1('approveOnWallet')}
             </button>
           )}
         </form>

@@ -35,6 +35,10 @@
     @apply px-2 md:px-[30px] lg:px-[60px] xl:px-[120px];
   }
 
+  .app-section > * {
+    @apply mx-auto w-full max-w-7xl;
+  }
+
   .shadow-1 {
     @apply shadow-[0px_3px_7px_rgba(0,0,0,0.12)];
   }
@@ -94,6 +98,14 @@
   .dark .animate-shimmer {
     background: linear-gradient(to right, #3a3a3a 5%, #4a4a4a 20%, #3a3a3a 40%);
     background-size: 1000px 100%;
+  }
+
+  .table-row {
+    @apply bg-white odd:bg-neutral-100 dark:bg-neutral-900 dark:odd:bg-neutral-800;
+  }
+
+  .table-description {
+    @apply whitespace-nowrap border-l-[1px] border-dashed border-gray-200 px-4 py-[6px] text-sm text-[#3D3D3D] first-of-type:border-l-0 last-of-type:w-full dark:border-gray-700;
   }
 
   @keyframes shimmer {

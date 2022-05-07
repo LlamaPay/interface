@@ -1,11 +1,13 @@
+import * as React from 'react';
 import disperseContract from 'abis/disperseContract';
 import { DisclosureState } from 'ariakit';
 import BigNumber from 'bignumber.js';
-import React from 'react';
 import toast from 'react-hot-toast';
 import { BeatLoader } from 'react-spinners';
 import { networkDetails } from 'utils/constants';
 import { useContractWrite, useNetwork } from 'wagmi';
+import { useQueryClient } from 'react-query';
+import { useTranslations } from 'next-intl';
 
 interface DisperseSendProps {
   dialog: DisclosureState;
@@ -15,15 +17,17 @@ interface DisperseSendProps {
 }
 
 export default function DisperseSend({ dialog, data, setTransactionHash, transactionDialog }: DisperseSendProps) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const [{ data: network }] = useNetwork();
-  const [{}, disperseEther] = useContractWrite(
+  const [{ loading }, disperseEther] = useContractWrite(
     {
       addressOrName: networkDetails[Number(network.chain?.id)].disperseAddress,
       contractInterface: disperseContract,
     },
     'disperseEther'
   );
+
+  const queryClient = useQueryClient();
+
   function sendGas() {
     let ether = new BigNumber(0);
     const recipients: string[] = [];
@@ -34,36 +38,36 @@ export default function DisperseSend({ dialog, data, setTransactionHash, transac
       values.push(value.toString());
       ether = ether.plus(value);
     });
-    setIsLoading(true);
+
     disperseEther({
       args: [recipients, values],
       overrides: {
         value: ether.toString(),
       },
     }).then((data) => {
-      setIsLoading(false);
-      let loading: any;
       if (data.error) {
         dialog.hide();
-        loading = toast.error(data.error.message);
+        toast.error(data.error.message);
       } else {
-        loading = toast.loading('Dispersing Gas');
+        const toastId = toast.loading('Dispersing Gas');
         setTransactionHash(data.data?.hash ?? '');
         dialog.hide();
         transactionDialog.show();
+
+        data.data?.wait().then((receipt) => {
+          toast.dismiss(toastId);
+          receipt.status === 1 ? toast.success('Successfully Dispersed Gas') : toast.error('Failed to Disperse Gas');
+          queryClient.invalidateQueries();
+        });
       }
-      data.data?.wait().then((receipt) => {
-        toast.dismiss(loading);
-        receipt.status === 1 ? toast.success('Successfully Dispersed Gas') : toast.error('Failed to Disperse Gas');
-      });
     });
   }
 
+  const t = useTranslations('Streams');
+
   return (
-    <>
-      <button onClick={sendGas} type="button" className="form-submit-button !mt-8">
-        {isLoading ? <BeatLoader size={6} color="white" /> : 'Send'}
-      </button>
-    </>
+    <button onClick={sendGas} type="button" className="form-submit-button mt-5">
+      {loading ? <BeatLoader size={6} color="white" /> : t('send')}
+    </button>
   );
 }

@@ -11,6 +11,7 @@ import { AltStreamSection } from 'components/Stream';
 import { AltHistorySection } from 'components/History';
 import { useFormatStreamAndHistory, useNetworkProvider } from 'hooks';
 import { chainDetails } from 'utils/network';
+import { useTranslations } from 'next-intl';
 
 interface StreamsProps {
   subgraphEndpoint: string;
@@ -37,30 +38,36 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, network, l
 
   const streamsAndHistory = useFormatStreamAndHistory({ data, address, provider });
 
+  const t = useTranslations('Common');
+
   return (
-    <Layout className="mx-auto mt-12 flex w-full flex-col gap-[30px]">
-      <section className="app-section section-header w-fit">
-        <h1 className="font-exo px-2 py-1 text-3xl">Streams and History</h1>
-        {network && (
-          <div className="mt-[5px] flex flex-wrap items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F]">
-            <div className="flex items-center rounded-full">
-              <Image
-                src={logoURI || defaultImage}
-                alt={'Logo of ' + network}
-                objectFit="contain"
-                width="24px"
-                height="24px"
-              />
-            </div>
-            <p>{network}</p>
+    <Layout className="mt-12 flex w-full flex-col gap-[30px]">
+      <section className="app-section">
+        <div>
+          <div className="section-header ml-0 w-fit">
+            <h1 className="font-exo px-2 py-1 text-3xl">{t('streamsAndHistory')}</h1>
+            {network && (
+              <div className="mt-[5px] flex flex-wrap items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F]">
+                <div className="flex items-center rounded-full">
+                  <Image
+                    src={logoURI || defaultImage}
+                    alt={t('logoAlt', { name: network })}
+                    objectFit="contain"
+                    width="24px"
+                    height="24px"
+                  />
+                </div>
+                <p>{network}</p>
+              </div>
+            )}
+            {address && (
+              <div className="mt-[5px] flex flex-wrap items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F]">
+                <BalanceIcon />
+                <p>{getAddress(address)}</p>
+              </div>
+            )}
           </div>
-        )}
-        {address && (
-          <div className="mt-[5px] flex flex-wrap items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F]">
-            <BalanceIcon />
-            <p>{getAddress(address)}</p>
-          </div>
-        )}
+        </div>
       </section>
       <section className="app-section flex h-full flex-1 flex-col gap-[50px] bg-[#D9F2F4]/10 py-[22px]">
         <AltStreamSection isLoading={isLoading} isError={isError} data={streamsAndHistory} />

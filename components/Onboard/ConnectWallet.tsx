@@ -2,6 +2,7 @@ import * as React from 'react';
 import AnimatedStream from 'components/AnimatedStream';
 import { useIsMounted } from 'hooks';
 import { Connector, useAccount, useConnect } from 'wagmi';
+import { useTranslations } from 'next-intl';
 
 const ConnectWallet = () => {
   const isMounted = useIsMounted();
@@ -24,6 +25,8 @@ const ConnectWallet = () => {
 
   const hideConnectors = connecting || accountDataLoading;
 
+  const t = useTranslations('OnboardWalletConnect')
+
   return (
     <div className="mt-12 flex flex-1 flex-col overflow-auto sm:mt-[104px]">
       <main className="mx-auto flex w-full flex-1 flex-col gap-4 px-7 sm:max-w-[26rem]">
@@ -44,7 +47,7 @@ const ConnectWallet = () => {
         )}
       </main>
       {!accountData && (
-        <p className="my-7 w-full px-5 text-center text-xs text-[#303030]">Connecting a wallet doesn't move funds</p>
+        <p className="my-7 w-full px-5 text-center text-xs text-[#303030]">{t('footer')}</p>
       )}
     </div>
   );

@@ -8,6 +8,7 @@ import { IStream } from 'types';
 import { formatAddress } from 'utils/address';
 import Link from 'next/link';
 import { useNetworkProvider } from 'hooks';
+import { useTranslations } from 'next-intl';
 
 export function SavedName({ data }: { data: IStream }) {
   // check the stream type (incoming or outgoing)
@@ -33,18 +34,21 @@ export function SavedName({ data }: { data: IStream }) {
 
   const updateName = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    updateAddress(address, savedAddress);
+    updateAddress(address.toLowerCase(), savedAddress);
     dialog.toggle();
   };
+
+  const t0 = useTranslations('Common')
+  const t1 = useTranslations('Streams')
 
   return (
     <div className="flex items-center gap-2 truncate">
       <Link href={`/streams?chainId=${chainId}&address=${data.payeeAddress}`} passHref>
         {isIncoming ? (
           <a className="flex cursor-pointer items-center gap-2 truncate">
-            <Tooltip content="Incoming stream">
+            <Tooltip content={t1('incomingStream')}>
               <div className="rounded bg-green-100 p-1 text-green-600">
-                <span className="sr-only">Incoming stream from</span>
+                <span className="sr-only">{t1('incomingStream')}</span>
                 <ArrowDownIcon className="h-4 w-4" />
               </div>
             </Tooltip>
@@ -52,9 +56,9 @@ export function SavedName({ data }: { data: IStream }) {
           </a>
         ) : (
           <a className="flex cursor-pointer items-center gap-2 truncate">
-            <Tooltip content="Outgoing stream">
+            <Tooltip content={t1('outgoingStream')}>
               <div className="rounded bg-red-100 p-1 text-red-600">
-                <span className="sr-only">Outgoing stream to</span>
+                <span className="sr-only">{t1('outgoingStream')}</span>
                 <ArrowUpIcon className="h-4 w-4" />
               </div>
             </Tooltip>
@@ -63,13 +67,13 @@ export function SavedName({ data }: { data: IStream }) {
         )}
       </Link>
       <button className="ml-auto rounded p-1 hover:bg-zinc-200 hover:dark:bg-stone-700" onClick={dialog.toggle}>
-        <span className="sr-only">Edit payee address name</span>
+        <span className="sr-only">{t1('editName')}</span>
         <PencilIcon className="h-4 w-4" />
       </button>
       <FormDialog dialog={dialog} title="" className="h-fit">
         <form onSubmit={updateName}>
           <label>
-            <span>Edit</span>
+            <span>{t0('edit')}</span>
             <input
               name="updatedName"
               className="w-full rounded border border-neutral-300 px-3 py-[11px] slashed-zero dark:border-neutral-700 dark:bg-stone-800"
@@ -83,7 +87,7 @@ export function SavedName({ data }: { data: IStream }) {
             />
           </label>
           <small className="truncate opacity-70">({address})</small>
-          <button className="mt-4 w-full rounded-lg bg-green-200 p-3 dark:text-black">Update</button>
+          <button className="form-submit-button mt-5">{t0('update')}</button>
         </form>
       </FormDialog>
     </div>

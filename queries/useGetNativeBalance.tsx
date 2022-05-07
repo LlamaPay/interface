@@ -1,19 +1,20 @@
-import { useLocale } from 'hooks';
-import { useBalance, useNetwork } from 'wagmi';
+import { BaseProvider } from '@ethersproject/providers';
+import { BigNumber } from 'ethers';
+import { useNetworkProvider } from 'hooks';
+import { useQuery } from 'react-query';
+
+async function fetchBalance(id: string, provider: BaseProvider | null) {
+  if (!provider) return null;
+  try {
+    const balance = await provider.getBalance(id);
+    return balance;
+  } catch (error) {
+    return null;
+  }
+}
 
 export function useGetNativeBalance(id: string) {
-  const [{ data, error, loading }] = useBalance({
-    addressOrName: id.toLowerCase(),
-  });
+  const { provider, network } = useNetworkProvider();
 
-  const [{ data: network }] = useNetwork();
-
-  const nativeCoin = network.chain?.nativeCurrency?.symbol;
-
-  const { locale } = useLocale();
-
-  if (error) return <p>Failed to Get Balance</p>;
-  if (loading) return <p>Loading Balance</p>;
-
-  return <p>{`${(Number(data?.value) / 1e18).toLocaleString(locale, { maximumFractionDigits: 5 })} ${nativeCoin}`}</p>;
+  return useQuery<BigNumber | null>(['nativebalance', network, id], () => fetchBalance(id, provider));
 }

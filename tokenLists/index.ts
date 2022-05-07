@@ -1,31 +1,16 @@
 import { ITokenList } from 'types';
-import avaxMainnet from './avaxMainnet';
 import fuji from './fuji';
 import kovan from './kovan';
 import rinkeby from './rinkeby';
 
 interface ILists {
-  chainId: number;
-  list: ITokenList[];
+  [key: number]: ITokenList;
 }
 
-const tokenLists: ILists[] = [
-  {
-    chainId: 4,
-    list: rinkeby,
-  },
-  {
-    chainId: 42,
-    list: kovan,
-  },
-  {
-    chainId: 43113,
-    list: fuji,
-  },
-  {
-    chainId: 43114,
-    list: avaxMainnet,
-  },
-];
+const tokenLists: ILists = {
+  4: rinkeby,
+  42: kovan,
+  43113: fuji,
+};
 
 export default tokenLists;

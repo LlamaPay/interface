@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import { ITokenBalance } from 'queries/useTokenBalances';
 
 interface IProps {
@@ -15,10 +16,11 @@ export function InputAmountWithMaxButton({
   fillMaxAmountOnClick,
   id,
 }: IProps) {
+  const  t = useTranslations('Forms')
   return (
     <div>
       <label className="input-label" htmlFor={id}>
-        How much do you want to Deposit in total?
+        {t('amountToDeposit')}
       </label>
       <div className="relative flex">
         <input
@@ -45,7 +47,7 @@ export function InputAmountWithMaxButton({
           disabled={!selectedToken}
           onClick={fillMaxAmountOnClick}
         >
-          MAX
+         {t('max')}
         </button>
       </div>
     </div>

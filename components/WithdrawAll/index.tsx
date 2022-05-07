@@ -1,10 +1,12 @@
+import * as React from 'react';
 import { useNetworkProvider } from 'hooks';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import useBatchCalls from 'queries/useBatchCalls';
-import React from 'react';
 import { useAccount } from 'wagmi';
 import { CashIcon } from '@heroicons/react/outline';
 import { LlamaContractInterface } from 'utils/contract';
+import useGnosisBatch from 'queries/useGnosisBatch';
+import { useTranslations } from 'next-intl';
 
 interface ICall {
   [key: string]: string[];
@@ -14,6 +16,7 @@ export default function WithdrawAll() {
   const { data } = useStreamsAndHistory();
   const [{ data: accountData }] = useAccount();
   const { mutate: batchCall } = useBatchCalls();
+  const { mutate: gnosisBatch } = useGnosisBatch();
   const { unsupported } = useNetworkProvider();
 
   const handleClick = () => {
@@ -35,10 +38,16 @@ export default function WithdrawAll() {
         return acc;
       }, {}) ?? {};
 
-    Object.keys(calls).map((p) => {
-      batchCall({ llamaContractAddress: p, calls: calls[p] });
-    });
+    if (process.env.NEXT_PUBLIC_SAFE === 'true') {
+      gnosisBatch({ calls: calls });
+    } else {
+      Object.keys(calls).map((p) => {
+        batchCall({ llamaContractAddress: p, calls: calls[p] });
+      });
+    }
   };
+
+  const t = useTranslations('Streams');
 
   return (
     <button
@@ -46,7 +55,7 @@ export default function WithdrawAll() {
       disabled={!accountData || unsupported}
       className="flex w-full items-center justify-between gap-4 whitespace-nowrap"
     >
-      <span>Send All</span>
+      <span>{t('sendAll')}</span>
       <CashIcon className="h-4 w-4" />
     </button>
   );

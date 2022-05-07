@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { DisclosureState, useDialogState } from 'ariakit';
+import { useDialogState } from 'ariakit';
 import { ArrowRightIcon } from '@heroicons/react/solid';
 import { FormDialog, TransactionDialog } from 'components/Dialog';
 import { IStream } from 'types';
@@ -9,12 +9,10 @@ import BigNumber from 'bignumber.js';
 import { secondsByDuration } from 'utils/constants';
 import useModifyStream from 'queries/useModifyStream';
 import { BeatLoader } from 'react-spinners';
-import { useLocale } from 'hooks';
+import { useIntl, useTranslations } from 'next-intl';
 
 interface ModifyProps {
   data: IStream;
-  dialog: DisclosureState;
-  title: string;
 }
 
 interface IUpdatedFormElements {
@@ -23,8 +21,10 @@ interface IUpdatedFormElements {
   modifiedStreamDuration: { value: 'month' | 'year' };
 }
 
-export const Modify = ({ data, dialog, title }: ModifyProps) => {
+export const Modify = ({ data }: ModifyProps) => {
   const amountPerSec = Number(data.amountPerSec) / 1e20;
+
+  const dialog = useDialogState();
 
   const { mutate: modifyStream, isLoading, data: transaction } = useModifyStream();
 
@@ -62,26 +62,33 @@ export const Modify = ({ data, dialog, title }: ModifyProps) => {
     );
   };
 
-  const { locale } = useLocale();
+  const intl = useIntl();
+
+  const t0 = useTranslations('Common');
+  const t1 = useTranslations('Streams');
+  const t2 = useTranslations('Forms');
 
   return (
     <>
-      <FormDialog dialog={dialog} title={title} className="h-min">
+      <button className="row-action-links" onClick={dialog.toggle}>
+        {t1('modify')}
+      </button>
+      <FormDialog dialog={dialog} title={t1('modify')} className="h-min">
         <span className="space-y-4 text-[#303030]">
           <section>
-            <h2 className="font-medium text-[#3D3D3D]">Current Stream</h2>
+            <h2 className="font-medium text-[#3D3D3D]">{t2('currentStream')}</h2>
             <div className="my-1 rounded border p-2 dark:border-stone-700">
               <div className="flex items-center space-x-2">
-                <span>You</span>
+                <span>{t0('you')}</span>
                 <ArrowRightIcon className="h-4 w-4 " />
                 <span className="truncate">{savedAddressName}</span>
               </div>
               <div className="inline-block space-x-2">
-                <span>Payee:</span>
+                <span>{t0('payee')}:</span>
                 <span className="truncate">{data.payeeAddress}</span>
               </div>
               <p className="whitespace-nowrap">
-                {`Amount: ${(amountPerSec * secondsByDuration.month).toLocaleString(locale, {
+                {`${t0('amount')}: ${intl.formatNumber(amountPerSec * secondsByDuration.month, {
                   maximumFractionDigits: 5,
                   minimumFractionDigits: 5,
                 })} ${data.token?.symbol ?? ''}`}
@@ -89,22 +96,22 @@ export const Modify = ({ data, dialog, title }: ModifyProps) => {
             </div>
           </section>
           <section>
-            <h2 className="my-1 font-medium text-[#3D3D3D]">Update Stream</h2>
+            <h2 className="my-1 font-medium text-[#3D3D3D]">{t2('updateStream')}</h2>
             <form
               className="flex flex-col gap-4 rounded border px-2 pt-[2px] dark:border-stone-700"
               onSubmit={updateStream}
             >
-              <InputText name="updatedAddress" label="Address" isRequired placeholder="Enter Recipient Address" />
+              <InputText name="updatedAddress" label={t0('address')} isRequired placeholder={t2('recipientAddress')} />
 
               <InputAmountWithDuration
                 name="updatedAmount"
-                label="Amount"
+                label={t0('amount')}
                 selectInputName="modifiedStreamDuration"
                 isRequired
               />
 
               <SubmitButton className="my-2">
-                {isLoading ? <BeatLoader size={6} color="white" /> : 'Update'}
+                {isLoading ? <BeatLoader size={6} color="white" /> : t0('update')}
               </SubmitButton>
             </form>
           </section>

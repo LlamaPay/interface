@@ -1,5 +1,6 @@
 import Tooltip from 'components/Tooltip';
-import { useChainExplorer, useLocale } from 'hooks';
+import { useChainExplorer } from 'hooks';
+import { useIntl } from 'next-intl';
 import { IHistory } from 'types';
 
 function formatTime(timestamp: string): string {
@@ -21,14 +22,15 @@ function formatTime(timestamp: string): string {
   }
 }
 
-export default function HistoryAge({ data }: { data: IHistory }) {
-  const { locale } = useLocale();
+export function HistoryAge({ data }: { data: IHistory }) {
   const { url } = useChainExplorer();
+
+  const intl = useIntl();
 
   return (
     <>
       <Tooltip
-        content={new Date(Number(data.createdTimestamp) * 1e3).toLocaleString(locale, {
+        content={intl.formatDateTime(new Date(Number(data.createdTimestamp) * 1e3), {
           hour12: false,
         })}
       >

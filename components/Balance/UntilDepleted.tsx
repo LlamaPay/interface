@@ -1,33 +1,40 @@
-import React from 'react';
+import * as React from 'react';
 import Tooltip from 'components/Tooltip';
 import { IBalance } from 'types';
-import { useLocale } from 'hooks';
+import { useIntl, useTranslations } from 'next-intl';
 
 interface UntilDepletedProps {
   data: IBalance;
 }
 
-function getTime(data: IBalance, balance: number) {
+function getTime(data: IBalance, balance: number, t: any) {
   const time = balance / (Number(data.totalPaidPerSec) / 1e20);
-  if (Number(data.totalPaidPerSec) === 0) return 'No Streams';
-  if (time < 1) return 'Streams Depleted';
+
+  if (Number(data.totalPaidPerSec) === 0) return t('noStreams');
+
+  if (time < 1) return t('streamsDepleted');
+
   const days = time / 86400;
-  return `${days.toFixed(2)} days`;
+
+  return `${days.toFixed(2)} ${t('days')}`;
 }
 
-function getDate(data: IBalance, balance: number, locale: string) {
+function getDate(data: IBalance, balance: number, intl: any) {
   const time = balance / (Number(data.totalPaidPerSec) / 1e20);
-  if (time < 1) return 'Streams Depleted';
-  if (Number(data.totalPaidPerSec) === 0) return 'No Streams';
-  return new Date(Date.now() + time * 1e3).toLocaleString(locale, {
-    hour12: false,
-  });
+
+  if (time < 1) return '';
+
+  if (Number(data.totalPaidPerSec) === 0) return '';
+
+  return intl.formatDateTime(new Date(Date.now() + time * 1e3), { hour12: false });
 }
 
 export const UntilDepleted = ({ data }: UntilDepletedProps) => {
   const [balanceState, setBalanceState] = React.useState<number | null>(null);
 
-  const { locale } = useLocale();
+  const t = useTranslations('Balances');
+
+  const intl = useIntl();
 
   const updateBalance = React.useCallback(() => {
     const sub = ((Date.now() / 1e3 - Number(data.lastPayerUpdate)) * Number(data.totalPaidPerSec)) / 1e20;
@@ -44,7 +51,7 @@ export const UntilDepleted = ({ data }: UntilDepletedProps) => {
 
   return (
     <>
-      {balanceState && <Tooltip content={getDate(data, balanceState, locale)}>{getTime(data, balanceState)}</Tooltip>}
+      {balanceState && <Tooltip content={getDate(data, balanceState, intl)}>{getTime(data, balanceState, t)}</Tooltip>}
     </>
   );
 };

@@ -1,13 +1,16 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import { TableInstance } from '@tanstack/react-table';
+import classNames from 'classnames';
+import { useTranslations } from 'next-intl';
 
 interface ITableProps {
   instance: TableInstance<any>;
+  maxWidthColumn?: number;
   hidePagination?: boolean;
   downloadToCSV?: () => void;
 }
 
-const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
+const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV }: ITableProps) => {
   const totalRows = instance.getCoreRowModel().rows.length;
 
   const currentRows = instance.getRowModel().rows;
@@ -17,16 +20,17 @@ const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
 
   const showRowNumber = !Number.isNaN(firstRowId) && !Number.isNaN(lastRowId);
 
+  const t = useTranslations('Table');
+
   return (
     <div className="w-full">
       <div className="overflow-x-auto">
-        <table {...instance.getTableProps()} className="">
+        <table>
           <thead>
             {instance.getHeaderGroups().map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
+              <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <th
-                    {...header.getHeaderProps()}
                     key={header.id}
                     className="whitespace-nowrap py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D]"
                   >
@@ -36,18 +40,17 @@ const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
               </tr>
             ))}
           </thead>
-          <tbody {...instance.getTableBodyProps()}>
+          <tbody>
             {instance.getRowModel().rows.map((row) => (
-              <tr
-                {...row.getRowProps()}
-                key={row.id}
-                className="bg-white odd:bg-neutral-100 dark:bg-neutral-900 dark:odd:bg-neutral-800"
-              >
-                {row.getVisibleCells().map((cell) => (
+              <tr key={row.id} className="table-row">
+                {row.getVisibleCells().map((cell, index) => (
                   <td
-                    {...cell.getCellProps()}
                     key={cell.id}
-                    className="truncate whitespace-nowrap border-l-[1px] border-dashed border-gray-200 px-4 py-[6px] text-sm text-[#3D3D3D] first-of-type:border-l-0 last-of-type:w-full dark:border-gray-700"
+                    className={classNames(
+                      'table-description',
+                      index + 1 === maxWidthColumn && 'w-full text-right',
+                      maxWidthColumn && index + 1 > maxWidthColumn && 'border-l-0'
+                    )}
                   >
                     {cell.renderCell()}
                   </td>
@@ -64,12 +67,12 @@ const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
           <div className="flex flex-1 items-center justify-between gap-2">
             {downloadToCSV && (
               <button className="bg-none text-xs text-[#303030] underline" onClick={downloadToCSV}>
-                Export CSV
+                {t('exportCSV')}
               </button>
             )}
             {!hidePagination && (
               <label className="flex items-center space-x-1">
-                <span className="text-xs text-[rgba(0,0,0,0.54)]">Rows per page:</span>
+                <span className="text-xs text-[rgba(0,0,0,0.54)]">{`${t('rowsPerPage')}:`}</span>
                 <select
                   value={instance.getState().pagination.pageSize}
                   onChange={(e) => {
@@ -96,7 +99,7 @@ const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
                   disabled={!instance.getCanPreviousPage()}
                   aria-disabled={!instance.getCanPreviousPage()}
                 >
-                  <span className="sr-only">Previous</span>
+                  <span className="sr-only">{t('previous')}</span>
                   <ChevronLeftIcon className="h-6" color="#333336" />
                 </button>
                 <button
@@ -105,7 +108,7 @@ const Table = ({ instance, hidePagination, downloadToCSV }: ITableProps) => {
                   disabled={!instance.getCanNextPage()}
                   aria-disabled={!instance.getCanNextPage()}
                 >
-                  <span className="sr-only">Next</span>
+                  <span className="sr-only">{t('next')}</span>
                   <ChevronRightIcon className="h-6" color="#333336" />
                 </button>
               </span>
