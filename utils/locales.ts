@@ -26,7 +26,7 @@ const localeNames: ILocale[] = [
   },
   {
     name: '日本語',
-    id: 'jp',
+    id: 'ja-JP',
   },
 ];
 
