@@ -5,8 +5,7 @@ import useWithdrawable from 'queries/useWithdrawable';
 import { useTokenPrice } from 'queries/useTokenPrice';
 import Tooltip from 'components/Tooltip';
 import { ExclamationCircleIcon, ExclamationIcon } from '@heroicons/react/solid';
-import { useLocale } from 'hooks';
-import { useTranslations } from 'next-intl';
+import { useIntl, useTranslations } from 'next-intl';
 
 export const Withdrawable = ({ data }: { data: IStream }) => {
   const { data: callResult, isLoading } = useWithdrawable({
@@ -21,7 +20,7 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
 
   const { data: price } = useTokenPrice(data.token.address.toLowerCase());
 
-  const { locale } = useLocale();
+  const intl = useIntl();
 
   const t = useTranslations('Streams');
 
@@ -50,7 +49,7 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
       <div className="flex space-x-1">
         <Tooltip content={balanceState && price && `${(balanceState * Number(price)).toFixed(2)} USD`}>
           <span className="slashed-zero tabular-nums text-red-600">
-            {balanceState && `${formatBalance(balanceState, locale)}`}
+            {balanceState && `${formatBalance(balanceState, intl)}`}
           </span>
         </Tooltip>
         <Tooltip content={t('outOfFunds')}>
@@ -65,7 +64,7 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
       <div className="flex space-x-1">
         {balanceState ? (
           <>
-            <span className="slashed-zero tabular-nums">{`${formatBalance(balanceState, locale)}`}</span>
+            <span className="slashed-zero tabular-nums">{`${formatBalance(balanceState, intl)}`}</span>
             <Tooltip content={t('paused')}>
               <ExclamationIcon className="h-5 w-5 text-yellow-600" />
             </Tooltip>
@@ -87,7 +86,7 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
   return (
     <div className="flex justify-start">
       <Tooltip content={balanceState && price && `${(balanceState * Number(price)).toFixed(2)} USD`}>
-        <span className="slashed-zero tabular-nums">{balanceState && formatBalance(balanceState, locale)}</span>
+        <span className="slashed-zero tabular-nums">{balanceState && formatBalance(balanceState, intl)}</span>
       </Tooltip>
     </div>
   );
