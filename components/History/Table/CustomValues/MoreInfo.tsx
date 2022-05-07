@@ -1,11 +1,11 @@
 import { DisclosureState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
 import { UserHistoryFragment } from 'services/generated/graphql';
-import { useChainExplorer, useLocale } from 'hooks';
+import { useChainExplorer } from 'hooks';
 import { ExternalLinkIcon } from '@heroicons/react/outline';
 import { secondsByDuration } from 'utils/constants';
 import { formatAmountInTable } from 'utils/amount';
-import { useTranslations } from 'next-intl';
+import { useIntl, useTranslations } from 'next-intl';
 
 interface MoreInfoProps {
   data: UserHistoryFragment;
@@ -22,7 +22,7 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
 
   const txLink = `${chainExplorer}/tx/${data.txHash}`;
 
-  const { locale } = useLocale();
+  const intl = useIntl();
 
   const t0 = useTranslations('Common');
   const t1 = useTranslations('Streams');
@@ -60,7 +60,7 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
                       `${formatAmountInTable(
                         Number(data.oldStream?.amountPerSec) / 1e20,
                         secondsByDuration['month'],
-                        locale
+                        intl
                       )} ${data.oldStream?.token?.symbol ?? ''}`}
                   </p>
                 </div>
@@ -101,7 +101,7 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
                     `${formatAmountInTable(
                       Number(data.stream?.amountPerSec) / 1e20,
                       secondsByDuration['month'],
-                      locale
+                      intl
                     )} ${data.stream?.token.symbol}`}
                 </p>
               </div>
@@ -120,7 +120,7 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
           <section>
             <h1 className="font-medium text-[#303030]">{t0('eventTimestamp')}</h1>
             <p>
-              {new Date(Number(data.createdTimestamp) * 1e3).toLocaleString(locale, {
+              {intl.formatDateTime(new Date(Number(data.createdTimestamp) * 1e3), {
                 hour12: false,
               })}
             </p>
