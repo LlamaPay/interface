@@ -24,6 +24,10 @@ const localeNames: ILocale[] = [
     name: 'Ελληνικά',
     id: 'el',
   },
+  {
+    name: '日本語',
+    id: 'jp',
+  },
 ];
 
 export default localeNames;
