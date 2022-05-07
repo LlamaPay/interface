@@ -1,4 +1,4 @@
-import React from 'react';
+import * as React from 'react';
 import Tooltip from 'components/Tooltip';
 import { IBalance } from 'types';
 import { useIntl, useTranslations } from 'next-intl';
@@ -7,7 +7,7 @@ interface UntilDepletedProps {
   data: IBalance;
 }
 
-function getTime(data: IBalance, balance: number, t: (a: string) => string) {
+function getTime(data: IBalance, balance: number, t: any) {
   const time = balance / (Number(data.totalPaidPerSec) / 1e20);
 
   if (Number(data.totalPaidPerSec) === 0) return t('noStreams');

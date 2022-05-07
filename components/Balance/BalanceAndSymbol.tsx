@@ -1,6 +1,4 @@
-import React from 'react';
-import Tooltip from 'components/Tooltip';
-import { useTokenPrice } from 'queries/useTokenPrice';
+import * as React from 'react';
 import { IBalance } from 'types';
 import { useIntl } from 'next-intl';
 
@@ -10,8 +8,6 @@ interface BalanceAndSymbolProps {
 
 export const BalanceAndSymbol = ({ data }: BalanceAndSymbolProps) => {
   const [balanceState, setBalanceState] = React.useState<number | null>(null);
-
-  const { data: price } = useTokenPrice(data.address);
 
   const intl = useIntl();
 
@@ -31,13 +27,9 @@ export const BalanceAndSymbol = ({ data }: BalanceAndSymbolProps) => {
   }, [updateBalance, data]);
 
   return (
-    <>
-      <Tooltip content={balanceState && price && `${(balanceState * Number(price)).toFixed(2)} USD`}>
-        <span className="slashed-zero tabular-nums">
-          {balanceState &&
-            `${intl.formatNumber(balanceState, { maximumFractionDigits: 5, minimumFractionDigits: 5 })} ${data.symbol}`}
-        </span>
-      </Tooltip>
-    </>
+    <span className="slashed-zero tabular-nums">
+      {balanceState &&
+        `${intl.formatNumber(balanceState, { maximumFractionDigits: 5, minimumFractionDigits: 5 })} ${data.symbol}`}
+    </span>
   );
 };

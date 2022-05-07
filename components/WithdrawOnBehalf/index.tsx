@@ -1,8 +1,8 @@
+import * as React from 'react';
 import { DisclosureState, useDialogState } from 'ariakit';
 import { FormDialog, TransactionDialog } from 'components/Dialog';
 import useTokenList from 'hooks/useTokenList';
 import { useTranslations } from 'next-intl';
-import React from 'react';
 
 import WithdrawOnBehalfForm, { Fallback } from './Form';
 

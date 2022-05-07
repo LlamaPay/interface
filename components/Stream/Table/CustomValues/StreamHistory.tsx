@@ -1,9 +1,9 @@
+import * as React from 'react';
 import { useDialogState } from 'ariakit';
 import classNames from 'classnames';
 import { FormDialog } from 'components/Dialog';
 import { useChainExplorer } from 'hooks';
 import { useIntl, useTranslations } from 'next-intl';
-import React from 'react';
 import { IStream } from 'types';
 
 interface StreamHistoryProps {

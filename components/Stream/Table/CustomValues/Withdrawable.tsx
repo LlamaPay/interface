@@ -2,7 +2,6 @@ import * as React from 'react';
 import { IStream } from 'types';
 import { formatBalance } from 'utils/amount';
 import useWithdrawable from 'queries/useWithdrawable';
-import { useTokenPrice } from 'queries/useTokenPrice';
 import Tooltip from 'components/Tooltip';
 import { ExclamationCircleIcon, ExclamationIcon } from '@heroicons/react/solid';
 import { useIntl, useTranslations } from 'next-intl';
@@ -17,8 +16,6 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
   });
 
   const [balanceState, setBalanceState] = React.useState<number | null>(null);
-
-  const { data: price } = useTokenPrice(data.token.address.toLowerCase());
 
   const intl = useIntl();
 
@@ -46,22 +43,21 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
 
   if (callResult?.owed > 0) {
     return (
-      <div className="flex space-x-1">
-        <Tooltip content={balanceState && price && `${(balanceState * Number(price)).toFixed(2)} USD`}>
-          <span className="slashed-zero tabular-nums text-red-600">
-            {balanceState && `${formatBalance(balanceState, intl)}`}
-          </span>
-        </Tooltip>
+      <p className="flex space-x-1">
+        <span className="slashed-zero tabular-nums text-red-600">
+          {balanceState && `${formatBalance(balanceState, intl)}`}
+        </span>
+
         <Tooltip content={t('outOfFunds')}>
           <ExclamationCircleIcon className="h-5 w-5 text-red-600" />
         </Tooltip>
-      </div>
+      </p>
     );
   }
 
   if (data.paused) {
     return (
-      <div className="flex space-x-1">
+      <p className="flex space-x-1">
         {balanceState ? (
           <>
             <span className="slashed-zero tabular-nums">{`${formatBalance(balanceState, intl)}`}</span>
@@ -75,7 +71,7 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
             <ExclamationIcon className="h-5 w-5 text-yellow-600" />
           </>
         )}
-      </div>
+      </p>
     );
   }
 
@@ -84,10 +80,6 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
   }
 
   return (
-    <div className="flex justify-start">
-      <Tooltip content={balanceState && price && `${(balanceState * Number(price)).toFixed(2)} USD`}>
-        <span className="slashed-zero tabular-nums">{balanceState && formatBalance(balanceState, intl)}</span>
-      </Tooltip>
-    </div>
+    <p className="flex justify-start slashed-zero tabular-nums">{balanceState && formatBalance(balanceState, intl)}</p>
   );
 };
