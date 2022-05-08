@@ -6,16 +6,11 @@ import { Logo } from 'components/Icons';
 import { DisclosureState, useDialogState } from 'ariakit';
 import Menu from './Menu';
 import { useTranslations } from 'next-intl';
-import { useTheme } from 'next-themes';
-import { DarkLogo } from 'components/Icons/DarkLogo';
 
 const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
   const [{ data }] = useAccount();
 
   const walletDailog = useDialogState();
-
-  const { resolvedTheme } = useTheme();
-  const isDark = resolvedTheme === 'dark';
 
   const t = useTranslations('Common');
 
@@ -28,7 +23,9 @@ const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
       }}
     >
       <Link href="/" passHref>
-        <a>{isDark ? <DarkLogo /> : <Logo />}</a>
+        <a>
+          <Logo />
+        </a>
       </Link>
 
       <nav className="flex flex-shrink-0 justify-between gap-[0.625rem] bg-[#D9F4E6] text-base dark:bg-[#333336] ">
