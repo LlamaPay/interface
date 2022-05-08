@@ -134,8 +134,8 @@ export default function HeaderMenu({
       <MenuItem
         label={
           <>
-            <span className="cursor-pointer">{t1('changeTheme')}</span>
-            {isDark ? <SunIcon className="h-4 w-4" /> : <MoonIcon className="h-4 w-4" />}
+            <span className="cursor-pointer">Change Theme</span>
+            {isDark ? <MoonIcon className="h-4 w-4" /> : <SunIcon className="h-4 w-4" />}
           </>
         }
         onClick={() => setTheme(isDark ? 'light' : 'dark')}

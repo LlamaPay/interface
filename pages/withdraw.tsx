@@ -136,7 +136,7 @@ const Withdraw: NextPage = () => {
             <button
               onClick={sendAllOnClick}
               disabled={!accountData || unsupported || isError || !formattedData.streams}
-              className="secondary-button flex w-fit items-center justify-between gap-4 whitespace-nowrap py-2 px-8 text-sm font-bold disabled:cursor-not-allowed dark:border-[#23BD8F] dark:bg-[#23BD8F] dark:text-white"
+              className="secondary-button flex w-fit items-center justify-between gap-4 whitespace-nowrap py-2 px-8 text-sm font-bold disabled:cursor-not-allowed dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"
             >
               <span>{t0('sendAll')}</span>
               <CashIcon className="h-4 w-4" />

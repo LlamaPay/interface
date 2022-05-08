@@ -36,7 +36,7 @@ const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
           </>
         ) : (
           <button
-            className="nav-button hidden dark:border-[#23BD8F] dark:bg-[#23BD8F] dark:text-white md:block"
+            className="nav-button hidden dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white md:block"
             onClick={walletDailog.toggle}
           >
             {t('connectWallet')}

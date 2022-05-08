@@ -16,11 +16,13 @@ export default function PayeeBalance({ id }: PayeeBalanceProps) {
   return (
     <>
       {isLoading ? (
-        <div className="animate-shimmer h-5 w-full"></div>
+        <div className="animate-shimmer h-5 w-full dark:text-white"></div>
       ) : isError ? (
-        '-'
+        <span className="dark:text-white">-</span>
       ) : (
-        `${intl.formatNumber(balance, { maximumFractionDigits: 5 })} ${network.nativeCurrency?.symbol}`
+        <span className="dark:text-white">
+          {`${intl.formatNumber(balance, { maximumFractionDigits: 5 })} ${network.nativeCurrency?.symbol}`}
+        </span>
       )}
     </>
   );

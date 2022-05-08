@@ -39,7 +39,7 @@ export default function Hero({ noBanner, onboardDialog }: { noBanner: boolean; o
       >
         <span className="dark:text-white">{t2('description')}</span>
         <button
-          className="shadow-1 dark:font-hold rounded-[10px] border border-[#1BDBAD] bg-white py-[10px] px-10 font-bold text-[#23BD8F] dark:border-[#23BD8F] dark:bg-[#23BD8F] dark:text-white"
+          className="shadow-1 dark:font-hold rounded-[10px] border border-[#1BDBAD] bg-white py-[10px] px-10 font-bold text-[#23BD8F] dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"
           onClick={onboardDialog.toggle}
         >
           {t1('getStarted')}

@@ -112,7 +112,7 @@ export function DepositForm({
       </form>
 
       <button
-        className="form-submit-button mx-auto mt-7 flex w-full max-w-xs items-center justify-center gap-2 bg-white text-[#23BD8F] dark:border-[#23BD8F] dark:bg-[#23BD8F] dark:text-white"
+        className="form-submit-button mx-auto mt-7 flex w-full max-w-xs items-center justify-center gap-2 bg-white text-[#23BD8F] dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"
         onClick={() => setCreateStream(true)}
       >
         <span>{t2('createAStream')}</span>

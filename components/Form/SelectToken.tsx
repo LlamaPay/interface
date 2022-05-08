@@ -142,7 +142,7 @@ export const SelectToken = React.forwardRef<HTMLButtonElement, ISelectTokenProps
               ))}
             </ComboboxList>
             <button
-              className="nav-button m-4 mt-auto flex items-center justify-center gap-2 rounded dark:border-[#23BD8F] dark:bg-[#23BD8F] dark:text-white"
+              className="nav-button m-4 mt-auto flex items-center justify-center gap-2 rounded dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"
               onClick={() => setNewTokenForm(true)}
             >
               <span>{t1('orAddANewToken')}</span>
