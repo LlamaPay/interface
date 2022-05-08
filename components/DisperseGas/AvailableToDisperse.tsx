@@ -2,9 +2,8 @@ import Image from 'next/image';
 import { chainDetails } from 'utils/network';
 import { useNetwork } from 'wagmi';
 import defaultImage from 'public/empty-token.webp';
-import { useLocale } from 'hooks';
 import { useGetNativeBalance } from 'queries/useGetNativeBalance';
-import { useTranslations } from 'next-intl';
+import { useIntl, useTranslations } from 'next-intl';
 
 export default function AvailableToDisperse({ id }: { id: string }) {
   const [{ data: networkData, loading: networkLoading }] = useNetwork();
@@ -13,7 +12,7 @@ export default function AvailableToDisperse({ id }: { id: string }) {
 
   const { network } = chainDetails(networkData?.chain?.id.toString() ?? '0');
 
-  const { locale } = useLocale();
+  const intl = useIntl();
 
   const balance =
     nativeBalance &&
@@ -40,7 +39,7 @@ export default function AvailableToDisperse({ id }: { id: string }) {
           </div>
           <p>
             {balance &&
-              `${balance.toLocaleString(locale, { maximumFractionDigits: 5 })} ${
+              `${intl.formatNumber(balance, { maximumFractionDigits: 5 })} ${
                 networkData?.chain?.nativeCurrency?.symbol
               }`}
           </p>

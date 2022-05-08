@@ -25,28 +25,26 @@ const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV }: ITab
   return (
     <div className="w-full">
       <div className="overflow-x-auto">
-        <table {...instance.getTableProps()} className="">
+        <table>
           <thead>
             {instance.getHeaderGroups().map((headerGroup) => (
-              <tr {...headerGroup.getHeaderGroupProps()} key={headerGroup.id}>
+              <tr key={headerGroup.id}>
                 {headerGroup.headers.map((header) => (
                   <th
-                    {...header.getHeaderProps()}
                     key={header.id}
                     className="whitespace-nowrap py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D]"
                   >
-                    {header.isPlaceholder ? null : header.renderHeader() ? t(header.id) : ''}
+                    {header.isPlaceholder ? null : header.renderHeader()}
                   </th>
                 ))}
               </tr>
             ))}
           </thead>
-          <tbody {...instance.getTableBodyProps()}>
+          <tbody>
             {instance.getRowModel().rows.map((row) => (
-              <tr {...row.getRowProps()} key={row.id} className="table-row">
+              <tr key={row.id} className="table-row">
                 {row.getVisibleCells().map((cell, index) => (
                   <td
-                    {...cell.getCellProps()}
                     key={cell.id}
                     className={classNames(
                       'table-description',

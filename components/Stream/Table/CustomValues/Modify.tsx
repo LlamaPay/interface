@@ -9,8 +9,7 @@ import BigNumber from 'bignumber.js';
 import { secondsByDuration } from 'utils/constants';
 import useModifyStream from 'queries/useModifyStream';
 import { BeatLoader } from 'react-spinners';
-import { useLocale } from 'hooks';
-import { useTranslations } from 'next-intl';
+import { useIntl, useTranslations } from 'next-intl';
 
 interface ModifyProps {
   data: IStream;
@@ -63,7 +62,7 @@ export const Modify = ({ data }: ModifyProps) => {
     );
   };
 
-  const { locale } = useLocale();
+  const intl = useIntl();
 
   const t0 = useTranslations('Common');
   const t1 = useTranslations('Streams');
@@ -89,7 +88,7 @@ export const Modify = ({ data }: ModifyProps) => {
                 <span className="truncate">{data.payeeAddress}</span>
               </div>
               <p className="whitespace-nowrap">
-                {`${t0('amount')}: ${(amountPerSec * secondsByDuration.month).toLocaleString(locale, {
+                {`${t0('amount')}: ${intl.formatNumber(amountPerSec * secondsByDuration.month, {
                   maximumFractionDigits: 5,
                   minimumFractionDigits: 5,
                 })} ${data.token?.symbol ?? ''}`}

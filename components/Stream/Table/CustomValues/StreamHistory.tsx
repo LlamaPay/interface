@@ -1,9 +1,9 @@
+import * as React from 'react';
 import { useDialogState } from 'ariakit';
 import classNames from 'classnames';
 import { FormDialog } from 'components/Dialog';
-import { useChainExplorer, useLocale } from 'hooks';
-import { useTranslations } from 'next-intl';
-import React from 'react';
+import { useChainExplorer } from 'hooks';
+import { useIntl, useTranslations } from 'next-intl';
 import { IStream } from 'types';
 
 interface StreamHistoryProps {
@@ -18,7 +18,7 @@ export const StreamHistory = ({ data, className }: StreamHistoryProps) => {
 
   const { url: chainExplorer, name: explorerName } = useChainExplorer();
 
-  const { locale } = useLocale();
+  const intl = useIntl();
 
   const t0 = useTranslations('Common');
   const t1 = useTranslations('History');
@@ -79,7 +79,7 @@ export const StreamHistory = ({ data, className }: StreamHistoryProps) => {
                     {translateEvent(p.eventType)}
                   </td>
                   <td className="whitespace-nowrap border border-r-0 px-4 py-[6px] text-left text-sm">
-                    {new Date(Number(p.createdTimestamp) * 1e3).toLocaleString(locale, { hour12: false })}
+                    {intl.formatDateTime(new Date(Number(p.createdTimestamp) * 1e3), { hour12: false })}
                   </td>
                   <td className="whitespace-nowrap rounded-r border px-4 py-[6px] text-center text-sm">
                     <a

@@ -1,7 +1,7 @@
+import * as React from 'react';
 import { useNetworkProvider } from 'hooks';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import useBatchCalls from 'queries/useBatchCalls';
-import React from 'react';
 import { useAccount } from 'wagmi';
 import { CashIcon } from '@heroicons/react/outline';
 import { LlamaContractInterface } from 'utils/contract';

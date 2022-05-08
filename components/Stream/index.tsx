@@ -47,18 +47,18 @@ export function AltStreamSection({
   isError: boolean;
   data?: IStreamAndHistory;
 }) {
-  const t = useTranslations('Streams')
+  const t = useTranslations('Streams');
   return (
     <section className="w-full">
       <div className="section-header">
         <span className="flex items-center gap-[0.625rem]">
           <StreamIcon />
-          <h1 className="font-exo">{t('activeStreams')}</h1>
+          <h1 className="font-exo">{t('heading')}</h1>
         </span>
       </div>
       {isLoading || isError || !data?.streams || data.streams?.length < 1 ? (
         <div className="flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
-          {isLoading ? null : isError ? <p>{t('error')}</p> : !data ? <p>{t('noActiveStreams')}</p> : null}
+          {isLoading ? null : isError ? <p>{t('error')}</p> : !data?.streams ? <p>{t('noActiveStreams')}</p> : null}
         </div>
       ) : (
         <DefaultStreamTable data={data.streams} />
