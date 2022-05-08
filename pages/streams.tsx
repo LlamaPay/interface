@@ -69,7 +69,7 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, network, l
           </div>
         </div>
       </section>
-      <section className="app-section flex h-full flex-1 flex-col gap-[50px] bg-[#D9F2F4]/10 py-[22px]">
+      <section className="app-section flex h-full flex-1 flex-col gap-[50px] bg-[#D9F2F4]/10 py-[22px] dark:bg-[#161818]">
         <AltStreamSection isLoading={isLoading} isError={isError} data={streamsAndHistory} />
         <AltHistorySection isLoading={isLoading} isError={isError} data={streamsAndHistory} />
       </section>
