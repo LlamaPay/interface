@@ -41,7 +41,9 @@
     "streamHistory": "Ιστορικό Ροών",
     "eventType": "Event Type",
     "timestamp": "Χρονοσφραγίδα",
-    "you": "Εσείς"
+    "you": "Εσείς",
+    "lightTheme": "Ελαφρύ θέμα",
+    "darkTheme": "Σκούρο θέμα"
   },
   "Header": {
     "connectWallet": "Σύνδεση Πορτοφολιού",

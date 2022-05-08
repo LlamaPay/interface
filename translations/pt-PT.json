@@ -41,7 +41,9 @@
     "streamHistory": "Histórico de fluxos",
     "eventType": "Tipo de evento",
     "timestamp": "Timestamp",
-    "you": "Tu"
+    "you": "Tu",
+    "lightTheme": "Tema claro",
+    "darkTheme": "Tema escuro"
   },
   "Header": {
     "connectWallet": "Conectar Carteira",

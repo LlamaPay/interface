@@ -42,7 +42,8 @@
     "eventType": "Event Type",
     "timestamp": "Timestamp",
     "you": "You",
-    "changeTheme": "Change Theme"
+    "lightTheme": "Light Theme",
+    "darkTheme": "Dark Theme"
   },
   "Header": {
     "connectWallet": "Connect Wallet",

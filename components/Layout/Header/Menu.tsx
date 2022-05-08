@@ -1,7 +1,7 @@
 import { BookOpenIcon, MoonIcon, PlayIcon, SunIcon } from '@heroicons/react/outline';
 import { DisclosureState } from 'ariakit';
 import { Menu, MenuItem } from 'components/NestedMenu';
-import { useLocale, useWindowSize } from 'hooks';
+import { useIsMounted, useLocale, useWindowSize } from 'hooks';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { formatAddress } from 'utils/address';
@@ -25,6 +25,9 @@ export default function HeaderMenu({
   const t2 = useTranslations('Header');
 
   const { setTheme, resolvedTheme } = useTheme();
+
+  const isMounted = useIsMounted();
+
   const isDark = resolvedTheme === 'dark';
 
   const address = accountData ? formatAddress(accountData.address) : null;
@@ -131,15 +134,17 @@ export default function HeaderMenu({
         }
       />
 
-      <MenuItem
-        label={
-          <>
-            <span className="cursor-pointer">Change Theme</span>
-            {isDark ? <MoonIcon className="h-4 w-4" /> : <SunIcon className="h-4 w-4" />}
-          </>
-        }
-        onClick={() => setTheme(isDark ? 'light' : 'dark')}
-      />
+      {isMounted && (
+        <MenuItem
+          label={
+            <>
+              <span className="cursor-pointer">{isDark ? t('lightTheme') : t('darkTheme')}</span>
+              {isDark ? <SunIcon className="h-4 w-4" /> : <MoonIcon className="h-4 w-4" />}
+            </>
+          }
+          onClick={() => setTheme(isDark ? 'light' : 'dark')}
+        />
+      )}
     </Menu>
   );
 }
