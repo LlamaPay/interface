@@ -67,7 +67,12 @@ const WithdrawForm = ({ data, formDialog }: IFormProps) => {
       <FormDialog title={data.title} dialog={formDialog} className="h-fit">
         <form className="mt-4 flex flex-col space-y-4" onSubmit={handleSubmit}>
           <div>
-            <InputAmount name="amount" label={`${t0('amount')} ${data.symbol}`} isRequired />
+            <InputAmount
+              name="amount"
+              label={`${t0('amount')} ${data.symbol}`}
+              isRequired
+              className="dark:border-[#252525] dark:bg-[#202020] dark:text-white"
+            />
             <AvailableAmount
               title={t1('availableForWithdrawl')}
               selectedToken={data.selectedToken}

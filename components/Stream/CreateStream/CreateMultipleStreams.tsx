@@ -128,36 +128,36 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
             {index > 0 && <hr className="mb-0 mt-2 border-dashed" />}
 
             <label>
-              <span className="input-label">{t1('addressToStream')}</span>
+              <span className="input-label dark:text-white">{t1('addressToStream')}</span>
               <input
                 placeholder={t1('recipientAddress')}
                 {...register(`streams.${index}.addressToStream` as const, {
                   required: true,
                   pattern: /^0x[a-fA-F0-9]{40}$/,
                 })}
-                className="input-field"
+                className="input-field dark:border-[#252525] dark:bg-[#202020] dark:text-white"
                 autoComplete="off"
                 autoCorrect="off"
                 type="text"
                 spellCheck="false"
               />
               {errors?.streams?.[index]?.addressToStream?.type === 'required' && (
-                <p className="mt-1 text-xs text-red-500">{t1('requiredField')}</p>
+                <p className="mt-1 text-xs text-red-500 dark:text-white">{t1('requiredField')}</p>
               )}
               {errors?.streams?.[index]?.addressToStream?.type === 'pattern' && (
-                <p className="mt-1 text-xs text-red-500">{t1('validAddress')}</p>
+                <p className="mt-1 text-xs text-red-500 dark:text-white">{t1('validAddress')}</p>
               )}
             </label>
 
             <label>
               <span className="input-label">
-                <span>{t1('associateName')}</span>
-                <small className="mx-2 text-neutral-500">{`(${t1('optional')})`}</small>
+                <span className="dark:text-white">{t1('associateName')}</span>
+                <small className="mx-2 text-neutral-500 ">{`(${t1('optional')})`}</small>
               </span>
               <input
                 placeholder={t1('fastIdentification')}
                 {...register(`streams.${index}.shortName` as const)}
-                className="input-field"
+                className="input-field dark:border-[#252525] dark:bg-[#202020] dark:text-white"
                 autoComplete="off"
                 autoCorrect="off"
                 type="text"
@@ -174,7 +174,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                   <SelectToken
                     handleTokenChange={field.onChange}
                     tokens={tokenOptions}
-                    className="border border-neutral-300 bg-transparent py-[3px] shadow-none dark:border-neutral-700 dark:bg-stone-800"
+                    className="border border-neutral-300 bg-transparent py-[3px] shadow-none dark:border-neutral-700 dark:bg-stone-800 dark:text-white"
                     label={t1('selectTokenFromBalances')}
                     {...field}
                   />
@@ -184,7 +184,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
 
             <div>
               <div>
-                <label htmlFor={`stream-amount-${index}`} className="input-label">
+                <label htmlFor={`stream-amount-${index}`} className="input-label dark:text-white">
                   {t1('amountToStream')}
                 </label>
                 <div className="relative flex">
@@ -194,7 +194,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                       required: true,
                       pattern: /^[0-9]*[.,]?[0-9]*$/,
                     })}
-                    className="input-field"
+                    className="input-field dark:border-[#252525] dark:bg-[#202020]"
                     autoComplete="off"
                     autoCorrect="off"
                     type="text"
@@ -243,7 +243,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
               >
                 Add another stream
               </button>
-              {fields.length > 1 &&
+              {fields.length > 1 && (
                 <button
                   type="button"
                   className="w-fit rounded-[10px] border border-red-400 py-[6px] px-6 text-sm font-normal shadow-sm disabled:cursor-not-allowed disabled:opacity-50"
@@ -252,7 +252,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                 >
                   Delete
                 </button>
-              }
+              )}
             </div>
           </section>
         );
@@ -260,7 +260,11 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
 
       <div className="mt-2 flex flex-col gap-3 sm:flex-row">
         <SubmitButton className="flex-1" disabled={createStreamLoading || batchLoading || gnosisLoading}>
-          {createStreamLoading || batchLoading ? <BeatLoader size={6} color="white" /> : 'Create Stream' + (fields.length <= 1 ? "" : "s")}
+          {createStreamLoading || batchLoading ? (
+            <BeatLoader size={6} color="white" />
+          ) : (
+            'Create Stream' + (fields.length <= 1 ? '' : 's')
+          )}
         </SubmitButton>
       </div>
     </form>

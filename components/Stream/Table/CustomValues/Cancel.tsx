@@ -68,7 +68,7 @@ export const Cancel = ({ data }: CancelProps) => {
 
   return (
     <>
-      <button onClick={handleClick} className="row-action-links w-full text-right text-[#E40000] dark:text-white">
+      <button onClick={handleClick} className="row-action-links w-full text-right text-[#E40000] dark:text-red-500">
         {t('cancel')}
       </button>
       {transactionHash && <TransactionDialog dialog={transactionDialog} transactionHash={transactionHash} />}

@@ -97,11 +97,11 @@ const Withdraw: NextPage = () => {
   const showFallback = !accountData || unsupported;
 
   return (
-    <Layout className="app-section mx-auto mt-12 flex w-full flex-col items-center pb-8">
+    <Layout className="app-section mx-auto mt-12 flex w-full flex-col items-center pb-8 dark:bg-[#161818]">
       <section className="z-2 mx-auto flex w-full max-w-lg flex-col">
         <h1 className="font-exo mb-5 flex items-center gap-[0.625rem] text-2xl font-semibold text-[#3D3D3D]">
           <StreamIcon />
-          <span>Withdraw on Behalf of Another Wallet</span>
+          <span className="dark:text-white">Withdraw on Behalf of Another Wallet</span>
         </h1>
         {showFallback ? (
           <div className="flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
@@ -122,12 +122,12 @@ const Withdraw: NextPage = () => {
           <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
             <h2 className="flex flex-wrap items-center gap-[0.625rem] text-[#3D3D3D]">
               <BalanceIcon />
-              <span>Streams of</span>
+              <span className="dark:text-white">Streams of</span>
               <a
                 href={`${chainExplorer}/address/${addressToFetch}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="break-words break-all"
+                className="break-words break-all dark:text-white"
               >
                 {addressToFetch}
               </a>
@@ -136,7 +136,7 @@ const Withdraw: NextPage = () => {
             <button
               onClick={sendAllOnClick}
               disabled={!accountData || unsupported || isError || !formattedData.streams}
-              className="secondary-button flex w-fit items-center justify-between gap-4 whitespace-nowrap py-2 px-8 text-sm font-bold disabled:cursor-not-allowed"
+              className="secondary-button flex w-fit items-center justify-between gap-4 whitespace-nowrap py-2 px-8 text-sm font-bold disabled:cursor-not-allowed dark:border-[#23BD8F] dark:bg-[#23BD8F] dark:text-white"
             >
               <span>{t0('sendAll')}</span>
               <CashIcon className="h-4 w-4" />
@@ -152,43 +152,43 @@ const Withdraw: NextPage = () => {
               <table>
                 <thead>
                   <tr>
-                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D]">
+                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D] dark:text-white">
                       {t2('name')}
                     </th>
-                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D]">
+                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D] dark:text-white">
                       {t2('address')}
                     </th>
-                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D]">
+                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D] dark:text-white">
                       {t2('token')}
                     </th>
-                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D]">
+                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D] dark:text-white">
                       {t2('amount')}
                     </th>
-                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D]">
+                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D] dark:text-white">
                       {t1('withdrawable')}
                     </th>
-                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D]"></th>
+                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D] dark:text-white"></th>
                   </tr>
                 </thead>
                 <tbody>
                   {formattedData.streams.map((stream) => (
-                    <tr key={stream.streamId} className="border">
-                      <td className="table-description border-solid">
+                    <tr key={stream.streamId} className="border dark:border-white">
+                      <td className="table-description border-solid dark:border-white">
                         <SavedName data={stream} />
                       </td>
-                      <td className="table-description border-solid">
+                      <td className="table-description border-solid dark:border-white">
                         <StreamAddress data={stream} />
                       </td>
-                      <td className="table-description border-solid">
+                      <td className="table-description border-solid dark:border-white">
                         <TokenName data={stream} />
                       </td>
-                      <td className="table-description border-solid">
+                      <td className="table-description border-solid dark:border-white">
                         <AmtPerMonth data={stream} />
                       </td>
-                      <td className="table-description border-solid">
+                      <td className="table-description border-solid dark:border-white">
                         <Withdrawable data={stream} />
                       </td>
-                      <td className="table-description border-solid text-right">
+                      <td className="table-description border-solid text-right dark:border-white">
                         <Push data={stream} buttonName="Send" />
                       </td>
                     </tr>

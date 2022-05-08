@@ -85,7 +85,7 @@ export const SelectToken = React.forwardRef<HTMLButtonElement, ISelectTokenProps
 
   return (
     <>
-      <SelectLabel state={select} className={classNames('input-label', !label && 'sr-only')}>
+      <SelectLabel state={select} className={classNames('input-label dark:text-white', !label && 'sr-only')}>
         {label || t1('selectToken')}
       </SelectLabel>
       <Select
@@ -101,7 +101,7 @@ export const SelectToken = React.forwardRef<HTMLButtonElement, ISelectTokenProps
       {/* use select state as dialog state so that combobox options are displayed */}
       <Dialog
         state={select}
-        className="shadow-2 absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex max-h-[80vh] max-w-lg flex-col overflow-auto rounded bg-white sm:left-8 sm:right-8"
+        className="shadow-2 dark:bg-[#] absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex max-h-[80vh] max-w-lg flex-col overflow-auto rounded bg-white dark:bg-[#333336] sm:left-8 sm:right-8"
       >
         {newTokenForm ? (
           <NewTokenForm setNewTokenForm={setNewTokenForm} />
@@ -142,7 +142,7 @@ export const SelectToken = React.forwardRef<HTMLButtonElement, ISelectTokenProps
               ))}
             </ComboboxList>
             <button
-              className="nav-button m-4 mt-auto flex items-center justify-center gap-2 rounded"
+              className="nav-button m-4 mt-auto flex items-center justify-center gap-2 rounded dark:border-[#23BD8F] dark:bg-[#23BD8F] dark:text-white"
               onClick={() => setNewTokenForm(true)}
             >
               <span>{t1('orAddANewToken')}</span>

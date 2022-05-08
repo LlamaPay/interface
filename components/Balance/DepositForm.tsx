@@ -137,12 +137,12 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
         <form className="mt-4 flex flex-col" onSubmit={handleSubmit}>
           <div>
             <div>
-              <label className="input-label" htmlFor="tableDFAmountToDeposit">
+              <label className="input-label dark:text-white" htmlFor="tableDFAmountToDeposit">
                 {t1('topupAmount')}
               </label>
               <div className="relative flex">
                 <input
-                  className="input-field"
+                  className="input-field dark:border-[#252525] dark:bg-[#202020] dark:text-white"
                   name="amount"
                   id="tableDFAmountToDeposit"
                   required

@@ -10,7 +10,7 @@ export default function Hero({ noBanner, onboardDialog }: { noBanner: boolean; o
   const t1 = useTranslations('Common');
   const t2 = useTranslations('Banner');
 
-  if (!displayBanner) return <div className="h-[30px]"></div>;
+  if (!displayBanner) return <div className="h-[30px] dark:bg-[#161818]"></div>;
 
   return (
     <section className="relative -z-10 mb-[30px] flex flex-row flex-wrap items-center justify-center gap-6 bg-[#D9F2F4]/70 px-2 py-[52px] text-[#303030]">

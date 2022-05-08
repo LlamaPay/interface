@@ -67,9 +67,16 @@
   .input-label {
     @apply text-sm font-medium text-[#303030];
   }
+  .dark .input-label {
+    @apply text-sm font-medium text-white;
+  }
 
   .input-field {
     @apply mt-[5px] w-full rounded border border-[#CBCBCB] px-3 py-[7px] slashed-zero placeholder:text-sm placeholder:text-[#666666];
+  }
+
+  .dark .input-field {
+    @apply mt-[5px] w-full rounded border border-[#252525] bg-[#202020] px-3 py-[7px] slashed-zero placeholder:text-sm placeholder:text-[#666666];
   }
 
   .input-error {
