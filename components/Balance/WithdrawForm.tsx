@@ -84,7 +84,11 @@ const WithdrawForm = ({ data, formDialog }: IFormProps) => {
           </SubmitButton>
         </form>
         <p className="my-3 text-center font-light text-[#303030]">{t0('or')}</p>
-        <SubmitButton disabled={isLoading} onClick={withdrawAllTokens} className="bg-white text-[#23BD8F]">
+        <SubmitButton
+          disabled={isLoading}
+          onClick={withdrawAllTokens}
+          className="bg-white text-[#23BD8F] dark:border-[#23BD8F] dark:bg-[#23BD8F] dark:text-white"
+        >
           {isLoading && withdrawAll.current ? <BeatLoader size={6} color="gray" /> : t1('withdrawAll')}
         </SubmitButton>
       </FormDialog>

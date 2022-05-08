@@ -80,8 +80,8 @@ export const Modify = ({ data }: ModifyProps) => {
             <div className="my-1 rounded border p-2 dark:border-stone-700">
               <div className="flex items-center space-x-2">
                 <span className="dark:text-white">{t0('you')}</span>
-                <ArrowRightIcon className="h-4 w-4 " />
-                <span className="truncate">{savedAddressName}</span>
+                <ArrowRightIcon className="h-4 w-4 dark:text-white" />
+                <span className="truncate dark:text-white">{savedAddressName}</span>
               </div>
               <div className="inline-block space-x-2">
                 <span className="dark:text-white">{t0('payee')}:</span>

@@ -109,7 +109,7 @@ const Balance = () => {
               <tbody>
                 {balances?.map((b) => (
                   <tr key={b.address}>
-                    <th className="w-full whitespace-nowrap rounded-l border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-left text-sm font-normal text-[#3D3D3D] dark:border-[#3e3e42] dark:bg-neutral-900 dark:text-white">
+                    <th className="w-full whitespace-nowrap rounded-l border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-left text-sm font-normal text-[#3D3D3D] dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white">
                       <div className="flex items-center space-x-2">
                         <div className="flex h-6 w-6 flex-shrink-0 items-center rounded-full">
                           <Image src={b.logoURI} alt={t('logoAlt', { name: b.name })} width="18px" height="18px" />
@@ -128,25 +128,25 @@ const Balance = () => {
                       </div>
                     </th>
                     <td
-                      className="whitespace-nowrap border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D] dark:border-[#3e3e42] dark:bg-neutral-900 dark:text-white"
+                      className="whitespace-nowrap border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D] dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white"
                       style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
                     >
                       <BalanceAndSymbol data={b} />
                     </td>
                     <td
-                      className="whitespace-nowrap border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D] dark:border-[#3e3e42] dark:bg-neutral-900 dark:text-white"
+                      className="whitespace-nowrap border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D] dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white"
                       style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
                     >
                       <UntilDepleted data={b} />
                     </td>
                     <td
-                      className="whitespace-nowrap border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D] dark:border-[#3e3e42] dark:bg-neutral-900 dark:text-white"
+                      className="whitespace-nowrap border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D] dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white"
                       style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
                     >
                       <MonthlyCost data={b} />
                     </td>
                     <td
-                      className="rounded-r border border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D] dark:border-[#3e3e42] dark:bg-neutral-900 dark:text-white"
+                      className="rounded-r border border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D] dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white"
                       style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
                     >
                       <span className="flex gap-3">

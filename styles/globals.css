@@ -142,7 +142,7 @@
   }
 
   .dark .dialog {
-    @apply shadow-2 absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex h-fit max-h-[80vh] max-w-lg flex-col overflow-auto rounded-2xl border border-[#333336] bg-[#333336] p-4 sm:left-8 sm:right-8;
+    @apply shadow-2 absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex h-fit max-h-[80vh] max-w-lg flex-col overflow-auto rounded-2xl border border-[#252525] bg-[#202020] p-4 sm:left-8 sm:right-8;
   }
 
   /* banner */
