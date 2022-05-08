@@ -26,5 +26,5 @@ export const TotalStreamed = ({ data }: { data: IStream }) => {
     return () => clearInterval(id);
   }, [data, intl]);
 
-  return <p className="flex justify-start slashed-zero tabular-nums">{amount}</p>;
+  return <p className="flex justify-start slashed-zero tabular-nums dark:text-white">{amount}</p>;
 };

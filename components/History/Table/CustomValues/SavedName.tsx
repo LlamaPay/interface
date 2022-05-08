@@ -18,7 +18,12 @@ export function SavedName({ value, eventType }: { value: string; eventType: stri
 
   return (
     <Tooltip content={value}>
-      <a href={`${chainExplorer}/address/${value}`} target="_blank" rel="noopener noreferrer">
+      <a
+        href={`${chainExplorer}/address/${value}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="dark:text-white"
+      >
         {you || name}
       </a>
     </Tooltip>

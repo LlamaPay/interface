@@ -62,7 +62,7 @@ export const Push = ({ data, buttonName }: PushProps) => {
 
   return (
     <>
-      <button onClick={handleClick} className="row-action-links">
+      <button onClick={handleClick} className="row-action-links dark:text-white">
         {buttonName === 'Withdraw' ? t0('withdraw') : t1('send')}
       </button>
 

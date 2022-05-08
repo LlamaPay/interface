@@ -41,13 +41,13 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, network, l
   const t = useTranslations('Common');
 
   return (
-    <Layout className="mt-12 flex w-full flex-col gap-[30px]">
+    <Layout className="mt-12 flex w-full flex-col gap-[30px] dark:bg-[#161818]">
       <section className="app-section">
         <div>
           <div className="section-header ml-0 w-fit">
-            <h1 className="font-exo px-2 py-1 text-3xl">{t('streamsAndHistory')}</h1>
+            <h1 className="font-exo px-2 py-1 text-3xl dark:text-white">{t('streamsAndHistory')}</h1>
             {network && (
-              <div className="mt-[5px] flex flex-wrap items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F]">
+              <div className="mt-[5px] flex flex-wrap items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
                 <div className="flex items-center rounded-full">
                   <Image
                     src={logoURI || defaultImage}
@@ -61,7 +61,7 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, network, l
               </div>
             )}
             {address && (
-              <div className="mt-[5px] flex flex-wrap items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F]">
+              <div className="mt-[5px] flex flex-wrap items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
                 <BalanceIcon />
                 <p>{getAddress(address)}</p>
               </div>
@@ -69,7 +69,7 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, network, l
           </div>
         </div>
       </section>
-      <section className="app-section flex h-full flex-1 flex-col gap-[50px] bg-[#D9F2F4]/10 py-[22px]">
+      <section className="app-section flex h-full flex-1 flex-col gap-[50px] bg-[#D9F2F4]/10 py-[22px] dark:bg-[#161818]">
         <AltStreamSection isLoading={isLoading} isError={isError} data={streamsAndHistory} />
         <AltHistorySection isLoading={isLoading} isError={isError} data={streamsAndHistory} />
       </section>

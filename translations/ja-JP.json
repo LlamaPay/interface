@@ -41,7 +41,9 @@
     "streamHistory": "ストリームの歴史",
     "eventType": "エベントの種類",
     "timestamp": "タイムスタンプ",
-    "you": "貴方"
+    "you": "貴方",
+    "lightTheme": "ライトテーマ",
+    "darkTheme": "ダークテーマ"
   },
   "Header": {
     "connectWallet": "ウォレットを接続",

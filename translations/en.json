@@ -41,7 +41,9 @@
     "streamHistory": "Stream History",
     "eventType": "Event Type",
     "timestamp": "Timestamp",
-    "you": "You"
+    "you": "You",
+    "lightTheme": "Light Theme",
+    "darkTheme": "Dark Theme"
   },
   "Header": {
     "connectWallet": "Connect Wallet",

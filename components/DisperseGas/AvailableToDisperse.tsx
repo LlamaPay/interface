@@ -23,7 +23,7 @@ export default function AvailableToDisperse({ id }: { id: string }) {
   const t1 = useTranslations('Disperse');
 
   return (
-    <div className="mt-[5px] flex flex-wrap items-center justify-between gap-4 rounded bg-[#E7E7E7]/40 px-2 py-1 text-xs text-[#4E575F]">
+    <div className="mt-[5px] flex flex-wrap items-center justify-between gap-4 rounded bg-[#E7E7E7]/40 px-2 py-1 text-xs text-[#4E575F] dark:bg-[#252525] dark:text-white">
       <span>{t1('availableToDisperse')}</span>
       {isLoading || networkLoading ? (
         <div></div>

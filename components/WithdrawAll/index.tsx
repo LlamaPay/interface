@@ -53,7 +53,7 @@ export default function WithdrawAll() {
     <button
       onClick={handleClick}
       disabled={!accountData || unsupported}
-      className="flex w-full items-center justify-between gap-4 whitespace-nowrap"
+      className="flex w-full items-center justify-between gap-4 whitespace-nowrap dark:text-white"
     >
       <span>{t('sendAll')}</span>
       <CashIcon className="h-4 w-4" />

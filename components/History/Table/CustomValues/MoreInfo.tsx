@@ -32,30 +32,30 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
       <FormDialog dialog={dialog} title={t0('moreInfo')} className="h-min">
         <span className="space-y-4 text-[#3D3D3D]">
           <section>
-            <h1 className="font-medium text-[#303030]">{t0('token')}</h1>
+            <h1 className="font-medium text-[#303030] dark:text-white">{t0('token')}</h1>
             <div className="my-1 rounded border p-2 dark:border-stone-700">
               <div className="flex space-x-1">
-                <p>{data.stream?.token.name}</p>
-                <p>({data.stream?.token.symbol})</p>
+                <p className="dark:text-white">{data.stream?.token.name}</p>
+                <p className="dark:text-white">({data.stream?.token.symbol})</p>
               </div>
             </div>
           </section>
 
           {data.eventType === 'StreamModified' && (
             <section>
-              <h1 className="font-medium text-[#303030]">{t0('oldStream')}</h1>
+              <h1 className="font-medium text-[#303030] dark:text-white">{t0('oldStream')}</h1>
               <div className="my-1 rounded border p-2 dark:border-stone-700">
                 <div className="flex space-x-1">
-                  <p>{t0('payer')}:</p>
-                  <p>{data.oldStream?.payer.id}</p>
+                  <p className="dark:text-white">{t0('payer')}:</p>
+                  <p className="dark:text-white">{data.oldStream?.payer.id}</p>
                 </div>
                 <div className="flex space-x-1">
-                  <p>{t0('payee')}:</p>
-                  <p>{data.oldStream?.payee.id}</p>
+                  <p className="dark:text-white">{t0('payee')}:</p>
+                  <p className="dark:text-white">{data.oldStream?.payee.id}</p>
                 </div>
                 <div className="flex space-x-1">
-                  <p>{t0('amount')}:</p>
-                  <p>
+                  <p className="dark:text-white">{t0('amount')}:</p>
+                  <p className="dark:text-white">
                     {!Number.isNaN(data.oldStream?.amountPerSec) &&
                       `${formatAmountInTable(
                         Number(data.oldStream?.amountPerSec) / 1e20,
@@ -65,8 +65,8 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
                   </p>
                 </div>
                 <div className="flex space-x-1">
-                  <p>{t1('totalStreamed')}:</p>
-                  <p>
+                  <p className="dark:text-white">{t1('totalStreamed')}:</p>
+                  <p className="dark:text-white">
                     {amountStreamed(
                       data.createdTimestamp,
                       data.oldStream?.createdTimestamp,
@@ -79,24 +79,24 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
           )}
 
           <section>
-            <h1 className="font-medium text-[#303030]">
+            <h1 className="font-medium text-[#303030] dark:text-white">
               {data.eventType === 'StreamModified' ? t0('newStream') : t0('stream')}
             </h1>
             <div className="my-1 rounded border p-2 dark:border-stone-700">
               <div className="flex space-x-1">
-                <p>{t0('payer')}:</p>
-                <p>{data.stream?.payer.id}</p>
+                <p className="dark:text-white">{t0('payer')}:</p>
+                <p className="dark:text-white">{data.stream?.payer.id}</p>
               </div>
 
               <div className="flex space-x-1">
-                <p>{t0('payee')}:</p>
-                <p>{data.stream?.payee.id}</p>
+                <p className="dark:text-white">{t0('payee')}:</p>
+                <p className="dark:text-white">{data.stream?.payee.id}</p>
               </div>
 
               <div className="flex space-x-1">
-                <p>{t0('amount')}:</p>
+                <p className="dark:text-white">{t0('amount')}:</p>
 
-                <p>
+                <p className="dark:text-white">
                   {!Number.isNaN(data.stream?.amountPerSec) &&
                     `${formatAmountInTable(
                       Number(data.stream?.amountPerSec) / 1e20,
@@ -108,8 +108,8 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
 
               {data.eventType === 'StreamCancelled' && (
                 <div className="flex space-x-1">
-                  <p>{t1('totalStreamed')}:</p>
-                  <p>
+                  <p className="dark:text-white">{t1('totalStreamed')}:</p>
+                  <p className="dark:text-white">
                     {amountStreamed(data.createdTimestamp, data.stream?.createdTimestamp, data.stream?.amountPerSec)}
                   </p>
                 </div>
@@ -118,8 +118,8 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
           </section>
 
           <section>
-            <h1 className="font-medium text-[#303030]">{t0('eventTimestamp')}</h1>
-            <p>
+            <h1 className="font-medium text-[#303030] dark:text-white">{t0('eventTimestamp')}</h1>
+            <p className="dark:text-white">
               {intl.formatDateTime(new Date(Number(data.createdTimestamp) * 1e3), {
                 hour12: false,
               })}

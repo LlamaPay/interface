@@ -112,7 +112,7 @@ export default function SendToPayees({
           <button
             onClick={onSplitEqually}
             type="button"
-            className="rounded border border-[#1BDBAD] bg-white py-2 px-4 text-sm font-normal text-[#23BD8F]"
+            className="rounded border border-[#1BDBAD] bg-white py-2 px-4 text-sm font-normal text-[#23BD8F] dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"
           >
             {t('splitEqually')}
           </button>
@@ -120,10 +120,18 @@ export default function SendToPayees({
         {accountData?.address && <AvailableToDisperse id={accountData.address.toLowerCase()} />}
       </div>
       <div className="flex space-x-2">
-        <button onClick={onSelectAll} type="button" className="rounded-3xl border bg-white px-3 py-[6px] text-xs">
+        <button
+          onClick={onSelectAll}
+          type="button"
+          className="rounded-3xl border bg-white px-3 py-[6px] text-xs dark:border-[#252525] dark:bg-[#252525]"
+        >
           {t('selectAll')}
         </button>
-        <button onClick={onUnselectAll} type="button" className="rounded-3xl border bg-white px-3 py-[6px] text-xs">
+        <button
+          onClick={onUnselectAll}
+          type="button"
+          className="rounded-3xl border bg-white px-3 py-[6px] text-xs dark:border-[#252525] dark:bg-[#252525]"
+        >
           {t('unselectAll')}
         </button>
       </div>
@@ -133,9 +141,15 @@ export default function SendToPayees({
           <thead>
             <tr>
               <th className="table-description text-sm font-semibold !text-[#3D3D3D]"></th>
-              <th className="table-description text-sm font-semibold !text-[#3D3D3D]">{t('nameOrAddress')}</th>
-              <th className="table-description text-sm font-semibold !text-[#3D3D3D]">{t('payeeBalance')}</th>
-              <th className="table-description text-sm font-semibold !text-[#3D3D3D]">{t('amountToSend')}</th>
+              <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+                {t('nameOrAddress')}
+              </th>
+              <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+                {t('payeeBalance')}
+              </th>
+              <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+                {t('amountToSend')}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -151,7 +165,7 @@ export default function SendToPayees({
                     ></input>
                   </label>
                 </td>
-                <td className="table-description">
+                <td className="table-description dark:text-white">
                   {addresses.addressBook.find((e) => e.id === p)?.shortName
                     ? addresses.addressBook.find((e) => e.id === p)?.shortName
                     : formatAddress(p)}
@@ -161,7 +175,7 @@ export default function SendToPayees({
                 </td>
                 <td className="table-description">
                   <input
-                    className="input-field m-0 min-w-[8rem] py-1"
+                    className="input-field m-0 min-w-[8rem] py-1 dark:text-white"
                     autoComplete="off"
                     autoCorrect="off"
                     type="text"

@@ -12,7 +12,7 @@ export type MenuItemProps = HTMLAttributes<HTMLDivElement> & {
 export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(function A({ label, ...props }, ref) {
   return (
     <BaseMenuItem
-      className="flex scroll-m-2 items-center justify-between gap-4 p-2 font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40"
+      className="flex scroll-m-2 items-center justify-between gap-4 p-2 font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white dark:hover:text-[#cccccc]"
       ref={ref}
       {...props}
     >
@@ -38,7 +38,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function B({ label, ch
   const renderMenuButton = (menuButtonProps: MenuButtonProps) => (
     <MenuButton
       state={menu}
-      className="shadow-1 rounded-2xl border border-[#f7f8fa] bg-white py-2 px-4 text-[#3D3D3D]"
+      className="shadow-1 rounded-2xl border border-[#f7f8fa] bg-white py-2 px-4 text-[#3D3D3D] dark:border-[#202020] dark:bg-[#202020] dark:text-[#23BD8F]"
       {...menuButtonProps}
     >
       {label}
@@ -59,7 +59,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function B({ label, ch
         // MenuItem components into a single component, so it works as a
         // submenu button.
         <BaseMenuItem
-          className="flex scroll-m-2 items-center justify-between gap-4 p-2 font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40"
+          className="flex scroll-m-2 items-center justify-between gap-4 p-2 font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white"
           ref={ref}
           {...props}
         >
@@ -69,7 +69,10 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function B({ label, ch
         // Otherwise, we just render the menu button.
         renderMenuButton({ ref, ...props })
       )}
-      <BaseMenu state={menu} className="shadow-2 z-10 min-w-[10rem] rounded-xl border border-[#EAEAEA] bg-white p-2">
+      <BaseMenu
+        state={menu}
+        className="shadow-2 z-10 min-w-[10rem] rounded-xl border border-[#EAEAEA] bg-white p-2 dark:border-[#252525] dark:bg-[#202020] "
+      >
         <MenuContext.Provider value={true}>{children}</MenuContext.Provider>
       </BaseMenu>
     </>

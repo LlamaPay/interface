@@ -41,7 +41,9 @@
     "streamHistory": "Historique du flux",
     "eventType": "Taper",
     "timestamp": "Horodatage",
-    "you": "Vous"
+    "you": "Vous",
+    "lightTheme": "Thème de la lumière",
+    "darkTheme": "Thème sombre"
   },
   "Header": {
     "connectWallet": "Connectez votre portefeuille pour consulter vos flux",

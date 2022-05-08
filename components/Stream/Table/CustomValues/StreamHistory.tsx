@@ -63,25 +63,29 @@ export const StreamHistory = ({ data, className }: StreamHistoryProps) => {
       <button className={classNames('row-action-links', className)} onClick={dialog.toggle}>
         {t0('history')}
       </button>
-      <FormDialog dialog={dialog} title={t0('streamHistory')} className="v-min h-min">
+      <FormDialog dialog={dialog} title={t0('streamHistory')} className="v-min h-min dark:text-white">
         <section className="text-[#303030]">
           <table className=" w-full border-separate" style={{ borderSpacing: '0 2px' }}>
             <thead>
               <tr>
-                <th className="px-4 py-[6px] text-left text-sm font-medium text-[#3D3D3D]">{t0('eventType')}</th>
-                <th className="px-4 py-[6px] text-left text-sm font-medium text-[#3D3D3D]">{t0('timestamp')}</th>
+                <th className="px-4 py-[6px] text-left text-sm font-medium text-[#3D3D3D] dark:text-white">
+                  {t0('eventType')}
+                </th>
+                <th className="px-4 py-[6px] text-left text-sm font-medium text-[#3D3D3D] dark:text-white">
+                  {t0('timestamp')}
+                </th>
               </tr>
             </thead>
             <tbody>
               {historicalData.map((p) => (
                 <tr className="border-stone-700" key={p.txHash + p.eventType}>
-                  <td className="whitespace-nowrap rounded-l border border-r-0 px-4 py-[6px] text-left text-sm">
+                  <td className="whitespace-nowrap rounded-l border border-r-0 px-4 py-[6px] text-left text-sm dark:text-white">
                     {translateEvent(p.eventType)}
                   </td>
-                  <td className="whitespace-nowrap border border-r-0 px-4 py-[6px] text-left text-sm">
+                  <td className="whitespace-nowrap border border-r-0 px-4 py-[6px] text-left text-sm dark:text-white">
                     {intl.formatDateTime(new Date(Number(p.createdTimestamp) * 1e3), { hour12: false })}
                   </td>
-                  <td className="whitespace-nowrap rounded-r border px-4 py-[6px] text-center text-sm">
+                  <td className="whitespace-nowrap rounded-r border px-4 py-[6px] text-center text-sm dark:text-white">
                     <a
                       href={`${chainExplorer}/tx/${p.txHash}`}
                       target="_blank"

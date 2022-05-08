@@ -17,7 +17,12 @@ export const StreamAddress = ({ data }: { data: IStream }) => {
 
   return (
     <Tooltip content={`${address}`}>
-      <a href={`${chainExplorer}/address/${address}`} target="_blank" rel="noopener noreferrer">
+      <a
+        href={`${chainExplorer}/address/${address}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="dark:text-white"
+      >
         {address ? formatAddress(address) : ''}
       </a>
     </Tooltip>

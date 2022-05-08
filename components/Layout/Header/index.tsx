@@ -16,7 +16,7 @@ const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
 
   return (
     <header
-      className="flex items-center justify-between gap-10 bg-[#D9F4E6] text-base"
+      className="flex items-center justify-between gap-10 bg-[#D9F4E6] text-base dark:bg-[#333336]"
       style={{
         paddingInline: 'clamp(0.5rem, 2.5vw, 2rem)',
         paddingBlock: 'clamp(1rem, 2.5vh, 2rem)',
@@ -28,14 +28,17 @@ const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
         </a>
       </Link>
 
-      <nav className="flex flex-shrink-0 justify-between gap-[0.625rem] bg-[#D9F4E6] text-base">
+      <nav className="flex flex-shrink-0 justify-between gap-[0.625rem] bg-[#D9F4E6] text-base dark:bg-[#333336] ">
         {data ? (
           <>
             <NetworksMenu />
             <Account showAccountInfo={walletDailog.toggle} />
           </>
         ) : (
-          <button className="nav-button hidden md:block" onClick={walletDailog.toggle}>
+          <button
+            className="nav-button hidden dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white md:block"
+            onClick={walletDailog.toggle}
+          >
             {t('connectWallet')}
           </button>
         )}

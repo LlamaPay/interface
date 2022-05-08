@@ -18,7 +18,7 @@ export function StreamSection() {
       <div className="section-header flex w-full flex-wrap items-center justify-between gap-[0.625rem]">
         <span className="flex items-center gap-[0.625rem]">
           <StreamIcon />
-          <h1 className="font-exo">{t('heading')}</h1>
+          <h1 className="font-exo dark:text-white">{t('heading')}</h1>
         </span>
 
         <div className="flex flex-wrap gap-[0.625rem]">
@@ -53,7 +53,7 @@ export function AltStreamSection({
       <div className="section-header">
         <span className="flex items-center gap-[0.625rem]">
           <StreamIcon />
-          <h1 className="font-exo">{t('heading')}</h1>
+          <h1 className="font-exo dark:text-white">{t('heading')}</h1>
         </span>
       </div>
       {isLoading || isError || !data?.streams || data.streams?.length < 1 ? (

@@ -59,7 +59,7 @@ export const WalletSelector = ({ dialog }: Props) => {
               {accountData.ens?.name ? `${accountData.ens?.name} (${formattedAddress})` : accountData.address}
             </p>
             <button
-              className="nav-button mt-5"
+              className="nav-button mt-5 dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"
               onClick={() => {
                 disconnect();
                 dialog.toggle();

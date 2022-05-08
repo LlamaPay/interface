@@ -29,7 +29,12 @@ export function TokenName({ data }: { data: IStream }) {
         />
       </div>
       {chainExplorer ? (
-        <a href={`${chainExplorer}/address/${data.token.address}`} target="_blank" rel="noopener noreferrer">
+        <a
+          href={`${chainExplorer}/address/${data.token.address}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="dark:text-white"
+        >
           {data.tokenSymbol}
         </a>
       ) : (

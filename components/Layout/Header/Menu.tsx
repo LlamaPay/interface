@@ -1,13 +1,14 @@
-import { BookOpenIcon, PlayIcon } from '@heroicons/react/outline';
+import { BookOpenIcon, MoonIcon, PlayIcon, SunIcon } from '@heroicons/react/outline';
 import { DisclosureState } from 'ariakit';
 import { Menu, MenuItem } from 'components/NestedMenu';
-import { useLocale, useWindowSize } from 'hooks';
+import { useIsMounted, useLocale, useWindowSize } from 'hooks';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { formatAddress } from 'utils/address';
 import { chainDetails } from 'utils/network';
 import { useAccount, useNetwork } from 'wagmi';
 import defaultImage from 'public/empty-token.webp';
+import { useTheme } from 'next-themes';
 
 export default function HeaderMenu({
   onboardDialog,
@@ -22,6 +23,12 @@ export default function HeaderMenu({
 
   const t1 = useTranslations('Common');
   const t2 = useTranslations('Header');
+
+  const { setTheme, resolvedTheme } = useTheme();
+
+  const isMounted = useIsMounted();
+
+  const isDark = resolvedTheme === 'dark';
 
   const address = accountData ? formatAddress(accountData.address) : null;
 
@@ -126,6 +133,18 @@ export default function HeaderMenu({
           </a>
         }
       />
+
+      {isMounted && (
+        <MenuItem
+          label={
+            <>
+              <span className="cursor-pointer">{isDark ? t('lightTheme') : t('darkTheme')}</span>
+              {isDark ? <SunIcon className="h-4 w-4" /> : <MoonIcon className="h-4 w-4" />}
+            </>
+          }
+          onClick={() => setTheme(isDark ? 'light' : 'dark')}
+        />
+      )}
     </Menu>
   );
 }

@@ -32,7 +32,7 @@ const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV }: ITab
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="whitespace-nowrap py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D]"
+                    className="whitespace-nowrap py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D] dark:text-white"
                   >
                     {header.isPlaceholder ? null : header.renderHeader()}
                   </th>
@@ -66,19 +66,19 @@ const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV }: ITab
         <div className="flex w-full flex-col gap-2 sm:flex-row sm:justify-between sm:gap-5">
           <div className="flex flex-1 items-center justify-between gap-2">
             {downloadToCSV && (
-              <button className="bg-none text-xs text-[#303030] underline" onClick={downloadToCSV}>
+              <button className="bg-none text-xs text-[#303030] underline dark:text-white" onClick={downloadToCSV}>
                 {t('exportCSV')}
               </button>
             )}
             {!hidePagination && (
               <label className="flex items-center space-x-1">
-                <span className="text-xs text-[rgba(0,0,0,0.54)]">{`${t('rowsPerPage')}:`}</span>
+                <span className="text-xs text-[rgba(0,0,0,0.54)] dark:text-white">{`${t('rowsPerPage')}:`}</span>
                 <select
                   value={instance.getState().pagination.pageSize}
                   onChange={(e) => {
                     instance.setPageSize(Number(e.target.value));
                   }}
-                  className="border-0 pr-6 text-xs text-[#333336] dark:bg-black"
+                  className="border-0 pr-6 text-xs text-[#333336] dark:bg-[#202020] dark:text-white"
                 >
                   {[10, 20, 30, 40, 50].map((pageSize) => (
                     <option key={pageSize} value={pageSize}>
@@ -90,7 +90,7 @@ const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV }: ITab
             )}
           </div>
           {!hidePagination && (
-            <div className="flex items-center justify-between space-x-8 pr-1 text-[rgba(0,0,0,0.87)]">
+            <div className="flex items-center justify-between space-x-8 pr-1 text-[rgba(0,0,0,0.87)] dark:text-white">
               {showRowNumber && <span className="text-xs">{`${firstRowId} - ${lastRowId} of ${totalRows}`}</span>}
               <span className="space-x-5">
                 <button
@@ -100,7 +100,7 @@ const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV }: ITab
                   aria-disabled={!instance.getCanPreviousPage()}
                 >
                   <span className="sr-only">{t('previous')}</span>
-                  <ChevronLeftIcon className="h-6" color="#333336" />
+                  <ChevronLeftIcon className="h-6 dark:text-white" color="#333336" />
                 </button>
                 <button
                   className="rounded p-1"
@@ -109,7 +109,7 @@ const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV }: ITab
                   aria-disabled={!instance.getCanNextPage()}
                 >
                   <span className="sr-only">{t('next')}</span>
-                  <ChevronRightIcon className="h-6" color="#333336" />
+                  <ChevronRightIcon className="h-6 dark:text-white" color="#333336" />
                 </button>
               </span>
             </div>
