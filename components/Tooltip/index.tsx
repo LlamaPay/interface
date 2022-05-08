@@ -22,7 +22,10 @@ const Tooltip = ({ children, content }: IProps) => {
       >
         {children}
       </TooltipAnchor>
-      <AriaTooltip state={tooltip} className="rounded border bg-neutral-50 py-1 px-2 text-xs drop-shadow">
+      <AriaTooltip
+        state={tooltip}
+        className="rounded border bg-neutral-50 py-1 px-2 text-xs drop-shadow dark:border-[#202020] dark:bg-[#202020]"
+      >
         {content}
       </AriaTooltip>
     </>
