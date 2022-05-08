@@ -22,21 +22,29 @@ export default function DisperseFallback({
           </label>
           <button
             type="button"
-            className="rounded border border-[#1BDBAD] bg-white py-2 px-4 text-sm font-normal text-[#23BD8F]"
+            className="rounded border border-[#1BDBAD] bg-white py-2 px-4 text-sm font-normal text-[#23BD8F] dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"
             disabled
           >
             {t('splitEqually')}
           </button>
         </div>
-        <div className="mt-[5px] flex flex-wrap items-center justify-between gap-4 rounded bg-[#E7E7E7]/40 px-2 py-1 text-xs text-[#4E575F]">
+        <div className="dark:text-white] mt-[5px] flex flex-wrap items-center justify-between gap-4 rounded bg-[#E7E7E7]/40 px-2 py-1 text-xs text-[#4E575F] dark:bg-[#252525]">
           <span>{t('availableToDisperse')}</span>
         </div>
       </div>
       <div className="flex space-x-2">
-        <button disabled type="button" className="rounded-3xl border bg-white px-3 py-[6px] text-xs">
+        <button
+          disabled
+          type="button"
+          className="rounded-3xl border bg-white px-3 py-[6px] text-xs dark:border-[#252525] dark:bg-[#252525]"
+        >
           {t('selectAll')}
         </button>
-        <button disabled type="button" className="rounded-3xl border bg-white px-3 py-[6px] text-xs">
+        <button
+          disabled
+          type="button"
+          className="rounded-3xl border bg-white px-3 py-[6px] text-xs dark:border-[#252525] dark:bg-[#252525]"
+        >
           {t('unselectAll')}
         </button>
       </div>

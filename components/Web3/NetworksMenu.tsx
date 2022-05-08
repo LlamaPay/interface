@@ -43,7 +43,7 @@ export const NetworksMenu = () => {
       </SelectLabel>
       <Select
         state={select}
-        className="nav-button hidden items-center justify-between gap-2 dark:bg-[#303030] dark:text-white sm:flex"
+        className="nav-button hidden items-center justify-between gap-2 dark:border-[#252525] dark:bg-[#202020] dark:text-white sm:flex"
       >
         <>
           <div className="flex h-5 w-5 items-center rounded-full">
@@ -63,7 +63,7 @@ export const NetworksMenu = () => {
       {select.mounted && (
         <SelectPopover
           state={select}
-          className="shadow-2 z-10 max-h-[280px] w-fit min-w-[12rem] overflow-y-auto rounded-xl border border-[#EAEAEA] bg-white p-2 dark:border-[#252525] dark:bg-[#202020]"
+          className="shadow-2 z-10 max-h-[280px] w-fit min-w-[12rem] overflow-y-auto rounded-xl border border-[#EAEAEA] bg-white p-2 dark:border-[#252525] dark:bg-[#202020] "
         >
           <SelectGroup>
             <SelectGroupLabel className="p-2 text-sm font-normal text-neutral-500 dark:text-white">
