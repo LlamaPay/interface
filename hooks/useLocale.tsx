@@ -10,7 +10,7 @@ interface IReturnProps {
 export function useLocale(): IReturnProps {
   const { locale, pathname, asPath, query, push } = useRouter();
 
-  const localeId = localeNames.find((item) => item.id === locale)?.id ?? 'en-CA';
+  const localeId = localeNames.find((item) => item.id === locale)?.id ?? 'en-US';
 
   const updateLocale = (nextLocale: string) => {
     // change just the locale and maintain all other route information including href's query

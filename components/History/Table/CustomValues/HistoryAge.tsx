@@ -32,6 +32,8 @@ export function HistoryAge({ data }: { data: IHistory }) {
       <Tooltip
         content={intl.formatDateTime(new Date(Number(data.createdTimestamp) * 1e3), {
           hour12: false,
+          dateStyle: 'short',
+          timeStyle: 'short',
         })}
       >
         <a href={`${url}/tx/${data.txHash}`} target="_blank" rel="noopener noreferrer" className="dark:text-white">

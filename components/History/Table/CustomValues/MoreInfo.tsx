@@ -122,6 +122,8 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
             <p className="dark:text-white">
               {intl.formatDateTime(new Date(Number(data.createdTimestamp) * 1e3), {
                 hour12: false,
+                dateStyle: 'short',
+                timeStyle: 'short',
               })}
             </p>
           </section>
