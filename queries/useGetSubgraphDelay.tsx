@@ -46,7 +46,12 @@ async function getSubgraphDelay({ chainId }: useGetSubgraphDelayProps) {
           };
         }
       );
-      return Number(currentBlock.data.result.timestamp) - lastBlockIndexed.time;
+      const timeDelay = Number(currentBlock.data.result.timestamp) - lastBlockIndexed.time;
+      const blockDelay = Number(currentBlock.data.result.number) - lastBlockIndexed.height;
+      if (!timeDelay || !blockDelay) {
+        throw new Error('Unable to get block or time information');
+      }
+      return { timeDelay, blockDelay };
     }
   } catch (error) {
     return null;
