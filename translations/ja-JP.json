@@ -106,7 +106,8 @@
     "streamCreated": "ストリームが作られました",
     "streamModified": "ストリームが変更されました",
     "streamCancelled": "ストリームが取消されました",
-    "viewTransactionOnExplorer": "{name}でトランザクションを表示"
+    "viewTransactionOnExplorer": "{name}でトランザクションを表示",
+    "invoice": "インヴォイス"
   },
   "Payees": {
     "connectWallet": "ウォレットを接続して支払人を表示",

@@ -106,7 +106,8 @@
     "streamCreated": "Stream Created",
     "streamModified": "Stream Modified",
     "streamCancelled": "Stream Cancelled",
-    "viewTransactionOnExplorer": "View transaction on {name}"
+    "viewTransactionOnExplorer": "View transaction on {name}",
+    "invoice": "Invoice"
   },
   "Payees": {
     "connectWallet": "Connect wallet to view payees list",

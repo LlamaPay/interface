@@ -106,7 +106,8 @@
     "streamCreated": "Flujo creado",
     "streamModified": "Flujo modificado",
     "streamCancelled": "Flujo cancelado",
-    "viewTransactionOnExplorer": "Ver transacción en {name}"
+    "viewTransactionOnExplorer": "Ver transacción en {name}",
+    "invoice": "Factura"
   },
   "Payees": {
     "connectWallet": "Conecte la billetera para ver la lista de beneficiarios",

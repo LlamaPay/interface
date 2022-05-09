@@ -106,7 +106,8 @@
     "streamCreated": "Fluxo Criado",
     "streamModified": "Fluxo Modificado",
     "streamCancelled": "Fluxo Cancelado",
-    "viewTransactionOnExplorer": "Ver transação {name}"
+    "viewTransactionOnExplorer": "Ver transação {name}",
+    "invoice": "Fatura"
   },
   "Payees": {
     "connectWallet": "Conecta a tua carteira para veres a lista de beneficiários",

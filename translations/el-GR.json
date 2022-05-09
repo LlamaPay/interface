@@ -106,7 +106,8 @@
     "streamCreated": "Η Ροή δημιουργήθηκε",
     "streamModified": "Η Ροή τροποποιήθηκε",
     "streamCancelled": "Η Ροή ακυρώθηκε",
-    "viewTransactionOnExplorer": "Προβολή συναλλαγής στο {name}"
+    "viewTransactionOnExplorer": "Προβολή συναλλαγής στο {name}",
+    "invoice": "τιμολόγιο"
   },
   "Payees": {
     "connectWallet": "Συνδέστε το πορτοφόλι σας για να δείτε τη λίστα δικαιούχων",
