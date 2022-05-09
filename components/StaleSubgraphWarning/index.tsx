@@ -11,7 +11,7 @@ export default function StaleSubgraphWarning() {
 
   if (delayTime === null || delayTime === undefined || delayTime < 60) return <></>;
   return (
-    <section className="h-[25px] bg-red-600 text-center">
+    <section className="h-[25px] bg-red-600 text-center text-white">
       <span className="font-exo text-sm">
         {`Subgraph is currently delayed by ${(delayTime / 60).toFixed(2)} minutes`}
       </span>
