@@ -24,13 +24,16 @@ async function getSubgraphDelay({ chainId }: useGetSubgraphDelayProps) {
       throw new Error('Could not get chain');
     } else {
       const rpcUrl = networkDetails[chainId].rpcUrl;
+
       const subgraphEndpoint = networkDetails[chainId].subgraphEndpoint;
+
       const currentBlock = await axios.post(rpcUrl, {
         jsonrpc: '2.0',
         method: 'eth_getBlockByNumber',
         params: ['latest', false],
         id: 1,
       });
+
       const lastBlockIndexed = await request(subgraphEndpoint, GET_LAST_INDEXED_BLOCK).then(
         async (lastBlockIndexedResult) => {
           const height = lastBlockIndexedResult._meta.block.number;
@@ -46,12 +49,15 @@ async function getSubgraphDelay({ chainId }: useGetSubgraphDelayProps) {
           };
         }
       );
+
       const timeDelay = Number(currentBlock.data.result.timestamp) - lastBlockIndexed.time;
+
       const blockDelay = Number(currentBlock.data.result.number) - lastBlockIndexed.height;
+
       if (!timeDelay || !blockDelay) {
         throw new Error('Unable to get block or time information');
       }
-      return { timeDelay, blockDelay };
+      return { timeDelay, blockDelay, currentBlock: currentBlock.data.result.number };
     }
   } catch (error) {
     return null;
@@ -60,9 +66,10 @@ async function getSubgraphDelay({ chainId }: useGetSubgraphDelayProps) {
 
 export default function useGetSubgraphDelay() {
   const [{ data }] = useNetwork();
+
   const chainId = data.chain?.id;
 
-  return useQuery(['subgraphDelay', getSubgraphDelay], () => getSubgraphDelay({ chainId }), {
+  return useQuery(['subgraphDelay', chainId], () => getSubgraphDelay({ chainId }), {
     refetchInterval: 10000,
   });
 }

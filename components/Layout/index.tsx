@@ -30,6 +30,7 @@ export default function Layout({ children, className, noBanner = false, ...props
           content="LlamaPay is a multi-chain protocol that allows you to automate transactions and stream them by the second. The recipients can withdraw these funds at any time. This eliminates the need for manual transactions."
         />
       </Head>
+      <StaleSubgraphWarning />
       <Header onboardDialog={onboardDialog} />
       {/* <div className="absolute top-0 bottom-0 right-0 left-0 overflow-hidden">
         <div
@@ -48,7 +49,6 @@ export default function Layout({ children, className, noBanner = false, ...props
           className="absolute left-[50vw] -z-10 h-[100vh] w-screen rounded-full"
         ></div>
       </div> */}
-      <StaleSubgraphWarning />
       {router.pathname === '/' && <Hero noBanner={noBanner} onboardDialog={onboardDialog} />}
 
       <main className={classNames('flex-1', className)} {...props}>

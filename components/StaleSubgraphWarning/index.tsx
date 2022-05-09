@@ -7,10 +7,8 @@ export default function StaleSubgraphWarning() {
   if (!data || data?.timeDelay < 60) return null;
 
   return (
-    <section className="h-[25px] bg-red-600 text-center text-white">
-      <span className="font-exo text-sm">
-        {`Subgraph is currently delayed by ${data.blockDelay} blocks (${(data.timeDelay / 60).toFixed(2)} minutes)`}
-      </span>
-    </section>
+    <p className="font-exo bg-red-600 py-1 px-2 text-center text-sm font-light text-white">
+      {`Subgraph is currently delayed by ${data.blockDelay} blocks (${(data.timeDelay / 60).toFixed(2)} minutes)`}
+    </p>
   );
 }
