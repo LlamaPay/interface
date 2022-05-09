@@ -8,6 +8,7 @@ import Hero from 'components/Hero';
 import OnboardDialog from 'components/Onboard';
 import { useRouter } from 'next/router';
 import { useDialogState } from 'ariakit';
+import StaleSubgraphWarning from 'components/StaleSubgraphWarning';
 
 interface ILayoutProps {
   children: React.ReactNode;
@@ -47,6 +48,7 @@ export default function Layout({ children, className, noBanner = false, ...props
           className="absolute left-[50vw] -z-10 h-[100vh] w-screen rounded-full"
         ></div>
       </div> */}
+      <StaleSubgraphWarning />
       {router.pathname === '/' && <Hero noBanner={noBanner} onboardDialog={onboardDialog} />}
 
       <main className={classNames('flex-1', className)} {...props}>
