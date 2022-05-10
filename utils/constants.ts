@@ -38,6 +38,10 @@ interface INetworkDetails {
   };
 }
 
+interface ISecondsByDuration {
+  [key: string]: number;
+}
+
 export const defaultProvider = providers.getDefaultProvider(4, {
   alchemy: alchemyId,
   etherscan: etherscanKey,
@@ -258,7 +262,7 @@ export const chains: Chain[] = [
   },
 ];
 
-export const secondsByDuration = {
+export const secondsByDuration: ISecondsByDuration = {
   week: 604800,
   month: 2592000,
   year: 31104000,
