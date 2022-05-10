@@ -102,7 +102,7 @@ const DepositAndCreate = ({ tokens, userAddress, dialog }: IStreamFormProps) => 
     const streamDuration = form.streamDuration?.value;
     const payeeAddress = form.addressToStream?.value;
 
-    const duration = streamDuration === 'year' ? 'year' : 'month';
+    const duration = streamDuration;
 
     if (tokenAddress !== '') {
       // check if token exist in all tokens list

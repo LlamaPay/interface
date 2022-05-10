@@ -29,7 +29,7 @@ export interface ICheckApproval {
 export interface IFormElements {
   amountToDeposit: { value: string };
   amountToStream: { value: string };
-  streamDuration: { value: 'year' | 'month' };
+  streamDuration: { value: 'year' | 'month' | 'week' };
   addressToStream: { value: string };
   shortName: { value: string };
 }

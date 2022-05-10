@@ -18,7 +18,7 @@ interface ModifyProps {
 interface IUpdatedFormElements {
   updatedAddress: { value: string };
   updatedAmount: { value: string };
-  modifiedStreamDuration: { value: 'month' | 'year' };
+  modifiedStreamDuration: { value: 'month' | 'year' | 'week' };
 }
 
 export const Modify = ({ data }: ModifyProps) => {

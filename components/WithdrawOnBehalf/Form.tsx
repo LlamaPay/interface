@@ -60,7 +60,7 @@ const WithdrawOnBehalfForm = ({
     const streamedAmount = form.streamedAmount?.value;
     const streamDuration = form.streamDuration?.value;
 
-    const duration = streamDuration === 'year' ? 'year' : 'month';
+    const duration = streamDuration;
 
     const tokenDetails = tokens?.find((t) => t.tokenAddress === tokenAddress);
 

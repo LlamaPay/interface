@@ -39,7 +39,7 @@ export function useCreateStreamForm({ tokens, dialog }: { tokens: ITokenBalance[
       updateAddress(payeeAddress.toLowerCase(), shortName);
     }
 
-    const duration = streamDuration === 'year' ? 'year' : 'month';
+    const duration = streamDuration;
 
     if (tokenAddress !== '' && payeeAddress) {
       // check if token exist in all tokens list

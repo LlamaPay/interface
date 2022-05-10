@@ -259,6 +259,7 @@ export const chains: Chain[] = [
 ];
 
 export const secondsByDuration = {
+  week: 604800,
   month: 2592000,
   year: 31104000,
 };

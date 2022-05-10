@@ -19,7 +19,7 @@ type FormValues = {
     shortName: string;
     tokenAddress: string;
     amountToStream: string;
-    streamDuration: 'month' | 'year';
+    streamDuration: 'month' | 'year' | 'week';
   }[];
 };
 
@@ -71,7 +71,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
         updateAddress(item.addressToStream?.toLowerCase(), item.shortName);
       }
 
-      const duration = item.streamDuration === 'year' ? 'year' : 'month';
+      const duration = item.streamDuration;
       const tokenDetails = tokens.find((t) => t.tokenAddress?.toString() === item.tokenAddress?.toString()) ?? null;
 
       if (tokenDetails === null) return;
@@ -90,7 +90,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
           updateAddress(item.addressToStream?.toLowerCase(), item.shortName);
         }
 
-        const duration = item.streamDuration === 'year' ? 'year' : 'month';
+        const duration = item.streamDuration;
 
         const tokenDetails = tokens.find((t) => t.tokenAddress?.toString() === item.tokenAddress?.toString()) ?? null;
         if (tokenDetails === null) return calls;
@@ -212,6 +212,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                     className="absolute right-1 bottom-1 top-2 my-auto flex w-full max-w-[24%] items-center truncate rounded border-0 bg-zinc-100 p-2 pr-4 text-sm shadow-sm dark:bg-stone-600"
                     style={{ backgroundSize: '1.25rem', backgroundPosition: 'calc(100% - 4px) 55%' }}
                   >
+                    <option value="week">{t0('week')}</option>
                     <option value="month">{t0('month')}</option>
                     <option value="year">{t0('year')}</option>
                   </select>
