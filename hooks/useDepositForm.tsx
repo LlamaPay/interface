@@ -119,6 +119,7 @@ export function useDepositForm({
           llamaContractAddress: tokenDetails.llamaContractAddress,
           tokenContractAddress: tokenDetails.tokenAddress,
           amountToDeposit: bigAmount.toFixed(0),
+          formDialog: componentDialog,
         });
       } else if (isApproved && tokenDetails.llamaContractAddress) {
         deposit(
