@@ -70,9 +70,14 @@ export const Modify = ({ data }: ModifyProps) => {
 
   return (
     <>
-      <button className="row-action-links dark:text-white" onClick={dialog.toggle}>
-        {t1('modify')}
-      </button>
+      {data.paused ? (
+        ''
+      ) : (
+        <button className="row-action-links dark:text-white" onClick={dialog.toggle}>
+          {t1('modify')}
+        </button>
+      )}
+
       <FormDialog dialog={dialog} title={t1('modify')} className="h-min">
         <span className="space-y-4 text-[#303030]">
           <section>

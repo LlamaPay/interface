@@ -16,7 +16,7 @@ import { useTranslations } from 'next-intl';
 
 const DepositForm = ({ data, formDialog }: IFormProps) => {
   const { mutate, isLoading, data: transaction } = useDepositToken();
-  const { mutate: mutateGnosis } = useDepositGnosis();
+  const { mutate: mutateGnosis, isLoading: gnosisLoading } = useDepositGnosis();
 
   const transactionDialog = useDialogState();
 
@@ -72,11 +72,18 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
       const formattedAmt = new BigNumber(amount).multipliedBy(10 ** data.tokenDecimals);
 
       if (process.env.NEXT_PUBLIC_SAFE === 'true') {
-        mutateGnosis({
-          llamaContractAddress: data.llamaContractAddress,
-          tokenContractAddress: data.tokenAddress,
-          amountToDeposit: formattedAmt.toFixed(0),
-        });
+        mutateGnosis(
+          {
+            llamaContractAddress: data.llamaContractAddress,
+            tokenContractAddress: data.tokenAddress,
+            amountToDeposit: formattedAmt.toFixed(0),
+          },
+          {
+            onSettled: () => {
+              formDialog.toggle();
+            },
+          }
+        );
       } else if (isApproved) {
         mutate(
           {
@@ -175,8 +182,8 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
           <p className="my-4 text-center text-sm text-red-500">{approvalError && "Couldn't approve token"}</p>
 
           {isApproved ? (
-            <SubmitButton disabled={isLoading} className="mt-4">
-              {isLoading ? <BeatLoader size={6} color="white" /> : t0('deposit')}
+            <SubmitButton disabled={isLoading || gnosisLoading} className="mt-4">
+              {isLoading || gnosisLoading ? <BeatLoader size={6} color="white" /> : t0('deposit')}
             </SubmitButton>
           ) : (
             <SubmitButton disabled={disableApprove} className="mt-4">
