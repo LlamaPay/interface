@@ -7,7 +7,7 @@ interface IUseDepositGnosis {
   llamaContractAddress: string;
   tokenContractAddress: string;
   amountToDeposit: string;
-  formDialog: DisclosureState;
+  formDialog?: DisclosureState;
 }
 
 interface IDepositGnosis extends IUseDepositGnosis {
@@ -41,7 +41,7 @@ async function deposit({
       ];
 
       await sdk.txs.send({ txs: transactions });
-      formDialog.toggle();
+      formDialog ? formDialog.toggle() : '';
     }
   } catch (error: any) {
     throw new Error(error.message || (error?.reason ?? "Couldn't deposit token"));
