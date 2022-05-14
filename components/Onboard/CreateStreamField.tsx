@@ -48,7 +48,7 @@ const Form = ({
   const t1 = useTranslations('Onboard');
 
   return (
-    <div className="mx-auto flex w-full flex-1 flex-col overflow-auto px-7 pt-12 pb-7 sm:pt-[104px]">
+    <div className="mx-auto flex w-full flex-1 flex-col overflow-auto px-7 pt-12 pb-7">
       <form className="flex flex-1 flex-col gap-8" onSubmit={handleSubmit}>
         <InputText
           name="addressToStream"
