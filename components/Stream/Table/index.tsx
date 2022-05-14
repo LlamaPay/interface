@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { createTable, getCoreRowModelSync, useTableInstance } from '@tanstack/react-table';
+import { createTable, getCoreRowModel, useTableInstance } from '@tanstack/react-table';
 import Table from 'components/Table';
 import {
   TotalStreamed,
@@ -134,7 +134,7 @@ export function StreamTable({ data }: { data: IStream[] }) {
   const instance = useTableInstance(table, {
     data,
     columns,
-    getCoreRowModel: getCoreRowModelSync(),
+    getCoreRowModel: getCoreRowModel(),
   });
 
   const downloadToCSV = React.useCallback(() => {
@@ -196,7 +196,7 @@ export function DefaultStreamTable({ data }: { data: IStream[] }) {
   const instance = useTableInstance(defaultTable, {
     data,
     columns,
-    getCoreRowModel: getCoreRowModelSync(),
+    getCoreRowModel: getCoreRowModel(),
   });
 
   return <Table instance={instance} hidePagination={true} />;

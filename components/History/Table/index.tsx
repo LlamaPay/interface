@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {
   createTable,
-  getCoreRowModelSync,
+  getCoreRowModel,
   getPaginationRowModel,
   useTableInstance,
   PaginationState,
@@ -15,12 +15,6 @@ import { useTranslations } from 'next-intl';
 const table = createTable().setRowType<IHistory>();
 
 export function HistoryTable({ data }: { data: IHistory[] }) {
-  const [pagination, setPagination] = React.useState<PaginationState>({
-    pageIndex: 0,
-    pageSize: 10,
-    pageCount: -1, // -1 allows the table to calculate the page count for us via instance.getPageCount()
-  });
-
   const t = useTranslations('Table');
 
   const columns = React.useMemo(
@@ -66,15 +60,21 @@ export function HistoryTable({ data }: { data: IHistory[] }) {
     [t]
   );
 
+  const [pagination, setPagination] = React.useState<PaginationState>({
+    pageIndex: 0,
+    pageSize: 10,
+    pageCount: undefined, // allows the table to calculate the page count for us via instance.getPageCount()
+  });
+
   const instance = useTableInstance(table, {
     data,
     columns,
     state: {
       pagination,
     },
-    getCoreRowModel: getCoreRowModelSync(),
-    getPaginationRowModel: getPaginationRowModel(),
     onPaginationChange: setPagination,
+    getCoreRowModel: getCoreRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
   });
 
   const downloadToCSV = React.useCallback(() => downloadHistory(data), [data]);

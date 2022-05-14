@@ -957,17 +957,17 @@
     "@ethersproject/properties" "^5.6.0"
     "@ethersproject/strings" "^5.6.0"
 
-"@floating-ui/core@^0.6.2":
-  version "0.6.2"
-  resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-0.6.2.tgz#f2813f0e5f3d5ed7af5029e1a082203dadf02b7d"
-  integrity sha512-jktYRmZwmau63adUG3GKOAVCofBXkk55S/zQ94XOorAHhwqFIOFAy1rSp2N0Wp6/tGbe9V3u/ExlGZypyY17rg==
+"@floating-ui/core@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@floating-ui/core/-/core-0.7.0.tgz#f2442168d65c22daeb48cfb730cbc3a29a846ac7"
+  integrity sha512-W7+i5Suhhvv97WDTW//KqUA43f/2a4abprM1rWqtLM9lIlJ29tbFI8h232SvqunXon0WmKNEKVjbOsgBhTnbLw==
 
-"@floating-ui/dom@0.4.5":
-  version "0.4.5"
-  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-0.4.5.tgz#2e88d16646119cc67d44683f75ee99840475bbfa"
-  integrity sha512-b+prvQgJt8pieaKYMSJBXHxX/DYwdLsAWxKYqnO5dO2V4oo/TYBZJAUQCVNjTWWsrs6o4VDrNcP9+E70HAhJdw==
+"@floating-ui/dom@0.5.0":
+  version "0.5.0"
+  resolved "https://registry.yarnpkg.com/@floating-ui/dom/-/dom-0.5.0.tgz#e4efd9e609ff3ee6778fbe4273930d6d1c220f2e"
+  integrity sha512-PS75dnMg4GdWjDFOiOs15cDzYJpukRNHqQn0ugrBlsrpk2n+y8bwZ24XrsdLSL7kxshmxxr2nTNycLnmRIvV7g==
   dependencies:
-    "@floating-ui/core" "^0.6.2"
+    "@floating-ui/core" "^0.7.0"
 
 "@fontsource/exo-2@^4.5.7":
   version "4.5.8"
@@ -1610,17 +1610,17 @@
   dependencies:
     mini-svg-data-uri "^1.2.3"
 
-"@tanstack/react-table@^8.0.0-alpha.67":
-  version "8.0.0-alpha.67"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-table/-/react-table-8.0.0-alpha.67.tgz#d33823515ac68fefac4a6bb295882e047e58b87f"
-  integrity sha512-fTlV6OucVxpoXejHJJz4KcYbRMdOciYX1sR9i0YmQXV3YgDgto/p+roeS0i7EjBJP32pPz9H59q35zEKzAgTFw==
+"@tanstack/react-table@^8.0.0-alpha.76":
+  version "8.0.0-alpha.76"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-table/-/react-table-8.0.0-alpha.76.tgz#f0592a69ca77ea1a49d5d8451a3402909dde8be8"
+  integrity sha512-/iGBcLShprSCiGXuI5P69GhuRGjEJPy2xTVcZ2dLcIHNX5DhW14ShXkwjM/OF8f4n5+TdVVX9o9hfPuxs7zVPQ==
   dependencies:
-    "@tanstack/table-core" "8.0.0-alpha.67"
+    "@tanstack/table-core" "8.0.0-alpha.76"
 
-"@tanstack/table-core@8.0.0-alpha.67":
-  version "8.0.0-alpha.67"
-  resolved "https://registry.yarnpkg.com/@tanstack/table-core/-/table-core-8.0.0-alpha.67.tgz#b910bc4a3c03ffbcb8089c5f28de5943c83a466b"
-  integrity sha512-CkZGpfrP8zS3os6XHJ0nhr8vNnTdWNVm6lFlJ03knAY1Fl6NqGlg+nLbOWYm7zokPMDgEHCVoeMMKJI5UWB0+w==
+"@tanstack/table-core@8.0.0-alpha.76":
+  version "8.0.0-alpha.76"
+  resolved "https://registry.yarnpkg.com/@tanstack/table-core/-/table-core-8.0.0-alpha.76.tgz#89aad824e619fee208020b1c337fe951b6576206"
+  integrity sha512-DvKx/uk+rNb9B5ccn0I7mTXBzo+FHM+c40m4z6sE6J1Pt4p+Ac9SWtluuVdxarmpj9F1rqKvKkRHsGm/m8bQIA==
 
 "@tootallnate/once@2":
   version "2.0.0"
@@ -2213,18 +2213,18 @@ aria-query@^4.2.2:
     "@babel/runtime" "^7.10.2"
     "@babel/runtime-corejs3" "^7.10.2"
 
-ariakit-utils@0.17.0-next.17:
-  version "0.17.0-next.17"
-  resolved "https://registry.yarnpkg.com/ariakit-utils/-/ariakit-utils-0.17.0-next.17.tgz#b629221053844285837c026d14e1dbf0cd652994"
-  integrity sha512-LCyuFvsTa8zGB1b8T0mMlps84vRrw2DrqXqkj9+uuTEsHZ6yxkmVkJJPm+oNL+rE46wUUwrFEOvzDsCvpWgJEw==
+ariakit-utils@0.17.0-next.18:
+  version "0.17.0-next.18"
+  resolved "https://registry.yarnpkg.com/ariakit-utils/-/ariakit-utils-0.17.0-next.18.tgz#5bf9a3be399b30c1f9b8573dbd24b06f552cc5fd"
+  integrity sha512-uDPWUW850ootTSIeYWkDU83bjJeM+QB3WAurw0RUoqOsUbJOFqxG5opVikDhvelRMR8+gV52MC2v2iy10wxb7Q==
 
-ariakit@^2.0.0-next.25:
-  version "2.0.0-next.25"
-  resolved "https://registry.yarnpkg.com/ariakit/-/ariakit-2.0.0-next.25.tgz#d7cc36211a04901bfb06235411c970a179ca2282"
-  integrity sha512-4JLlyLTcvjwlndlAlRIezcyIBLvU8mVqKQQxMvu7YEcrSQmFQ0A5vUTu3w7/PY1/3XOs/T6pGnPWNW/PwLRkCQ==
+ariakit@^2.0.0-next.26:
+  version "2.0.0-next.26"
+  resolved "https://registry.yarnpkg.com/ariakit/-/ariakit-2.0.0-next.26.tgz#55d58da24866df23eafe70563abc07771e658f90"
+  integrity sha512-XilUfLkKqA6RZhoklY+ZtmpHApISARlnKuqhxoyUceWUV/XxuAe1b/ZaUDn4uZLlnppbTlzgexIVrg0MOpveJg==
   dependencies:
-    "@floating-ui/dom" "0.4.5"
-    ariakit-utils "0.17.0-next.17"
+    "@floating-ui/dom" "0.5.0"
+    ariakit-utils "0.17.0-next.18"
 
 array-includes@^3.1.4:
   version "3.1.5"
