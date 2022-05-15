@@ -32,19 +32,19 @@
     "logoAlt": "Logo de {name}",
     "transactionSubmitted": "Transacción Completada",
     "viewOnExplorer": "Ver en {explorer}",
-    "eventTimestamp": "Hora del Evento",
-    "moreInfo": "Más Info",
+    "eventTimestamp": "Fecha del Evento",
+    "moreInfo": "Más información",
     "oldStream": "Transacciones Viejas",
     "newStream": "Transacciones Nuevas",
-    "stream": "Transmision",
+    "stream": "Transmisión",
     "payer": "Enviador",
-    "payee": "Recibidor",
-    "streamHistory": "Historia de Transmisiones",
+    "payee": "beneficiario",
+    "streamHistory": "Historial de Transmisiones",
     "eventType": "Tipo de acción",
     "timestamp": "Fecha",
-    "you": "Tu",
-    "lightTheme": "Tema de luz",
-    "darkTheme": "Tema oscuro"
+    "you": "Tú",
+    "lightTheme": "Configuración Blanca",
+    "darkTheme": "Configuración Oscura"
   },
   "Header": {
     "connectWallet": "Conectar Billetera",
@@ -53,7 +53,7 @@
   },
   "Banner": {
     "heading": "Autimatiza los pagos recurrentes de la nomina en crypto!",
-    "description": "Automatiza pagos de salario, transmitiendolos por segundo. De esa manera los empleados pordran retirar en cualquier momentos y sin necesidad de que tengas que realizar envios manuales.",
+    "description": "Automatiza pagos de salario, transmitiendolos por segundo. De esa manera los empleados pordrán retirar en cualquier momentos y sin necesidad de que tengas que realizar envios manuales.",
     "close": "Cerrar Anuncio"
   },
   "Balances": {
@@ -63,9 +63,9 @@
     "deposit": "Depositar token nuevo",
     "noData": "Crea un Saldo Primero",
     "error": "Error en Carga de Saldo",
-    "toDepleted": "Se agota el",
+    "toDepleted": "Agotado",
     "monthlyCost": "Costo Mensual",
-    "topup": "Aumentar",
+    "topup": "Recarga",
     "streamsDepleted": "Transmisiones Agotadas",
     "noStreams": "Sin Transmisiones",
     "days": "Días"
@@ -88,10 +88,10 @@
     "outgoingStream": "Transmisión Saliente",
     "incomingStream": "Transmisión Entrante",
     "incomingStreamFrom": "Transmisión Entrante desde",
-    "disperse": "Dividir",
+    "disperse": "Distribuir",
     "withdrawAnotherWallet": "Retirar Otra Billetera",
     "sendAll": "Enviar Todo",
-    "editName": "Editar directión del recibidor"
+    "editName": "Editar directión del beneficiario"
   },
   "History": {
     "heading": "Historial",
@@ -106,14 +106,14 @@
     "receiveStream": "Recibir Transmisión",
     "streamCreated": "Transmisión Creada",
     "streamModified": "Transmisión Modificada",
-    "streamCancelled": "Transmisión Modificada",
+    "streamCancelled": "Transmisión Cancelada",
     "viewTransactionOnExplorer": "Ver Transacción en {name}",
     "invoice": "Factura"
   },
   "Payees": {
-    "connectWallet": "Conecta la Billetera para ver la lista de recipientes",
-    "noData": "Crea una transmisión para ver la lista de recipientes",
-    "error": "Error en Carga de lista de recipientes"
+    "connectWallet": "Conecta la Billetera para ver la lista de beneficiarios",
+    "noData": "Crea una transmisión para ver la lista de beneficiarios",
+    "error": "Error en Carga de lista de beneficiarios"
   },
   "Table": {
     "exportCSV": "Exportar CSV",
@@ -123,7 +123,7 @@
     "userName": "Nombre",
     "address": "Dirección",
     "tokenSymbol": "Token",
-    "amountPerSec": "Monto",
+    "amountPerSec": "Monto por segundo",
     "totalStreamed": "Total Transmitido",
     "userWithdrawable": "Retirable",
     "history": "Historial",
@@ -134,19 +134,19 @@
     "age": "Antigüedad"
   },
   "Forms": {
-    "tokenToDeposit": "Que token quieres depositar?",
+    "tokenToDeposit": "¿Qué token quieres depositar?",
     "availableForDeposit": "Disponible para Depositar",
-    "amountToDeposit": "¿Cuanto quieres depositar en total?",
+    "amountToDeposit": "¿Cuánto quieres depositar en total?",
     "max": "MÁXIMO",
-    "approveOnWallet": "Aprovar en la Billetera",
+    "approveOnWallet": "Aprobar en la Billetera",
     "availableForWithdrawl": "Disponible para Retirar",
     "withdrawAll": "Retirar todo",
-    "topupAmount": "Maximizar Monto",
+    "topupAmount": "Cantidad de recarga",
     "optional": "opcional",
-    "addressToStream": "Escriba la dirección a transmitir",
-    "recipientAddress": "Escriba la dirección del recippiente",
+    "addressToStream": "Ingrese la dirección a transmitir",
+    "recipientAddress": "Ingrese la dirección del recippiente",
     "associateName": "¿Desea Asociar el Nombre con la Dirección?",
-    "fastIdentification": "Agrega un nombre para identifición rápida",
+    "fastIdentification": "Agrega un nombre para identificación rápida",
     "selectTokenFromBalances": "Seleccionar Token desde el saldo",
     "amountToStream": "Monto a Transmitir",
     "streamDuration": "Duración de la transmisión",
@@ -154,12 +154,12 @@
     "delete": "Borrar",
     "addStream": "Agregar Transmisión",
     "requiredField": "Campo Obligatorio",
-    "validAddress": "Escriba una Dirección Válida",
-    "validNumber": "Escriba un numero válido",
+    "validAddress": "Ingrese una Dirección Válida",
+    "validNumber": "Ingrese un número válido",
     "withdrawOnBehalf": "Retirar en nombre de otra billetera",
     "tokensError": "Error en carga de la lista de Tokens",
-    "enterPayerAddress": "Escriba la dirección del enviador",
-    "enterPayeeAddress": "Escriba la dirección del recibidor",
+    "enterPayerAddress": "Ingrese la dirección del enviador",
+    "enterPayeeAddress": "Ingrese la dirección del beneficiario",
     "streamedAmount": "Monto Transmitido",
     "currentStream": "Transmisión Actual",
     "updateStream": "Actualizar Transmisión",
@@ -177,7 +177,7 @@
     "footer": "Los fondos no son movidos solo al conectar una billeteera",
     "welcome": "¡Bienvenido!",
     "description": "Crear transmisiones de duración indefinida, y solo envíe dinero de una reserva. Esto hace posible la maximización de todas las transmisiones en una sola operación y solo se provee dinero cuando es necesario para mantener la reserva.",
-    "learnMore": "Leer más en nuestros Documentos"
+    "learnMore": "Obtenga más información en nuestros documentos"
   },
   "Onboard": {
     "worksWithAllTokens": "Funciona con todos los tokens",
@@ -188,25 +188,25 @@
   "CreateStream": {
     "createANewStream": "Crear una nueva transmisión",
     "connectWallet": "Conecte la Billetera para crear una nueva transmisión",
-    "notSupported": "Cadena no respaldada",
+    "notSupported": "Cadena no compatible",
     "sus": "Algo ha salido mal"
   },
   "Disperse": {
-    "disperseTokentoYourPayees": "Dispersar {token} hacia Tus recibidores",
-    "amountToDisperse": "Escriba el monto a dispersar",
+    "disperseTokentoYourPayees": "Distribuir {token} hacia Tus beneficiarioes",
+    "amountToDisperse": "Ingrese el monto a distribuir",
     "splitEqually": "Dividir por Igual",
-    "availableToDisperse": "Disponible para Dispersar",
+    "availableToDisperse": "Disponible para distribuir",
     "selectAll": "Selectionar todo",
     "unselectAll": "Deseleccionar todo",
     "nameOrAddress": "Nombre/dirección",
-    "payeeBalance": "Balance del recibidor",
+    "payeeBalance": "Balance del beneficiario",
     "amountToSend": "Monto a Enviar"
   },
   "Withdraw": {
-    "connectWallet": "Contectarse para retirar un monto en nombre de otra billetera",
+    "connectWallet": "Conéctese para retirar un monto en nombre de otra billetera",
     "sus": "Algo ha salido mal",
-    "networkNotSupported": "Red no respaldada",
-    "addressToFetchStreams": "Entre una dirección para conseguir las transmisiones",
+    "networkNotSupported": "Red no compatible",
+    "addressToFetchStreams": "Ingrese una dirección para conseguir las transmisiones",
     "noData": "Este usuario no tiene transmisiones entrante",
     "error": "No se encontraron transmisiones para este usuario",
     "sendAll": "Enviar todo"
