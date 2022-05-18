@@ -1,4 +1,4 @@
-import { BookOpenIcon, MoonIcon, PlayIcon, SunIcon } from '@heroicons/react/outline';
+import { BookOpenIcon, ChartPieIcon, MoonIcon, PlayIcon, SunIcon } from '@heroicons/react/outline';
 import { DisclosureState } from 'ariakit';
 import { Menu, MenuItem } from 'components/NestedMenu';
 import { useIsMounted, useLocale, useWindowSize } from 'hooks';
@@ -119,6 +119,19 @@ export default function HeaderMenu({
           <MenuItem label={locale.name} key={locale.id} onClick={() => updateLocale(locale.id)} />
         ))}
       </Menu>
+
+      <MenuItem
+        label={
+          <a
+            href="/vesting"
+            rel="noreferrer noopener"
+            className="flex w-full items-center justify-between gap-4 font-normal"
+          >
+            <span className="cursor-pointer">Vesting</span>
+            <ChartPieIcon className="h-4 w-4" />
+          </a>
+        }
+      />
 
       <MenuItem
         label={
