@@ -1,6 +1,7 @@
 import { InputAmount, InputAmountWithDuration, InputText, SubmitButton } from 'components/Form';
 import * as React from 'react';
 import { Switch } from '@headlessui/react';
+import useCreateVestingContract from 'queries/useCreateVestingContract';
 
 interface IVestingElements {
   recipientAddress: { value: string };
@@ -14,7 +15,8 @@ interface IVestingElements {
 
 export default function Vesting() {
   const [includeCliff, setIncludeCliff] = React.useState<boolean>(false);
-  const [customStartTime, setCustomStartTime] = React.useState<boolean>(false);
+  const [includeCustomStart, setIncludeCustomStart] = React.useState<boolean>(false);
+  const { mutate, isLoading } = useCreateVestingContract();
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -27,6 +29,19 @@ export default function Vesting() {
     const vestingDuration = form.vestingDuration?.value;
     const cliffTime = form.cliffTime?.value;
     const cliffDuration = form.cliffDuration?.value;
+    mutate({
+      factory: '0x98d3872b4025ABE58C4667216047Fe549378d90f',
+      recipient: recipientAddress,
+      vestedToken: vestedToken,
+      vestedAmount: vestingAmount,
+      vestingTime: vestingTime,
+      vestingDuration: vestingDuration,
+      hasCustomStart: includeCustomStart,
+      customStart: '0',
+      hasCliff: includeCliff,
+      cliffTime: cliffTime,
+      cliffDuration: cliffDuration,
+    });
   }
 
   return (
@@ -63,15 +78,15 @@ export default function Vesting() {
         </Switch>
         <span>{`Custom Start Time`}</span>
         <Switch
-          checked={customStartTime}
-          onChange={setCustomStartTime}
+          checked={includeCustomStart}
+          onChange={setIncludeCustomStart}
           className={`${
-            customStartTime ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
+            includeCustomStart ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
           } relative inline-flex h-6 w-11 items-center rounded-full`}
         >
           <span
             className={`${
-              customStartTime ? 'translate-x-6' : 'translate-x-1'
+              includeCustomStart ? 'translate-x-6' : 'translate-x-1'
             } inline-block h-4 w-4 transform rounded-full bg-white`}
           />
         </Switch>
