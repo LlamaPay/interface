@@ -21,7 +21,7 @@ const fetchBalance = async (
         (d.status === 'fulfilled' && new BigNumber(d.value.toString()).dividedBy(10 ** tokens[index].decimals)) ?? null;
 
       // filter zero balance tokens
-      if (!amount || amount.toFixed(0) === '0') return [];
+      if (!amount || !(Number(amount) > 0)) return [];
 
       return {
         name: tokens[index]?.name,
