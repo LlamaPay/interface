@@ -27,8 +27,8 @@ export const InputAmount = ({ name, label, isRequired, className, handleChange, 
   );
 };
 
-export const InputText = ({ name, label, isRequired, className, optional, ...props }: InputElement) => {
-  const t = useTranslations('Forms')
+export const InputText = ({ name, label, isRequired, className, optional, handleChange, ...props }: InputElement) => {
+  const t = useTranslations('Forms');
   return (
     <label>
       <span className="input-label">
@@ -43,6 +43,7 @@ export const InputText = ({ name, label, isRequired, className, optional, ...pro
         autoCorrect="off"
         type="text"
         spellCheck="false"
+        onChange={handleChange}
         {...props}
       />
     </label>
