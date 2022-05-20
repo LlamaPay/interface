@@ -53,7 +53,7 @@ export default function Vesting() {
     checkApproval();
   }, [vestingAmount, vestedToken, lmao]);
 
-  const factory = '0x98d3872b4025ABE58C4667216047Fe549378d90f';
+  const factory = '0x73aCD60f886B8574AcA8b47dD5B37F4b7F114c5C';
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
