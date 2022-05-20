@@ -1,10 +1,12 @@
 import { ethers, Signer } from 'ethers';
 import { getAddress } from 'ethers/lib/utils';
-import { useMutation } from 'react-query';
+import { useMutation, useQueryClient } from 'react-query';
 import { useSigner } from 'wagmi';
 import vestingFactory from 'abis/vestingFactory';
 import BigNumber from 'bignumber.js';
 import { secondsByDuration } from 'utils/constants';
+import toast from 'react-hot-toast';
+import { ITransactionError, ITransactionSuccess } from 'types';
 
 interface IUseCreateVestingContract {
   factory: string;
@@ -66,7 +68,8 @@ async function createVestingContract({
 
 export default function useCreateVestingContract() {
   const [{ data: signer }] = useSigner();
-  return useMutation(
+  const queryClient = useQueryClient();
+  return useMutation<ITransactionSuccess, ITransactionError, IUseCreateVestingContract, unknown>(
     ({
       recipient,
       factory,
@@ -93,6 +96,26 @@ export default function useCreateVestingContract() {
         hasCliff,
         cliffTime,
         cliffDuration,
-      })
+      }),
+    {
+      onError: (error) => {
+        toast.error(error.message || 'Transaction Failed');
+      },
+      onSuccess: (data) => {
+        const bubble = toast.loading('Creating Contract');
+        data.wait().then((result) => {
+          toast.dismiss(bubble);
+          queryClient.invalidateQueries();
+          if (result.status === 1) {
+            toast.success('Successfully Created Contract');
+          } else {
+            toast.error('Failed to Create Contract');
+          }
+        });
+      },
+      onSettled: () => {
+        queryClient.invalidateQueries();
+      },
+    }
   );
 }

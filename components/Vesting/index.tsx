@@ -28,7 +28,7 @@ export default function Vesting() {
   const [lmao, setLmao] = React.useState<boolean>(true);
   const { mutate, isLoading } = useCreateVestingContract();
   const { mutate: checkTokenApproval, data: isApproved, isLoading: checkingApproval } = useCheckTokenApproval();
-  const { mutate: approveToken, isLoading: approvingToken, error: approvalError } = useApproveToken();
+  const { mutate: approveToken, isLoading: approvingToken } = useApproveToken();
   const provider = useProvider();
   const [{ data: accountData }] = useAccount();
 
@@ -64,7 +64,6 @@ export default function Vesting() {
     const cliffTime = form.cliffTime?.value;
     const cliffDuration = form.cliffDuration?.value;
     if (isApproved) {
-      console.log(formattedAmt);
       mutate(
         {
           factory: factory,
