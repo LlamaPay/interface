@@ -1,6 +1,10 @@
 import { ethers, providers } from 'ethers';
 import { Chain, allChains } from 'wagmi';
 
+// NODE_ENV
+export const isDev = process.env.NODE_ENV === 'development';
+export const isProd = process.env.NODE_ENV === 'production';
+
 // TESTNETS
 export const FACTORY_RINKEBY = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_KOVAN = '0xd43bb75cc924e8475dff2604b962f39089e4f842';

@@ -5,9 +5,13 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {},
+    debugScreens: {
+      position: ['bottom', 'right'],
+    },
   },
   plugins: [
     require('@tailwindcss/forms'),
+    require('tailwindcss-debug-screens'),
     plugin(({ addVariant }) => {
       addVariant('enter', '&[data-enter]');
       addVariant('leave', '&[data-leave]');

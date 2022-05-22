@@ -1,4 +1,6 @@
 import { Html, Head, Main, NextScript } from 'next/document';
+import classNames from 'classnames';
+import { isDev } from 'utils/constants';
 
 export default function Document() {
   return (
@@ -9,7 +11,12 @@ export default function Document() {
         <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
         <link rel="manifest" href="/favicons/site.webmanifest" />
       </Head>
-      <body className="bg-white text-black dark:bg-[#161818] dark:text-white">
+      <body
+        className={classNames(
+          'bg-white text-black dark:bg-[#161818] dark:text-white',
+          { 'debug-screens': isDev }
+        )}
+      >
         <Main />
         <NextScript />
       </body>
