@@ -96,3 +96,16 @@ export interface ITransaction {
   data?: ITransactionSuccess;
   error?: ITransactionError;
 }
+
+export interface IVesting {
+  unclaimed: string;
+  locked: string;
+  recipient: string;
+  token: string;
+  startTime: string;
+  endTime: string;
+  cliffLength: string;
+  totalLocked: string;
+  totalClaimed: string;
+  admin: string;
+}
