@@ -2,6 +2,8 @@ import { createTable, getCoreRowModel, useTableInstance } from '@tanstack/react-
 import Table from 'components/Table';
 import React from 'react';
 import { IVesting } from 'types';
+import { formatAddress } from 'utils/address';
+import Unclaimed from './CustomValues/Unclaimed';
 
 const table = createTable().setRowType<IVesting>();
 
@@ -11,27 +13,39 @@ export function VestingTable({ data }: { data: IVesting[] }) {
       table.createDisplayColumn({
         id: 'token',
         header: 'Token',
-        cell: ({ cell }) => cell.row.original && <p>uwu</p>,
+        cell: ({ cell }) =>
+          cell.row.original && <a className="text-center dark:text-white">{`${cell.row.original.tokenName}`}</a>,
       }),
       table.createDisplayColumn({
         id: 'funder',
         header: 'Funder',
-        cell: ({ cell }) => cell.row.original && <p>uwu</p>,
+        cell: ({ cell }) =>
+          cell.row.original && <a className="text-center dark:text-white ">{formatAddress(cell.row.original.admin)}</a>,
+      }),
+      table.createDisplayColumn({
+        id: 'total_locked',
+        header: 'Total Vested',
+        cell: ({ cell }) =>
+          cell.row.original && (
+            <span className="text-center dark:text-white">
+              {(Number(cell.row.original.totalLocked) / 10 ** cell.row.original.tokenDecimals).toFixed(5)}
+            </span>
+          ),
       }),
       table.createDisplayColumn({
         id: 'claimed',
         header: 'Claimed',
-        cell: ({ cell }) => cell.row.original && <p>uwu</p>,
+        cell: ({ cell }) =>
+          cell.row.original && (
+            <span className="text-center dark:text-white">
+              {(Number(cell.row.original.totalClaimed) / 10 ** cell.row.original.tokenDecimals).toFixed(5)}
+            </span>
+          ),
       }),
       table.createDisplayColumn({
         id: 'unclaimed',
         header: 'Unclaimed',
-        cell: ({ cell }) => cell.row.original && <p>uwu</p>,
-      }),
-      table.createDisplayColumn({
-        id: 'ends',
-        header: 'Ends',
-        cell: ({ cell }) => cell.row.original && <p>uwu</p>,
+        cell: ({ cell }) => cell.row.original && <Unclaimed data={cell.row.original} />,
       }),
     ],
     []

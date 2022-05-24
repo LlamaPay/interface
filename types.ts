@@ -102,6 +102,9 @@ export interface IVesting {
   locked: string;
   recipient: string;
   token: string;
+  tokenName: string;
+  tokenSymbol: string;
+  tokenDecimals: number;
   startTime: string;
   endTime: string;
   cliffLength: string;

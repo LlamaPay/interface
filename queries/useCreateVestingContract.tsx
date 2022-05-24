@@ -47,7 +47,9 @@ async function createVestingContract({
       const factoryContract = new ethers.Contract(getAddress(factory), vestingFactoryReadable, signer);
       const convertedVestingDuration = new BigNumber(vestingTime).times(secondsByDuration[vestingDuration]).toFixed(0);
       const toStart =
-        hasCustomStart && customStart ? new BigNumber(customStart).toFixed(0) : new BigNumber(0).toFixed(0);
+        hasCustomStart && customStart
+          ? new BigNumber(customStart).toFixed(0)
+          : new BigNumber(Date.now() / 1e3).toFixed(0);
       const cliffAmount =
         hasCliff && cliffTime && cliffDuration
           ? new BigNumber(cliffTime).times(secondsByDuration[cliffDuration]).toFixed(0)

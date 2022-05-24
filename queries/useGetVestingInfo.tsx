@@ -6,7 +6,7 @@ import { ContractCallContext, ContractCallResults, Multicall } from 'ethereum-mu
 import { ethers } from 'ethers';
 import { useQuery } from 'react-query';
 import { IVesting } from 'types';
-import { useAccount, useProvider } from 'wagmi';
+import { erc20ABI, useAccount, useProvider } from 'wagmi';
 
 async function getVestingInfo(userAddress: string, provider: BaseProvider) {
   try {
@@ -65,13 +65,31 @@ async function getVestingInfo(userAddress: string, provider: BaseProvider) {
       const vestingContractMulticallResults: ContractCallResults = await multicall.call(vestingContractCallContext);
 
       const results: IVesting[] = [];
-      Object.keys(vestingContractMulticallResults.results).forEach((key) => {
+      for (const key in vestingContractMulticallResults.results) {
         const context = vestingContractMulticallResults.results[key].callsReturnContext;
+        if (context[7].returnValues[0].hex === context[8].returnValues[0].hex) continue;
+        const tokenInfo: ContractCallContext[] = [
+          {
+            reference: 'token',
+            contractAddress: context[3].returnValues[0],
+            abi: erc20ABI,
+            calls: [
+              { reference: 'name', methodName: 'name', methodParameters: [] },
+              { reference: 'symbol', methodName: 'symbol', methodParameters: [] },
+              { reference: 'decimals', methodName: 'decimals', methodParameters: [] },
+            ],
+          },
+        ];
+        const tokenInfoResult: ContractCallResults = await multicall.call(tokenInfo);
+        const tokenContext = tokenInfoResult.results.token.callsReturnContext;
         results.push({
           unclaimed: new BigNumber(context[0].returnValues[0].hex).toString(),
           locked: new BigNumber(context[1].returnValues[0].hex).toString(),
           recipient: context[2].returnValues[0],
           token: context[3].returnValues[0],
+          tokenName: tokenContext[0].returnValues[0],
+          tokenSymbol: tokenContext[1].returnValues[0],
+          tokenDecimals: tokenContext[2].returnValues[0],
           startTime: new BigNumber(context[4].returnValues[0].hex).toString(),
           endTime: new BigNumber(context[5].returnValues[0].hex).toString(),
           cliffLength: new BigNumber(context[6].returnValues[0].hex).toString(),
@@ -79,7 +97,7 @@ async function getVestingInfo(userAddress: string, provider: BaseProvider) {
           totalClaimed: new BigNumber(context[8].returnValues[0].hex).toString(),
           admin: context[9].returnValues[0],
         });
-      });
+      }
 
       return results;
     }
