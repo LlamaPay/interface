@@ -3,6 +3,7 @@ import Table from 'components/Table';
 import React from 'react';
 import { IVesting } from 'types';
 import { formatAddress } from 'utils/address';
+import ClaimButton from './CustomValues/ClaimButton';
 import Unclaimed from './CustomValues/Unclaimed';
 
 const table = createTable().setRowType<IVesting>();
@@ -35,17 +36,17 @@ export function VestingTable({ data }: { data: IVesting[] }) {
       table.createDisplayColumn({
         id: 'claimed',
         header: 'Claimed',
-        cell: ({ cell }) =>
-          cell.row.original && (
-            <span className="text-center dark:text-white">
-              {(Number(cell.row.original.totalClaimed) / 10 ** cell.row.original.tokenDecimals).toFixed(5)}
-            </span>
-          ),
+        cell: ({ cell }) => cell.row.original && <Unclaimed data={cell.row.original} dataType="claimed" />,
       }),
       table.createDisplayColumn({
         id: 'unclaimed',
         header: 'Unclaimed',
-        cell: ({ cell }) => cell.row.original && <Unclaimed data={cell.row.original} />,
+        cell: ({ cell }) => cell.row.original && <Unclaimed data={cell.row.original} dataType="unclaimed" />,
+      }),
+      table.createDisplayColumn({
+        id: 'claimOrRug',
+        header: '',
+        cell: ({ cell }) => cell.row.original && <ClaimButton data={cell.row.original} />,
       }),
     ],
     []

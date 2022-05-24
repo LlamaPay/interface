@@ -83,6 +83,7 @@ async function getVestingInfo(userAddress: string, provider: BaseProvider) {
         const tokenInfoResult: ContractCallResults = await multicall.call(tokenInfo);
         const tokenContext = tokenInfoResult.results.token.callsReturnContext;
         results.push({
+          contract: key,
           unclaimed: new BigNumber(context[0].returnValues[0].hex).toString(),
           locked: new BigNumber(context[1].returnValues[0].hex).toString(),
           recipient: context[2].returnValues[0],

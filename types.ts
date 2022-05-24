@@ -98,6 +98,7 @@ export interface ITransaction {
 }
 
 export interface IVesting {
+  contract: string;
   unclaimed: string;
   locked: string;
   recipient: string;
