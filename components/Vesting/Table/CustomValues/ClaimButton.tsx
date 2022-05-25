@@ -1,39 +1,69 @@
 import { Switch } from '@headlessui/react';
+import vestingContractReadable from 'abis/vestingContractReadable';
 import { useDialogState } from 'ariakit';
 import BigNumber from 'bignumber.js';
-import { FormDialog } from 'components/Dialog';
+import { FormDialog, TransactionDialog } from 'components/Dialog';
 import { InputAmount, InputText, SubmitButton } from 'components/Form';
-import useWithdrawVestedTokens from 'queries/useWithdrawVestedTokens';
 import React from 'react';
+import toast from 'react-hot-toast';
+import { BeatLoader } from 'react-spinners';
 import { IVesting } from 'types';
-import { useAccount } from 'wagmi';
+import { useAccount, useContractWrite } from 'wagmi';
 
 export default function ClaimButton({ data }: { data: IVesting }) {
   const [inputAmount, setInputAmount] = React.useState<string>('');
-  const [beneficiary, setBeneficiary] = React.useState<string>('');
+  const [beneficiaryInput, setBeneficiaryInput] = React.useState<string>('');
   const [hasCustomBeneficiary, setHasCustomBeneficiary] = React.useState<boolean>(false);
-  const { mutate } = useWithdrawVestedTokens();
+  const [transactionHash, setTransactionHash] = React.useState<string>('');
+  const transactionDialog = useDialogState();
   const [{ data: accountData }] = useAccount();
+  const [{ loading }, claim] = useContractWrite(
+    {
+      addressOrName: data.contract,
+      contractInterface: vestingContractReadable,
+    },
+    'claim'
+  );
   const claimDialog = useDialogState();
 
-  function handleSubmit() {
+  function handleClaim() {
+    const beneficiary = hasCustomBeneficiary ? beneficiaryInput : accountData?.address;
     const amount = new BigNumber(inputAmount).times(10 ** data.tokenDecimals).toFixed(0);
-    mutate({
-      contract: data.contract,
-      amount: amount,
-      beneficiary: hasCustomBeneficiary ? beneficiary : accountData?.address,
+    claim({ args: [beneficiary, amount] }).then((data) => {
+      if (data.error) {
+        toast.error('Failed to Claim Tokens');
+      } else {
+        const toastid = toast.loading('Claiming Tokens');
+        setTransactionHash(data.data.hash);
+        claimDialog.hide();
+        transactionDialog.show();
+        data.data.wait().then((receipt) => {
+          toast.dismiss(toastid);
+          receipt.status === 1 ? toast.success('Successfully Claimed Tokens') : toast.error('Failed to Claim Tokens');
+        });
+      }
     });
-    claimDialog.hide();
   }
 
-  function claimAllTokens() {
-    const amount = new BigNumber(data.unclaimed).times(10 ** data.tokenDecimals).toFixed(0);
-    mutate({
-      contract: data.contract,
-      amount: amount,
-      beneficiary: hasCustomBeneficiary ? beneficiary : accountData?.address,
+  function handleClaimAll() {
+    const beneficiary = hasCustomBeneficiary ? beneficiaryInput : accountData?.address;
+    const amount = new BigNumber(data.unclaimed).toFixed(0);
+    claim({ args: [beneficiary, amount] }).then((data) => {
+      if (data.error) {
+        toast.error('Failed to Claim Tokens');
+      } else {
+        const toastid = toast.loading('Claiming All Tokens');
+        setTransactionHash(data.data.hash);
+        claimDialog.hide();
+        transactionDialog.show();
+        data.data.wait().then((receipt) => {
+          toast.dismiss(toastid);
+          receipt.status === 1
+            ? toast.success('Successfully Claimed All Tokens')
+            : toast.error('Failed to Claim All Tokens');
+        });
+      }
     });
-    claimDialog.hide();
   }
 
   return (
@@ -85,18 +115,19 @@ export default function ClaimButton({ data }: { data: IVesting }) {
             <InputText
               label={'Beneficiary'}
               name="beneficiary"
-              handleChange={(e) => setBeneficiary(e.target.value)}
+              handleChange={(e) => setBeneficiaryInput(e.target.value)}
               isRequired
             />
           )}
-          <SubmitButton className="mt-5" onClick={handleSubmit}>
-            {'Claim Tokens'}
+          <SubmitButton className="mt-5" onClick={handleClaim}>
+            {loading ? <BeatLoader size={6} color="white" /> : 'Claim Tokens'}
           </SubmitButton>
-          <SubmitButton className="mt-5" onClick={claimAllTokens}>
-            {'Claim All Tokens'}
+          <SubmitButton className="mt-5" onClick={handleClaimAll}>
+            {loading ? <BeatLoader size={6} color="white" /> : 'Claim All Tokens'}
           </SubmitButton>
         </span>
       </FormDialog>
+      <TransactionDialog transactionHash={transactionHash} dialog={transactionDialog} />
     </>
   );
 }

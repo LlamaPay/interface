@@ -1,13 +1,18 @@
 import { InputAmount, InputAmountWithDuration, InputText, SubmitButton } from 'components/Form';
 import * as React from 'react';
 import { Switch } from '@headlessui/react';
-import useCreateVestingContract from 'queries/useCreateVestingContract';
 import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval';
 import { createERC20Contract, ICheckTokenAllowance } from 'utils/tokenUtils';
 import { getAddress } from 'ethers/lib/utils';
-import { useAccount, useProvider } from 'wagmi';
+import { useAccount, useContractWrite, useProvider } from 'wagmi';
 import BigNumber from 'bignumber.js';
 import { BeatLoader } from 'react-spinners';
+import vestingFactoryReadable from 'abis/vestingFactoryReadable';
+import { secondsByDuration } from 'utils/constants';
+import toast from 'react-hot-toast';
+import { useQueryClient } from 'react-query';
+import { TransactionDialog } from 'components/Dialog';
+import { useDialogState } from 'ariakit';
 
 interface IVestingElements {
   recipientAddress: { value: string };
@@ -25,12 +30,23 @@ export default function CreateVesting() {
   const [vestingAmount, setVestingAmount] = React.useState<string>('');
   const [formattedAmt, setFormattedAmt] = React.useState<string>('');
   const [vestedToken, setVestedToken] = React.useState<string>('');
+  const [transactionHash, setTransactionHash] = React.useState<string>('');
+  const transactionDialog = useDialogState();
   const [lmao, setLmao] = React.useState<boolean>(true);
-  const { mutate, isLoading } = useCreateVestingContract();
   const { mutate: checkTokenApproval, data: isApproved, isLoading: checkingApproval } = useCheckTokenApproval();
   const { mutate: approveToken, isLoading: approvingToken } = useApproveToken();
   const provider = useProvider();
   const [{ data: accountData }] = useAccount();
+  const queryClient = useQueryClient();
+  const factory = '0xdC6Ac3c1ec8dC4bA2884AF348e76b8bc4807bF1E';
+
+  const [{ loading }, deploy_vesting_contract] = useContractWrite(
+    {
+      addressOrName: factory,
+      contractInterface: vestingFactoryReadable,
+    },
+    'deploy_vesting_contract'
+  );
 
   React.useEffect(() => {
     async function checkApproval() {
@@ -53,37 +69,38 @@ export default function CreateVesting() {
     checkApproval();
   }, [vestingAmount, vestedToken, lmao]);
 
-  const factory = '0xdC6Ac3c1ec8dC4bA2884AF348e76b8bc4807bF1E';
-
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.target as typeof e.target & IVestingElements;
-    const recipientAddress = form.recipientAddress?.value;
-    const vestingTime = form.vestingTime?.value;
-    const vestingDuration = form.vestingDuration?.value;
-    const cliffTime = form.cliffTime?.value;
-    const cliffDuration = form.cliffDuration?.value;
+    const recipientAddress = form.recipientAddress.value;
+    const vestingTime = new BigNumber(form.vestingTime.value)
+      .times(secondsByDuration[form.vestingDuration.value])
+      .toFixed(0);
+    const toStart = includeCustomStart ? '' : new BigNumber(Date.now() / 1e3).toFixed(0);
+    const cliffTime = includeCliff
+      ? new BigNumber(form.cliffTime.value).times(secondsByDuration[form.cliffDuration.value]).toFixed(0)
+      : '0';
     if (isApproved) {
-      mutate(
-        {
-          factory: factory,
-          recipient: recipientAddress,
-          vestedToken: vestedToken,
-          vestedAmount: formattedAmt,
-          vestingTime: vestingTime,
-          vestingDuration: vestingDuration,
-          hasCustomStart: includeCustomStart,
-          customStart: '0',
-          hasCliff: includeCliff,
-          cliffTime: cliffTime,
-          cliffDuration: cliffDuration,
-        },
-        {
-          onSettled: () => {
-            setLmao(!lmao);
-          },
+      deploy_vesting_contract({
+        args: [vestedToken, recipientAddress, formattedAmt, vestingTime, toStart, cliffTime],
+      }).then((data) => {
+        if (data.error) {
+          toast.error(data.error.message);
+        } else {
+          const toastid = toast.loading('Creating Contract');
+          setTransactionHash(data.data.hash);
+          transactionDialog.show();
+          data.data.wait().then((receipt) => {
+            toast.dismiss(toastid);
+            if (receipt.status === 1) {
+              toast.success('Successfuly Created Contract');
+            } else {
+              toast.error('Failed to Create Contract');
+            }
+            queryClient.invalidateQueries();
+          });
         }
-      );
+      });
     } else {
       approveToken(
         {
@@ -101,71 +118,79 @@ export default function CreateVesting() {
   }
 
   return (
-    <form className="flex max-w-xl flex-col gap-4" onSubmit={onSubmit}>
-      <span className="font-exo text-2xl font-semibold text-[#3D3D3D] dark:text-white">{'Set Up Vesting'}</span>
-      <InputText label={'Recipient Address'} name="recipientAddress" isRequired />
-      <InputText
-        label={'Vested Token Address'}
-        name="vestedToken"
-        isRequired
-        handleChange={(e) => setVestedToken(e.target.value)}
-      />
-      <InputAmount
-        label={'Vesting Amount'}
-        name="vestingAmount"
-        isRequired
-        handleChange={(e) => setVestingAmount(e.target.value)}
-      />
-      <InputAmountWithDuration
-        label={'Vesting Duration'}
-        name="vestingTime"
-        isRequired
-        selectInputName="vestingDuration"
-      />
-      {includeCliff ? (
-        <InputAmountWithDuration label={'Cliff Duration'} name="cliffTime" isRequired selectInputName="cliffDuration" />
-      ) : (
-        ''
-      )}
-      <div className="flex gap-2">
-        <span>{'Include Cliff'}</span>
-        <Switch
-          checked={includeCliff}
-          onChange={setIncludeCliff}
-          className={`${
-            includeCliff ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
-          } relative inline-flex h-6 w-11 items-center rounded-full`}
-        >
-          <span
-            className={`${
-              includeCliff ? 'translate-x-6' : 'translate-x-1'
-            } inline-block h-4 w-4 transform rounded-full bg-white`}
+    <>
+      <form className="flex max-w-xl flex-col gap-4" onSubmit={onSubmit}>
+        <span className="font-exo text-2xl font-semibold text-[#3D3D3D] dark:text-white">{'Set Up Vesting'}</span>
+        <InputText label={'Recipient Address'} name="recipientAddress" isRequired />
+        <InputText
+          label={'Vested Token Address'}
+          name="vestedToken"
+          isRequired
+          handleChange={(e) => setVestedToken(e.target.value)}
+        />
+        <InputAmount
+          label={'Vesting Amount'}
+          name="vestingAmount"
+          isRequired
+          handleChange={(e) => setVestingAmount(e.target.value)}
+        />
+        <InputAmountWithDuration
+          label={'Vesting Duration'}
+          name="vestingTime"
+          isRequired
+          selectInputName="vestingDuration"
+        />
+        {includeCliff ? (
+          <InputAmountWithDuration
+            label={'Cliff Duration'}
+            name="cliffTime"
+            isRequired
+            selectInputName="cliffDuration"
           />
-        </Switch>
-        <span>{`Custom Start Time`}</span>
-        <Switch
-          checked={includeCustomStart}
-          onChange={setIncludeCustomStart}
-          className={`${
-            includeCustomStart ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
-          } relative inline-flex h-6 w-11 items-center rounded-full`}
-        >
-          <span
-            className={`${
-              includeCustomStart ? 'translate-x-6' : 'translate-x-1'
-            } inline-block h-4 w-4 transform rounded-full bg-white`}
-          />
-        </Switch>
-      </div>
-      <SubmitButton className="mt-5">
-        {isLoading || checkingApproval || isLoading || approvingToken ? (
-          <BeatLoader size={6} color="white" />
-        ) : isApproved ? (
-          'Create Contract'
         ) : (
-          'Approve Token'
+          ''
         )}
-      </SubmitButton>
-    </form>
+        <div className="flex gap-2">
+          <span>{'Include Cliff'}</span>
+          <Switch
+            checked={includeCliff}
+            onChange={setIncludeCliff}
+            className={`${
+              includeCliff ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
+            } relative inline-flex h-6 w-11 items-center rounded-full`}
+          >
+            <span
+              className={`${
+                includeCliff ? 'translate-x-6' : 'translate-x-1'
+              } inline-block h-4 w-4 transform rounded-full bg-white`}
+            />
+          </Switch>
+          <span>{`Custom Start Time`}</span>
+          <Switch
+            checked={includeCustomStart}
+            onChange={setIncludeCustomStart}
+            className={`${
+              includeCustomStart ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
+            } relative inline-flex h-6 w-11 items-center rounded-full`}
+          >
+            <span
+              className={`${
+                includeCustomStart ? 'translate-x-6' : 'translate-x-1'
+              } inline-block h-4 w-4 transform rounded-full bg-white`}
+            />
+          </Switch>
+        </div>
+        <SubmitButton className="mt-5">
+          {loading || checkingApproval || loading || approvingToken ? (
+            <BeatLoader size={6} color="white" />
+          ) : isApproved ? (
+            'Create Contract'
+          ) : (
+            'Approve Token'
+          )}
+        </SubmitButton>
+      </form>
+      <TransactionDialog dialog={transactionDialog} transactionHash={transactionHash} />
+    </>
   );
 }

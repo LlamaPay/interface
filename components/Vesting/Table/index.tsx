@@ -24,6 +24,14 @@ export function VestingTable({ data }: { data: IVesting[] }) {
           cell.row.original && <a className="text-center dark:text-white ">{formatAddress(cell.row.original.admin)}</a>,
       }),
       table.createDisplayColumn({
+        id: 'recipient',
+        header: 'Recipient',
+        cell: ({ cell }) =>
+          cell.row.original && (
+            <a className="text-center dark:text-white">{formatAddress(cell.row.original.recipient)}</a>
+          ),
+      }),
+      table.createDisplayColumn({
         id: 'total_locked',
         header: 'Total Vested',
         cell: ({ cell }) =>
