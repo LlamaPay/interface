@@ -44,7 +44,7 @@ export function VestingTable({ data }: { data: IVesting[] }) {
         cell: ({ cell }) => cell.row.original && <Unclaimed data={cell.row.original} dataType="unclaimed" />,
       }),
       table.createDisplayColumn({
-        id: 'claimOrRug',
+        id: 'claim',
         header: '',
         cell: ({ cell }) => cell.row.original && <ClaimButton data={cell.row.original} />,
       }),
