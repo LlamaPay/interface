@@ -71,7 +71,7 @@ export default function ClaimButton({ data }: { data: IVesting }) {
       <div className="float-right">
         {Date.now() / 1e3 >= Number(data.startTime) + Number(data.cliffLength) &&
           accountData?.address.toLowerCase() === data.recipient.toLowerCase() && (
-            <button onClick={claimDialog.toggle} className="row-action-links dark:text-white">
+            <button onClick={claimDialog.toggle} className="row-action-links font-exo dark:text-white">
               Claim Tokens
             </button>
           )}
@@ -87,16 +87,16 @@ export default function ClaimButton({ data }: { data: IVesting }) {
               className="dark:border-[#252525] dark:bg-[#202020] dark:text-white"
             />
             <div className="mt-[5px] flex flex-wrap items-center justify-between gap-4 rounded bg-[#E7E7E7]/40 px-2 py-1 text-xs text-[#4E575F] dark:bg-[#252525] dark:text-white">
-              <span>{'Available to be Claimed'}</span>
+              <span className="font-exo">{'Available to be Claimed'}</span>
               <div>
-                <p className="dark:text-white">{`${(Number(data.unclaimed) / 10 ** data.tokenDecimals).toFixed(5)} ${
-                  data.tokenSymbol
-                }`}</p>
+                <p className="font-exo dark:text-white">{`${(Number(data.unclaimed) / 10 ** data.tokenDecimals).toFixed(
+                  5
+                )} ${data.tokenSymbol}`}</p>
               </div>
             </div>
           </div>
           <div className="flex gap-2">
-            <span>{'Custom Beneficiary'}</span>
+            <span className="font-exo">{'Custom Beneficiary'}</span>
             <Switch
               checked={hasCustomBeneficiary}
               onChange={setHasCustomBeneficiary}

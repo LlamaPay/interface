@@ -24,7 +24,7 @@ export function VestingTable({ data }: { data: IVesting[] }) {
               href={`${explorerUrl}/address/${cell.row.original.token}`}
               target="_blank"
               rel="noreferrer noopener"
-              className="text-center dark:text-white"
+              className="font-exo text-center dark:text-white"
             >{`${cell.row.original.tokenName}`}</a>
           ),
       }),
@@ -37,7 +37,7 @@ export function VestingTable({ data }: { data: IVesting[] }) {
               href={`${explorerUrl}/address/${cell.row.original.admin}`}
               target="_blank"
               rel="noreferrer noopener"
-              className="text-center dark:text-white "
+              className="font-exo text-center dark:text-white"
             >
               {formatAddress(cell.row.original.admin)}
             </a>
@@ -52,7 +52,7 @@ export function VestingTable({ data }: { data: IVesting[] }) {
               href={`${explorerUrl}/address/${cell.row.original.recipient}`}
               target="_blank"
               rel="noreferrer noopener"
-              className="text-center dark:text-white"
+              className="font-exo text-center dark:text-white"
             >
               {formatAddress(cell.row.original.recipient)}
             </a>
@@ -63,7 +63,7 @@ export function VestingTable({ data }: { data: IVesting[] }) {
         header: 'Total Vested',
         cell: ({ cell }) =>
           cell.row.original && (
-            <span className="text-center dark:text-white">
+            <span className="font-exo text-center dark:text-white">
               {`${(Number(cell.row.original.totalLocked) / 10 ** cell.row.original.tokenDecimals).toFixed(5)} ${
                 cell.row.original.tokenSymbol
               }`}
@@ -75,7 +75,7 @@ export function VestingTable({ data }: { data: IVesting[] }) {
         header: 'Claimed',
         cell: ({ cell }) =>
           cell.row.original && (
-            <span className="text-center dark:text-white">{`${(
+            <span className="font-exo text-center dark:text-white">{`${(
               Number(cell.row.original.totalClaimed) /
               10 ** cell.row.original.tokenDecimals
             ).toFixed(5)} ${cell.row.original.tokenSymbol}`}</span>

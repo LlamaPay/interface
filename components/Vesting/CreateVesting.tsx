@@ -123,9 +123,9 @@ export default function CreateVesting() {
     <>
       <div className="max-w-xl">
         <Link href="/vesting">
-          <a className="flex gap-1 align-baseline">
-            <ChevronDoubleLeftIcon className="h-5 w-5" />
-            <span className="text-sm">Return</span>
+          <a className="flex gap-1 align-middle">
+            <ChevronDoubleLeftIcon className="h-6 w-6" />
+            <span className="text-md font-exo font-bold">Return</span>
           </a>
         </Link>
       </div>
@@ -161,7 +161,7 @@ export default function CreateVesting() {
           ''
         )}
         <div className="flex gap-2">
-          <span>{'Include Cliff'}</span>
+          <span className="font-exo">{'Include Cliff'}</span>
           <Switch
             checked={includeCliff}
             onChange={setIncludeCliff}
@@ -175,7 +175,7 @@ export default function CreateVesting() {
               } inline-block h-4 w-4 transform rounded-full bg-white`}
             />
           </Switch>
-          <span>{`Custom Start Time`}</span>
+          <span className="font-exo">{`Custom Start Time`}</span>
           <Switch
             checked={includeCustomStart}
             onChange={setIncludeCustomStart}
