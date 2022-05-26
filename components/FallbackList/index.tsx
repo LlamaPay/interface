@@ -6,7 +6,7 @@ interface FallbackProps {
   isLoading?: boolean;
   isError: boolean;
   noData: boolean;
-  type: 'streams' | 'history' | 'balances' | 'payeesList';
+  type: 'streams' | 'history' | 'balances' | 'payeesList' | 'vestingStreams';
 }
 
 const Fallback = ({ isLoading, isError, noData, type }: FallbackProps) => {
@@ -43,6 +43,11 @@ const Fallback = ({ isLoading, isError, noData, type }: FallbackProps) => {
       errorMessage = t4('error');
       emptyDataMessage = t4('noData');
       defaultMessage = !accountData ? t4('connectWallet') : unsupported ? t0('networkNotSupported') : null;
+      break;
+    case 'vestingStreams':
+      errorMessage = 'Error';
+      emptyDataMessage = 'No Data';
+      defaultMessage = !accountData ? 'Connect Wallet' : unsupported ? t0('networkNotSupported') : null;
       break;
   }
 

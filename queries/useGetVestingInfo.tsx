@@ -111,6 +111,6 @@ export default function useGetVestingInfo() {
   const provider = useProvider();
   const [{ data: accountData }] = useAccount();
   return useQuery(['vestingInfo'], () => getVestingInfo(accountData?.address ?? '', provider), {
-    refetchInterval: 10000,
+    refetchInterval: 1000,
   });
 }

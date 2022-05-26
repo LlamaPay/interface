@@ -1,9 +1,10 @@
+import Fallback from 'components/FallbackList';
 import Link from 'next/link';
 import useGetVestingInfo from 'queries/useGetVestingInfo';
 import { VestingTable } from './Table';
 
 export default function VestingPage() {
-  const { data } = useGetVestingInfo();
+  const { data, isLoading, error } = useGetVestingInfo();
 
   return (
     <section className="w-full">
@@ -13,7 +14,11 @@ export default function VestingPage() {
           <a className="primary-button text-md py-2 px-5 text-center font-bold">{'Create Contract'}</a>
         </Link>
       </div>
-      {data && <VestingTable data={data} />}
+      {isLoading || error || !data || data.length < 1 ? (
+        <Fallback isLoading={isLoading} isError={error ? true : false} noData={true} type={'vestingStreams'} />
+      ) : (
+        <VestingTable data={data} />
+      )}
     </section>
   );
 }
