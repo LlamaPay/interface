@@ -73,12 +73,18 @@ export function VestingTable({ data }: { data: IVesting[] }) {
       table.createDisplayColumn({
         id: 'claimed',
         header: 'Claimed',
-        cell: ({ cell }) => cell.row.original && <Unclaimed data={cell.row.original} dataType="claimed" />,
+        cell: ({ cell }) =>
+          cell.row.original && (
+            <span className="text-center dark:text-white">{`${(
+              Number(cell.row.original.totalClaimed) /
+              10 ** cell.row.original.tokenDecimals
+            ).toFixed(5)} ${cell.row.original.tokenSymbol}`}</span>
+          ),
       }),
       table.createDisplayColumn({
         id: 'unclaimed',
         header: 'Unclaimed',
-        cell: ({ cell }) => cell.row.original && <Unclaimed data={cell.row.original} dataType="unclaimed" />,
+        cell: ({ cell }) => cell.row.original && <Unclaimed data={cell.row.original} />,
       }),
       table.createDisplayColumn({
         id: 'claim',

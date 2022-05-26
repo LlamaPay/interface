@@ -13,6 +13,8 @@ import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import { TransactionDialog } from 'components/Dialog';
 import { useDialogState } from 'ariakit';
+import Link from 'next/link';
+import { ChevronDoubleLeftIcon } from '@heroicons/react/outline';
 
 interface IVestingElements {
   recipientAddress: { value: string };
@@ -119,6 +121,14 @@ export default function CreateVesting() {
 
   return (
     <>
+      <div className="max-w-xl">
+        <Link href="/vesting">
+          <a className="flex gap-1 align-baseline">
+            <ChevronDoubleLeftIcon className="h-5 w-5" />
+            <span className="text-sm">Return</span>
+          </a>
+        </Link>
+      </div>
       <form className="flex max-w-xl flex-col gap-4" onSubmit={onSubmit}>
         <span className="font-exo text-2xl font-semibold text-[#3D3D3D] dark:text-white">{'Set Up Vesting'}</span>
         <InputText label={'Recipient Address'} name="recipientAddress" isRequired />
