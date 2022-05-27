@@ -1,4 +1,4 @@
-import { BookOpenIcon, MoonIcon, PlayIcon, SunIcon } from '@heroicons/react/outline';
+import { BookOpenIcon, LibraryIcon, MoonIcon, PlayIcon, SunIcon } from '@heroicons/react/outline';
 import { DisclosureState } from 'ariakit';
 import { Menu, MenuItem } from 'components/NestedMenu';
 import { useIsMounted, useLocale, useWindowSize } from 'hooks';
@@ -130,6 +130,20 @@ export default function HeaderMenu({
           >
             <span>{t2('docs')}</span>
             <BookOpenIcon className="h-4 w-4" />
+          </a>
+        }
+      />
+
+      <MenuItem
+        label={
+          <a
+            href="https://docs.llamapay.io/llamapay/gnosis-safe/adding-as-a-custom-app"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="flex w-full items-center justify-between gap-4 font-normal"
+          >
+            <span>Gnosis Safe</span>
+            <LibraryIcon className="h-4 w-4" />
           </a>
         }
       />
