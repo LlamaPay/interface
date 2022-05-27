@@ -57,50 +57,27 @@ const vestingFactory: any = [
   {
     stateMutability: 'view',
     type: 'function',
-    name: 'get_contract_count',
+    name: 'contract_by_address',
+    inputs: [{ name: 'user', type: 'address' }],
+    outputs: [{ name: '', type: 'address[]' }],
+  },
+  { stateMutability: 'view', type: 'function', name: 'target', inputs: [], outputs: [{ name: '', type: 'address' }] },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    name: 'contract_count',
     inputs: [],
     outputs: [{ name: '', type: 'uint256' }],
-    gas: 2418,
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    name: 'vesting_info_by_index',
-    inputs: [{ name: 'index', type: 'uint256' }],
-    outputs: [
-      { name: 'contract', type: 'address' },
-      { name: 'funder', type: 'address' },
-      { name: 'recipient', type: 'address' },
-    ],
-    gas: 7163,
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    name: 'target',
-    inputs: [],
-    outputs: [{ name: '', type: 'address' }],
-    gas: 2478,
-  },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    name: 'contractCount',
-    inputs: [],
-    outputs: [{ name: '', type: 'uint256' }],
-    gas: 2508,
   },
   {
     stateMutability: 'view',
     type: 'function',
     name: 'contracts',
-    inputs: [{ name: 'arg0', type: 'uint256' }],
-    outputs: [
-      { name: 'contract', type: 'address' },
-      { name: 'funder', type: 'address' },
-      { name: 'recipient', type: 'address' },
+    inputs: [
+      { name: 'arg0', type: 'address' },
+      { name: 'arg1', type: 'uint256' },
     ],
-    gas: 7253,
+    outputs: [{ name: '', type: 'address' }],
   },
 ];
 

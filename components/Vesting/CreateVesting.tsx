@@ -40,7 +40,7 @@ export default function CreateVesting() {
   const provider = useProvider();
   const [{ data: accountData }] = useAccount();
   const queryClient = useQueryClient();
-  const factory = '0xdC6Ac3c1ec8dC4bA2884AF348e76b8bc4807bF1E';
+  const factory = '0xe2c30f52776803fe554fbde744ba8d993b4cd07e';
 
   const [{ loading }, deploy_vesting_contract] = useContractWrite(
     {
@@ -100,6 +100,7 @@ export default function CreateVesting() {
               toast.error('Failed to Create Contract');
             }
             queryClient.invalidateQueries();
+            setLmao(!lmao);
           });
         }
       });

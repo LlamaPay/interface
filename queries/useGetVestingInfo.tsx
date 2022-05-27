@@ -14,38 +14,15 @@ async function getVestingInfo(userAddress: string, provider: BaseProvider) {
       throw new Error('No signer/provider');
     } else {
       const factoryContract = new ethers.Contract(
-        '0xdC6Ac3c1ec8dC4bA2884AF348e76b8bc4807bF1E',
+        '0xE2c30F52776803FE554fbdE744bA8D993B4CD07E',
         vestingFactory,
         provider
       );
-      const amountOfContracts = await factoryContract.get_contract_count();
       const multicall = new Multicall({ ethersProvider: provider, tryAggregate: true });
 
-      const vestingFactorycalls = Array.from({ length: amountOfContracts }, (_, k) => ({
-        reference: k.toString(),
-        methodName: 'vesting_info_by_index',
-        methodParameters: [k],
-      }));
-      const factoryContractCallContext: ContractCallContext[] = [
-        {
-          reference: 'Factory',
-          contractAddress: '0xdC6Ac3c1ec8dC4bA2884AF348e76b8bc4807bF1E',
-          abi: vestingFactory,
-          calls: vestingFactorycalls,
-        },
-      ];
+      const vestingContracts = await factoryContract.contract_by_address(userAddress);
 
-      const factoryMulticallResults: ContractCallResults = await multicall.call(factoryContractCallContext);
-      const vestingContracts: string[] = [];
-
-      factoryMulticallResults.results.Factory.callsReturnContext.map((p) => {
-        const arr = p.returnValues;
-        if (arr[1].toLowerCase() === userAddress.toLowerCase() || arr[2].toLowerCase() === userAddress.toLowerCase()) {
-          vestingContracts.push(arr[0]);
-        }
-      });
-
-      const vestingContractCallContext: ContractCallContext[] = vestingContracts.map((p) => ({
+      const vestingContractCallContext: ContractCallContext[] = vestingContracts.map((p: any) => ({
         reference: p,
         contractAddress: p,
         abi: vestingEscrow,
@@ -111,6 +88,7 @@ export default function useGetVestingInfo() {
   const provider = useProvider();
   const [{ data: accountData }] = useAccount();
   return useQuery(['vestingInfo'], () => getVestingInfo(accountData?.address ?? '', provider), {
-    refetchInterval: 1000,
+    refetchInterval: 10000,
+    retry: true,
   });
 }
