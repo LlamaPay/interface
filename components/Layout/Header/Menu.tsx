@@ -9,6 +9,7 @@ import { chainDetails } from 'utils/network';
 import { useAccount, useNetwork } from 'wagmi';
 import defaultImage from 'public/empty-token.webp';
 import { useTheme } from 'next-themes';
+import Link from 'next/link';
 
 export default function HeaderMenu({
   onboardDialog,
@@ -114,24 +115,22 @@ export default function HeaderMenu({
         onClick={onboardDialog.toggle}
       />
 
+      <MenuItem
+        label={
+          <Link passHref href="/vesting">
+            <div className="flex w-full items-center justify-between gap-4 font-normal">
+              <span className="cursor-pointer">Vesting</span>
+              <ChartPieIcon className="h-4 w-4" />
+            </div>
+          </Link>
+        }
+      />
+
       <Menu label={t2('language')}>
         {locales.map((locale) => (
           <MenuItem label={locale.name} key={locale.id} onClick={() => updateLocale(locale.id)} />
         ))}
       </Menu>
-
-      <MenuItem
-        label={
-          <a
-            href="/vesting"
-            rel="noreferrer noopener"
-            className="flex w-full items-center justify-between gap-4 font-normal"
-          >
-            <span className="cursor-pointer">Vesting</span>
-            <ChartPieIcon className="h-4 w-4" />
-          </a>
-        }
-      />
 
       <MenuItem
         label={
