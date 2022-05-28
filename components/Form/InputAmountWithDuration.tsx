@@ -56,7 +56,7 @@ export const InputAmountWithDuration = ({
       <div className="flex space-x-1 pt-1">
         <ExclamationCircleIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
         <span className="text-[11px] text-gray-500 dark:text-gray-400">
-          {'Streams have arbitrary duration and they can be cancelled at any time.'}
+          {'Streams have arbitrary duration and can be cancelled at any time.'}
         </span>
       </div>
     </div>
