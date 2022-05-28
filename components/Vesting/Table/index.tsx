@@ -6,6 +6,7 @@ import { IVesting } from 'types';
 import { formatAddress } from 'utils/address';
 import { networkDetails } from 'utils/constants';
 import ClaimButton from './CustomValues/ClaimButton';
+import EndingDate from './CustomValues/EndingDate';
 import Unclaimed from './CustomValues/Unclaimed';
 
 const table = createTable().setRowType<IVesting>();
@@ -85,6 +86,11 @@ export function VestingTable({ data }: { data: IVesting[] }) {
         id: 'unclaimed',
         header: 'Unclaimed',
         cell: ({ cell }) => cell.row.original && <Unclaimed data={cell.row.original} />,
+      }),
+      table.createDisplayColumn({
+        id: 'ends',
+        header: 'Ends',
+        cell: ({ cell }) => cell.row.original && <EndingDate data={cell.row.original} />,
       }),
       table.createDisplayColumn({
         id: 'claim',

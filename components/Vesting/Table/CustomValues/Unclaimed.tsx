@@ -13,7 +13,7 @@ export default function Unclaimed({ data }: { data: IVesting }) {
     const tilCliff = ((Number(data.startTime) + Number(data.cliffLength) - Date.now() / 1e3) / 86400).toFixed(2);
     return (
       <Tooltip content={getDate(data, intl)}>
-        <span className="font-exo dark:text-white">{`Cliff Ends In ${tilCliff} days`}</span>
+        <span className="font-exo dark:text-white">{`Starts In ${tilCliff} days`}</span>
       </Tooltip>
     );
   }

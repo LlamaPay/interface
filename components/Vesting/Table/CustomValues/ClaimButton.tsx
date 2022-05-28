@@ -68,7 +68,7 @@ export default function ClaimButton({ data }: { data: IVesting }) {
 
   return (
     <>
-      <div className="float-right">
+      <div className="">
         {Date.now() / 1e3 >= Number(data.startTime) + Number(data.cliffLength) &&
           accountData?.address.toLowerCase() === data.recipient.toLowerCase() && (
             <button onClick={claimDialog.toggle} className="row-action-links font-exo dark:text-white">

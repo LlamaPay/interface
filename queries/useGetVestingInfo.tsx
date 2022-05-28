@@ -8,10 +8,12 @@ import { useQuery } from 'react-query';
 import { IVesting } from 'types';
 import { erc20ABI, useAccount, useProvider } from 'wagmi';
 
-async function getVestingInfo(userAddress: string, provider: BaseProvider) {
+async function getVestingInfo(userAddress: string | undefined, provider: BaseProvider) {
   try {
     if (!provider) {
       throw new Error('No signer/provider');
+    } else if (!userAddress) {
+      throw new Error('No address');
     } else {
       const factoryContract = new ethers.Contract(
         '0xE2c30F52776803FE554fbdE744bA8D993B4CD07E',
@@ -87,8 +89,8 @@ async function getVestingInfo(userAddress: string, provider: BaseProvider) {
 export default function useGetVestingInfo() {
   const provider = useProvider();
   const [{ data: accountData }] = useAccount();
-  return useQuery(['vestingInfo'], () => getVestingInfo(accountData?.address ?? '', provider), {
-    refetchInterval: 10000,
+  return useQuery(['vestingInfo'], () => getVestingInfo(accountData?.address, provider), {
+    refetchInterval: 5000,
     retry: true,
   });
 }
