@@ -2,6 +2,7 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { InputAmountWithDaysProps } from './types';
 import { useTranslations } from 'next-intl';
+import { ExclamationCircleIcon } from '@heroicons/react/outline';
 
 export const InputAmountWithDuration = ({
   name,
@@ -51,6 +52,12 @@ export const InputAmountWithDuration = ({
           <option value="month">{t0('month')}</option>
           <option value="year">{t0('year')}</option>
         </select>
+      </div>
+      <div className="flex space-x-1 pl-1 pt-1">
+        <ExclamationCircleIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+        <span className="text-[11px] text-gray-500 dark:text-gray-400">
+          Duration just calculates the amount of tokens that are streamed every second
+        </span>
       </div>
     </div>
   );
