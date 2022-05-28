@@ -164,6 +164,12 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                 type="text"
                 spellCheck="false"
               />
+              <div className="flex space-x-1 pt-1">
+                <ExclamationCircleIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                  {`Names are only stored in the local storage of your device.`}
+                </span>
+              </div>
             </label>
 
             <span>
@@ -221,7 +227,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                 <div className="flex space-x-1 pt-1">
                   <ExclamationCircleIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
                   <span className="text-[11px] text-gray-500 dark:text-gray-400">
-                    {'Streams have arbitrary duration they can be cancelled at any time.'}
+                    {'Streams have an arbitrary duration and they can be cancelled at any time.'}
                   </span>
                 </div>
               </div>
