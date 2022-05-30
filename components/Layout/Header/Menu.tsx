@@ -116,7 +116,7 @@ export default function HeaderMenu({
 
       <Menu label={t2('language')}>
         {locales.map((locale) => (
-          <MenuItem label={locale.name} key={locale.id} onClick={() => updateLocale(locale.id)} />
+          <MenuItem style={{cursor:"pointer"}} label={locale.name} key={locale.id} onClick={() => updateLocale(locale.id)} />
         ))}
       </Menu>
 
