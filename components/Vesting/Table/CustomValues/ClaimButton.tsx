@@ -12,10 +12,11 @@ import { useAccount, useContractWrite } from 'wagmi';
 
 export default function ClaimButton({ data }: { data: IVesting }) {
   const [inputAmount, setInputAmount] = React.useState<string>('');
-  const [beneficiaryInput, setBeneficiaryInput] = React.useState<string>('');
+  const [beneficiaryInput, setBeneficiaryInput] = React.useState<string | undefined>('');
   const [hasCustomBeneficiary, setHasCustomBeneficiary] = React.useState<boolean>(false);
   const [transactionHash, setTransactionHash] = React.useState<string>('');
   const transactionDialog = useDialogState();
+  const confirmDialog = useDialogState();
   const [{ data: accountData }] = useAccount();
   const [{ loading }, claim] = useContractWrite(
     {
@@ -27,28 +28,25 @@ export default function ClaimButton({ data }: { data: IVesting }) {
   const claimDialog = useDialogState();
 
   function handleClaim() {
-    const beneficiary = hasCustomBeneficiary ? beneficiaryInput : accountData?.address;
-    const amount = new BigNumber(inputAmount).times(10 ** data.tokenDecimals).toFixed(0);
-    claim({ args: [beneficiary, amount] }).then((data) => {
-      if (data.error) {
-        toast.error('Failed to Claim Tokens');
-      } else {
-        const toastid = toast.loading('Claiming Tokens');
-        setTransactionHash(data.data.hash);
-        claimDialog.hide();
-        transactionDialog.show();
-        data.data.wait().then((receipt) => {
-          toast.dismiss(toastid);
-          receipt.status === 1 ? toast.success('Successfully Claimed Tokens') : toast.error('Failed to Claim Tokens');
-        });
-      }
-    });
+    if (!hasCustomBeneficiary) {
+      setBeneficiaryInput(accountData?.address);
+    }
+    setInputAmount(new BigNumber(inputAmount).times(10 ** data.tokenDecimals).toFixed(0));
+    claimDialog.hide();
+    confirmDialog.show();
   }
 
   function handleClaimAll() {
-    const beneficiary = hasCustomBeneficiary ? beneficiaryInput : accountData?.address;
-    const amount = new BigNumber(data.unclaimed).toFixed(0);
-    claim({ args: [beneficiary, amount] }).then((data) => {
+    if (!hasCustomBeneficiary) {
+      setBeneficiaryInput(accountData?.address);
+    }
+    setInputAmount(new BigNumber(data.unclaimed).toFixed(0));
+    claimDialog.hide();
+    confirmDialog.show();
+  }
+
+  function handleConfirm() {
+    claim({ args: [beneficiaryInput, inputAmount] }).then((data) => {
       if (data.error) {
         toast.error('Failed to Claim Tokens');
       } else {
@@ -77,7 +75,7 @@ export default function ClaimButton({ data }: { data: IVesting }) {
           )}
       </div>
       <FormDialog className="h-min" dialog={claimDialog} title={'Claim Tokens'}>
-        <span className="space-y-4">
+        <div className="space-y-4">
           <div>
             <InputAmount
               name="amount"
@@ -120,12 +118,27 @@ export default function ClaimButton({ data }: { data: IVesting }) {
             />
           )}
           <SubmitButton className="mt-5" onClick={handleClaim}>
-            {loading ? <BeatLoader size={6} color="white" /> : 'Claim Tokens'}
+            {'Claim Tokens'}
           </SubmitButton>
           <SubmitButton className="mt-5" onClick={handleClaimAll}>
-            {loading ? <BeatLoader size={6} color="white" /> : 'Claim All Tokens'}
+            {'Claim All Tokens'}
           </SubmitButton>
-        </span>
+        </div>
+      </FormDialog>
+      <FormDialog className="h-min" title="Confirm Claim" dialog={confirmDialog}>
+        <div className="space-y-4">
+          <section>
+            <p className="text-md">
+              {`Sending: ${(Number(inputAmount) / 10 ** data.tokenDecimals).toFixed(5)} ${data.tokenSymbol}`}
+            </p>
+          </section>
+          <section>
+            <p className="text-md">{`To: ${beneficiaryInput}`}</p>
+          </section>
+          <SubmitButton className="mt-5" onClick={handleConfirm}>
+            {loading ? <BeatLoader size={6} color="white" /> : 'Confirm Transaction'}
+          </SubmitButton>
+        </div>
       </FormDialog>
       <TransactionDialog transactionHash={transactionHash} dialog={transactionDialog} />
     </>

@@ -4,87 +4,82 @@ import vestingFactory from 'abis/vestingFactory';
 import BigNumber from 'bignumber.js';
 import { ContractCallContext, ContractCallResults, Multicall } from 'ethereum-multicall';
 import { ethers } from 'ethers';
+import { useNetworkProvider } from 'hooks';
 import { useQuery } from 'react-query';
 import { IVesting } from 'types';
-import { erc20ABI, useAccount, useProvider } from 'wagmi';
+import { erc20ABI, useAccount } from 'wagmi';
 
 async function getVestingInfo(userAddress: string | undefined, provider: BaseProvider) {
-  try {
-    if (!provider) {
-      throw new Error('No signer/provider');
-    } else {
-      const factoryContract = new ethers.Contract(
-        '0xE2c30F52776803FE554fbdE744bA8D993B4CD07E',
-        vestingFactory,
-        provider
-      );
-      const multicall = new Multicall({ ethersProvider: provider, tryAggregate: true });
-      const vestingContracts = await factoryContract.contract_by_address(userAddress);
-      const vestingContractCallContext: ContractCallContext[] = vestingContracts.map((p: any) => ({
-        reference: p,
-        contractAddress: p,
-        abi: vestingEscrow,
+  if (!provider) {
+    throw new Error('No signer/provider');
+  } else if (!userAddress) {
+    throw new Error('No Account');
+  } else {
+    const factoryContract = new ethers.Contract('0xE2c30F52776803FE554fbdE744bA8D993B4CD07E', vestingFactory, provider);
+    const multicall = new Multicall({ ethersProvider: provider, tryAggregate: true });
+    const vestingContracts = await factoryContract.contract_by_address(userAddress);
+    const vestingContractCallContext: ContractCallContext[] = vestingContracts.map((p: any) => ({
+      reference: p,
+      contractAddress: p,
+      abi: vestingEscrow,
+      calls: [
+        { reference: 'unclaimed', methodName: 'unclaimed', methodParameters: [] },
+        { reference: 'locked', methodName: 'locked', methodParameters: [] },
+        { reference: 'recipient', methodName: 'recipient', methodParameters: [] },
+        { reference: 'token', methodName: 'token', methodParameters: [] },
+        { reference: 'startTime', methodName: 'start_time', methodParameters: [] },
+        { reference: 'endTime', methodName: 'end_time', methodParameters: [] },
+        { reference: 'cliffLength', methodName: 'cliff_length', methodParameters: [] },
+        { reference: 'totalLocked', methodName: 'total_locked', methodParameters: [] },
+        { reference: 'totalClaimed', methodName: 'total_claimed', methodParameters: [] },
+        { reference: 'admin', methodName: 'admin', methodParameters: [] },
+      ],
+    }));
+    const vestingContractMulticallResults: ContractCallResults = await multicall.call(vestingContractCallContext);
+    const tokenContractCallContext: ContractCallContext[] = Object.keys(vestingContractMulticallResults.results).map(
+      (p: any) => ({
+        reference: vestingContractMulticallResults.results[p].callsReturnContext[3].returnValues[0],
+        contractAddress: vestingContractMulticallResults.results[p].callsReturnContext[3].returnValues[0],
+        abi: erc20ABI,
         calls: [
-          { reference: 'unclaimed', methodName: 'unclaimed', methodParameters: [] },
-          { reference: 'locked', methodName: 'locked', methodParameters: [] },
-          { reference: 'recipient', methodName: 'recipient', methodParameters: [] },
-          { reference: 'token', methodName: 'token', methodParameters: [] },
-          { reference: 'startTime', methodName: 'start_time', methodParameters: [] },
-          { reference: 'endTime', methodName: 'end_time', methodParameters: [] },
-          { reference: 'cliffLength', methodName: 'cliff_length', methodParameters: [] },
-          { reference: 'totalLocked', methodName: 'total_locked', methodParameters: [] },
-          { reference: 'totalClaimed', methodName: 'total_claimed', methodParameters: [] },
-          { reference: 'admin', methodName: 'admin', methodParameters: [] },
+          { reference: 'name', methodName: 'name', methodParameters: [] },
+          { reference: 'symbol', methodName: 'symbol', methodParameters: [] },
+          { reference: 'decimals', methodName: 'decimals', methodParameters: [] },
         ],
-      }));
-      const vestingContractMulticallResults: ContractCallResults = await multicall.call(vestingContractCallContext);
-      const tokenContractCallContext: ContractCallContext[] = Object.keys(vestingContractMulticallResults.results).map(
-        (p: any) => ({
-          reference: vestingContractMulticallResults.results[p].callsReturnContext[3].returnValues[0],
-          contractAddress: vestingContractMulticallResults.results[p].callsReturnContext[3].returnValues[0],
-          abi: erc20ABI,
-          calls: [
-            { reference: 'name', methodName: 'name', methodParameters: [] },
-            { reference: 'symbol', methodName: 'symbol', methodParameters: [] },
-            { reference: 'decimals', methodName: 'decimals', methodParameters: [] },
-          ],
-        })
-      );
-      const tokenContractCallResults: ContractCallResults = await multicall.call(tokenContractCallContext);
-      const results: IVesting[] = [];
-      for (const key in vestingContractMulticallResults.results) {
-        const vestingReturnContext = vestingContractMulticallResults.results[key].callsReturnContext;
-        const tokenReturnContext =
-          tokenContractCallResults.results[vestingReturnContext[3].returnValues[0]].callsReturnContext;
-        results.push({
-          contract: key,
-          unclaimed: new BigNumber(vestingReturnContext[0].returnValues[0].hex).toString(),
-          locked: new BigNumber(vestingReturnContext[1].returnValues[0].hex).toString(),
-          recipient: vestingReturnContext[2].returnValues[0],
-          token: vestingReturnContext[3].returnValues[0],
-          tokenName: tokenReturnContext[0].returnValues[0],
-          tokenSymbol: tokenReturnContext[1].returnValues[0],
-          tokenDecimals: tokenReturnContext[2].returnValues[0],
-          startTime: new BigNumber(vestingReturnContext[4].returnValues[0].hex).toString(),
-          endTime: new BigNumber(vestingReturnContext[5].returnValues[0].hex).toString(),
-          cliffLength: new BigNumber(vestingReturnContext[6].returnValues[0].hex).toString(),
-          totalLocked: new BigNumber(vestingReturnContext[7].returnValues[0].hex).toString(),
-          totalClaimed: new BigNumber(vestingReturnContext[8].returnValues[0].hex).toString(),
-          admin: vestingReturnContext[9].returnValues[0],
-        });
-      }
-      return results;
+      })
+    );
+    const tokenContractCallResults: ContractCallResults = await multicall.call(tokenContractCallContext);
+    const results: IVesting[] = [];
+    for (const key in vestingContractMulticallResults.results) {
+      const vestingReturnContext = vestingContractMulticallResults.results[key].callsReturnContext;
+      const tokenReturnContext =
+        tokenContractCallResults.results[vestingReturnContext[3].returnValues[0]].callsReturnContext;
+      results.push({
+        contract: key,
+        unclaimed: new BigNumber(vestingReturnContext[0].returnValues[0].hex).toString(),
+        locked: new BigNumber(vestingReturnContext[1].returnValues[0].hex).toString(),
+        recipient: vestingReturnContext[2].returnValues[0],
+        token: vestingReturnContext[3].returnValues[0],
+        tokenName: tokenReturnContext[0].returnValues[0],
+        tokenSymbol: tokenReturnContext[1].returnValues[0],
+        tokenDecimals: tokenReturnContext[2].returnValues[0],
+        startTime: new BigNumber(vestingReturnContext[4].returnValues[0].hex).toString(),
+        endTime: new BigNumber(vestingReturnContext[5].returnValues[0].hex).toString(),
+        cliffLength: new BigNumber(vestingReturnContext[6].returnValues[0].hex).toString(),
+        totalLocked: new BigNumber(vestingReturnContext[7].returnValues[0].hex).toString(),
+        totalClaimed: new BigNumber(vestingReturnContext[8].returnValues[0].hex).toString(),
+        admin: vestingReturnContext[9].returnValues[0],
+      });
     }
-  } catch (error) {
-    console.error(error);
+    return results;
   }
 }
 
 export default function useGetVestingInfo() {
-  const provider = useProvider();
+  const { provider } = useNetworkProvider();
   const [{ data: accountData }] = useAccount();
   return useQuery(['vestingInfo'], () => getVestingInfo(accountData?.address, provider), {
-    refetchInterval: 1000,
+    refetchInterval: 10000,
     retry: true,
   });
 }
