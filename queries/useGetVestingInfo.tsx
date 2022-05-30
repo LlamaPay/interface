@@ -9,7 +9,7 @@ import { useQuery } from 'react-query';
 import { IVesting } from 'types';
 import { erc20ABI, useAccount } from 'wagmi';
 
-async function getVestingInfo(userAddress: string | undefined, provider: BaseProvider) {
+async function getVestingInfo(userAddress: string | undefined, provider: BaseProvider | null) {
   if (!provider) {
     throw new Error('No signer/provider');
   } else if (!userAddress) {
@@ -80,6 +80,6 @@ export default function useGetVestingInfo() {
   const [{ data: accountData }] = useAccount();
   return useQuery(['vestingInfo'], () => getVestingInfo(accountData?.address, provider), {
     refetchInterval: 10000,
-    retry: true,
+    retry: 5,
   });
 }
