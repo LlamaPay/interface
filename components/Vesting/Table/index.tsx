@@ -3,16 +3,16 @@ import Table from 'components/Table';
 import { useNetworkProvider } from 'hooks';
 import React from 'react';
 import { IVesting } from 'types';
-import { formatAddress } from 'utils/address';
 import { networkDetails } from 'utils/constants';
 import ClaimButton from './CustomValues/ClaimButton';
-import EndingDate from './CustomValues/EndingDate';
-import Unclaimed from './CustomValues/Unclaimed';
+import FunderOrRecipient from './CustomValues/FunderOrRecipient';
+import Status from './CustomValues/Status';
 
 const table = createTable().setRowType<IVesting>();
 
 export function VestingTable({ data }: { data: IVesting[] }) {
   const { chainId } = useNetworkProvider();
+
   const explorerUrl = chainId ? networkDetails[chainId].blockExplorerURL : '';
   const columns = React.useMemo(
     () => [
@@ -30,34 +30,9 @@ export function VestingTable({ data }: { data: IVesting[] }) {
           ),
       }),
       table.createDisplayColumn({
-        id: 'funder',
-        header: 'Funder',
-        cell: ({ cell }) =>
-          cell.row.original && (
-            <a
-              href={`${explorerUrl}/address/${cell.row.original.admin}`}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="font-exo text-center dark:text-white"
-            >
-              {formatAddress(cell.row.original.admin)}
-            </a>
-          ),
-      }),
-      table.createDisplayColumn({
-        id: 'recipient',
-        header: 'Recipient',
-        cell: ({ cell }) =>
-          cell.row.original && (
-            <a
-              href={`${explorerUrl}/address/${cell.row.original.recipient}`}
-              target="_blank"
-              rel="noreferrer noopener"
-              className="font-exo text-center dark:text-white"
-            >
-              {formatAddress(cell.row.original.recipient)}
-            </a>
-          ),
+        id: 'funderOrRecipient',
+        header: 'Funder/Recipient',
+        cell: ({ cell }) => cell.row.original && <FunderOrRecipient data={cell.row.original} />,
       }),
       table.createDisplayColumn({
         id: 'total_locked',
@@ -84,13 +59,20 @@ export function VestingTable({ data }: { data: IVesting[] }) {
       }),
       table.createDisplayColumn({
         id: 'unclaimed',
-        header: 'Unclaimed',
-        cell: ({ cell }) => cell.row.original && <Unclaimed data={cell.row.original} />,
+        header: 'Withdrawable',
+        cell: ({ cell }) =>
+          cell.row.original && (
+            <span className="font-exo text-center dark:text-white">
+              {`${(Number(cell.row.original.unclaimed) / 10 ** cell.row.original.tokenDecimals).toFixed(5)} ${
+                cell.row.original.tokenSymbol
+              }`}
+            </span>
+          ),
       }),
       table.createDisplayColumn({
-        id: 'ends',
-        header: 'Ends',
-        cell: ({ cell }) => cell.row.original && <EndingDate data={cell.row.original} />,
+        id: 'status',
+        header: 'Status',
+        cell: ({ cell }) => cell.row.original && <Status data={cell.row.original} />,
       }),
       table.createDisplayColumn({
         id: 'claim',

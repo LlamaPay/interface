@@ -33,6 +33,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
         { reference: 'totalLocked', methodName: 'total_locked', methodParameters: [] },
         { reference: 'totalClaimed', methodName: 'total_claimed', methodParameters: [] },
         { reference: 'admin', methodName: 'admin', methodParameters: [] },
+        { reference: 'disabled_at', methodName: 'disabled_at', methodParameters: [] },
       ],
     }));
     const vestingContractMulticallResults: ContractCallResults = await multicall.call(vestingContractCallContext);
@@ -69,6 +70,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
         totalLocked: new BigNumber(vestingReturnContext[7].returnValues[0].hex).toString(),
         totalClaimed: new BigNumber(vestingReturnContext[8].returnValues[0].hex).toString(),
         admin: vestingReturnContext[9].returnValues[0],
+        disabledAt: new BigNumber(vestingReturnContext[10].returnValues[0].hex).toString(),
       });
     }
     return results;

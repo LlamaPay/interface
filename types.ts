@@ -112,4 +112,5 @@ export interface IVesting {
   totalLocked: string;
   totalClaimed: string;
   admin: string;
+  disabledAt: string;
 }
