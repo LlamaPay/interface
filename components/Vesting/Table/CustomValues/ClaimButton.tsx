@@ -66,7 +66,7 @@ export default function ClaimButton({ data }: { data: IVesting }) {
 
   return (
     <>
-      <div className="">
+      <div>
         {Date.now() / 1e3 >= Number(data.startTime) + Number(data.cliffLength) &&
           accountData?.address.toLowerCase() === data.recipient.toLowerCase() && (
             <button onClick={claimDialog.toggle} className="row-action-links font-exo dark:text-white">
@@ -128,12 +128,10 @@ export default function ClaimButton({ data }: { data: IVesting }) {
       <FormDialog className="h-min" title="Confirm Claim" dialog={confirmDialog}>
         <div className="space-y-4">
           <section>
-            <p className="text-md">
-              {`Sending: ${(Number(inputAmount) / 10 ** data.tokenDecimals).toFixed(5)} ${data.tokenSymbol}`}
-            </p>
-          </section>
-          <section>
-            <p className="text-md">{`To: ${beneficiaryInput}`}</p>
+            <div className="font-exo my-1 rounded border p-2 dark:border-stone-700 dark:text-white">
+              <p>{`Sending: ${(Number(inputAmount) / 10 ** data.tokenDecimals).toFixed(5)} ${data.tokenSymbol}`}</p>
+              <p>{`To: ${beneficiaryInput}`}</p>
+            </div>
           </section>
           <SubmitButton className="mt-5" onClick={handleConfirm}>
             {loading ? <BeatLoader size={6} color="white" /> : 'Confirm Transaction'}
