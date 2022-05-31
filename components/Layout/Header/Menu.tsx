@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import { BookOpenIcon, ChartPieIcon, MoonIcon, PlayIcon, SunIcon } from '@heroicons/react/outline';
+=======
+import { BookOpenIcon, LibraryIcon, MoonIcon, PlayIcon, SunIcon } from '@heroicons/react/outline';
+>>>>>>> 241043dd46e1c1dfddd9cd9bc3bbe485006ec18a
 import { DisclosureState } from 'ariakit';
 import { Menu, MenuItem } from 'components/NestedMenu';
 import { useIsMounted, useLocale, useWindowSize } from 'hooks';
@@ -128,7 +132,7 @@ export default function HeaderMenu({
 
       <Menu label={t2('language')}>
         {locales.map((locale) => (
-          <MenuItem label={locale.name} key={locale.id} onClick={() => updateLocale(locale.id)} />
+          <MenuItem style={{cursor:"pointer"}} label={locale.name} key={locale.id} onClick={() => updateLocale(locale.id)} />
         ))}
       </Menu>
 
@@ -142,6 +146,20 @@ export default function HeaderMenu({
           >
             <span>{t2('docs')}</span>
             <BookOpenIcon className="h-4 w-4" />
+          </a>
+        }
+      />
+
+      <MenuItem
+        label={
+          <a
+            href="https://docs.llamapay.io/llamapay/gnosis-safe/adding-as-a-custom-app"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="flex w-full items-center justify-between gap-4 font-normal"
+          >
+            <span>Gnosis Safe</span>
+            <LibraryIcon className="h-4 w-4" />
           </a>
         }
       />

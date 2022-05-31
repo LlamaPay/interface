@@ -38,12 +38,27 @@ export default function Hero({ noBanner, onboardDialog }: { noBanner: boolean; o
         style={{ lineHeight: '26px' }}
       >
         <span className="dark:text-white">{t2('description')}</span>
-        <button
-          className="shadow-1 dark:font-hold rounded-[10px] border border-[#1BDBAD] bg-white py-[10px] px-10 font-bold text-[#23BD8F] dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"
-          onClick={onboardDialog.toggle}
-        >
-          {t1('getStarted')}
-        </button>
+        <div className="flex gap-3">
+          <button
+            className="shadow-1 dark:font-hold rounded-[10px] border border-[#1BDBAD] bg-white py-[10px] px-10 font-bold text-[#23BD8F] dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"
+            onClick={onboardDialog.toggle}
+          >
+            {t1('getStarted')}
+          </button>
+          {process.env.NEXT_PUBLIC_SAFE === 'false' ? (
+            <a
+              className="shadow-1 dark:font-hold rounded-[10px] border border-[#1BDBAD] bg-white py-[10px] px-10 font-bold
+          text-[#23BD8F] dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"
+              href="https://docs.llamapay.io/llamapay/gnosis-safe/adding-as-a-custom-app"
+              target="_blank"
+              rel="noreferrer noopener"
+            >
+              {'Use With Gnosis Safe'}
+            </a>
+          ) : (
+            ''
+          )}
+        </div>
       </p>
     </section>
   );

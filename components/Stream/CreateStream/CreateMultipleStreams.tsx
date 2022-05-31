@@ -12,6 +12,7 @@ import { secondsByDuration } from 'utils/constants';
 import useStreamToken from 'queries/useStreamToken';
 import { useTranslations } from 'next-intl';
 import useGnosisBatch from 'queries/useGnosisBatch';
+import { ExclamationCircleIcon } from '@heroicons/react/outline';
 
 type FormValues = {
   streams: {
@@ -163,6 +164,12 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                 type="text"
                 spellCheck="false"
               />
+              <div className="flex space-x-1 pt-1">
+                <ExclamationCircleIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                  {`Names are only stored in the local storage of your device.`}
+                </span>
+              </div>
             </label>
 
             <span>
@@ -216,6 +223,12 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                     <option value="month">{t0('month')}</option>
                     <option value="year">{t0('year')}</option>
                   </select>
+                </div>
+                <div className="flex space-x-1 pt-1">
+                  <ExclamationCircleIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                  <span className="text-[11px] text-gray-500 dark:text-gray-400">
+                    {'Streams have an arbitrary duration and they can be cancelled at any time.'}
+                  </span>
                 </div>
               </div>
               {errors?.streams?.[index]?.amountToStream?.type === 'required' && (

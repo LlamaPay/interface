@@ -7,6 +7,7 @@ import useTokenBalances, { ITokenBalance } from 'queries/useTokenBalances';
 import AnimatedStream from 'components/AnimatedStream';
 import useTokenList from 'hooks/useTokenList';
 import { useTranslations } from 'next-intl';
+import { ExclamationCircleIcon } from '@heroicons/react/outline';
 
 export default function CreateStreamField({
   setCreateStream,
@@ -57,14 +58,21 @@ const Form = ({
           placeholder={t0('recipientAddress')}
         />
 
-        <InputText
-          name="shortName"
-          isRequired={false}
-          label={t0('associateName')}
-          placeholder={t0('fastIdentification')}
-          optional
-        />
-
+        <div>
+          <InputText
+            name="shortName"
+            isRequired={false}
+            label={t0('associateName')}
+            placeholder={t0('fastIdentification')}
+            optional
+          />
+          <div className="flex space-x-1">
+            <ExclamationCircleIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+            <span className="text-[11px] text-gray-500 dark:text-gray-400">
+              {`Names are only stored in the local storage of your device.`}
+            </span>
+          </div>
+        </div>
         <span>
           <SelectToken
             handleTokenChange={handleTokenChange}
