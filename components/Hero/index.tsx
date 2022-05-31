@@ -38,7 +38,7 @@ export default function Hero({ noBanner, onboardDialog }: { noBanner: boolean; o
         style={{ lineHeight: '26px' }}
       >
         <span className="dark:text-white">{t2('description')}</span>
-        <div className="flex gap-3">
+        <span className="flex gap-3">
           <button
             className="shadow-1 dark:font-hold rounded-[10px] border border-[#1BDBAD] bg-white py-[10px] px-10 font-bold text-[#23BD8F] dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"
             onClick={onboardDialog.toggle}
@@ -58,7 +58,7 @@ export default function Hero({ noBanner, onboardDialog }: { noBanner: boolean; o
           ) : (
             ''
           )}
-        </div>
+        </span>
       </p>
     </section>
   );
