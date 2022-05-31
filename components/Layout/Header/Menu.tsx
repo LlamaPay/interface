@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 import { BookOpenIcon, ChartPieIcon, MoonIcon, PlayIcon, SunIcon } from '@heroicons/react/outline';
-=======
-import { BookOpenIcon, LibraryIcon, MoonIcon, PlayIcon, SunIcon } from '@heroicons/react/outline';
->>>>>>> 241043dd46e1c1dfddd9cd9bc3bbe485006ec18a
 import { DisclosureState } from 'ariakit';
 import { Menu, MenuItem } from 'components/NestedMenu';
 import { useIsMounted, useLocale, useWindowSize } from 'hooks';
@@ -132,7 +128,12 @@ export default function HeaderMenu({
 
       <Menu label={t2('language')}>
         {locales.map((locale) => (
-          <MenuItem style={{cursor:"pointer"}} label={locale.name} key={locale.id} onClick={() => updateLocale(locale.id)} />
+          <MenuItem
+            style={{ cursor: 'pointer' }}
+            label={locale.name}
+            key={locale.id}
+            onClick={() => updateLocale(locale.id)}
+          />
         ))}
       </Menu>
 
