@@ -1,4 +1,4 @@
-import { BookOpenIcon, ChartPieIcon, MoonIcon, PlayIcon, SunIcon } from '@heroicons/react/outline';
+import { BookOpenIcon, ChartPieIcon, LibraryIcon, MoonIcon, PlayIcon, SunIcon } from '@heroicons/react/outline';
 import { DisclosureState } from 'ariakit';
 import { Menu, MenuItem } from 'components/NestedMenu';
 import { useIsMounted, useLocale, useWindowSize } from 'hooks';
