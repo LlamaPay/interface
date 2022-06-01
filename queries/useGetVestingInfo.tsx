@@ -71,6 +71,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
         totalClaimed: new BigNumber(vestingReturnContext[8].returnValues[0].hex).toString(),
         admin: vestingReturnContext[9].returnValues[0],
         disabledAt: new BigNumber(vestingReturnContext[10].returnValues[0].hex).toString(),
+        timestamp: Date.now() / 1e3,
       });
     }
     return results;

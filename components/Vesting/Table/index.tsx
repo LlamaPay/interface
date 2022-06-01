@@ -7,6 +7,7 @@ import { networkDetails } from 'utils/constants';
 import ClaimButton from './CustomValues/ClaimButton';
 import FunderOrRecipient from './CustomValues/FunderOrRecipient';
 import Status from './CustomValues/Status';
+import Unclaimed from './CustomValues/Unclaimed';
 
 const table = createTable().setRowType<IVesting>();
 
@@ -60,14 +61,7 @@ export function VestingTable({ data }: { data: IVesting[] }) {
       table.createDisplayColumn({
         id: 'unclaimed',
         header: 'Withdrawable',
-        cell: ({ cell }) =>
-          cell.row.original && (
-            <span className="font-exo text-center dark:text-white">
-              {`${(Number(cell.row.original.unclaimed) / 10 ** cell.row.original.tokenDecimals).toFixed(5)} ${
-                cell.row.original.tokenSymbol
-              }`}
-            </span>
-          ),
+        cell: ({ cell }) => cell.row.original && <Unclaimed data={cell.row.original} />,
       }),
       table.createDisplayColumn({
         id: 'status',

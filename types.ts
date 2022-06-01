@@ -113,4 +113,5 @@ export interface IVesting {
   totalClaimed: string;
   admin: string;
   disabledAt: string;
+  timestamp: number;
 }
