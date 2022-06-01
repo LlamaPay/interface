@@ -117,9 +117,9 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'polygon-pos',
   },
   250: {
-    rpcUrl: 'https://rpcapi.fantom.network',
+    rpcUrl: 'https://rpc.ftm.tools/',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-fantom',
-    chainProviders: new ethers.providers.JsonRpcProvider('https://rpcapi.fantom.network	'),
+    chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ftm.tools/'),
     llamapayFactoryAddress: FACTORY_FANTOM,
     disperseAddress: DISPERSE_DEFAULT,
     blockExplorerURL: 'https://https://ftmscan.com.com/',
