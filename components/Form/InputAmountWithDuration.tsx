@@ -53,12 +53,6 @@ export const InputAmountWithDuration = ({
           <option value="year">{t0('year')}</option>
         </select>
       </div>
-      <div className="flex space-x-1 pt-1">
-        <ExclamationCircleIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
-        <span className="text-[11px] text-gray-500 dark:text-gray-400">
-          {'Streams have an arbitrary duration and can be cancelled at any time.'}
-        </span>
-      </div>
     </div>
   );
 };

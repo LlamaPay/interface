@@ -25,6 +25,7 @@ interface IVestingElements {
   vestingDuration: { value: 'year' | 'month' | 'week' };
   cliffTime: { value: string };
   cliffDuration: { value: 'year' | 'month' | 'week' };
+  startDate: { value: string };
 }
 
 interface IVestingData {
@@ -94,7 +95,12 @@ export default function CreateVesting() {
     const vestingTime = new BigNumber(form.vestingTime.value)
       .times(secondsByDuration[form.vestingDuration.value])
       .toFixed(0);
-    const startTime = includeCustomStart ? '' : new BigNumber(Date.now() / 1e3).toFixed(0);
+    const date = includeCustomStart ? new Date(form.startDate.value) : new Date(Date.now());
+    if (date.toString() === 'Invalid Date') {
+      toast.error('Invalid Date');
+      return;
+    }
+    const startTime = new BigNumber(Number(date) / 1e3).toFixed(0);
     const cliffTime = includeCliff
       ? new BigNumber(form.cliffTime.value).times(secondsByDuration[form.cliffDuration.value]).toFixed(0)
       : '0';
@@ -190,15 +196,16 @@ export default function CreateVesting() {
           isRequired
           selectInputName="vestingDuration"
         />
-        {includeCliff ? (
+        {includeCliff && (
           <InputAmountWithDuration
             label={'Cliff Duration'}
             name="cliffTime"
             isRequired
             selectInputName="cliffDuration"
           />
-        ) : (
-          ''
+        )}
+        {includeCustomStart && (
+          <InputText label={'Start Date (YYYY-MM-DD)'} name="startDate" isRequired placeholder="YYYY-MM-DD" />
         )}
         <div className="flex gap-2">
           <span className="font-exo">{'Include Cliff'}</span>
@@ -251,7 +258,11 @@ export default function CreateVesting() {
               <p>{`Starts: ${intl.formatDateTime(new Date(Number(vestingData.startTime) * 1e3), {
                 dateStyle: 'short',
                 timeStyle: 'short',
-              })}`}</p>
+              })} (${intl.formatDateTime(new Date(Number(vestingData.startTime) * 1e3), {
+                dateStyle: 'short',
+                timeStyle: 'short',
+                timeZone: 'utc',
+              })} UTC)`}</p>
               {vestingData.cliffTime !== '0' && (
                 <>
                   <p>{`Cliff Duration: ${(Number(vestingData.cliffTime) / 86400).toFixed(2)} days`}</p>
@@ -261,7 +272,14 @@ export default function CreateVesting() {
                       dateStyle: 'short',
                       timeStyle: 'short',
                     }
-                  )}`}</p>
+                  )} (${intl.formatDateTime(
+                    new Date((Number(vestingData.startTime) + Number(vestingData.cliffTime)) * 1e3),
+                    {
+                      dateStyle: 'short',
+                      timeStyle: 'short',
+                      timeZone: 'utc',
+                    }
+                  )} UTC)`}</p>
                 </>
               )}
               <p>{`Ends: ${intl.formatDateTime(
@@ -275,7 +293,19 @@ export default function CreateVesting() {
                   dateStyle: 'short',
                   timeStyle: 'short',
                 }
-              )}`}</p>
+              )} (${intl.formatDateTime(
+                new Date(
+                  (Number(vestingData.startTime) +
+                    Number(vestingData.cliffTime) +
+                    Number(vestingData.vestingDuration)) *
+                    1e3
+                ),
+                {
+                  dateStyle: 'short',
+                  timeStyle: 'short',
+                  timeZone: 'utc',
+                }
+              )} UTC) `}</p>
             </div>
             <SubmitButton className="mt-5" onClick={onConfirm}>
               {loading || checkingApproval || loading || approvingToken ? (
