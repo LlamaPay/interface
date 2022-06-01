@@ -73,6 +73,21 @@ export function VestingTable({ data }: { data: IVesting[] }) {
         header: '',
         cell: ({ cell }) => cell.row.original && <ClaimButton data={cell.row.original} />,
       }),
+      table.createDisplayColumn({
+        id: 'viewContract',
+        header: '',
+        cell: ({ cell }) =>
+          cell.row.original && (
+            <a
+              href={`${explorerUrl}/address/${cell.row.original.contract}`}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="row-action-links font-exo float-right dark:text-white"
+            >
+              {'View Contract'}
+            </a>
+          ),
+      }),
     ],
     [explorerUrl]
   );
