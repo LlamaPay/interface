@@ -1,3 +1,4 @@
+import { TrashIcon } from '@heroicons/react/outline';
 import { DotsVerticalIcon } from '@heroicons/react/solid';
 import { useDialogState } from 'ariakit';
 import { Menu, MenuButton, MenuItem, useMenuState } from 'ariakit/menu';
@@ -20,6 +21,11 @@ export default function StreamMenu() {
   const t = useTranslations('Streams');
 
   const router = useRouter();
+
+  function clearLocalStorage() {
+    localStorage.removeItem('llama-address-book');
+    window.location.reload();
+  }
 
   return (
     <>
@@ -54,8 +60,14 @@ export default function StreamMenu() {
         <MenuItem className="flex scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:hover:text-[#cccccc]">
           <WithdrawAll />
         </MenuItem>
+        <MenuItem
+          className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white dark:hover:text-[#cccccc]"
+          onClick={clearLocalStorage}
+        >
+          <span className="dark:text-white dark:hover:text-[#cccccc]">{'Clear Names'}</span>
+          <TrashIcon className="h-4 w-4" />
+        </MenuItem>
       </Menu>
-
       <DisperseGasMoney dialog={disperseGasGialog} />
     </>
   );

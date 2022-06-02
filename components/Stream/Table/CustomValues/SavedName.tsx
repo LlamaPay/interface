@@ -38,6 +38,12 @@ export function SavedName({ data }: { data: IStream }) {
     dialog.toggle();
   };
 
+  function clearName() {
+    console.log(address);
+    setSavedAddress(formatAddress(address));
+    updateAddress(address.toLowerCase(), formatAddress(address));
+  }
+
   const t0 = useTranslations('Common');
   const t1 = useTranslations('Streams');
 
@@ -70,10 +76,13 @@ export function SavedName({ data }: { data: IStream }) {
         <span className="sr-only">{t1('editName')}</span>
         <PencilIcon className="h-4 w-4 dark:text-white" />
       </button>
-      <FormDialog dialog={dialog} title="" className="h-fit">
+      <FormDialog dialog={dialog} title="Custom Name" className="h-fit">
         <form onSubmit={updateName}>
           <label>
             <span>{t0('edit')}</span>
+            <button onClick={clearName} className="float-right text-sm underline underline-offset-1">
+              {'Clear'}
+            </button>
             <input
               name="updatedName"
               className="w-full rounded border border-neutral-300 px-3 py-[11px] slashed-zero dark:border-neutral-700 dark:bg-stone-800"
