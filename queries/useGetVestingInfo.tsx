@@ -7,15 +7,19 @@ import { ethers } from 'ethers';
 import { useNetworkProvider } from 'hooks';
 import { useQuery } from 'react-query';
 import { IVesting } from 'types';
+import { networkDetails } from 'utils/constants';
 import { erc20ABI, useAccount } from 'wagmi';
 
-async function getVestingInfo(userAddress: string | undefined, provider: BaseProvider | null) {
+async function getVestingInfo(userAddress: string | undefined, provider: BaseProvider | null, chainId: number | null) {
   if (!provider) {
-    throw new Error('No signer/provider');
+    throw new Error('No provider');
   } else if (!userAddress) {
     throw new Error('No Account');
+  } else if (!chainId) {
+    throw new Error('Cannot get Chain ID');
   } else {
-    const factoryContract = new ethers.Contract('0xE2c30F52776803FE554fbdE744bA8D993B4CD07E', vestingFactory, provider);
+    const factoryAddress = networkDetails[chainId].vestingFactory;
+    const factoryContract = new ethers.Contract(factoryAddress, vestingFactory, provider);
     const multicall = new Multicall({ ethersProvider: provider, tryAggregate: true });
     const vestingContracts = await factoryContract.contract_by_address(userAddress);
     const vestingContractCallContext: ContractCallContext[] = vestingContracts.map((p: any) => ({
@@ -79,9 +83,9 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
 }
 
 export default function useGetVestingInfo() {
-  const { provider } = useNetworkProvider();
+  const { provider, chainId } = useNetworkProvider();
   const [{ data: accountData }] = useAccount();
-  return useQuery(['vestingInfo'], () => getVestingInfo(accountData?.address, provider), {
+  return useQuery(['vestingInfo'], () => getVestingInfo(accountData?.address, provider, chainId), {
     refetchInterval: 10000,
     retry: 5,
   });

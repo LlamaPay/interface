@@ -8,7 +8,7 @@ import { useAccount, useContractWrite, useProvider } from 'wagmi';
 import BigNumber from 'bignumber.js';
 import { BeatLoader } from 'react-spinners';
 import vestingFactoryReadable from 'abis/vestingFactoryReadable';
-import { secondsByDuration } from 'utils/constants';
+import { networkDetails, secondsByDuration } from 'utils/constants';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import { FormDialog, TransactionDialog } from 'components/Dialog';
@@ -16,6 +16,7 @@ import { useDialogState } from 'ariakit';
 import Link from 'next/link';
 import { ChevronDoubleLeftIcon } from '@heroicons/react/outline';
 import { useIntl } from 'next-intl';
+import { useNetworkProvider } from 'hooks';
 
 interface IVestingElements {
   recipientAddress: { value: string };
@@ -54,13 +55,14 @@ export default function CreateVesting() {
   const { mutate: approveToken, isLoading: approvingToken } = useApproveToken();
   const provider = useProvider();
   const [{ data: accountData }] = useAccount();
+  const { chainId } = useNetworkProvider();
   const queryClient = useQueryClient();
   const intl = useIntl();
-  const factory = '0xe2c30f52776803fe554fbde744ba8d993b4cd07e';
+  const factoryAddress = networkDetails[chainId!].vestingFactory;
 
   const [{ loading }, deploy_vesting_contract] = useContractWrite(
     {
-      addressOrName: factory,
+      addressOrName: factoryAddress,
       contractInterface: vestingFactoryReadable,
     },
     'deploy_vesting_contract'
