@@ -1,8 +1,10 @@
+import { useLocale } from 'hooks';
 import React from 'react';
 import { IVesting } from 'types';
 
 export default function Unclaimed({ data }: { data: IVesting }) {
   const [balanceState, setBalanceState] = React.useState<number | null>(null);
+  const { locale } = useLocale();
   const setState = React.useCallback(() => {
     if (
       Date.now() / 1e3 > Number(data.endTime) ||
@@ -24,6 +26,12 @@ export default function Unclaimed({ data }: { data: IVesting }) {
   }, [setState]);
 
   return (
-    <span className="font-exo text-center dark:text-white">{`${balanceState?.toFixed(5)} ${data.tokenSymbol}`}</span>
+    <span className="font-exo text-center slashed-zero tabular-nums dark:text-white">{`${balanceState?.toLocaleString(
+      locale,
+      {
+        minimumFractionDigits: 5,
+        maximumFractionDigits: 5,
+      }
+    )}`}</span>
   );
 }

@@ -14,20 +14,20 @@ export default function Status({ data }: { data: IVesting }) {
     return (
       <div className="float-left">
         <Tooltip content={getDate(data, intl)}>
-          <span className="font-exo text-center dark:text-white">{` Vesting Starts in ${tilStart} Days`}</span>
+          <span className="font-exo text-center slashed-zero tabular-nums dark:text-white">{` Vesting Starts in ${tilStart} Days`}</span>
         </Tooltip>
       </div>
     );
   } else if (data.totalClaimed === data.totalLocked) {
     return (
       <div className="float-left">
-        <span className="font-exo text-center dark:text-white">{`Vesting Ended`}</span>
+        <span className="font-exo text-center slashed-zero tabular-nums dark:text-white">{`Vesting Ended`}</span>
       </div>
     );
   } else if (Number(data.disabledAt) <= Date.now() / 1e3) {
     return (
       <div className="float-left">
-        <span className="font-exo text-center dark:text-white">{`Vesting Stopped by Admin`}</span>
+        <span className="font-exo text-center slashed-zero tabular-nums dark:text-white">{`Vesting Stopped by Admin`}</span>
       </div>
     );
   } else {
@@ -37,7 +37,7 @@ export default function Status({ data }: { data: IVesting }) {
     ).toFixed(5);
     return (
       <div className="float-left">
-        <span className="font-exo text-center dark:text-white">{`Vesting ${amtPerMonth} ${data.tokenSymbol}/month`}</span>
+        <span className="font-exo text-center slashed-zero tabular-nums dark:text-white">{`Vesting ${amtPerMonth}/month`}</span>
       </div>
     );
   }

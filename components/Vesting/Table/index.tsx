@@ -4,6 +4,7 @@ import { useNetworkProvider } from 'hooks';
 import React from 'react';
 import { IVesting } from 'types';
 import { networkDetails } from 'utils/constants';
+import ChartButton from './CustomValues/ChartButton';
 import ClaimButton from './CustomValues/ClaimButton';
 import FunderOrRecipient from './CustomValues/FunderOrRecipient';
 import Status from './CustomValues/Status';
@@ -27,7 +28,7 @@ export function VestingTable({ data }: { data: IVesting[] }) {
               target="_blank"
               rel="noreferrer noopener"
               className="font-exo text-center dark:text-white"
-            >{`${cell.row.original.tokenName}`}</a>
+            >{`${cell.row.original.tokenName} (${cell.row.original.tokenSymbol})`}</a>
           ),
       }),
       table.createDisplayColumn({
@@ -40,10 +41,8 @@ export function VestingTable({ data }: { data: IVesting[] }) {
         header: 'Total Vested',
         cell: ({ cell }) =>
           cell.row.original && (
-            <span className="font-exo text-center dark:text-white">
-              {`${(Number(cell.row.original.totalLocked) / 10 ** cell.row.original.tokenDecimals).toFixed(5)} ${
-                cell.row.original.tokenSymbol
-              }`}
+            <span className="font-exo text-center slashed-zero tabular-nums dark:text-white">
+              {`${(Number(cell.row.original.totalLocked) / 10 ** cell.row.original.tokenDecimals).toFixed(5)}`}
             </span>
           ),
       }),
@@ -52,10 +51,10 @@ export function VestingTable({ data }: { data: IVesting[] }) {
         header: 'Claimed',
         cell: ({ cell }) =>
           cell.row.original && (
-            <span className="font-exo text-center dark:text-white">{`${(
+            <span className="font-exo text-center slashed-zero tabular-nums dark:text-white">{`${(
               Number(cell.row.original.totalClaimed) /
               10 ** cell.row.original.tokenDecimals
-            ).toFixed(5)} ${cell.row.original.tokenSymbol}`}</span>
+            ).toFixed(5)}`}</span>
           ),
       }),
       table.createDisplayColumn({
@@ -74,6 +73,11 @@ export function VestingTable({ data }: { data: IVesting[] }) {
         cell: ({ cell }) => cell.row.original && <ClaimButton data={cell.row.original} />,
       }),
       table.createDisplayColumn({
+        id: 'chart',
+        header: '',
+        cell: ({ cell }) => cell.row.original && <ChartButton data={cell.row.original} />,
+      }),
+      table.createDisplayColumn({
         id: 'viewContract',
         header: '',
         cell: ({ cell }) =>
@@ -82,9 +86,9 @@ export function VestingTable({ data }: { data: IVesting[] }) {
               href={`${explorerUrl}/address/${cell.row.original.contract}`}
               target="_blank"
               rel="noreferrer noopener"
-              className="row-action-links font-exo float-right dark:text-white"
+              className="row-action-links font-exo dark:text-white"
             >
-              {'View Contract'}
+              {'Contract'}
             </a>
           ),
       }),

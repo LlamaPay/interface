@@ -42,6 +42,7 @@ interface IVestingData {
 export default function CreateVesting() {
   const [includeCliff, setIncludeCliff] = React.useState<boolean>(false);
   const [includeCustomStart, setIncludeCustomStart] = React.useState<boolean>(false);
+  const [showChart, setShowChart] = React.useState<boolean>(false);
   const [vestingAmount, setVestingAmount] = React.useState<string>('');
   const [formattedAmt, setFormattedAmt] = React.useState<string>('');
   const [vestedToken, setVestedToken] = React.useState<string>('');
@@ -224,7 +225,7 @@ export default function CreateVesting() {
               } inline-block h-4 w-4 transform rounded-full bg-white`}
             />
           </Switch>
-          <span className="font-exo">{`Custom Start Time`}</span>
+          <span className="font-exo">{`Custom Start`}</span>
           <Switch
             checked={includeCustomStart}
             onChange={setIncludeCustomStart}
@@ -235,6 +236,20 @@ export default function CreateVesting() {
             <span
               className={`${
                 includeCustomStart ? 'translate-x-6' : 'translate-x-1'
+              } inline-block h-4 w-4 transform rounded-full bg-white`}
+            />
+          </Switch>
+          <span className="font-exo">{'Show Chart'}</span>
+          <Switch
+            checked={showChart}
+            onChange={setShowChart}
+            className={`${
+              showChart ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
+            } relative inline-flex h-6 w-11 items-center rounded-full`}
+          >
+            <span
+              className={`${
+                showChart ? 'translate-x-6' : 'translate-x-1'
               } inline-block h-4 w-4 transform rounded-full bg-white`}
             />
           </Switch>
@@ -250,7 +265,7 @@ export default function CreateVesting() {
         </SubmitButton>
       </form>
       <TransactionDialog dialog={transactionDialog} transactionHash={transactionHash} />
-      {vestingData ? (
+      {vestingData && (
         <FormDialog dialog={confirmDialog} title={'Confirm Vesting Contract'}>
           <div className="space-y-4">
             <div className="font-exo my-1 rounded border p-2 dark:border-stone-700 dark:text-white">
@@ -318,8 +333,6 @@ export default function CreateVesting() {
             </SubmitButton>
           </div>
         </FormDialog>
-      ) : (
-        ''
       )}
     </>
   );
