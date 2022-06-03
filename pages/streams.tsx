@@ -63,7 +63,7 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, network, l
             {address && (
               <div className="mt-[5px] flex flex-wrap items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
                 <BalanceIcon />
-                <p>{getAddress(address)}</p>
+                <p>{address}</p>
               </div>
             )}
           </div>
@@ -80,9 +80,14 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, network, l
 export const getServerSideProps: GetServerSideProps = async ({ query, locale }) => {
   const { chainId, address } = query;
 
-  const userAddress = typeof address === 'string' ? address?.toLowerCase() : '';
-
   const { network, chain } = chainDetails(chainId);
+
+  const defaultAddress = typeof address === 'string' ? address?.toLowerCase() : '';
+
+  const userAddress = await network.chainProviders
+    .resolveName('alice.eth')
+    .then((address) => address || defaultAddress)
+    .catch(() => defaultAddress);
 
   const queryClient = new QueryClient();
 
