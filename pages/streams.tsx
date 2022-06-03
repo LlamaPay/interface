@@ -85,7 +85,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
   const defaultAddress = typeof address === 'string' ? address?.toLowerCase() : '';
 
   const userAddress = await network.chainProviders
-    .resolveName('alice.eth')
+    .resolveName(defaultAddress)
     .then((address) => address || defaultAddress)
     .catch(() => defaultAddress);
 
