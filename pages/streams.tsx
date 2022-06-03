@@ -6,7 +6,6 @@ import { dehydrate, QueryClient } from 'react-query';
 import { useStreamAndHistoryQuery } from 'services/generated/graphql';
 import defaultImage from 'public/empty-token.webp';
 import Image, { StaticImageData } from 'next/image';
-import { getAddress } from 'ethers/lib/utils';
 import { AltStreamSection } from 'components/Stream';
 import { AltHistorySection } from 'components/History';
 import { useFormatStreamAndHistory, useNetworkProvider } from 'hooks';
@@ -16,17 +15,18 @@ import { useTranslations } from 'next-intl';
 interface StreamsProps {
   subgraphEndpoint: string;
   address: string;
+  resolvedAddress: string;
   network: string;
   logoURI: StaticImageData;
 }
 
-const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, network, logoURI }) => {
+const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, resolvedAddress, network, logoURI }) => {
   const { data, isLoading, isError } = useStreamAndHistoryQuery(
     {
       endpoint: subgraphEndpoint,
     },
     {
-      id: address,
+      id: resolvedAddress,
       network: network,
     },
     {
@@ -36,9 +36,11 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, network, l
 
   const { provider } = useNetworkProvider();
 
-  const streamsAndHistory = useFormatStreamAndHistory({ data, address, provider });
+  const streamsAndHistory = useFormatStreamAndHistory({ data, address: resolvedAddress, provider });
 
   const t = useTranslations('Common');
+
+  const user = address.toLowerCase() !== resolvedAddress.toLowerCase() ? `${address} (${resolvedAddress})` : address;
 
   return (
     <Layout className="mt-12 flex w-full flex-col gap-[30px] dark:bg-[#161818]">
@@ -63,7 +65,7 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, network, l
             {address && (
               <div className="mt-[5px] flex flex-wrap items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
                 <BalanceIcon />
-                <p>{address}</p>
+                <p>{user}</p>
               </div>
             )}
           </div>
@@ -82,9 +84,11 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
 
   const { network, chain } = chainDetails(chainId);
 
-  const defaultAddress = typeof address === 'string' ? address?.toLowerCase() : '';
+  const { network: mainnet } = chainDetails('1');
 
-  const userAddress = await network.chainProviders
+  const defaultAddress = typeof address === 'string' ? address : '';
+
+  const userAddress = await mainnet.chainProviders
     .resolveName(defaultAddress)
     .then((address) => address || defaultAddress)
     .catch(() => defaultAddress);
@@ -98,7 +102,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
         endpoint: network?.subgraphEndpoint ?? '',
       },
       {
-        id: userAddress,
+        id: userAddress.toLowerCase(),
         network: chain?.name ?? '',
       }
     )
@@ -108,7 +112,8 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
   return {
     props: {
       subgraphEndpoint: network?.subgraphEndpoint ?? '',
-      address: userAddress,
+      address,
+      resolvedAddress: userAddress.toLowerCase(),
       network: chain?.name ?? '',
       logoURI: network?.logoURI ?? defaultImage,
       dehydratedState: dehydrate(queryClient),

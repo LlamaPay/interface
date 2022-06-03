@@ -39,7 +39,6 @@ export function SavedName({ data }: { data: IStream }) {
   };
 
   function clearName() {
-    console.log(address);
     setSavedAddress(formatAddress(address));
     updateAddress(address.toLowerCase(), formatAddress(address));
   }
