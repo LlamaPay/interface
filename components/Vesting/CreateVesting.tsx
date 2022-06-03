@@ -1,5 +1,5 @@
-import { InputAmount, InputAmountWithDuration, InputText, SubmitButton } from 'components/Form';
 import * as React from 'react';
+import { InputAmount, InputAmountWithDuration, InputText, SubmitButton } from 'components/Form';
 import { Switch } from '@headlessui/react';
 import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval';
 import { createERC20Contract, ICheckTokenAllowance } from 'utils/tokenUtils';
@@ -17,7 +17,6 @@ import Link from 'next/link';
 import { ChevronDoubleLeftIcon } from '@heroicons/react/outline';
 import { useIntl } from 'next-intl';
 import { useNetworkProvider } from 'hooks';
-import { Line } from 'react-chartjs-2';
 
 interface IVestingElements {
   recipientAddress: { value: string };
@@ -94,7 +93,7 @@ export default function CreateVesting() {
       }
     }
     checkApproval();
-  }, [vestingAmount, vestedToken, lmao, provider, accountData?.address, checkTokenApproval]);
+  }, [vestingAmount, vestedToken, lmao, provider, accountData?.address, checkTokenApproval, factory]);
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
