@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useTranslations } from 'next-intl';
 import { ITokenBalance } from 'queries/useTokenBalances';
 
@@ -16,7 +17,7 @@ export function InputAmountWithMaxButton({
   fillMaxAmountOnClick,
   id,
 }: IProps) {
-  const  t = useTranslations('Forms')
+  const t = useTranslations('Forms');
   return (
     <div>
       <label className="input-label" htmlFor={id}>
@@ -47,7 +48,7 @@ export function InputAmountWithMaxButton({
           disabled={!selectedToken}
           onClick={fillMaxAmountOnClick}
         >
-         {t('max')}
+          {t('max')}
         </button>
       </div>
     </div>

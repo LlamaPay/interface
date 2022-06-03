@@ -45,8 +45,8 @@ const Fallback = ({ isLoading, isError, noData, type }: FallbackProps) => {
       defaultMessage = !accountData ? t4('connectWallet') : unsupported ? t0('networkNotSupported') : null;
       break;
     case 'vestingStreams':
-      errorMessage = 'Error';
-      emptyDataMessage = 'No Data';
+      errorMessage = t0('error');
+      emptyDataMessage = 'Create a Vesting Contract to see a list of your vesting tokens';
       defaultMessage = !accountData ? 'Connect Wallet' : unsupported ? t0('networkNotSupported') : null;
       break;
   }

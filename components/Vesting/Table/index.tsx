@@ -16,6 +16,7 @@ export function VestingTable({ data }: { data: IVesting[] }) {
   const { chainId } = useNetworkProvider();
 
   const explorerUrl = chainId ? networkDetails[chainId].blockExplorerURL : '';
+
   const columns = React.useMemo(
     () => [
       table.createDisplayColumn({

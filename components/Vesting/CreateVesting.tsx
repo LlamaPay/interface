@@ -63,7 +63,7 @@ export default function CreateVesting() {
   const { chainId } = useNetworkProvider();
   const queryClient = useQueryClient();
   const intl = useIntl();
-  const factory = networkDetails[chainId!].vestingFactory;
+  const factory = chainId ? networkDetails[chainId]?.vestingFactory : '';
 
   const [{ loading }, deploy_vesting_contract] = useContractWrite(
     {

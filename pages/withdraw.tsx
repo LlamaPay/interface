@@ -16,7 +16,6 @@ import {
   TokenName,
   Withdrawable,
 } from 'components/Stream/Table/CustomValues';
-import { getAddress } from 'ethers/lib/utils';
 import { CashIcon } from '@heroicons/react/solid';
 import useBatchCalls from 'queries/useBatchCalls';
 import useGnosisBatch from 'queries/useGnosisBatch';

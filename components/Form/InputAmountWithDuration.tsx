@@ -2,7 +2,6 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { InputAmountWithDaysProps } from './types';
 import { useTranslations } from 'next-intl';
-import { ExclamationCircleIcon } from '@heroicons/react/outline';
 
 export const InputAmountWithDuration = ({
   name,
