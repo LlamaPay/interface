@@ -17,6 +17,7 @@ import Link from 'next/link';
 import { ChevronDoubleLeftIcon } from '@heroicons/react/outline';
 import { useIntl } from 'next-intl';
 import { useNetworkProvider } from 'hooks';
+import { Line } from 'react-chartjs-2';
 
 interface IVestingElements {
   recipientAddress: { value: string };
@@ -47,6 +48,10 @@ export default function CreateVesting() {
   const [formattedAmt, setFormattedAmt] = React.useState<string>('');
   const [vestedToken, setVestedToken] = React.useState<string>('');
   const [vestedTokenDecimals, setVestedTokenDecimals] = React.useState<number>(0);
+  const [vestingTime, setVestingTime] = React.useState<string>('');
+  const [vestingDuration, setVestingDuration] = React.useState<string>('week');
+  const [cliffTime, setCliffTime] = React.useState<string>('');
+  const [cliffDuration, setCliffDuration] = React.useState<string>('week');
   const [transactionHash, setTransactionHash] = React.useState<string>('');
   const [vestingData, setVestingData] = React.useState<IVestingData | null>(null);
   const transactionDialog = useDialogState();
@@ -95,17 +100,15 @@ export default function CreateVesting() {
     e.preventDefault();
     const form = e.target as typeof e.target & IVestingElements;
     const recipientAddress = form.recipientAddress.value;
-    const vestingTime = new BigNumber(form.vestingTime.value)
-      .times(secondsByDuration[form.vestingDuration.value])
-      .toFixed(0);
+    const fmtVestingTime = new BigNumber(vestingTime).times(secondsByDuration[vestingDuration]).toFixed(0);
     const date = includeCustomStart ? new Date(form.startDate.value) : new Date(Date.now());
     if (date.toString() === 'Invalid Date') {
       toast.error('Invalid Date');
       return;
     }
     const startTime = new BigNumber(Number(date) / 1e3).toFixed(0);
-    const cliffTime = includeCliff
-      ? new BigNumber(form.cliffTime.value).times(secondsByDuration[form.cliffDuration.value]).toFixed(0)
+    const fmtCliffTime = includeCliff
+      ? new BigNumber(cliffTime).times(secondsByDuration[cliffDuration]).toFixed(0)
       : '0';
 
     if (isApproved) {
@@ -114,8 +117,8 @@ export default function CreateVesting() {
         vestedToken,
         tokenDecimals: vestedTokenDecimals,
         vestingAmount: formattedAmt,
-        vestingDuration: vestingTime,
-        cliffTime,
+        vestingDuration: fmtVestingTime,
+        cliffTime: fmtCliffTime,
         startTime,
       });
       confirmDialog.show();
@@ -198,6 +201,8 @@ export default function CreateVesting() {
           name="vestingTime"
           isRequired
           selectInputName="vestingDuration"
+          handleChange={(e) => setVestingTime(e.target.value)}
+          handleSelectChange={(e) => setVestingDuration(e.target.value)}
         />
         {includeCliff && (
           <InputAmountWithDuration
@@ -205,6 +210,8 @@ export default function CreateVesting() {
             name="cliffTime"
             isRequired
             selectInputName="cliffDuration"
+            handleChange={(e) => setCliffTime(e.target.value)}
+            handleSelectChange={(e) => setCliffDuration(e.target.value)}
           />
         )}
         {includeCustomStart && (
