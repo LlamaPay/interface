@@ -1638,7 +1638,7 @@
   dependencies:
     mini-svg-data-uri "^1.2.3"
 
-"@tanstack/react-table@^8.0.0-alpha.76":
+"@tanstack/react-table@^8.0.0-beta.4":
   version "8.0.0-beta.4"
   resolved "https://registry.yarnpkg.com/@tanstack/react-table/-/react-table-8.0.0-beta.4.tgz#3c2be1cb247ebbdde46484bd769994937ce28f83"
   integrity sha512-0GM6V+eupU8/0ja+rQ0F9d7UCq4kA9D0UBSdZMjv1MJryTu2apDc8bOTyOkwmQiqNl2JMj3pBg7A9izXM6ozzA==
@@ -2246,7 +2246,7 @@ ariakit-utils@0.17.0-next.20:
   resolved "https://registry.yarnpkg.com/ariakit-utils/-/ariakit-utils-0.17.0-next.20.tgz#eb07a1cbbb185e4716394499af5fc919eff66165"
   integrity sha512-OWUaYtOCoYLbB2kAOT0SsActG/wFdDtASDui71zIIDEaRpcnebKhp0+57a+SFDPoKOuNs0D87Rh6N0/2uF3jYg==
 
-ariakit@^2.0.0-next.26:
+ariakit@^2.0.0-next.29:
   version "2.0.0-next.29"
   resolved "https://registry.yarnpkg.com/ariakit/-/ariakit-2.0.0-next.29.tgz#5ea9d8e92e530d309548741f748ec3e87317cdf2"
   integrity sha512-Lky9TU3qciTQjmt2m8IDK1RkGLubN8iK9e9boBrEQsme2sAyWbk9W3i7AxBfyz4szR7R2+bvzedAxwkG3PSe3A==

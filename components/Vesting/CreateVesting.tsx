@@ -16,6 +16,7 @@ import { useDialogState } from 'ariakit';
 import Link from 'next/link';
 import { ChevronDoubleLeftIcon } from '@heroicons/react/outline';
 import { useIntl } from 'next-intl';
+import useGetVestingInfo from 'queries/useGetVestingInfo';
 
 interface IVestingElements {
   recipientAddress: { value: string };
@@ -69,6 +70,9 @@ export default function CreateVesting({ factory }: { factory: string }) {
     },
     'deploy_vesting_contract'
   );
+
+  // keep query active in this page so when vesting tx is submitted, this query is invalidated and user can see the data when they navigate to /vesting page
+  useGetVestingInfo();
 
   React.useEffect(() => {
     async function checkApproval() {
