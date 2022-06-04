@@ -1,17 +1,15 @@
-import classNames from 'classnames';
 import Fallback from 'components/FallbackList';
-import { useNetworkProvider } from 'hooks';
-import Link from 'next/link';
 import useGetVestingInfo from 'queries/useGetVestingInfo';
+import Table from './Table';
+import { useNetworkProvider } from 'hooks';
 import { networkDetails } from 'utils/constants';
-import { VestingTable } from './Table';
+import Link from 'next/link';
+import classNames from 'classnames';
 
-export default function VestingPage() {
-  const { data, isLoading, error } = useGetVestingInfo();
-
+export default function VestingTable() {
   const { chainId } = useNetworkProvider();
-
   const vestingFactory = chainId ? networkDetails[chainId]?.vestingFactory : null;
+  const { data, isLoading, error } = useGetVestingInfo();
 
   return (
     <section className="w-full">
@@ -29,10 +27,11 @@ export default function VestingPage() {
           </a>
         </Link>
       </div>
+
       {isLoading || error || !data || data.length < 1 ? (
         <Fallback isLoading={isLoading} isError={error ? true : false} noData={true} type={'vestingStreams'} />
       ) : (
-        <VestingTable data={data} />
+        <Table data={data} />
       )}
     </section>
   );

@@ -8,7 +8,7 @@ import { useAccount, useContractWrite, useProvider } from 'wagmi';
 import BigNumber from 'bignumber.js';
 import { BeatLoader } from 'react-spinners';
 import vestingFactoryReadable from 'abis/vestingFactoryReadable';
-import { networkDetails, secondsByDuration } from 'utils/constants';
+import { secondsByDuration } from 'utils/constants';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import { FormDialog, TransactionDialog } from 'components/Dialog';
@@ -16,7 +16,6 @@ import { useDialogState } from 'ariakit';
 import Link from 'next/link';
 import { ChevronDoubleLeftIcon } from '@heroicons/react/outline';
 import { useIntl } from 'next-intl';
-import { useNetworkProvider } from 'hooks';
 
 interface IVestingElements {
   recipientAddress: { value: string };
@@ -39,7 +38,7 @@ interface IVestingData {
   startTime: string;
 }
 
-export default function CreateVesting() {
+export default function CreateVesting({ factory }: { factory: string }) {
   const [includeCliff, setIncludeCliff] = React.useState<boolean>(false);
   const [includeCustomStart, setIncludeCustomStart] = React.useState<boolean>(false);
   const [showChart, setShowChart] = React.useState<boolean>(false);
@@ -60,10 +59,8 @@ export default function CreateVesting() {
   const { mutate: approveToken, isLoading: approvingToken } = useApproveToken();
   const provider = useProvider();
   const [{ data: accountData }] = useAccount();
-  const { chainId } = useNetworkProvider();
   const queryClient = useQueryClient();
   const intl = useIntl();
-  const factory = chainId ? networkDetails[chainId]?.vestingFactory : '';
 
   const [{ loading }, deploy_vesting_contract] = useContractWrite(
     {
@@ -181,7 +178,7 @@ export default function CreateVesting() {
         </Link>
       </div>
       <form className="flex max-w-xl flex-col gap-4" onSubmit={onSubmit}>
-        <span className="font-exo text-2xl font-semibold text-[#3D3D3D] dark:text-white">{'Set Up Vesting'}</span>
+        <span className="font-exo text-2xl font-semibold text-[#3D3D3D] dark:text-white">Set Up Vesting</span>
         <InputText label={'Recipient Address'} name="recipientAddress" isRequired />
         <InputText
           label={'Vested Token Address'}

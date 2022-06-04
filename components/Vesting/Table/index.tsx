@@ -12,7 +12,7 @@ import Unclaimed from './CustomValues/Unclaimed';
 
 const table = createTable().setRowType<IVesting>();
 
-export function VestingTable({ data }: { data: IVesting[] }) {
+export default function VestingTable({ data }: { data: IVesting[] }) {
   const { chainId } = useNetworkProvider();
 
   const explorerUrl = chainId ? networkDetails[chainId].blockExplorerURL : '';
