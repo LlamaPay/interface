@@ -15,7 +15,7 @@ export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   // Pass data to the page via props
   return {
     props: {
-      messages: (await import(`../translations/${locale}.json`)).default,
+      messages: (await import(`translations/${locale}.json`)).default,
     },
   };
 };

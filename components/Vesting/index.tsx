@@ -17,7 +17,7 @@ export default function VestingPage() {
     <section className="w-full">
       <div className="section-header flex w-full flex-wrap items-center justify-between">
         <h1 className="font-exo dark:text-white">{'Vesting'}</h1>
-        <Link href="/vesting-create" aria-disabled={!vestingFactory}>
+        <Link href="/vesting/create" aria-disabled={!vestingFactory}>
           <a
             className={classNames(
               'primary-button text-md py-2 px-5 text-center font-bold',

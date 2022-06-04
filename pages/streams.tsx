@@ -107,7 +107,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
       network: chain?.name ?? '',
       logoURI: network?.logoURI ?? defaultImage,
       dehydratedState: dehydrate(queryClient),
-      messages: (await import(`../translations/${locale}.json`)).default,
+      messages: (await import(`translations/${locale}.json`)).default,
     },
   };
 };

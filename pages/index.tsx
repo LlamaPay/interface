@@ -28,7 +28,7 @@ export const getServerSideProps: GetServerSideProps = async ({ req, locale }) =>
   // Pass data to the page via props
   return {
     props: {
-      messages: (await import(`../translations/${locale}.json`)).default,
+      messages: (await import(`translations/${locale}.json`)).default,
       noBanner: req.cookies[NO_BANNER] ?? false,
     },
   };
