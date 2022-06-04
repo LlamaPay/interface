@@ -7,6 +7,7 @@ export const FACTORY_KOVAN = '0xd43bb75cc924e8475dff2604b962f39089e4f842';
 export const FACTORY_FUJI = '0xc4705f96030D347F421Fbe01d9A19F18B26a7d30';
 
 export const VESTING_FACTORY_RINKEBY = '0xe266B85eE0552DBb32FDfB533376A5066B46A492';
+export const VESTING_FACTORY_KOVAN = '0x8c5e31c26e5da2f188d3294f8a38a5d59c104389';
 
 // LIVE
 export const FACTORY_AVALANCHE = '0x7d507b4c2d7e54da5731f643506996da8525f4a3';
@@ -84,7 +85,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerName: 'Etherscan',
     prefix: 'ethereum',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
-    vestingFactory: '',
+    vestingFactory: VESTING_FACTORY_KOVAN,
   },
   43113: {
     rpcUrl: 'https://api.avax-test.network/ext/bc/C/rpc',
