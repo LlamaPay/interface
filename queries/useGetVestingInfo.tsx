@@ -21,7 +21,21 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
     const factoryAddress = networkDetails[chainId].vestingFactory;
     const factoryContract = new ethers.Contract(factoryAddress, vestingFactory, provider);
     const multicall = new Multicall({ ethersProvider: provider, tryAggregate: true });
-    const vestingContracts = await factoryContract.contract_by_address(userAddress);
+    const vestingContractsCount = await factoryContract.contracts_list_pointer(userAddress);
+    const vestingUserContractsContext: ContractCallContext[] = Array.from(
+      { length: Number(vestingContractsCount) },
+      (_, k) => ({
+        reference: k.toString(),
+        contractAddress: factoryAddress,
+        abi: vestingFactory,
+        calls: [{ reference: 'contract', methodName: 'contracts', methodParameters: [userAddress, k] }],
+      })
+    );
+    const vestingUserContractsResults: ContractCallResults = await multicall.call(vestingUserContractsContext);
+    const vestingContracts: any[] = [];
+    Object.keys(vestingUserContractsResults.results).map((p) => {
+      vestingContracts.push(vestingUserContractsResults.results[p].callsReturnContext[0].returnValues[0]);
+    });
     const vestingContractCallContext: ContractCallContext[] = vestingContracts.map((p: any) => ({
       reference: p,
       contractAddress: p,
@@ -87,6 +101,6 @@ export default function useGetVestingInfo() {
   const [{ data: accountData }] = useAccount();
   return useQuery(['vestingInfo'], () => getVestingInfo(accountData?.address, provider, chainId), {
     refetchInterval: 10000,
-    retry: 5,
+    retry: 10,
   });
 }

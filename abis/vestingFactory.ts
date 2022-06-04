@@ -57,17 +57,10 @@ const vestingFactory: any = [
   {
     stateMutability: 'view',
     type: 'function',
-    name: 'contract_by_address',
-    inputs: [{ name: 'user', type: 'address' }],
-    outputs: [{ name: '', type: 'address[]' }],
-  },
-  { stateMutability: 'view', type: 'function', name: 'target', inputs: [], outputs: [{ name: '', type: 'address' }] },
-  {
-    stateMutability: 'view',
-    type: 'function',
-    name: 'contract_count',
+    name: 'target',
     inputs: [],
-    outputs: [{ name: '', type: 'uint256' }],
+    outputs: [{ name: '', type: 'address' }],
+    gas: 2418,
   },
   {
     stateMutability: 'view',
@@ -78,6 +71,15 @@ const vestingFactory: any = [
       { name: 'arg1', type: 'uint256' },
     ],
     outputs: [{ name: '', type: 'address' }],
+    gas: 2708,
+  },
+  {
+    stateMutability: 'view',
+    type: 'function',
+    name: 'contracts_list_pointer',
+    inputs: [{ name: 'arg0', type: 'address' }],
+    outputs: [{ name: '', type: 'uint256' }],
+    gas: 2693,
   },
 ];
 
