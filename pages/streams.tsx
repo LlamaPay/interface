@@ -11,6 +11,7 @@ import { AltHistorySection } from 'components/History';
 import { useFormatStreamAndHistory, useNetworkProvider } from 'hooks';
 import { chainDetails } from 'utils/network';
 import { useTranslations } from 'next-intl';
+import Balance from 'components/Balance';
 
 interface StreamsProps {
   subgraphEndpoint: string;
@@ -70,6 +71,9 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, resolvedAd
             )}
           </div>
         </div>
+      </section>
+      <section className="app-section dark:bg-[#161818]">
+        <Balance address={address}/>
       </section>
       <section className="app-section flex h-full flex-1 flex-col gap-[50px] bg-[#D9F2F4]/10 py-[22px] dark:bg-[#161818]">
         <AltStreamSection isLoading={isLoading} isError={isError} data={streamsAndHistory} />

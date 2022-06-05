@@ -7,10 +7,12 @@ interface FallbackProps {
   isError: boolean;
   noData: boolean;
   type: 'streams' | 'history' | 'balances' | 'payeesList';
+  supressWalletConnection?: boolean
 }
 
-const Fallback = ({ isLoading, isError, noData, type }: FallbackProps) => {
-  const [{ data: accountData }] = useAccount();
+const Fallback = ({ isLoading, isError, noData, type, supressWalletConnection}: FallbackProps) => {
+  const [{ data: basicAccountData }] = useAccount();
+  const accountData = supressWalletConnection === true || basicAccountData !== undefined
 
   const { unsupported } = useNetworkProvider();
   const t0 = useTranslations('Common');
