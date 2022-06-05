@@ -2,8 +2,6 @@ import * as React from 'react';
 import { InputAmount, InputAmountWithDuration, InputText, SubmitButton } from 'components/Form';
 import { Switch } from '@headlessui/react';
 import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval';
-import { createERC20Contract, ICheckTokenAllowance } from 'utils/tokenUtils';
-import { getAddress } from 'ethers/lib/utils';
 import { useAccount, useContractWrite, useProvider } from 'wagmi';
 import BigNumber from 'bignumber.js';
 import { BeatLoader } from 'react-spinners';
@@ -11,12 +9,15 @@ import vestingFactoryReadable from 'abis/vestingFactoryReadable';
 import { secondsByDuration } from 'utils/constants';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
-import { FormDialog, TransactionDialog } from 'components/Dialog';
+import { TransactionDialog } from 'components/Dialog';
 import { useDialogState } from 'ariakit';
 import Link from 'next/link';
-import { useIntl } from 'next-intl';
 import useGetVestingInfo from 'queries/useGetVestingInfo';
 import { ArrowCircleLeftIcon } from '@heroicons/react/outline';
+import Confirm, { IVestingData } from './confirm';
+import { createERC20Contract } from 'utils/tokenUtils';
+import { getAddress } from 'ethers/lib/utils';
+import { checkApproval, createContractAndCheckApproval } from 'components/Form/utils';
 
 interface IVestingElements {
   recipientAddress: { value: string };
@@ -29,39 +30,31 @@ interface IVestingElements {
   startDate: { value: string };
 }
 
-interface IVestingData {
-  recipientAddress: string;
-  vestedToken: string;
-  tokenDecimals: number;
-  vestingAmount: string;
-  vestingDuration: string;
-  cliffTime: string;
-  startTime: string;
-}
-
 export default function CreateVesting({ factory }: { factory: string }) {
+  // form switches
   const [includeCliff, setIncludeCliff] = React.useState<boolean>(false);
   const [includeCustomStart, setIncludeCustomStart] = React.useState<boolean>(false);
   const [showChart, setShowChart] = React.useState<boolean>(false);
-  const [vestingAmount, setVestingAmount] = React.useState<string>('');
-  const [formattedAmt, setFormattedAmt] = React.useState<string>('');
-  const [vestedToken, setVestedToken] = React.useState<string>('');
-  const [vestedTokenDecimals, setVestedTokenDecimals] = React.useState<number>(0);
-  const [vestingTime, setVestingTime] = React.useState<string>('');
+
+  // form input values
   const [vestingDuration, setVestingDuration] = React.useState<string>('week');
-  const [cliffTime, setCliffTime] = React.useState<string>('');
   const [cliffDuration, setCliffDuration] = React.useState<string>('week');
+  const [vestedToken, setVestedToken] = React.useState<string>('');
+  const [vestedAmount, setVestedAmount] = React.useState<string>('');
+
   const [transactionHash, setTransactionHash] = React.useState<string>('');
+
   const [vestingData, setVestingData] = React.useState<IVestingData | null>(null);
-  const transactionDialog = useDialogState();
-  const confirmDialog = useDialogState();
-  const [lmao, setLmao] = React.useState<boolean>(true);
+
   const { mutate: checkTokenApproval, data: isApproved, isLoading: checkingApproval } = useCheckTokenApproval();
+
   const { mutate: approveToken, isLoading: approvingToken } = useApproveToken();
-  const provider = useProvider();
-  const [{ data: accountData }] = useAccount();
+
   const queryClient = useQueryClient();
-  const intl = useIntl();
+
+  const transactionDialog = useDialogState();
+
+  const confirmDialog = useDialogState();
 
   const [{ loading }, deploy_vesting_contract] = useContractWrite(
     {
@@ -71,57 +64,64 @@ export default function CreateVesting({ factory }: { factory: string }) {
     'deploy_vesting_contract'
   );
 
+  const provider = useProvider();
+  const [{ data: accountData }] = useAccount();
+
   // keep query active in this page so when vesting tx is submitted, this query is invalidated and user can see the data when they navigate to /vesting page
   useGetVestingInfo();
 
-  React.useEffect(() => {
-    async function checkApproval() {
-      try {
-        const tokenContract = createERC20Contract({ tokenAddress: getAddress(vestedToken), provider });
-        const decimals = await tokenContract.decimals();
-        setVestedTokenDecimals(Number(decimals));
-        const formatted = new BigNumber(vestingAmount).times(10 ** decimals).toFixed(0);
-        setFormattedAmt(formatted);
-        const data: ICheckTokenAllowance = {
-          token: tokenContract,
-          userAddress: accountData?.address,
-          approveForAddress: factory,
-          approvedForAmount: formatted,
-        };
-        checkTokenApproval(data);
-      } catch (error: any) {
-        if (error.reason !== 'invalid address') console.error(error.reason);
-      }
+  const checkApprovalOnChange = (vestedToken: string, vestedAmount: string) => {
+    if (accountData && provider && vestedToken !== '' && vestedAmount !== '') {
+      createContractAndCheckApproval({
+        userAddress: accountData.address,
+        tokenAddress: vestedToken,
+        provider,
+        approvalFn: checkTokenApproval,
+        approvedForAmount: vestedAmount,
+        approveForAddress: factory,
+      });
     }
-    checkApproval();
-  }, [vestingAmount, vestedToken, lmao, provider, accountData?.address, checkTokenApproval, factory]);
+  };
 
-  function onSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const form = e.target as typeof e.target & IVestingElements;
+
+    const form = e.target as HTMLFormElement & IVestingElements;
     const recipientAddress = form.recipientAddress.value;
+    const vestingTime = form.vestingTime.value;
+    const cliffTime = form.cliffTime?.value;
+    const vestedToken = form.vestedToken.value;
+    const vestingAmount = form.vestingAmount.value;
+
     const fmtVestingTime = new BigNumber(vestingTime).times(secondsByDuration[vestingDuration]).toFixed(0);
     const date = includeCustomStart ? new Date(form.startDate.value) : new Date(Date.now());
+
     if (date.toString() === 'Invalid Date') {
       toast.error('Invalid Date');
       return;
     }
+
     const startTime = new BigNumber(Number(date) / 1e3).toFixed(0);
     const fmtCliffTime = includeCliff
       ? new BigNumber(cliffTime).times(secondsByDuration[cliffDuration]).toFixed(0)
       : '0';
 
+    const tokenContract = createERC20Contract({ tokenAddress: getAddress(vestedToken), provider });
+    const decimals = await tokenContract.decimals();
+    const formattedAmt = new BigNumber(vestingAmount).times(10 ** decimals).toFixed(0);
+
     if (isApproved) {
       setVestingData({
         recipientAddress,
         vestedToken,
-        tokenDecimals: vestedTokenDecimals,
+        tokenDecimals: Number(decimals),
         vestingAmount: formattedAmt,
         vestingDuration: fmtVestingTime,
         cliffTime: fmtCliffTime,
         startTime,
       });
       confirmDialog.show();
+      form.reset();
     } else {
       approveToken(
         {
@@ -131,12 +131,28 @@ export default function CreateVesting({ factory }: { factory: string }) {
         },
         {
           onSettled: () => {
-            setLmao(!lmao);
+            // llamacontractAddress is approveForAddress
+            checkApproval({
+              tokenDetails: { tokenContract, llamaContractAddress: factory, decimals },
+              userAddress: accountData?.address,
+              approvedForAmount: vestingAmount,
+              checkTokenApproval,
+            });
           },
         }
       );
     }
   }
+
+  const handleVestTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setVestedToken(e.target.value);
+    checkApprovalOnChange(e.target.value, vestedAmount);
+  };
+
+  const handleVestAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setVestedAmount(e.target.value);
+    checkApprovalOnChange(vestedToken, e.target.value);
+  };
 
   function onConfirm() {
     if (!vestingData) return;
@@ -149,15 +165,15 @@ export default function CreateVesting({ factory }: { factory: string }) {
         vestingData?.startTime,
         vestingData?.cliffTime,
       ],
-    }).then((data) => {
-      if (data.error) {
-        toast.error(data.error.message);
+    }).then((tx) => {
+      if (tx.error) {
+        toast.error(tx.error.message);
       } else {
         const toastid = toast.loading('Creating Contract');
-        setTransactionHash(data.data.hash);
+        setTransactionHash(tx.data.hash);
         confirmDialog.hide();
         transactionDialog.show();
-        data.data.wait().then((receipt) => {
+        tx.data.wait().then((receipt) => {
           toast.dismiss(toastid);
           if (receipt.status === 1) {
             toast.success('Successfuly Created Contract');
@@ -165,7 +181,6 @@ export default function CreateVesting({ factory }: { factory: string }) {
             toast.error('Failed to Create Contract');
           }
           queryClient.invalidateQueries();
-          setLmao(!lmao);
         });
       }
     });
@@ -175,31 +190,20 @@ export default function CreateVesting({ factory }: { factory: string }) {
     <section className="relative w-full">
       <form className="mx-auto flex max-w-xl flex-col gap-4" onSubmit={onSubmit}>
         <Link href="/vesting">
-          <a className="flex items-center gap-2">
+          <a className="relative left-[-2px] flex items-center gap-2">
             <ArrowCircleLeftIcon className="h-6 w-6" />
             <span className="">Return</span>
           </a>
         </Link>
         <h1 className="font-exo my-2 text-2xl font-semibold text-[#3D3D3D] dark:text-white">Set Up Vesting</h1>
         <InputText label={'Recipient Address'} name="recipientAddress" isRequired />
-        <InputText
-          label={'Vested Token Address'}
-          name="vestedToken"
-          isRequired
-          handleChange={(e) => setVestedToken(e.target.value)}
-        />
-        <InputAmount
-          label={'Vesting Amount'}
-          name="vestingAmount"
-          isRequired
-          handleChange={(e) => setVestingAmount(e.target.value)}
-        />
+        <InputText label={'Vested Token Address'} name="vestedToken" handleChange={handleVestTokenChange} isRequired />
+        <InputAmount label={'Vesting Amount'} name="vestingAmount" handleChange={handleVestAmountChange} isRequired />
         <InputAmountWithDuration
           label={'Vesting Duration'}
           name="vestingTime"
           isRequired
           selectInputName="vestingDuration"
-          handleChange={(e) => setVestingTime(e.target.value)}
           handleSelectChange={(e) => setVestingDuration(e.target.value)}
         />
         {includeCliff && (
@@ -208,7 +212,6 @@ export default function CreateVesting({ factory }: { factory: string }) {
             name="cliffTime"
             isRequired
             selectInputName="cliffDuration"
-            handleChange={(e) => setCliffTime(e.target.value)}
             handleSelectChange={(e) => setCliffDuration(e.target.value)}
           />
         )}
@@ -259,8 +262,9 @@ export default function CreateVesting({ factory }: { factory: string }) {
             />
           </Switch>
         </div>
+
         <SubmitButton className="mt-5">
-          {loading || checkingApproval || loading || approvingToken ? (
+          {loading || checkingApproval || approvingToken ? (
             <BeatLoader size={6} color="white" />
           ) : isApproved ? (
             'Create Contract'
@@ -270,75 +274,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
         </SubmitButton>
       </form>
       <TransactionDialog dialog={transactionDialog} transactionHash={transactionHash} />
-      {vestingData && (
-        <FormDialog dialog={confirmDialog} title={'Confirm Vesting Contract'}>
-          <div className="space-y-4">
-            <div className="font-exo my-1 rounded border p-2 dark:border-stone-700 dark:text-white">
-              <p>{`Recipient: ${vestingData?.recipientAddress}`}</p>
-              <p>{`Token: ${vestingData?.vestedToken}`}</p>
-              <p>{`Amount: ${(Number(vestingData?.vestingAmount) / 10 ** vestingData?.tokenDecimals).toFixed(5)}`}</p>
-              <p>{`Starts: ${intl.formatDateTime(new Date(Number(vestingData.startTime) * 1e3), {
-                dateStyle: 'short',
-                timeStyle: 'short',
-              })} (${intl.formatDateTime(new Date(Number(vestingData.startTime) * 1e3), {
-                dateStyle: 'short',
-                timeStyle: 'short',
-                timeZone: 'utc',
-              })} UTC)`}</p>
-              {vestingData.cliffTime !== '0' && (
-                <>
-                  <p>{`Cliff Duration: ${(Number(vestingData.cliffTime) / 86400).toFixed(2)} days`}</p>
-                  <p>{`Cliff Ends: ${intl.formatDateTime(
-                    new Date((Number(vestingData.startTime) + Number(vestingData.cliffTime)) * 1e3),
-                    {
-                      dateStyle: 'short',
-                      timeStyle: 'short',
-                    }
-                  )} (${intl.formatDateTime(
-                    new Date((Number(vestingData.startTime) + Number(vestingData.cliffTime)) * 1e3),
-                    {
-                      dateStyle: 'short',
-                      timeStyle: 'short',
-                      timeZone: 'utc',
-                    }
-                  )} UTC)`}</p>
-                </>
-              )}
-              <p>{`Ends: ${intl.formatDateTime(
-                new Date(
-                  (Number(vestingData.startTime) +
-                    Number(vestingData.cliffTime) +
-                    Number(vestingData.vestingDuration)) *
-                    1e3
-                ),
-                {
-                  dateStyle: 'short',
-                  timeStyle: 'short',
-                }
-              )} (${intl.formatDateTime(
-                new Date(
-                  (Number(vestingData.startTime) +
-                    Number(vestingData.cliffTime) +
-                    Number(vestingData.vestingDuration)) *
-                    1e3
-                ),
-                {
-                  dateStyle: 'short',
-                  timeStyle: 'short',
-                  timeZone: 'utc',
-                }
-              )} UTC) `}</p>
-            </div>
-            <SubmitButton className="mt-5" onClick={onConfirm}>
-              {loading || checkingApproval || loading || approvingToken ? (
-                <BeatLoader size={6} color="white" />
-              ) : (
-                'Confirm Transaction'
-              )}
-            </SubmitButton>
-          </div>
-        </FormDialog>
-      )}
+      {vestingData && <Confirm dialog={confirmDialog} vestingData={vestingData} onConfirm={onConfirm} />}
     </section>
   );
 }

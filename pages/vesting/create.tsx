@@ -1,5 +1,5 @@
 import Layout from 'components/Layout';
-import CreateVesting from 'components/Vesting/CreateVesting';
+import CreateVesting from 'components/Vesting/create';
 import { useNetworkProvider } from 'hooks';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslations } from 'next-intl';
