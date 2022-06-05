@@ -15,6 +15,14 @@ export const StreamAddress = ({ data }: { data: IStream }) => {
     }
   }, [data]);
 
+  const ens = React.useMemo(() => {
+    if (data.streamType === 'incomingStream') {
+      return data.payerEns;
+    } else if (data.streamType === 'outgoingStream') {
+      return data.payeeEns;
+    }
+  }, [data]);
+
   return (
     <Tooltip content={`${address}`}>
       <a
@@ -23,7 +31,7 @@ export const StreamAddress = ({ data }: { data: IStream }) => {
         rel="noopener noreferrer"
         className="dark:text-white"
       >
-        {address ? formatAddress(address) : ''}
+        {ens ? ens : address ? formatAddress(address) : ''}
       </a>
     </Tooltip>
   );
