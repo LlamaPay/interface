@@ -43,6 +43,9 @@ fragment UserStream on Stream {
 fragment UserHistory on HistoryEvent {
   txHash
   eventType
+  users {
+    id
+  }
   stream {
     streamId
     payer {
