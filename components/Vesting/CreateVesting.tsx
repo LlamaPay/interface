@@ -14,9 +14,9 @@ import { useQueryClient } from 'react-query';
 import { FormDialog, TransactionDialog } from 'components/Dialog';
 import { useDialogState } from 'ariakit';
 import Link from 'next/link';
-import { ChevronDoubleLeftIcon } from '@heroicons/react/outline';
 import { useIntl } from 'next-intl';
 import useGetVestingInfo from 'queries/useGetVestingInfo';
+import { ArrowCircleLeftIcon } from '@heroicons/react/outline';
 
 interface IVestingElements {
   recipientAddress: { value: string };
@@ -172,17 +172,15 @@ export default function CreateVesting({ factory }: { factory: string }) {
   }
 
   return (
-    <>
-      <div className="max-w-xl">
+    <section className="relative w-full">
+      <form className="mx-auto flex max-w-xl flex-col gap-4" onSubmit={onSubmit}>
         <Link href="/vesting">
-          <a className="flex gap-1 align-middle">
-            <ChevronDoubleLeftIcon className="h-6 w-6" />
-            <span className="text-md font-exo font-bold">Return</span>
+          <a className="flex items-center gap-2">
+            <ArrowCircleLeftIcon className="h-6 w-6" />
+            <span className="">Return</span>
           </a>
         </Link>
-      </div>
-      <form className="flex max-w-xl flex-col gap-4" onSubmit={onSubmit}>
-        <span className="font-exo text-2xl font-semibold text-[#3D3D3D] dark:text-white">Set Up Vesting</span>
+        <h1 className="font-exo my-2 text-2xl font-semibold text-[#3D3D3D] dark:text-white">Set Up Vesting</h1>
         <InputText label={'Recipient Address'} name="recipientAddress" isRequired />
         <InputText
           label={'Vested Token Address'}
@@ -341,6 +339,6 @@ export default function CreateVesting({ factory }: { factory: string }) {
           </div>
         </FormDialog>
       )}
-    </>
+    </section>
   );
 }

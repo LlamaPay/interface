@@ -29,7 +29,13 @@ export default function VestingTable() {
       </div>
 
       {isLoading || error || !data || data.length < 1 ? (
-        <Fallback isLoading={isLoading} isError={error ? true : false} noData={true} type={'vestingStreams'} />
+        <Fallback
+          isLoading={isLoading}
+          isError={error ? true : false}
+          noData={true}
+          type={'vestingStreams'}
+          showLoader={true}
+        />
       ) : (
         <Table data={data} />
       )}

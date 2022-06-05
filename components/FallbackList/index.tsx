@@ -1,5 +1,6 @@
 import { useNetworkProvider } from 'hooks';
 import { useTranslations } from 'next-intl';
+import { BeatLoader } from 'react-spinners';
 import { useAccount } from 'wagmi';
 
 interface FallbackProps {
@@ -7,9 +8,10 @@ interface FallbackProps {
   isError: boolean;
   noData: boolean;
   type: 'streams' | 'history' | 'balances' | 'payeesList' | 'vestingStreams';
+  showLoader?: boolean;
 }
 
-const Fallback = ({ isLoading, isError, noData, type }: FallbackProps) => {
+const Fallback = ({ isLoading, isError, noData, type, showLoader = false }: FallbackProps) => {
   const [{ data: accountData }] = useAccount();
 
   const { unsupported } = useNetworkProvider();
@@ -46,15 +48,21 @@ const Fallback = ({ isLoading, isError, noData, type }: FallbackProps) => {
       break;
     case 'vestingStreams':
       errorMessage = t0('error');
-      emptyDataMessage = 'Create a Vesting Contract to see a list of your vesting tokens';
+      emptyDataMessage = 'Create a Vesting Contract to see a list of your vestings';
       defaultMessage = !accountData ? 'Connect Wallet' : unsupported ? t0('networkNotSupported') : null;
       break;
   }
 
+  const loader = showLoader ? (
+    <span className="relative top-[2px]">
+      <BeatLoader size={6} />
+    </span>
+  ) : null;
+
   return (
     <div className="flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
       {defaultMessage ||
-        (isLoading ? null : isError ? <p>{errorMessage}</p> : noData ? <p>{emptyDataMessage}</p> : null)}
+        (isLoading ? loader : isError ? <p>{errorMessage}</p> : noData ? <p>{emptyDataMessage}</p> : null)}
     </div>
   );
 };
