@@ -14,7 +14,7 @@ import { useDialogState } from 'ariakit';
 import Link from 'next/link';
 import useGetVestingInfo from 'queries/useGetVestingInfo';
 import { ArrowCircleLeftIcon } from '@heroicons/react/outline';
-import Confirm, { IVestingData } from './confirm';
+import Confirm, { IVestingData } from './Confirm';
 import { createERC20Contract } from 'utils/tokenUtils';
 import { getAddress } from 'ethers/lib/utils';
 import { checkApproval, createContractAndCheckApproval } from 'components/Form/utils';
@@ -216,7 +216,13 @@ export default function CreateVesting({ factory }: { factory: string }) {
           />
         )}
         {includeCustomStart && (
-          <InputText label={'Start Date (YYYY-MM-DD)'} name="startDate" isRequired placeholder="YYYY-MM-DD" />
+          <InputText
+            label={'Start Date (YYYY-MM-DD)'}
+            name="startDate"
+            isRequired
+            placeholder="YYYY-MM-DD"
+            pattern="\d{4}-\d{2}-\d{2}"
+          />
         )}
         <div className="flex gap-2">
           <span className="font-exo">{'Include Cliff'}</span>
