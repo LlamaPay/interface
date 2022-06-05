@@ -20,6 +20,7 @@ export function useFormatStreamAndHistory({
     data: data,
     userAddress: address,
   });
+
   return React.useMemo(() => {
     if (provider && data && address) {
       const streams = data?.user?.streams ?? [];
@@ -61,9 +62,16 @@ export function useFormatStreamAndHistory({
         const addressType: 'payer' | 'payee' =
           h.stream?.payer?.id?.toLowerCase() === address.toLowerCase() ? 'payer' : 'payee';
 
-        const addressRelated = addressType === 'payer' ? h.stream?.payee?.id ?? null : h.stream?.payer?.id ?? null;
+        const addressRelated =
+          addressType === 'payer'
+            ? h.stream?.payee?.id ?? null
+            : h.stream?.payer?.id
+            ? h.stream?.payer?.id
+            : h.users[0]?.id ?? null;
+
         const ensName =
           ensData && addressRelated && ensData[addressRelated] !== undefined ? ensData[addressRelated] : null;
+
         return {
           ...h,
           amountPerSec: h.stream?.amountPerSec ?? null,
@@ -78,5 +86,5 @@ export function useFormatStreamAndHistory({
         history: formattedHistory.length > 0 ? formattedHistory : null,
       };
     } else return { streams: null, history: null };
-  }, [data, provider, address]);
+  }, [data, provider, address, ensData]);
 }

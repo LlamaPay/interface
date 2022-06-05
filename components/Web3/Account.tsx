@@ -6,7 +6,7 @@ interface Props {
 }
 
 export const Account = ({ showAccountInfo }: Props) => {
-  const [{ data }] = useAccount();
+  const [{ data }] = useAccount({ fetchEns: true });
 
   if (!data) return null;
 
