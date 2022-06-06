@@ -124,7 +124,7 @@ export const networkDetails: INetworkDetails = {
     chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ftm.tools/'),
     llamapayFactoryAddress: FACTORY_FANTOM,
     disperseAddress: DISPERSE_DEFAULT,
-    blockExplorerURL: 'https://https://ftmscan.com.com/',
+    blockExplorerURL: 'https://ftmscan.com',
     blockExplorerName: 'FTMScan',
     prefix: 'fantom',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/fantom/info/logo.png',
