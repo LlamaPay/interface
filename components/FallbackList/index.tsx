@@ -12,7 +12,7 @@ interface FallbackProps {
   supressWalletConnection?: boolean;
 }
 
-const Fallback = ({ isLoading, isError, noData, type, supressWalletConnection }: FallbackProps) => {
+const Fallback = ({ isLoading, isError, noData, type, supressWalletConnection, showLoader }: FallbackProps) => {
   const [{ data: basicAccountData }] = useAccount();
 
   const accountData = supressWalletConnection === true || basicAccountData !== undefined;
