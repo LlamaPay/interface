@@ -1,4 +1,4 @@
-import { TrashIcon } from '@heroicons/react/outline';
+import { ShareIcon, TrashIcon } from '@heroicons/react/outline';
 import { DotsVerticalIcon } from '@heroicons/react/solid';
 import { useDialogState } from 'ariakit';
 import { Menu, MenuButton, MenuItem, useMenuState } from 'ariakit/menu';
@@ -8,14 +8,19 @@ import WithdrawAll from 'components/WithdrawAll';
 import { useNetworkProvider } from 'hooks';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/router';
-import { useAccount } from 'wagmi';
+import { useAccount, useEnsLookup } from 'wagmi';
 
 export default function StreamMenu() {
   const menu = useMenuState({ gutter: 8 });
 
   const { nativeCurrency, unsupported } = useNetworkProvider();
   const [{ data: accountData }] = useAccount();
+  const { chainId } = useNetworkProvider();
 
+  const [{ data: ensName }] = useEnsLookup({
+    address: accountData?.address,
+  });
+  const shareableUrl = `/streams?chainId=${chainId}&address=${ensName ?? accountData?.address}`;
   const disperseGasGialog = useDialogState();
 
   const t = useTranslations('Streams');
@@ -59,6 +64,12 @@ export default function StreamMenu() {
         </MenuItem>
         <MenuItem className="flex scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:hover:text-[#cccccc]">
           <WithdrawAll />
+        </MenuItem>
+        <MenuItem className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white dark:hover:text-[#cccccc]">
+          <a href={shareableUrl} target="_blank" rel="noreferrer noopener">
+            {'Show Public Page'}
+          </a>
+          <ShareIcon className="h-4 w-4" />
         </MenuItem>
         <MenuItem
           className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white dark:hover:text-[#cccccc]"
