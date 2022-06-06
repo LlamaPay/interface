@@ -14,11 +14,11 @@ const fetchBalance = async (
 ): Promise<IBalance[] | null> => {
   if (!id || id === '' || !tokens || tokens.length < 1 || !provider) return null;
   try {
-    const res = await Promise.allSettled(tokens.map((c) => c.llamaTokenContract.getPayerBalance(id)));
+    const res = await Promise.allSettled(tokens.map((c) => c.llamaTokenContract.balances(id)));
 
     const data = res.flatMap((d, index) => {
       const amount =
-        (d.status === 'fulfilled' && new BigNumber(d.value.toString()).dividedBy(10 ** tokens[index].decimals)) ?? null;
+        (d.status === 'fulfilled' && new BigNumber(d.value.toString()).dividedBy(10 ** 20)) ?? null;
 
       // filter zero balance tokens
       if (!amount || !(Number(amount) > 0)) return [];
