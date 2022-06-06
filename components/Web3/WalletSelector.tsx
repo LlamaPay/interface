@@ -1,17 +1,20 @@
 import * as React from 'react';
 import { Connector, useAccount, useConnect } from 'wagmi';
-import { useIsMounted } from 'hooks';
+import { useChainExplorer, useIsMounted } from 'hooks';
 import { formatAddress } from 'utils/address';
 import { Dialog, DialogHeading, DisclosureState } from 'ariakit';
 import { XIcon } from '@heroicons/react/solid';
 import { useTranslations } from 'next-intl';
+import { ExternalLinkIcon } from '@heroicons/react/outline';
 
 interface Props {
   dialog: DisclosureState;
 }
 
 export const WalletSelector = ({ dialog }: Props) => {
-  const [{ data: accountData }, disconnect] = useAccount();
+  const [{ data: accountData }, disconnect] = useAccount({ fetchEns: true });
+
+  const { url: chainExplorer } = useChainExplorer();
 
   const isMounted = useIsMounted();
   const [
@@ -55,8 +58,14 @@ export const WalletSelector = ({ dialog }: Props) => {
           </DialogHeading>
           <div className="mt-3 flex flex-col gap-2">
             <p className="text-sm font-thin">{`${t('connectedWith')} ${accountData.connector?.name}`}</p>
-            <p className="break-words">
-              {accountData.ens?.name ? `${accountData.ens?.name} (${formattedAddress})` : accountData.address}
+            <p className="flex items-center gap-4 break-words">
+              <span>
+                {accountData.ens?.name ? `${accountData.ens?.name} (${formattedAddress})` : accountData.address}
+              </span>
+              <a href={`${chainExplorer}/address/${accountData.address}`} target="_blank" rel="noreferrer noopener">
+                <span className="sr-only">View address on chain explorer</span>
+                <ExternalLinkIcon className="h-4 w-4" />
+              </a>
             </p>
             <button
               className="nav-button mt-5 dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"

@@ -9,10 +9,13 @@ interface FallbackProps {
   noData: boolean;
   type: 'streams' | 'history' | 'balances' | 'payeesList' | 'vestingStreams';
   showLoader?: boolean;
+  supressWalletConnection?: boolean;
 }
 
-const Fallback = ({ isLoading, isError, noData, type, showLoader = false }: FallbackProps) => {
-  const [{ data: accountData }] = useAccount();
+const Fallback = ({ isLoading, isError, noData, type, supressWalletConnection }: FallbackProps) => {
+  const [{ data: basicAccountData }] = useAccount();
+
+  const accountData = supressWalletConnection === true || basicAccountData !== undefined;
 
   const { unsupported } = useNetworkProvider();
   const t0 = useTranslations('Common');

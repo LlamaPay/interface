@@ -44,11 +44,11 @@ const fetchBalance = async (
   }
 };
 
-function useGetPayerBalance(contracts: ITokenLists[] | null, tokensKey: string) {
+function useGetPayerBalance(contracts: ITokenLists[] | null, tokensKey: string, replacementPayerAddress?:string) {
   const [{ data: accountData }] = useAccount();
   const { provider } = useNetworkProvider();
 
-  const payerAddress = accountData?.address.toLowerCase() ?? '';
+  const payerAddress = replacementPayerAddress ?? accountData?.address.toLowerCase() ?? '';
 
   return useQuery<IBalance[] | null>(
     ['payerBalance', payerAddress, tokensKey],

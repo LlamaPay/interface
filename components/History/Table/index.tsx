@@ -37,7 +37,11 @@ export function HistoryTable({ data }: { data: IHistory[] }) {
         header: t('addressName'),
         cell: ({ cell }) =>
           cell.row.original && (
-            <SavedName value={cell.row.original.addressRelated || ''} eventType={cell.row.original.eventType} />
+            <SavedName
+              value={cell.row.original.addressRelated || ''}
+              eventType={cell.row.original.eventType}
+              ens={cell.row.original.addressRelatedEns}
+            />
           ),
       }),
       table.createDisplayColumn({

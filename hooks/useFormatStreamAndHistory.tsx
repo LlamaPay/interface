@@ -1,4 +1,5 @@
 import { getAddress } from 'ethers/lib/utils';
+import useResolveEns from 'queries/useResolveEns';
 import * as React from 'react';
 import { StreamAndHistoryQuery } from 'services/generated/graphql';
 import { IStreamAndHistory } from 'types';
@@ -15,6 +16,11 @@ export function useFormatStreamAndHistory({
   address?: string;
   provider: Provider | null;
 }): IStreamAndHistory {
+  const { data: ensData } = useResolveEns({
+    data: data,
+    userAddress: address,
+  });
+
   return React.useMemo(() => {
     if (provider && data && address) {
       const streams = data?.user?.streams ?? [];
@@ -24,11 +30,18 @@ export function useFormatStreamAndHistory({
         const streamType: 'outgoingStream' | 'incomingStream' =
           s.payer.id?.toLowerCase() === address.toLowerCase() ? 'outgoingStream' : 'incomingStream';
 
+        const payerEns =
+          ensData && ensData[s.payer.id.toLowerCase()] !== undefined ? ensData[s.payer.id.toLowerCase()] : null;
+        const payeeEns =
+          ensData && ensData[s.payee.id.toLowerCase()] !== undefined ? ensData[s.payee.id.toLowerCase()] : null;
+
         return {
           llamaContractAddress: s.contract.address,
           amountPerSec: s.amountPerSec,
           createdTimestamp: s.createdTimestamp,
           payerAddress: s.payer.id,
+          payerEns: payerEns,
+          payeeEns: payeeEns,
           payeeAddress: s.payee.id,
           streamId: s.streamId,
           streamType,
@@ -49,12 +62,21 @@ export function useFormatStreamAndHistory({
         const addressType: 'payer' | 'payee' =
           h.stream?.payer?.id?.toLowerCase() === address.toLowerCase() ? 'payer' : 'payee';
 
-        const addressRelated = addressType === 'payer' ? h.stream?.payee?.id ?? null : h.stream?.payer?.id ?? null;
+        const addressRelated =
+          addressType === 'payer'
+            ? h.stream?.payee?.id ?? null
+            : h.stream?.payer?.id
+            ? h.stream?.payer?.id
+            : h.users[0]?.id ?? null;
+
+        const ensName =
+          ensData && addressRelated && ensData[addressRelated] !== undefined ? ensData[addressRelated] : null;
 
         return {
           ...h,
           amountPerSec: h.stream?.amountPerSec ?? null,
           addressRelated,
+          addressRelatedEns: ensName,
           addressType,
         };
       });
@@ -64,5 +86,5 @@ export function useFormatStreamAndHistory({
         history: formattedHistory.length > 0 ? formattedHistory : null,
       };
     } else return { streams: null, history: null };
-  }, [data, provider, address]);
+  }, [data, provider, address, ensData]);
 }

@@ -40,6 +40,8 @@ export interface IStream {
   amountPerSec: string;
   createdTimestamp: string;
   payerAddress: string;
+  payerEns: string | null;
+  payeeEns: string | null;
   payeeAddress: string;
   streamId: string;
   streamType: 'outgoingStream' | 'incomingStream';
@@ -57,6 +59,7 @@ export interface IStream {
 
 export interface IHistory extends UserHistoryFragment {
   addressRelated: string | null;
+  addressRelatedEns: string | null;
   addressType: 'payer' | 'payee';
   amountPerSec: string;
 }

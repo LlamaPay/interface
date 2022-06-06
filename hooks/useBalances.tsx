@@ -4,7 +4,7 @@ import usePayers from 'queries/usePayers';
 import { useNetworkProvider } from './useNetworkProvider';
 import useTokenList from './useTokenList';
 
-export const useBalances = () => {
+export const useBalances = (payerAddress?:string) => {
   const { data: tokens, isLoading: tokensLoading, error: tokensError } = useTokenList();
   const { network } = useNetworkProvider();
 
@@ -18,9 +18,9 @@ export const useBalances = () => {
     data: balances = null,
     isLoading: balancesLoading,
     error: balancesError,
-  } = useGetPayerBalance(tokens, tokensKey);
+  } = useGetPayerBalance(tokens, tokensKey, payerAddress);
 
-  const { data: payersData } = usePayers(tokens, tokensKey);
+  const { data: payersData } = usePayers(tokens, tokensKey, payerAddress);
 
   const formattedBalances = React.useMemo(() => {
     const formattedBalances =

@@ -17,8 +17,8 @@ import useTokenBalances from 'queries/useTokenBalances';
 import { BeatLoader } from 'react-spinners';
 import { useTranslations } from 'next-intl';
 
-const Balance = () => {
-  const { balances, noBalances, isLoading, isError } = useBalances();
+const Balance = (props:{address?:string}) => {
+  const { balances, noBalances, isLoading, isError } = useBalances(props.address);
 
   // function that returns chain explorer url based on the chain user is connected to
   const { url: chainExplorer } = useChainExplorer();
@@ -61,6 +61,7 @@ const Balance = () => {
   };
 
   const showFallback = isLoading || noBalances || isError;
+  const showActions = props.address === undefined
 
   const t = useTranslations('Common');
 
@@ -73,7 +74,7 @@ const Balance = () => {
             <h1 className="font-exo dark:text-white">{t1('heading')}</h1>
           </span>
 
-          <button
+          {showActions && <button
             className="primary-button"
             disabled={isLoading || tokensLoading || !accountData || !tokens}
             onClick={() => {
@@ -81,11 +82,11 @@ const Balance = () => {
             }}
           >
             {isLoading || tokensLoading ? <BeatLoader size={6} color="white" /> : <>{t1('deposit')}</>}
-          </button>
+          </button>}
         </div>
 
         {showFallback ? (
-          <Fallback isLoading={isLoading} isError={isError} noData={noBalances} type="balances" />
+          <Fallback isLoading={isLoading} isError={isError} noData={noBalances} supressWalletConnection={!showActions} type="balances" />
         ) : (
           <div className="mt-[-10px] overflow-x-auto">
             <table className="border-separate" style={{ borderSpacing: '0 10px' }}>
@@ -149,6 +150,7 @@ const Balance = () => {
                       className="rounded-r border border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D] dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white"
                       style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
                     >
+                      {showActions && 
                       <span className="flex gap-3">
                         <button
                           className="whitespace-nowrap text-xs text-black/80 underline disabled:cursor-not-allowed dark:text-white"
@@ -163,7 +165,7 @@ const Balance = () => {
                         >
                           {t1('topup')}
                         </button>
-                      </span>
+                      </span>}
                     </td>
                   </tr>
                 ))}
