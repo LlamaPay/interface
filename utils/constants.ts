@@ -15,12 +15,14 @@ export const FACTORY_OPTIMISM = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_ARBITRUM = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_BSC = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_XDAI = '0xde1C04855c2828431ba637675B6929A684f84C7F';
+export const FACTORY_METER = '0x7671079fBcd0BE5d7623B77021963a7c024fdA00';
 
 export const MAINNET_ENS_RESOLVER = '0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C';
 
 export const DISPERSE_DEFAULT = '0xD152f549545093347A162Dce210e7293f1452150';
 export const DISPERSE_AVALANCHE = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 export const DISPERSE_ARBITRUM = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
+export const DISPERSE_METER = '0x8e5455983a70da3d1e66719636e907d63eca40b7';
 export const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
 export const alchemyId = 'PwvZx2hO2XpToWXSw9sgJJt1eBgjkRUr';
 export const etherscanKey = 'DDH7EVWI1AQHBNPX5PYRSDM5SHCVBKX58Q';
@@ -190,6 +192,18 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/xdai/info/logo.png',
     tokenListId: 'xdai',
   },
+  82: {
+    rpcUrl: 'https://rpc.meter.io',
+    subgraphEndpoint: 'http://graph.meter.io:8000/subgraphs/name/llamapay/llamapay-meter',
+    chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.meter.io'),
+    llamapayFactoryAddress: FACTORY_METER,
+    disperseAddress: DISPERSE_METER,
+    blockExplorerURL: 'https://scan.meter.io/',
+    blockExplorerName: 'Meter Blockchain Explorer',
+    prefix: 'meter',
+    logoURI: '',
+    tokenListId: '',
+  },
 };
 
 export const defaultChains: Chain[] = allChains.filter(
@@ -259,6 +273,18 @@ export const chains: Chain[] = [
       {
         name: 'Blockscout',
         url: 'https://blockscout.com/xdai/mainnet/',
+      },
+    ],
+  },
+  {
+    id: 82,
+    name: 'Meter',
+    nativeCurrency: { name: 'Meter', symbol: 'MTR', decimals: 18 },
+    rpcUrls: ['https://rpc.meter.io'],
+    blockExplorers: [
+      {
+        name: 'Meter Blockchain Explorer',
+        url: 'https://scan.meter.io/',
       },
     ],
   },
