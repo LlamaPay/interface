@@ -8,10 +8,12 @@ import { FormDialog, TransactionDialog } from 'components/Dialog';
 import { useDialogState } from 'ariakit';
 import AvailableAmount from 'components/AvailableAmount';
 import { useTranslations } from 'next-intl';
+import useGnosisBatch from 'queries/useGnosisBatch';
+import { LlamaContractInterface } from 'utils/contract';
 
 const WithdrawForm = ({ data, formDialog }: IFormProps) => {
   const { mutate, isLoading, data: transaction } = useWithdrawByPayer();
-
+  const { mutate: gnosisBatch } = useGnosisBatch();
   const transactionDialog = useDialogState();
 
   const withdrawAll = React.useRef(false);
@@ -27,12 +29,42 @@ const WithdrawForm = ({ data, formDialog }: IFormProps) => {
 
     if (amount) {
       const formattedAmt = new BigNumber(amount).multipliedBy(1e20);
-      withdrawAll.current = false;
+      if (process.env.NEXT_PUBLIC_SAFE === 'true') {
+        const call: { [key: string]: string[] } = {};
+        call[data.llamaContractAddress] = [LlamaContractInterface.encodeFunctionData('withdrawPayer', [formattedAmt])];
+        gnosisBatch({ calls: call });
+      } else {
+        withdrawAll.current = false;
+        mutate(
+          {
+            amountToWithdraw: formattedAmt.toFixed(0),
+            llamaContractAddress: data.llamaContractAddress,
+            withdrawAll: false,
+          },
+          {
+            onSettled: () => {
+              formDialog.toggle();
+              transactionDialog.toggle();
+            },
+          }
+        );
+      }
+    }
+
+    form.reset();
+  };
+
+  const withdrawAllTokens = () => {
+    if (process.env.NEXT_PUBLIC_SAFE === 'true') {
+      const call: { [key: string]: string[] } = {};
+      call[data.llamaContractAddress] = [LlamaContractInterface.encodeFunctionData('withdrawPayerAll')];
+      gnosisBatch({ calls: call });
+    } else {
+      withdrawAll.current = true;
       mutate(
         {
-          amountToWithdraw: formattedAmt.toFixed(0),
           llamaContractAddress: data.llamaContractAddress,
-          withdrawAll: false,
+          withdrawAll: true,
         },
         {
           onSettled: () => {
@@ -42,24 +74,6 @@ const WithdrawForm = ({ data, formDialog }: IFormProps) => {
         }
       );
     }
-
-    form.reset();
-  };
-
-  const withdrawAllTokens = () => {
-    withdrawAll.current = true;
-    mutate(
-      {
-        llamaContractAddress: data.llamaContractAddress,
-        withdrawAll: true,
-      },
-      {
-        onSettled: () => {
-          formDialog.toggle();
-          transactionDialog.toggle();
-        },
-      }
-    );
   };
 
   return (
