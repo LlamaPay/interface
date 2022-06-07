@@ -8,6 +8,7 @@ import vestingFactoryReadable from 'abis/vestingFactoryReadable';
 import { useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
 import { TransactionDialog } from 'components/Dialog';
+import { BeatLoader } from 'react-spinners';
 
 export interface IVestingData {
   recipientAddress: string;
@@ -32,7 +33,7 @@ export default function Confirm({ vestingData, dialog, factory }: IConfirmProps)
 
   const queryClient = useQueryClient();
 
-  const [{}, deploy_vesting_contract] = useContractWrite(
+  const [{ loading }, deploy_vesting_contract] = useContractWrite(
     {
       addressOrName: factory,
       contractInterface: vestingFactoryReadable,
@@ -131,7 +132,7 @@ export default function Confirm({ vestingData, dialog, factory }: IConfirmProps)
             )} UTC) `}</p>
           </div>
           <SubmitButton className="mt-5" onClick={onConfirm}>
-            Confirm Transaction
+            {loading ? <BeatLoader size={6} color="white" /> : 'Confirm Transaction'}
           </SubmitButton>
         </div>
       </FormDialog>{' '}

@@ -12,9 +12,16 @@ interface IVestingChartProps {
   vestingPeriod: number;
   cliffPeriod: number | null;
   startTime: Date;
+  vestedDays?: string | null;
 }
 
-export default function VestingChart({ amount, vestingPeriod, cliffPeriod, startTime }: IVestingChartProps) {
+export default function VestingChart({
+  amount,
+  vestingPeriod,
+  cliffPeriod,
+  startTime,
+  vestedDays,
+}: IVestingChartProps) {
   const id = React.useId();
 
   const { resolvedTheme } = useTheme();
@@ -24,58 +31,90 @@ export default function VestingChart({ amount, vestingPeriod, cliffPeriod, start
   const series = React.useMemo(() => {
     const chartColor = '#14b8a6';
 
-    const series = {
-      name: '',
-      type: 'line',
-      stack: 'value',
-      emphasis: {
-        focus: 'series',
-        shadowBlur: 10,
-      },
-      symbol: 'none',
-      itemStyle: {
-        color: chartColor,
-      },
-      areaStyle: {
-        color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-          {
-            offset: 0,
-            color: chartColor,
-          },
-          {
-            offset: 1,
-            color: !isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)',
-          },
-        ]),
-      },
-      data: [...Array(vestingPeriod)].map((_, index) => [
-        new Date(new Date().setDate(startTime.getDate() + index)),
-        index > (cliffPeriod || 0) ? (amount / vestingPeriod) * index : 0,
-      ]),
-      ...(cliffPeriod && {
-        markLine: {
-          data: [
-            [
-              {
-                name: 'CLIFF',
-                xAxis: new Date(new Date().setDate(startTime.getDate() + cliffPeriod)),
-                yAxis: 0,
-                label: {
-                  color: isDark ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)',
-                  fontFamily: 'inter, sans-serif',
-                  fontSize: 14,
-                  fontWeight: 500,
-                },
-              },
-              { name: 'end', xAxis: new Date(new Date().setDate(startTime.getDate() + cliffPeriod)), yAxis: 'max' },
-            ],
-          ],
+    const series = [
+      {
+        name: 'To Vest',
+        type: 'line',
+        emphasis: {
+          focus: 'series',
+          shadowBlur: 10,
         },
-      }),
-    };
+        symbol: 'none',
+        itemStyle: {
+          color: chartColor,
+        },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: chartColor,
+            },
+            {
+              offset: 1,
+              color: !isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+            },
+          ]),
+        },
+        data: [...Array(vestingPeriod + 1)].map((_, index) => [
+          new Date(new Date().setDate(startTime.getDate() + index)),
+          index > (cliffPeriod || 0) ? (amount / vestingPeriod) * index : 0,
+        ]),
+        ...(cliffPeriod && {
+          markLine: {
+            data: [
+              [
+                {
+                  name: 'CLIFF',
+                  xAxis: new Date(new Date().setDate(startTime.getDate() + cliffPeriod)),
+                  yAxis: 0,
+                  label: {
+                    color: isDark ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)',
+                    fontFamily: 'inter, sans-serif',
+                    fontSize: 14,
+                    fontWeight: 500,
+                  },
+                },
+                { name: 'end', xAxis: new Date(new Date().setDate(startTime.getDate() + cliffPeriod)), yAxis: 'max' },
+              ],
+            ],
+          },
+        }),
+      },
+    ];
+
+    if (vestedDays) {
+      series.push({
+        name: 'Vested',
+        type: 'line',
+        emphasis: {
+          focus: 'series',
+          shadowBlur: 10,
+        },
+        symbol: 'none',
+        itemStyle: {
+          color: 'red',
+        },
+        areaStyle: {
+          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+            {
+              offset: 0,
+              color: 'red',
+            },
+            {
+              offset: 1,
+              color: !isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)',
+            },
+          ]),
+        },
+        data: [...Array(Number(vestedDays))].map((_, index) => [
+          new Date(new Date().setDate(startTime.getDate() + index)),
+          (amount / vestingPeriod) * index,
+        ]),
+      });
+    }
 
     return series;
-  }, [amount, vestingPeriod, startTime, cliffPeriod, isDark]);
+  }, [amount, vestingPeriod, startTime, cliffPeriod, isDark, vestedDays]);
 
   const createInstance = React.useCallback(() => {
     const element = document.getElementById(id);
@@ -167,6 +206,7 @@ export default function VestingChart({ amount, vestingPeriod, cliffPeriod, start
         },
       ],
       series,
+      animation: false,
     });
 
     function resize() {

@@ -121,6 +121,18 @@ export default function CreateVesting({ factory }: { factory: string }) {
       });
       confirmDialog.show();
       form.reset();
+      setFormData({
+        vestedToken: '',
+        vestedAmount: '',
+        vestingTime: '',
+        vestingDuration: 'week',
+        includeCliff: false,
+        includeCustomStart: false,
+        cliffTime: '',
+        cliffDuration: 'week',
+        startDate: '',
+        showChart: false,
+      });
     } else {
       approveToken(
         {

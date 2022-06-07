@@ -104,7 +104,12 @@ export default function useGetVestingInfo() {
   const { provider, chainId } = useNetworkProvider();
 
   const [{ data: accountData }] = useAccount();
-  return useQuery(['vestingInfo', chainId], () => getVestingInfo(accountData?.address, provider, chainId), {
-    refetchInterval: 10000,
-  });
+
+  return useQuery(
+    ['vestingInfo', accountData?.address, chainId],
+    () => getVestingInfo(accountData?.address, provider, chainId),
+    {
+      refetchInterval: 20000,
+    }
+  );
 }

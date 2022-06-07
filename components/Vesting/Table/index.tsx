@@ -96,6 +96,7 @@ export default function VestingTable({ data }: { data: IVesting[] }) {
     ],
     [explorerUrl]
   );
+
   const instance = useTableInstance(table, {
     data,
     columns,

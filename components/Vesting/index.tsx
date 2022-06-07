@@ -8,7 +8,9 @@ import classNames from 'classnames';
 
 export default function VestingTable() {
   const { chainId } = useNetworkProvider();
+
   const vestingFactory = chainId ? networkDetails[chainId]?.vestingFactory : null;
+
   const { data, isLoading, error } = useGetVestingInfo();
 
   return (
