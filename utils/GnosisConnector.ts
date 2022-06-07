@@ -8,7 +8,7 @@ const __IS_SERVER__ = typeof window === 'undefined';
 
 export class GnosisConnector extends Connector<SafeAppProvider, SafeOpts | undefined> {
   readonly id = 'gnosis';
-  readonly name = 'Gnosis';
+  readonly name = 'Gnosis Safe';
   readonly ready = !__IS_SERVER__;
 
   #provider?: SafeAppProvider;

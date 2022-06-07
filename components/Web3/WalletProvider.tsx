@@ -37,9 +37,6 @@ const connectors = ({ chainId }: ConnectorsConfig) => {
             jsonRpcUrl: chainDetails ? chainDetails.rpcUrl : `${rpcUrl}/${infuraId}`,
           },
         }),
-        new GnosisConnector({
-          chains,
-        }),
       ];
 };
 
