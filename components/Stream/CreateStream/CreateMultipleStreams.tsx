@@ -66,7 +66,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
   });
 
   const onSubmit = (data: FormValues) => {
-    if (data.streams.length === 1) {
+    if (data.streams.length === 1 && process.env.NEXT_PUBLIC_SAFE === 'false') {
       const item = data.streams[0];
       if (item.shortName && item.shortName !== '') {
         updateAddress(item.addressToStream?.toLowerCase(), item.shortName);
