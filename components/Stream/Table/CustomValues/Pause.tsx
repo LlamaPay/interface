@@ -1,8 +1,10 @@
 import llamaContract from 'abis/llamaContract';
 import { useTranslations } from 'next-intl';
+import useGnosisBatch from 'queries/useGnosisBatch';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import { IStream } from 'types';
+import { LlamaContractInterface } from 'utils/contract';
 import { useContractWrite } from 'wagmi';
 
 interface PauseProps {
@@ -20,18 +22,26 @@ export function Pause({ data }: PauseProps) {
       args: [data.payeeAddress, data.amountPerSec],
     }
   );
-
+  const { mutate: gnosisBatch } = useGnosisBatch();
   const queryClient = useQueryClient();
 
   function onPause() {
-    pauseStream().then((data) => {
-      const loading = data.error ? toast.error(data.error.message) : toast.loading('Pausing Stream');
-      data.data?.wait().then((receipt) => {
-        toast.dismiss(loading);
-        receipt.status === 1 ? toast.success('Stream Paused') : toast.error('Failed to Pause Stream');
-        queryClient.invalidateQueries();
+    if (process.env.NEXT_PUBLIC_SAFE === 'true') {
+      const call: { [key: string]: string[] } = {};
+      call[data.llamaContractAddress] = [
+        LlamaContractInterface.encodeFunctionData('pauseStream', [data.payeeAddress, data.amountPerSec]),
+      ];
+      gnosisBatch({ calls: call });
+    } else {
+      pauseStream().then((data) => {
+        const loading = data.error ? toast.error(data.error.message) : toast.loading('Pausing Stream');
+        data.data?.wait().then((receipt) => {
+          toast.dismiss(loading);
+          receipt.status === 1 ? toast.success('Stream Paused') : toast.error('Failed to Pause Stream');
+          queryClient.invalidateQueries();
+        });
       });
-    });
+    }
   }
 
   const t = useTranslations('Common');

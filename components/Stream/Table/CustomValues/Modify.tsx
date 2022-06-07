@@ -10,6 +10,8 @@ import { secondsByDuration } from 'utils/constants';
 import useModifyStream from 'queries/useModifyStream';
 import { BeatLoader } from 'react-spinners';
 import { useIntl, useTranslations } from 'next-intl';
+import { LlamaContractInterface } from 'utils/contract';
+import useGnosisBatch from 'queries/useGnosisBatch';
 
 interface ModifyProps {
   data: IStream;
@@ -27,7 +29,7 @@ export const Modify = ({ data }: ModifyProps) => {
   const dialog = useDialogState();
 
   const { mutate: modifyStream, isLoading, data: transaction } = useModifyStream();
-
+  const { mutate: gnosisBatch } = useGnosisBatch();
   const transactionDialog = useDialogState();
 
   const savedAddressName =
@@ -45,21 +47,34 @@ export const Modify = ({ data }: ModifyProps) => {
 
     const updatedAmountPerSec = new BigNumber(updatedAmount).times(1e20).div(secondsByDuration[duration]).toFixed(0);
 
-    modifyStream(
-      {
-        llamaContractAddress: data.llamaContractAddress,
-        payeeAddress: data.payeeAddress,
-        amountPerSec: data.amountPerSec,
-        updatedAddress,
-        updatedAmountPerSec,
-      },
-      {
-        onSettled: () => {
-          dialog.toggle();
-          transactionDialog.toggle();
+    if (process.env.NEXT_PUBLIC_SAFE === 'true') {
+      const call: { [key: string]: string[] } = {};
+      call[data.llamaContractAddress] = [
+        LlamaContractInterface.encodeFunctionData('modifyStream', [
+          data.payeeAddress,
+          data.amountPerSec,
+          updatedAddress,
+          updatedAmountPerSec,
+        ]),
+      ];
+      gnosisBatch({ calls: call });
+    } else {
+      modifyStream(
+        {
+          llamaContractAddress: data.llamaContractAddress,
+          payeeAddress: data.payeeAddress,
+          amountPerSec: data.amountPerSec,
+          updatedAddress,
+          updatedAmountPerSec,
         },
-      }
-    );
+        {
+          onSettled: () => {
+            dialog.toggle();
+            transactionDialog.toggle();
+          },
+        }
+      );
+    }
   };
 
   const intl = useIntl();

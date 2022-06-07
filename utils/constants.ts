@@ -209,7 +209,7 @@ export const networkDetails: INetworkDetails = {
 
 export const defaultChains: Chain[] = allChains.filter(
   (chain) =>
-    chain.name === 'Rinkeby' ||
+    //chain.name === 'Rinkeby' ||
     chain.name === 'Kovan' ||
     chain.name === 'Avalanche Fuji Testnet' ||
     chain.name === 'Avalanche Mainnet' ||
