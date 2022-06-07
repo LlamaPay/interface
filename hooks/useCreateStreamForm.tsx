@@ -50,6 +50,7 @@ export function useCreateStreamForm({ tokens, dialog }: { tokens: ITokenBalance[
         // convert amt to seconds
         const amtPerSec = new BigNumber(amountToStream).times(1e20).div(secondsByDuration[duration]);
 
+        console.log("CREATE_STREAM")
         // query mutation
         streamToken(
           {

@@ -30,6 +30,7 @@ const streamToken = async ({
       throw new Error("Couldn't get signer");
     } else {
       const contract = createWriteContract(llamaContractAddress, signer);
+      console.log("contract", contract, signer)
       if (method === 'DEPOSIT_AND_CREATE' && amountToDeposit) {
         return await contract.depositAndCreate(amountToDeposit, payeeAddress, amountPerSec);
       } else if (method === 'CREATE_STREAM') {
