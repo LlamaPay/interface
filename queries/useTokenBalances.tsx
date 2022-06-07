@@ -42,7 +42,7 @@ const fetchBalance = async ({ userAddress, tokens, provider }: IFetchBalance) =>
             llamaContractAddress: tokens[index].llamaContractAddress,
             symbol: tokens[index].symbol,
             logoURI: tokens[index].logoURI,
-            balance: bal ? bal.toFixed(5) : null,
+            balance: bal ? Math.floor((Number(bal) * 100000) / 100000).toFixed(5) : null,
           };
         })
         ?.sort((a, b) => {
