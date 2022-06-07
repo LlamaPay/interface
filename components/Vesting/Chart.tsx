@@ -2,17 +2,19 @@ import * as React from 'react';
 import * as echarts from 'echarts/core';
 import { CanvasRenderer } from 'echarts/renderers';
 import { LineChart } from 'echarts/charts';
-import { TooltipComponent, DataZoomComponent, GridComponent } from 'echarts/components';
+import { TooltipComponent, DataZoomComponent, GridComponent, MarkLineComponent } from 'echarts/components';
 import { useTheme } from 'next-themes';
 
-echarts.use([CanvasRenderer, LineChart, TooltipComponent, DataZoomComponent, GridComponent]);
+echarts.use([CanvasRenderer, LineChart, TooltipComponent, DataZoomComponent, GridComponent, MarkLineComponent]);
 
 interface IVestingChartProps {
   amount: number;
-  duration: number;
+  vestingPeriod: number;
+  cliffPeriod: number | null;
+  startTime: Date;
 }
 
-export default function VestingChart({ amount, duration }: IVestingChartProps) {
+export default function VestingChart({ amount, vestingPeriod, cliffPeriod, startTime }: IVestingChartProps) {
   const id = React.useId();
 
   const { resolvedTheme } = useTheme();
@@ -20,9 +22,7 @@ export default function VestingChart({ amount, duration }: IVestingChartProps) {
   const isDark = resolvedTheme === 'dark';
 
   const series = React.useMemo(() => {
-    const chartColor = 'green';
-
-    const currentDate = new Date();
+    const chartColor = '#14b8a6';
 
     const series = {
       name: '',
@@ -44,18 +44,38 @@ export default function VestingChart({ amount, duration }: IVestingChartProps) {
           },
           {
             offset: 1,
-            color: 'rgba(255, 255, 255, 0.2)',
+            color: !isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)',
           },
         ]),
       },
-      data: [...Array(duration)].map((_, index) => [
-        new Date(new Date().setDate(currentDate.getDate() + index)),
-        (amount / duration) * (index + 1),
+      data: [...Array(vestingPeriod)].map((_, index) => [
+        new Date(new Date().setDate(startTime.getDate() + index)),
+        index > (cliffPeriod || 0) ? (amount / vestingPeriod) * index : 0,
       ]),
+      ...(cliffPeriod && {
+        markLine: {
+          data: [
+            [
+              {
+                name: 'CLIFF',
+                xAxis: new Date(new Date().setDate(startTime.getDate() + cliffPeriod)),
+                yAxis: 0,
+                label: {
+                  color: isDark ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)',
+                  fontFamily: 'inter, sans-serif',
+                  fontSize: 14,
+                  fontWeight: 500,
+                },
+              },
+              { name: 'end', xAxis: new Date(new Date().setDate(startTime.getDate() + cliffPeriod)), yAxis: 'max' },
+            ],
+          ],
+        },
+      }),
     };
 
     return series;
-  }, []);
+  }, [amount, vestingPeriod, startTime, cliffPeriod, isDark]);
 
   const createInstance = React.useCallback(() => {
     const element = document.getElementById(id);
@@ -83,15 +103,13 @@ export default function VestingChart({ amount, duration }: IVestingChartProps) {
           });
 
           const vals = params.reduce((prev: string, curr: any) => {
-            if (curr.value[1] !== 0) {
-              return (prev +=
-                '<li style="list-style:none">' +
-                curr.marker +
-                curr.seriesName +
-                '&nbsp;&nbsp;' +
-                curr.value[1]?.toFixed(4) +
-                '</li>');
-            } else return prev;
+            return (prev +=
+              '<li style="list-style:none">' +
+              curr.marker +
+              curr.seriesName +
+              '&nbsp;&nbsp;' +
+              (curr.value[1] ? curr.value[1]?.toFixed(4) : curr.value[1]) +
+              '</li>');
           }, '');
 
           return chartdate + vals;

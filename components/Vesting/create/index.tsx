@@ -2,17 +2,13 @@ import * as React from 'react';
 import { InputAmount, InputAmountWithDuration, InputText, SubmitButton } from 'components/Form';
 import { Switch } from '@headlessui/react';
 import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval';
-import { useAccount, useContractWrite, useProvider } from 'wagmi';
+import { useAccount, useProvider } from 'wagmi';
 import BigNumber from 'bignumber.js';
 import { BeatLoader } from 'react-spinners';
-import vestingFactoryReadable from 'abis/vestingFactoryReadable';
 import { secondsByDuration } from 'utils/constants';
 import toast from 'react-hot-toast';
-import { useQueryClient } from 'react-query';
-import { TransactionDialog } from 'components/Dialog';
 import { useDialogState } from 'ariakit';
 import Link from 'next/link';
-import useGetVestingInfo from 'queries/useGetVestingInfo';
 import { ArrowCircleLeftIcon } from '@heroicons/react/outline';
 import Confirm, { IVestingData } from './Confirm';
 import { createERC20Contract } from 'utils/tokenUtils';
@@ -24,56 +20,38 @@ const VestingChart = dynamic(() => import('../Chart'), { ssr: false });
 
 interface IVestingElements {
   recipientAddress: { value: string };
+  tokenDecimals: number;
   vestedToken: { value: string };
   vestingAmount: { value: string };
-  vestingTime: { value: string };
   vestingDuration: { value: 'year' | 'month' | 'week' };
   cliffTime: { value: string };
-  cliffDuration: { value: 'year' | 'month' | 'week' };
   startDate: { value: string };
 }
 
 export default function CreateVesting({ factory }: { factory: string }) {
-  const [transactionHash, setTransactionHash] = React.useState<string>('');
-
-  const [vestingData, setVestingData] = React.useState<IVestingData | null>(null);
-
   const [formData, setFormData] = React.useState({
     vestedToken: '',
     vestedAmount: '',
     vestingTime: '',
-    vestingDuration: '',
+    vestingDuration: 'week',
     includeCliff: false,
     includeCustomStart: false,
     cliffTime: '',
-    cliffDuration: '',
+    cliffDuration: 'week',
     startDate: '',
     showChart: false,
   });
+
+  const [vestingData, setVestingData] = React.useState<IVestingData | null>(null);
 
   const { mutate: checkTokenApproval, data: isApproved, isLoading: checkingApproval } = useCheckTokenApproval();
 
   const { mutate: approveToken, isLoading: approvingToken } = useApproveToken();
 
-  const queryClient = useQueryClient();
-
-  const transactionDialog = useDialogState();
-
   const confirmDialog = useDialogState();
-
-  const [{ loading }, deploy_vesting_contract] = useContractWrite(
-    {
-      addressOrName: factory,
-      contractInterface: vestingFactoryReadable,
-    },
-    'deploy_vesting_contract'
-  );
 
   const provider = useProvider();
   const [{ data: accountData }] = useAccount();
-
-  // keep query active in this page so when vesting tx is submitted, this query is invalidated and user can see the data when they navigate to /vesting page
-  useGetVestingInfo();
 
   const checkApprovalOnChange = (vestedToken: string, vestedAmount: string) => {
     if (accountData && provider && vestedToken !== '' && vestedAmount !== '') {
@@ -165,38 +143,6 @@ export default function CreateVesting({ factory }: { factory: string }) {
     }
   }
 
-  function onConfirm() {
-    if (!vestingData) return;
-    deploy_vesting_contract({
-      args: [
-        vestingData?.vestedToken,
-        vestingData?.recipientAddress,
-        vestingData?.vestingAmount,
-        vestingData?.vestingDuration,
-        vestingData?.startTime,
-        vestingData?.cliffTime,
-      ],
-    }).then((tx) => {
-      if (tx.error) {
-        toast.error(tx.error.message);
-      } else {
-        const toastid = toast.loading('Creating Contract');
-        setTransactionHash(tx.data.hash);
-        confirmDialog.hide();
-        transactionDialog.show();
-        tx.data.wait().then((receipt) => {
-          toast.dismiss(toastid);
-          if (receipt.status === 1) {
-            toast.success('Successfuly Created Contract');
-          } else {
-            toast.error('Failed to Create Contract');
-          }
-          queryClient.invalidateQueries();
-        });
-      }
-    });
-  }
-
   return (
     <section className="relative w-full">
       <form className="mx-auto flex max-w-xl flex-col gap-4" onSubmit={onSubmit}>
@@ -215,6 +161,8 @@ export default function CreateVesting({ factory }: { factory: string }) {
           name="vestingTime"
           isRequired
           selectInputName="vestingDuration"
+          handleChange={(e) => handleChange(e.target.value, 'vestingTime')}
+          handleSelectChange={(e) => handleChange(e.target.value, 'vestingDuration')}
         />
         {formData.includeCliff && (
           <InputAmountWithDuration
@@ -222,6 +170,8 @@ export default function CreateVesting({ factory }: { factory: string }) {
             name="cliffTime"
             isRequired
             selectInputName="cliffDuration"
+            handleChange={(e) => handleChange(e.target.value, 'cliffTime')}
+            handleSelectChange={(e) => handleChange(e.target.value, 'cliffDuration')}
           />
         )}
         {formData.includeCustomStart && (
@@ -231,13 +181,19 @@ export default function CreateVesting({ factory }: { factory: string }) {
             isRequired
             placeholder="YYYY-MM-DD"
             pattern="\d{4}-\d{2}-\d{2}"
+            handleChange={(e) => handleChange(e.target.value, 'startDate')}
           />
         )}
         <div className="flex gap-2">
           <span className="font-exo">{'Include Cliff'}</span>
           <Switch
             checked={formData.includeCliff}
-            onChange={(value) => handleChange(value, 'includeCliff')}
+            onChange={(value) => {
+              handleChange(value, 'includeCliff');
+              if (!value) {
+                handleChange('', 'cliffTime');
+              }
+            }}
             className={`${
               formData.includeCliff ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
             } relative inline-flex h-6 w-11 items-center rounded-full`}
@@ -251,7 +207,15 @@ export default function CreateVesting({ factory }: { factory: string }) {
           <span className="font-exo">{`Custom Start`}</span>
           <Switch
             checked={formData.includeCustomStart}
-            onChange={(value) => handleChange(value, 'includeCustomStart')}
+            onChange={(value) => {
+              handleChange(value, 'includeCustomStart');
+
+              if (!value) {
+                handleChange('', 'startDate');
+              } else {
+                handleChange(false, 'showChart');
+              }
+            }}
             className={`${
               formData.includeCustomStart ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
             } relative inline-flex h-6 w-11 items-center rounded-full`}
@@ -278,14 +242,10 @@ export default function CreateVesting({ factory }: { factory: string }) {
           </Switch>
         </div>
 
-        {formData.showChart && (
-          <div className="h-[360px]">
-            <VestingChart amount={0} duration={0} />
-          </div>
-        )}
+        {formData.showChart && <Chart {...formData} />}
 
         <SubmitButton className="mt-5">
-          {loading || checkingApproval || approvingToken ? (
+          {checkingApproval || approvingToken ? (
             <BeatLoader size={6} color="white" />
           ) : isApproved ? (
             'Create Contract'
@@ -295,9 +255,68 @@ export default function CreateVesting({ factory }: { factory: string }) {
         </SubmitButton>
       </form>
 
-      <TransactionDialog dialog={transactionDialog} transactionHash={transactionHash} />
-
-      {vestingData && <Confirm dialog={confirmDialog} vestingData={vestingData} onConfirm={onConfirm} />}
+      {vestingData && <Confirm dialog={confirmDialog} vestingData={vestingData} factory={factory} />}
     </section>
   );
 }
+
+interface IChartProps {
+  vestedAmount: string;
+  vestingTime: string;
+  vestingDuration: string;
+  cliffTime: string;
+  cliffDuration: string;
+  startDate: string;
+  includeCustomStart: boolean;
+  includeCliff: boolean;
+}
+
+const Fallback = () => <p className="font-sm mt-6 text-center text-red-500">Enter valid data to view chart</p>;
+
+const isValidDate = (date: string) => new Date(date).toString() !== 'Invalid Date';
+
+const Chart = ({
+  vestedAmount,
+  vestingTime,
+  vestingDuration,
+  cliffDuration,
+  cliffTime,
+  startDate,
+  includeCustomStart,
+  includeCliff,
+}: IChartProps) => {
+  if (
+    vestedAmount === '' ||
+    Number.isNaN(vestedAmount) ||
+    vestingTime === '' ||
+    Number.isNaN(vestingTime) ||
+    vestingDuration === '' ||
+    (includeCliff && Number.isNaN(cliffTime)) ||
+    (includeCustomStart && (startDate === '' || !isValidDate(startDate)))
+  ) {
+    return <Fallback />;
+  }
+
+  const vestingPeriod = Number(vestingTime) * (vestingDuration === 'year' ? 365 : vestingDuration === 'month' ? 30 : 7);
+
+  const cliffPeriod = includeCliff
+    ? Number(cliffTime) * (cliffDuration === 'year' ? 365 : vestingDuration === 'month' ? 30 : 7)
+    : null;
+
+  if (cliffPeriod && cliffPeriod > vestingPeriod) {
+    return <Fallback />;
+  }
+
+  const startTime = includeCustomStart && startDate !== '' ? new Date(startDate) : new Date(Date.now());
+
+  return (
+    <div className="h-[360px]">
+      <VestingChart
+        amount={Number(vestedAmount)}
+        vestingPeriod={vestingPeriod}
+        cliffPeriod={cliffPeriod}
+        startTime={startTime}
+      />
+    </div>
+  );
+};
