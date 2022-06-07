@@ -17,8 +17,8 @@ interface IDepositFieldprops {
 const DepositField = ({ tokens, userAddress, dialog }: IDepositFieldprops) => {
   const transactionDialog = useDialogState();
 
-  const t0 = useTranslations('Common')
-  const t1 = useTranslations('Forms')
+  const t0 = useTranslations('Common');
+  const t1 = useTranslations('Forms');
 
   const {
     checkingApproval,
@@ -43,11 +43,7 @@ const DepositField = ({ tokens, userAddress, dialog }: IDepositFieldprops) => {
       <FormDialog title="" dialog={dialog} className="h-fit">
         <form onSubmit={handleSubmit}>
           <div className="mb-5">
-            <SelectToken
-              label={t1('tokenToDeposit')}
-              tokens={tokenOptions}
-              handleTokenChange={handleTokenChange}
-            />
+            <SelectToken label={t1('tokenToDeposit')} tokens={tokenOptions} handleTokenChange={handleTokenChange} />
             <AvailableAmount selectedToken={selectedToken} title={t1('availableForDeposit')} />
           </div>
 

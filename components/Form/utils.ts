@@ -1,6 +1,9 @@
 import BigNumber from 'bignumber.js';
+import { getAddress } from 'ethers/lib/utils';
+import { Provider } from 'hooks/useNetworkProvider';
 import debounce from 'lodash.debounce';
 import { IToken } from 'types';
+import { createERC20Contract } from 'utils/tokenUtils';
 
 type TokenDetails = Pick<IToken, 'decimals' | 'tokenContract' | 'llamaContractAddress'>;
 
@@ -9,6 +12,15 @@ export interface ICheckApproval {
   userAddress?: string;
   approvedForAmount: string;
   checkTokenApproval: ({}) => void;
+}
+
+interface ICreateAndCheckApproval {
+  tokenAddress: string;
+  userAddress: string;
+  approvedForAmount: string;
+  provider: Provider;
+  approvalFn: ({}) => void;
+  approveForAddress: string;
 }
 
 function checkTokenApproval({ tokenDetails, userAddress, approvedForAmount, checkTokenApproval }: ICheckApproval) {
@@ -28,7 +40,27 @@ function checkTokenApproval({ tokenDetails, userAddress, approvedForAmount, chec
   }
 }
 
+async function createTokenContractAndCheckApproval({
+  tokenAddress,
+  approvedForAmount,
+  userAddress,
+  provider,
+  approvalFn,
+  approveForAddress,
+}: ICreateAndCheckApproval) {
+  const tokenContract = createERC20Contract({ tokenAddress: getAddress(tokenAddress), provider });
+  const decimals = await tokenContract.decimals();
+
+  checkTokenApproval({
+    tokenDetails: { tokenContract, llamaContractAddress: approveForAddress, decimals },
+    userAddress,
+    approvedForAmount,
+    checkTokenApproval: approvalFn,
+  });
+}
+
 export const checkApproval = debounce(checkTokenApproval, 200);
+export const createContractAndCheckApproval = debounce(createTokenContractAndCheckApproval, 200);
 
 // function to check if the amount entered is in the right format
 export function checkIsAmountValid(amount: string) {

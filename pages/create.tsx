@@ -12,7 +12,7 @@ const Create: NextPage = () => {
   const [{ data: accountData }] = useAccount();
   const { unsupported } = useNetworkProvider();
 
-  // keep query active in this page so when a stream is submitted this query is invalidated and the data is present when user is navigated to homepage
+  // keep query active in this page so when a stream is submitted this query is invalidated and user can see the data when they navigate to homepage
   useStreamsAndHistory();
 
   const t = useTranslations('CreateStream');
@@ -40,7 +40,7 @@ export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
   // Pass data to the page via props
   return {
     props: {
-      messages: (await import(`../translations/${locale}.json`)).default,
+      messages: (await import(`translations/${locale}.json`)).default,
     },
   };
 };

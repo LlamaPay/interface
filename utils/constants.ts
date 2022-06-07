@@ -6,6 +6,9 @@ export const FACTORY_RINKEBY = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_KOVAN = '0xd43bb75cc924e8475dff2604b962f39089e4f842';
 export const FACTORY_FUJI = '0xc4705f96030D347F421Fbe01d9A19F18B26a7d30';
 
+export const VESTING_FACTORY_RINKEBY = '0xe266B85eE0552DBb32FDfB533376A5066B46A492';
+export const VESTING_FACTORY_KOVAN = '0x8c5e31c26e5da2f188d3294f8a38a5d59c104389';
+
 // LIVE
 export const FACTORY_AVALANCHE = '0x7d507b4c2d7e54da5731f643506996da8525f4a3';
 export const FACTORY_POLYGON = '0xde1C04855c2828431ba637675B6929A684f84C7F';
@@ -37,6 +40,7 @@ interface INetworkDetails {
     prefix: string;
     logoURI: string;
     tokenListId?: string;
+    vestingFactory: string;
   };
 }
 
@@ -67,6 +71,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerName: 'Etherscan',
     prefix: 'ethereum',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
+    vestingFactory: VESTING_FACTORY_RINKEBY,
   },
   42: {
     rpcUrl: `https://kovan.infura.io/v3/${infuraId}`,
@@ -82,6 +87,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerName: 'Etherscan',
     prefix: 'ethereum',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
+    vestingFactory: VESTING_FACTORY_KOVAN,
   },
   43113: {
     rpcUrl: 'https://api.avax-test.network/ext/bc/C/rpc',
@@ -93,6 +99,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerName: 'Snowtrace',
     prefix: 'avax',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchex/info/logo.png',
+    vestingFactory: '',
   },
   43114: {
     rpcUrl: 'https://api.avax.network/ext/bc/C/rpc',
@@ -105,6 +112,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'avax',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchex/info/logo.png',
     tokenListId: 'avalanche',
+    vestingFactory: '',
   },
   137: {
     rpcUrl: 'https://polygon-rpc.com/',
@@ -117,6 +125,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'polygon',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/polygon/info/logo.png',
     tokenListId: 'polygon-pos',
+    vestingFactory: '',
   },
   250: {
     rpcUrl: 'https://rpc.ftm.tools/',
@@ -129,6 +138,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'fantom',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/fantom/info/logo.png',
     tokenListId: 'fantom',
+    vestingFactory: '',
   },
   1: {
     rpcUrl: 'https://rpc.ankr.com/eth',
@@ -141,6 +151,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'ethereum',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
     tokenListId: 'ethereum',
+    vestingFactory: '',
   },
   10: {
     rpcUrl: 'https://mainnet.optimism.io',
@@ -153,6 +164,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'optimism',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/optimism/info/logo.png',
     tokenListId: 'optimistic-ethereum',
+    vestingFactory: '',
   },
   42161: {
     rpcUrl: 'https://rpc.ankr.com/arbitrum',
@@ -165,6 +177,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'arbitrum',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/arbitrum/info/logo.png',
     tokenListId: 'arbitrum-one',
+    vestingFactory: '',
   },
   56: {
     rpcUrl: 'https://bsc-dataseed.binance.org',
@@ -177,6 +190,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'bsc',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png',
     tokenListId: 'binance-smart-chain',
+    vestingFactory: '',
   },
   100: {
     rpcUrl: 'https://xdai-rpc.gateway.pokt.network',
@@ -189,6 +203,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'xdai',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/xdai/info/logo.png',
     tokenListId: 'xdai',
+    vestingFactory: '',
   },
 };
 
