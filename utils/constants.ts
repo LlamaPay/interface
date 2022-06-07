@@ -8,6 +8,7 @@ export const FACTORY_FUJI = '0xc4705f96030D347F421Fbe01d9A19F18B26a7d30';
 
 export const VESTING_FACTORY_RINKEBY = '0xe266B85eE0552DBb32FDfB533376A5066B46A492';
 export const VESTING_FACTORY_KOVAN = '0x8c5e31c26e5da2f188d3294f8a38a5d59c104389';
+export const VESTING_FACTORY_FUJI = '0x04E7a9ad16F34240a7ADB96919b8C4bFc3E8Afe9';
 
 // LIVE
 export const FACTORY_AVALANCHE = '0x7d507b4c2d7e54da5731f643506996da8525f4a3';
@@ -99,7 +100,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerName: 'Snowtrace',
     prefix: 'avax',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchex/info/logo.png',
-    vestingFactory: '',
+    vestingFactory: VESTING_FACTORY_FUJI,
   },
   43114: {
     rpcUrl: 'https://api.avax.network/ext/bc/C/rpc',
