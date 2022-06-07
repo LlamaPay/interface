@@ -280,7 +280,7 @@ export const chains: Chain[] = [
 ];
 
 export const secondsByDuration: ISecondsByDuration = {
-  week: 604800,
-  month: 2592000,
-  year: 31104000,
+  week: 7 * 24 * 60 * 60,
+  month: 30 * 24 * 60 * 60,
+  year: 365 * 24 * 60 * 60,
 };
