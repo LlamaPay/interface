@@ -31,7 +31,9 @@ const WithdrawForm = ({ data, formDialog }: IFormProps) => {
       const formattedAmt = new BigNumber(amount).multipliedBy(1e20);
       if (process.env.NEXT_PUBLIC_SAFE === 'true') {
         const call: { [key: string]: string[] } = {};
-        call[data.llamaContractAddress] = [LlamaContractInterface.encodeFunctionData('withdrawPayer', [formattedAmt])];
+        call[data.llamaContractAddress] = [
+          LlamaContractInterface.encodeFunctionData('withdrawPayer', [formattedAmt.toFixed(0)]),
+        ];
         gnosisBatch({ calls: call });
       } else {
         withdrawAll.current = false;
