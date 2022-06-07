@@ -18,6 +18,9 @@ import Confirm, { IVestingData } from './Confirm';
 import { createERC20Contract } from 'utils/tokenUtils';
 import { getAddress } from 'ethers/lib/utils';
 import { checkApproval, createContractAndCheckApproval } from 'components/Form/utils';
+import dynamic from 'next/dynamic';
+
+const VestingChart = dynamic(() => import('../Chart'), { ssr: false });
 
 interface IVestingElements {
   recipientAddress: { value: string };
@@ -31,20 +34,22 @@ interface IVestingElements {
 }
 
 export default function CreateVesting({ factory }: { factory: string }) {
-  // form switches
-  const [includeCliff, setIncludeCliff] = React.useState<boolean>(false);
-  const [includeCustomStart, setIncludeCustomStart] = React.useState<boolean>(false);
-  const [showChart, setShowChart] = React.useState<boolean>(false);
-
-  // form input values
-  const [vestingDuration, setVestingDuration] = React.useState<string>('week');
-  const [cliffDuration, setCliffDuration] = React.useState<string>('week');
-  const [vestedToken, setVestedToken] = React.useState<string>('');
-  const [vestedAmount, setVestedAmount] = React.useState<string>('');
-
   const [transactionHash, setTransactionHash] = React.useState<string>('');
 
   const [vestingData, setVestingData] = React.useState<IVestingData | null>(null);
+
+  const [formData, setFormData] = React.useState({
+    vestedToken: '',
+    vestedAmount: '',
+    vestingTime: '',
+    vestingDuration: '',
+    includeCliff: false,
+    includeCustomStart: false,
+    cliffTime: '',
+    cliffDuration: '',
+    startDate: '',
+    showChart: false,
+  });
 
   const { mutate: checkTokenApproval, data: isApproved, isLoading: checkingApproval } = useCheckTokenApproval();
 
@@ -83,18 +88,34 @@ export default function CreateVesting({ factory }: { factory: string }) {
     }
   };
 
+  const handleChange = (value: string | boolean, type: keyof typeof formData) => {
+    setFormData((prev) => ({ ...prev, [type]: value }));
+  };
+
+  const handleVestTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({ ...prev, vestedToken: e.target.value }));
+    checkApprovalOnChange(e.target.value, formData.vestedAmount);
+  };
+
+  const handleVestAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({ ...prev, vestedAmount: e.target.value }));
+    checkApprovalOnChange(formData.vestedToken, e.target.value);
+  };
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
     const form = e.target as HTMLFormElement & IVestingElements;
-    const recipientAddress = form.recipientAddress.value;
+    const recipientAddress = form.recipientAddress?.value;
     const vestingTime = form.vestingTime.value;
     const cliffTime = form.cliffTime?.value;
-    const vestedToken = form.vestedToken.value;
-    const vestingAmount = form.vestingAmount.value;
+    const vestedToken = form.vestedToken?.value;
+    const vestingAmount = form.vestingAmount?.value;
+    const vestingDuration = form.vestingDuration?.value;
+    const cliffDuration = form.cliffDuration?.value;
 
     const fmtVestingTime = new BigNumber(vestingTime).times(secondsByDuration[vestingDuration]).toFixed(0);
-    const date = includeCustomStart ? new Date(form.startDate.value) : new Date(Date.now());
+    const date = formData.includeCustomStart ? new Date(form.startDate.value) : new Date(Date.now());
 
     if (date.toString() === 'Invalid Date') {
       toast.error('Invalid Date');
@@ -102,7 +123,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
     }
 
     const startTime = new BigNumber(Number(date) / 1e3).toFixed(0);
-    const fmtCliffTime = includeCliff
+    const fmtCliffTime = formData.includeCliff
       ? new BigNumber(cliffTime).times(secondsByDuration[cliffDuration]).toFixed(0)
       : '0';
 
@@ -143,16 +164,6 @@ export default function CreateVesting({ factory }: { factory: string }) {
       );
     }
   }
-
-  const handleVestTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setVestedToken(e.target.value);
-    checkApprovalOnChange(e.target.value, vestedAmount);
-  };
-
-  const handleVestAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setVestedAmount(e.target.value);
-    checkApprovalOnChange(vestedToken, e.target.value);
-  };
 
   function onConfirm() {
     if (!vestingData) return;
@@ -204,18 +215,16 @@ export default function CreateVesting({ factory }: { factory: string }) {
           name="vestingTime"
           isRequired
           selectInputName="vestingDuration"
-          handleSelectChange={(e) => setVestingDuration(e.target.value)}
         />
-        {includeCliff && (
+        {formData.includeCliff && (
           <InputAmountWithDuration
             label={'Cliff Duration'}
             name="cliffTime"
             isRequired
             selectInputName="cliffDuration"
-            handleSelectChange={(e) => setCliffDuration(e.target.value)}
           />
         )}
-        {includeCustomStart && (
+        {formData.includeCustomStart && (
           <InputText
             label={'Start Date (YYYY-MM-DD)'}
             name="startDate"
@@ -227,47 +236,53 @@ export default function CreateVesting({ factory }: { factory: string }) {
         <div className="flex gap-2">
           <span className="font-exo">{'Include Cliff'}</span>
           <Switch
-            checked={includeCliff}
-            onChange={setIncludeCliff}
+            checked={formData.includeCliff}
+            onChange={(value) => handleChange(value, 'includeCliff')}
             className={`${
-              includeCliff ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
+              formData.includeCliff ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
             } relative inline-flex h-6 w-11 items-center rounded-full`}
           >
             <span
               className={`${
-                includeCliff ? 'translate-x-6' : 'translate-x-1'
+                formData.includeCliff ? 'translate-x-6' : 'translate-x-1'
               } inline-block h-4 w-4 transform rounded-full bg-white`}
             />
           </Switch>
           <span className="font-exo">{`Custom Start`}</span>
           <Switch
-            checked={includeCustomStart}
-            onChange={setIncludeCustomStart}
+            checked={formData.includeCustomStart}
+            onChange={(value) => handleChange(value, 'includeCustomStart')}
             className={`${
-              includeCustomStart ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
+              formData.includeCustomStart ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
             } relative inline-flex h-6 w-11 items-center rounded-full`}
           >
             <span
               className={`${
-                includeCustomStart ? 'translate-x-6' : 'translate-x-1'
+                formData.includeCustomStart ? 'translate-x-6' : 'translate-x-1'
               } inline-block h-4 w-4 transform rounded-full bg-white`}
             />
           </Switch>
           <span className="font-exo">{'Show Chart'}</span>
           <Switch
-            checked={showChart}
-            onChange={setShowChart}
+            checked={formData.showChart}
+            onChange={(value) => handleChange(value, 'showChart')}
             className={`${
-              showChart ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
+              formData.showChart ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
             } relative inline-flex h-6 w-11 items-center rounded-full`}
           >
             <span
               className={`${
-                showChart ? 'translate-x-6' : 'translate-x-1'
+                formData.showChart ? 'translate-x-6' : 'translate-x-1'
               } inline-block h-4 w-4 transform rounded-full bg-white`}
             />
           </Switch>
         </div>
+
+        {formData.showChart && (
+          <div className="h-[360px]">
+            <VestingChart amount={0} duration={0} />
+          </div>
+        )}
 
         <SubmitButton className="mt-5">
           {loading || checkingApproval || approvingToken ? (
@@ -279,7 +294,9 @@ export default function CreateVesting({ factory }: { factory: string }) {
           )}
         </SubmitButton>
       </form>
+
       <TransactionDialog dialog={transactionDialog} transactionHash={transactionHash} />
+
       {vestingData && <Confirm dialog={confirmDialog} vestingData={vestingData} onConfirm={onConfirm} />}
     </section>
   );
