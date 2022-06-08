@@ -6,9 +6,9 @@ export const FACTORY_RINKEBY = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_KOVAN = '0xd43bb75cc924e8475dff2604b962f39089e4f842';
 export const FACTORY_FUJI = '0xc4705f96030D347F421Fbe01d9A19F18B26a7d30';
 
-export const VESTING_FACTORY_RINKEBY = '0xe266B85eE0552DBb32FDfB533376A5066B46A492';
-export const VESTING_FACTORY_KOVAN = '0x8c5e31c26e5da2f188d3294f8a38a5d59c104389';
-export const VESTING_FACTORY_FUJI = '0x04E7a9ad16F34240a7ADB96919b8C4bFc3E8Afe9';
+export const VESTING_FACTORY_RINKEBY = '0xed52BE57e480eF200A5C987aFa78Cf615e1530FE';
+export const VESTING_FACTORY_KOVAN = '0xed52BE57e480eF200A5C987aFa78Cf615e1530FE';
+export const VESTING_FACTORY_FUJI = '0xed52BE57e480eF200A5C987aFa78Cf615e1530FE';
 
 // LIVE
 export const FACTORY_AVALANCHE = '0x7d507b4c2d7e54da5731f643506996da8525f4a3';
@@ -19,6 +19,15 @@ export const FACTORY_OPTIMISM = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_ARBITRUM = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_BSC = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_XDAI = '0xde1C04855c2828431ba637675B6929A684f84C7F';
+
+export const VESTING_FACTORY_AVALANCHE = '0xed52BE57e480eF200A5C987aFa78Cf615e1530FE';
+export const VESTING_FACTORY_POLYGON = '0xed52BE57e480eF200A5C987aFa78Cf615e1530FE';
+export const VESTING_FACTORY_FANTOM = '0xed52BE57e480eF200A5C987aFa78Cf615e1530FE';
+export const VESTING_FACTORY_MAINNET = '0xed52BE57e480eF200A5C987aFa78Cf615e1530FE';
+export const VESTING_FACTORY_OPTIMISM = '0xed52BE57e480eF200A5C987aFa78Cf615e1530FE';
+export const VESTING_FACTORY_ARBITRUM = '0xed52BE57e480eF200A5C987aFa78Cf615e1530FE';
+export const VESTING_FACTORY_BSC = '0xed52BE57e480eF200A5C987aFa78Cf615e1530FE';
+export const VESTING_FACTORY_XDAI = '0xed52BE57e480eF200A5C987aFa78Cf615e1530FE';
 
 export const MAINNET_ENS_RESOLVER = '0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C';
 
@@ -113,7 +122,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'avax',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchex/info/logo.png',
     tokenListId: 'avalanche',
-    vestingFactory: '',
+    vestingFactory: VESTING_FACTORY_AVALANCHE,
   },
   137: {
     rpcUrl: 'https://polygon-rpc.com/',
@@ -126,7 +135,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'polygon',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/polygon/info/logo.png',
     tokenListId: 'polygon-pos',
-    vestingFactory: '',
+    vestingFactory: VESTING_FACTORY_POLYGON,
   },
   250: {
     rpcUrl: 'https://rpc.ftm.tools/',
@@ -139,7 +148,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'fantom',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/fantom/info/logo.png',
     tokenListId: 'fantom',
-    vestingFactory: '',
+    vestingFactory: VESTING_FACTORY_FANTOM,
   },
   1: {
     rpcUrl: 'https://rpc.ankr.com/eth',
@@ -152,7 +161,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'ethereum',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
     tokenListId: 'ethereum',
-    vestingFactory: '',
+    vestingFactory: VESTING_FACTORY_MAINNET,
   },
   10: {
     rpcUrl: 'https://mainnet.optimism.io',
@@ -165,7 +174,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'optimism',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/optimism/info/logo.png',
     tokenListId: 'optimistic-ethereum',
-    vestingFactory: '',
+    vestingFactory: VESTING_FACTORY_OPTIMISM,
   },
   42161: {
     rpcUrl: 'https://rpc.ankr.com/arbitrum',
@@ -178,7 +187,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'arbitrum',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/arbitrum/info/logo.png',
     tokenListId: 'arbitrum-one',
-    vestingFactory: '',
+    vestingFactory: VESTING_FACTORY_ARBITRUM,
   },
   56: {
     rpcUrl: 'https://bsc-dataseed.binance.org',
@@ -191,7 +200,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'bsc',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png',
     tokenListId: 'binance-smart-chain',
-    vestingFactory: '',
+    vestingFactory: VESTING_FACTORY_BSC,
   },
   100: {
     rpcUrl: 'https://xdai-rpc.gateway.pokt.network',
@@ -204,7 +213,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'xdai',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/xdai/info/logo.png',
     tokenListId: 'xdai',
-    vestingFactory: '',
+    vestingFactory: VESTING_FACTORY_XDAI,
   },
 };
 

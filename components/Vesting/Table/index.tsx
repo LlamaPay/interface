@@ -39,7 +39,7 @@ export default function VestingTable({ data }: { data: IVesting[] }) {
       }),
       table.createDisplayColumn({
         id: 'total_locked',
-        header: 'Total Vested',
+        header: 'Total Vesting',
         cell: ({ cell }) =>
           cell.row.original && (
             <span className="font-exo text-center slashed-zero tabular-nums dark:text-white">

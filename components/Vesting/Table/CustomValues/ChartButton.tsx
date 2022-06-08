@@ -19,7 +19,7 @@ export default function ChartButton({ data }: { data: IVesting }) {
         ? ((Number(data.timestamp) - Number(data.startTime)) / 86400).toFixed(0)
         : null;
 
-    const cliffPeriod = (Number(data.cliffLength) - Number(data.startTime)) / 86400;
+    const cliffPeriod = Number(data.cliffLength) / 86400;
 
     return { vestingPeriod, amount, startTime, vestedDays, cliffPeriod };
   }, [data]);
