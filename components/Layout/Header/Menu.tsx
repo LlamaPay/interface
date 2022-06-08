@@ -1,4 +1,12 @@
-import { BookOpenIcon, ChartPieIcon, LibraryIcon, MoonIcon, PlayIcon, SunIcon } from '@heroicons/react/outline';
+import {
+  BookOpenIcon,
+  ChartPieIcon,
+  LibraryIcon,
+  MoonIcon,
+  PlayIcon,
+  SunIcon,
+  TerminalIcon,
+} from '@heroicons/react/outline';
 import { DisclosureState } from 'ariakit';
 import { Menu, MenuItem } from 'components/NestedMenu';
 import { useIsMounted, useLocale, useWindowSize } from 'hooks';
@@ -161,6 +169,20 @@ export default function HeaderMenu({
           >
             <span>Gnosis Safe</span>
             <LibraryIcon className="h-4 w-4" />
+          </a>
+        }
+      />
+
+      <MenuItem
+        label={
+          <a
+            href="https://github.com/banteg/ape-llamapay"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="flex w-full items-center justify-between gap-4 font-normal"
+          >
+            <span>Ape SDK</span>
+            <TerminalIcon className="h-4 w-4" />
           </a>
         }
       />
