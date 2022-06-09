@@ -33,11 +33,11 @@ export default function CreateVesting({ factory }: { factory: string }) {
     vestedToken: '',
     vestedAmount: '',
     vestingTime: '',
-    vestingDuration: 'week',
+    vestingDuration: 'year',
     includeCliff: false,
     includeCustomStart: false,
     cliffTime: '',
-    cliffDuration: 'week',
+    cliffDuration: 'year',
     startDate: '',
   });
 
@@ -124,11 +124,11 @@ export default function CreateVesting({ factory }: { factory: string }) {
         vestedToken: '',
         vestedAmount: '',
         vestingTime: '',
-        vestingDuration: 'week',
+        vestingDuration: 'year',
         includeCliff: false,
         includeCustomStart: false,
         cliffTime: '',
-        cliffDuration: 'week',
+        cliffDuration: 'year',
         startDate: '',
       });
     } else {

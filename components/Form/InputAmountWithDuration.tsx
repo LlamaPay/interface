@@ -51,9 +51,9 @@ export const InputAmountWithDuration = ({
           style={{ backgroundSize: '1.25rem', backgroundPosition: 'calc(100% - 4px) 55%' }}
           onChange={handleSelectChange}
         >
-          <option value="week">{t0('week')}</option>
-          <option value="month">{t0('month')}</option>
           <option value="year">{t0('year')}</option>
+          <option value="month">{t0('month')}</option>
+          <option value="week">{t0('week')}</option>
         </select>
       </div>
     </div>
