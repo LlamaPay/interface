@@ -57,7 +57,7 @@ export default function VestingChart({
         },
         data: [...Array(vestingPeriod + 1)].map((_, index) => [
           new Date(new Date(startTime).setDate(startTime.getDate() + index)),
-          index > (cliffPeriod || 0) ? (amount / vestingPeriod) * index : 0,
+          index >= (cliffPeriod || 0) ? (amount / vestingPeriod) * index : 0,
         ]),
         ...(cliffPeriod && {
           markLine: {
@@ -65,7 +65,7 @@ export default function VestingChart({
               [
                 {
                   name: 'CLIFF',
-                  xAxis: new Date(new Date().setDate(startTime.getDate() + cliffPeriod)),
+                  xAxis: new Date(new Date(startTime).setDate(startTime.getDate() + cliffPeriod)),
                   yAxis: 0,
                   label: {
                     color: isDark ? 'rgba(255, 255, 255, 1)' : 'rgba(0, 0, 0, 1)',
@@ -74,7 +74,7 @@ export default function VestingChart({
                     fontWeight: 500,
                   },
                 },
-                { name: 'end', xAxis: new Date(new Date().setDate(startTime.getDate() + cliffPeriod)), yAxis: 'max' },
+                { name: 'end', xAxis: new Date(new Date(startTime).setDate(startTime.getDate() + cliffPeriod)), yAxis: 'max' },
               ],
             ],
           },
