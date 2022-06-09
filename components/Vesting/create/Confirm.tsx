@@ -112,7 +112,7 @@ export default function Confirm({ vestingData, dialog, factory }: IConfirmProps)
             )}
             <p>{`Ends: ${intl.formatDateTime(
               new Date(
-                (Number(vestingData.startTime) + Number(vestingData.cliffTime) + Number(vestingData.vestingDuration)) *
+                (Number(vestingData.startTime) + Number(vestingData.vestingDuration)) *
                   1e3
               ),
               {
@@ -121,7 +121,7 @@ export default function Confirm({ vestingData, dialog, factory }: IConfirmProps)
               }
             )} (${intl.formatDateTime(
               new Date(
-                (Number(vestingData.startTime) + Number(vestingData.cliffTime) + Number(vestingData.vestingDuration)) *
+                (Number(vestingData.startTime) + Number(vestingData.vestingDuration)) *
                   1e3
               ),
               {
