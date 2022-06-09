@@ -39,7 +39,6 @@ export default function CreateVesting({ factory }: { factory: string }) {
     cliffTime: '',
     cliffDuration: 'week',
     startDate: '',
-    showChart: false,
   });
 
   const [vestingData, setVestingData] = React.useState<IVestingData | null>(null);
@@ -131,7 +130,6 @@ export default function CreateVesting({ factory }: { factory: string }) {
         cliffTime: '',
         cliffDuration: 'week',
         startDate: '',
-        showChart: false,
       });
     } else {
       approveToken(
@@ -224,8 +222,6 @@ export default function CreateVesting({ factory }: { factory: string }) {
 
               if (!value) {
                 handleChange('', 'startDate');
-              } else {
-                handleChange(false, 'showChart');
               }
             }}
             className={`${
@@ -238,23 +234,9 @@ export default function CreateVesting({ factory }: { factory: string }) {
               } inline-block h-4 w-4 transform rounded-full bg-white`}
             />
           </Switch>
-          <span className="font-exo">{'Show Chart'}</span>
-          <Switch
-            checked={formData.showChart}
-            onChange={(value) => handleChange(value, 'showChart')}
-            className={`${
-              formData.showChart ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
-            } relative inline-flex h-6 w-11 items-center rounded-full`}
-          >
-            <span
-              className={`${
-                formData.showChart ? 'translate-x-6' : 'translate-x-1'
-              } inline-block h-4 w-4 transform rounded-full bg-white`}
-            />
-          </Switch>
         </div>
 
-        {formData.showChart && <Chart {...formData} />}
+        <Chart {...formData} />
 
         <SubmitButton className="mt-5">
           {checkingApproval || approvingToken ? (
