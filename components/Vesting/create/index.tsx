@@ -294,7 +294,7 @@ const Chart = ({
   const vestingPeriod = Number(vestingTime) * (vestingDuration === 'year' ? 365 : vestingDuration === 'month' ? 30 : 7);
 
   const cliffPeriod = includeCliff
-    ? Number(cliffTime) * (cliffDuration === 'year' ? 365 : vestingDuration === 'month' ? 30 : 7)
+    ? Number(cliffTime) * (cliffDuration === 'year' ? 365 : cliffDuration === 'month' ? 30 : 7)
     : null;
 
   if (cliffPeriod && cliffPeriod > vestingPeriod) {
