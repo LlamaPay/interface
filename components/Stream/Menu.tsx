@@ -40,6 +40,7 @@ export default function StreamMenu() {
         disabled={!accountData || unsupported}
         style={{ pointerEvents: 'initial' }}
       >
+        <span className="sr-only">Open Streams Menu</span>
         <DotsVerticalIcon className="h-4 w-4" />
       </MenuButton>
       <Menu
