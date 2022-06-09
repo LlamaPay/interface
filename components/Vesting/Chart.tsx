@@ -56,7 +56,7 @@ export default function VestingChart({
           ]),
         },
         data: [...Array(vestingPeriod + 1)].map((_, index) => [
-          new Date(new Date().setDate(startTime.getDate() + index)),
+          new Date(new Date(startTime).setDate(startTime.getDate() + index)),
           index > (cliffPeriod || 0) ? (amount / vestingPeriod) * index : 0,
         ]),
         ...(cliffPeriod && {
