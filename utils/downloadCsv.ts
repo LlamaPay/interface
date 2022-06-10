@@ -59,11 +59,30 @@ export const downloadStreams = (
 };
 
 export const downloadHistory = (data: IHistory[]) => {
-  const rows = [['Address Related', 'Transaction Hash', 'Event Type', 'Amount Per Sec', 'Timestamp']];
+  const rows = [['Address Related', 'Transaction Hash', 'Event Type', 'Amount Per Sec/Amount', 'Timestamp']];
 
   data.forEach((d) => {
     rows.push([d.addressRelated, d.txHash, d.eventType, d.amountPerSec, d.createdTimestamp]);
   });
 
+  download('history.csv', rows.map((r) => r.join(',')).join('\n'));
+};
+
+export const downloadCustomHistory = (
+  data: IHistory[],
+  dateRange: { start: string; end: string },
+  eventType: string | null
+) => {
+  const rows = [['Address Related', 'Transaction Hash', 'Event Type', 'Amount Per Sec/Amount', 'Timestamp']];
+  const startTimestamp = Number(new Date(dateRange.start)) / 1e3;
+  const endTimestamp = Number(new Date(dateRange.end)) / 1e3;
+  data.forEach((d) => {
+    if (Number(d.createdTimestamp) > endTimestamp || Number(d.createdTimestamp) < startTimestamp) return;
+    if (!eventType) {
+      rows.push([d.addressRelated, d.txHash, d.eventType, d.amountPerSec, d.createdTimestamp]);
+    } else if (eventType === d.eventType) {
+      rows.push([d.addressRelated, d.txHash, d.eventType, d.amountPerSec, d.createdTimestamp]);
+    }
+  });
   download('history.csv', rows.map((r) => r.join(',')).join('\n'));
 };
