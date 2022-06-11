@@ -95,7 +95,7 @@ export default function HeaderMenu({
                   <div className="flex items-center gap-2">
                     <div className="flex h-5 w-5 items-center rounded-full">
                       <Image
-                        src={network.logoURI || defaultImage}
+                        src={network?.logoURI ?? defaultImage}
                         alt={t('logoAlt', { name: value.name })}
                         objectFit="contain"
                         width="20px"

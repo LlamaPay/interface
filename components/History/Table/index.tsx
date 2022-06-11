@@ -69,7 +69,6 @@ export function HistoryTable({ data }: { data: IHistory[] }) {
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
-    pageCount: undefined, // allows the table to calculate the page count for us via instance.getPageCount()
   });
 
   const instance = useTableInstance(table, {

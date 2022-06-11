@@ -1,6 +1,6 @@
 import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
-import { networkDetails } from 'utils/constants';
+import { chains, networkDetails } from 'utils/constants';
 import { useNetwork } from 'wagmi';
 
 export type Provider = ethers.providers.BaseProvider;
@@ -17,6 +17,26 @@ export const useNetworkProvider = () => {
   if (pathname === '/streams' && !Number.isNaN(query.chainId)) {
     chainId = Number(query.chainId);
     name = networkDetails[chainId]?.blockExplorerName;
+  }
+
+  if (pathname === '/salaries/[chain]/[address]') {
+    const chainParam = query.chain;
+
+    const isParamChainId = Number.isNaN(Number(chainParam));
+
+    let chain = null;
+
+    // handle routes like /salaries/ethereum/0x1234... & /salaries/1/0x1234
+    if (isParamChainId) {
+      chain = typeof chainParam === 'string' && chains.find((c) => c.name.toLowerCase() === chainParam.toLowerCase());
+    } else {
+      chain = typeof chainParam === 'string' && chains.find((c) => c.id === Number(chainParam));
+    }
+
+    if (chain) {
+      chainId = Number(chain.id);
+      name = networkDetails[chainId]?.blockExplorerName;
+    }
   }
 
   const chainDetails = chainId && networkDetails[chainId];

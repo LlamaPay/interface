@@ -11,6 +11,15 @@ const nextConfig = {
   images: {
     domains: ['raw.githubusercontent.com', 'assets.coingecko.com'],
   },
+  async redirects() {
+    return [
+      {
+        source: '/salaries',
+        destination: '/',
+        permanent: true,
+      },
+    ];
+  },
 };
 
 module.exports = withBundleAnalyzer(nextConfig);
