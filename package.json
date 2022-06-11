@@ -16,7 +16,7 @@
     "@gnosis.pm/safe-apps-sdk": "^7.3.0",
     "@headlessui/react": "^1.6.1",
     "@heroicons/react": "^1.0.6",
-    "@tanstack/react-table": "^8.0.0-beta.4",
+    "@tanstack/react-table": "^8.0.0-beta.8",
     "ariakit": "^2.0.0-next.29",
     "axios": "^0.26.1",
     "bignumber.js": "^9.0.2",

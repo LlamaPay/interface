@@ -41,8 +41,6 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, resolvedAd
 
   const t = useTranslations('Common');
 
-  const user = address.toLowerCase() !== resolvedAddress.toLowerCase() ? `${address} (${resolvedAddress})` : address;
-
   return (
     <Layout className="mt-12 flex w-full flex-col gap-[30px] dark:bg-[#161818]">
       <section className="app-section">
