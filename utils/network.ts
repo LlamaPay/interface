@@ -1,11 +1,18 @@
-import { allChains } from 'wagmi';
-import { networkDetails } from './constants';
+import { chains, networkDetails } from './constants';
 
 export function chainDetails(chainId: unknown) {
-  const id = typeof chainId === 'string' ? Number(chainId) : 0;
+  if (typeof chainId !== 'string') return {};
 
-  const network = networkDetails[id];
-  const chain = allChains.find((c) => c.id === id);
+  const id = Number(chainId);
 
-  return { network, chain };
+  // handle routes like /salaries/ethereum/0x1234... & /salaries/1/0x1234
+  if (Number.isNaN(id)) {
+    const chain = chains.find((c) => c.name?.toLowerCase() === chainId.toLowerCase());
+    const network = chain && networkDetails[chain?.id];
+    return { network, chain };
+  } else {
+    const network = networkDetails[id];
+    const chain = chains.find((c) => c.id === id);
+    return { network, chain };
+  }
 }

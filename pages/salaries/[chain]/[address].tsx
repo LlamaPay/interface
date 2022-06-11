@@ -84,9 +84,9 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, resolvedAd
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query, locale }) => {
-  const { chainId, address } = query;
+  const { chain, address } = query;
 
-  const { network, chain } = chainDetails(chainId);
+  const { network, chain: c } = chainDetails(chain);
 
   const { network: mainnet } = chainDetails('1');
 
@@ -107,7 +107,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
       },
       {
         id: userAddress?.toLowerCase() ?? '',
-        network: chain?.name ?? '',
+        network: c?.name ?? '',
       }
     )
   );
@@ -118,7 +118,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
       subgraphEndpoint: network?.subgraphEndpoint ?? '',
       address,
       resolvedAddress: userAddress?.toLowerCase(),
-      network: chain?.name ?? '',
+      network: c?.name ?? '',
       logoURI: network?.logoURI ?? defaultImage,
       dehydratedState: dehydrate(queryClient),
       messages: (await import(`translations/${locale}.json`)).default,
