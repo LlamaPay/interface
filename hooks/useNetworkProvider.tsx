@@ -19,7 +19,7 @@ export const useNetworkProvider = () => {
     name = networkDetails[chainId]?.blockExplorerName;
   }
 
-  if (pathname === '/salaries/[chain]/[address]') {
+  if (pathname === '/salaries/[chain]/[address]' || pathname === '/vesting/[chain]/[address]') {
     const chainParam = query.chain;
 
     const isParamChainId = Number.isNaN(Number(chainParam));

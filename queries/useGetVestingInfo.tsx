@@ -113,3 +113,15 @@ export default function useGetVestingInfo() {
     }
   );
 }
+
+interface IVestingInfoByQueryParams {
+  address: string;
+  chainId: number | null;
+  provider: BaseProvider | null;
+}
+
+export function useGetVestingInfoByQueryParams({ address, chainId, provider }: IVestingInfoByQueryParams) {
+  return useQuery(['vestingInfo', address, chainId], () => getVestingInfo(address, provider, chainId), {
+    refetchInterval: 30000,
+  });
+}
