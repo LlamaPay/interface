@@ -198,7 +198,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
           <span className="font-exo">{'Include Cliff'}</span>
           <Switch
             checked={formData.includeCliff}
-            onChange={(value) => {
+            onChange={(value: boolean) => {
               handleChange(value, 'includeCliff');
               if (!value) {
                 handleChange('', 'cliffTime');
@@ -217,7 +217,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
           <span className="font-exo">{`Custom Start`}</span>
           <Switch
             checked={formData.includeCustomStart}
-            onChange={(value) => {
+            onChange={(value: boolean) => {
               handleChange(value, 'includeCustomStart');
 
               if (!value) {
