@@ -20,6 +20,7 @@ import { CashIcon } from '@heroicons/react/solid';
 import useBatchCalls from 'queries/useBatchCalls';
 import useGnosisBatch from 'queries/useGnosisBatch';
 import { LlamaContractInterface } from 'utils/contract';
+import { chainDetails } from 'utils/network';
 
 interface ICall {
   [key: string]: string[];
@@ -29,11 +30,14 @@ const Withdraw: NextPage = () => {
   const [{ data: accountData }] = useAccount();
   const { unsupported } = useNetworkProvider();
   const [addressToFetch, setAddressToFetch] = React.useState<string | null>(null);
+  const [address, setAddress] = React.useState<string | null>(null);
   const { mutate: batchCall } = useBatchCalls();
   const { mutate: gnosisBatch } = useGnosisBatch();
   const { url: chainExplorer } = useChainExplorer();
 
   const { provider, network } = useNetworkProvider();
+
+  const { network: mainnet } = chainDetails('1');
 
   // get subgraph endpoint
   const endpoint = useGraphEndpoint();
@@ -55,10 +59,18 @@ const Withdraw: NextPage = () => {
   const t1 = useTranslations('Streams');
   const t2 = useTranslations('Common');
 
-  const fetchStreams = (e: React.FormEvent<HTMLFormElement>) => {
+  const fetchStreams = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement & { addressToFetchStreams: { value: string } };
-    setAddressToFetch(form.addressToFetchStreams.value);
+    setAddress(form.addressToFetchStreams.value);
+
+    const userAddress = await mainnet?.chainProviders
+      .resolveName(form.addressToFetchStreams.value)
+      .then((address) => address || form.addressToFetchStreams.value)
+      .catch(() => form.addressToFetchStreams.value);
+
+    setAddressToFetch(userAddress || form.addressToFetchStreams.value);
+
     form.reset();
   };
 
@@ -121,15 +133,17 @@ const Withdraw: NextPage = () => {
           <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
             <h2 className="flex flex-wrap items-center gap-[0.625rem] text-[#3D3D3D]">
               <BalanceIcon />
-              <span className="dark:text-white">Streams of</span>
-              <a
-                href={`${chainExplorer}/address/${addressToFetch}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="break-words break-all dark:text-white"
-              >
-                {addressToFetch}
-              </a>
+              <span>
+                <span className="dark:text-white">Streams of</span>{' '}
+                <a
+                  href={`${chainExplorer}/address/${addressToFetch}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="break-words break-all font-medium dark:text-white"
+                >
+                  {address}
+                </a>
+              </span>
             </h2>
 
             <button
