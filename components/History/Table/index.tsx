@@ -11,6 +11,8 @@ import { IHistory } from 'types';
 import { ActionName, HistoryActions, Amount, SavedName, HistoryAge, EventType } from './CustomValues';
 import { downloadHistory } from 'utils/downloadCsv';
 import { useTranslations } from 'next-intl';
+import { useDialogState } from 'ariakit';
+import CustomExportDialog from './CustomValues/CustomExportDialog';
 
 const table = createTable().setRowType<IHistory>();
 
@@ -67,7 +69,6 @@ export function HistoryTable({ data }: { data: IHistory[] }) {
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
-    pageCount: undefined, // allows the table to calculate the page count for us via instance.getPageCount()
   });
 
   const instance = useTableInstance(table, {
@@ -82,6 +83,12 @@ export function HistoryTable({ data }: { data: IHistory[] }) {
   });
 
   const downloadToCSV = React.useCallback(() => downloadHistory(data), [data]);
+  const customHistoryDialog = useDialogState();
 
-  return <Table instance={instance} downloadToCSV={downloadToCSV} />;
+  return (
+    <>
+      <Table instance={instance} downloadToCSV={downloadToCSV} customHistory={customHistoryDialog} />
+      <CustomExportDialog data={data} dialog={customHistoryDialog} />
+    </>
+  );
 }

@@ -24,6 +24,7 @@ const Header = ({ onboardDialog }: { onboardDialog: DisclosureState }) => {
     >
       <Link href="/" passHref>
         <a>
+          <span className="sr-only">Navigate to Home Page</span>
           <Logo />
         </a>
       </Link>

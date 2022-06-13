@@ -41,32 +41,35 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, resolvedAd
 
   const t = useTranslations('Common');
 
-  const user = address.toLowerCase() !== resolvedAddress.toLowerCase() ? `${address} (${resolvedAddress})` : address;
-
   return (
     <Layout className="mt-12 flex w-full flex-col gap-[30px] dark:bg-[#161818]">
       <section className="app-section">
         <div>
-          <div className="section-header ml-0 w-fit">
+          <div className="section-header ml-0 max-w-fit">
             <h1 className="font-exo px-2 py-1 text-3xl dark:text-white">{t('streamsAndHistory')}</h1>
             {network && (
-              <div className="mt-[5px] flex flex-wrap items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
+              <div className="mt-[5px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
                 <div className="flex items-center rounded-full">
                   <Image
                     src={logoURI || defaultImage}
                     alt={t('logoAlt', { name: network })}
                     objectFit="contain"
-                    width="24px"
+                    width="21px"
                     height="24px"
                   />
                 </div>
-                <p>{network}</p>
+                <p className="truncate whitespace-nowrap">{network}</p>
               </div>
             )}
             {address && (
-              <div className="mt-[5px] flex flex-wrap items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
+              <div className="mt-[5px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
                 <BalanceIcon />
-                <p>{user}</p>
+                <p className="space-x-1 truncate whitespace-nowrap">
+                  <span>{address}</span>
+                  {address.toLowerCase() !== resolvedAddress.toLowerCase() && (
+                    <span className="hidden md:inline-block">{` (${resolvedAddress})`}</span>
+                  )}
+                </p>
               </div>
             )}
           </div>
@@ -92,7 +95,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
 
   const defaultAddress = typeof address === 'string' ? address : '';
 
-  const userAddress = await mainnet.chainProviders
+  const userAddress = await mainnet?.chainProviders
     .resolveName(defaultAddress)
     .then((address) => address || defaultAddress)
     .catch(() => defaultAddress);
@@ -106,7 +109,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
         endpoint: network?.subgraphEndpoint ?? '',
       },
       {
-        id: userAddress.toLowerCase(),
+        id: userAddress?.toLowerCase() ?? '',
         network: chain?.name ?? '',
       }
     )
@@ -117,11 +120,11 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
     props: {
       subgraphEndpoint: network?.subgraphEndpoint ?? '',
       address,
-      resolvedAddress: userAddress.toLowerCase(),
+      resolvedAddress: userAddress?.toLowerCase(),
       network: chain?.name ?? '',
       logoURI: network?.logoURI ?? defaultImage,
       dehydratedState: dehydrate(queryClient),
-      messages: (await import(`../translations/${locale}.json`)).default,
+      messages: (await import(`translations/${locale}.json`)).default,
     },
   };
 };

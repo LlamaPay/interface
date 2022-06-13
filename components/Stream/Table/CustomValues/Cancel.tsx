@@ -9,6 +9,8 @@ import { useContractWrite } from 'wagmi';
 import { Interface } from 'ethers/lib/utils';
 import useBatchCalls from 'queries/useBatchCalls';
 import { useTranslations } from 'next-intl';
+import { LlamaContractInterface } from 'utils/contract';
+import useGnosisBatch from 'queries/useGnosisBatch';
 
 interface CancelProps {
   data: IStream;
@@ -35,32 +37,49 @@ export const Cancel = ({ data }: CancelProps) => {
 
   const queryClient = useQueryClient();
   const { mutate: batchCall } = useBatchCalls();
-
+  const { mutate: gnosisBatch } = useGnosisBatch();
   const handleClick = () => {
     if (data.paused) {
-      batchCall({
-        llamaContractAddress: data.llamaContractAddress,
-        calls: [
-          CreateInterface.encodeFunctionData('createStream', [data.payeeAddress, data.amountPerSec]),
-          CancelInterface.encodeFunctionData('cancelStream', [data.payeeAddress, data.amountPerSec]),
-        ],
-      });
+      if (process.env.NEXT_PUBLIC_SAFE === 'true') {
+        const calls: { [key: string]: string[] } = {};
+        calls[data.llamaContractAddress] = [
+          LlamaContractInterface.encodeFunctionData('createStream', [data.payeeAddress, data.amountPerSec]),
+          LlamaContractInterface.encodeFunctionData('cancelStream', [data.payeeAddress, data.amountPerSec]),
+        ];
+        gnosisBatch({ calls: calls });
+      } else {
+        batchCall({
+          llamaContractAddress: data.llamaContractAddress,
+          calls: [
+            CreateInterface.encodeFunctionData('createStream', [data.payeeAddress, data.amountPerSec]),
+            CancelInterface.encodeFunctionData('cancelStream', [data.payeeAddress, data.amountPerSec]),
+          ],
+        });
+      }
     } else {
-      cancel().then(({ data, error }) => {
-        if (error) {
-          toast.error(error.message);
-        }
+      if (process.env.NEXT_PUBLIC_SAFE === 'true') {
+        const calls: { [key: string]: string[] } = {};
+        calls[data.llamaContractAddress] = [
+          LlamaContractInterface.encodeFunctionData('cancelStream', [data.payeeAddress, data.amountPerSec]),
+        ];
+        gnosisBatch({ calls: calls });
+      } else {
+        cancel().then(({ data, error }) => {
+          if (error) {
+            toast.error(error.message);
+          }
 
-        if (data) {
-          setTransactionHash(data.hash);
-          const toastid = toast.loading('Cancelling Stream');
-          data?.wait().then((receipt) => {
-            toast.dismiss(toastid);
-            receipt.status === 1 ? toast.success('Stream Cancelled') : toast.error('Failed to Cancel Stream');
-            queryClient.invalidateQueries();
-          });
-        }
-      });
+          if (data) {
+            setTransactionHash(data.hash);
+            const toastid = toast.loading('Cancelling Stream');
+            data?.wait().then((receipt) => {
+              toast.dismiss(toastid);
+              receipt.status === 1 ? toast.success('Stream Cancelled') : toast.error('Failed to Cancel Stream');
+              queryClient.invalidateQueries();
+            });
+          }
+        });
+      }
     }
   };
 

@@ -6,6 +6,10 @@ export const FACTORY_RINKEBY = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_KOVAN = '0xd43bb75cc924e8475dff2604b962f39089e4f842';
 export const FACTORY_FUJI = '0xc4705f96030D347F421Fbe01d9A19F18B26a7d30';
 
+export const VESTING_FACTORY_RINKEBY = '0xB93427b83573C8F27a08A909045c3e809610411a';
+export const VESTING_FACTORY_KOVAN = '0xB93427b83573C8F27a08A909045c3e809610411a';
+export const VESTING_FACTORY_FUJI = '0xB93427b83573C8F27a08A909045c3e809610411a';
+
 // LIVE
 export const FACTORY_AVALANCHE = '0x7d507b4c2d7e54da5731f643506996da8525f4a3';
 export const FACTORY_POLYGON = '0xde1C04855c2828431ba637675B6929A684f84C7F';
@@ -16,6 +20,15 @@ export const FACTORY_ARBITRUM = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_BSC = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_XDAI = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_METER = '0x7671079fBcd0BE5d7623B77021963a7c024fdA00';
+
+export const VESTING_FACTORY_AVALANCHE = '0xB93427b83573C8F27a08A909045c3e809610411a';
+export const VESTING_FACTORY_POLYGON = '0xB93427b83573C8F27a08A909045c3e809610411a';
+export const VESTING_FACTORY_FANTOM = '0xB93427b83573C8F27a08A909045c3e809610411a';
+export const VESTING_FACTORY_MAINNET = '0xB93427b83573C8F27a08A909045c3e809610411a';
+export const VESTING_FACTORY_OPTIMISM = '0xB93427b83573C8F27a08A909045c3e809610411a';
+export const VESTING_FACTORY_ARBITRUM = '0xB93427b83573C8F27a08A909045c3e809610411a';
+export const VESTING_FACTORY_BSC = '0xB93427b83573C8F27a08A909045c3e809610411a';
+export const VESTING_FACTORY_XDAI = '0xB93427b83573C8F27a08A909045c3e809610411a';
 
 export const MAINNET_ENS_RESOLVER = '0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C';
 
@@ -39,6 +52,7 @@ interface INetworkDetails {
     prefix: string;
     logoURI: string;
     tokenListId?: string;
+    vestingFactory: string;
   };
 }
 
@@ -69,6 +83,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerName: 'Etherscan',
     prefix: 'ethereum',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
+    vestingFactory: VESTING_FACTORY_RINKEBY,
   },
   42: {
     rpcUrl: `https://kovan.infura.io/v3/${infuraId}`,
@@ -84,6 +99,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerName: 'Etherscan',
     prefix: 'ethereum',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
+    vestingFactory: VESTING_FACTORY_KOVAN,
   },
   43113: {
     rpcUrl: 'https://api.avax-test.network/ext/bc/C/rpc',
@@ -95,6 +111,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerName: 'Snowtrace',
     prefix: 'avax',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchex/info/logo.png',
+    vestingFactory: VESTING_FACTORY_FUJI,
   },
   43114: {
     rpcUrl: 'https://api.avax.network/ext/bc/C/rpc',
@@ -107,6 +124,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'avax',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchex/info/logo.png',
     tokenListId: 'avalanche',
+    vestingFactory: VESTING_FACTORY_AVALANCHE,
   },
   137: {
     rpcUrl: 'https://polygon-rpc.com/',
@@ -119,6 +137,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'polygon',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/polygon/info/logo.png',
     tokenListId: 'polygon-pos',
+    vestingFactory: VESTING_FACTORY_POLYGON,
   },
   250: {
     rpcUrl: 'https://rpc.ftm.tools/',
@@ -131,6 +150,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'fantom',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/fantom/info/logo.png',
     tokenListId: 'fantom',
+    vestingFactory: VESTING_FACTORY_FANTOM,
   },
   1: {
     rpcUrl: 'https://rpc.ankr.com/eth',
@@ -143,6 +163,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'ethereum',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
     tokenListId: 'ethereum',
+    vestingFactory: VESTING_FACTORY_MAINNET,
   },
   10: {
     rpcUrl: 'https://mainnet.optimism.io',
@@ -155,6 +176,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'optimism',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/optimism/info/logo.png',
     tokenListId: 'optimistic-ethereum',
+    vestingFactory: VESTING_FACTORY_OPTIMISM,
   },
   42161: {
     rpcUrl: 'https://rpc.ankr.com/arbitrum',
@@ -167,6 +189,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'arbitrum',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/arbitrum/info/logo.png',
     tokenListId: 'arbitrum-one',
+    vestingFactory: VESTING_FACTORY_ARBITRUM,
   },
   56: {
     rpcUrl: 'https://bsc-dataseed.binance.org',
@@ -179,6 +202,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'bsc',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png',
     tokenListId: 'binance-smart-chain',
+    vestingFactory: VESTING_FACTORY_BSC,
   },
   100: {
     rpcUrl: 'https://xdai-rpc.gateway.pokt.network',
@@ -191,6 +215,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'xdai',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/xdai/info/logo.png',
     tokenListId: 'xdai',
+    vestingFactory: VESTING_FACTORY_XDAI,
   },
   82: {
     rpcUrl: 'https://rpc.meter.io',
@@ -208,7 +233,7 @@ export const networkDetails: INetworkDetails = {
 
 export const defaultChains: Chain[] = allChains.filter(
   (chain) =>
-    chain.name === 'Rinkeby' ||
+    //chain.name === 'Rinkeby' ||
     chain.name === 'Kovan' ||
     chain.name === 'Avalanche Fuji Testnet' ||
     chain.name === 'Avalanche Mainnet' ||
@@ -291,7 +316,7 @@ export const chains: Chain[] = [
 ];
 
 export const secondsByDuration: ISecondsByDuration = {
-  week: 604800,
-  month: 2592000,
-  year: 31104000,
+  week: 7 * 24 * 60 * 60,
+  month: 30 * 24 * 60 * 60,
+  year: 365 * 24 * 60 * 60,
 };

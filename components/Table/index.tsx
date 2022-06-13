@@ -1,5 +1,6 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
 import { TableInstance } from '@tanstack/react-table';
+import { DisclosureState } from 'ariakit';
 import classNames from 'classnames';
 import { useTranslations } from 'next-intl';
 
@@ -8,9 +9,10 @@ interface ITableProps {
   maxWidthColumn?: number;
   hidePagination?: boolean;
   downloadToCSV?: () => void;
+  customHistory?: DisclosureState;
 }
 
-const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV }: ITableProps) => {
+const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV, customHistory }: ITableProps) => {
   const totalRows = instance.getCoreRowModel().rows.length;
 
   const currentRows = instance.getRowModel().rows;
@@ -65,11 +67,22 @@ const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV }: ITab
         <div className={hidePagination ? 'h-4' : 'h-2'} />
         <div className="flex w-full flex-col gap-2 sm:flex-row sm:justify-between sm:gap-5">
           <div className="flex flex-1 items-center justify-between gap-2">
-            {downloadToCSV && (
-              <button className="bg-none text-xs text-[#303030] underline dark:text-white" onClick={downloadToCSV}>
-                {t('exportCSV')}
-              </button>
-            )}
+            <div className="flex gap-2">
+              {downloadToCSV && (
+                <button className="bg-none text-xs text-[#303030] underline dark:text-white" onClick={downloadToCSV}>
+                  {t('exportCSV')}
+                </button>
+              )}
+              {customHistory && (
+                <button
+                  className="bg-none text-xs text-[#303030] underline dark:text-white"
+                  onClick={customHistory.toggle}
+                >
+                  {'Custom Export'}
+                </button>
+              )}
+            </div>
+
             {!hidePagination && (
               <label className="flex items-center space-x-1">
                 <span className="text-xs text-[rgba(0,0,0,0.54)] dark:text-white">{`${t('rowsPerPage')}:`}</span>

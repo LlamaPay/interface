@@ -1,4 +1,12 @@
-import { BookOpenIcon, LibraryIcon, MoonIcon, PlayIcon, SunIcon } from '@heroicons/react/outline';
+import {
+  BookOpenIcon,
+  ChartPieIcon,
+  LibraryIcon,
+  MoonIcon,
+  PlayIcon,
+  SunIcon,
+  TerminalIcon,
+} from '@heroicons/react/outline';
 import { DisclosureState } from 'ariakit';
 import { Menu, MenuItem } from 'components/NestedMenu';
 import { useIsMounted, useLocale, useWindowSize } from 'hooks';
@@ -9,6 +17,7 @@ import { chainDetails } from 'utils/network';
 import { useAccount, useNetwork } from 'wagmi';
 import defaultImage from 'public/empty-token.webp';
 import { useTheme } from 'next-themes';
+import Link from 'next/link';
 
 export default function HeaderMenu({
   onboardDialog,
@@ -86,7 +95,7 @@ export default function HeaderMenu({
                   <div className="flex items-center gap-2">
                     <div className="flex h-5 w-5 items-center rounded-full">
                       <Image
-                        src={network.logoURI || defaultImage}
+                        src={network?.logoURI ?? defaultImage}
                         alt={t('logoAlt', { name: value.name })}
                         objectFit="contain"
                         width="20px"
@@ -114,9 +123,25 @@ export default function HeaderMenu({
         onClick={onboardDialog.toggle}
       />
 
+      <MenuItem
+        label={
+          <Link passHref href="/vesting">
+            <div className="flex w-full items-center justify-between gap-4 font-normal">
+              <span className="cursor-pointer">Vesting</span>
+              <ChartPieIcon className="h-4 w-4" />
+            </div>
+          </Link>
+        }
+      />
+
       <Menu label={t2('language')}>
         {locales.map((locale) => (
-          <MenuItem style={{cursor:"pointer"}} label={locale.name} key={locale.id} onClick={() => updateLocale(locale.id)} />
+          <MenuItem
+            style={{ cursor: 'pointer' }}
+            label={locale.name}
+            key={locale.id}
+            onClick={() => updateLocale(locale.id)}
+          />
         ))}
       </Menu>
 
@@ -144,6 +169,20 @@ export default function HeaderMenu({
           >
             <span>Gnosis Safe</span>
             <LibraryIcon className="h-4 w-4" />
+          </a>
+        }
+      />
+
+      <MenuItem
+        label={
+          <a
+            href="https://github.com/banteg/ape-llamapay"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="flex w-full items-center justify-between gap-4 font-normal"
+          >
+            <span>Ape SDK</span>
+            <TerminalIcon className="h-4 w-4" />
           </a>
         }
       />

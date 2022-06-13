@@ -1,18 +1,21 @@
 import { useNetworkProvider } from 'hooks';
 import { useTranslations } from 'next-intl';
+import { BeatLoader } from 'react-spinners';
 import { useAccount } from 'wagmi';
 
 interface FallbackProps {
   isLoading?: boolean;
   isError: boolean;
   noData: boolean;
-  type: 'streams' | 'history' | 'balances' | 'payeesList';
-  supressWalletConnection?: boolean
+  type: 'streams' | 'history' | 'balances' | 'payeesList' | 'vestingStreams';
+  showLoader?: boolean;
+  supressWalletConnection?: boolean;
 }
 
-const Fallback = ({ isLoading, isError, noData, type, supressWalletConnection}: FallbackProps) => {
+const Fallback = ({ isLoading, isError, noData, type, supressWalletConnection, showLoader }: FallbackProps) => {
   const [{ data: basicAccountData }] = useAccount();
-  const accountData = supressWalletConnection === true || basicAccountData !== undefined
+
+  const accountData = supressWalletConnection === true || basicAccountData !== undefined;
 
   const { unsupported } = useNetworkProvider();
   const t0 = useTranslations('Common');
@@ -46,12 +49,27 @@ const Fallback = ({ isLoading, isError, noData, type, supressWalletConnection}: 
       emptyDataMessage = t4('noData');
       defaultMessage = !accountData ? t4('connectWallet') : unsupported ? t0('networkNotSupported') : null;
       break;
+    case 'vestingStreams':
+      errorMessage = t0('error');
+      emptyDataMessage = 'Create a Vesting Contract to see a list of your streams';
+      defaultMessage = !accountData
+        ? 'Connect Wallet to see your vesting streams'
+        : unsupported
+        ? t0('networkNotSupported')
+        : null;
+      break;
   }
+
+  const loader = showLoader ? (
+    <span className="relative top-[2px]">
+      <BeatLoader size={6} />
+    </span>
+  ) : null;
 
   return (
     <div className="flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
       {defaultMessage ||
-        (isLoading ? null : isError ? <p>{errorMessage}</p> : noData ? <p>{emptyDataMessage}</p> : null)}
+        (isLoading ? loader : isError ? <p>{errorMessage}</p> : noData ? <p>{emptyDataMessage}</p> : null)}
     </div>
   );
 };

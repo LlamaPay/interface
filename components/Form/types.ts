@@ -8,6 +8,7 @@ export interface InputElement {
   handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   placeholder?: string;
   optional?: boolean;
+  pattern?: string;
 }
 
 export interface InputWithTokenElement extends InputElement {
@@ -27,4 +28,6 @@ export interface InputAmountWithDaysProps {
   label: string;
   isRequired: boolean;
   className?: string;
+  handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  handleSelectChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
 }
