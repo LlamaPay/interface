@@ -70,8 +70,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
         const vestingReturnContext = vestingContractInfoResults.results[key].callsReturnContext;
         const recipient = vestingReturnContext[2].returnValues[0].toLowerCase();
         const admin = vestingReturnContext[9].returnValues[0].toLowerCase();
-        if (userAddress.toLowerCase() === recipient || userAddress.toLowerCase() === admin) {
-        }
+        if (userAddress.toLowerCase() !== recipient && userAddress.toLowerCase() !== admin) continue;
         const tokenReturnContext =
           tokenContractCallResults.results[vestingReturnContext[3].returnValues[0]].callsReturnContext;
         results.push({
