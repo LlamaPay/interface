@@ -20,20 +20,38 @@ import { CashIcon } from '@heroicons/react/solid';
 import useBatchCalls from 'queries/useBatchCalls';
 import useGnosisBatch from 'queries/useGnosisBatch';
 import { LlamaContractInterface } from 'utils/contract';
+import { chainDetails } from 'utils/network';
+import defaultImage from 'public/empty-token.webp';
+import Image from 'next/image';
+import { networkDetails } from 'utils/constants';
+import { useRouter } from 'next/router';
 
 interface ICall {
   [key: string]: string[];
 }
 
-const Withdraw: NextPage = () => {
+interface IWithdrawProps {
+  resolvedAddress: string | null;
+}
+
+const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
   const [{ data: accountData }] = useAccount();
   const { unsupported } = useNetworkProvider();
-  const [addressToFetch, setAddressToFetch] = React.useState<string | null>(null);
+  const [addressToFetch, setAddressToFetch] = React.useState<string | null>(resolvedAddress);
+  const [fetchingEns, setFetchingEns] = React.useState(false);
   const { mutate: batchCall } = useBatchCalls();
   const { mutate: gnosisBatch } = useGnosisBatch();
   const { url: chainExplorer } = useChainExplorer();
 
-  const { provider, network } = useNetworkProvider();
+  const router = useRouter();
+
+  const { address } = router.query;
+
+  const { provider, network, chainId } = useNetworkProvider();
+
+  const { network: mainnet } = chainDetails('1');
+
+  const { logoURI } = chainId ? networkDetails[chainId] : { logoURI: null };
 
   // get subgraph endpoint
   const endpoint = useGraphEndpoint();
@@ -55,11 +73,27 @@ const Withdraw: NextPage = () => {
   const t1 = useTranslations('Streams');
   const t2 = useTranslations('Common');
 
-  const fetchStreams = (e: React.FormEvent<HTMLFormElement>) => {
+  const fetchStreams = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    setFetchingEns(true);
+
     const form = e.target as HTMLFormElement & { addressToFetchStreams: { value: string } };
-    setAddressToFetch(form.addressToFetchStreams.value);
-    form.reset();
+
+    try {
+      const userAddress = await mainnet?.chainProviders
+        .resolveName(form.addressToFetchStreams.value)
+        .then((address) => address || form.addressToFetchStreams.value)
+        .catch(() => form.addressToFetchStreams.value);
+
+      setAddressToFetch(userAddress || form.addressToFetchStreams.value);
+    } catch (error) {
+      setAddressToFetch(form.addressToFetchStreams.value);
+    } finally {
+      router.push(`/withdraw?address=${form.addressToFetchStreams.value}`, undefined, { shallow: true });
+      setFetchingEns(false);
+      form.reset();
+    }
   };
 
   const formattedData = useFormatStreamAndHistory({
@@ -95,13 +129,29 @@ const Withdraw: NextPage = () => {
 
   const showFallback = !accountData || unsupported;
 
+  const t = useTranslations('Common');
+
   return (
     <Layout className="app-section mx-auto mt-12 flex w-full flex-col items-center pb-8 dark:bg-[#161818]">
-      <section className="z-2 mx-auto flex w-full max-w-lg flex-col">
-        <h1 className="font-exo mb-5 flex items-center gap-[0.625rem] text-2xl font-semibold text-[#3D3D3D]">
+      <section className="z-2 mx-auto flex w-full max-w-lg flex-col gap-5">
+        <h1 className="font-exo flex items-center gap-[0.625rem] text-2xl font-semibold text-[#3D3D3D]">
           <StreamIcon />
           <span className="dark:text-white">Withdraw on Behalf of Another Wallet</span>
         </h1>
+
+        <div className="mt-[-15px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
+          <div className="flex items-center rounded-full">
+            <Image
+              src={logoURI ?? defaultImage}
+              alt={t('logoAlt', { name: network })}
+              objectFit="contain"
+              width="21px"
+              height="24px"
+            />
+          </div>
+          <p className="truncate whitespace-nowrap">{network}</p>
+        </div>
+
         {showFallback ? (
           <div className="flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
             <p>{!accountData ? t0('connectWallet') : unsupported ? t0('networkNotSupported') : t0('sus')}</p>
@@ -110,7 +160,7 @@ const Withdraw: NextPage = () => {
           <form onSubmit={fetchStreams}>
             <InputText label={t0('addressToFetchStreams')} name="addressToFetchStreams" isRequired />
             <SubmitButton className="mt-5" disabled={isLoading}>
-              {isLoading ? <BeatLoader size={6} color="white" /> : 'Fetch Streams'}
+              {fetchingEns || isLoading ? <BeatLoader size={6} color="white" /> : 'Fetch Streams'}
             </SubmitButton>
           </form>
         )}
@@ -121,15 +171,17 @@ const Withdraw: NextPage = () => {
           <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
             <h2 className="flex flex-wrap items-center gap-[0.625rem] text-[#3D3D3D]">
               <BalanceIcon />
-              <span className="dark:text-white">Streams of</span>
-              <a
-                href={`${chainExplorer}/address/${addressToFetch}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="break-words break-all dark:text-white"
-              >
-                {addressToFetch}
-              </a>
+              <span>
+                <span className="dark:text-white">Streams of</span>{' '}
+                <a
+                  href={`${chainExplorer}/address/${addressToFetch}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="break-words break-all font-medium dark:text-white"
+                >
+                  {address}
+                </a>
+              </span>
             </h2>
 
             <button
@@ -202,11 +254,23 @@ const Withdraw: NextPage = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+export const getServerSideProps: GetServerSideProps = async ({ query, locale }) => {
+  const { address } = query;
+
+  const { network: mainnet } = chainDetails('1');
+
+  const defaultAddress = typeof address === 'string' ? address : null;
+
+  const resolvedAddress = await mainnet?.chainProviders
+    .resolveName(defaultAddress || '')
+    .then((address) => address || defaultAddress)
+    .catch(() => defaultAddress);
+
   // Pass data to the page via props
   return {
     props: {
       messages: (await import(`translations/${locale}.json`)).default,
+      resolvedAddress,
     },
   };
 };

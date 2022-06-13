@@ -14,7 +14,7 @@ export const useNetworkProvider = () => {
 
   let name: string | null = data?.chain?.name ?? null;
 
-  if (pathname === '/streams' && !Number.isNaN(query.chainId)) {
+  if (pathname === '/streams' && !Number.isNaN(Number(query.chainId))) {
     chainId = Number(query.chainId);
     name = networkDetails[chainId]?.blockExplorerName;
   }
