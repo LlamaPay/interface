@@ -6,6 +6,7 @@ import { networkDetails } from 'utils/constants';
 import Link from 'next/link';
 import classNames from 'classnames';
 import { IVesting } from 'types';
+import { useTranslations } from 'next-intl';
 
 export default function VestingTable() {
   const { chainId } = useNetworkProvider();
@@ -53,6 +54,8 @@ interface IAltVestingSectionProps {
 }
 
 export function AltVestingSection({ isLoading, isError, data }: IAltVestingSectionProps) {
+  const t = useTranslations('Streams');
+
   return (
     <section className="w-full">
       <div className="section-header">
@@ -61,9 +64,9 @@ export function AltVestingSection({ isLoading, isError, data }: IAltVestingSecti
       {isLoading || isError || !data || data.length < 1 ? (
         <div className="flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
           {isLoading ? null : isError ? (
-            <p>Error loading Vesting Streams</p>
+            <p>{t('error')}</p>
           ) : !data || data.length < 1 ? (
-            <p>Create a Vesting Stream to see the list</p>
+            <p>{t('noActiveStreams')}</p>
           ) : null}
         </div>
       ) : (
