@@ -51,8 +51,12 @@ const Fallback = ({ isLoading, isError, noData, type, supressWalletConnection, s
       break;
     case 'vestingStreams':
       errorMessage = t0('error');
-      emptyDataMessage = 'Create a Vesting Contract to see a list of your vestings';
-      defaultMessage = !accountData ? 'Connect Wallet' : unsupported ? t0('networkNotSupported') : null;
+      emptyDataMessage = 'Create a Vesting Contract to see a list of your streams';
+      defaultMessage = !accountData
+        ? 'Connect Wallet to see your vesting streams'
+        : unsupported
+        ? t0('networkNotSupported')
+        : null;
       break;
   }
 

@@ -46,7 +46,7 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, resolvedAd
       <section className="app-section">
         <div>
           <div className="section-header ml-0 max-w-fit">
-            <h1 className="font-exo px-2 py-1 text-3xl dark:text-white">{t('streamsAndHistory')}</h1>
+            <h1 className="font-exo px-2 py-1 text-3xl dark:text-white">Salaries</h1>
             {network && (
               <div className="mt-[5px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
                 <div className="flex items-center rounded-full">
@@ -64,7 +64,7 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, resolvedAd
             {address && (
               <div className="mt-[5px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
                 <BalanceIcon />
-                <p className="truncate whitespace-nowrap">
+                <p className="space-x-1 truncate whitespace-nowrap">
                   <span>{address}</span>
                   {address.toLowerCase() !== resolvedAddress.toLowerCase() && (
                     <span className="hidden md:inline-block">{` (${resolvedAddress})`}</span>

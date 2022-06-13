@@ -10,7 +10,8 @@ const Create: NextPage = () => {
   const [{ data: accountData }] = useAccount();
   const { unsupported } = useNetworkProvider();
   const { chainId } = useNetworkProvider();
-  const t = useTranslations('Common');
+
+  const t = useTranslations('CreateStream');
 
   const factory = chainId ? networkDetails[chainId]?.vestingFactory : null;
 
@@ -22,7 +23,7 @@ const Create: NextPage = () => {
         <>
           <span className="font-exo text-2xl font-semibold text-[#3D3D3D] dark:text-white">Set Up Vesting</span>
           <div className="flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
-            <p>{!accountData ? t('connectWallet') : unsupported ? t('networkNotSupported') : t('error')}</p>
+            <p>{!accountData ? t('connectWallet') : unsupported ? t('notSupported') : t('sus')}</p>
           </div>
         </>
       )}

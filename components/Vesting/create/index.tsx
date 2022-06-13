@@ -198,7 +198,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
           <span className="font-exo">{'Include Cliff'}</span>
           <Switch
             checked={formData.includeCliff}
-            onChange={(value) => {
+            onChange={(value: boolean) => {
               handleChange(value, 'includeCliff');
               if (!value) {
                 handleChange('', 'cliffTime');
@@ -217,7 +217,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
           <span className="font-exo">{`Custom Start`}</span>
           <Switch
             checked={formData.includeCustomStart}
-            onChange={(value) => {
+            onChange={(value: boolean) => {
               handleChange(value, 'includeCustomStart');
 
               if (!value) {
@@ -265,7 +265,11 @@ interface IChartProps {
   includeCliff: boolean;
 }
 
-const Fallback = () => <p className="font-sm mt-6 text-center text-red-500">Enter valid data to view chart</p>;
+const Fallback = () => (
+  <div className="mt-6 flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
+    <p className="text-center">Enter valid data to view chart</p>
+  </div>
+);
 
 const isValidDate = (date: string) => new Date(date).toString() !== 'Invalid Date';
 
@@ -279,13 +283,17 @@ const Chart = ({
   includeCustomStart,
   includeCliff,
 }: IChartProps) => {
+  const vesAmount = Number(vestedAmount);
+  const vesTime = Number(vestingTime);
+  const clfTime = Number(cliffTime);
+
   if (
     vestedAmount === '' ||
-    Number.isNaN(vestedAmount) ||
+    Number.isNaN(vesAmount) ||
     vestingTime === '' ||
-    Number.isNaN(vestingTime) ||
+    Number.isNaN(vesTime) ||
     vestingDuration === '' ||
-    (includeCliff && Number.isNaN(cliffTime)) ||
+    (includeCliff && Number.isNaN(clfTime)) ||
     (includeCustomStart && (startDate === '' || !isValidDate(startDate)))
   ) {
     return <Fallback />;
