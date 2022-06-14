@@ -77,7 +77,7 @@ const Fallback = ({ isLoading, isError, noData, type, supressWalletConnection, s
 
 export function FallbackContainer({ children }: { children: React.ReactNode }) {
   return (
-    <div className="flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
+    <div className="flex min-h-[3.5rem] w-full items-center justify-center break-all rounded border border-dashed border-[#626262] px-3 text-xs font-semibold">
       {children}
     </div>
   );
