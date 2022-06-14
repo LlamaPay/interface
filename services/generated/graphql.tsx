@@ -1134,6 +1134,14 @@ export type UserStreamFragment = { __typename?: 'Stream', streamId: any, active:
 
 export type UserHistoryFragment = { __typename?: 'HistoryEvent', txHash: any, eventType: string, amount?: any | null, createdTimestamp: any, users: Array<{ __typename?: 'User', id: string }>, stream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number, symbol: string } } | null, oldStream?: { __typename?: 'Stream', streamId: any, amountPerSec: any, createdTimestamp: any, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, symbol: string } } | null, token: { __typename?: 'Token', symbol: string, decimals: number } };
 
+export type StreamByIdQueryVariables = Exact<{
+  id: Scalars['Bytes'];
+  network: Scalars['String'];
+}>;
+
+
+export type StreamByIdQuery = { __typename?: 'Query', streams: Array<{ __typename?: 'Stream', streamId: any, active: boolean, reason?: string | null, paused: boolean, pausedAmount: any, lastPaused: any, amountPerSec: any, createdTimestamp: any, contract: { __typename?: 'LlamaPayContract', address: any }, payer: { __typename?: 'User', id: string }, payee: { __typename?: 'User', id: string }, token: { __typename?: 'Token', address: any, name: string, decimals: number, symbol: string }, historicalEvents: Array<{ __typename?: 'HistoryEvent', eventType: string, txHash: any, createdTimestamp: any }> }> };
+
 export const UserStreamFragmentDoc = `
     fragment UserStream on Stream {
   streamId
@@ -1275,3 +1283,28 @@ useStreamAndHistoryQuery.getKey = (variables: StreamAndHistoryQueryVariables) =>
 ;
 
 useStreamAndHistoryQuery.fetcher = (dataSource: { endpoint: string, fetchParams?: RequestInit }, variables: StreamAndHistoryQueryVariables) => fetcher<StreamAndHistoryQuery, StreamAndHistoryQueryVariables>(dataSource.endpoint, dataSource.fetchParams || {}, StreamAndHistoryDocument, variables);
+export const StreamByIdDocument = `
+    query StreamById($id: Bytes!, $network: String!) {
+  streams(where: {streamId: $id}) {
+    ...UserStream
+  }
+}
+    ${UserStreamFragmentDoc}`;
+export const useStreamByIdQuery = <
+      TData = StreamByIdQuery,
+      TError = unknown
+    >(
+      dataSource: { endpoint: string, fetchParams?: RequestInit },
+      variables: StreamByIdQueryVariables,
+      options?: UseQueryOptions<StreamByIdQuery, TError, TData>
+    ) =>
+    useQuery<StreamByIdQuery, TError, TData>(
+      ['StreamById', variables],
+      fetcher<StreamByIdQuery, StreamByIdQueryVariables>(dataSource.endpoint, dataSource.fetchParams || {}, StreamByIdDocument, variables),
+      options
+    );
+
+useStreamByIdQuery.getKey = (variables: StreamByIdQueryVariables) => ['StreamById', variables];
+;
+
+useStreamByIdQuery.fetcher = (dataSource: { endpoint: string, fetchParams?: RequestInit }, variables: StreamByIdQueryVariables) => fetcher<StreamByIdQuery, StreamByIdQueryVariables>(dataSource.endpoint, dataSource.fetchParams || {}, StreamByIdDocument, variables);
