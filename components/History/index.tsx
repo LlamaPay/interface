@@ -1,6 +1,6 @@
 import * as React from 'react';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
-import Fallback from 'components/FallbackList';
+import Fallback, { FallbackContainer } from 'components/Fallback';
 import { HistoryIcon } from 'components/Icons';
 import { HistoryTable } from './Table';
 import { IStreamAndHistory } from 'types';
@@ -49,13 +49,13 @@ export function AltHistorySection({
         </span>
       </div>
       {isLoading || isError || !data?.history || data.history?.length < 1 ? (
-        <div className="flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
+        <FallbackContainer>
           {isLoading ? null : isError ? (
             <p>{t('error')}</p>
           ) : !data?.history || data.history?.length < 1 ? (
             <p>{t('noHistoricalData')}</p>
           ) : null}
-        </div>
+        </FallbackContainer>
       ) : (
         <HistoryTable data={data.history} />
       )}

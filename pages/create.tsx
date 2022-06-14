@@ -7,6 +7,7 @@ import { useNetworkProvider } from 'hooks';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { StreamIcon } from 'components/Icons';
 import { useTranslations } from 'next-intl';
+import { FallbackContainer } from 'components/Fallback';
 
 const Create: NextPage = () => {
   const [{ data: accountData }] = useAccount();
@@ -25,9 +26,9 @@ const Create: NextPage = () => {
             <StreamIcon />
             <span>{t('createANewStream')}</span>
           </h1>
-          <div className="flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
+          <FallbackContainer>
             <p>{!accountData ? t('connectWallet') : unsupported ? t('notSupported') : t('sus')}</p>
-          </div>
+          </FallbackContainer>
         </section>
       ) : (
         <CreateStream />

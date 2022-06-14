@@ -1,3 +1,4 @@
+import { FallbackContainer } from 'components/Fallback';
 import Layout from 'components/Layout';
 import CreateVesting from 'components/Vesting/create';
 import { useNetworkProvider } from 'hooks';
@@ -22,9 +23,9 @@ const Create: NextPage = () => {
       ) : (
         <>
           <span className="font-exo text-2xl font-semibold text-[#3D3D3D] dark:text-white">Set Up Vesting</span>
-          <div className="flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
+          <FallbackContainer>
             <p>{!accountData ? t('connectWallet') : unsupported ? t('notSupported') : t('sus')}</p>
-          </div>
+          </FallbackContainer>
         </>
       )}
     </Layout>

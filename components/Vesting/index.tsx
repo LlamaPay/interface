@@ -1,4 +1,4 @@
-import Fallback from 'components/FallbackList';
+import Fallback, { FallbackContainer } from 'components/Fallback';
 import useGetVestingInfo from 'queries/useGetVestingInfo';
 import Table from './Table';
 import { useNetworkProvider } from 'hooks';
@@ -62,13 +62,13 @@ export function AltVestingSection({ isLoading, isError, data }: IAltVestingSecti
         <h1 className="font-exo dark:text-white">Streams</h1>
       </div>
       {isLoading || isError || !data || data.length < 1 ? (
-        <div className="flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
+        <FallbackContainer>
           {isLoading ? null : isError ? (
             <p>{t('error')}</p>
           ) : !data || data.length < 1 ? (
             <p>{t('noActiveStreams')}</p>
           ) : null}
-        </div>
+        </FallbackContainer>
       ) : (
         <Table data={data} />
       )}

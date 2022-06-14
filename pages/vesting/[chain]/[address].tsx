@@ -11,6 +11,8 @@ import { useTranslations } from 'next-intl';
 import { useGetVestingInfoByQueryParams } from 'queries/useGetVestingInfo';
 import { useNetworkProvider } from 'hooks';
 import { AltVestingSection } from 'components/Vesting';
+import { FallbackContainer } from 'components/Fallback';
+import { useRouter } from 'next/router';
 
 interface StreamsProps {
   subgraphEndpoint: string;
@@ -24,6 +26,8 @@ interface StreamsProps {
 const Streams: NextPage<StreamsProps> = ({ address, resolvedAddress, network, chainId, logoURI }) => {
   const t = useTranslations('Common');
 
+  const { query } = useRouter();
+
   const { provider } = useNetworkProvider();
 
   const { data, isLoading, error } = useGetVestingInfoByQueryParams({ address: resolvedAddress, provider, chainId });
@@ -34,20 +38,20 @@ const Streams: NextPage<StreamsProps> = ({ address, resolvedAddress, network, ch
         <div>
           <div className="section-header ml-0 max-w-fit">
             <h1 className="font-exo px-0 py-1 text-3xl dark:text-white">Vesting</h1>
-            {network && (
-              <div className="mt-[5px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
-                <div className="flex items-center rounded-full">
-                  <Image
-                    src={logoURI || defaultImage}
-                    alt={t('logoAlt', { name: network })}
-                    objectFit="contain"
-                    width="21px"
-                    height="24px"
-                  />
-                </div>
-                <p className="truncate whitespace-nowrap">{network}</p>
+
+            <div className="mt-[5px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
+              <div className="flex items-center rounded-full">
+                <Image
+                  src={logoURI || defaultImage}
+                  alt={network ? t('logoAlt', { name: network }) : 'Fallback Logo'}
+                  objectFit="contain"
+                  width="21px"
+                  height="24px"
+                />
               </div>
-            )}
+              <p className="truncate whitespace-nowrap">{network || query.chain}</p>
+            </div>
+
             {address && (
               <div className="mt-[5px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
                 <BalanceIcon />
@@ -63,9 +67,17 @@ const Streams: NextPage<StreamsProps> = ({ address, resolvedAddress, network, ch
         </div>
       </section>
 
-      <section className="app-section flex h-full flex-1 flex-col gap-[50px] bg-[#D9F2F4]/10 py-[22px] dark:bg-[#161818]">
-        <AltVestingSection isLoading={isLoading} isError={error ? true : false} data={data} />
-      </section>
+      {network ? (
+        <section className="app-section flex h-full flex-1 flex-col gap-[50px] bg-[#D9F2F4]/10 py-[22px] dark:bg-[#161818]">
+          <AltVestingSection isLoading={isLoading} isError={error ? true : false} data={data} />
+        </section>
+      ) : (
+        <section className="app-section">
+          <FallbackContainer>
+            <p>{t('networkNotSupported')}</p>
+          </FallbackContainer>
+        </section>
+      )}
     </Layout>
   );
 };
@@ -105,7 +117,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
       subgraphEndpoint: network?.subgraphEndpoint ?? '',
       address,
       resolvedAddress: userAddress?.toLowerCase(),
-      network: c?.name ?? '',
+      network: c?.name ?? null,
       chainId: c?.id ?? null,
       logoURI: network?.logoURI ?? defaultImage,
       dehydratedState: dehydrate(queryClient),

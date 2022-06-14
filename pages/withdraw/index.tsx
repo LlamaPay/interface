@@ -25,6 +25,7 @@ import defaultImage from 'public/empty-token.webp';
 import Image from 'next/image';
 import { networkDetails } from 'utils/constants';
 import { useRouter } from 'next/router';
+import { FallbackContainer } from 'components/Fallback';
 
 interface ICall {
   [key: string]: string[];
@@ -153,9 +154,9 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
         </div>
 
         {showFallback ? (
-          <div className="flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
+          <FallbackContainer>
             <p>{!accountData ? t0('connectWallet') : unsupported ? t0('networkNotSupported') : t0('sus')}</p>
-          </div>
+          </FallbackContainer>
         ) : (
           <form onSubmit={fetchStreams}>
             <InputText label={t0('addressToFetchStreams')} name="addressToFetchStreams" isRequired />
@@ -195,9 +196,9 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
           </div>
 
           {isError || !formattedData.streams ? (
-            <div className="flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
+            <FallbackContainer>
               <p>{!formattedData.streams ? t0('noData') : isError ? t0('error') : t0('sus')}</p>
-            </div>
+            </FallbackContainer>
           ) : (
             <div className="overflow-x-auto">
               <table>
