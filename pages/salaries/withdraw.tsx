@@ -21,9 +21,10 @@ interface ClaimPageProps {
   network: string | null;
   subgraphEndpoint: string;
   logoURI: StaticImageData;
+  chainExplorer: string | null;
 }
 
-const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, logoURI }) => {
+const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, logoURI, chainExplorer }) => {
   const { data, isLoading, isError } = useStreamByIdQuery(
     {
       endpoint: subgraphEndpoint,
@@ -63,7 +64,14 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
                   <BalanceIcon />
                 </Tooltip>
               </span>
-              <span className="relative left-[30px]">{payeeEns || stream?.payee?.id}</span>
+              <a
+                href={chainExplorer ? `${chainExplorer}/address/${stream?.payee?.id}` : '/'}
+                className="relative left-[30px]"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                {payeeEns || stream?.payee?.id}
+              </a>
             </p>
           </div>
         )}
@@ -153,6 +161,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
     props: {
       streamId: id,
       network: c?.name ?? null,
+      chainExplorer: c?.blockExplorers ? c.blockExplorers[0].url : null,
       subgraphEndpoint: network?.subgraphEndpoint ?? '',
       logoURI: network?.logoURI ?? defaultImage,
       dehydratedState: dehydrate(queryClient),
