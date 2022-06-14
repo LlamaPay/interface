@@ -152,8 +152,8 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
 
             <label>
               <span className="input-label">
-                <span className="dark:text-white">{t1('associateName')}</span>
-                <small className="mx-2 text-neutral-500 ">{`(${t1('optional')})`}</small>
+                <span className="mr-1 dark:text-white">{t1('associateName')}</span>
+                <small className="text-neutral-500 ">{`(${t1('optional')})`}</small>
               </span>
               <input
                 placeholder={t1('fastIdentification')}
