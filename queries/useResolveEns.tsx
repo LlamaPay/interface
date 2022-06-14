@@ -62,6 +62,17 @@ async function resolveEns(data: StreamAndHistoryQuery | undefined, address: stri
   }
 }
 
+const { network: mainnet } = chainDetails('1');
+
+async function fetchEns(address: string) {
+  const userAddress = await mainnet?.chainProviders
+    .lookupAddress(address)
+    .then((ens) => ens || address)
+    .catch(() => address);
+
+  return userAddress;
+}
+
 export default function useResolveEns({
   data,
   userAddress,
@@ -79,14 +90,5 @@ export default function useResolveEns({
 export function useGetEns(address: string) {
   const { chainId } = useNetworkProvider();
 
-  return useQuery(['ensAdressOf', address, chainId], async () => {
-    const { network: mainnet } = chainDetails('1');
-
-    const userAddress = await mainnet?.chainProviders
-      .resolveName(address)
-      .then((address) => address || address)
-      .catch(() => address);
-
-    return userAddress;
-  });
+  return useQuery(['ensAdressOf', address, chainId], () => fetchEns(address));
 }
