@@ -5,8 +5,9 @@ import { useQuery } from 'react-query';
 import { StreamAndHistoryQuery } from 'services/generated/graphql';
 import { MAINNET_ENS_RESOLVER, networkDetails } from 'utils/constants';
 import mainnetResolver from 'abis/mainnetResolver';
+import { chainDetails } from 'utils/network';
 
-interface IEnsResolve {
+export interface IEnsResolve {
   [key: string]: string | null;
 }
 
@@ -61,6 +62,17 @@ async function resolveEns(data: StreamAndHistoryQuery | undefined, address: stri
   }
 }
 
+const { network: mainnet } = chainDetails('1');
+
+async function fetchEns(address: string) {
+  const userAddress = await mainnet?.chainProviders
+    .lookupAddress(address)
+    .then((ens) => ens || address)
+    .catch(() => address);
+
+  return userAddress;
+}
+
 export default function useResolveEns({
   data,
   userAddress,
@@ -73,4 +85,10 @@ export default function useResolveEns({
   return useQuery<IEnsResolve | null>(['ensAddresses', userAddress, chainId, data ? true : false], () =>
     resolveEns(data, userAddress)
   );
+}
+
+export function useGetEns(address: string) {
+  const { chainId } = useNetworkProvider();
+
+  return useQuery(['ensAdressOf', address, chainId], () => fetchEns(address));
 }

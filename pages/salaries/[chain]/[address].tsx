@@ -33,7 +33,7 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, resolvedAd
       network: network,
     },
     {
-      refetchInterval: network ? 10000 : false,
+      refetchInterval: network ? 20000 : false,
     }
   );
 

@@ -162,6 +162,22 @@
     padding-bottom: 5px;
   }
 
+  .claim-amount > * {
+    @apply !text-3xl;
+  }
+
+  .claim-amount .animate-shimmer {
+    @apply !h-[36px];
+  }
+
+  .claim-amount svg {
+    @apply !hidden;
+  }
+
+  .claim-button > * {
+    @apply form-submit-button mt-8 text-base no-underline;
+  }
+
   @media (max-width: 360px) {
     .balance-wrap {
       flex-direction: column !important;
