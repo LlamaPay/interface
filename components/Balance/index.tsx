@@ -10,7 +10,7 @@ import { BalanceAndSymbol } from './BalanceAndSymbol';
 import { UntilDepleted } from './UntilDepleted';
 import { MonthlyCost } from './MonthlyCost';
 import Image from 'next/image';
-import Fallback from 'components/FallbackList';
+import Fallback from 'components/Fallback';
 import { BalanceIcon } from 'components/Icons';
 import { useAccount } from 'wagmi';
 import useTokenBalances from 'queries/useTokenBalances';

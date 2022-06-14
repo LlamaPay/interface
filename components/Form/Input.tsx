@@ -32,8 +32,8 @@ export const InputText = ({ name, label, isRequired, className, optional, handle
   return (
     <label>
       <span className="input-label">
-        <span>{label}</span>
-        {optional && <small className="mx-2 text-neutral-500">{`(${t('optional')})`}</small>}
+        <span className="mr-2">{label}</span>
+        {optional && <small className="text-neutral-500">{`(${t('optional')})`}</small>}
       </span>
       <input
         className={classNames('input-field', className)}

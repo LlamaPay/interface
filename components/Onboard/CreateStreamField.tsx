@@ -58,7 +58,7 @@ const Form = ({
           placeholder={t0('recipientAddress')}
         />
 
-        <div>
+        <span>
           <InputText
             name="shortName"
             isRequired={false}
@@ -66,13 +66,14 @@ const Form = ({
             placeholder={t0('fastIdentification')}
             optional
           />
-          <div className="flex space-x-1">
-            <ExclamationCircleIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+          <span className="mt-1 flex space-x-1">
+            <ExclamationCircleIcon className="h-4 w-4 flex-shrink-0 text-gray-500 dark:text-gray-400" />
             <span className="text-[11px] text-gray-500 dark:text-gray-400">
-              {`Names are only stored in the local storage of your device.`}
+              Names are only stored in the local storage of your device.
             </span>
-          </div>
-        </div>
+          </span>
+        </span>
+
         <span>
           <SelectToken
             handleTokenChange={handleTokenChange}
@@ -82,12 +83,20 @@ const Form = ({
           />
         </span>
 
-        <InputAmountWithDuration
-          name="amountToStream"
-          isRequired={true}
-          label={t0('amountToStream')}
-          selectInputName="streamDuration"
-        />
+        <span>
+          <InputAmountWithDuration
+            name="amountToStream"
+            isRequired={true}
+            label={t0('amountToStream')}
+            selectInputName="streamDuration"
+          />
+          <span className="mt-1 flex space-x-1">
+            <ExclamationCircleIcon className="h-4 w-4 flex-shrink-0 text-gray-500 dark:text-gray-400" />
+            <span className="text-[11px] text-gray-500 dark:text-gray-400">
+              Streams have an arbitrary duration and they can be cancelled at any time.
+            </span>
+          </span>
+        </span>
 
         <SubmitButton disabled={confirmingStream}>
           {confirmingStream ? <BeatLoader size={6} color="white" /> : t0('createStream')}

@@ -152,8 +152,8 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
 
             <label>
               <span className="input-label">
-                <span className="dark:text-white">{t1('associateName')}</span>
-                <small className="mx-2 text-neutral-500 ">{`(${t1('optional')})`}</small>
+                <span className="mr-1 dark:text-white">{t1('associateName')}</span>
+                <small className="text-neutral-500 ">{`(${t1('optional')})`}</small>
               </span>
               <input
                 placeholder={t1('fastIdentification')}
@@ -164,12 +164,12 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                 type="text"
                 spellCheck="false"
               />
-              <div className="flex space-x-1 pt-1">
-                <ExclamationCircleIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+              <span className="mt-1 flex space-x-1">
+                <ExclamationCircleIcon className="h-4 w-4 flex-shrink-0 text-gray-500 dark:text-gray-400" />
                 <span className="text-[11px] text-gray-500 dark:text-gray-400">
-                  {`Names are only stored in the local storage of your device.`}
+                  Names are only stored in the local storage of your device.
                 </span>
-              </div>
+              </span>
             </label>
 
             <span>
@@ -194,6 +194,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                 <label htmlFor={`stream-amount-${index}`} className="input-label dark:text-white">
                   {t1('amountToStream')}
                 </label>
+
                 <div className="relative flex">
                   <input
                     placeholder="0.0"
@@ -224,12 +225,12 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                     <option value="year">{t0('year')}</option>
                   </select>
                 </div>
-                <div className="flex space-x-1 pt-1">
-                  <ExclamationCircleIcon className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                <span className="mt-1 flex space-x-1">
+                  <ExclamationCircleIcon className="h-4 w-4 flex-shrink-0 text-gray-500 dark:text-gray-400" />
                   <span className="text-[11px] text-gray-500 dark:text-gray-400">
-                    {'Streams have an arbitrary duration and they can be cancelled at any time.'}
+                    Streams have an arbitrary duration and they can be cancelled at any time.
                   </span>
-                </div>
+                </span>
               </div>
               {errors?.streams?.[index]?.amountToStream?.type === 'required' && (
                 <p className="mt-1 text-xs text-red-500">{t1('requiredField')}</p>

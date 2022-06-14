@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Link from 'next/link';
-import Fallback from 'components/FallbackList';
+import Fallback, { FallbackContainer } from 'components/Fallback';
 import { StreamIcon } from 'components/Icons';
 import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { StreamTable, DefaultStreamTable } from './Table';
@@ -57,9 +57,9 @@ export function AltStreamSection({
         </span>
       </div>
       {isLoading || isError || !data?.streams || data.streams?.length < 1 ? (
-        <div className="flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
+        <FallbackContainer>
           {isLoading ? null : isError ? <p>{t('error')}</p> : !data?.streams ? <p>{t('noActiveStreams')}</p> : null}
-        </div>
+        </FallbackContainer>
       ) : (
         <DefaultStreamTable data={data.streams} />
       )}

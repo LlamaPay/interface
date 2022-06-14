@@ -15,6 +15,7 @@ import { createERC20Contract } from 'utils/tokenUtils';
 import { getAddress } from 'ethers/lib/utils';
 import { checkApproval, createContractAndCheckApproval } from 'components/Form/utils';
 import dynamic from 'next/dynamic';
+import { FallbackContainer } from 'components/Fallback';
 
 const VestingChart = dynamic(() => import('../Chart'), { ssr: false });
 
@@ -266,9 +267,9 @@ interface IChartProps {
 }
 
 const Fallback = () => (
-  <div className="mt-6 flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
+  <FallbackContainer>
     <p className="text-center">Enter valid data to view chart</p>
-  </div>
+  </FallbackContainer>
 );
 
 const isValidDate = (date: string) => new Date(date).toString() !== 'Invalid Date';

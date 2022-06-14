@@ -1,5 +1,6 @@
 import { useNetworkProvider } from 'hooks';
 import { useTranslations } from 'next-intl';
+import React from 'react';
 import { BeatLoader } from 'react-spinners';
 import { useAccount } from 'wagmi';
 
@@ -67,11 +68,19 @@ const Fallback = ({ isLoading, isError, noData, type, supressWalletConnection, s
   ) : null;
 
   return (
-    <div className="flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
+    <FallbackContainer>
       {defaultMessage ||
         (isLoading ? loader : isError ? <p>{errorMessage}</p> : noData ? <p>{emptyDataMessage}</p> : null)}
-    </div>
+    </FallbackContainer>
   );
 };
+
+export function FallbackContainer({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex h-14 w-full items-center justify-center rounded border border-dashed border-[#626262] text-xs font-semibold">
+      {children}
+    </div>
+  );
+}
 
 export default Fallback;

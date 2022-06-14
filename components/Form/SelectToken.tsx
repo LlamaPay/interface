@@ -91,16 +91,18 @@ export const SelectToken = React.forwardRef<HTMLButtonElement, ISelectTokenProps
       <Select
         state={select}
         className={classNames('input-field flex w-full items-center !py-[0px]', className)}
-        onClick={dialog.toggle}
+        onClick={() => {
+          dialog.toggle();
+          combobox.setVisible(true);
+        }}
         ref={ref}
       >
         {<Token value={select.value} shortName />}
         <SelectArrow className="relative right-[-2px]" />
       </Select>
 
-      {/* use select state as dialog state so that combobox options are displayed */}
       <Dialog
-        state={select}
+        state={dialog}
         className="shadow-2 dark:bg-[#] absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex max-h-[80vh] max-w-lg flex-col overflow-auto rounded bg-white dark:bg-[#333336] sm:left-8 sm:right-8"
       >
         {newTokenForm ? (

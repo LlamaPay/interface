@@ -15,12 +15,13 @@ export default function StreamMenu() {
 
   const { nativeCurrency, unsupported } = useNetworkProvider();
   const [{ data: accountData }] = useAccount();
-  const { chainId } = useNetworkProvider();
+  const { network } = useNetworkProvider();
 
   const [{ data: ensName }] = useEnsLookup({
     address: accountData?.address,
   });
-  const shareableUrl = `/streams?chainId=${chainId}&address=${ensName ?? accountData?.address}`;
+
+  const shareableUrl = `/salaries/${network}/${ensName ?? accountData?.address}`;
   const disperseGasGialog = useDialogState();
 
   const t = useTranslations('Streams');
