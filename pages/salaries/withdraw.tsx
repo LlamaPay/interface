@@ -15,6 +15,12 @@ import { useGetEns } from 'queries/useResolveEns';
 import Tooltip from 'components/Tooltip';
 import { CurrencyDollarIcon } from '@heroicons/react/outline';
 import { secondsByDuration } from 'utils/constants';
+import { Push, TotalStreamed, Withdrawable } from 'components/Stream/Table/CustomValues';
+import { useNetworkProvider } from 'hooks';
+import { formatStream } from 'hooks/useFormatStreamAndHistory';
+import { useNetwork } from 'wagmi';
+import { WalletSelector } from 'components/Web3';
+import { useDialogState } from 'ariakit';
 
 interface ClaimPageProps {
   streamId: string;
@@ -22,9 +28,12 @@ interface ClaimPageProps {
   subgraphEndpoint: string;
   logoURI: StaticImageData;
   chainExplorer: string | null;
+  chainId: number | null;
 }
 
-const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, logoURI, chainExplorer }) => {
+const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, logoURI, chainExplorer, chainId }) => {
+  const [{ data: networkData }, switchNetwork] = useNetwork();
+
   const { data, isLoading, isError } = useStreamByIdQuery(
     {
       endpoint: subgraphEndpoint,
@@ -40,11 +49,16 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
 
   const { query } = useRouter();
 
-  const t = useTranslations('Common');
+  const t0 = useTranslations('Common');
+  const t1 = useTranslations('Streams');
 
   const stream = data && (data.streams[0] || null);
 
   const showFallback = !network || isLoading || isError || !stream;
+
+  const { provider } = useNetworkProvider();
+
+  const formattedStream = stream && provider && formatStream({ stream, address: stream.payee.id, provider });
 
   const { data: payeeEns } = useGetEns(stream?.payee?.id ?? '');
 
@@ -52,10 +66,12 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
 
   const intl = useIntl();
 
+  const walletDailog = useDialogState();
+
   return (
     <Layout className="mt-12 flex w-full flex-col gap-[30px] dark:bg-[#161818]">
       <section className="app-section mx-auto w-full max-w-3xl">
-        <h1 className="font-exo py-1 text-3xl dark:text-white">{t('withdraw')}</h1>
+        <h1 className="font-exo pb-1 text-3xl">Salary</h1>
         {!showFallback && (
           <div className="flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
             <p className="relative flex items-center gap-[0.675rem]">
@@ -80,7 +96,7 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
           <div className="flex items-center rounded-full">
             <Image
               src={logoURI || defaultImage}
-              alt={network ? t('logoAlt', { name: network }) : 'Fallback Logo'}
+              alt={network ? t0('logoAlt', { name: network }) : 'Fallback Logo'}
               objectFit="contain"
               width="21px"
               height="24px"
@@ -92,7 +108,7 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
         {showFallback ? (
           <FallbackContainer>
             {!network ? (
-              <p>{t('networkNotSupported')}</p>
+              <p>{t0('networkNotSupported')}</p>
             ) : isLoading ? (
               <span className="relative top-[2px]">
                 <BeatLoader size={6} />
@@ -113,14 +129,44 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
                     <CurrencyDollarIcon className="h-5 w-5" />
                   </Tooltip>
                 </span>
-                <span>{`${
-                  amountPerMonth && intl.formatNumber(amountPerMonth, { maximumFractionDigits: 5 })
+                <span>{`${amountPerMonth && intl.formatNumber(amountPerMonth, { maximumFractionDigits: 5 })} ${
+                  stream.token.symbol
                 } / month`}</span>
               </p>
             </div>
+            {formattedStream && (
+              <>
+                <h2 className="font-exo mt-8 text-lg text-[#4E575F] dark:text-[#9ca3af]">{t1('totalStreamed')}</h2>
+                <span className="claim-amount">
+                  <TotalStreamed data={formattedStream} />
+                </span>
+                <h2 className="font-exo mt-8 text-lg text-[#4E575F] dark:text-[#9ca3af]">{t1('withdrawable')}</h2>
+                <span className="claim-amount">
+                  <Withdrawable data={formattedStream} />
+                </span>
+                {!networkData.chain ? (
+                  <button className="form-submit-button mt-8" onClick={walletDailog.toggle}>
+                    {t0('connectWallet')}
+                  </button>
+                ) : chainId === networkData.chain?.id ? (
+                  <span className="claim-button">
+                    <Push data={formattedStream} buttonName="Withdraw" />
+                  </span>
+                ) : (
+                  <button
+                    className="form-submit-button mt-8"
+                    disabled={!switchNetwork || chainId === null}
+                    onClick={() => switchNetwork && chainId !== null && switchNetwork(chainId)}
+                  >
+                    Switch Network
+                  </button>
+                )}
+              </>
+            )}
           </>
         )}
       </section>
+      <WalletSelector dialog={walletDailog} />
     </Layout>
   );
 };
@@ -161,6 +207,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
     props: {
       streamId: id,
       network: c?.name ?? null,
+      chainId: c?.id ?? null,
       chainExplorer: c?.blockExplorers ? c.blockExplorers[0].url : null,
       subgraphEndpoint: network?.subgraphEndpoint ?? '',
       logoURI: network?.logoURI ?? defaultImage,

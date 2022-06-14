@@ -7,7 +7,7 @@ import { MAINNET_ENS_RESOLVER, networkDetails } from 'utils/constants';
 import mainnetResolver from 'abis/mainnetResolver';
 import { chainDetails } from 'utils/network';
 
-interface IEnsResolve {
+export interface IEnsResolve {
   [key: string]: string | null;
 }
 

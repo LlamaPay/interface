@@ -23,7 +23,11 @@ export const useNetworkProvider = () => {
     }
   }
 
-  if (pathname === '/salaries/[chain]/[address]' || pathname === '/vesting/[chain]/[address]') {
+  if (
+    pathname === '/salaries/[chain]/[address]' ||
+    pathname === '/salaries/withdraw' ||
+    pathname === '/vesting/[chain]/[address]'
+  ) {
     const chainParam = query.chain;
 
     const isParamChainId = chainParam && !Number.isNaN(Number(chainParam));

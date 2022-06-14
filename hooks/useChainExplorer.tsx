@@ -38,6 +38,7 @@ export const useChainExplorer = () => {
     }
 
     const explorers = network?.chain?.blockExplorers;
+
     return { name: explorers ? explorers[0]?.name ?? null : null, url: explorers ? explorers[0]?.url ?? null : null };
   }, [network, pathname, query]);
 
