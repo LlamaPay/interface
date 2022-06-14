@@ -41,9 +41,9 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
 
   const t = useTranslations('Common');
 
-  const showFallback = !network || isLoading || isError || !data || !data.streams;
+  const stream = data && (data.streams[0] || null);
 
-  const stream = data && data.streams[0];
+  const showFallback = !network || isLoading || isError || !stream;
 
   const { data: payeeEns } = useGetEns(stream?.payee?.id ?? '');
 
@@ -90,7 +90,10 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
                 <BeatLoader size={6} />
               </span>
             ) : (
-              <p>Couldn't find any stream with ID: {query.stream}</p>
+              <p>
+                <span className="font-normal">Couldn't find any stream with ID: </span>
+                {query.stream} <span className="font-normal">on</span> {network}
+              </p>
             )}
           </FallbackContainer>
         ) : (
