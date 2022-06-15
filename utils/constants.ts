@@ -19,7 +19,7 @@ export const FACTORY_OPTIMISM = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_ARBITRUM = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_BSC = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_XDAI = '0xde1C04855c2828431ba637675B6929A684f84C7F';
-export const FACTORY_METER = '0x7671079fBcd0BE5d7623B77021963a7c024fdA00';
+export const FACTORY_METER = '0xc666badd040d5e471d2b77296fef46165ffe5132';
 
 export const VESTING_FACTORY_AVALANCHE = '0xB93427b83573C8F27a08A909045c3e809610411a';
 export const VESTING_FACTORY_POLYGON = '0xB93427b83573C8F27a08A909045c3e809610411a';
@@ -226,8 +226,9 @@ export const networkDetails: INetworkDetails = {
     blockExplorerURL: 'https://scan.meter.io/',
     blockExplorerName: 'Meter Blockchain Explorer',
     prefix: 'meter',
-    logoURI: '',
-    tokenListId: '',
+    logoURI: 'https://assets.coingecko.com/coins/images/11848/large/mtrg-logo.png?1595062273',
+    tokenListId: 'xdai',
+    vestingFactory: '',
   },
 };
 
