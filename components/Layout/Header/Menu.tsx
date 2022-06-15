@@ -1,5 +1,6 @@
 import {
   BookOpenIcon,
+  CashIcon,
   ChartPieIcon,
   LibraryIcon,
   MoonIcon,
@@ -50,6 +51,8 @@ export default function HeaderMenu({
   const size = useWindowSize();
 
   const isSm = size && size.width && size.width < 640;
+
+  const isLg = size && size.width && size.width < 1024;
 
   const t = useTranslations('Common');
 
@@ -123,16 +126,31 @@ export default function HeaderMenu({
         onClick={onboardDialog.toggle}
       />
 
-      <MenuItem
-        label={
-          <Link passHref href="/vesting">
-            <div className="flex w-full items-center justify-between gap-4 font-normal">
-              <span className="cursor-pointer">Vesting</span>
-              <ChartPieIcon className="h-4 w-4" />
-            </div>
-          </Link>
-        }
-      />
+      {isLg && (
+        <MenuItem
+          label={
+            <Link passHref href="/">
+              <div className="flex w-full items-center justify-between gap-4 font-normal">
+                <span className="cursor-pointer">Salaries</span>
+                <CashIcon className="h-4 w-4" />
+              </div>
+            </Link>
+          }
+        />
+      )}
+
+      {isLg && (
+        <MenuItem
+          label={
+            <Link passHref href="/vesting">
+              <div className="flex w-full items-center justify-between gap-4 font-normal">
+                <span className="cursor-pointer">Vesting</span>
+                <ChartPieIcon className="h-4 w-4" />
+              </div>
+            </Link>
+          }
+        />
+      )}
 
       <Menu label={t2('language')}>
         {locales.map((locale) => (
