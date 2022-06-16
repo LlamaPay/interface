@@ -5,10 +5,12 @@ import { Chain, allChains } from 'wagmi';
 export const FACTORY_RINKEBY = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_KOVAN = '0xd43bb75cc924e8475dff2604b962f39089e4f842';
 export const FACTORY_FUJI = '0xc4705f96030D347F421Fbe01d9A19F18B26a7d30';
+export const FACTORY_GOERLI = '0x7D65A4E90f105F72f6Ff0E44A15Af791ba93cD0E';
 
 export const VESTING_FACTORY_RINKEBY = '0xB93427b83573C8F27a08A909045c3e809610411a';
 export const VESTING_FACTORY_KOVAN = '0xB93427b83573C8F27a08A909045c3e809610411a';
 export const VESTING_FACTORY_FUJI = '0xB93427b83573C8F27a08A909045c3e809610411a';
+export const VESTING_FACTORY_GOERLI = '0x985A0DD877aD2E445e6E7BB58d5600b3F04dDC31';
 
 // LIVE
 export const FACTORY_AVALANCHE = '0x7d507b4c2d7e54da5731f643506996da8525f4a3';
@@ -36,6 +38,7 @@ export const DISPERSE_DEFAULT = '0xD152f549545093347A162Dce210e7293f1452150';
 export const DISPERSE_AVALANCHE = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 export const DISPERSE_ARBITRUM = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 export const DISPERSE_METER = '0x8e5455983a70da3d1e66719636e907d63eca40b7';
+export const DISPERSE_GOERLI = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 export const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
 export const alchemyId = 'PwvZx2hO2XpToWXSw9sgJJt1eBgjkRUr';
 export const etherscanKey = 'DDH7EVWI1AQHBNPX5PYRSDM5SHCVBKX58Q';
@@ -230,6 +233,23 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'meter',
     vestingFactory: '',
   },
+  5: {
+    rpcUrl: `https://goerli.infura.io/v3/${infuraId}`,
+    subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-goerli',
+    chainProviders: providers.getDefaultProvider(5, {
+      alchemy: alchemyId,
+      etherscan: etherscanKey,
+      infura: infuraId,
+    }),
+    llamapayFactoryAddress: FACTORY_GOERLI,
+    disperseAddress: DISPERSE_GOERLI,
+    blockExplorerURL: 'https://goerli.etherscan.io/',
+    blockExplorerName: 'Etherscan',
+    prefix: 'ethereum',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
+    tokenListId: 'goerli',
+    vestingFactory: VESTING_FACTORY_GOERLI,
+  },
 };
 
 export const defaultChains: Chain[] = allChains.filter(
@@ -241,7 +261,8 @@ export const defaultChains: Chain[] = allChains.filter(
     chain.name === 'Polygon Mainnet' ||
     chain.name === 'Mainnet' ||
     chain.name === 'Optimism' ||
-    chain.name === 'Arbitrum One'
+    chain.name === 'Arbitrum One' ||
+    chain.name === 'Goerli'
 );
 
 const formattedChains = defaultChains.map((chain) => {
