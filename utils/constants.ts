@@ -227,6 +227,7 @@ export const networkDetails: INetworkDetails = {
     blockExplorerName: 'Meter Blockchain Explorer',
     prefix: 'meter',
     logoURI: 'https://assets.coingecko.com/coins/images/11848/large/mtrg-logo.png?1595062273',
+    tokenListId: 'meter',
     vestingFactory: '',
   },
 };
