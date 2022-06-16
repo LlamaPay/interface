@@ -31,6 +31,7 @@ export const VESTING_FACTORY_OPTIMISM = '0xB93427b83573C8F27a08A909045c3e8096104
 export const VESTING_FACTORY_ARBITRUM = '0xB93427b83573C8F27a08A909045c3e809610411a';
 export const VESTING_FACTORY_BSC = '0xB93427b83573C8F27a08A909045c3e809610411a';
 export const VESTING_FACTORY_XDAI = '0xB93427b83573C8F27a08A909045c3e809610411a';
+export const VESTING_FACTORY_METER = '0x6B24Fe659D1E91f8800E86600DE577A4cA8814a6';
 
 export const MAINNET_ENS_RESOLVER = '0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C';
 
@@ -231,7 +232,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'meter',
     logoURI: 'https://assets.coingecko.com/coins/images/11848/large/mtrg-logo.png?1595062273',
     tokenListId: 'meter',
-    vestingFactory: '',
+    vestingFactory: VESTING_FACTORY_METER,
   },
   5: {
     rpcUrl: `https://goerli.infura.io/v3/${infuraId}`,
