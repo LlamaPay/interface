@@ -247,7 +247,6 @@ export const networkDetails: INetworkDetails = {
     blockExplorerName: 'Etherscan',
     prefix: 'ethereum',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
-    tokenListId: 'goerli',
     vestingFactory: VESTING_FACTORY_GOERLI,
   },
 };
