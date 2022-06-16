@@ -219,7 +219,7 @@ export const networkDetails: INetworkDetails = {
   },
   82: {
     rpcUrl: 'https://rpc.meter.io',
-    subgraphEndpoint: 'http://graph.meter.io:8000/subgraphs/name/llamapay/llamapay-meter',
+    subgraphEndpoint: 'https://graph.meter.io/subgraphs/name/llamapay/llamapay-meter',
     chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.meter.io'),
     llamapayFactoryAddress: FACTORY_METER,
     disperseAddress: DISPERSE_METER,
