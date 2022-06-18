@@ -4,6 +4,7 @@ import tokenLists from 'tokenLists';
 import useGetAllTokens from 'queries/useGetAllTokens';
 import { ITokenLists } from 'types';
 import { useGetTokenList } from 'queries/useGetTokenList';
+import { tokenWhitelist } from 'utils/constants';
 
 export default function useTokenList() {
   const { chainId } = useNetworkProvider();
@@ -22,7 +23,14 @@ export default function useTokenList() {
         // always convert addresses to lowercase
         const address = token.tokenAddress.toLowerCase();
         const verifiedToken = verifiedLists[address];
-
+        if (tokenWhitelist[address] !== undefined) {
+          return {
+            ...token,
+            logoURI: tokenWhitelist[address].logoURI,
+            name: tokenWhitelist[address].name,
+            isVerified: tokenWhitelist[address].isVerified,
+          };
+        }
         return {
           ...token,
           logoURI:

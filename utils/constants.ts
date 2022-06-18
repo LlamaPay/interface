@@ -70,6 +70,14 @@ export const defaultProvider = providers.getDefaultProvider(4, {
   infura: infuraId,
 });
 
+interface ITokenWhitelist {
+  [key: string]: {
+    logoURI: string;
+    isVerified: boolean;
+    name: string;
+  };
+}
+
 export const defaultSubgraphEndpoint = 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-avax-mainnet';
 
 export const networkDetails: INetworkDetails = {
@@ -341,4 +349,18 @@ export const secondsByDuration: ISecondsByDuration = {
   week: 7 * 24 * 60 * 60,
   month: 30 * 24 * 60 * 60,
   year: 365 * 24 * 60 * 60,
+};
+
+export const tokenWhitelist: ITokenWhitelist = {
+  '0x5729cb3716a315d0bde3b5e489163bf8b9659436': {
+    logoURI: 'https://assets.coingecko.com/coins/images/11848/large/mtrg-logo.png?1595062273',
+    name: 'MeterGov',
+    isVerified: true,
+  },
+  '0x6abaedab0ba368f1df52d857f24154cc76c8c972': {
+    logoURI:
+      'https://assets.coingecko.com/coins/images/12149/large/Meter-Logo-Vertical-Gray-Light-Blue-rgb-200x200px.png?1597618760',
+    name: 'Meter',
+    isVerified: true,
+  },
 };
