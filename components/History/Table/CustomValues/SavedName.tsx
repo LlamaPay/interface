@@ -23,12 +23,12 @@ export function SavedName({ value, eventType, ens }: { value: string; eventType:
     ens ??
     formatAddress(value);
 
-  const { url: chainExplorer } = useChainExplorer();
+  const { url: chainExplorer, id } = useChainExplorer();
 
   return (
     <Tooltip content={value}>
       <a
-        href={`${chainExplorer}/address/${value}`}
+        href={id === 82 ? `${chainExplorer}address/${value}` : `${chainExplorer}/address/${value}`}
         target="_blank"
         rel="noopener noreferrer"
         className="dark:text-white"

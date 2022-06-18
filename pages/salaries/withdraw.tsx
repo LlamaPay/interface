@@ -81,7 +81,13 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
                 </Tooltip>
               </span>
               <a
-                href={chainExplorer ? `${chainExplorer}/address/${stream?.payee?.id}` : '/'}
+                href={
+                  chainExplorer
+                    ? networkData.chain?.id === 82
+                      ? `${chainExplorer}address/${stream?.payee?.id}`
+                      : `${chainExplorer}/address/${stream?.payee?.id}`
+                    : '/'
+                }
                 className="relative left-[30px]"
                 target="_blank"
                 rel="noopener noreferrer"

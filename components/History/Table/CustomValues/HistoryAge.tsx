@@ -23,8 +23,7 @@ function formatTime(timestamp: string): string {
 }
 
 export function HistoryAge({ data }: { data: IHistory }) {
-  const { url } = useChainExplorer();
-
+  const { url, id } = useChainExplorer();
   const intl = useIntl();
 
   return (
@@ -36,7 +35,12 @@ export function HistoryAge({ data }: { data: IHistory }) {
           timeStyle: 'short',
         })}
       >
-        <a href={`${url}/tx/${data.txHash}`} target="_blank" rel="noopener noreferrer" className="dark:text-white">
+        <a
+          href={id === 82 ? `${url}tx/${data.txHash}` : `${url}/tx/${data.txHash}`}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="dark:text-white"
+        >
           {formatTime(data.createdTimestamp)}
         </a>
       </Tooltip>

@@ -22,7 +22,7 @@ const Balance = (props: { address?: string }) => {
   const { balances, noBalances, isLoading, isError } = useBalances(props.address);
 
   // function that returns chain explorer url based on the chain user is connected to
-  const { url: chainExplorer } = useChainExplorer();
+  const { url: chainExplorer, id } = useChainExplorer();
 
   const depositFormDialog = useDialogState();
   const depositFieldDialog = useDialogState();
@@ -126,7 +126,11 @@ const Balance = (props: { address?: string }) => {
                         </div>
                         {chainExplorer ? (
                           <a
-                            href={`${chainExplorer}/address/${b.contractAddress}`}
+                            href={
+                              id === 82
+                                ? `${chainExplorer}address/${b.contractAddress}`
+                                : `${chainExplorer}/address/${b.contractAddress}`
+                            }
                             target="_blank"
                             rel="noopener noreferrer"
                           >

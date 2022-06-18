@@ -175,7 +175,11 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
               <span>
                 <span className="dark:text-white">Streams of</span>{' '}
                 <a
-                  href={`${chainExplorer}/address/${addressToFetch}`}
+                  href={
+                    chainId === 82
+                      ? `${chainExplorer}address/${addressToFetch}`
+                      : `${chainExplorer}/address/${addressToFetch}`
+                  }
                   target="_blank"
                   rel="noopener noreferrer"
                   className="break-words break-all font-medium dark:text-white"

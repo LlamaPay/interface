@@ -25,7 +25,11 @@ export default function VestingTable({ data }: { data: IVesting[] }) {
         cell: ({ cell }) =>
           cell.row.original && (
             <a
-              href={`${explorerUrl}/address/${cell.row.original.token}`}
+              href={
+                chainId === 82
+                  ? `${explorerUrl}address/${cell.row.original.token}`
+                  : `${explorerUrl}/address/${cell.row.original.token}`
+              }
               target="_blank"
               rel="noreferrer noopener"
               className="font-exo text-center dark:text-white"
@@ -84,7 +88,11 @@ export default function VestingTable({ data }: { data: IVesting[] }) {
         cell: ({ cell }) =>
           cell.row.original && (
             <a
-              href={`${explorerUrl}/address/${cell.row.original.contract}`}
+              href={
+                chainId === 82
+                  ? `${explorerUrl}address/${cell.row.original.contract}`
+                  : `${explorerUrl}/address/${cell.row.original.contract}`
+              }
               target="_blank"
               rel="noreferrer noopener"
               className="row-action-links font-exo dark:text-white"

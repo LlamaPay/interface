@@ -8,7 +8,7 @@ import { useTranslations } from 'next-intl';
 
 export function TokenName({ data }: { data: IStream }) {
   // function that returns chain explorer url based on the chain user is connected to
-  const { url: chainExplorer } = useChainExplorer();
+  const { url: chainExplorer, id } = useChainExplorer();
 
   const { data: tokens } = useTokenList();
 
@@ -30,7 +30,11 @@ export function TokenName({ data }: { data: IStream }) {
       </div>
       {chainExplorer ? (
         <a
-          href={`${chainExplorer}/address/${data.token.address}`}
+          href={
+            id === 82
+              ? `${chainExplorer}address/${data.token.address}`
+              : `${chainExplorer}/address/${data.token.address}`
+          }
           target="_blank"
           rel="noopener noreferrer"
           className="dark:text-white"

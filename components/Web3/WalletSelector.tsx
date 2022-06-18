@@ -14,7 +14,7 @@ interface Props {
 export const WalletSelector = ({ dialog }: Props) => {
   const [{ data: accountData }, disconnect] = useAccount({ fetchEns: true });
 
-  const { url: chainExplorer } = useChainExplorer();
+  const { url: chainExplorer, id } = useChainExplorer();
 
   const isMounted = useIsMounted();
   const [
@@ -62,7 +62,15 @@ export const WalletSelector = ({ dialog }: Props) => {
               <span>
                 {accountData.ens?.name ? `${accountData.ens?.name} (${formattedAddress})` : accountData.address}
               </span>
-              <a href={`${chainExplorer}/address/${accountData.address}`} target="_blank" rel="noreferrer noopener">
+              <a
+                href={
+                  id === 82
+                    ? `${chainExplorer}address/${accountData.address}`
+                    : `${chainExplorer}/address/${accountData.address}`
+                }
+                target="_blank"
+                rel="noreferrer noopener"
+              >
                 <span className="sr-only">View address on chain explorer</span>
                 <ExternalLinkIcon className="h-4 w-4" />
               </a>

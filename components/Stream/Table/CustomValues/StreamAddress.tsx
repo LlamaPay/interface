@@ -5,7 +5,7 @@ import { formatAddress } from 'utils/address';
 import { useChainExplorer } from 'hooks';
 
 export const StreamAddress = ({ data }: { data: IStream }) => {
-  const { url: chainExplorer } = useChainExplorer();
+  const { url: chainExplorer, id } = useChainExplorer();
 
   const address = React.useMemo(() => {
     if (data.streamType === 'incomingStream') {
@@ -26,7 +26,7 @@ export const StreamAddress = ({ data }: { data: IStream }) => {
   return (
     <Tooltip content={`${address}`}>
       <a
-        href={`${chainExplorer}/address/${address}`}
+        href={id === 82 ? `${chainExplorer}address/${address}` : `${chainExplorer}/address/${address}`}
         target="_blank"
         rel="noopener noreferrer"
         className="dark:text-white"

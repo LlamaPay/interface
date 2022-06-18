@@ -16,7 +16,7 @@ export const StreamHistory = ({ data, className }: StreamHistoryProps) => {
 
   const dialog = useDialogState();
 
-  const { url: chainExplorer, name: explorerName } = useChainExplorer();
+  const { url: chainExplorer, name: explorerName, id } = useChainExplorer();
 
   const intl = useIntl();
 
@@ -87,7 +87,7 @@ export const StreamHistory = ({ data, className }: StreamHistoryProps) => {
                   </td>
                   <td className="whitespace-nowrap rounded-r border px-4 py-[6px] text-center text-sm dark:text-white">
                     <a
-                      href={`${chainExplorer}/tx/${p.txHash}`}
+                      href={id === 82 ? `${chainExplorer}tx/${p.txHash}` : `${chainExplorer}/tx/${p.txHash}`}
                       target="_blank"
                       rel="noreferrer noopener"
                       className="underline"
