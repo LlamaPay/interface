@@ -4,7 +4,7 @@ import tokenLists from 'tokenLists';
 import useGetAllTokens from 'queries/useGetAllTokens';
 import { ITokenLists } from 'types';
 import { useGetTokenList } from 'queries/useGetTokenList';
-import { tokenWhitelist } from 'utils/constants';
+import { meterBlacklist } from 'utils/constants';
 
 export default function useTokenList() {
   const { chainId } = useNetworkProvider();
@@ -19,18 +19,12 @@ export default function useTokenList() {
 
       if (!verifiedLists) return null;
 
-      return tokens.map((token) => {
+      const filteredTokens = tokens.filter((token) => !meterBlacklist.includes(token.tokenAddress.toLowerCase()));
+
+      return filteredTokens.map((token) => {
         // always convert addresses to lowercase
         const address = token.tokenAddress.toLowerCase();
         const verifiedToken = verifiedLists[address];
-        if (tokenWhitelist[address] !== undefined) {
-          return {
-            ...token,
-            logoURI: tokenWhitelist[address].logoURI,
-            name: tokenWhitelist[address].name,
-            isVerified: tokenWhitelist[address].isVerified,
-          };
-        }
         return {
           ...token,
           logoURI:
