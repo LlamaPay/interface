@@ -4,7 +4,6 @@ import Layout from 'components/Layout';
 import { dehydrate, QueryClient } from 'react-query';
 import { chainDetails } from 'utils/network';
 import { useStreamByIdQuery } from 'services/generated/graphql';
-import { BalanceIcon } from 'components/Icons';
 import defaultImage from 'public/empty-token.webp';
 import Image, { StaticImageData } from 'next/image';
 import { useIntl, useTranslations } from 'next-intl';
@@ -61,6 +60,7 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
   const formattedStream = stream && provider && formatStream({ stream, address: stream.payee.id, provider });
 
   const { data: payeeEns } = useGetEns(stream?.payee?.id ?? '');
+  const { data: payerEns } = useGetEns(stream?.payer?.id ?? '');
 
   const amountPerMonth = stream ? (Number(stream.amountPerSec) * secondsByDuration['month']) / 1e20 : null;
 
@@ -70,44 +70,63 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
 
   return (
     <Layout className="mt-12 flex w-full flex-col gap-[30px] dark:bg-[#161818]">
-      <section className="app-section mx-auto w-full max-w-3xl">
+      <section className="mx-auto w-full max-w-lg px-2">
         <h1 className="font-exo pb-1 text-3xl">Salary</h1>
         {!showFallback && (
-          <div className="flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
-            <p className="relative flex items-center gap-[0.675rem]">
-              <span className="absolute">
-                <Tooltip content="Payee Address">
-                  <BalanceIcon />
-                </Tooltip>
-              </span>
-              <a
-                href={
-                  chainExplorer
-                    ? networkData.chain?.id === 82
-                      ? `${chainExplorer}address/${stream?.payee?.id}`
-                      : `${chainExplorer}/address/${stream?.payee?.id}`
-                    : '/'
-                }
-                className="relative left-[30px]"
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                {payeeEns || stream?.payee?.id}
-              </a>
-            </p>
-          </div>
+          <>
+            <div className="flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
+              <p className="relative flex items-center gap-[15px]">
+                <span>From</span>
+                <a
+                  href={
+                    chainExplorer
+                      ? networkData.chain?.id === 82
+                        ? `${chainExplorer}address/${stream?.payer?.id}`
+                        : `${chainExplorer}/address/${stream?.payer?.id}`
+                      : '/'
+                  }
+                  className="relative break-all"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {payerEns || stream?.payer?.id}
+                </a>
+              </p>
+            </div>
+            <div className="mt-[5px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
+              <p className="relative flex items-center gap-[15px]">
+                <span>To</span>
+                <a
+                  href={
+                    chainExplorer
+                      ? networkData.chain?.id === 82
+                        ? `${chainExplorer}address/${stream?.payee?.id}`
+                        : `${chainExplorer}/address/${stream?.payee?.id}`
+                      : '/'
+                  }
+                  className="relative break-all"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {payeeEns || stream?.payee?.id}
+                </a>
+              </p>
+            </div>
+          </>
         )}
 
         <div className="mt-[5px] mb-8 flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
-          <div className="flex items-center rounded-full">
-            <Image
-              src={logoURI || defaultImage}
-              alt={network ? t0('logoAlt', { name: network }) : 'Fallback Logo'}
-              objectFit="contain"
-              width="21px"
-              height="24px"
-            />
-          </div>
+          <Tooltip content="Chain">
+            <div className="flex items-center rounded-full">
+              <Image
+                src={logoURI || defaultImage}
+                alt={network ? t0('logoAlt', { name: network }) : 'Fallback Logo'}
+                objectFit="contain"
+                width="21px"
+                height="24px"
+              />
+            </div>
+          </Tooltip>
           <p className="truncate whitespace-nowrap">{network || query.chain}</p>
         </div>
 
@@ -131,7 +150,7 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
             <div className="mt-[-28px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
               <p className="flex items-center gap-[0.675rem]">
                 <span className="relative top-[3px]">
-                  <Tooltip content="Amount">
+                  <Tooltip content={t0('amount')}>
                     <CurrencyDollarIcon className="h-5 w-5" />
                   </Tooltip>
                 </span>
