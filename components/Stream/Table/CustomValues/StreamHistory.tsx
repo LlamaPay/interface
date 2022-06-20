@@ -14,6 +14,8 @@ interface StreamHistoryProps {
 export const StreamHistory = ({ data, className }: StreamHistoryProps) => {
   const historicalData = data.historicalEvents;
 
+  const [ytdAmount, setYtdAmount] = React.useState<string | null>(null);
+
   const dialog = useDialogState();
 
   const { url: chainExplorer, name: explorerName, id } = useChainExplorer();
@@ -58,6 +60,32 @@ export const StreamHistory = ({ data, className }: StreamHistoryProps) => {
     return eventType;
   };
 
+  const setYTD = React.useCallback(() => {
+    const curYear = new Date().getFullYear();
+    if (data === undefined) {
+      setYtdAmount(null);
+    } else {
+      const year = Number(new Date(`01-01-${curYear}`)) / 1e3;
+      const start = Number(data.createdTimestamp);
+      if (year > start) {
+        const totalAmount =
+          (((Date.now() - year) / 1000) * Number(data.amountPerSec) - Number(data.pausedAmount)) / 1e20;
+        setYtdAmount(intl.formatNumber(totalAmount, { maximumFractionDigits: 5, minimumFractionDigits: 5 }));
+      } else {
+        const totalAmount =
+          (((Date.now() - Number(data.createdTimestamp) * 1000) / 1000) * Number(data.amountPerSec) -
+            Number(data.pausedAmount)) /
+          1e20;
+        setYtdAmount(intl.formatNumber(totalAmount, { maximumFractionDigits: 5, minimumFractionDigits: 5 }));
+      }
+    }
+  }, [data]);
+
+  React.useEffect(() => {
+    const id = setInterval(setYTD, 1);
+    return () => clearInterval(id);
+  }, [setYTD]);
+
   return (
     <>
       <button className={classNames('row-action-links', className)} onClick={dialog.toggle}>
@@ -65,6 +93,7 @@ export const StreamHistory = ({ data, className }: StreamHistoryProps) => {
       </button>
       <FormDialog dialog={dialog} title={t0('streamHistory')} className="v-min h-min dark:text-white">
         <section className="text-[#303030]">
+          <span className="font-exo text-sm slashed-zero tabular-nums dark:text-white">{`Streamed YTD: ${ytdAmount} ${data.tokenSymbol}`}</span>
           <table className=" w-full border-separate" style={{ borderSpacing: '0 2px' }}>
             <thead>
               <tr>
