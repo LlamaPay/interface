@@ -22,6 +22,7 @@ export const FACTORY_ARBITRUM = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_BSC = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_XDAI = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_METER = '0xc666badd040d5e471d2b77296fef46165ffe5132';
+export const FACTORY_METIS = '0x43634d1C608f16Fb0f4926c12b54124C93030600';
 
 export const VESTING_FACTORY_AVALANCHE = '0xB93427b83573C8F27a08A909045c3e809610411a';
 export const VESTING_FACTORY_POLYGON = '0xB93427b83573C8F27a08A909045c3e809610411a';
@@ -32,6 +33,7 @@ export const VESTING_FACTORY_ARBITRUM = '0xB93427b83573C8F27a08A909045c3e8096104
 export const VESTING_FACTORY_BSC = '0xB93427b83573C8F27a08A909045c3e809610411a';
 export const VESTING_FACTORY_XDAI = '0xB93427b83573C8F27a08A909045c3e809610411a';
 export const VESTING_FACTORY_METER = '0x6B24Fe659D1E91f8800E86600DE577A4cA8814a6';
+export const VESTING_FACTORY_METIS = '0xB93427b83573C8F27a08A909045c3e809610411a';
 
 export const MAINNET_ENS_RESOLVER = '0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C';
 
@@ -39,6 +41,7 @@ export const DISPERSE_DEFAULT = '0xD152f549545093347A162Dce210e7293f1452150';
 export const DISPERSE_AVALANCHE = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 export const DISPERSE_ARBITRUM = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 export const DISPERSE_METER = '0x8e5455983a70da3d1e66719636e907d63eca40b7';
+export const DISPERSE_METIS = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 export const DISPERSE_GOERLI = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 export const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
 export const alchemyId = 'PwvZx2hO2XpToWXSw9sgJJt1eBgjkRUr';
@@ -258,6 +261,19 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
     vestingFactory: VESTING_FACTORY_GOERLI,
   },
+  1088: {
+    rpcUrl: 'https://andromeda.metis.io/?owner=1088',
+    subgraphEndpoint: 'https://andromeda-graph.metis.io:8000/subgraphs/name/llamapay/llamapay-metis',
+    chainProviders: new ethers.providers.JsonRpcProvider('https://andromeda.metis.io/?owner=1088'),
+    llamapayFactoryAddress: FACTORY_METIS,
+    disperseAddress: DISPERSE_METIS,
+    blockExplorerURL: 'https://andromeda-explorer.metis.io/',
+    blockExplorerName: 'Andromeda Metis Explorer',
+    prefix: 'metis',
+    tokenListId: 'metis-andromeda',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/metis/info/logo.png',
+    vestingFactory: VESTING_FACTORY_METIS,
+  },
 };
 
 export const defaultChains: Chain[] = allChains.filter(
@@ -340,6 +356,18 @@ export const chains: Chain[] = [
       {
         name: 'Meter Blockchain Explorer',
         url: 'https://scan.meter.io/',
+      },
+    ],
+  },
+  {
+    id: 1088,
+    name: 'Metis',
+    nativeCurrency: { name: 'Metis', symbol: 'METIS', decimals: 18 },
+    rpcUrls: ['https://andromeda.metis.io/?owner=1088'],
+    blockExplorers: [
+      {
+        name: 'Andromeda Metis Explorer',
+        url: 'https://andromeda-explorer.metis.io/',
       },
     ],
   },
