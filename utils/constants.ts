@@ -64,6 +64,14 @@ interface ISecondsByDuration {
   [key: string]: number;
 }
 
+interface ITokenWhitelist {
+  [key: string]: {
+    logoURI: string;
+    isVerified: boolean;
+    name: string;
+  };
+}
+
 export const defaultProvider = providers.getDefaultProvider(4, {
   alchemy: alchemyId,
   etherscan: etherscanKey,
@@ -343,7 +351,12 @@ export const secondsByDuration: ISecondsByDuration = {
   year: 365 * 24 * 60 * 60,
 };
 
-export const meterBlacklist = [
-  '0x5729cb3716a315d0bde3b5e489163bf8b9659436',
-  '0x6abaedab0ba368f1df52d857f24154cc76c8c972',
-];
+export const blacklist = ['0x5729cb3716a315d0bde3b5e489163bf8b9659436', '0x6abaedab0ba368f1df52d857f24154cc76c8c972'];
+export const whitelist: ITokenWhitelist = {
+  '0x687a6294d0d6d63e751a059bf1ca68e4ae7b13e2': {
+    logoURI:
+      'https://assets.coingecko.com/coins/images/12149/large/Meter-Logo-Vertical-Gray-Light-Blue-rgb-200x200px.png?1597618760',
+    name: 'Meter',
+    isVerified: true,
+  },
+};
