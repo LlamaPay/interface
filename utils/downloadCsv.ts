@@ -59,10 +59,18 @@ export const downloadStreams = (
 };
 
 export const downloadHistory = (data: IHistory[]) => {
-  const rows = [['Address Related', 'Transaction Hash', 'Event Type', 'Amount Per Sec/Amount', 'Timestamp']];
+  const rows = [['Address Related', 'Transaction Hash', 'Event Type', 'Amount Per Month/Amount', 'Timestamp']];
 
   data.forEach((d) => {
-    rows.push([d.addressRelated, d.txHash, d.eventType, d.amountPerSec, d.createdTimestamp]);
+    rows.push([
+      d.addressRelated,
+      d.txHash,
+      d.eventType,
+      d.eventType === 'Withdraw' || 'Deposit' || 'PayerWithdraw'
+        ? Number(d.amount) / 10 ** Number(d.token.decimals)
+        : (Number(d.amountPerSec) / 1e20) * secondsByDuration['month'],
+      d.createdTimestamp,
+    ]);
   });
 
   download('history.csv', rows.map((r) => r.join(',')).join('\n'));
@@ -73,15 +81,31 @@ export const downloadCustomHistory = (
   dateRange: { start: string; end: string },
   eventType: string | null
 ) => {
-  const rows = [['Address Related', 'Transaction Hash', 'Event Type', 'Amount Per Sec/Amount', 'Timestamp']];
+  const rows = [['Address Related', 'Transaction Hash', 'Event Type', 'Amount Per Month/Amount', 'Timestamp']];
   const startTimestamp = Number(new Date(dateRange.start)) / 1e3;
   const endTimestamp = Number(new Date(dateRange.end)) / 1e3;
   data.forEach((d) => {
     if (Number(d.createdTimestamp) > endTimestamp || Number(d.createdTimestamp) < startTimestamp) return;
     if (!eventType) {
-      rows.push([d.addressRelated, d.txHash, d.eventType, d.amountPerSec, d.createdTimestamp]);
+      rows.push([
+        d.addressRelated,
+        d.txHash,
+        d.eventType,
+        eventType === 'Withdraw' || 'Deposit'
+          ? Number(d.amount) / 10 ** Number(d.token.decimals)
+          : (Number(d.amountPerSec) / 1e20) * secondsByDuration['month'],
+        d.createdTimestamp,
+      ]);
     } else if (eventType === d.eventType) {
-      rows.push([d.addressRelated, d.txHash, d.eventType, d.amountPerSec, d.createdTimestamp]);
+      rows.push([
+        d.addressRelated,
+        d.txHash,
+        d.eventType,
+        eventType === 'Withdraw' || 'Deposit' || 'PayerWithdraw'
+          ? Number(d.amount) / 10 ** Number(d.token.decimals)
+          : (Number(d.amountPerSec) / 1e20) * secondsByDuration['month'],
+        d.createdTimestamp,
+      ]);
     }
   });
   download('history.csv', rows.map((r) => r.join(',')).join('\n'));
