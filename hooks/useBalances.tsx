@@ -2,9 +2,9 @@ import * as React from 'react';
 import useGetPayerBalance from 'queries/useGetPayerBalance';
 import usePayers from 'queries/usePayers';
 import { useNetworkProvider } from './useNetworkProvider';
-import useTokenList from './useTokenList';
+import { useTokenList } from '.';
 
-export const useBalances = (payerAddress?:string) => {
+export const useBalances = (payerAddress?: string) => {
   const { data: tokens, isLoading: tokensLoading, error: tokensError } = useTokenList();
   const { network } = useNetworkProvider();
 

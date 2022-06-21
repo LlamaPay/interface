@@ -1,10 +1,9 @@
 import * as React from 'react';
 import AnimatedStream from 'components/AnimatedStream';
 import { InputAmountWithMaxButton, SelectToken } from 'components/Form';
-import useTokenList from 'hooks/useTokenList';
 import useTokenBalances, { ITokenBalance } from 'queries/useTokenBalances';
 import { BeatLoader } from 'react-spinners';
-import { useDepositForm } from 'hooks';
+import { useDepositForm, useTokenList } from 'hooks';
 import AvailableAmount from 'components/AvailableAmount';
 import { ArrowRightIcon } from '@heroicons/react/solid';
 import { useTranslations } from 'next-intl';

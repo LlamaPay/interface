@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { useChainExplorer } from 'hooks';
+import { useChainExplorer, useTokenList } from 'hooks';
 import Image from 'next/image';
 import defaultImage from 'public/empty-token.webp';
-import useTokenList from 'hooks/useTokenList';
 import { IStream } from 'types';
 import { useTranslations } from 'next-intl';
 

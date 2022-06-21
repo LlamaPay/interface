@@ -6,7 +6,7 @@ import { ITokenLists } from 'types';
 import { useGetTokenList } from 'queries/useGetTokenList';
 import { blacklist, whitelist } from 'utils/constants';
 
-export default function useTokenList() {
+export function useTokenList() {
   const { chainId } = useNetworkProvider();
 
   const { data: tokens, isLoading, error } = useGetAllTokens();

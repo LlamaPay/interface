@@ -15,11 +15,13 @@ import Tooltip from 'components/Tooltip';
 import { CurrencyDollarIcon } from '@heroicons/react/outline';
 import { secondsByDuration } from 'utils/constants';
 import { Push, TotalStreamed, Withdrawable } from 'components/Stream/Table/CustomValues';
-import { useNetworkProvider } from 'hooks';
+import { useNetworkProvider, useTokenList } from 'hooks';
 import { formatStream } from 'hooks/useFormatStreamAndHistory';
 import { useNetwork } from 'wagmi';
 import { WalletSelector } from 'components/Web3';
 import { useDialogState } from 'ariakit';
+import { StreamIcon } from 'components/Icons';
+import Link from 'next/link';
 
 interface ClaimPageProps {
   streamId: string;
@@ -32,6 +34,8 @@ interface ClaimPageProps {
 
 const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, logoURI, chainExplorer, chainId }) => {
   const [{ data: networkData }, switchNetwork] = useNetwork();
+
+  const { data: tokenList } = useTokenList();
 
   const { data, isLoading, isError } = useStreamByIdQuery(
     {
@@ -68,6 +72,10 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
 
   const walletDailog = useDialogState();
 
+  const tokenLogo =
+    tokenList?.find((t) => t.tokenAddress.toLowerCase() === stream?.token?.address?.toLowerCase())?.logoURI ??
+    defaultImage;
+
   return (
     <Layout className="mt-12 flex w-full flex-col gap-[30px] dark:bg-[#161818]">
       <section className="mx-auto w-full max-w-lg px-2">
@@ -75,7 +83,7 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
         {!showFallback && (
           <>
             <div className="flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
-              <p className="relative flex items-center gap-[15px]">
+              <p className="relative flex items-center gap-[10px]">
                 <span>From</span>
                 <a
                   href={
@@ -94,7 +102,7 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
               </p>
             </div>
             <div className="mt-[5px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
-              <p className="relative flex items-center gap-[15px]">
+              <p className="relative flex items-center gap-[10px]">
                 <span>To</span>
                 <a
                   href={
@@ -115,15 +123,15 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
           </>
         )}
 
-        <div className="mt-[5px] mb-8 flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
+        <div className="mt-[5px] mb-8 flex items-center gap-[10px] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
           <Tooltip content="Chain">
             <div className="flex items-center rounded-full">
               <Image
                 src={logoURI || defaultImage}
-                alt={network ? t0('logoAlt', { name: network }) : 'Fallback Logo'}
+                alt={network ? t0('logoAlt', { name: network }) : 'Chain'}
                 objectFit="contain"
-                width="21px"
-                height="24px"
+                width="16px"
+                height="15px"
               />
             </div>
           </Tooltip>
@@ -147,18 +155,34 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
           </FallbackContainer>
         ) : (
           <>
-            <div className="mt-[-28px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
-              <p className="flex items-center gap-[0.675rem]">
-                <span className="relative top-[3px]">
-                  <Tooltip content={t0('amount')}>
-                    <CurrencyDollarIcon className="h-5 w-5" />
-                  </Tooltip>
-                </span>
-                <span>{`${amountPerMonth && intl.formatNumber(amountPerMonth, { maximumFractionDigits: 5 })} ${
+            <div className="mt-[-28px] flex items-center gap-[10px] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
+              <div className="flex items-center rounded-full">
+                <Image
+                  src={tokenLogo}
+                  alt={stream.token.name || 'Token'}
+                  objectFit="contain"
+                  width="16px"
+                  height="15px"
+                />
+              </div>
+              <p>
+                {`${amountPerMonth && intl.formatNumber(amountPerMonth, { maximumFractionDigits: 5 })} ${
                   stream.token.symbol
-                } / month`}</span>
+                } / month`}
               </p>
             </div>
+
+            <div className="mt-[5px] flex items-center gap-[10px] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
+              <span className="relative top-[3px]">
+                <Tooltip content={t0('amount')}>
+                  <StreamIcon height={15} width={16} />
+                </Tooltip>
+              </span>
+              <Link href={`/salaries/${network || query.chain}/${payeeEns || stream?.payee?.id}`}>
+                Checkout all streams
+              </Link>
+            </div>
+
             {formattedStream && (
               <>
                 <h2 className="font-exo mt-8 text-lg text-[#4E575F] dark:text-[#9ca3af]">{t1('totalStreamed')}</h2>
@@ -191,6 +215,7 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
           </>
         )}
       </section>
+
       <WalletSelector dialog={walletDailog} />
     </Layout>
   );
