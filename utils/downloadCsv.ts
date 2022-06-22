@@ -86,22 +86,12 @@ export const downloadCustomHistory = (
   const endTimestamp = Number(new Date(dateRange.end)) / 1e3;
   data.forEach((d) => {
     if (Number(d.createdTimestamp) > endTimestamp || Number(d.createdTimestamp) < startTimestamp) return;
-    if (!eventType) {
+    if (!eventType || eventType === d.eventType) {
       rows.push([
         d.addressRelated,
         d.txHash,
         d.eventType,
         eventType === 'Withdraw' || 'Deposit'
-          ? Number(d.amount) / 10 ** Number(d.token.decimals)
-          : (Number(d.amountPerSec) / 1e20) * secondsByDuration['month'],
-        d.createdTimestamp,
-      ]);
-    } else if (eventType === d.eventType) {
-      rows.push([
-        d.addressRelated,
-        d.txHash,
-        d.eventType,
-        eventType === 'Withdraw' || 'Deposit' || 'PayerWithdraw'
           ? Number(d.amount) / 10 ** Number(d.token.decimals)
           : (Number(d.amountPerSec) / 1e20) * secondsByDuration['month'],
         d.createdTimestamp,
