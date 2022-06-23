@@ -12,7 +12,6 @@ import { FallbackContainer } from 'components/Fallback';
 import { BeatLoader } from 'react-spinners';
 import { useGetEns } from 'queries/useResolveEns';
 import Tooltip from 'components/Tooltip';
-import { CurrencyDollarIcon } from '@heroicons/react/outline';
 import { secondsByDuration } from 'utils/constants';
 import { Push, TotalStreamed, Withdrawable } from 'components/Stream/Table/CustomValues';
 import { useNetworkProvider, useTokenList } from 'hooks';

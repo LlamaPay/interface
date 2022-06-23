@@ -26,6 +26,7 @@ export const useNetworkProvider = () => {
   if (
     pathname === '/salaries/[chain]/[address]' ||
     pathname === '/salaries/withdraw' ||
+    pathname === '/salaries/withdraw/[chain]/[stream]' ||
     pathname === '/vesting/[chain]/[address]'
   ) {
     const chainParam = query.chain;
