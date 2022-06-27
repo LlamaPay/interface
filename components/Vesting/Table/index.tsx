@@ -26,7 +26,7 @@ export default function VestingTable({ data }: { data: IVesting[] }) {
           cell.row.original && (
             <a
               href={
-                chainId === 82 || id === 1088
+                chainId === 82 || chainId === 1088
                   ? `${explorerUrl}address/${cell.row.original.token}`
                   : `${explorerUrl}/address/${cell.row.original.token}`
               }
@@ -89,7 +89,7 @@ export default function VestingTable({ data }: { data: IVesting[] }) {
           cell.row.original && (
             <a
               href={
-                chainId === 82 || id === 1088
+                chainId === 82 || chainId === 1088
                   ? `${explorerUrl}address/${cell.row.original.contract}`
                   : `${explorerUrl}/address/${cell.row.original.contract}`
               }
