@@ -176,7 +176,7 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
                 <span className="dark:text-white">Streams of</span>{' '}
                 <a
                   href={
-                    chainId === 82
+                    chainId === 82 || chainId === 1088
                       ? `${chainExplorer}address/${addressToFetch}`
                       : `${chainExplorer}/address/${addressToFetch}`
                   }

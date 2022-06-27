@@ -46,7 +46,7 @@ export const TransactionDialog = ({ dialog, className, transactionHash }: FormDi
       <h1 className="text-center">{t('transactionSubmitted')}</h1>
       <a
         className="mt-1 mb-8 text-center text-sm text-green-700"
-        href={url ? (id === 82 ? `${url}tx/${transactionHash}` : `${url}/tx/${transactionHash}`) : '/'}
+        href={url ? (id === 82 || id === 1088 ? `${url}tx/${transactionHash}` : `${url}/tx/${transactionHash}`) : '/'}
         target="_blank"
         rel="noopener noreferrer"
       >

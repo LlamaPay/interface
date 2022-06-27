@@ -127,7 +127,7 @@ const Balance = (props: { address?: string }) => {
                         {chainExplorer ? (
                           <a
                             href={
-                              id === 82
+                              id === 82 || id === 1088
                                 ? `${chainExplorer}address/${b.contractAddress}`
                                 : `${chainExplorer}/address/${b.contractAddress}`
                             }

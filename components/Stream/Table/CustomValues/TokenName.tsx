@@ -30,7 +30,7 @@ export function TokenName({ data }: { data: IStream }) {
       {chainExplorer ? (
         <a
           href={
-            id === 82
+            id === 82 || id === 1088
               ? `${chainExplorer}address/${data.token.address}`
               : `${chainExplorer}/address/${data.token.address}`
           }

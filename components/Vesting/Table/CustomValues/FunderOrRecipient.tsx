@@ -15,7 +15,11 @@ export default function funderOrRecipient({ data }: { data: IVesting }) {
     <>
       {accountData?.address.toLowerCase() === data.recipient.toLowerCase() ? (
         <a
-          href={chainId === 82 ? `${explorerUrl}address/${data.admin}` : `${explorerUrl}/address/${data.admin}`}
+          href={
+            chainId === 82 || chainId === 1088
+              ? `${explorerUrl}address/${data.admin}`
+              : `${explorerUrl}/address/${data.admin}`
+          }
           target="_blank"
           rel="noreferrer noopener"
           className="font-exo text-center dark:text-white"
@@ -24,7 +28,11 @@ export default function funderOrRecipient({ data }: { data: IVesting }) {
         </a>
       ) : (
         <a
-          href={chainId === 82 ? `${explorerUrl}address/${data.recipient}` : `${explorerUrl}/address/${data.recipient}`}
+          href={
+            chainId === 82 || chainId === 1088
+              ? `${explorerUrl}address/${data.recipient}`
+              : `${explorerUrl}/address/${data.recipient}`
+          }
           target="_blank"
           rel="noreferrer noopener"
           className="font-exo text-center dark:text-white"

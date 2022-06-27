@@ -7,7 +7,7 @@ import { IHistory } from 'types';
 export function ActionName({ data }: { data: IHistory }) {
   const { url: chainExplorer, id } = useChainExplorer();
 
-  const link = id === 82 ? `${chainExplorer}tx/${data.txHash}` : `${chainExplorer}/tx/${data.txHash}`;
+  const link = id === 82 || id === 1088 ? `${chainExplorer}tx/${data.txHash}` : `${chainExplorer}/tx/${data.txHash}`;
 
   const t0 = useTranslations('Common');
   const t1 = useTranslations('History');

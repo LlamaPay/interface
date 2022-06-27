@@ -64,7 +64,7 @@ export const WalletSelector = ({ dialog }: Props) => {
               </span>
               <a
                 href={
-                  id === 82
+                  id === 82 || id === 1088
                     ? `${chainExplorer}address/${accountData.address}`
                     : `${chainExplorer}/address/${accountData.address}`
                 }

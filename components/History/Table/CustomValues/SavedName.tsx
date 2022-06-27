@@ -28,7 +28,7 @@ export function SavedName({ value, eventType, ens }: { value: string; eventType:
   return (
     <Tooltip content={value}>
       <a
-        href={id === 82 ? `${chainExplorer}address/${value}` : `${chainExplorer}/address/${value}`}
+        href={id === 82 || id === 1088 ? `${chainExplorer}address/${value}` : `${chainExplorer}/address/${value}`}
         target="_blank"
         rel="noopener noreferrer"
         className="dark:text-white"

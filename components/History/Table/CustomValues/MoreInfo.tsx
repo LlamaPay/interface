@@ -20,7 +20,7 @@ function amountStreamed(createdTime: string, streamCreatedTime: string | undefin
 export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
   const { url: chainExplorer, name: explorerName, id } = useChainExplorer();
 
-  const txLink = id === 82 ? `${chainExplorer}tx/${data.txHash}` : `${chainExplorer}/tx/${data.txHash}`;
+  const txLink = id === 82 || id === 1088 ? `${chainExplorer}tx/${data.txHash}` : `${chainExplorer}/tx/${data.txHash}`;
 
   const intl = useIntl();
 

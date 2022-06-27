@@ -87,7 +87,7 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
                 <a
                   href={
                     chainExplorer
-                      ? networkData.chain?.id === 82
+                      ? networkData.chain?.id === 82 || networkData.chain?.id === 1088
                         ? `${chainExplorer}address/${stream?.payer?.id}`
                         : `${chainExplorer}/address/${stream?.payer?.id}`
                       : '/'
@@ -106,7 +106,7 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
                 <a
                   href={
                     chainExplorer
-                      ? networkData.chain?.id === 82
+                      ? networkData.chain?.id === 82 || networkData.chain?.id === 1088
                         ? `${chainExplorer}address/${stream?.payee?.id}`
                         : `${chainExplorer}/address/${stream?.payee?.id}`
                       : '/'

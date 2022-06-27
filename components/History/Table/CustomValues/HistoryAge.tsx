@@ -36,7 +36,7 @@ export function HistoryAge({ data }: { data: IHistory }) {
         })}
       >
         <a
-          href={id === 82 ? `${url}tx/${data.txHash}` : `${url}/tx/${data.txHash}`}
+          href={id === 82 || id === 1088 ? `${url}tx/${data.txHash}` : `${url}/tx/${data.txHash}`}
           target="_blank"
           rel="noopener noreferrer"
           className="dark:text-white"
