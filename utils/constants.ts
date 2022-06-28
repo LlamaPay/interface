@@ -263,7 +263,7 @@ export const networkDetails: INetworkDetails = {
   },
   1088: {
     rpcUrl: 'https://andromeda.metis.io/?owner=1088',
-    subgraphEndpoint: 'https://andromeda-graph.metis.io/subgraphs/name/llamapay/llamapay-metis',
+    subgraphEndpoint: 'https://andromeda-graph.metis.io/subgraphs/name/maia-dao/llama-pay/graphql',
     chainProviders: new ethers.providers.JsonRpcProvider('https://andromeda.metis.io/?owner=1088'),
     llamapayFactoryAddress: FACTORY_METIS,
     disperseAddress: DISPERSE_METIS,
