@@ -1668,17 +1668,17 @@
   dependencies:
     mini-svg-data-uri "^1.2.3"
 
-"@tanstack/react-table@^8.0.0-beta.8":
-  version "8.0.0-beta.8"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-table/-/react-table-8.0.0-beta.8.tgz#f5992029a216e1b0eac0bb2289d6387806fb5a34"
-  integrity sha512-hffDi9NnSI2tl/l3cW0CH8ErI1aJOWzIo6of0t1KMGdfES6mDcnfYMMRjm89ffaWogqVrdkKFJfbNAwV0g/0iA==
+"@tanstack/react-table@^8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-table/-/react-table-8.1.1.tgz#774b2f38ca7e3a696f342c2b717c887959651113"
+  integrity sha512-a6HbrapPae/DgNOyGsFH47xK3v5zYVbxQDGH7ab1+kdSfNwbL23P1fgOCTn8CgmnXO+KI9oEdkZUJ47r9h03Cg==
   dependencies:
-    "@tanstack/table-core" "8.0.0-beta.8"
+    "@tanstack/table-core" "8.1.1"
 
-"@tanstack/table-core@8.0.0-beta.8":
-  version "8.0.0-beta.8"
-  resolved "https://registry.yarnpkg.com/@tanstack/table-core/-/table-core-8.0.0-beta.8.tgz#ade867e0f8f282ffba15fb465fbed2847c4a6832"
-  integrity sha512-uIl9kHsuyP09Mc5DBhCzBavRg/e2KNUnZmb7/SW6ec+l2cyC4n64c1B64rDVzIn0CaV/0ajuXB4gI3xfcGsPfg==
+"@tanstack/table-core@8.1.1":
+  version "8.1.1"
+  resolved "https://registry.yarnpkg.com/@tanstack/table-core/-/table-core-8.1.1.tgz#61ebb779292b7d427b3ec8404f5a962d4796b87a"
+  integrity sha512-LvhrGH3Q3HPwah4b3ZNe1qatiS2BXjiBSQDrlQ4CkQBL8rdlrjzdXzyDL1OTJRIkYPxX2kqMgluwvgGEfw9kfg==
 
 "@tootallnate/once@2":
   version "2.0.0"

@@ -1,11 +1,11 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
-import { TableInstance } from '@tanstack/react-table';
+import { Table, flexRender } from '@tanstack/react-table';
 import { DisclosureState } from 'ariakit';
 import classNames from 'classnames';
 import { useTranslations } from 'next-intl';
 
 interface ITableProps {
-  instance: TableInstance<any>;
+  instance: Table<any>;
   maxWidthColumn?: number;
   hidePagination?: boolean;
   downloadToCSV?: () => void;
@@ -36,7 +36,7 @@ const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV, custom
                     key={header.id}
                     className="whitespace-nowrap py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D] dark:text-white"
                   >
-                    {header.isPlaceholder ? null : header.renderHeader()}
+                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
                   </th>
                 ))}
               </tr>
@@ -54,7 +54,7 @@ const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV, custom
                       maxWidthColumn && index + 1 > maxWidthColumn && 'border-l-0'
                     )}
                   >
-                    {cell.renderCell()}
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 ))}
               </tr>
