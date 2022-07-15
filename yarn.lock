@@ -1687,17 +1687,17 @@
   dependencies:
     mini-svg-data-uri "^1.2.3"
 
-"@tanstack/react-table@^8.1.1":
-  version "8.1.1"
-  resolved "https://registry.yarnpkg.com/@tanstack/react-table/-/react-table-8.1.1.tgz#774b2f38ca7e3a696f342c2b717c887959651113"
-  integrity sha512-a6HbrapPae/DgNOyGsFH47xK3v5zYVbxQDGH7ab1+kdSfNwbL23P1fgOCTn8CgmnXO+KI9oEdkZUJ47r9h03Cg==
+"@tanstack/react-table@^8.2.6":
+  version "8.2.6"
+  resolved "https://registry.yarnpkg.com/@tanstack/react-table/-/react-table-8.2.6.tgz#a44855d1958d9e8fa7a34280f81f08d2ef7f8d4f"
+  integrity sha512-hHEKSqRPSojhFLosSpqKMRNDX8mk/UVvFdekXHai86NAg1WaLYB51hWVg18IqFe9PCaPZNpTPNguJ7u54ed8Gg==
   dependencies:
-    "@tanstack/table-core" "8.1.1"
+    "@tanstack/table-core" "8.2.6"
 
-"@tanstack/table-core@8.1.1":
-  version "8.1.1"
-  resolved "https://registry.yarnpkg.com/@tanstack/table-core/-/table-core-8.1.1.tgz#61ebb779292b7d427b3ec8404f5a962d4796b87a"
-  integrity sha512-LvhrGH3Q3HPwah4b3ZNe1qatiS2BXjiBSQDrlQ4CkQBL8rdlrjzdXzyDL1OTJRIkYPxX2kqMgluwvgGEfw9kfg==
+"@tanstack/table-core@8.2.6":
+  version "8.2.6"
+  resolved "https://registry.yarnpkg.com/@tanstack/table-core/-/table-core-8.2.6.tgz#7240ac14a43cc43adbe01fbc6ae4d8a2bf82541a"
+  integrity sha512-yHjKksyq5ZI4GoVJgR/+X8Z1gaZdOL1om3G9M4af6yTTyRP5ZquMlU5318MBtx2NzXl4BxtENLXBWYrcz5WKSA==
 
 "@tootallnate/once@2":
   version "2.0.0"
@@ -2304,18 +2304,18 @@ aria-query@^4.2.2:
     "@babel/runtime" "^7.10.2"
     "@babel/runtime-corejs3" "^7.10.2"
 
-ariakit-utils@0.17.0-next.22:
-  version "0.17.0-next.22"
-  resolved "https://registry.yarnpkg.com/ariakit-utils/-/ariakit-utils-0.17.0-next.22.tgz#3d12871646979e1f9674ba0de1ca45018ee243ba"
-  integrity sha512-S2BUE4IvsX2g7y7EqwarVfxWS5sgtOqobfuTdkJO9HGASWv5nw0L1MMGtyt+HSkvMMdmPgKNQ8wMqixuWSk74g==
+ariakit-utils@0.17.0-next.23:
+  version "0.17.0-next.23"
+  resolved "https://registry.yarnpkg.com/ariakit-utils/-/ariakit-utils-0.17.0-next.23.tgz#b9c5f638e5cc7a3ddc2e3256f23d42718e3af47b"
+  integrity sha512-r6a8rvjTBNbdNVWhGm4XL8hTlpIlP0G+yJf3No48kK6QpR1JN9QinLI/wMwWwJnxDYfwnBhkbcROCqF7iT/4ig==
 
-ariakit@^2.0.0-next.31:
-  version "2.0.0-next.31"
-  resolved "https://registry.yarnpkg.com/ariakit/-/ariakit-2.0.0-next.31.tgz#75bb914dd77c9e5bd4cc7e9a6502534e22621cd3"
-  integrity sha512-ChBErZ3/qLVcrtqFXME5/fS6EcM/qN8A/6shgu5TDTqERfH5hw3iTzOW4Z2r+srIVltj8Ab+kwCXgG3UgMlE/Q==
+ariakit@^2.0.0-next.34:
+  version "2.0.0-next.34"
+  resolved "https://registry.yarnpkg.com/ariakit/-/ariakit-2.0.0-next.34.tgz#2e2073abfb9b3ec8c6292d0b438acd7e0ddce0d1"
+  integrity sha512-jZ/S6q+eNGd2561PhYBxqj7j1tzMm2gbA3FAJuvZ24xiKxIj9/n2dszgMnhyFxVnHJQ3oAn1DesHZwkNAAbl+Q==
   dependencies:
     "@floating-ui/dom" "0.5.4"
-    ariakit-utils "0.17.0-next.22"
+    ariakit-utils "0.17.0-next.23"
 
 array-includes@^3.1.4, array-includes@^3.1.5:
   version "3.1.5"

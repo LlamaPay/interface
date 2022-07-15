@@ -93,7 +93,7 @@ export const SelectToken = React.forwardRef<HTMLButtonElement, ISelectTokenProps
         className={classNames('input-field flex w-full items-center !py-[0px]', className)}
         onClick={() => {
           dialog.toggle();
-          combobox.setVisible(true);
+          combobox.setOpen(true);
         }}
         ref={ref}
       >

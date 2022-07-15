@@ -1,4 +1,4 @@
-import { createTable, getCoreRowModel, useTableInstance } from '@tanstack/react-table';
+import { ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table';
 import Table from 'components/Table';
 import { useNetworkProvider } from 'hooks';
 import React from 'react';
@@ -10,16 +10,14 @@ import FunderOrRecipient from './CustomValues/FunderOrRecipient';
 import Status from './CustomValues/Status';
 import Unclaimed from './CustomValues/Unclaimed';
 
-const table = createTable().setRowType<IVesting>();
-
 export default function VestingTable({ data }: { data: IVesting[] }) {
   const { chainId } = useNetworkProvider();
 
   const explorerUrl = chainId ? networkDetails[chainId].blockExplorerURL : '';
 
-  const columns = React.useMemo(
+  const columns = React.useMemo<ColumnDef<IVesting>[]>(
     () => [
-      table.createDisplayColumn({
+      {
         id: 'token',
         header: 'Token',
         cell: ({ cell }) =>
@@ -35,13 +33,13 @@ export default function VestingTable({ data }: { data: IVesting[] }) {
               className="font-exo text-center dark:text-white"
             >{`${cell.row.original.tokenName} (${cell.row.original.tokenSymbol})`}</a>
           ),
-      }),
-      table.createDisplayColumn({
+      },
+      {
         id: 'funderOrRecipient',
         header: 'Funder/Recipient',
         cell: ({ cell }) => cell.row.original && <FunderOrRecipient data={cell.row.original} />,
-      }),
-      table.createDisplayColumn({
+      },
+      {
         id: 'total_locked',
         header: 'Total Vesting',
         cell: ({ cell }) =>
@@ -50,8 +48,8 @@ export default function VestingTable({ data }: { data: IVesting[] }) {
               {`${(Number(cell.row.original.totalLocked) / 10 ** cell.row.original.tokenDecimals).toFixed(5)}`}
             </span>
           ),
-      }),
-      table.createDisplayColumn({
+      },
+      {
         id: 'claimed',
         header: 'Claimed',
         cell: ({ cell }) =>
@@ -61,28 +59,28 @@ export default function VestingTable({ data }: { data: IVesting[] }) {
               10 ** cell.row.original.tokenDecimals
             ).toFixed(5)}`}</span>
           ),
-      }),
-      table.createDisplayColumn({
+      },
+      {
         id: 'unclaimed',
         header: 'Withdrawable',
         cell: ({ cell }) => cell.row.original && <Unclaimed data={cell.row.original} />,
-      }),
-      table.createDisplayColumn({
+      },
+      {
         id: 'status',
         header: 'Status',
         cell: ({ cell }) => cell.row.original && <Status data={cell.row.original} />,
-      }),
-      table.createDisplayColumn({
+      },
+      {
         id: 'claim',
         header: '',
         cell: ({ cell }) => cell.row.original && <ClaimButton data={cell.row.original} />,
-      }),
-      table.createDisplayColumn({
+      },
+      {
         id: 'chart',
         header: '',
         cell: ({ cell }) => cell.row.original && <ChartButton data={cell.row.original} />,
-      }),
-      table.createDisplayColumn({
+      },
+      {
         id: 'viewContract',
         header: '',
         cell: ({ cell }) =>
@@ -100,12 +98,12 @@ export default function VestingTable({ data }: { data: IVesting[] }) {
               {'Contract'}
             </a>
           ),
-      }),
+      },
     ],
-    [explorerUrl]
+    [explorerUrl, chainId]
   );
 
-  const instance = useTableInstance(table, {
+  const instance = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
