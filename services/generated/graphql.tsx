@@ -125,6 +125,7 @@ export type HistoryEvent_Filter = {
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
   oldStream?: InputMaybe<Scalars['String']>;
+  oldStream_?: InputMaybe<Stream_Filter>;
   oldStream_contains?: InputMaybe<Scalars['String']>;
   oldStream_contains_nocase?: InputMaybe<Scalars['String']>;
   oldStream_ends_with?: InputMaybe<Scalars['String']>;
@@ -145,6 +146,7 @@ export type HistoryEvent_Filter = {
   oldStream_starts_with?: InputMaybe<Scalars['String']>;
   oldStream_starts_with_nocase?: InputMaybe<Scalars['String']>;
   stream?: InputMaybe<Scalars['String']>;
+  stream_?: InputMaybe<Stream_Filter>;
   stream_contains?: InputMaybe<Scalars['String']>;
   stream_contains_nocase?: InputMaybe<Scalars['String']>;
   stream_ends_with?: InputMaybe<Scalars['String']>;
@@ -165,6 +167,7 @@ export type HistoryEvent_Filter = {
   stream_starts_with?: InputMaybe<Scalars['String']>;
   stream_starts_with_nocase?: InputMaybe<Scalars['String']>;
   token?: InputMaybe<Scalars['String']>;
+  token_?: InputMaybe<Token_Filter>;
   token_contains?: InputMaybe<Scalars['String']>;
   token_contains_nocase?: InputMaybe<Scalars['String']>;
   token_ends_with?: InputMaybe<Scalars['String']>;
@@ -191,6 +194,7 @@ export type HistoryEvent_Filter = {
   txHash_not_contains?: InputMaybe<Scalars['Bytes']>;
   txHash_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
   users?: InputMaybe<Array<Scalars['String']>>;
+  users_?: InputMaybe<User_Filter>;
   users_contains?: InputMaybe<Array<Scalars['String']>>;
   users_contains_nocase?: InputMaybe<Array<Scalars['String']>>;
   users_not?: InputMaybe<Array<Scalars['String']>>;
@@ -257,6 +261,7 @@ export type LlamaPayContract_Filter = {
   createdTimestamp_not?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   factory?: InputMaybe<Scalars['String']>;
+  factory_?: InputMaybe<LlamaPayFactory_Filter>;
   factory_contains?: InputMaybe<Scalars['String']>;
   factory_contains_nocase?: InputMaybe<Scalars['String']>;
   factory_ends_with?: InputMaybe<Scalars['String']>;
@@ -284,7 +289,9 @@ export type LlamaPayContract_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  streams_?: InputMaybe<Stream_Filter>;
   token?: InputMaybe<Scalars['String']>;
+  token_?: InputMaybe<Token_Filter>;
   token_contains?: InputMaybe<Scalars['String']>;
   token_contains_nocase?: InputMaybe<Scalars['String']>;
   token_ends_with?: InputMaybe<Scalars['String']>;
@@ -344,6 +351,7 @@ export type LlamaPayFactory_Filter = {
   address_not?: InputMaybe<Scalars['Bytes']>;
   address_not_contains?: InputMaybe<Scalars['Bytes']>;
   address_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  contracts_?: InputMaybe<LlamaPayContract_Filter>;
   count?: InputMaybe<Scalars['Int']>;
   count_gt?: InputMaybe<Scalars['Int']>;
   count_gte?: InputMaybe<Scalars['Int']>;
@@ -578,6 +586,7 @@ export type Stream_Filter = {
   amountPerSec_not?: InputMaybe<Scalars['BigInt']>;
   amountPerSec_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
   contract?: InputMaybe<Scalars['String']>;
+  contract_?: InputMaybe<LlamaPayContract_Filter>;
   contract_contains?: InputMaybe<Scalars['String']>;
   contract_contains_nocase?: InputMaybe<Scalars['String']>;
   contract_ends_with?: InputMaybe<Scalars['String']>;
@@ -613,6 +622,7 @@ export type Stream_Filter = {
   createdTimestamp_lte?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_not?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  historicalEvents_?: InputMaybe<HistoryEvent_Filter>;
   id?: InputMaybe<Scalars['ID']>;
   id_gt?: InputMaybe<Scalars['ID']>;
   id_gte?: InputMaybe<Scalars['ID']>;
@@ -642,6 +652,7 @@ export type Stream_Filter = {
   paused_not?: InputMaybe<Scalars['Boolean']>;
   paused_not_in?: InputMaybe<Array<Scalars['Boolean']>>;
   payee?: InputMaybe<Scalars['String']>;
+  payee_?: InputMaybe<User_Filter>;
   payee_contains?: InputMaybe<Scalars['String']>;
   payee_contains_nocase?: InputMaybe<Scalars['String']>;
   payee_ends_with?: InputMaybe<Scalars['String']>;
@@ -662,6 +673,7 @@ export type Stream_Filter = {
   payee_starts_with?: InputMaybe<Scalars['String']>;
   payee_starts_with_nocase?: InputMaybe<Scalars['String']>;
   payer?: InputMaybe<Scalars['String']>;
+  payer_?: InputMaybe<User_Filter>;
   payer_contains?: InputMaybe<Scalars['String']>;
   payer_contains_nocase?: InputMaybe<Scalars['String']>;
   payer_ends_with?: InputMaybe<Scalars['String']>;
@@ -708,6 +720,7 @@ export type Stream_Filter = {
   streamId_not_contains?: InputMaybe<Scalars['Bytes']>;
   streamId_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
   token?: InputMaybe<Scalars['String']>;
+  token_?: InputMaybe<Token_Filter>;
   token_contains?: InputMaybe<Scalars['String']>;
   token_contains_nocase?: InputMaybe<Scalars['String']>;
   token_ends_with?: InputMaybe<Scalars['String']>;
@@ -728,6 +741,7 @@ export type Stream_Filter = {
   token_starts_with?: InputMaybe<Scalars['String']>;
   token_starts_with_nocase?: InputMaybe<Scalars['String']>;
   users?: InputMaybe<Array<Scalars['String']>>;
+  users_?: InputMaybe<User_Filter>;
   users_contains?: InputMaybe<Array<Scalars['String']>>;
   users_contains_nocase?: InputMaybe<Array<Scalars['String']>>;
   users_not?: InputMaybe<Array<Scalars['String']>>;
@@ -907,6 +921,7 @@ export type Token_Filter = {
   address_not_contains?: InputMaybe<Scalars['Bytes']>;
   address_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
   contract?: InputMaybe<Scalars['String']>;
+  contract_?: InputMaybe<LlamaPayContract_Filter>;
   contract_contains?: InputMaybe<Scalars['String']>;
   contract_contains_nocase?: InputMaybe<Scalars['String']>;
   contract_ends_with?: InputMaybe<Scalars['String']>;
@@ -1064,6 +1079,7 @@ export type User_Filter = {
   createdTimestamp_lte?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_not?: InputMaybe<Scalars['BigInt']>;
   createdTimestamp_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  historicalEvents_?: InputMaybe<HistoryEvent_Filter>;
   id?: InputMaybe<Scalars['ID']>;
   id_gt?: InputMaybe<Scalars['ID']>;
   id_gte?: InputMaybe<Scalars['ID']>;
@@ -1072,6 +1088,7 @@ export type User_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  streams_?: InputMaybe<Stream_Filter>;
 };
 
 export enum User_OrderBy {
