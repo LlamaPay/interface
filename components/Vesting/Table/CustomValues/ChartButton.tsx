@@ -31,7 +31,7 @@ export default function ChartButton({ data }: { data: IVesting }) {
       </button>
       <FormDialog dialog={dialog} title={`${data.tokenSymbol}`} className="max-w-[36rem]">
         <div className="h-[360px]">
-          {dialog.open && (
+          {dialog.visible && (
             <VestingChart
               amount={amount}
               vestingPeriod={vestingPeriod}

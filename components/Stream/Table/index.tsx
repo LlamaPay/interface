@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { createTable, getCoreRowModel, useTableInstance } from '@tanstack/react-table';
 import Table from 'components/Table';
 import {
   TotalStreamed,
@@ -20,43 +20,47 @@ import { downloadStreams } from 'utils/downloadCsv';
 import { useAddressStore } from 'store/address';
 import { useTranslations } from 'next-intl';
 
+const defaultTable = createTable().setRowType<IStream>();
+
+const table = createTable().setRowType<IStream>();
+
 export function StreamTable({ data }: { data: IStream[] }) {
   const addressStore = useAddressStore();
 
   const t = useTranslations('Table');
 
-  const columns = React.useMemo<ColumnDef<IStream>[]>(
+  const columns = React.useMemo(
     () => [
-      {
+      table.createDisplayColumn({
         id: 'userName',
         header: t('userName'),
         cell: ({ cell }) => cell.row.original && <SavedName data={cell.row.original} />,
-      },
-      {
+      }),
+      table.createDisplayColumn({
         id: 'address',
         header: t('address'),
         cell: ({ cell }) => cell.row.original && <StreamAddress data={cell.row.original} />,
-      },
-      {
+      }),
+      table.createDataColumn('tokenSymbol', {
         header: t('tokenSymbol'),
         cell: ({ cell }) => cell.row.original && <TokenName data={cell.row.original} />,
-      },
-      {
+      }),
+      table.createDisplayColumn({
         id: 'amountPerSec',
         header: t('amountPerSec'),
         cell: ({ cell }) => cell.row.original && <AmtPerMonth data={cell.row.original} />,
-      },
-      {
+      }),
+      table.createDisplayColumn({
         id: 'totalStreamed',
         header: t('totalStreamed'),
         cell: ({ cell }) => cell.row.original && <TotalStreamed data={cell.row.original} />,
-      },
-      {
+      }),
+      table.createDisplayColumn({
         id: 'userWithdrawable',
         header: t('userWithdrawable'),
         cell: ({ cell }) => cell.row.original && <Withdrawable data={cell.row.original} />,
-      },
-      {
+      }),
+      table.createDisplayColumn({
         id: 'send',
         header: '',
         cell: ({ cell }) => {
@@ -70,8 +74,8 @@ export function StreamTable({ data }: { data: IStream[] }) {
             </div>
           );
         },
-      },
-      {
+      }),
+      table.createDisplayColumn({
         id: 'modify',
         header: '',
         cell: ({ cell }) => {
@@ -81,8 +85,8 @@ export function StreamTable({ data }: { data: IStream[] }) {
 
           return <Modify data={data} />;
         },
-      },
-      {
+      }),
+      table.createDisplayColumn({
         id: 'pauseOrResume',
         header: '',
         cell: ({ cell }) => {
@@ -92,8 +96,8 @@ export function StreamTable({ data }: { data: IStream[] }) {
 
           return <>{data.paused ? <Resume data={data} /> : <Pause data={data} />}</>;
         },
-      },
-      {
+      }),
+      table.createDisplayColumn({
         id: 'history',
         header: '',
         cell: ({ cell }) => {
@@ -103,8 +107,8 @@ export function StreamTable({ data }: { data: IStream[] }) {
 
           return <StreamHistory data={data} />;
         },
-      },
-      {
+      }),
+      table.createDisplayColumn({
         id: 'cancelOrWithdraw',
         header: '',
         cell: ({ cell }) => {
@@ -122,12 +126,12 @@ export function StreamTable({ data }: { data: IStream[] }) {
             </>
           );
         },
-      },
+      }),
     ],
     [t]
   );
 
-  const instance = useReactTable({
+  const instance = useTableInstance(table, {
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
@@ -144,38 +148,38 @@ export function StreamTable({ data }: { data: IStream[] }) {
 export function DefaultStreamTable({ data }: { data: IStream[] }) {
   const t = useTranslations('Table');
 
-  const columns = React.useMemo<ColumnDef<IStream>[]>(
+  const columns = React.useMemo(
     () => [
-      {
+      defaultTable.createDisplayColumn({
         id: 'userName',
         header: t('userName'),
         cell: ({ cell }) => cell.row.original && <SavedName data={cell.row.original} />,
-      },
-      {
+      }),
+      defaultTable.createDisplayColumn({
         id: 'address',
         header: t('address'),
         cell: ({ cell }) => cell.row.original && <StreamAddress data={cell.row.original} />,
-      },
-      {
+      }),
+      defaultTable.createDataColumn('tokenSymbol', {
         header: t('tokenSymbol'),
         cell: ({ cell }) => cell.row.original && <TokenName data={cell.row.original} />,
-      },
-      {
+      }),
+      defaultTable.createDisplayColumn({
         id: 'amountPerSec',
         header: t('amountPerSec'),
         cell: ({ cell }) => cell.row.original && <AmtPerMonth data={cell.row.original} />,
-      },
-      {
+      }),
+      defaultTable.createDisplayColumn({
         id: 'totalStreamed',
         header: t('totalStreamed'),
         cell: ({ cell }) => cell.row.original && <TotalStreamed data={cell.row.original} />,
-      },
-      {
+      }),
+      defaultTable.createDisplayColumn({
         id: 'userWithdrawable',
         header: t('userWithdrawable'),
         cell: ({ cell }) => cell.row.original && <Withdrawable data={cell.row.original} />,
-      },
-      {
+      }),
+      defaultTable.createDisplayColumn({
         id: 'history',
         header: '',
         cell: ({ cell }) =>
@@ -184,12 +188,12 @@ export function DefaultStreamTable({ data }: { data: IStream[] }) {
               <StreamHistory data={cell.row.original} />
             </span>
           ),
-      },
+      }),
     ],
     [t]
   );
 
-  const instance = useReactTable({
+  const instance = useTableInstance(defaultTable, {
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
