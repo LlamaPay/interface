@@ -3,6 +3,7 @@ import { Table, flexRender } from '@tanstack/react-table';
 import { DisclosureState } from 'ariakit';
 import classNames from 'classnames';
 import { useTranslations } from 'next-intl';
+import SortIcon from './SortIcon';
 
 interface ITableProps {
   instance: Table<any>;
@@ -36,7 +37,19 @@ const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV, custom
                     key={header.id}
                     className="whitespace-nowrap py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D] dark:text-white"
                   >
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                    {header.isPlaceholder ? null : (
+                      <span
+                        {...{
+                          className: header.column.getCanSort()
+                            ? 'cursor-pointer select-none flex space-x-2 items-center'
+                            : '',
+                          onClick: header.column.getToggleSortingHandler(),
+                        }}
+                      >
+                        <span>{flexRender(header.column.columnDef.header, header.getContext())}</span>
+                        {header.column.getCanSort() && <SortIcon dir={header.column.getIsSorted()} />}
+                      </span>
+                    )}
                   </th>
                 ))}
               </tr>
