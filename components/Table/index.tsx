@@ -36,7 +36,20 @@ const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV, custom
                     key={header.id}
                     className="whitespace-nowrap py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D] dark:text-white"
                   >
-                    {header.isPlaceholder ? null : flexRender(header.column.columnDef.header, header.getContext())}
+                    {header.isPlaceholder ? null : (
+                      <span
+                        {...{
+                          className: header.column.getCanSort() ? 'cursor-pointer select-none' : '',
+                          onClick: header.column.getToggleSortingHandler(),
+                        }}
+                      >
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                        {{
+                          asc: ' 🔼',
+                          desc: ' 🔽',
+                        }[header.column.getIsSorted() as string] ?? null}
+                      </span>
+                    )}
                   </th>
                 ))}
               </tr>
