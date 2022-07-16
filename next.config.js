@@ -11,6 +11,7 @@ const nextConfig = {
   images: {
     domains: ['raw.githubusercontent.com', 'assets.coingecko.com'],
   },
+  reactStrictMode: false,
   async redirects() {
     return [
       {
