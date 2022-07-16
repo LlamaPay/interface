@@ -1,7 +1,8 @@
+import * as React from 'react';
 import { useNetworkProvider } from 'hooks';
 import { networkDetails } from 'utils/constants';
 
-export default function ExplorerLink({ value, query }: { value: string; query: string }) {
+export default function ExplorerLink({ value, query }: { value: React.ReactNode; query: string }) {
   const { chainId } = useNetworkProvider();
 
   const explorerUrl = chainId ? networkDetails[chainId].blockExplorerURL : '';

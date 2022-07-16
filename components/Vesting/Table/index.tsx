@@ -74,7 +74,13 @@ export default function VestingTable({ data }: { data: IVesting[] }) {
       {
         id: 'viewContract',
         header: '',
-        cell: ({ cell }) => cell.row.original && <ExplorerLink query={cell.row.original.contract} value="Contract" />,
+        cell: ({ cell }) =>
+          cell.row.original && (
+            <ExplorerLink
+              query={cell.row.original.contract}
+              value={<span className="row-action-links font-exo float-right dark:text-white">Contract</span>}
+            />
+          ),
       },
     ],
     [accountData]
