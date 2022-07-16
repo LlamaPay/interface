@@ -26,12 +26,13 @@ const Home: NextPage<HomePageProps> = ({ noBanner }) => {
 
 export const getServerSideProps: GetServerSideProps = async ({ req, locale }) => {
   console.log({ locale });
+  const messages = locale
+    ? (await import(`translations/${locale}.json`)).default
+    : (await import(`translations/en.json`)).default;
   // Pass data to the page via props
   return {
     props: {
-      messages: locale
-        ? (await import(`translations/${locale}.json`)).default
-        : (await import(`translations/en.json`)).default,
+      messages: messages || (await import(`translations/en.json`)).default,
       noBanner: req.cookies[NO_BANNER] ?? false,
     },
   };
