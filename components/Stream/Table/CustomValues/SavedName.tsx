@@ -79,7 +79,7 @@ export function SavedName({ data }: { data: IStream }) {
         <form onSubmit={updateName}>
           <label>
             <span>{t0('edit')}</span>
-            <button onClick={clearName} className="float-right text-sm underline underline-offset-1">
+            <button onClick={clearName} type="button" className="float-right text-sm underline underline-offset-1">
               {'Clear'}
             </button>
             <input

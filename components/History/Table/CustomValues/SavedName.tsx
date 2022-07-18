@@ -6,16 +6,12 @@ import { useAddressStore } from 'store/address';
 import { formatAddress } from 'utils/address';
 import { useAccount } from 'wagmi';
 
-export function SavedName({ value, eventType, ens }: { value: string; eventType: string; ens: string | null }) {
+export function SavedName({ value, ens }: { value: string; eventType: string; ens: string | null }) {
   const t = useTranslations('Common');
 
   const [{ data: accountData }] = useAccount();
 
-  let you = eventType === 'Deposit' || eventType === 'PayerWithdraw' ? t('you') : false;
-
-  if (!accountData || accountData.address.toLowerCase() !== value.toLowerCase()) {
-    you = ens || formatAddress(value);
-  }
+  const you = accountData && accountData.address.toLowerCase() === value.toLowerCase() ? t('you') : false;
 
   const name =
     useAddressStore((state) => state.addressBook.find((p) => p.id?.toLowerCase() === value?.toLowerCase()))

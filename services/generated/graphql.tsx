@@ -1275,7 +1275,7 @@ export const StreamAndHistoryDocument = `
     streams(orderBy: createdTimestamp, orderDirection: desc, where: {active: true}) {
       ...UserStream
     }
-    historicalEvents(orderBy: createdTimestamp, orderDirection: desc) {
+    historicalEvents(orderBy: createdTimestamp, orderDirection: desc, first: 1000) {
       ...UserHistory
     }
   }

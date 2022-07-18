@@ -33,8 +33,8 @@ export const Modify = ({ data }: ModifyProps) => {
   const transactionDialog = useDialogState();
 
   const savedAddressName =
-    useAddressStore((state) => state.addressBook.find((p) => p.id === data.payeeAddress))?.shortName ??
-    data.payeeAddress;
+    useAddressStore((state) => state.addressBook.find((p) => p.id.toLowerCase() === data.payeeAddress?.toLowerCase()))
+      ?.shortName ?? data.payeeAddress;
 
   const updateStream = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

@@ -166,9 +166,8 @@ export default function SendToPayees({
                   </label>
                 </td>
                 <td className="table-description dark:text-white">
-                  {addresses.addressBook.find((e) => e.id === p)?.shortName
-                    ? addresses.addressBook.find((e) => e.id === p)?.shortName
-                    : formatAddress(p)}
+                  {addresses.addressBook.find((e) => e.id.toLowerCase() === p.toLowerCase())?.shortName ??
+                    formatAddress(p)}
                 </td>
                 <td className="table-description">
                   <PayeeBalance id={p} />
