@@ -23,7 +23,12 @@ export default function ClaimButton({ data }: { data: IVesting }) {
       addressOrName: data.contract,
       contractInterface: vestingContractReadable,
     },
-    'claim'
+    'claim',
+    {
+      overrides: {
+        gasLimit: 180000
+      }
+    }
   );
   const claimDialog = useDialogState();
 
