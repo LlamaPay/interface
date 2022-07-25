@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ColumnDef, getCoreRowModel, useReactTable } from '@tanstack/react-table';
+import { ColumnDef, getCoreRowModel, useReactTable, getSortedRowModel, SortingState } from '@tanstack/react-table';
 import Table from 'components/Table';
 import {
   TotalStreamed,
@@ -14,6 +14,9 @@ import {
   Modify,
   StreamHistory,
   Cancel,
+  amtPerMonthFormatter,
+  streamAddressFormatter,
+  totalStreamedFormatter,
 } from './CustomValues';
 import { IStream } from 'types';
 import { downloadStreams } from 'utils/downloadCsv';
@@ -33,23 +36,31 @@ export function StreamTable({ data }: { data: IStream[] }) {
         cell: ({ cell }) => cell.row.original && <SavedName data={cell.row.original} />,
       },
       {
+        accessorFn: (row) => streamAddressFormatter(row).valueToSort,
         id: 'address',
         header: t('address'),
-        cell: ({ cell }) => cell.row.original && <StreamAddress data={cell.row.original} />,
+        cell: (info) => <StreamAddress data={streamAddressFormatter(info.cell.row.original)} />,
+        enableMultiSort: true,
       },
       {
+        accessorKey: 'tokenSymbol',
         header: t('tokenSymbol'),
         cell: ({ cell }) => cell.row.original && <TokenName data={cell.row.original} />,
+        enableMultiSort: true,
       },
       {
+        accessorFn: (row) => amtPerMonthFormatter(row.amountPerSec),
         id: 'amountPerSec',
         header: t('amountPerSec'),
-        cell: ({ cell }) => cell.row.original && <AmtPerMonth data={cell.row.original} />,
+        cell: (info) => <AmtPerMonth value={info.getValue()} />,
+        enableMultiSort: true,
       },
       {
+        accessorFn: totalStreamedFormatter,
         id: 'totalStreamed',
         header: t('totalStreamed'),
         cell: ({ cell }) => cell.row.original && <TotalStreamed data={cell.row.original} />,
+        enableMultiSort: true,
       },
       {
         id: 'userWithdrawable',
@@ -127,10 +138,17 @@ export function StreamTable({ data }: { data: IStream[] }) {
     [t]
   );
 
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+
   const instance = useReactTable({
     data,
     columns,
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
 
   const downloadToCSV = React.useCallback(() => {
@@ -152,23 +170,31 @@ export function DefaultStreamTable({ data }: { data: IStream[] }) {
         cell: ({ cell }) => cell.row.original && <SavedName data={cell.row.original} />,
       },
       {
+        accessorFn: (row) => streamAddressFormatter(row).valueToSort,
         id: 'address',
         header: t('address'),
-        cell: ({ cell }) => cell.row.original && <StreamAddress data={cell.row.original} />,
+        cell: (info) => <StreamAddress data={streamAddressFormatter(info.cell.row.original)} />,
+        enableMultiSort: true,
       },
       {
+        accessorKey: 'tokenSymbol',
         header: t('tokenSymbol'),
         cell: ({ cell }) => cell.row.original && <TokenName data={cell.row.original} />,
+        enableMultiSort: true,
       },
       {
+        accessorFn: (row) => amtPerMonthFormatter(row.amountPerSec),
         id: 'amountPerSec',
         header: t('amountPerSec'),
-        cell: ({ cell }) => cell.row.original && <AmtPerMonth data={cell.row.original} />,
+        cell: (info) => <AmtPerMonth value={info.getValue()} />,
+        enableMultiSort: true,
       },
       {
+        accessorFn: totalStreamedFormatter,
         id: 'totalStreamed',
         header: t('totalStreamed'),
         cell: ({ cell }) => cell.row.original && <TotalStreamed data={cell.row.original} />,
+        enableMultiSort: true,
       },
       {
         id: 'userWithdrawable',
@@ -189,10 +215,17 @@ export function DefaultStreamTable({ data }: { data: IStream[] }) {
     [t]
   );
 
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+
   const instance = useReactTable({
     data,
     columns,
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
 
   return <Table instance={instance} hidePagination={true} />;

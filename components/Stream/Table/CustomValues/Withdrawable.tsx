@@ -21,25 +21,22 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
 
   const t = useTranslations('Streams');
 
-  const setWithdrawables = React.useCallback(() => {
-    if (callResult?.withdrawableAmount === undefined || callResult.lastUpdate === undefined) {
-      setBalanceState(null);
-    } else if (callResult?.owed > 0) {
-      setBalanceState(callResult?.withdrawableAmount / 10 ** data.token.decimals);
-    } else {
-      setBalanceState(
-        callResult?.withdrawableAmount / 10 ** data.token.decimals +
-          ((Date.now() / 1e3 - callResult.lastUpdate) * Number(data.amountPerSec)) / 1e20
-      );
-    }
-  }, [callResult, data]);
-
   React.useEffect(() => {
-    const id = setInterval(setWithdrawables, 1);
+    const id = setInterval(() => {
+      setBalanceState(
+        withdrawableAmtFormatter({
+          amountPerSec: data.amountPerSec,
+          decimals: data.token.decimals,
+          withdrawableAmount: callResult?.withdrawableAmount,
+          owed: callResult?.owed,
+          lastUpdate: callResult?.lastUpdate,
+        })
+      );
+    }, 1);
 
     // clear interval when component unmounts
     return () => clearInterval(id);
-  }, [setWithdrawables]);
+  }, [callResult, data]);
 
   if (callResult?.owed > 0) {
     return (
@@ -53,6 +50,10 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
         </Tooltip>
       </p>
     );
+  }
+
+  if (isLoading) {
+    return <div className="animate-shimmer h-4 w-full bg-gray-400"></div>;
   }
 
   if (data.paused) {
@@ -75,13 +76,51 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
     );
   }
 
-  if (isLoading) {
-    return <div className="animate-shimmer h-4 w-full bg-gray-400"></div>;
-  }
-
   return (
     <p className="flex justify-start slashed-zero tabular-nums dark:text-white">
       {balanceState && formatBalance(balanceState, intl)}
     </p>
   );
 };
+
+interface IWithdrawableAmtFormatter {
+  amountPerSec: string;
+  decimals: number;
+  withdrawableAmount?: number;
+  owed: number;
+  lastUpdate?: number;
+}
+
+function withdrawableAmtFormatter({
+  amountPerSec,
+  decimals,
+  withdrawableAmount,
+  owed,
+  lastUpdate,
+}: IWithdrawableAmtFormatter) {
+  if (withdrawableAmount === undefined || lastUpdate === undefined) {
+    return null;
+  } else if (owed > 0) {
+    return withdrawableAmount / 10 ** decimals;
+  } else {
+    return withdrawableAmount / 10 ** decimals + ((Date.now() / 1e3 - lastUpdate) * Number(amountPerSec)) / 1e20;
+  }
+}
+
+// export function useWithdrawableAmtFormatter(data: IStream) {
+//   const { data: callResult } = useWithdrawable({
+//     contract: data.llamaTokenContract,
+//     payer: data.payerAddress,
+//     payee: data.payeeAddress,
+//     amountPerSec: data.amountPerSec,
+//     streamId: data.streamId,
+//   });
+
+//   return withdrawableAmtFormatter({
+//     amountPerSec: data.amountPerSec,
+//     decimals: data.token.decimals,
+//     withdrawableAmount: callResult?.withdrawableAmount,
+//     owed: callResult?.owed,
+//     lastUpdate: callResult?.lastUpdate,
+//   });
+// }
