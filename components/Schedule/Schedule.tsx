@@ -3,7 +3,7 @@ import { useDialogState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
 import { InputText, SubmitButton } from 'components/Form';
 import { IStream } from 'types';
-import { useContractWrite, useNetwork } from 'wagmi';
+import { useAccount, useContractRead, useContractWrite, useNetwork } from 'wagmi';
 import { networkDetails } from 'utils/constants';
 import botContract from 'abis/botContract';
 
@@ -15,10 +15,23 @@ interface IScheduleElements {
 export default function Schedule({ data }: { data: IStream }) {
   const dialog = useDialogState();
   const [{ data: network }] = useNetwork();
+  const [{ data: accountData }] = useAccount();
+  const botAddress = networkDetails[Number(network.chain?.id)].botAddress;
+
+  const [{ data: balance }] = useContractRead(
+    {
+      addressOrName: botAddress,
+      contractInterface: botContract,
+    },
+    'balances',
+    {
+      args: accountData?.address,
+    }
+  );
 
   const [{}, scheduleWithdraw] = useContractWrite(
     {
-      addressOrName: networkDetails[Number(network.chain?.id)].botAddress,
+      addressOrName: botAddress,
       contractInterface: botContract,
     },
     'scheduleWithdraw'
@@ -58,7 +71,7 @@ export default function Schedule({ data }: { data: IStream }) {
       <FormDialog dialog={dialog} title={'Schedule Withdraw'} className="h-min">
         <span className="space-y-4 text-[#303030] dark:text-white">
           <form className="mx-auto flex max-w-xl flex-col gap-4" onSubmit={onSubmit}>
-            <span>Balance:</span>
+            <span>{`Balance: ${Number(balance)}`}</span>
             <div>
               <label className="input-label">Frequency</label>
               <select name="frequency" className="input-field w-full">

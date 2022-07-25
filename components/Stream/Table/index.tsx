@@ -19,7 +19,7 @@ import { IStream } from 'types';
 import { downloadStreams } from 'utils/downloadCsv';
 import { useAddressStore } from 'store/address';
 import { useTranslations } from 'next-intl';
-import Schedule from './CustomValues/Schedule';
+import Schedule from '../../Schedule/Schedule';
 
 export function StreamTable({ data }: { data: IStream[] }) {
   const addressStore = useAddressStore();

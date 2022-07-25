@@ -1,9 +1,10 @@
-import { ShareIcon, TrashIcon } from '@heroicons/react/outline';
+import { ChipIcon, ShareIcon, TrashIcon } from '@heroicons/react/outline';
 import { DotsVerticalIcon } from '@heroicons/react/solid';
 import { useDialogState } from 'ariakit';
 import { Menu, MenuButton, MenuItem, useMenuState } from 'ariakit/menu';
 import DisperseGasMoney from 'components/DisperseGas';
 import { FuelIcon, WalletIcon } from 'components/Icons';
+import BotFunds from 'components/Schedule/BotFunds';
 import WithdrawAll from 'components/WithdrawAll';
 import { useNetworkProvider } from 'hooks';
 import { useTranslations } from 'next-intl';
@@ -13,7 +14,7 @@ import { useAccount, useEnsLookup } from 'wagmi';
 export default function StreamMenu() {
   const menu = useMenuState({ gutter: 8 });
 
-  const { nativeCurrency, unsupported } = useNetworkProvider();
+  const { nativeCurrency, unsupported, chainId } = useNetworkProvider();
   const [{ data: accountData }] = useAccount();
   const { network } = useNetworkProvider();
 
@@ -23,6 +24,7 @@ export default function StreamMenu() {
 
   const shareableUrl = `/salaries/${network}/${ensName ?? accountData?.address}`;
   const disperseGasGialog = useDialogState();
+  const botDialog = useDialogState();
 
   const t = useTranslations('Streams');
 
@@ -46,8 +48,13 @@ export default function StreamMenu() {
       </MenuButton>
       <Menu
         state={menu}
+        onClick={botDialog.toggle}
         className="shadow-2 z-10 min-w-[10rem] rounded-xl border border-[#EAEAEA] bg-white p-2 dark:border-[#252525] dark:bg-[#202020]"
       >
+        <MenuItem className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white dark:hover:text-[#cccccc]">
+          <span className="dark:text-white dark:hover:text-[#cccccc]">Bot Funds</span>
+          <ChipIcon className="h-4 w-4" />
+        </MenuItem>
         <MenuItem
           className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white dark:hover:text-[#cccccc]"
           onClick={disperseGasGialog.toggle}
@@ -82,6 +89,16 @@ export default function StreamMenu() {
         </MenuItem>
       </Menu>
       <DisperseGasMoney dialog={disperseGasGialog} />
+      {chainId && accountData ? (
+        <BotFunds
+          dialog={botDialog}
+          chainId={chainId}
+          accountAddress={accountData?.address}
+          nativeCurrency={nativeCurrency?.symbol}
+        />
+      ) : (
+        ''
+      )}
     </>
   );
 }
