@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useIntl, useTranslations } from 'next-intl';
 import { secondsByDuration } from 'utils/constants';
 
-export const AmtPerMonth = ({ value }: { value: number }) => {
+export const AmtPerMonth = ({ data }: { data: number }) => {
   const t = useTranslations('Common');
 
   const intl = useIntl();
@@ -10,7 +10,7 @@ export const AmtPerMonth = ({ value }: { value: number }) => {
   return (
     <>
       <span className="slashed-zero tabular-nums dark:text-white">
-        {intl.formatNumber(value, { maximumFractionDigits: 5 })}
+        {intl.formatNumber(data, { maximumFractionDigits: 5 })}
       </span>
       <span className="mx-1 text-xs text-gray-500 dark:text-white">{`/ ${t('month')?.toLowerCase()}`}</span>
     </>

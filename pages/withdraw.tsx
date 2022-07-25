@@ -10,9 +10,11 @@ import { useStreamAndHistoryQuery } from 'services/generated/graphql';
 import { BeatLoader } from 'react-spinners';
 import {
   AmtPerMonth,
+  amtPerMonthFormatter,
   Push,
   SavedName,
   StreamAddress,
+  streamAddressFormatter,
   TokenName,
   Withdrawable,
 } from 'components/Stream/Table/CustomValues';
@@ -233,13 +235,13 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
                         <SavedName data={stream} />
                       </td>
                       <td className="table-description border-solid dark:border-white">
-                        <StreamAddress data={stream} />
+                        <StreamAddress data={streamAddressFormatter(stream)} />
                       </td>
                       <td className="table-description border-solid dark:border-white">
                         <TokenName data={stream} />
                       </td>
                       <td className="table-description border-solid dark:border-white">
-                        <AmtPerMonth data={stream} />
+                        <AmtPerMonth data={amtPerMonthFormatter(stream.amountPerSec)} />
                       </td>
                       <td className="table-description border-solid dark:border-white">
                         <Withdrawable data={stream} />

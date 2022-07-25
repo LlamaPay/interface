@@ -52,7 +52,7 @@ export function StreamTable({ data }: { data: IStream[] }) {
         accessorFn: (row) => amtPerMonthFormatter(row.amountPerSec),
         id: 'amountPerSec',
         header: t('amountPerSec'),
-        cell: (info) => <AmtPerMonth value={info.getValue()} />,
+        cell: (info) => <AmtPerMonth data={info.getValue()} />,
         enableMultiSort: true,
       },
       {
@@ -186,7 +186,7 @@ export function DefaultStreamTable({ data }: { data: IStream[] }) {
         accessorFn: (row) => amtPerMonthFormatter(row.amountPerSec),
         id: 'amountPerSec',
         header: t('amountPerSec'),
-        cell: (info) => <AmtPerMonth value={info.getValue()} />,
+        cell: (info) => <AmtPerMonth data={info.getValue()} />,
         enableMultiSort: true,
       },
       {
