@@ -6,6 +6,8 @@ import { IStream } from 'types';
 import { useAccount, useContractRead, useContractWrite, useNetwork } from 'wagmi';
 import { networkDetails } from 'utils/constants';
 import botContract from 'abis/botContract';
+import toast from 'react-hot-toast';
+import { useQueryClient } from 'react-query';
 
 interface IScheduleElements {
   startDate: { value: string };
@@ -17,6 +19,7 @@ export default function Schedule({ data }: { data: IStream }) {
   const [{ data: network }] = useNetwork();
   const [{ data: accountData }] = useAccount();
   const botAddress = networkDetails[Number(network.chain?.id)].botAddress;
+  const queryClient = useQueryClient();
 
   const [{ data: balance }] = useContractRead(
     {
@@ -60,6 +63,22 @@ export default function Schedule({ data }: { data: IStream }) {
         start,
         freq === 'daily' ? 86400 : 'weekly' ? 604800 : 'biweekly' ? 1209600 : 'monthly' ? 2419200 : null,
       ],
+    }).then((d) => {
+      const data: any = d;
+      if (data.error) {
+        dialog.hide();
+        toast.error(data.error.reason);
+      } else {
+        const toastId = toast.loading('Scheduling Event');
+        dialog.hide();
+        data.data?.wait().then((receipt: any) => {
+          toast.dismiss(toastId);
+          receipt.status === 1
+            ? toast.success('Successfully Scheduled Event')
+            : toast.error('Failed to Schedule Event');
+          queryClient.invalidateQueries();
+        });
+      }
     });
   }
 
