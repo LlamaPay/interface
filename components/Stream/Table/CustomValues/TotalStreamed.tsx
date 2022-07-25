@@ -9,17 +9,7 @@ export const TotalStreamed = ({ data }: { data: IStream }) => {
 
   React.useEffect(() => {
     const id = setInterval(() => {
-      if (data.paused) {
-        const totalAmount =
-          ((Number(data.lastPaused) - Number(data.createdTimestamp)) * Number(data.amountPerSec)) / 1e20;
-        setAmount(intl.formatNumber(totalAmount, { maximumFractionDigits: 5 }));
-      } else {
-        const totalAmount =
-          (((Date.now() - Number(data.createdTimestamp) * 1000) / 1000) * Number(data.amountPerSec) -
-            Number(data.pausedAmount)) /
-          1e20;
-        setAmount(intl.formatNumber(totalAmount, { maximumFractionDigits: 5, minimumFractionDigits: 5 }));
-      }
+      setAmount(intl.formatNumber(totalStreamedFormatter(data), { maximumFractionDigits: 5 }));
     }, 1);
 
     // clear interval when component unmounts
@@ -28,3 +18,15 @@ export const TotalStreamed = ({ data }: { data: IStream }) => {
 
   return <p className="flex justify-start slashed-zero tabular-nums dark:text-white">{amount}</p>;
 };
+
+export function totalStreamedFormatter(data: IStream): number {
+  if (data.paused) {
+    return ((Number(data.lastPaused) - Number(data.createdTimestamp)) * Number(data.amountPerSec)) / 1e20;
+  } else {
+    return (
+      (((Date.now() - Number(data.createdTimestamp) * 1000) / 1000) * Number(data.amountPerSec) -
+        Number(data.pausedAmount)) /
+      1e20
+    );
+  }
+}

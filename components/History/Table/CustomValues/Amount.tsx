@@ -38,3 +38,11 @@ export function Amount({ value, data }: { value: string; data: IHistory }) {
     </>
   );
 }
+
+export function historyAmountFormatter(data: IHistory): number {
+  if (data.eventType === 'Deposit' || data.eventType === 'Withdraw' || data.eventType === 'PayerWithdraw') {
+    return data.amount && Number(data.amount) / 10 ** Number(data.token.decimals);
+  } else {
+    return (Number(data.amountPerSec) / 1e20) * secondsByDuration['month'];
+  }
+}

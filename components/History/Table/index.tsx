@@ -5,14 +5,25 @@ import {
   useReactTable,
   PaginationState,
   ColumnDef,
+  SortingState,
+  getSortedRowModel,
 } from '@tanstack/react-table';
 import Table from 'components/Table';
 import { IHistory } from 'types';
-import { ActionName, HistoryActions, Amount, SavedName, HistoryAge, EventType } from './CustomValues';
+import {
+  ActionName,
+  HistoryActions,
+  Amount,
+  SavedName,
+  HistoryAge,
+  EventType,
+  CustomExportDialog,
+  historyAmountFormatter,
+  eventAgeFormatter,
+} from './CustomValues';
 import { downloadHistory } from 'utils/downloadCsv';
 import { useTranslations } from 'next-intl';
 import { useDialogState } from 'ariakit';
-import CustomExportDialog from './CustomValues/CustomExportDialog';
 
 export function HistoryTable({ data }: { data: IHistory[] }) {
   const t = useTranslations('Table');
@@ -45,12 +56,14 @@ export function HistoryTable({ data }: { data: IHistory[] }) {
           ),
       },
       {
+        accessorFn: historyAmountFormatter,
         id: 'amount',
         header: t('amount'),
         cell: ({ cell }) =>
           cell.row.original && <Amount value={cell.row.original.amountPerSec} data={cell.row.original} />,
       },
       {
+        accessorFn: (row) => eventAgeFormatter(row.createdTimestamp),
         id: 'age',
         header: t('age'),
         cell: ({ cell }) => cell.row.original && <HistoryAge data={cell.row.original} />,
@@ -69,15 +82,20 @@ export function HistoryTable({ data }: { data: IHistory[] }) {
     pageSize: 10,
   });
 
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+
   const instance = useReactTable({
     data,
     columns,
     state: {
       pagination,
+      sorting,
     },
     onPaginationChange: setPagination,
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
 
   const downloadToCSV = React.useCallback(() => downloadHistory(data), [data]);

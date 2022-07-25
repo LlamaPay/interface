@@ -12,7 +12,7 @@ interface ICustomExportElements {
   event: { value: string };
 }
 
-export default function CustomExportDialog({ data, dialog }: { data: IHistory[]; dialog: DisclosureState }) {
+export function CustomExportDialog({ data, dialog }: { data: IHistory[]; dialog: DisclosureState }) {
   const [hasEventType, setHasEventType] = React.useState<boolean>(false);
 
   function downloadCSV(e: React.FormEvent<HTMLFormElement>) {
