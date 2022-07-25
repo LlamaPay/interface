@@ -19,6 +19,7 @@ import { IStream } from 'types';
 import { downloadStreams } from 'utils/downloadCsv';
 import { useAddressStore } from 'store/address';
 import { useTranslations } from 'next-intl';
+import Schedule from './CustomValues/Schedule';
 
 export function StreamTable({ data }: { data: IStream[] }) {
   const addressStore = useAddressStore();
@@ -102,6 +103,15 @@ export function StreamTable({ data }: { data: IStream[] }) {
           if (!data) return null;
 
           return <StreamHistory data={data} />;
+        },
+      },
+      {
+        id: 'schedule',
+        header: '',
+        cell: ({ cell }) => {
+          const data = cell.row.original;
+          if (!data) return null;
+          return <Schedule data={data} />;
         },
       },
       {
