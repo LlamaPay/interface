@@ -19,14 +19,14 @@ export function TokenName({ data }: { data: IStream }) {
 
   return (
     <div className="flex items-center gap-2">
-      <div className="flex h-6 w-6 flex-shrink-0 items-center rounded-full">
+      <span className="h-[18px] w-[18px] rounded-full">
         <Image
           src={token?.logoURI ?? defaultImage}
           alt={t('logoAlt', { name: data.tokenName })}
           width="18px"
           height="18px"
         />
-      </div>
+      </span>
       {chainExplorer ? (
         <a
           href={
