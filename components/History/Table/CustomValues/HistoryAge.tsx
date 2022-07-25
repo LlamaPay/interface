@@ -3,7 +3,7 @@ import { useChainExplorer } from 'hooks';
 import { useIntl } from 'next-intl';
 import { IHistory } from 'types';
 
-function formatTime(timestamp: string): string {
+export function eventAgeFormatter(timestamp: string): string {
   const timePassed = Date.now() / 1e3 - Number(timestamp);
   const days = Math.floor(timePassed / 86400);
   const hours = Math.floor((timePassed - 86400 * days) / 3600);
@@ -41,7 +41,7 @@ export function HistoryAge({ data }: { data: IHistory }) {
           rel="noopener noreferrer"
           className="dark:text-white"
         >
-          {formatTime(data.createdTimestamp)}
+          {eventAgeFormatter(data.createdTimestamp)}
         </a>
       </Tooltip>
     </>
