@@ -70,11 +70,11 @@ export default function Schedule({
         start,
         freq === 'daily'
           ? secondsByDuration['day']
-          : 'weekly'
+          : freq === 'weekly'
           ? secondsByDuration['week']
-          : 'biweekly'
+          : freq === 'biweekly'
           ? secondsByDuration['biweek']
-          : 'monthly'
+          : freq === 'monthly'
           ? secondsByDuration['month']
           : null,
       ],
@@ -82,7 +82,7 @@ export default function Schedule({
       const data: any = d;
       if (data.error) {
         dialog.hide();
-        toast.error(data.error.reason);
+        toast.error(data.error.reason ?? data.error.message);
       } else {
         const toastId = toast.loading('Scheduling Event');
         dialog.hide();
