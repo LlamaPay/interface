@@ -3,8 +3,8 @@ import { useDialogState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
 import { InputText, SubmitButton } from 'components/Form';
 import { IStream } from 'types';
-import { useAccount, useContractRead, useContractWrite, useNetwork } from 'wagmi';
-import { networkDetails } from 'utils/constants';
+import { useAccount, useContractRead, useContractWrite } from 'wagmi';
+import { networkDetails, secondsByDuration } from 'utils/constants';
 import botContract from 'abis/botContract';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
@@ -14,11 +14,18 @@ interface IScheduleElements {
   frequency: { value: string };
 }
 
-export default function Schedule({ data }: { data: IStream }) {
+export default function Schedule({
+  data,
+  chainId,
+  nativeCurrency,
+}: {
+  data: IStream;
+  chainId: number;
+  nativeCurrency: string;
+}) {
   const dialog = useDialogState();
-  const [{ data: network }] = useNetwork();
   const [{ data: accountData }] = useAccount();
-  const botAddress = networkDetails[Number(network.chain?.id)].botAddress;
+  const botAddress = networkDetails[chainId].botAddress;
   const queryClient = useQueryClient();
 
   const [{ data: balance }] = useContractRead(
@@ -61,7 +68,15 @@ export default function Schedule({ data }: { data: IStream }) {
         data.payeeAddress,
         data.amountPerSec,
         start,
-        freq === 'daily' ? 86400 : 'weekly' ? 604800 : 'biweekly' ? 1209600 : 'monthly' ? 2419200 : null,
+        freq === 'daily'
+          ? secondsByDuration['day']
+          : 'weekly'
+          ? secondsByDuration['week']
+          : 'biweekly'
+          ? secondsByDuration['biweek']
+          : 'monthly'
+          ? secondsByDuration['month']
+          : null,
       ],
     }).then((d) => {
       const data: any = d;
@@ -90,7 +105,7 @@ export default function Schedule({ data }: { data: IStream }) {
       <FormDialog dialog={dialog} title={'Schedule Withdraw'} className="h-min">
         <span className="space-y-4 text-[#303030] dark:text-white">
           <form className="mx-auto flex max-w-xl flex-col gap-4" onSubmit={onSubmit}>
-            <span>{`Balance: ${Number(balance)}`}</span>
+            <span>{`Balance: ${(Number(balance) / 1e18).toFixed(5)} ${nativeCurrency}`}</span>
             <div>
               <label className="input-label">Frequency</label>
               <select name="frequency" className="input-field w-full">

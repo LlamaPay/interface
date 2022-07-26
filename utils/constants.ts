@@ -392,7 +392,9 @@ export const chains: Chain[] = [
 ];
 
 export const secondsByDuration: ISecondsByDuration = {
+  day: 24 * 60 * 60,
   week: 7 * 24 * 60 * 60,
+  biweek: 2 * 7 * 24 * 60 * 60,
   month: 30 * 24 * 60 * 60,
   year: 365 * 24 * 60 * 60,
 };
