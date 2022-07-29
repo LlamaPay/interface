@@ -44,7 +44,8 @@ export const DISPERSE_METER = '0x8e5455983a70da3d1e66719636e907d63eca40b7';
 export const DISPERSE_METIS = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 export const DISPERSE_GOERLI = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 
-export const BOT_GOERLI = '0x408D44C21657065C20b2dD9DbbD3d7665FC1821E';
+export const BOT_GOERLI = '0x3addFDd274f86587A49Bb6ba09BaBa3581B6cb0f';
+export const BOT_AVALANCHE = '0x9410Fbb6cd03966AD3F8D9014ce1f77b001B633C';
 
 export const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
 export const alchemyId = 'PwvZx2hO2XpToWXSw9sgJJt1eBgjkRUr';
@@ -141,7 +142,7 @@ export const networkDetails: INetworkDetails = {
     chainProviders: new ethers.providers.JsonRpcProvider('https://api.avax.network/ext/bc/C/rpc'),
     llamapayFactoryAddress: FACTORY_AVALANCHE,
     disperseAddress: DISPERSE_AVALANCHE,
-    botAddress: '',
+    botAddress: BOT_AVALANCHE,
     blockExplorerURL: 'https://snowtrace.io/',
     blockExplorerName: 'Snowtrace',
     prefix: 'avax',

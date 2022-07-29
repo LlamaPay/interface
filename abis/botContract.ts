@@ -98,6 +98,14 @@ const botContract: any = [
     stateMutability: 'nonpayable',
     type: 'function',
   },
+  {
+    inputs: [{ internalType: 'address', name: '_newLlama', type: 'address' }],
+    name: 'changeLlama',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  { inputs: [], name: 'confirmNewLlama', outputs: [], stateMutability: 'nonpayable', type: 'function' },
   { inputs: [], name: 'deposit', outputs: [], stateMutability: 'payable', type: 'function' },
   {
     inputs: [
@@ -142,6 +150,13 @@ const botContract: any = [
   {
     inputs: [],
     name: 'llama',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'newLlama',
     outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
     type: 'function',
