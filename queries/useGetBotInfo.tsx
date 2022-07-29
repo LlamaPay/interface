@@ -12,6 +12,11 @@ const topics: any = {
   '0xf02b6913a0661fd5a19a298c7bac40f63b16c538b8799cf36812e1224e2e9c60': 'WithdrawExecuted',
 };
 
+const blockCreated: any = {
+  43114: 17930644,
+  5: 7308157,
+};
+
 async function getBotInfo(userAddress: string | undefined, provider: BaseProvider | null, chainId: number | null) {
   try {
     if (!provider) {
@@ -22,8 +27,21 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
       throw new Error('Cannot get Chain ID');
     } else {
       const contract = new ethers.Contract(networkDetails[chainId].botAddress, botContract, provider);
+      const endBlock = await provider.getBlockNumber();
+      let currBlock = blockCreated[chainId];
       const filters = contract.filters;
-      const events = await contract.queryFilter(filters);
+      let events: ethers.Event[] = [];
+      do {
+        const start = currBlock;
+        if (currBlock + 1024 > endBlock) {
+          currBlock = endBlock;
+        } else {
+          currBlock += 1024;
+        }
+        const queriedEvents = await contract.queryFilter(filters, start, currBlock);
+        events = events.concat(queriedEvents);
+      } while (currBlock < endBlock);
+
       const scheduleEvents: any = {};
       events.forEach((e) => {
         const data = ethers.utils.defaultAbiCoder.decode(
@@ -74,7 +92,7 @@ export default function useGetBotInfo() {
     ['botInfo', accountData?.address, chainId],
     () => getBotInfo(accountData?.address, provider, chainId),
     {
-      refetchInterval: 30000,
+      refetchInterval: 1000,
     }
   );
 }
