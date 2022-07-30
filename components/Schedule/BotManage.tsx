@@ -122,7 +122,7 @@ export default function BotFunds({
 
   return (
     <>
-      <FormDialog dialog={dialog} title="Manage Bot" className="h-min">
+      <FormDialog dialog={dialog} title="Manage Bot" className="h-min min-w-fit	">
         <span className="space-y-4 text-[#303030] dark:text-white">
           <div className="flex space-x-2">
             <span>{`Balance: ${(Number(balance) / 1e18).toFixed(5)} ${nativeCurrency}`}</span>
@@ -132,8 +132,12 @@ export default function BotFunds({
           </div>
           <section>
             <form onSubmit={onSubmit}>
-              <InputAmount name="amount" isRequired label="Amount to Deposit" />
-              <SubmitButton className="mt-5">Deposit</SubmitButton>
+              <div className="flex space-x-2">
+                <div className="w-full">
+                  <InputAmount name="amount" isRequired label="Amount to Deposit" />
+                </div>
+                <SubmitButton className="bottom-0 h-min w-1/2 place-self-end">Deposit</SubmitButton>
+              </div>
             </form>
           </section>
           {botInfo ? (
@@ -142,9 +146,11 @@ export default function BotFunds({
               <table className="border">
                 <thead>
                   <tr>
+                    <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">Type</th>
                     <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
-                      Address
+                      Address Related
                     </th>
+                    <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">Token</th>
                     <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
                       Amount/Month
                     </th>
@@ -160,9 +166,23 @@ export default function BotFunds({
                       <td className="table-description text-center dark:text-white">
                         <span>
                           {botInfo[p].from.toLowerCase() === accountAddress.toLowerCase()
-                            ? formatAddress(botInfo[p].to)
-                            : formatAddress(botInfo[p].from)}
+                            ? 'Outgoing'
+                            : botInfo[p].to.toLowerCase() === accountAddress.toLowerCase()
+                            ? 'Incoming'
+                            : 'Owner'}
                         </span>
+                      </td>
+                      <td className="table-description text-center dark:text-white">
+                        <span>
+                          {botInfo[p].from.toLowerCase() === accountAddress.toLowerCase()
+                            ? formatAddress(botInfo[p].to)
+                            : botInfo[p].from.toLowerCase() === accountAddress.toLowerCase()
+                            ? formatAddress(botInfo[p].from)
+                            : `${formatAddress(botInfo[p].from)} => ${formatAddress(botInfo[p].to)}`}
+                        </span>
+                      </td>
+                      <td className="table-description text-center dark:text-white">
+                        <span>{botInfo[p].token}</span>
                       </td>
                       <td className="table-description text-center dark:text-white">
                         <span>{((botInfo[p].amountPerSec * secondsByDuration['month']) / 1e20).toFixed(5)}</span>
@@ -182,9 +202,13 @@ export default function BotFunds({
                       </td>
                       <td className="table-description">
                         <div className="text-center">
-                          <button className="row-action-links" onClick={(e) => handleCancel(p)}>
-                            Cancel
-                          </button>
+                          {botInfo[p].owner.toLowerCase() === accountAddress.toLowerCase() ? (
+                            <button className="row-action-links" onClick={(e) => handleCancel(p)}>
+                              Cancel
+                            </button>
+                          ) : (
+                            ''
+                          )}
                         </div>
                       </td>
                     </tr>

@@ -1,10 +1,11 @@
 import { BaseProvider } from '@ethersproject/providers';
 import botContract from 'abis/botContract';
+import llamaContract from 'abis/llamaContract';
 import { ethers } from 'ethers';
 import { useNetworkProvider } from 'hooks';
 import { useQuery } from 'react-query';
 import { networkDetails } from 'utils/constants';
-import { useAccount } from 'wagmi';
+import { erc20ABI, useAccount } from 'wagmi';
 
 const topics: any = {
   '0x2964df00d05d867fb39d81ec5ed1d5ab5125691de320bbc5cfc5faf7a5505369': 'WithdrawScheduled',
@@ -49,16 +50,20 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
           e.data
         );
         const owner = data[0].toLowerCase();
-        if (owner !== userAddress.toLowerCase()) return;
+        const from = data[2].toLowerCase();
+        const to = data[3].toLowerCase();
+        const user = userAddress.toLowerCase();
+        if (owner !== user && from !== user && to !== user) return;
         const id = data[7];
         if (scheduleEvents[id] === undefined) {
           scheduleEvents[id] = [];
         }
         scheduleEvents[id].push({
+          owner: owner,
           topic: topics[e.topics[0]],
           llamaPay: data[1],
-          from: data[2],
-          to: data[3],
+          from: from,
+          to: to,
           amountPerSec: data[4],
           starts: data[5],
           frequency: data[6],
@@ -68,7 +73,11 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
       for (const id in scheduleEvents) {
         const last = scheduleEvents[id][scheduleEvents[id].length - 1];
         if (last.topic === 'WithdrawExecuted' || last.topic === 'WithdrawScheduled') {
+          const llamapayContract = new ethers.Contract(last.llamaPay, llamaContract, provider);
+          const tokenContract = new ethers.Contract(await llamapayContract.token(), erc20ABI, provider);
           toInclude[id] = {
+            owner: last.owner,
+            token: await tokenContract.symbol(),
             llamaPay: last.llamaPay,
             from: last.from,
             to: last.to,
