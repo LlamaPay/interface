@@ -13,8 +13,8 @@ const topics: any = {
 };
 
 const blockCreated: any = {
-  43114: 17930644,
-  5: 7308157,
+  43114: 18006597,
+  5: 7318552,
 };
 
 async function getBotInfo(userAddress: string | undefined, provider: BaseProvider | null, chainId: number | null) {
@@ -92,7 +92,7 @@ export default function useGetBotInfo() {
     ['botInfo', accountData?.address, chainId],
     () => getBotInfo(accountData?.address, provider, chainId),
     {
-      refetchInterval: 1000,
+      refetchInterval: 30000,
     }
   );
 }
