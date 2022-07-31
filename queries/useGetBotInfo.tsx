@@ -14,8 +14,8 @@ const topics: any = {
 };
 
 const blockCreated: any = {
-  43114: 18006597,
-  5: 7318552,
+  43114: 18041202,
+  5: 7323322,
 };
 
 async function getBotInfo(userAddress: string | undefined, provider: BaseProvider | null, chainId: number | null) {
@@ -44,6 +44,7 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
       } while (currBlock < endBlock);
 
       const scheduleEvents: any = {};
+      const llamaPayToToken: any = {};
       events.forEach((e) => {
         const data = ethers.utils.defaultAbiCoder.decode(
           ['address', 'address', 'address', 'address', 'uint216', 'uint40', 'uint40', 'bytes32'],
@@ -73,11 +74,14 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
       for (const id in scheduleEvents) {
         const last = scheduleEvents[id][scheduleEvents[id].length - 1];
         if (last.topic === 'WithdrawExecuted' || last.topic === 'WithdrawScheduled') {
-          const llamapayContract = new ethers.Contract(last.llamaPay, llamaContract, provider);
-          const tokenContract = new ethers.Contract(await llamapayContract.token(), erc20ABI, provider);
+          if (llamaPayToToken[last.llamaPay] === undefined) {
+            const llamapayContract = new ethers.Contract(last.llamaPay, llamaContract, provider);
+            const tokenContract = new ethers.Contract(await llamapayContract.token(), erc20ABI, provider);
+            llamaPayToToken[last.llamaPay] = tokenContract.symbol();
+          }
           toInclude[id] = {
             owner: last.owner,
-            token: await tokenContract.symbol(),
+            token: llamaPayToToken[last.llamaPay],
             llamaPay: last.llamaPay,
             from: last.from,
             to: last.to,

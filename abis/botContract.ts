@@ -1,11 +1,8 @@
 const botContract: any = [
   {
     anonymous: false,
-    inputs: [
-      { indexed: false, internalType: 'address', name: 'owner', type: 'address' },
-      { indexed: false, internalType: 'bytes', name: 'data', type: 'bytes' },
-    ],
-    name: 'ExecuteFailed',
+    inputs: [{ indexed: false, internalType: 'address', name: '_owner', type: 'address' }],
+    name: 'OwnerWithdrawFailed',
     type: 'event',
   },
   {
@@ -42,6 +39,15 @@ const botContract: any = [
     anonymous: false,
     inputs: [
       { indexed: false, internalType: 'address', name: 'owner', type: 'address' },
+      { indexed: false, internalType: 'bytes', name: 'data', type: 'bytes' },
+    ],
+    name: 'WithdrawFailed',
+    type: 'event',
+  },
+  {
+    anonymous: false,
+    inputs: [
+      { indexed: false, internalType: 'address', name: 'owner', type: 'address' },
       { indexed: false, internalType: 'address', name: 'llamaPay', type: 'address' },
       { indexed: false, internalType: 'address', name: 'from', type: 'address' },
       { indexed: false, internalType: 'address', name: 'to', type: 'address' },
@@ -62,12 +68,12 @@ const botContract: any = [
   },
   {
     inputs: [
-      { internalType: 'bytes[]', name: 'calls', type: 'bytes[]' },
-      { internalType: 'bool', name: 'revertOnFail', type: 'bool' },
+      { internalType: 'bytes[]', name: '_calls', type: 'bytes[]' },
+      { internalType: 'address[]', name: '_owners', type: 'address[]' },
     ],
-    name: 'batch',
+    name: 'batchExecuteOwnerWithdrawals',
     outputs: [],
-    stateMutability: 'payable',
+    stateMutability: 'nonpayable',
     type: 'function',
   },
   {
@@ -99,6 +105,13 @@ const botContract: any = [
     type: 'function',
   },
   {
+    inputs: [{ internalType: 'uint256', name: '_newFee', type: 'uint256' }],
+    name: 'changeFee',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [{ internalType: 'address', name: '_newLlama', type: 'address' }],
     name: 'changeLlama',
     outputs: [],
@@ -107,16 +120,6 @@ const botContract: any = [
   },
   { inputs: [], name: 'confirmNewLlama', outputs: [], stateMutability: 'nonpayable', type: 'function' },
   { inputs: [], name: 'deposit', outputs: [], stateMutability: 'payable', type: 'function' },
-  {
-    inputs: [
-      { internalType: 'bytes[]', name: '_calls', type: 'bytes[]' },
-      { internalType: 'address', name: '_owner', type: 'address' },
-    ],
-    name: 'executeTransactions',
-    outputs: [],
-    stateMutability: 'nonpayable',
-    type: 'function',
-  },
   {
     inputs: [
       { internalType: 'address', name: '_owner', type: 'address' },
@@ -130,6 +133,13 @@ const botContract: any = [
     name: 'executeWithdraw',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'fee',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -166,22 +176,6 @@ const botContract: any = [
     name: 'owners',
     outputs: [{ internalType: 'address', name: '', type: 'address' }],
     stateMutability: 'view',
-    type: 'function',
-  },
-  {
-    inputs: [
-      { internalType: 'contract IERC20Permit', name: 'token', type: 'address' },
-      { internalType: 'address', name: 'from', type: 'address' },
-      { internalType: 'address', name: 'to', type: 'address' },
-      { internalType: 'uint256', name: 'amount', type: 'uint256' },
-      { internalType: 'uint256', name: 'deadline', type: 'uint256' },
-      { internalType: 'uint8', name: 'v', type: 'uint8' },
-      { internalType: 'bytes32', name: 'r', type: 'bytes32' },
-      { internalType: 'bytes32', name: 's', type: 'bytes32' },
-    ],
-    name: 'permitToken',
-    outputs: [],
-    stateMutability: 'nonpayable',
     type: 'function',
   },
   { inputs: [], name: 'refund', outputs: [], stateMutability: 'nonpayable', type: 'function' },
