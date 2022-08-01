@@ -10,8 +10,9 @@ import { createERC20Contract } from 'utils/tokenUtils';
 import { getAddress, Interface } from 'ethers/lib/utils';
 import { useProvider } from 'wagmi';
 import React from 'react';
-import vestingFactoryReadable from 'abis/vestingFactoryReadable';
 import { ERC20Interface } from 'utils/contract';
+import vestingFactory from 'abis/vestingFactory';
+import { BeatLoader } from 'react-spinners';
 
 type FormValues = {
   vestingContracts: {
@@ -27,7 +28,7 @@ type FormValues = {
   }[];
 };
 
-const vestingFactoryInterface = new Interface(vestingFactoryReadable);
+const vestingFactoryInterface = new Interface(vestingFactory);
 
 export default function CreateGnosisVesting({ factory }: { factory: string }) {
   const { mutate: gnosisBatch, isLoading: gnosisLoading } = useGnosisBatch();
@@ -77,6 +78,14 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
         ? new BigNumber(info.cliffTime).times(secondsByDuration[info.cliffDuration]).toFixed(0)
         : '0';
       const fmtVestingAmount = new BigNumber(info.vestedAmount).times(10 ** decimals).toFixed(0);
+      console.log(
+        getAddress(tokenAddress),
+        getAddress(info.recipientAddress),
+        fmtVestingAmount,
+        fmtVestingTime,
+        startTime,
+        fmtCliffTime
+      );
       const call = vestingFactoryInterface.encodeFunctionData('deploy_vesting_contract', [
         getAddress(tokenAddress),
         getAddress(info.recipientAddress),
@@ -208,7 +217,9 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
           </section>
         );
       })}
-      <SubmitButton className="mt-5">{'Create Contracts'}</SubmitButton>
+      <SubmitButton disabled={gnosisLoading} className="mt-5">
+        {gnosisLoading ? <BeatLoader size={6} color="white" /> : 'Create Contracts'}
+      </SubmitButton>
     </form>
   );
 }
