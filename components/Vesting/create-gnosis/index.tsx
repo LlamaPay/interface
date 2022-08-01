@@ -107,7 +107,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
     }
     const calls = {
       tokenAddress: [ERC20Interface.encodeFunctionData('approve', [factory, toApprove.toFixed(0)])],
-      factory: createCalls,
+      //factory: createCalls,
     };
     gnosisBatch({ calls: calls });
   }
