@@ -48,13 +48,19 @@ export default function StreamMenu() {
       </MenuButton>
       <Menu
         state={menu}
-        onClick={botDialog.toggle}
         className="shadow-2 z-10 min-w-[10rem] rounded-xl border border-[#EAEAEA] bg-white p-2 dark:border-[#252525] dark:bg-[#202020]"
       >
-        <MenuItem className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white dark:hover:text-[#cccccc]">
-          <span className="dark:text-white dark:hover:text-[#cccccc]">Manage Bot</span>
-          <ChipIcon className="h-4 w-4" />
-        </MenuItem>
+        {chainId == 43114 || chainId == 5 ? (
+          <MenuItem
+            onClick={botDialog.toggle}
+            className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white dark:hover:text-[#cccccc]"
+          >
+            <span className="dark:text-white dark:hover:text-[#cccccc]">Manage Bot</span>
+            <ChipIcon className="h-4 w-4" />
+          </MenuItem>
+        ) : (
+          ''
+        )}
         <MenuItem
           className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white dark:hover:text-[#cccccc]"
           onClick={disperseGasGialog.toggle}
@@ -89,7 +95,7 @@ export default function StreamMenu() {
         </MenuItem>
       </Menu>
       <DisperseGasMoney dialog={disperseGasGialog} />
-      {chainId && accountData ? (
+      {chainId && accountData && (chainId === 5 || chainId === 43114) ? (
         <BotFunds
           dialog={botDialog}
           chainId={chainId}
