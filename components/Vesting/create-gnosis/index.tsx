@@ -79,7 +79,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
   async function onSubmit(data: FormValues) {
     const tokenContract = createERC20Contract({ tokenAddress: getAddress(tokenAddress), provider });
     const decimals = await tokenContract.decimals();
-    const createCalls = [];
+    const createCalls: string[] = [];
     let toApprove = new BigNumber(0);
     for (const i in data.vestingContracts) {
       const info = data.vestingContracts[i];
@@ -105,10 +105,9 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
       createCalls.push(call);
       toApprove = toApprove.plus(fmtVestingAmount);
     }
-    const calls = {
-      tokenAddress: [ERC20Interface.encodeFunctionData('approve', [factory, toApprove.toFixed(0)])],
-      //factory: createCalls,
-    };
+    const calls: { [key: string]: string[] } = {};
+    calls[tokenAddress] = [ERC20Interface.encodeFunctionData('approve', [factory, toApprove.toFixed(0)])];
+    calls[factory] = createCalls;
     gnosisBatch({ calls: calls });
   }
   return (
