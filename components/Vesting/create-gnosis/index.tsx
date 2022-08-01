@@ -12,7 +12,6 @@ import { useProvider } from 'wagmi';
 import React from 'react';
 import { ERC20Interface } from 'utils/contract';
 import { BeatLoader } from 'react-spinners';
-import vestingContractReadable from 'abis/vestingContractReadable';
 
 type FormValues = {
   vestingContracts: {
@@ -28,7 +27,24 @@ type FormValues = {
   }[];
 };
 
-const vestingFactoryInterface = new Interface(vestingContractReadable);
+const factoryAbi = [
+  {
+    stateMutability: 'nonpayable',
+    type: 'function',
+    name: 'deploy_vesting_contract',
+    inputs: [
+      { name: 'token', type: 'address' },
+      { name: 'recipient', type: 'address' },
+      { name: 'amount', type: 'uint256' },
+      { name: 'vesting_duration', type: 'uint256' },
+      { name: 'vesting_start', type: 'uint256' },
+      { name: 'cliff_length', type: 'uint256' },
+    ],
+    outputs: [{ name: '', type: 'address' }],
+  },
+];
+
+const vestingFactoryInterface = new Interface(factoryAbi);
 
 export default function CreateGnosisVesting({ factory }: { factory: string }) {
   const { mutate: gnosisBatch, isLoading: gnosisLoading } = useGnosisBatch();
