@@ -11,8 +11,8 @@ import { getAddress, Interface } from 'ethers/lib/utils';
 import { useProvider } from 'wagmi';
 import React from 'react';
 import { ERC20Interface } from 'utils/contract';
-import vestingFactory from 'abis/vestingFactory';
 import { BeatLoader } from 'react-spinners';
+import vestingContractReadable from 'abis/vestingContractReadable';
 
 type FormValues = {
   vestingContracts: {
@@ -28,7 +28,7 @@ type FormValues = {
   }[];
 };
 
-const vestingFactoryInterface = new Interface(vestingFactory);
+const vestingFactoryInterface = new Interface(vestingContractReadable);
 
 export default function CreateGnosisVesting({ factory }: { factory: string }) {
   const { mutate: gnosisBatch, isLoading: gnosisLoading } = useGnosisBatch();
@@ -78,14 +78,6 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
         ? new BigNumber(info.cliffTime).times(secondsByDuration[info.cliffDuration]).toFixed(0)
         : '0';
       const fmtVestingAmount = new BigNumber(info.vestedAmount).times(10 ** decimals).toFixed(0);
-      console.log(
-        getAddress(tokenAddress),
-        getAddress(info.recipientAddress),
-        fmtVestingAmount,
-        fmtVestingTime,
-        startTime,
-        fmtCliffTime
-      );
       const call = vestingFactoryInterface.encodeFunctionData('deploy_vesting_contract', [
         getAddress(tokenAddress),
         getAddress(info.recipientAddress),
