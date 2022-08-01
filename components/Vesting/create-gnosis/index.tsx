@@ -205,10 +205,10 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
                 </button>
               )}
             </div>
-            <SubmitButton className="mt-5">{'Create Contracts'}</SubmitButton>
           </section>
         );
       })}
+      <SubmitButton className="mt-5">{'Create Contracts'}</SubmitButton>
     </form>
   );
 }
