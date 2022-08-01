@@ -43,6 +43,10 @@ export const DISPERSE_ARBITRUM = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 export const DISPERSE_METER = '0x8e5455983a70da3d1e66719636e907d63eca40b7';
 export const DISPERSE_METIS = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 export const DISPERSE_GOERLI = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
+
+export const BOT_GOERLI = '0xB7CAa90CDbB8746F54B19F2f85E86b99598b268c';
+export const BOT_AVALANCHE = '0x0327a00f37115115038c289827480dDaAbae948e';
+
 export const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
 export const alchemyId = 'PwvZx2hO2XpToWXSw9sgJJt1eBgjkRUr';
 export const etherscanKey = 'DDH7EVWI1AQHBNPX5PYRSDM5SHCVBKX58Q';
@@ -54,6 +58,7 @@ interface INetworkDetails {
     chainProviders: ethers.providers.BaseProvider;
     llamapayFactoryAddress: string;
     disperseAddress: string;
+    botAddress: string;
     blockExplorerURL: string;
     blockExplorerName: string;
     prefix: string;
@@ -94,6 +99,7 @@ export const networkDetails: INetworkDetails = {
     }),
     llamapayFactoryAddress: FACTORY_RINKEBY,
     disperseAddress: DISPERSE_DEFAULT,
+    botAddress: '',
     blockExplorerURL: 'https://rinkeby.etherscan.io/',
     blockExplorerName: 'Etherscan',
     prefix: 'ethereum',
@@ -110,6 +116,7 @@ export const networkDetails: INetworkDetails = {
     }),
     llamapayFactoryAddress: FACTORY_KOVAN,
     disperseAddress: DISPERSE_DEFAULT,
+    botAddress: '',
     blockExplorerURL: 'https://kovan.etherscan.io/',
     blockExplorerName: 'Etherscan',
     prefix: 'ethereum',
@@ -122,6 +129,7 @@ export const networkDetails: INetworkDetails = {
     chainProviders: new ethers.providers.JsonRpcProvider(`https://api.avax-test.network/ext/bc/C/rpc`),
     llamapayFactoryAddress: FACTORY_FUJI,
     disperseAddress: '0x267F83942214d11fDce5E8AA98351AFF6392946A',
+    botAddress: '',
     blockExplorerURL: 'https://testnet.snowtrace.io/',
     blockExplorerName: 'Snowtrace',
     prefix: 'avax',
@@ -134,6 +142,7 @@ export const networkDetails: INetworkDetails = {
     chainProviders: new ethers.providers.JsonRpcProvider('https://api.avax.network/ext/bc/C/rpc'),
     llamapayFactoryAddress: FACTORY_AVALANCHE,
     disperseAddress: DISPERSE_AVALANCHE,
+    botAddress: BOT_AVALANCHE,
     blockExplorerURL: 'https://snowtrace.io/',
     blockExplorerName: 'Snowtrace',
     prefix: 'avax',
@@ -147,6 +156,7 @@ export const networkDetails: INetworkDetails = {
     chainProviders: new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/'),
     llamapayFactoryAddress: FACTORY_POLYGON,
     disperseAddress: DISPERSE_DEFAULT,
+    botAddress: '',
     blockExplorerURL: 'https://polygonscan.com/',
     blockExplorerName: 'Polygonscan',
     prefix: 'polygon',
@@ -160,6 +170,7 @@ export const networkDetails: INetworkDetails = {
     chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ftm.tools/'),
     llamapayFactoryAddress: FACTORY_FANTOM,
     disperseAddress: DISPERSE_DEFAULT,
+    botAddress: '',
     blockExplorerURL: 'https://ftmscan.com/',
     blockExplorerName: 'FTMScan',
     prefix: 'fantom',
@@ -173,6 +184,7 @@ export const networkDetails: INetworkDetails = {
     chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/eth'),
     llamapayFactoryAddress: FACTORY_MAINNET,
     disperseAddress: DISPERSE_DEFAULT,
+    botAddress: '',
     blockExplorerURL: 'https://etherscan.io/',
     blockExplorerName: 'Etherscan',
     prefix: 'ethereum',
@@ -186,6 +198,7 @@ export const networkDetails: INetworkDetails = {
     chainProviders: new ethers.providers.JsonRpcProvider('https://mainnet.optimism.io'),
     llamapayFactoryAddress: FACTORY_OPTIMISM,
     disperseAddress: DISPERSE_DEFAULT,
+    botAddress: '',
     blockExplorerURL: 'https://optimistic.etherscan.io/',
     blockExplorerName: 'Etherscan',
     prefix: 'optimism',
@@ -199,6 +212,7 @@ export const networkDetails: INetworkDetails = {
     chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/arbitrum'),
     llamapayFactoryAddress: FACTORY_ARBITRUM,
     disperseAddress: DISPERSE_ARBITRUM,
+    botAddress: '',
     blockExplorerURL: 'https://arbiscan.io/',
     blockExplorerName: 'Arbiscan',
     prefix: 'arbitrum',
@@ -212,6 +226,7 @@ export const networkDetails: INetworkDetails = {
     chainProviders: new ethers.providers.JsonRpcProvider('https://bsc-dataseed.binance.org'),
     llamapayFactoryAddress: FACTORY_BSC,
     disperseAddress: DISPERSE_DEFAULT,
+    botAddress: '',
     blockExplorerURL: 'https://www.bscscan.com/',
     blockExplorerName: 'BscScan',
     prefix: 'bsc',
@@ -225,6 +240,7 @@ export const networkDetails: INetworkDetails = {
     chainProviders: new ethers.providers.JsonRpcProvider('https://xdai-rpc.gateway.pokt.network'),
     llamapayFactoryAddress: FACTORY_XDAI,
     disperseAddress: DISPERSE_DEFAULT,
+    botAddress: '',
     blockExplorerURL: 'https://blockscout.com/xdai/mainnet/',
     blockExplorerName: 'Blockscout',
     prefix: 'xdai',
@@ -238,6 +254,7 @@ export const networkDetails: INetworkDetails = {
     chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.meter.io'),
     llamapayFactoryAddress: FACTORY_METER,
     disperseAddress: DISPERSE_METER,
+    botAddress: '',
     blockExplorerURL: 'https://scan.meter.io/',
     blockExplorerName: 'Meter Blockchain Explorer',
     prefix: 'meter',
@@ -255,6 +272,7 @@ export const networkDetails: INetworkDetails = {
     }),
     llamapayFactoryAddress: FACTORY_GOERLI,
     disperseAddress: DISPERSE_GOERLI,
+    botAddress: BOT_GOERLI,
     blockExplorerURL: 'https://goerli.etherscan.io/',
     blockExplorerName: 'Etherscan',
     prefix: 'ethereum',
@@ -267,6 +285,7 @@ export const networkDetails: INetworkDetails = {
     chainProviders: new ethers.providers.JsonRpcProvider('https://andromeda.metis.io/?owner=1088'),
     llamapayFactoryAddress: FACTORY_METIS,
     disperseAddress: DISPERSE_METIS,
+    botAddress: '',
     blockExplorerURL: 'https://andromeda-explorer.metis.io/',
     blockExplorerName: 'Andromeda Metis Explorer',
     prefix: 'metis',
@@ -374,7 +393,9 @@ export const chains: Chain[] = [
 ];
 
 export const secondsByDuration: ISecondsByDuration = {
+  day: 24 * 60 * 60,
   week: 7 * 24 * 60 * 60,
+  biweek: 2 * 7 * 24 * 60 * 60,
   month: 30 * 24 * 60 * 60,
   year: 365 * 24 * 60 * 60,
 };

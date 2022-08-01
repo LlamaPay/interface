@@ -22,10 +22,12 @@ import { IStream } from 'types';
 import { downloadStreams } from 'utils/downloadCsv';
 import { useAddressStore } from 'store/address';
 import { useTranslations } from 'next-intl';
+import Schedule from '../../Schedule/Schedule';
+import { useNetworkProvider } from 'hooks';
 
 export function StreamTable({ data }: { data: IStream[] }) {
   const addressStore = useAddressStore();
-
+  const { nativeCurrency, chainId } = useNetworkProvider();
   const t = useTranslations('Table');
 
   const columns = React.useMemo<ColumnDef<IStream>[]>(
@@ -113,6 +115,16 @@ export function StreamTable({ data }: { data: IStream[] }) {
           if (!data) return null;
 
           return <StreamHistory data={data} />;
+        },
+      },
+      {
+        id: 'schedule',
+        header: '',
+        cell: ({ cell }) => {
+          const data = cell.row.original;
+          if (!data || !chainId) return null;
+          if (chainId !== 43114 && chainId !== 5) return null;
+          return <Schedule data={data} nativeCurrency={nativeCurrency?.symbol ?? 'ETH'} chainId={chainId} />;
         },
       },
       {
