@@ -86,10 +86,10 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
         fmtCliffTime,
       ]);
       createCalls.push(call);
-      toApprove.plus(fmtVestingAmount).toFixed(0);
+      toApprove = toApprove.plus(fmtVestingAmount);
     }
     const calls = {
-      tokenAddress: [ERC20Interface.encodeFunctionData('approve', [factory, toApprove])],
+      tokenAddress: [ERC20Interface.encodeFunctionData('approve', [factory, toApprove.toFixed(0)])],
       factory: createCalls,
     };
     gnosisBatch({ calls: calls });
