@@ -12,6 +12,8 @@ import { useProvider } from 'wagmi';
 import React from 'react';
 import { ERC20Interface } from 'utils/contract';
 import { BeatLoader } from 'react-spinners';
+import VestingChart from '../Chart';
+import { Switch } from '@headlessui/react';
 
 type FormValues = {
   vestingContracts: {
@@ -19,8 +21,8 @@ type FormValues = {
     vestedAmount: string;
     vestingTime: string;
     vestingDuration: 'month' | 'year' | 'week';
-    includeCliff: false;
-    includeCustomStart: false;
+    includeCliff: boolean;
+    includeCustomStart: boolean;
     cliffTime: string;
     cliffDuration: 'month' | 'year' | 'week';
     startDate: string;
@@ -54,6 +56,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
     register,
     control,
     handleSubmit,
+    getValues,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
@@ -72,7 +75,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
       ],
     },
   });
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, update } = useFieldArray({
     name: 'vestingContracts',
     control,
   });
@@ -188,6 +191,130 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
                 </select>
               </div>
             </label>
+            {getValues(`vestingContracts.${index}.includeCliff`) ? (
+              <label>
+                <span className="input-label dark:text-white">{'Cliff Time'}</span>
+                <div className="relative flex">
+                  <input
+                    placeholder="0.0"
+                    {...register(`vestingContracts.${index}.cliffTime` as const, {
+                      pattern: /^[0-9]*[.,]?[0-9]*$/,
+                    })}
+                    className="input-field dark:border-[#252525] dark:bg-[#202020]"
+                    autoComplete="off"
+                    autoCorrect="off"
+                    type="text"
+                    spellCheck="false"
+                    inputMode="decimal"
+                  />
+                  <select
+                    {...register(`vestingContracts.${index}.cliffDuration` as const, {
+                      required: true,
+                    })}
+                    className="absolute right-1 bottom-1 top-2 my-auto flex w-full max-w-[24%] items-center truncate rounded border-0 bg-zinc-100 p-2 pr-4 text-sm shadow-sm dark:bg-stone-600"
+                    style={{ backgroundSize: '1.25rem', backgroundPosition: 'calc(100% - 4px) 55%' }}
+                  >
+                    <option value="week">{'week'}</option>
+                    <option value="month">{'month'}</option>
+                    <option value="year">{'year'}</option>
+                  </select>
+                </div>
+              </label>
+            ) : (
+              ''
+            )}
+            {getValues(`vestingContracts.${index}.includeCustomStart`) ? (
+              <label>
+                <span className="input-label dark:text-white">{'Start Date'}</span>
+                <input
+                  placeholder="YYYY-MM-DD"
+                  {...register(`vestingContracts.${index}.startDate` as const, {
+                    pattern: /\d{4}-\d{2}-\d{2}/,
+                  })}
+                  className="input-field dark:border-[#252525] dark:bg-[#202020] dark:text-white"
+                  autoComplete="off"
+                  autoCorrect="off"
+                  type="text"
+                  spellCheck="false"
+                />
+              </label>
+            ) : (
+              ''
+            )}
+
+            <div className="flex items-center gap-2">
+              <span className="font-exo">{'Include Cliff'}</span>
+              <Switch
+                {...register(`vestingContracts.${index}.includeCliff` as const)}
+                className={`${
+                  getValues(`vestingContracts.${index}.includeCliff`) ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
+                } relative inline-flex h-6 w-11 items-center rounded-full`}
+                checked={getValues(`vestingContracts.${index}.includeCliff`)}
+                onChange={(e: boolean) => {
+                  update(index, {
+                    ...getValues(`vestingContracts.${index}`),
+                    includeCliff: e,
+                  });
+                }}
+              >
+                <span
+                  className={`${
+                    getValues(`vestingContracts.${index}.includeCliff`) ? 'translate-x-6' : 'translate-x-1'
+                  } inline-block h-4 w-4 transform rounded-full bg-white`}
+                />
+              </Switch>
+              <span className="font-exo">{'Custom Start'}</span>
+              <Switch
+                {...register(`vestingContracts.${index}.includeCustomStart` as const)}
+                className={`${
+                  getValues(`vestingContracts.${index}.includeCustomStart`)
+                    ? 'bg-[#23BD8F]'
+                    : 'bg-gray-200 dark:bg-[#252525]'
+                } relative inline-flex h-6 w-11 items-center rounded-full`}
+                checked={getValues(`vestingContracts.${index}.includeCustomStart`)}
+                onChange={(e: boolean) => {
+                  update(index, {
+                    ...getValues(`vestingContracts.${index}`),
+                    includeCustomStart: e,
+                  });
+                }}
+              >
+                <span
+                  className={`${
+                    getValues(`vestingContracts.${index}.includeCustomStart`) ? 'translate-x-6' : 'translate-x-1'
+                  } inline-block h-4 w-4 transform rounded-full bg-white`}
+                />
+              </Switch>
+            </div>
+            <div className="h-[360px]">
+              <VestingChart
+                amount={Number(getValues(`vestingContracts.${index}.vestedAmount`))}
+                vestingPeriod={
+                  Number(getValues(`vestingContracts.${index}.vestingTime`)) *
+                  (getValues(`vestingContracts.${index}.vestingDuration`) === 'year'
+                    ? 365
+                    : getValues(`vestingContracts.${index}.vestingDuration`) === 'month'
+                    ? 30
+                    : 7)
+                }
+                cliffPeriod={
+                  getValues(`vestingContracts.${index}.includeCliff`)
+                    ? Number(getValues(`vestingContracts.${index}.cliffTime`)) *
+                      (getValues(`vestingContracts.${index}.cliffDuration`) === 'year'
+                        ? 365
+                        : getValues(`vestingContracts.${index}.cliffDuration`) === 'month'
+                        ? 30
+                        : 7)
+                    : null
+                }
+                startTime={
+                  getValues(`vestingContracts.${index}.includeCustomStart`) &&
+                  getValues(`vestingContracts.${index}.startDate`) !== ''
+                    ? new Date(getValues(`vestingContracts.${index}.startDate`))
+                    : new Date(Date.now())
+                }
+              />
+            </div>
             <div>
               <button
                 type="button"
