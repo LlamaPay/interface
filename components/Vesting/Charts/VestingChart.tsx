@@ -74,7 +74,11 @@ export default function VestingChart({
                     fontWeight: 500,
                   },
                 },
-                { name: 'end', xAxis: new Date(new Date(startTime).setDate(startTime.getDate() + cliffPeriod)), yAxis: 'max' },
+                {
+                  name: 'end',
+                  xAxis: new Date(new Date(startTime).setDate(startTime.getDate() + cliffPeriod)),
+                  yAxis: 'max',
+                },
               ],
             ],
           },

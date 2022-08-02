@@ -50,11 +50,10 @@ export const InputAmountWithDuration = ({
           className="absolute right-1 bottom-1 top-2 my-auto flex w-full max-w-[24%] items-center truncate rounded border-0 bg-zinc-100 p-2 pr-4 text-sm shadow-sm dark:bg-stone-600"
           style={{ backgroundSize: '1.25rem', backgroundPosition: 'calc(100% - 4px) 55%' }}
           onChange={handleSelectChange}
+          defaultValue="month"
         >
           <option value="year">{t0('year')}</option>
-          <option value="month" selected>
-            {t0('month')}
-          </option>
+          <option value="month">{t0('month')}</option>
           <option value="week">{t0('week')}</option>
         </select>
       </div>

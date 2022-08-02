@@ -1,6 +1,7 @@
 import { FallbackContainer } from 'components/Fallback';
 import Layout from 'components/Layout';
 import CreateVesting from 'components/Vesting/create';
+import CreateGnosisVesting from 'components/Vesting/create-gnosis';
 import { useNetworkProvider } from 'hooks';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslations } from 'next-intl';
@@ -17,9 +18,13 @@ const Create: NextPage = () => {
   const factory = chainId ? networkDetails[chainId]?.vestingFactory : null;
 
   return (
-    <Layout className="app-section mx-auto mt-12 flex w-full flex-col items-center space-y-6 pb-8 dark:bg-[#161818]">
+    <Layout className="app-section mx-auto mt-12 flex w-full flex-col items-center space-y-6 pb-[10rem] dark:bg-[#161818]">
       {factory ? (
-        <CreateVesting factory={factory} />
+        process.env.NEXT_PUBLIC_SAFE === 'true' ? (
+          <CreateGnosisVesting factory={factory} />
+        ) : (
+          <CreateVesting factory={factory} />
+        )
       ) : (
         <>
           <span className="font-exo text-2xl font-semibold text-[#3D3D3D] dark:text-white">Set Up Vesting</span>
