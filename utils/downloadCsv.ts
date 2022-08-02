@@ -104,6 +104,7 @@ export const downloadCustomHistory = (
       const splt = assignedNames[p].split('');
       rows.push([splt[0], splt[1], earnedByEach[p].toFixed(2)]);
     });
+    download('LlamaPayGustoExport.csv', rows.map((r) => r.join(',')).join('\n'));
     return;
   }
   if (!eventType) {
