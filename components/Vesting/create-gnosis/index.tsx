@@ -12,7 +12,7 @@ import { useProvider } from 'wagmi';
 import React from 'react';
 import { ERC20Interface } from 'utils/contract';
 import { BeatLoader } from 'react-spinners';
-import VestingChart from '../Chart';
+//import VestingChart from '../Chart';
 import { Switch } from '@headlessui/react';
 
 type FormValues = {
@@ -52,13 +52,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
   const { mutate: gnosisBatch, isLoading: gnosisLoading } = useGnosisBatch();
   const [tokenAddress, setTokenAddress] = React.useState<string>('');
   const provider = useProvider();
-  const {
-    register,
-    control,
-    handleSubmit,
-    getValues,
-    formState: { errors },
-  } = useForm<FormValues>({
+  const { register, control, handleSubmit, getValues } = useForm<FormValues>({
     defaultValues: {
       vestingContracts: [
         {
@@ -286,7 +280,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
                 />
               </Switch>
             </div>
-            <div className="h-[360px]">
+            {/* <div className="h-[360px]">
               <VestingChart
                 amount={Number(getValues(`vestingContracts.${index}.vestedAmount`))}
                 vestingPeriod={
@@ -314,7 +308,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
                     : new Date(Date.now())
                 }
               />
-            </div>
+            </div> */}
             <div>
               <button
                 type="button"
