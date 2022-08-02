@@ -79,15 +79,46 @@ export const downloadHistory = (data: IHistory[]) => {
 export const downloadCustomHistory = (
   data: IHistory[],
   dateRange: { start: string; end: string },
-  eventType: string | null
+  eventType: string | null,
+  assignedNames: { [key: string]: string }
 ) => {
-  const rows = [['Address Related', 'Transaction Hash', 'Event Type', 'Amount Per Month/Amount', 'Timestamp']];
   const startTimestamp = Number(new Date(dateRange.start)) / 1e3;
   const endTimestamp = Number(new Date(dateRange.end)) / 1e3;
-  data.forEach((d) => {
-    if (Number(d.createdTimestamp) > endTimestamp || Number(d.createdTimestamp) < startTimestamp) return;
+  let rows: [string[]] = [[]];
+  if (eventType === 'Gusto') {
+    rows = [['First name', 'Last name', 'Streamed']];
+    const earnedByEach: { [key: string]: number } = {};
+    for (const i in data) {
+      const d = data[i];
+      if (Number(d.createdTimestamp) > endTimestamp || Number(d.createdTimestamp) < startTimestamp) return;
+      if (d.eventType !== 'Withdraw') continue;
+      if (d.addressRelated === null) continue;
+      if (earnedByEach[d.addressRelated] === undefined) {
+        earnedByEach[d.addressRelated] = Number(d.amount) / 10 ** Number(d.token.decimals);
+      } else {
+        let newTotal = (earnedByEach[d.addressRelated] += Number(d.amount) / 10 ** Number(d.token.decimals));
+        earnedByEach[d.addressRelated] = newTotal;
+      }
+    }
+    Object.keys(earnedByEach).forEach((p) => {
+      const splt = assignedNames[p].split('');
+      rows.push([splt[0], splt[1], earnedByEach[p].toFixed(2)]);
+    });
+    return;
+  }
+  if (!eventType) {
+    rows = [['Name', 'Address Related', 'Transaction Hash', 'Event Type', 'Amount Per Month/Amount', 'Timestamp']];
+  } else if (eventType === 'Withdraw' || eventType === 'Deposit') {
+    rows = [['Name', 'Address Related', 'Transaction Hash', 'Event Type', 'Amount', 'Timestamp']];
+  } else {
+    rows = [['Name', 'Address Related', 'Transaction Hash', 'Event Type', 'Amount Per Month', 'Timestamp']];
+  }
+  for (const i in data) {
+    const d = data[i];
+    if (Number(d.createdTimestamp) > endTimestamp || Number(d.createdTimestamp) < startTimestamp) continue;
     if (!eventType || eventType === d.eventType) {
       rows.push([
+        d.addressRelated ? assignedNames[d.addressRelated] : '',
         d.addressRelated,
         d.txHash,
         d.eventType,
@@ -97,6 +128,6 @@ export const downloadCustomHistory = (
         d.createdTimestamp,
       ]);
     }
-  });
+  }
   download('history.csv', rows.map((r) => r.join(',')).join('\n'));
 };

@@ -4,6 +4,7 @@ import { FormDialog } from 'components/Dialog';
 import { InputText, SubmitButton } from 'components/Form';
 import React from 'react';
 import { IHistory } from 'types';
+import { formatAddress } from 'utils/address';
 import { downloadCustomHistory } from 'utils/downloadCsv';
 
 interface ICustomExportElements {
@@ -14,15 +15,38 @@ interface ICustomExportElements {
 
 export function CustomExportDialog({ data, dialog }: { data: IHistory[]; dialog: DisclosureState }) {
   const [hasEventType, setHasEventType] = React.useState<boolean>(false);
-
+  const [hasAssignNames, setHasAssignNames] = React.useState<boolean>(false);
   function downloadCSV(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.target as HTMLFormElement & ICustomExportElements;
     downloadCustomHistory(
       data,
       { start: form.startDate?.value, end: form.endDate?.value },
-      hasEventType ? form.event?.value : null
+      hasEventType ? form.event?.value : null,
+      tableContents
     );
+  }
+
+  const addresses = React.useMemo(() => {
+    if (!data) return {};
+    const addresses: { [key: string]: string } = {};
+    data.forEach((event) => {
+      if (!event.addressRelated) return;
+      if (addresses[event.addressRelated] !== undefined) return;
+      addresses[event.addressRelated] = '';
+    });
+    return addresses;
+  }, [data]);
+
+  const [tableContents, setTableContents] = React.useState<{ [key: string]: string }>(addresses);
+
+  function onNameChange(e: React.ChangeEvent<HTMLInputElement>) {
+    e.preventDefault();
+    const address = e.target.name;
+    const newTableContents = { ...tableContents };
+    const value = e.target.value;
+    newTableContents[address] = value;
+    setTableContents(newTableContents);
   }
 
   return (
@@ -43,7 +67,7 @@ export function CustomExportDialog({ data, dialog }: { data: IHistory[]; dialog:
           pattern="\d{4}-\d{2}-\d{2}"
         ></InputText>
         <div className="flex gap-2">
-          <span className="font-exo">{'Event'}</span>
+          <span className="font-exo">{'Custom'}</span>
           <Switch
             checked={hasEventType}
             onChange={setHasEventType}
@@ -57,6 +81,20 @@ export function CustomExportDialog({ data, dialog }: { data: IHistory[]; dialog:
               } inline-block h-4 w-4 transform rounded-full bg-white`}
             />
           </Switch>
+          <span className="font-exo">{'Assign Names'}</span>
+          <Switch
+            checked={hasAssignNames}
+            onChange={setHasAssignNames}
+            className={`${
+              hasAssignNames ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
+            } relative inline-flex h-6 w-11 items-center rounded-full`}
+          >
+            <span
+              className={`${
+                hasAssignNames ? 'translate-x-6' : 'translate-x-1'
+              } inline-block h-4 w-4 transform rounded-full bg-white`}
+            />
+          </Switch>
         </div>
         {hasEventType && (
           <select name="event" required className="input-label w-full rounded dark:border-[#252525] dark:bg-[#202020]">
@@ -67,7 +105,38 @@ export function CustomExportDialog({ data, dialog }: { data: IHistory[]; dialog:
             <option value="StreamCancelled">{'Cancel Stream'}</option>
             <option value="StreamModified">{'Modify Stream'}</option>
             <option value="StreamPaused">{'Pause'}</option>
+            <option value="Gusto">{'Gusto'}</option>
           </select>
+        )}
+        {hasAssignNames && (
+          <table className="w-full">
+            <thead>
+              <tr>
+                <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">Address</th>
+                <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.keys(tableContents).map((p) => (
+                <tr key={p} className="table-row">
+                  <td className="table-description w-1/3 text-center dark:text-white">{formatAddress(p)}</td>
+                  <td className="table-description dark:text-white">
+                    <input
+                      className="input-field m-0 min-w-[8rem] py-1 dark:text-white"
+                      spellCheck="false"
+                      inputMode="text"
+                      type="text"
+                      autoComplete="off"
+                      autoCorrect="off"
+                      value={tableContents[p]}
+                      onChange={(e) => onNameChange(e)}
+                      name={p}
+                    />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
         )}
         <SubmitButton className="mt-5">{'Download'}</SubmitButton>
       </form>
