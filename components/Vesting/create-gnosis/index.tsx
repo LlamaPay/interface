@@ -146,7 +146,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
                 placeholder="0.0"
                 {...register(`vestingContracts.${index}.vestedAmount` as const, {
                   required: true,
-                  pattern: /[0-9.]/,
+                  pattern: /^[0-9]*[.,]?[0-9]*$/,
                 })}
                 className="input-field dark:border-[#252525] dark:bg-[#202020]"
                 autoComplete="off"
