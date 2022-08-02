@@ -12,22 +12,9 @@ import { useProvider } from 'wagmi';
 import React from 'react';
 import { ERC20Interface } from 'utils/contract';
 import { BeatLoader } from 'react-spinners';
-//import VestingChart from '../Chart';
 import { Switch } from '@headlessui/react';
-
-type FormValues = {
-  vestingContracts: {
-    recipientAddress: string;
-    vestedAmount: string;
-    vestingTime: string;
-    vestingDuration: 'month' | 'year' | 'week';
-    includeCliff: boolean;
-    includeCustomStart: boolean;
-    cliffTime: string;
-    cliffDuration: 'month' | 'year' | 'week';
-    startDate: string;
-  }[];
-};
+import { IVestingGnosisFormValues } from '../types';
+import MultipleStreamChartWrapper from '../Charts/MultipleStreamChartWrapper';
 
 const factoryAbi = [
   {
@@ -52,7 +39,8 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
   const { mutate: gnosisBatch, isLoading: gnosisLoading } = useGnosisBatch();
   const [tokenAddress, setTokenAddress] = React.useState<string>('');
   const provider = useProvider();
-  const { register, control, handleSubmit, getValues } = useForm<FormValues>({
+
+  const { register, control, handleSubmit, getValues } = useForm<IVestingGnosisFormValues>({
     defaultValues: {
       vestingContracts: [
         {
@@ -69,11 +57,13 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
       ],
     },
   });
+
   const { fields, append, remove, update } = useFieldArray({
     name: 'vestingContracts',
     control,
   });
-  async function onSubmit(data: FormValues) {
+
+  async function onSubmit(data: IVestingGnosisFormValues) {
     const tokenContract = createERC20Contract({ tokenAddress: getAddress(tokenAddress), provider });
     const decimals = await tokenContract.decimals();
     const createCalls: string[] = [];
@@ -107,6 +97,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
     calls[factory] = createCalls;
     gnosisBatch({ calls: calls });
   }
+
   return (
     <form className="mx-auto flex max-w-xl flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
       <Link href="/vesting">
@@ -280,35 +271,9 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
                 />
               </Switch>
             </div>
-            {/* <div className="h-[360px]">
-              <VestingChart
-                amount={Number(getValues(`vestingContracts.${index}.vestedAmount`))}
-                vestingPeriod={
-                  Number(getValues(`vestingContracts.${index}.vestingTime`)) *
-                  (getValues(`vestingContracts.${index}.vestingDuration`) === 'year'
-                    ? 365
-                    : getValues(`vestingContracts.${index}.vestingDuration`) === 'month'
-                    ? 30
-                    : 7)
-                }
-                cliffPeriod={
-                  getValues(`vestingContracts.${index}.includeCliff`)
-                    ? Number(getValues(`vestingContracts.${index}.cliffTime`)) *
-                      (getValues(`vestingContracts.${index}.cliffDuration`) === 'year'
-                        ? 365
-                        : getValues(`vestingContracts.${index}.cliffDuration`) === 'month'
-                        ? 30
-                        : 7)
-                    : null
-                }
-                startTime={
-                  getValues(`vestingContracts.${index}.includeCustomStart`) &&
-                  getValues(`vestingContracts.${index}.startDate`) !== ''
-                    ? new Date(getValues(`vestingContracts.${index}.startDate`))
-                    : new Date(Date.now())
-                }
-              />
-            </div> */}
+
+            <MultipleStreamChartWrapper {...{ control, index }} />
+
             <div>
               <button
                 type="button"

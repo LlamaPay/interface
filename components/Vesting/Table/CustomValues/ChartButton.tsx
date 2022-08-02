@@ -4,7 +4,7 @@ import { FormDialog } from 'components/Dialog';
 import { IVesting } from 'types';
 import dynamic from 'next/dynamic';
 
-const VestingChart = dynamic(() => import('../../Chart'), { ssr: false });
+const VestingChart = dynamic(() => import('../../Charts/VestingChart'), { ssr: false });
 
 export default function ChartButton({ data }: { data: IVesting }) {
   const dialog = useDialogState();
