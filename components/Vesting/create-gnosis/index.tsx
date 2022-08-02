@@ -15,6 +15,7 @@ import { BeatLoader } from 'react-spinners';
 import { Switch } from '@headlessui/react';
 import { IVestingGnosisFormValues } from '../types';
 import MultipleStreamChartWrapper from '../Charts/MultipleStreamChartWrapper';
+import { useQueryClient } from 'react-query';
 
 const factoryAbi = [
   {
@@ -39,6 +40,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
   const { mutate: gnosisBatch, isLoading: gnosisLoading } = useGnosisBatch();
   const [tokenAddress, setTokenAddress] = React.useState<string>('');
   const provider = useProvider();
+  const queryClient = useQueryClient();
 
   const { register, control, handleSubmit, getValues } = useForm<IVestingGnosisFormValues>({
     defaultValues: {
@@ -96,6 +98,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
     calls[tokenAddress] = [ERC20Interface.encodeFunctionData('approve', [factory, toApprove.toFixed(0)])];
     calls[factory] = createCalls;
     gnosisBatch({ calls: calls });
+    queryClient.invalidateQueries();
   }
 
   return (
