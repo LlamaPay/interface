@@ -102,7 +102,7 @@ export const downloadCustomHistory = (
     }
 
     Object.keys(earnedByEach).forEach((p) => {
-      const splt = assignedNames[p].split('');
+      const splt = assignedNames[p].split(' ');
       rows.push([splt[0], splt[1], earnedByEach[p].toFixed(2)]);
     });
     download('gusto.csv', rows.map((r) => r.join(',')).join('\n'));
