@@ -140,7 +140,7 @@ export default function BotFunds({
               </div>
             </form>
           </section>
-          {botInfo ? (
+          {botInfo && (
             <div className="overflow-x-auto">
               <h1 className="pb-2">Schedule:</h1>
               <table className="border">
@@ -216,8 +216,6 @@ export default function BotFunds({
                 </tbody>
               </table>
             </div>
-          ) : (
-            ''
           )}
         </span>
       </FormDialog>

@@ -42,7 +42,6 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
         const queriedEvents = await contract.queryFilter(filters, start, currBlock);
         events = events.concat(queriedEvents);
       } while (currBlock < endBlock);
-
       const scheduleEvents: any = {};
       const llamaPayToToken: any = {};
       events.forEach((e) => {
@@ -77,7 +76,7 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
           if (llamaPayToToken[last.llamaPay] === undefined) {
             const llamapayContract = new ethers.Contract(last.llamaPay, llamaContract, provider);
             const tokenContract = new ethers.Contract(await llamapayContract.token(), erc20ABI, provider);
-            llamaPayToToken[last.llamaPay] = tokenContract.symbol();
+            llamaPayToToken[last.llamaPay] = await tokenContract.symbol();
           }
           toInclude[id] = {
             owner: last.owner,
@@ -94,7 +93,8 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
       return toInclude;
     }
   } catch (error) {
-    return null;
+    console.error(error);
+    return {};
   }
 }
 
