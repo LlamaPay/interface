@@ -90,7 +90,7 @@ export const downloadCustomHistory = (
     const earnedByEach: { [key: string]: number } = {};
     for (const i in data) {
       const d = data[i];
-      if (Number(d.createdTimestamp) > endTimestamp || Number(d.createdTimestamp) < startTimestamp) return;
+      if (Number(d.createdTimestamp) > endTimestamp || Number(d.createdTimestamp) < startTimestamp) continue;
       if (d.eventType !== 'Withdraw') continue;
       if (d.addressRelated === null) continue;
       if (earnedByEach[d.addressRelated] === undefined) {
@@ -100,11 +100,12 @@ export const downloadCustomHistory = (
         earnedByEach[d.addressRelated] = newTotal;
       }
     }
+
     Object.keys(earnedByEach).forEach((p) => {
       const splt = assignedNames[p].split('');
       rows.push([splt[0], splt[1], earnedByEach[p].toFixed(2)]);
     });
-    download('LlamaPayGustoExport.csv', rows.map((r) => r.join(',')).join('\n'));
+    download('gusto.csv', rows.map((r) => r.join(',')).join('\n'));
     return;
   }
   if (!eventType) {

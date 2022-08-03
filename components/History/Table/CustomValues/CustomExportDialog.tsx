@@ -14,7 +14,6 @@ interface ICustomExportElements {
 }
 
 export function CustomExportDialog({ data, dialog }: { data: IHistory[]; dialog: DisclosureState }) {
-  const [hasEventType, setHasEventType] = React.useState<boolean>(false);
   const [hasAssignNames, setHasAssignNames] = React.useState<boolean>(false);
   function downloadCSV(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -22,7 +21,7 @@ export function CustomExportDialog({ data, dialog }: { data: IHistory[]; dialog:
     downloadCustomHistory(
       data,
       { start: form.startDate?.value, end: form.endDate?.value },
-      hasEventType ? form.event?.value : null,
+      form.event?.value !== '' ? form.event?.value : null,
       tableContents
     );
   }
@@ -66,21 +65,18 @@ export function CustomExportDialog({ data, dialog }: { data: IHistory[]; dialog:
           placeholder="YYYY-MM-DD"
           pattern="\d{4}-\d{2}-\d{2}"
         ></InputText>
+        <select name="event" required className="input-label w-full rounded dark:border-[#252525] dark:bg-[#202020]">
+          <option value="AllEvents">{'All Events'}</option>
+          <option value="Deposit">{'Deposit'}</option>
+          <option value="Withdraw">{'Withdraw'}</option>
+          <option value="PayerWithdraw">{'Payer Withdraw'}</option>
+          <option value="StreamCreated">{'Create Stream'}</option>
+          <option value="StreamCancelled">{'Cancel Stream'}</option>
+          <option value="StreamModified">{'Modify Stream'}</option>
+          <option value="StreamPaused">{'Pause'}</option>
+          <option value="Gusto">{'Gusto'}</option>
+        </select>
         <div className="flex gap-2">
-          <span className="font-exo">{'Custom'}</span>
-          <Switch
-            checked={hasEventType}
-            onChange={setHasEventType}
-            className={`${
-              hasEventType ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
-            } relative inline-flex h-6 w-11 items-center rounded-full`}
-          >
-            <span
-              className={`${
-                hasEventType ? 'translate-x-6' : 'translate-x-1'
-              } inline-block h-4 w-4 transform rounded-full bg-white`}
-            />
-          </Switch>
           <span className="font-exo">{'Assign Names'}</span>
           <Switch
             checked={hasAssignNames}
@@ -96,18 +92,6 @@ export function CustomExportDialog({ data, dialog }: { data: IHistory[]; dialog:
             />
           </Switch>
         </div>
-        {hasEventType && (
-          <select name="event" required className="input-label w-full rounded dark:border-[#252525] dark:bg-[#202020]">
-            <option value="Deposit">{'Deposit'}</option>
-            <option value="Withdraw">{'Withdraw'}</option>
-            <option value="PayerWithdraw">{'Payer Withdraw'}</option>
-            <option value="StreamCreated">{'Create Stream'}</option>
-            <option value="StreamCancelled">{'Cancel Stream'}</option>
-            <option value="StreamModified">{'Modify Stream'}</option>
-            <option value="StreamPaused">{'Pause'}</option>
-            <option value="Gusto">{'Gusto'}</option>
-          </select>
-        )}
         {hasAssignNames && (
           <table className="w-full">
             <thead>
