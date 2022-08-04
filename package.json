@@ -11,6 +11,7 @@
     "prepare": "yarn graphql:generate"
   },
   "dependencies": {
+    "@antefinance/ante-widget-react": "^0.1.2",
     "@fontsource/exo-2": "^4.5.7",
     "@gnosis.pm/safe-apps-provider": "^0.11.0",
     "@gnosis.pm/safe-apps-sdk": "^7.3.0",

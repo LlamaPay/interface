@@ -2,19 +2,23 @@ import Head from 'next/head';
 import * as React from 'react';
 import Header from './Header';
 import classNames from 'classnames';
-import Footer from './Footer';
 import CustomToast from 'components/CustomToast';
 import Hero from 'components/Hero';
 import OnboardDialog from 'components/Onboard';
 import { useRouter } from 'next/router';
 import { useDialogState } from 'ariakit';
 import StaleSubgraphWarning from 'components/StaleSubgraphWarning';
+import dynamic from 'next/dynamic';
 
 interface ILayoutProps {
   children: React.ReactNode;
   className?: string;
   noBanner?: boolean;
 }
+
+const Footer = dynamic(() => import('./Footer'), {
+  ssr: false,
+});
 
 export default function Layout({ children, className, noBanner = false, ...props }: ILayoutProps) {
   const router = useRouter();

@@ -1,14 +1,12 @@
-// import { useTheme } from 'next-themes';
-// import { SunIcon, MoonIcon } from '@heroicons/react/solid';
+import AnteWidget from '@antefinance/ante-widget-react';
+import '@antefinance/ante-widget/dist/widget.css';
 
 const Footer = () => {
-  // const { setTheme, resolvedTheme } = useTheme();
-  // const isDark = resolvedTheme === 'dark';
   return (
     <footer>
-      {/* <button className="p-2" onClick={() => setTheme(isDark ? 'light' : 'dark')}>
-        {isDark ? <SunIcon className="h-5 w-5" /> : <MoonIcon className="h-5 w-5" />}
-      </button> */}
+      <div className="float-right mr-3">
+        <AnteWidget.Protocol name="LlamaPay" chain="0x1" />
+      </div>
     </footer>
   );
 };
