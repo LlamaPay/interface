@@ -44,7 +44,7 @@ export const DISPERSE_METER = '0x8e5455983a70da3d1e66719636e907d63eca40b7';
 export const DISPERSE_METIS = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 export const DISPERSE_GOERLI = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 
-export const BOT_GOERLI = '0xB7CAa90CDbB8746F54B19F2f85E86b99598b268c';
+export const BOT_GOERLI = '0xAF86436289454f0D862160b914BFE768bCcF9920';
 export const BOT_AVALANCHE = '0x0327a00f37115115038c289827480dDaAbae948e';
 
 export const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
@@ -409,3 +409,5 @@ export const whitelist: ITokenWhitelist = {
     isVerified: true,
   },
 };
+
+export const zeroAdd: string = '0x0000000000000000000000000000000000000000';

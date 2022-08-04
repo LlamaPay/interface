@@ -49,7 +49,7 @@ export default function Schedule({
 
   const [formData, setFormData] = React.useState({
     startDate: '',
-    frequency: '',
+    frequency: 'daily',
   });
 
   function handleChange(value: string, type: keyof typeof formData) {
