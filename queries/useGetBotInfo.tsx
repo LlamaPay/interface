@@ -15,6 +15,7 @@ const topics: { [key: string]: string } = {
 
 const blockCreated: { [key: number]: number } = {
   5: 7343399,
+  43114: 18219329,
 };
 
 async function getBotInfo(userAddress: string | undefined, provider: BaseProvider | null, chainId: number | null) {
