@@ -131,7 +131,7 @@ export default function useGetBotInfo() {
     ['botInfo', accountData?.address, chainId],
     () => getBotInfo(accountData?.address, provider, chainId),
     {
-      refetchInterval: 30000,
+      refetchInterval: 10000,
     }
   );
 }
