@@ -55,20 +55,18 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
         }[];
       } = {};
       for (const i in events) {
-        const data = ethers.utils.defaultAbiCoder.decode(
-          ['address', 'address', 'address', 'address', 'uint216', 'uint40', 'uint40', 'bytes32'],
-          events[i].data
-        );
+        const args = events[i].args;
+        if (!args) continue;
         const user = userAddress.toLowerCase();
-        const owner = data[0].toLowerCase();
+        const owner = args.owner.toLowerCase();
         const topic = topics[events[i].topics[0]];
-        const llamaPay = data[1].toLowerCase();
-        const from = data[2].toLowerCase();
-        const to = data[3].toLowerCase();
-        const amountPerSec = data[4];
-        const starts = data[5];
-        const frequency = data[6];
-        const id = data[7];
+        const llamaPay = args.llamaPay.toLowerCase();
+        const from = args.from.toLowerCase();
+        const to = args.to.toLowerCase();
+        const amountPerSec = args.amountPerSec;
+        const starts = args.starts;
+        const frequency = args.frequency;
+        const id = args.id;
         if (from !== user && to !== user) continue;
         if (scheduleEvents[id] === undefined) {
           scheduleEvents[id] = [];
