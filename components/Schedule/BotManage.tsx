@@ -10,6 +10,7 @@ import { useQueryClient } from 'react-query';
 import useGetBotInfo from 'queries/useGetBotInfo';
 import { formatAddress } from 'utils/address';
 import { zeroAdd } from 'utils/constants';
+import useGetRedirectInfo from 'queries/useGetRedirectInfo';
 
 export default function BotFunds({
   dialog,
@@ -30,6 +31,7 @@ export default function BotFunds({
   });
 
   const { data: botInfo } = useGetBotInfo();
+  const { data: redirectInfo } = useGetRedirectInfo();
 
   const [{ data: balance }] = useContractRead(
     {
@@ -309,6 +311,62 @@ export default function BotFunds({
                             ''
                           )}
                         </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+          {redirectInfo && (
+            <div className="overflow-x-auto">
+              <table className="border">
+                <thead>
+                  <tr>
+                    <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">Type</th>
+                    <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+                      Address Related
+                    </th>
+                    <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">Token</th>
+                    <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+                      Amount to Send
+                    </th>
+                    <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+                      Frequency
+                    </th>
+                    <th className="table-description align-right text-sm font-semibold !text-[#3D3D3D] dark:!text-white"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.keys(redirectInfo).map((p) => (
+                    <tr key={p} className="table-row">
+                      <td className="table-description text-center dark:text-white">Redirect</td>
+                      <td className="table-description text-center dark:text-white">
+                        <span>{formatAddress(redirectInfo[p].to)}</span>
+                      </td>
+                      <td className="table-description text-center dark:text-white">
+                        <span>{redirectInfo[p].token}</span>
+                      </td>
+                      <td className="table-description text-center dark:text-white">
+                        <span>{redirectInfo[p].amount / 10 ** redirectInfo[p].decimals}</span>
+                      </td>
+                      <td className="table-description text-center dark:text-white">
+                        <span>
+                          {redirectInfo[p].frequency === secondsByDuration['day']
+                            ? 'Every Day'
+                            : redirectInfo[p].frequency === secondsByDuration['week']
+                            ? 'Every 7 Days'
+                            : redirectInfo[p].frequency === secondsByDuration['biweek']
+                            ? 'Every 14 Days'
+                            : redirectInfo[p].frequency === secondsByDuration['month']
+                            ? 'Every 30 days'
+                            : ''}
+                        </span>
+                      </td>
+                      <td className="table-description text-center dark:text-white">
+                        <button className="row-action-links" onClick={(e) => handleCancel(p)}>
+                          Cancel
+                        </button>
                       </td>
                     </tr>
                   ))}
