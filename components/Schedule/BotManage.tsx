@@ -1,7 +1,7 @@
 import { DisclosureState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
 import { networkDetails, secondsByDuration } from 'utils/constants';
-import { erc20ABI, useContractRead, useContractWrite } from 'wagmi';
+import { erc20ABI, useContractRead, useContractWrite, useSigner } from 'wagmi';
 import botContract from 'abis/botContract';
 import { InputAmount, InputText, SubmitButton } from 'components/Form';
 import React from 'react';
@@ -10,6 +10,7 @@ import { useQueryClient } from 'react-query';
 import useGetBotInfo from 'queries/useGetBotInfo';
 import { formatAddress } from 'utils/address';
 import { zeroAdd } from 'utils/constants';
+import { createWriteContract } from 'utils/contract';
 
 export default function BotFunds({
   dialog,
@@ -31,6 +32,7 @@ export default function BotFunds({
   const [redirectAddress, setRedirectAddress] = React.useState<string | null>(null);
 
   const { data: botInfo } = useGetBotInfo();
+  const [{ data: signer }] = useSigner();
 
   const [{ data: balance }] = useContractRead(
     {
@@ -230,34 +232,13 @@ export default function BotFunds({
     });
   }
 
-  function onApprove(p: string) {
-    if (!botInfo?.toInclude) return;
-    const [{}, approve] = useContractWrite(
-      {
-        addressOrName: botInfo?.toInclude[p].token,
-        contractInterface: erc20ABI,
-      },
-      'approve',
-      {
-        args: [botAddress, '115792089237316195423570985008687907853269984665640564039457584007913129639935'],
-      }
+  async function onApprove(p: string) {
+    if (!botInfo?.toInclude || !signer) return;
+    const contract = createWriteContract(botInfo?.toInclude[p].token, signer);
+    await contract.approve(
+      botAddress,
+      '115792089237316195423570985008687907853269984665640564039457584007913129639935'
     );
-    approve().then((data) => {
-      if (data.error) {
-        dialog.hide();
-        toast.error(data.error.message);
-      } else {
-        const toastid = toast.loading('Approving Contract');
-        dialog.hide();
-        data.data?.wait().then((receipt) => {
-          toast.dismiss(toastid);
-          receipt.status === 1
-            ? toast.success('Successfully Approved Contract')
-            : toast.error('Failed to Approve Contract');
-        });
-        queryClient.invalidateQueries();
-      }
-    });
   }
 
   return (
@@ -303,6 +284,7 @@ export default function BotFunds({
                     isRequired
                     label="Redirect Withdrawals To"
                     placeholder="0x..."
+                    handleChange={(e) => setRedirectAddress(e.target.value)}
                   />
                 </div>
                 <SubmitButton className="bottom-0 h-min w-1/2 place-self-end">Redirect</SubmitButton>
