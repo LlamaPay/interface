@@ -234,7 +234,6 @@ export default function BotFunds({
   }
 
   async function onApprove() {
-    console.log(selectedToken);
     approveMax({ tokenAddress: selectedToken, spenderAddress: botAddress });
   }
 
@@ -293,7 +292,9 @@ export default function BotFunds({
                   <select onChange={(e) => setSelectedToken(e.target.value)} name="token" className="input-field">
                     <option value={''}></option>
                     {Object.keys(botInfo?.llamaPayToToken).map((p) => (
-                      <option value={p}>{botInfo?.llamaPayToToken[p]}</option>
+                      <option key={p} value={p}>
+                        {botInfo?.llamaPayToToken[p]}
+                      </option>
                     ))}
                   </select>
                   <SubmitButton onClick={onApprove} className="bottom-0 h-min w-1/2 place-self-end">
