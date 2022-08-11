@@ -77,7 +77,7 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
         };
       }
       const redirect = await contract.redirects(userAddress);
-      return { toInclude, redirect };
+      return { toInclude, redirect, llamaPayToToken };
     }
   } catch (error) {
     console.error(error);

@@ -30,6 +30,7 @@ export default function BotFunds({
     frequency: 'daily',
   });
   const [redirectAddress, setRedirectAddress] = React.useState<string | null>(null);
+  const [selectedToken, setSelectedToken] = React.useState<string>('');
 
   const { data: botInfo } = useGetBotInfo();
   const { mutate: approveMax } = useApproveTokenForMaxAmt();
@@ -202,7 +203,7 @@ export default function BotFunds({
         dialog.hide();
         toast.error(data.error.message);
       } else {
-        const toastid = toast.loading(`Setting Redirect to ${redirectAddress}`);
+        const toastid = toast.loading(`Setting Redirect to ${formatAddress(redirectAddress ?? '')}`);
         dialog.hide();
         data.data?.wait().then((receipt) => {
           toast.dismiss(toastid);
@@ -232,9 +233,9 @@ export default function BotFunds({
     });
   }
 
-  async function onApprove(p: string) {
-    if (!botInfo?.toInclude) return;
-    approveMax({ tokenAddress: botInfo?.toInclude[p].token, spenderAddress: botAddress });
+  async function onApprove() {
+    console.log(selectedToken);
+    approveMax({ tokenAddress: selectedToken, spenderAddress: botAddress });
   }
 
   return (
@@ -258,34 +259,49 @@ export default function BotFunds({
             </form>
           </section>
           <section>
-            <form onSubmit={onRedirect}>
-              <div className="flex space-x-2">
-                <span className="text-md font-evo">
-                  {botInfo?.redirect === zeroAdd || !botInfo?.redirect
-                    ? 'Redirect not Set'
-                    : `Redirecting Withdrawals to ${formatAddress(botInfo?.redirect)}`}
-                </span>
-                {botInfo?.redirect !== zeroAdd && botInfo?.redirect && (
-                  <button className="row-action-links" onClick={onCancelRedirect}>
-                    Remove
-                  </button>
-                )}
-              </div>
+            <div className="flex space-x-2">
+              <span className="text-md font-evo">
+                {botInfo?.redirect === zeroAdd || !botInfo?.redirect
+                  ? 'Redirect not Set'
+                  : `Redirecting Withdrawals to ${formatAddress(botInfo?.redirect)}`}
+              </span>
+              {botInfo?.redirect !== zeroAdd && botInfo?.redirect && (
+                <button className="row-action-links" onClick={onCancelRedirect}>
+                  Remove
+                </button>
+              )}
+            </div>
 
-              <div className="flex space-x-2">
-                <div className="w-full">
-                  <InputText
-                    name="redirectTo"
-                    pattern="/^0x[a-fA-F0-9]{40}$/"
-                    isRequired
-                    label="Redirect Withdrawals To"
-                    placeholder="0x..."
-                    handleChange={(e) => setRedirectAddress(e.target.value)}
-                  />
-                </div>
-                <SubmitButton className="bottom-0 h-min w-1/2 place-self-end">Redirect</SubmitButton>
+            <div className="flex space-x-2">
+              <div className="w-full">
+                <InputText
+                  name="redirectTo"
+                  isRequired
+                  label="Redirect Withdrawals To"
+                  placeholder="0x..."
+                  handleChange={(e) => setRedirectAddress(e.target.value)}
+                />
               </div>
-            </form>
+              <SubmitButton onClick={onRedirect} className="bottom-0 h-min w-1/2 place-self-end">
+                Redirect
+              </SubmitButton>
+            </div>
+            {botInfo?.llamaPayToToken && (
+              <>
+                <label className="input-label">Approve Token for Bot Contract</label>
+                <div className="flex space-x-2">
+                  <select onChange={(e) => setSelectedToken(e.target.value)} name="token" className="input-field">
+                    <option value={''}></option>
+                    {Object.keys(botInfo?.llamaPayToToken).map((p) => (
+                      <option value={p}>{botInfo?.llamaPayToToken[p]}</option>
+                    ))}
+                  </select>
+                  <SubmitButton onClick={onApprove} className="bottom-0 h-min w-1/2 place-self-end">
+                    Approve
+                  </SubmitButton>
+                </div>
+              </>
+            )}
           </section>
           <section className="border px-2 py-2">
             <h1 className="pb-1">Schedule for All Streams:</h1>
@@ -394,9 +410,6 @@ export default function BotFunds({
                       </td>
                       <td className="table-description">
                         <div className="flex space-x-1 text-center">
-                          <button className="row-action-links" onClick={(e) => onApprove(p)}>
-                            Approve
-                          </button>
                           {botInfo.toInclude[p].owner.toLowerCase() === accountAddress.toLowerCase() && (
                             <button className="row-action-links" onClick={(e) => handleCancel(p)}>
                               Cancel
