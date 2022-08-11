@@ -47,11 +47,11 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
               <div className="my-1 rounded border p-2 dark:border-stone-700">
                 <div className="flex space-x-1">
                   <p className="dark:text-white">{t0('payer')}:</p>
-                  <p className="dark:text-white">{data.oldStream?.payer.id}</p>
+                  <p className="truncate dark:text-white">{data.oldStream?.payer.id}</p>
                 </div>
                 <div className="flex space-x-1">
                   <p className="dark:text-white">{t0('payee')}:</p>
-                  <p className="dark:text-white">{data.oldStream?.payee.id}</p>
+                  <p className="truncate dark:text-white">{data.oldStream?.payee.id}</p>
                 </div>
                 <div className="flex space-x-1">
                   <p className="dark:text-white">{t0('amount')}:</p>
@@ -85,12 +85,12 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
             <div className="my-1 rounded border p-2 dark:border-stone-700">
               <div className="flex space-x-1">
                 <p className="dark:text-white">{t0('payer')}:</p>
-                <p className="dark:text-white">{data.stream?.payer.id}</p>
+                <p className="truncate dark:text-white">{data.stream?.payer.id}</p>
               </div>
 
               <div className="flex space-x-1">
                 <p className="dark:text-white">{t0('payee')}:</p>
-                <p className="dark:text-white">{data.stream?.payee.id}</p>
+                <p className="truncate dark:text-white">{data.stream?.payee.id}</p>
               </div>
 
               <div className="flex space-x-1">
