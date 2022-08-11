@@ -1,7 +1,7 @@
 import { DisclosureState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
 import { networkDetails, secondsByDuration } from 'utils/constants';
-import { erc20ABI, useContractRead, useContractWrite, useSigner } from 'wagmi';
+import { useContractRead, useContractWrite } from 'wagmi';
 import botContract from 'abis/botContract';
 import { InputAmount, InputText, SubmitButton } from 'components/Form';
 import React from 'react';
@@ -10,7 +10,7 @@ import { useQueryClient } from 'react-query';
 import useGetBotInfo from 'queries/useGetBotInfo';
 import { formatAddress } from 'utils/address';
 import { zeroAdd } from 'utils/constants';
-import { createWriteContract } from 'utils/contract';
+import { useApproveTokenForMaxAmt } from 'queries/useTokenApproval';
 
 export default function BotFunds({
   dialog,
@@ -32,7 +32,7 @@ export default function BotFunds({
   const [redirectAddress, setRedirectAddress] = React.useState<string | null>(null);
 
   const { data: botInfo } = useGetBotInfo();
-  const [{ data: signer }] = useSigner();
+  const { mutate: approveMax } = useApproveTokenForMaxAmt();
 
   const [{ data: balance }] = useContractRead(
     {
@@ -233,12 +233,8 @@ export default function BotFunds({
   }
 
   async function onApprove(p: string) {
-    if (!botInfo?.toInclude || !signer) return;
-    const contract = createWriteContract(botInfo?.toInclude[p].token, signer);
-    await contract.approve(
-      botAddress,
-      '115792089237316195423570985008687907853269984665640564039457584007913129639935'
-    );
+    if (!botInfo?.toInclude) return;
+    approveMax({ tokenAddress: botInfo?.toInclude[p].token, spenderAddress: botAddress });
   }
 
   return (

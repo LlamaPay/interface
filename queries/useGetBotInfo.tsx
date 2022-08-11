@@ -77,7 +77,6 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
         };
       }
       const redirect = await contract.redirects(userAddress);
-      console.log(redirect);
       return { toInclude, redirect };
     }
   } catch (error) {
