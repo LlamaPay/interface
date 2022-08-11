@@ -1,7 +1,7 @@
 import { DisclosureState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
 import { networkDetails, secondsByDuration } from 'utils/constants';
-import { useContractRead, useContractWrite } from 'wagmi';
+import { erc20ABI, useContractRead, useContractWrite } from 'wagmi';
 import botContract from 'abis/botContract';
 import { InputAmount, InputText, SubmitButton } from 'components/Form';
 import React from 'react';
@@ -28,6 +28,7 @@ export default function BotFunds({
     startDate: '',
     frequency: 'daily',
   });
+  const [redirectAddress, setRedirectAddress] = React.useState<string | null>(null);
 
   const { data: botInfo } = useGetBotInfo();
 
@@ -73,6 +74,22 @@ export default function BotFunds({
     'scheduleWithdraw'
   );
 
+  const [{}, setRedirect] = useContractWrite(
+    {
+      addressOrName: botAddress,
+      contractInterface: botContract,
+    },
+    'setRedirect'
+  );
+
+  const [{}, cancelRedirect] = useContractWrite(
+    {
+      addressOrName: botAddress,
+      contractInterface: botContract,
+    },
+    'cancelRedirect'
+  );
+
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
@@ -114,22 +131,22 @@ export default function BotFunds({
   }
 
   function handleCancel(p: string) {
-    if (botInfo === undefined) return;
-    const ele = botInfo[p];
-    cancelWithdraw({ args: [ele.llamaPay, ele.from, ele.to, ele.amountPerSec, ele.starts, ele.frequency] }).then(
-      (data) => {
-        if (data.error) {
-          toast.error(data.error.message);
-        } else {
-          const toastid = toast.loading(`Cancelling Withdrawal`);
-          data.data?.wait().then((receipt) => {
-            toast.dismiss(toastid);
-            receipt.status === 1 ? toast.success('Successfully Cancelled') : toast.error('Failed to Cancel');
-          });
-          queryClient.invalidateQueries();
-        }
+    if (!botInfo?.toInclude) return;
+    const ele = botInfo.toInclude[p];
+    cancelWithdraw({
+      args: [ele.llamaPay, ele.token, ele.from, ele.to, ele.amountPerSec, ele.starts, ele.frequency],
+    }).then((data) => {
+      if (data.error) {
+        toast.error(data.error.message);
+      } else {
+        const toastid = toast.loading(`Cancelling Withdrawal`);
+        data.data?.wait().then((receipt) => {
+          toast.dismiss(toastid);
+          receipt.status === 1 ? toast.success('Successfully Cancelled') : toast.error('Failed to Cancel');
+        });
+        queryClient.invalidateQueries();
       }
-    );
+    });
   }
 
   function handleChange(value: string, type: keyof typeof formData) {
@@ -142,6 +159,7 @@ export default function BotFunds({
 
     scheduleWithdraw({
       args: [
+        zeroAdd,
         zeroAdd,
         e === 'incoming' ? zeroAdd : accountAddress,
         e === 'outgoing' ? zeroAdd : accountAddress,
@@ -176,6 +194,72 @@ export default function BotFunds({
     });
   }
 
+  function onRedirect() {
+    setRedirect({ args: redirectAddress }).then((data) => {
+      if (data.error) {
+        dialog.hide();
+        toast.error(data.error.message);
+      } else {
+        const toastid = toast.loading(`Setting Redirect to ${redirectAddress}`);
+        dialog.hide();
+        data.data?.wait().then((receipt) => {
+          toast.dismiss(toastid);
+          receipt.status === 1 ? toast.success('Successfully Set Redirect') : toast.error('Failed to Set Redirect');
+        });
+        queryClient.invalidateQueries();
+      }
+    });
+  }
+
+  function onCancelRedirect() {
+    cancelRedirect().then((data) => {
+      if (data.error) {
+        dialog.hide();
+        toast.error(data.error.message);
+      } else {
+        const toastid = toast.loading(`Cancelling Redirect`);
+        dialog.hide();
+        data.data?.wait().then((receipt) => {
+          toast.dismiss(toastid);
+          receipt.status === 1
+            ? toast.success('Successfully Cancelled Redirect')
+            : toast.error('Failed to Cancel Redirect');
+        });
+        queryClient.invalidateQueries();
+      }
+    });
+  }
+
+  function onApprove(p: string) {
+    if (!botInfo?.toInclude) return;
+    const [{}, approve] = useContractWrite(
+      {
+        addressOrName: botInfo?.toInclude[p].token,
+        contractInterface: erc20ABI,
+      },
+      'approve',
+      {
+        args: [botAddress, '115792089237316195423570985008687907853269984665640564039457584007913129639935'],
+      }
+    );
+    approve().then((data) => {
+      if (data.error) {
+        dialog.hide();
+        toast.error(data.error.message);
+      } else {
+        const toastid = toast.loading('Approving Contract');
+        dialog.hide();
+        data.data?.wait().then((receipt) => {
+          toast.dismiss(toastid);
+          receipt.status === 1
+            ? toast.success('Successfully Approved Contract')
+            : toast.error('Failed to Approve Contract');
+        });
+        queryClient.invalidateQueries();
+      }
+    });
+  }
+
   return (
     <>
       <FormDialog dialog={dialog} title="Manage Bot" className="h-min min-w-fit	">
@@ -193,6 +277,35 @@ export default function BotFunds({
                   <InputAmount name="amount" isRequired label="Amount to Deposit" />
                 </div>
                 <SubmitButton className="bottom-0 h-min w-1/2 place-self-end">Deposit</SubmitButton>
+              </div>
+            </form>
+          </section>
+          <section>
+            <form onSubmit={onRedirect}>
+              <div className="flex space-x-2">
+                <span className="text-md font-evo">
+                  {botInfo?.redirect === zeroAdd || !botInfo?.redirect
+                    ? 'Redirect not Set'
+                    : `Redirecting Withdrawals to ${formatAddress(botInfo?.redirect)}`}
+                </span>
+                {botInfo?.redirect !== zeroAdd && botInfo?.redirect && (
+                  <button className="row-action-links" onClick={onCancelRedirect}>
+                    Remove
+                  </button>
+                )}
+              </div>
+
+              <div className="flex space-x-2">
+                <div className="w-full">
+                  <InputText
+                    name="redirectTo"
+                    pattern="/^0x[a-fA-F0-9]{40}$/"
+                    isRequired
+                    label="Redirect Withdrawals To"
+                    placeholder="0x..."
+                  />
+                </div>
+                <SubmitButton className="bottom-0 h-min w-1/2 place-self-end">Redirect</SubmitButton>
               </div>
             </form>
           </section>
@@ -232,7 +345,7 @@ export default function BotFunds({
               </div>
             </div>
           </section>
-          {botInfo && (
+          {botInfo?.toInclude && (
             <div className="overflow-x-auto">
               <table className="border">
                 <thead>
@@ -252,61 +365,64 @@ export default function BotFunds({
                   </tr>
                 </thead>
                 <tbody>
-                  {Object.keys(botInfo).map((p) => (
+                  {Object.keys(botInfo.toInclude).map((p) => (
                     <tr key={p} className="table-row">
                       <td className="table-description text-center dark:text-white">
                         <span>
-                          {botInfo[p].from.toLowerCase() === accountAddress.toLowerCase()
+                          {botInfo.toInclude[p].from.toLowerCase() === accountAddress.toLowerCase()
                             ? 'Outgoing'
-                            : botInfo[p].to.toLowerCase() === accountAddress.toLowerCase()
+                            : botInfo.toInclude[p].to.toLowerCase() === accountAddress.toLowerCase()
                             ? 'Incoming'
                             : 'Owner'}
                         </span>
                       </td>
                       <td className="table-description text-center dark:text-white">
                         <span>
-                          {botInfo[p].from === zeroAdd || botInfo[p].to === zeroAdd
+                          {botInfo.toInclude[p].from === zeroAdd || botInfo.toInclude[p].to === zeroAdd
                             ? 'All'
-                            : botInfo[p].from.toLowerCase() === accountAddress.toLowerCase()
-                            ? formatAddress(botInfo[p].to)
-                            : botInfo[p].from.toLowerCase() === accountAddress.toLowerCase()
-                            ? formatAddress(botInfo[p].to)
-                            : formatAddress(botInfo[p].from)}
+                            : botInfo.toInclude[p].from.toLowerCase() === accountAddress.toLowerCase()
+                            ? formatAddress(botInfo.toInclude[p].to)
+                            : botInfo.toInclude[p].from.toLowerCase() === accountAddress.toLowerCase()
+                            ? formatAddress(botInfo.toInclude[p].to)
+                            : formatAddress(botInfo.toInclude[p].from)}
                         </span>
                       </td>
                       <td className="table-description text-center dark:text-white">
                         <span>
-                          {botInfo[p].from === zeroAdd || botInfo[p].to === zeroAdd ? 'All' : botInfo[p].token}
-                        </span>
-                      </td>
-                      <td className="table-description text-center dark:text-white">
-                        <span>
-                          {botInfo[p].from === zeroAdd || botInfo[p].to === zeroAdd
+                          {botInfo.toInclude[p].from === zeroAdd || botInfo.toInclude[p].to === zeroAdd
                             ? 'All'
-                            : ((botInfo[p].amountPerSec * secondsByDuration['month']) / 1e20).toFixed(5)}
+                            : botInfo.toInclude[p].tokenSymbol}
                         </span>
                       </td>
                       <td className="table-description text-center dark:text-white">
                         <span>
-                          {botInfo[p].frequency === secondsByDuration['day']
+                          {botInfo.toInclude[p].from === zeroAdd || botInfo.toInclude[p].to === zeroAdd
+                            ? 'All'
+                            : ((botInfo.toInclude[p].amountPerSec * secondsByDuration['month']) / 1e20).toFixed(5)}
+                        </span>
+                      </td>
+                      <td className="table-description text-center dark:text-white">
+                        <span>
+                          {botInfo.toInclude[p].frequency === secondsByDuration['day']
                             ? 'Every Day'
-                            : botInfo[p].frequency === secondsByDuration['week']
+                            : botInfo.toInclude[p].frequency === secondsByDuration['week']
                             ? 'Every 7 Days'
-                            : botInfo[p].frequency === secondsByDuration['biweek']
+                            : botInfo.toInclude[p].frequency === secondsByDuration['biweek']
                             ? 'Every 14 Days'
-                            : botInfo[p].frequency === secondsByDuration['month']
+                            : botInfo.toInclude[p].frequency === secondsByDuration['month']
                             ? 'Every 30 days'
                             : ''}
                         </span>
                       </td>
                       <td className="table-description">
-                        <div className="text-center">
-                          {botInfo[p].owner.toLowerCase() === accountAddress.toLowerCase() ? (
+                        <div className="flex space-x-1 text-center">
+                          <button className="row-action-links" onClick={(e) => onApprove(p)}>
+                            Approve
+                          </button>
+                          {botInfo.toInclude[p].owner.toLowerCase() === accountAddress.toLowerCase() && (
                             <button className="row-action-links" onClick={(e) => handleCancel(p)}>
                               Cancel
                             </button>
-                          ) : (
-                            ''
                           )}
                         </div>
                       </td>

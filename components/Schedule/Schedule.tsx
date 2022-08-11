@@ -64,6 +64,7 @@ export default function Schedule({
     scheduleWithdraw({
       args: [
         data.llamaContractAddress,
+        data.llamaTokenContract,
         data.payerAddress,
         data.payeeAddress,
         data.amountPerSec,
