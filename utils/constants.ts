@@ -45,7 +45,8 @@ export const DISPERSE_METIS = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 export const DISPERSE_GOERLI = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 
 export const BOT_GOERLI = '0x89847b69AeBE835554aA9713fFe3984ecaA421FC';
-export const BOT_AVALANCHE = '0xDa33d4B2753B3C2439cA52678E1A506e4C5294d1';
+export const BOT_AVALANCHE = '0x0e52B144489769B6EeA905508e54A93cF3c258CF';
+export const BOT_MAINNET = '0xe10EB22440feB14AA374fB5607B82041Be218ee9';
 
 export const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
 export const alchemyId = 'PwvZx2hO2XpToWXSw9sgJJt1eBgjkRUr';
@@ -184,7 +185,7 @@ export const networkDetails: INetworkDetails = {
     chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/eth'),
     llamapayFactoryAddress: FACTORY_MAINNET,
     disperseAddress: DISPERSE_DEFAULT,
-    botAddress: '',
+    botAddress: BOT_MAINNET,
     blockExplorerURL: 'https://etherscan.io/',
     blockExplorerName: 'Etherscan',
     prefix: 'ethereum',

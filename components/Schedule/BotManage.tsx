@@ -234,6 +234,10 @@ export default function BotFunds({
     });
   }
 
+  function onCurrentDate() {
+    setFormData((prev) => ({ ...prev, ['startDate']: new Date(Date.now()).toISOString().slice(0, 10) }));
+  }
+
   return (
     <>
       <FormDialog dialog={dialog} title="Manage Bot" className="h-min min-w-fit	">
@@ -250,7 +254,7 @@ export default function BotFunds({
                 <div className="w-full">
                   <InputAmount name="amount" isRequired label="Amount to Deposit" />
                 </div>
-                <SubmitButton className="bottom-0 h-min w-1/2 place-self-end">Deposit</SubmitButton>
+                <SubmitButton className="bottom-0 h-min w-2/5 place-self-end">Deposit</SubmitButton>
               </div>
             </form>
           </section>
@@ -289,7 +293,7 @@ export default function BotFunds({
                     ))}
                   </select>
                 </div>
-                <SubmitButton onClick={onRedirect} className="bottom-0 h-min w-1/2 place-self-end">
+                <SubmitButton onClick={onRedirect} className="bottom-0 h-min w-2/5 place-self-end">
                   Redirect
                 </SubmitButton>
               </div>
@@ -299,38 +303,52 @@ export default function BotFunds({
             <span>Schedule for All Streams:</span>
           </div>
           <section className="border px-2 py-2">
-            <div className="space-y-2">
-              <InputText
-                label="Starts (YYYY-MM-DD)"
-                name="startDate"
-                isRequired
-                placeholder="YYYY-MM-DD"
-                pattern="\d{4}-\d{2}-\d{2}"
-                handleChange={(e) => handleChange(e.target.value, 'startDate')}
-              />
+            <div className="flex space-x-1 pb-2">
+              <div className="w-full">
+                <label className="input-label">Start Date</label>
+                <div className="relative flex">
+                  <input
+                    className="input-field"
+                    onChange={(e) => handleChange(e.target.value, 'startDate')}
+                    required
+                    autoComplete="off"
+                    autoCorrect="off"
+                    placeholder="YYYY-MM-DD"
+                    pattern="\d{4}-\d{2}-\d{2}"
+                    value={formData.startDate}
+                  />
+                  <button
+                    type="button"
+                    className="absolute bottom-[5px] top-[10px] right-[5px] rounded-lg border border-[#4E575F] px-2 text-xs font-bold text-[#4E575F] disabled:cursor-not-allowed"
+                    onClick={onCurrentDate}
+                  >
+                    {'Today'}
+                  </button>
+                </div>
+              </div>
               <div>
                 <label className="input-label">Frequency</label>
-                <select onChange={(e) => handleChange(e.target.value, 'frequency')} className="input-field w-full">
+                <select onChange={(e) => handleChange(e.target.value, 'frequency')} className="input-field w-1/2">
                   <option value="daily">Every Day</option>
                   <option value="weekly">Every 7 Days</option>
                   <option value="biweekly">Every 14 Days</option>
                   <option value="monthly">Every 30 Days</option>
                 </select>
               </div>
-              <div className="flex space-x-1">
-                <button
-                  onClick={(e) => handleSchedule('incoming')}
-                  className="place-self-end rounded-3xl border bg-white px-3 py-[6px] text-sm dark:border-[#252525] dark:bg-[#252525]"
-                >
-                  Incoming
-                </button>
-                <button
-                  onClick={(e) => handleSchedule('outgoing')}
-                  className="place-self-end rounded-3xl border bg-white px-3 py-[6px] text-sm dark:border-[#252525] dark:bg-[#252525]"
-                >
-                  Outgoing
-                </button>
-              </div>
+            </div>
+            <div>
+              <button
+                onClick={(e) => handleSchedule('incoming')}
+                className="place-self-end rounded-3xl border bg-white px-3 py-[6px] text-sm dark:border-[#252525] dark:bg-[#252525]"
+              >
+                Incoming
+              </button>
+              <button
+                onClick={(e) => handleSchedule('outgoing')}
+                className="place-self-end rounded-3xl border bg-white px-3 py-[6px] text-sm dark:border-[#252525] dark:bg-[#252525]"
+              >
+                Outgoing
+              </button>
             </div>
           </section>
           <div>

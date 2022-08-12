@@ -9,11 +9,6 @@ import botContract from 'abis/botContract';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 
-interface IScheduleElements {
-  startDate: { value: string };
-  frequency: { value: string };
-}
-
 export default function Schedule({
   data,
   chainId,
@@ -58,9 +53,8 @@ export default function Schedule({
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const form = e.target as HTMLFormElement & IScheduleElements;
-    const start = new Date(form.startDate.value).getTime() / 1e3;
-    const freq = form.frequency.value;
+    const start = (new Date(formData.startDate).getTime() / 1e3).toFixed(0);
+    const freq = formData.frequency;
     scheduleWithdraw({
       args: [
         data.llamaContractAddress,
@@ -98,6 +92,10 @@ export default function Schedule({
     });
   }
 
+  function onCurrentDate() {
+    setFormData((prev) => ({ ...prev, ['startDate']: new Date(Date.now()).toISOString().slice(0, 10) }));
+  }
+
   return (
     <>
       <button onClick={dialog.toggle} className="row-action-links w-full text-right">
@@ -117,14 +115,28 @@ export default function Schedule({
               </select>
             </div>
             <section>
-              <InputText
-                label="Starts (YYYY-MM-DD)"
-                name="startDate"
-                isRequired
-                placeholder="YYYY-MM-DD"
-                pattern="\d{4}-\d{2}-\d{2}"
-                handleChange={(e) => handleChange(e.target.value, 'startDate')}
-              />
+              <div className="w-full">
+                <label className="input-label">Start Date</label>
+                <div className="relative flex">
+                  <input
+                    className="input-field"
+                    onChange={(e) => handleChange(e.target.value, 'startDate')}
+                    required
+                    autoComplete="off"
+                    autoCorrect="off"
+                    placeholder="YYYY-MM-DD"
+                    pattern="\d{4}-\d{2}-\d{2}"
+                    value={formData.startDate}
+                  />
+                  <button
+                    type="button"
+                    className="absolute bottom-[5px] top-[10px] right-[5px] rounded-lg border border-[#4E575F] px-2 text-xs font-bold text-[#4E575F] disabled:cursor-not-allowed"
+                    onClick={onCurrentDate}
+                  >
+                    {'Today'}
+                  </button>
+                </div>
+              </div>
               <SubmitButton className="mt-5">Schedule</SubmitButton>
             </section>
           </form>
