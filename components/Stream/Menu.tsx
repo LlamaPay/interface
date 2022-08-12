@@ -50,7 +50,7 @@ export default function StreamMenu() {
         state={menu}
         className="shadow-2 z-10 min-w-[10rem] rounded-xl border border-[#EAEAEA] bg-white p-2 dark:border-[#252525] dark:bg-[#202020]"
       >
-        {chainId == 43114 || chainId == 5 ? (
+        {chainId == 43114 || chainId == 5 || chainId === 1 ? (
           <MenuItem
             onClick={botDialog.toggle}
             className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white dark:hover:text-[#cccccc]"
@@ -95,7 +95,7 @@ export default function StreamMenu() {
         </MenuItem>
       </Menu>
       <DisperseGasMoney dialog={disperseGasGialog} />
-      {chainId && accountData && (chainId === 5 || chainId === 43114) ? (
+      {chainId && accountData && (chainId === 5 || chainId === 43114 || chainId === 1) ? (
         <BotFunds
           dialog={botDialog}
           chainId={chainId}

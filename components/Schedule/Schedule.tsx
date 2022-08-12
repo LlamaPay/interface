@@ -8,11 +8,8 @@ import { networkDetails, secondsByDuration } from 'utils/constants';
 import botContract from 'abis/botContract';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
-
-interface IScheduleElements {
-  startDate: { value: string };
-  frequency: { value: string };
-}
+import { Switch } from '@headlessui/react';
+import { useApproveTokenForMaxAmt } from 'queries/useTokenApproval';
 
 export default function Schedule({
   data,
@@ -27,6 +24,9 @@ export default function Schedule({
   const [{ data: accountData }] = useAccount();
   const botAddress = networkDetails[chainId].botAddress;
   const queryClient = useQueryClient();
+  const [hasRedirect, setHasRedirect] = React.useState<boolean>(false);
+  const [redirectAddress, setRedirectAddress] = React.useState<string | null>(null);
+  const { mutate: approveMax } = useApproveTokenForMaxAmt();
 
   const [{ data: balance }] = useContractRead(
     {
@@ -47,8 +47,16 @@ export default function Schedule({
     'scheduleWithdraw'
   );
 
+  const [{}, setRedirect] = useContractWrite(
+    {
+      addressOrName: botAddress,
+      contractInterface: botContract,
+    },
+    'setRedirect'
+  );
+
   const [formData, setFormData] = React.useState({
-    startDate: '',
+    startDate: new Date(Date.now()).toISOString().slice(0, 10),
     frequency: 'daily',
   });
 
@@ -58,12 +66,12 @@ export default function Schedule({
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    const form = e.target as HTMLFormElement & IScheduleElements;
-    const start = new Date(form.startDate.value).getTime() / 1e3;
-    const freq = form.frequency.value;
+    const start = (new Date(formData.startDate).getTime() / 1e3).toFixed(0);
+    const freq = formData.frequency;
     scheduleWithdraw({
       args: [
         data.llamaContractAddress,
+        data.token.address,
         data.payerAddress,
         data.payeeAddress,
         data.amountPerSec,
@@ -81,11 +89,9 @@ export default function Schedule({
     }).then((d) => {
       const data: any = d;
       if (data.error) {
-        dialog.hide();
         toast.error(data.error.reason ?? data.error.message);
       } else {
         const toastId = toast.loading('Scheduling Event');
-        dialog.hide();
         data.data?.wait().then((receipt: any) => {
           toast.dismiss(toastId);
           receipt.status === 1
@@ -95,6 +101,30 @@ export default function Schedule({
         });
       }
     });
+    if (!hasRedirect) {
+      dialog.hide();
+      return;
+    } else {
+      approveMax({ tokenAddress: data.token.address, spenderAddress: botAddress });
+      setRedirect({ args: [redirectAddress] }).then((data) => {
+        if (data.error) {
+          toast.error(data.error.message);
+          dialog.hide();
+        } else {
+          dialog.hide();
+          const toastId = toast.loading('Setting Redirect');
+          data.data?.wait().then((receipt: any) => {
+            toast.dismiss(toastId);
+            receipt.status === 1 ? toast.success('Successfully Set Redirect') : toast.error('Failed to Set Redirect');
+            queryClient.invalidateQueries();
+          });
+        }
+      });
+    }
+  }
+
+  function onCurrentDate() {
+    setFormData((prev) => ({ ...prev, ['startDate']: new Date(Date.now()).toISOString().slice(0, 10) }));
   }
 
   return (
@@ -116,14 +146,57 @@ export default function Schedule({
               </select>
             </div>
             <section>
-              <InputText
-                label="Starts (YYYY-MM-DD)"
-                name="startDate"
-                isRequired
-                placeholder="YYYY-MM-DD"
-                pattern="\d{4}-\d{2}-\d{2}"
-                handleChange={(e) => handleChange(e.target.value, 'startDate')}
-              />
+              <div className="w-full space-y-1">
+                <label className="input-label">Start Date</label>
+                <div className="relative flex">
+                  <input
+                    className="input-field"
+                    onChange={(e) => handleChange(e.target.value, 'startDate')}
+                    required
+                    autoComplete="off"
+                    autoCorrect="off"
+                    placeholder="YYYY-MM-DD"
+                    pattern="\d{4}-\d{2}-\d{2}"
+                    value={formData.startDate}
+                  />
+                  <button
+                    type="button"
+                    className="absolute bottom-[5px] top-[10px] right-[5px] rounded-lg border border-[#4E575F] px-2 text-xs font-bold text-[#4E575F] disabled:cursor-not-allowed"
+                    onClick={onCurrentDate}
+                  >
+                    {'Today'}
+                  </button>
+                </div>
+                {data.payeeAddress.toLowerCase() === accountData?.address.toLowerCase() && (
+                  <div className="flex space-x-1">
+                    <span>Redirect Withdraw</span>
+                    <Switch
+                      checked={hasRedirect}
+                      onChange={setHasRedirect}
+                      className={`${
+                        hasRedirect ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
+                      } relative inline-flex h-6 w-11 items-center rounded-full`}
+                    >
+                      <span
+                        className={`${
+                          hasRedirect ? 'translate-x-6' : 'translate-x-1'
+                        } inline-block h-4 w-4 transform rounded-full bg-white`}
+                      />
+                    </Switch>
+                  </div>
+                )}
+                {hasRedirect && (
+                  <div className="w-full">
+                    <InputText
+                      name="redirectTo"
+                      isRequired
+                      label="Redirect Withdrawals To"
+                      placeholder="0x..."
+                      handleChange={(e) => setRedirectAddress(e.target.value)}
+                    />
+                  </div>
+                )}
+              </div>
               <SubmitButton className="mt-5">Schedule</SubmitButton>
             </section>
           </form>

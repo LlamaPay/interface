@@ -123,7 +123,7 @@ export function StreamTable({ data }: { data: IStream[] }) {
         cell: ({ cell }) => {
           const data = cell.row.original;
           if (!data || !chainId) return null;
-          if (chainId !== 43114 && chainId !== 5) return null;
+          if (chainId !== 43114 && chainId !== 5 && chainId !== 1) return null;
           return <Schedule data={data} nativeCurrency={nativeCurrency?.symbol ?? 'ETH'} chainId={chainId} />;
         },
       },

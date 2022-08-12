@@ -10,6 +10,7 @@ import { useQueryClient } from 'react-query';
 import useGetBotInfo from 'queries/useGetBotInfo';
 import { formatAddress } from 'utils/address';
 import { zeroAdd } from 'utils/constants';
+import { useApproveTokenForMaxAmt } from 'queries/useTokenApproval';
 
 export default function BotFunds({
   dialog,
@@ -25,11 +26,14 @@ export default function BotFunds({
   const botAddress = networkDetails[chainId].botAddress;
   const queryClient = useQueryClient();
   const [formData, setFormData] = React.useState({
-    startDate: '',
+    startDate: new Date(Date.now()).toISOString().slice(0, 10),
     frequency: 'daily',
   });
+  const [redirectAddress, setRedirectAddress] = React.useState<string | null>(null);
+  const [selectedToken, setSelectedToken] = React.useState<string>('');
 
   const { data: botInfo } = useGetBotInfo();
+  const { mutate: approveMax } = useApproveTokenForMaxAmt();
 
   const [{ data: balance }] = useContractRead(
     {
@@ -73,6 +77,22 @@ export default function BotFunds({
     'scheduleWithdraw'
   );
 
+  const [{}, setRedirect] = useContractWrite(
+    {
+      addressOrName: botAddress,
+      contractInterface: botContract,
+    },
+    'setRedirect'
+  );
+
+  const [{}, cancelRedirect] = useContractWrite(
+    {
+      addressOrName: botAddress,
+      contractInterface: botContract,
+    },
+    'cancelRedirect'
+  );
+
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
@@ -114,22 +134,22 @@ export default function BotFunds({
   }
 
   function handleCancel(p: string) {
-    if (botInfo === undefined) return;
-    const ele = botInfo[p];
-    cancelWithdraw({ args: [ele.llamaPay, ele.from, ele.to, ele.amountPerSec, ele.starts, ele.frequency] }).then(
-      (data) => {
-        if (data.error) {
-          toast.error(data.error.message);
-        } else {
-          const toastid = toast.loading(`Cancelling Withdrawal`);
-          data.data?.wait().then((receipt) => {
-            toast.dismiss(toastid);
-            receipt.status === 1 ? toast.success('Successfully Cancelled') : toast.error('Failed to Cancel');
-          });
-          queryClient.invalidateQueries();
-        }
+    if (!botInfo?.toInclude) return;
+    const ele = botInfo.toInclude[p];
+    cancelWithdraw({
+      args: [ele.llamaPay, ele.token, ele.from, ele.to, ele.amountPerSec, ele.starts, ele.frequency],
+    }).then((data) => {
+      if (data.error) {
+        toast.error(data.error.message);
+      } else {
+        const toastid = toast.loading(`Cancelling Withdrawal`);
+        data.data?.wait().then((receipt) => {
+          toast.dismiss(toastid);
+          receipt.status === 1 ? toast.success('Successfully Cancelled') : toast.error('Failed to Cancel');
+        });
+        queryClient.invalidateQueries();
       }
-    );
+    });
   }
 
   function handleChange(value: string, type: keyof typeof formData) {
@@ -142,6 +162,7 @@ export default function BotFunds({
 
     scheduleWithdraw({
       args: [
+        zeroAdd,
         zeroAdd,
         e === 'incoming' ? zeroAdd : accountAddress,
         e === 'outgoing' ? zeroAdd : accountAddress,
@@ -176,6 +197,47 @@ export default function BotFunds({
     });
   }
 
+  function onRedirect() {
+    approveMax({ tokenAddress: selectedToken, spenderAddress: botAddress });
+    setRedirect({ args: redirectAddress }).then((data) => {
+      if (data.error) {
+        dialog.hide();
+        toast.error(data.error.message);
+      } else {
+        const toastid = toast.loading(`Setting Redirect to ${formatAddress(redirectAddress ?? '')}`);
+        dialog.hide();
+        data.data?.wait().then((receipt) => {
+          toast.dismiss(toastid);
+          receipt.status === 1 ? toast.success('Successfully Set Redirect') : toast.error('Failed to Set Redirect');
+        });
+        queryClient.invalidateQueries();
+      }
+    });
+  }
+
+  function onCancelRedirect() {
+    cancelRedirect().then((data) => {
+      if (data.error) {
+        dialog.hide();
+        toast.error(data.error.message);
+      } else {
+        const toastid = toast.loading(`Cancelling Redirect`);
+        dialog.hide();
+        data.data?.wait().then((receipt) => {
+          toast.dismiss(toastid);
+          receipt.status === 1
+            ? toast.success('Successfully Cancelled Redirect')
+            : toast.error('Failed to Cancel Redirect');
+        });
+        queryClient.invalidateQueries();
+      }
+    });
+  }
+
+  function onCurrentDate() {
+    setFormData((prev) => ({ ...prev, ['startDate']: new Date(Date.now()).toISOString().slice(0, 10) }));
+  }
+
   return (
     <>
       <FormDialog dialog={dialog} title="Manage Bot" className="h-min min-w-fit	">
@@ -186,53 +248,113 @@ export default function BotFunds({
               Refund
             </button>
           </div>
-          <section>
+          <section className="border px-2 py-2">
             <form onSubmit={onSubmit}>
               <div className="flex space-x-2">
                 <div className="w-full">
                   <InputAmount name="amount" isRequired label="Amount to Deposit" />
                 </div>
-                <SubmitButton className="bottom-0 h-min w-1/2 place-self-end">Deposit</SubmitButton>
+                <SubmitButton className="bottom-0 h-min w-2/5 place-self-end">Deposit</SubmitButton>
               </div>
             </form>
           </section>
+          <div className="flex space-x-2">
+            <span className="text-md font-evo">
+              {botInfo?.redirect === zeroAdd || !botInfo?.redirect
+                ? 'Redirect not Set'
+                : `Redirecting Withdrawals to ${formatAddress(botInfo?.redirect)}`}
+            </span>
+            {botInfo?.redirect !== zeroAdd && botInfo?.redirect && (
+              <button className="row-action-links" onClick={onCancelRedirect}>
+                Remove
+              </button>
+            )}
+          </div>
           <section className="border px-2 py-2">
-            <h1 className="pb-1">Schedule for All Streams:</h1>
-            <div className="space-y-2">
-              <InputText
-                label="Starts (YYYY-MM-DD)"
-                name="startDate"
-                isRequired
-                placeholder="YYYY-MM-DD"
-                pattern="\d{4}-\d{2}-\d{2}"
-                handleChange={(e) => handleChange(e.target.value, 'startDate')}
-              />
+            {botInfo && (
+              <div className="flex space-x-2">
+                <div className="w-full">
+                  <InputText
+                    name="redirectTo"
+                    isRequired
+                    label="Redirect Withdrawals To"
+                    placeholder="0x..."
+                    handleChange={(e) => setRedirectAddress(e.target.value)}
+                  />
+                </div>
+                <div className="w-1/4">
+                  <label className="input-label">Token</label>
+                  <select onChange={(e) => setSelectedToken(e.target.value)} name="token" className="input-field">
+                    <option value={''}></option>
+                    {Object.keys(botInfo?.llamaPayToToken).map((p) => (
+                      <option key={p} value={p}>
+                        {botInfo?.llamaPayToToken[p]}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <SubmitButton onClick={onRedirect} className="bottom-0 h-min w-2/5 place-self-end">
+                  Redirect
+                </SubmitButton>
+              </div>
+            )}
+          </section>
+          <div>
+            <span>Schedule for All Streams:</span>
+          </div>
+          <section className="border px-2 py-2">
+            <div className="flex space-x-1 pb-2">
+              <div className="w-full">
+                <label className="input-label">Start Date</label>
+                <div className="relative flex">
+                  <input
+                    className="input-field"
+                    onChange={(e) => handleChange(e.target.value, 'startDate')}
+                    required
+                    autoComplete="off"
+                    autoCorrect="off"
+                    placeholder="YYYY-MM-DD"
+                    pattern="\d{4}-\d{2}-\d{2}"
+                    value={formData.startDate}
+                  />
+                  <button
+                    type="button"
+                    className="absolute bottom-[5px] top-[10px] right-[5px] rounded-lg border border-[#4E575F] px-2 text-xs font-bold text-[#4E575F] disabled:cursor-not-allowed"
+                    onClick={onCurrentDate}
+                  >
+                    {'Today'}
+                  </button>
+                </div>
+              </div>
               <div>
                 <label className="input-label">Frequency</label>
-                <select onChange={(e) => handleChange(e.target.value, 'frequency')} className="input-field w-full">
+                <select onChange={(e) => handleChange(e.target.value, 'frequency')} className="input-field w-1/2">
                   <option value="daily">Every Day</option>
                   <option value="weekly">Every 7 Days</option>
                   <option value="biweekly">Every 14 Days</option>
                   <option value="monthly">Every 30 Days</option>
                 </select>
               </div>
-              <div className="flex space-x-1">
-                <button
-                  onClick={(e) => handleSchedule('incoming')}
-                  className="place-self-end rounded-3xl border bg-white px-3 py-[6px] text-sm dark:border-[#252525] dark:bg-[#252525]"
-                >
-                  Incoming
-                </button>
-                <button
-                  onClick={(e) => handleSchedule('outgoing')}
-                  className="place-self-end rounded-3xl border bg-white px-3 py-[6px] text-sm dark:border-[#252525] dark:bg-[#252525]"
-                >
-                  Outgoing
-                </button>
-              </div>
+            </div>
+            <div>
+              <button
+                onClick={(e) => handleSchedule('incoming')}
+                className="place-self-end rounded-3xl border bg-white px-3 py-[6px] text-sm dark:border-[#252525] dark:bg-[#252525]"
+              >
+                Incoming
+              </button>
+              <button
+                onClick={(e) => handleSchedule('outgoing')}
+                className="place-self-end rounded-3xl border bg-white px-3 py-[6px] text-sm dark:border-[#252525] dark:bg-[#252525]"
+              >
+                Outgoing
+              </button>
             </div>
           </section>
-          {botInfo && (
+          <div>
+            <span> Scheduled Streams:</span>
+          </div>
+          {botInfo?.toInclude && (
             <div className="overflow-x-auto">
               <table className="border">
                 <thead>
@@ -252,61 +374,61 @@ export default function BotFunds({
                   </tr>
                 </thead>
                 <tbody>
-                  {Object.keys(botInfo).map((p) => (
+                  {Object.keys(botInfo.toInclude).map((p) => (
                     <tr key={p} className="table-row">
                       <td className="table-description text-center dark:text-white">
                         <span>
-                          {botInfo[p].from.toLowerCase() === accountAddress.toLowerCase()
+                          {botInfo.toInclude[p].from.toLowerCase() === accountAddress.toLowerCase()
                             ? 'Outgoing'
-                            : botInfo[p].to.toLowerCase() === accountAddress.toLowerCase()
+                            : botInfo.toInclude[p].to.toLowerCase() === accountAddress.toLowerCase()
                             ? 'Incoming'
                             : 'Owner'}
                         </span>
                       </td>
                       <td className="table-description text-center dark:text-white">
                         <span>
-                          {botInfo[p].from === zeroAdd || botInfo[p].to === zeroAdd
+                          {botInfo.toInclude[p].from === zeroAdd || botInfo.toInclude[p].to === zeroAdd
                             ? 'All'
-                            : botInfo[p].from.toLowerCase() === accountAddress.toLowerCase()
-                            ? formatAddress(botInfo[p].to)
-                            : botInfo[p].from.toLowerCase() === accountAddress.toLowerCase()
-                            ? formatAddress(botInfo[p].to)
-                            : formatAddress(botInfo[p].from)}
+                            : botInfo.toInclude[p].from.toLowerCase() === accountAddress.toLowerCase()
+                            ? formatAddress(botInfo.toInclude[p].to)
+                            : botInfo.toInclude[p].from.toLowerCase() === accountAddress.toLowerCase()
+                            ? formatAddress(botInfo.toInclude[p].to)
+                            : formatAddress(botInfo.toInclude[p].from)}
                         </span>
                       </td>
                       <td className="table-description text-center dark:text-white">
                         <span>
-                          {botInfo[p].from === zeroAdd || botInfo[p].to === zeroAdd ? 'All' : botInfo[p].token}
-                        </span>
-                      </td>
-                      <td className="table-description text-center dark:text-white">
-                        <span>
-                          {botInfo[p].from === zeroAdd || botInfo[p].to === zeroAdd
+                          {botInfo.toInclude[p].from === zeroAdd || botInfo.toInclude[p].to === zeroAdd
                             ? 'All'
-                            : ((botInfo[p].amountPerSec * secondsByDuration['month']) / 1e20).toFixed(5)}
+                            : botInfo.toInclude[p].tokenSymbol}
                         </span>
                       </td>
                       <td className="table-description text-center dark:text-white">
                         <span>
-                          {botInfo[p].frequency === secondsByDuration['day']
+                          {botInfo.toInclude[p].from === zeroAdd || botInfo.toInclude[p].to === zeroAdd
+                            ? 'All'
+                            : ((botInfo.toInclude[p].amountPerSec * secondsByDuration['month']) / 1e20).toFixed(5)}
+                        </span>
+                      </td>
+                      <td className="table-description text-center dark:text-white">
+                        <span>
+                          {botInfo.toInclude[p].frequency === secondsByDuration['day']
                             ? 'Every Day'
-                            : botInfo[p].frequency === secondsByDuration['week']
+                            : botInfo.toInclude[p].frequency === secondsByDuration['week']
                             ? 'Every 7 Days'
-                            : botInfo[p].frequency === secondsByDuration['biweek']
+                            : botInfo.toInclude[p].frequency === secondsByDuration['biweek']
                             ? 'Every 14 Days'
-                            : botInfo[p].frequency === secondsByDuration['month']
+                            : botInfo.toInclude[p].frequency === secondsByDuration['month']
                             ? 'Every 30 days'
                             : ''}
                         </span>
                       </td>
                       <td className="table-description">
                         <div className="text-center">
-                          {botInfo[p].owner.toLowerCase() === accountAddress.toLowerCase() ? (
+                          {botInfo.toInclude[p].owner.toLowerCase() === accountAddress.toLowerCase() && (
                             <button className="row-action-links" onClick={(e) => handleCancel(p)}>
                               Cancel
                             </button>
-                          ) : (
-                            ''
                           )}
                         </div>
                       </td>
