@@ -98,7 +98,7 @@ export default function BotFunds({
     const form = e.target as HTMLFormElement;
     deposit({
       overrides: {
-        value: (Number(form.amount.value) * 1e18).toString(),
+        value: (Number(form.amount.value) * 1e18).toFixed(0),
       },
     }).then((data) => {
       if (data.error) {

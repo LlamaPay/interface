@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import { Switch } from '@headlessui/react';
 import { useApproveTokenForMaxAmt } from 'queries/useTokenApproval';
+import BotDepositWarning from './BotDepositWarning';
 
 export default function Schedule({
   data,
@@ -21,23 +22,13 @@ export default function Schedule({
   nativeCurrency: string;
 }) {
   const dialog = useDialogState();
+  const warningDialog = useDialogState();
   const [{ data: accountData }] = useAccount();
   const botAddress = networkDetails[chainId].botAddress;
   const queryClient = useQueryClient();
   const [hasRedirect, setHasRedirect] = React.useState<boolean>(false);
   const [redirectAddress, setRedirectAddress] = React.useState<string | null>(null);
   const { mutate: approveMax } = useApproveTokenForMaxAmt();
-
-  const [{ data: balance }] = useContractRead(
-    {
-      addressOrName: botAddress,
-      contractInterface: botContract,
-    },
-    'balances',
-    {
-      args: accountData?.address,
-    }
-  );
 
   const [{}, scheduleWithdraw] = useContractWrite(
     {
@@ -68,6 +59,8 @@ export default function Schedule({
     e.preventDefault();
     const start = (new Date(formData.startDate).getTime() / 1e3).toFixed(0);
     const freq = formData.frequency;
+    dialog.hide();
+    warningDialog.show();
     scheduleWithdraw({
       args: [
         data.llamaContractAddress,
@@ -102,16 +95,13 @@ export default function Schedule({
       }
     });
     if (!hasRedirect) {
-      dialog.hide();
       return;
     } else {
       approveMax({ tokenAddress: data.token.address, spenderAddress: botAddress });
       setRedirect({ args: [redirectAddress] }).then((data) => {
         if (data.error) {
           toast.error(data.error.message);
-          dialog.hide();
         } else {
-          dialog.hide();
           const toastId = toast.loading('Setting Redirect');
           data.data?.wait().then((receipt: any) => {
             toast.dismiss(toastId);
@@ -135,7 +125,6 @@ export default function Schedule({
       <FormDialog dialog={dialog} title={'Schedule Withdraw'} className="h-min">
         <span className="space-y-4 text-[#303030] dark:text-white">
           <form className="mx-auto flex max-w-xl flex-col gap-4" onSubmit={onSubmit}>
-            <span>{`Balance: ${(Number(balance) / 1e18).toFixed(5)} ${nativeCurrency}`}</span>
             <div>
               <label className="input-label">Frequency</label>
               <select name="frequency" className="input-field w-full">
@@ -202,6 +191,12 @@ export default function Schedule({
           </form>
         </span>
       </FormDialog>
+      <BotDepositWarning
+        botAddress={botAddress}
+        dialog={warningDialog}
+        userAddress={accountData?.address ?? ''}
+        nativeCurrency={nativeCurrency}
+      />
     </>
   );
 }
