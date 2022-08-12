@@ -26,7 +26,7 @@ export default function BotFunds({
   const botAddress = networkDetails[chainId].botAddress;
   const queryClient = useQueryClient();
   const [formData, setFormData] = React.useState({
-    startDate: '',
+    startDate: new Date(Date.now()).toISOString().slice(0, 10),
     frequency: 'daily',
   });
   const [redirectAddress, setRedirectAddress] = React.useState<string | null>(null);

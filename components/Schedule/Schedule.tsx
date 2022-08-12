@@ -8,6 +8,8 @@ import { networkDetails, secondsByDuration } from 'utils/constants';
 import botContract from 'abis/botContract';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
+import { Switch } from '@headlessui/react';
+import { useApproveTokenForMaxAmt } from 'queries/useTokenApproval';
 
 export default function Schedule({
   data,
@@ -22,6 +24,9 @@ export default function Schedule({
   const [{ data: accountData }] = useAccount();
   const botAddress = networkDetails[chainId].botAddress;
   const queryClient = useQueryClient();
+  const [hasRedirect, setHasRedirect] = React.useState<boolean>(false);
+  const [redirectAddress, setRedirectAddress] = React.useState<string | null>(null);
+  const { mutate: approveMax } = useApproveTokenForMaxAmt();
 
   const [{ data: balance }] = useContractRead(
     {
@@ -42,8 +47,16 @@ export default function Schedule({
     'scheduleWithdraw'
   );
 
+  const [{}, setRedirect] = useContractWrite(
+    {
+      addressOrName: botAddress,
+      contractInterface: botContract,
+    },
+    'setRedirect'
+  );
+
   const [formData, setFormData] = React.useState({
-    startDate: '',
+    startDate: new Date(Date.now()).toISOString().slice(0, 10),
     frequency: 'daily',
   });
 
@@ -76,11 +89,9 @@ export default function Schedule({
     }).then((d) => {
       const data: any = d;
       if (data.error) {
-        dialog.hide();
         toast.error(data.error.reason ?? data.error.message);
       } else {
         const toastId = toast.loading('Scheduling Event');
-        dialog.hide();
         data.data?.wait().then((receipt: any) => {
           toast.dismiss(toastId);
           receipt.status === 1
@@ -90,6 +101,26 @@ export default function Schedule({
         });
       }
     });
+    if (!hasRedirect) {
+      dialog.hide();
+      return;
+    } else {
+      approveMax({ tokenAddress: data.token.address, spenderAddress: botAddress });
+      setRedirect({ args: [redirectAddress] }).then((data) => {
+        if (data.error) {
+          toast.error(data.error.message);
+          dialog.hide();
+        } else {
+          dialog.hide();
+          const toastId = toast.loading('Setting Redirect');
+          data.data?.wait().then((receipt: any) => {
+            toast.dismiss(toastId);
+            receipt.status === 1 ? toast.success('Successfully Set Redirect') : toast.error('Failed to Set Redirect');
+            queryClient.invalidateQueries();
+          });
+        }
+      });
+    }
   }
 
   function onCurrentDate() {
@@ -115,7 +146,7 @@ export default function Schedule({
               </select>
             </div>
             <section>
-              <div className="w-full">
+              <div className="w-full space-y-1">
                 <label className="input-label">Start Date</label>
                 <div className="relative flex">
                   <input
@@ -136,6 +167,35 @@ export default function Schedule({
                     {'Today'}
                   </button>
                 </div>
+                {data.payeeAddress.toLowerCase() === accountData?.address.toLowerCase() && (
+                  <div className="flex space-x-1">
+                    <span>Redirect Withdraw</span>
+                    <Switch
+                      checked={hasRedirect}
+                      onChange={setHasRedirect}
+                      className={`${
+                        hasRedirect ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
+                      } relative inline-flex h-6 w-11 items-center rounded-full`}
+                    >
+                      <span
+                        className={`${
+                          hasRedirect ? 'translate-x-6' : 'translate-x-1'
+                        } inline-block h-4 w-4 transform rounded-full bg-white`}
+                      />
+                    </Switch>
+                  </div>
+                )}
+                {hasRedirect && (
+                  <div className="w-full">
+                    <InputText
+                      name="redirectTo"
+                      isRequired
+                      label="Redirect Withdrawals To"
+                      placeholder="0x..."
+                      handleChange={(e) => setRedirectAddress(e.target.value)}
+                    />
+                  </div>
+                )}
               </div>
               <SubmitButton className="mt-5">Schedule</SubmitButton>
             </section>
