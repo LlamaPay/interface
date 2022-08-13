@@ -47,6 +47,7 @@ export const DISPERSE_GOERLI = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 export const BOT_GOERLI = '0x89847b69AeBE835554aA9713fFe3984ecaA421FC';
 export const BOT_AVALANCHE = '0x0e52B144489769B6EeA905508e54A93cF3c258CF';
 export const BOT_MAINNET = '0xe10EB22440feB14AA374fB5607B82041Be218ee9';
+export const BOT_POLYGON = '0xB1870E647c4F7eE5DccFB3e4A98be9F888b184e0';
 
 export const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
 export const alchemyId = 'PwvZx2hO2XpToWXSw9sgJJt1eBgjkRUr';
@@ -157,7 +158,7 @@ export const networkDetails: INetworkDetails = {
     chainProviders: new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/'),
     llamapayFactoryAddress: FACTORY_POLYGON,
     disperseAddress: DISPERSE_DEFAULT,
-    botAddress: '',
+    botAddress: BOT_POLYGON,
     blockExplorerURL: 'https://polygonscan.com/',
     blockExplorerName: 'Polygonscan',
     prefix: 'polygon',
