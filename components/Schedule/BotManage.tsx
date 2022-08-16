@@ -137,7 +137,7 @@ export default function BotFunds({
     if (!botInfo?.toInclude) return;
     const ele = botInfo.toInclude[p];
     cancelWithdraw({
-      args: [ele.llamaPay, ele.token, ele.from, ele.to, ele.amountPerSec, ele.starts, ele.frequency],
+      args: [ele.llamaPay, ele.from, ele.to, ele.amountPerSec, ele.starts, ele.frequency],
     }).then((data) => {
       if (data.error) {
         toast.error(data.error.message);
@@ -162,7 +162,6 @@ export default function BotFunds({
 
     scheduleWithdraw({
       args: [
-        zeroAdd,
         zeroAdd,
         e === 'incoming' ? zeroAdd : accountAddress,
         e === 'outgoing' ? zeroAdd : accountAddress,

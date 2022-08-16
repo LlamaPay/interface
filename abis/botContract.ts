@@ -4,7 +4,6 @@ const botContract: any = [
     inputs: [
       { indexed: false, internalType: 'address', name: 'owner', type: 'address' },
       { indexed: false, internalType: 'address', name: 'llamaPay', type: 'address' },
-      { indexed: false, internalType: 'address', name: 'token', type: 'address' },
       { indexed: false, internalType: 'address', name: 'from', type: 'address' },
       { indexed: false, internalType: 'address', name: 'to', type: 'address' },
       { indexed: false, internalType: 'uint216', name: 'amountPerSec', type: 'uint216' },
@@ -20,7 +19,6 @@ const botContract: any = [
     inputs: [
       { indexed: false, internalType: 'address', name: 'owner', type: 'address' },
       { indexed: false, internalType: 'address', name: 'llamaPay', type: 'address' },
-      { indexed: false, internalType: 'address', name: 'token', type: 'address' },
       { indexed: false, internalType: 'address', name: 'from', type: 'address' },
       { indexed: false, internalType: 'address', name: 'to', type: 'address' },
       { indexed: false, internalType: 'uint216', name: 'amountPerSec', type: 'uint216' },
@@ -36,7 +34,6 @@ const botContract: any = [
     inputs: [
       { indexed: false, internalType: 'address', name: 'owner', type: 'address' },
       { indexed: false, internalType: 'address', name: 'llamaPay', type: 'address' },
-      { indexed: false, internalType: 'address', name: 'token', type: 'address' },
       { indexed: false, internalType: 'address', name: 'from', type: 'address' },
       { indexed: false, internalType: 'address', name: 'to', type: 'address' },
       { indexed: false, internalType: 'uint216', name: 'amountPerSec', type: 'uint216' },
@@ -71,7 +68,6 @@ const botContract: any = [
   {
     inputs: [
       { internalType: 'address', name: '_llamaPay', type: 'address' },
-      { internalType: 'address', name: '_token', type: 'address' },
       { internalType: 'address', name: '_from', type: 'address' },
       { internalType: 'address', name: '_to', type: 'address' },
       { internalType: 'uint216', name: '_amountPerSec', type: 'uint216' },
@@ -87,7 +83,6 @@ const botContract: any = [
   {
     inputs: [
       { internalType: 'address', name: '_llamaPay', type: 'address' },
-      { internalType: 'address', name: '_token', type: 'address' },
       { internalType: 'address', name: '_from', type: 'address' },
       { internalType: 'address', name: '_to', type: 'address' },
       { internalType: 'uint216', name: '_amountPerSec', type: 'uint216' },
@@ -136,7 +131,6 @@ const botContract: any = [
     inputs: [
       { internalType: 'address', name: '_owner', type: 'address' },
       { internalType: 'address', name: '_llamaPay', type: 'address' },
-      { internalType: 'address', name: '_token', type: 'address' },
       { internalType: 'address', name: '_from', type: 'address' },
       { internalType: 'address', name: '_to', type: 'address' },
       { internalType: 'uint216', name: '_amountPerSec', type: 'uint216' },
@@ -190,7 +184,6 @@ const botContract: any = [
   {
     inputs: [
       { internalType: 'address', name: '_llamaPay', type: 'address' },
-      { internalType: 'address', name: '_token', type: 'address' },
       { internalType: 'address', name: '_from', type: 'address' },
       { internalType: 'address', name: '_to', type: 'address' },
       { internalType: 'uint216', name: '_amountPerSec', type: 'uint216' },
