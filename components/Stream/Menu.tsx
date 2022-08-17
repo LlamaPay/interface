@@ -9,6 +9,7 @@ import WithdrawAll from 'components/WithdrawAll';
 import { useNetworkProvider } from 'hooks';
 import { useTranslations } from 'next-intl';
 import { useRouter } from 'next/router';
+import { botDeployedOn } from 'utils/constants';
 import { useAccount, useEnsLookup } from 'wagmi';
 
 export default function StreamMenu() {
@@ -50,7 +51,7 @@ export default function StreamMenu() {
         state={menu}
         className="shadow-2 z-10 min-w-[10rem] rounded-xl border border-[#EAEAEA] bg-white p-2 dark:border-[#252525] dark:bg-[#202020]"
       >
-        {chainId == 43114 || chainId == 5 || chainId === 1 || chainId === 137 ? (
+        {chainId && botDeployedOn.includes(chainId) && (
           <MenuItem
             onClick={botDialog.toggle}
             className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white dark:hover:text-[#cccccc]"
@@ -58,8 +59,6 @@ export default function StreamMenu() {
             <span className="dark:text-white dark:hover:text-[#cccccc]">Manage Bot</span>
             <ChipIcon className="h-4 w-4" />
           </MenuItem>
-        ) : (
-          ''
         )}
         <MenuItem
           className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white dark:hover:text-[#cccccc]"
@@ -95,15 +94,13 @@ export default function StreamMenu() {
         </MenuItem>
       </Menu>
       <DisperseGasMoney dialog={disperseGasGialog} />
-      {chainId && accountData && (chainId === 5 || chainId === 43114 || chainId === 1 || chainId === 137) ? (
+      {chainId && accountData && botDeployedOn.includes(chainId) && (
         <BotFunds
           dialog={botDialog}
           chainId={chainId}
           accountAddress={accountData?.address}
           nativeCurrency={nativeCurrency?.symbol}
         />
-      ) : (
-        ''
       )}
     </>
   );

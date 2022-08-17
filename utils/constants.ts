@@ -48,6 +48,7 @@ export const BOT_GOERLI = '0xb27d2824Da49Cf7CA0d0F6DaD8c43A1E4Dd9FC1c';
 export const BOT_AVALANCHE = '0xF13563B612574D3E5372dDdC6c06b7A0F3bAC057';
 export const BOT_MAINNET = '0x0327a00f37115115038c289827480dDaAbae948e';
 export const BOT_POLYGON = '0x5daF92FB6587866bA91F14cE397EDc0a5Ee34507';
+export const BOT_OPTIMISM = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 
 export const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
 export const alchemyId = 'PwvZx2hO2XpToWXSw9sgJJt1eBgjkRUr';
@@ -200,7 +201,7 @@ export const networkDetails: INetworkDetails = {
     chainProviders: new ethers.providers.JsonRpcProvider('https://mainnet.optimism.io'),
     llamapayFactoryAddress: FACTORY_OPTIMISM,
     disperseAddress: DISPERSE_DEFAULT,
-    botAddress: '',
+    botAddress: BOT_OPTIMISM,
     blockExplorerURL: 'https://optimistic.etherscan.io/',
     blockExplorerName: 'Etherscan',
     prefix: 'optimism',
@@ -419,4 +420,7 @@ export const botContractCreation: { [key: number]: number } = {
   43114: 18721818,
   1: 15352659,
   137: 31960165,
+  10: 19434150,
 };
+
+export const botDeployedOn: number[] = [43114, 5, 1, 137, 10];
