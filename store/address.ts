@@ -6,7 +6,7 @@ type AddressStore = {
   updateAddress: (id: string, shortName: string) => void;
 };
 
-export const useAddressStore = create<AddressStore>()(
+export const useAddressStore = create<AddressStore>(
   persist(
     (set) => ({
       addressBook: [{ id: 'llamapay', shortName: '1' }],
