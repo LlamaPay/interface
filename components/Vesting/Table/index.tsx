@@ -33,14 +33,18 @@ export default function VestingTable({
         accessorFn: (row) => `${row.tokenName} (${row.tokenSymbol})`,
         id: 'token',
         header: 'Token',
-        cell: (info) => <ExplorerLink query={info.cell.row.original.token} value={info.getValue()} />,
+        cell: (info) => (
+          <ExplorerLink query={info.cell.row.original.token} value={info.getValue() as React.ReactNode} />
+        ),
       },
       {
         accessorFn: (row) =>
           accountData?.address.toLowerCase() === row.recipient.toLowerCase() ? row.admin : row.recipient,
         id: 'funderOrRecipient',
         header: 'Funder/Recipient',
-        cell: (info) => <ExplorerLink query={info.getValue()} value={formatAddress(info.getValue())} />,
+        cell: (info) => (
+          <ExplorerLink query={info.getValue() as string} value={formatAddress(info.getValue() as string)} />
+        ),
         enableSorting: false,
       },
       {
