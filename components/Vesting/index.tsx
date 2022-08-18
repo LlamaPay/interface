@@ -115,6 +115,28 @@ export function AltVestingSection({ isLoading, isError, data }: IAltVestingSecti
       ) : (
         <Table {...{ data, chartValues, chartDialog, claimDialog, claimValues }} />
       )}
+
+      <React.Suspense fallback={null}>
+        {chartValues.current && (
+          <FormDialog dialog={chartDialog} title={`${chartValues.current.tokenSymbol}`} className="max-w-[36rem]">
+            <div className="h-[360px]">
+              {chartDialog.open && (
+                <VestingChart
+                  amount={chartValues.current.amount}
+                  vestingPeriod={chartValues.current.vestingPeriod}
+                  cliffPeriod={chartValues.current.cliffPeriod}
+                  startTime={chartValues.current.startTime}
+                  vestedDays={chartValues.current.vestedDays}
+                />
+              )}
+            </div>
+          </FormDialog>
+        )}
+
+        {claimValues.current && (
+          <ClaimVesting claimValues={claimValues as React.MutableRefObject<IVesting>} claimDialog={claimDialog} />
+        )}
+      </React.Suspense>
     </section>
   );
 }
