@@ -12,6 +12,8 @@ import { useFormatStreamAndHistory, useNetworkProvider } from 'hooks';
 import { chainDetails } from 'utils/network';
 import { useTranslations } from 'next-intl';
 import Balance from 'components/Balance';
+import Link from 'next/link';
+import { ArrowCircleLeftIcon } from '@heroicons/react/outline';
 
 interface StreamsProps {
   subgraphEndpoint: string;
@@ -45,8 +47,15 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, resolvedAd
     <Layout className="mt-12 flex w-full flex-col gap-[30px] dark:bg-[#161818]">
       <section className="app-section">
         <div>
+          <Link href="/">
+            <a className="relative top-[-18px] flex items-center gap-2">
+              <ArrowCircleLeftIcon className="h-5 w-5" />
+              <span>Home</span>
+            </a>
+          </Link>
+
           <div className="section-header ml-0 max-w-fit">
-            <h1 className="font-exo px-2 py-1 text-3xl dark:text-white">{t('streamsAndHistory')}</h1>
+            <h1 className="font-exo py-1 text-3xl dark:text-white">{t('streamsAndHistory')}</h1>
             {network && (
               <div className="mt-[5px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
                 <div className="flex items-center rounded-full">

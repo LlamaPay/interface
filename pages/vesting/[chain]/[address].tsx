@@ -1,18 +1,20 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import * as React from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
+import Image, { StaticImageData } from 'next/image';
+import { dehydrate, QueryClient } from 'react-query';
+import { useTranslations } from 'next-intl';
 import Layout from 'components/Layout';
 import { BalanceIcon } from 'components/Icons';
-import { dehydrate, QueryClient } from 'react-query';
-import { useStreamAndHistoryQuery } from 'services/generated/graphql';
-import defaultImage from 'public/empty-token.webp';
-import Image, { StaticImageData } from 'next/image';
-import { chainDetails } from 'utils/network';
-import { useTranslations } from 'next-intl';
-import { useGetVestingInfoByQueryParams } from 'queries/useGetVestingInfo';
-import { useNetworkProvider } from 'hooks';
 import { AltVestingSection } from 'components/Vesting';
 import { FallbackContainer } from 'components/Fallback';
-import { useRouter } from 'next/router';
+import { useNetworkProvider } from 'hooks';
+import { useGetVestingInfoByQueryParams } from 'queries/useGetVestingInfo';
+import { ArrowCircleLeftIcon } from '@heroicons/react/outline';
+import defaultImage from 'public/empty-token.webp';
+import { useStreamAndHistoryQuery } from 'services/generated/graphql';
+import { chainDetails } from 'utils/network';
 
 interface StreamsProps {
   subgraphEndpoint: string;
@@ -36,6 +38,13 @@ const Streams: NextPage<StreamsProps> = ({ address, resolvedAddress, network, ch
     <Layout className="mt-12 flex w-full flex-col gap-[30px] dark:bg-[#161818]">
       <section className="app-section">
         <div>
+          <Link href="/">
+            <a className="relative top-[-18px] flex items-center gap-2">
+              <ArrowCircleLeftIcon className="h-5 w-5" />
+              <span>Home</span>
+            </a>
+          </Link>
+
           <div className="section-header ml-0 max-w-fit">
             <h1 className="font-exo px-0 py-1 text-3xl dark:text-white">Vesting</h1>
 
