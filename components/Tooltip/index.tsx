@@ -1,13 +1,16 @@
 import * as React from 'react';
 import { Button } from 'ariakit/button';
 import { Tooltip as AriaTooltip, TooltipAnchor, useTooltipState } from 'ariakit/tooltip';
+import classNames from 'classnames';
 
 interface IProps {
   children: React.ReactNode;
   content: string;
+  className?: string;
+  onClick?: () => void;
 }
 
-const Tooltip = ({ children, content }: IProps) => {
+const Tooltip = ({ children, content, className, ...props }: IProps) => {
   const tooltip = useTooltipState({ placement: 'bottom' });
 
   if (!content) return <span>{children}</span>;
@@ -17,8 +20,9 @@ const Tooltip = ({ children, content }: IProps) => {
       <TooltipAnchor
         state={tooltip}
         as={Button}
-        className="focus-visible:ariakit-outline aria-disabled:opacity-50"
+        className={classNames('focus-visible:ariakit-outline aria-disabled:opacity-50', className)}
         style={{ fontWeight: 'inherit' }}
+        {...props}
       >
         {children}
       </TooltipAnchor>

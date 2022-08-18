@@ -1,4 +1,5 @@
 import * as React from 'react';
+import Link from 'next/link';
 import { ColumnDef, getCoreRowModel, useReactTable, getSortedRowModel, SortingState } from '@tanstack/react-table';
 import Table from 'components/Table';
 import {
@@ -24,10 +25,12 @@ import { useAddressStore } from 'store/address';
 import { useTranslations } from 'next-intl';
 import Schedule from '../../Schedule/Schedule';
 import { useNetworkProvider } from 'hooks';
+import Tooltip from 'components/Tooltip';
+import { ClipboardCopyIcon } from '@heroicons/react/outline';
 
 export function StreamTable({ data }: { data: IStream[] }) {
   const addressStore = useAddressStore();
-  const { nativeCurrency, chainId } = useNetworkProvider();
+  const { nativeCurrency, chainId, network } = useNetworkProvider();
   const t = useTranslations('Table');
 
   const columns = React.useMemo<ColumnDef<IStream>[]>(
@@ -69,6 +72,26 @@ export function StreamTable({ data }: { data: IStream[] }) {
         header: t('userWithdrawable'),
         cell: ({ cell }) => cell.row.original && <Withdrawable data={cell.row.original} />,
       },
+
+      {
+        accessorKey: 'streamId',
+        id: 'linkToStream',
+        header: '',
+        cell: (info) =>
+          network && (
+            <Tooltip
+              content="Copy link to stream"
+              onClick={() =>
+                navigator.clipboard.writeText(`https://llamapay.io/salaries/withdraw/${network}/${info.getValue()}`)
+              }
+              className="relative top-[1px] ml-auto flex items-center"
+            >
+              <ClipboardCopyIcon className="h-4 w-4 text-black dark:text-white" />
+            </Tooltip>
+          ),
+        enableSorting: false,
+      },
+
       {
         id: 'send',
         header: '',
@@ -147,7 +170,7 @@ export function StreamTable({ data }: { data: IStream[] }) {
         },
       },
     ],
-    [t]
+    [t, chainId, nativeCurrency?.symbol, network]
   );
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -173,6 +196,8 @@ export function StreamTable({ data }: { data: IStream[] }) {
 
 export function DefaultStreamTable({ data }: { data: IStream[] }) {
   const t = useTranslations('Table');
+
+  const { network } = useNetworkProvider();
 
   const columns = React.useMemo<ColumnDef<IStream>[]>(
     () => [
@@ -214,6 +239,35 @@ export function DefaultStreamTable({ data }: { data: IStream[] }) {
         cell: ({ cell }) => cell.row.original && <Withdrawable data={cell.row.original} />,
       },
       {
+        accessorKey: 'streamId',
+        id: 'linkToStream',
+        header: '',
+        cell: (info) =>
+          network && (
+            <Tooltip
+              content="Copy link to stream"
+              onClick={() =>
+                navigator.clipboard.writeText(`https://llamapay.io/salaries/withdraw/${network}/${info.getValue()}`)
+              }
+              className="relative top-[1px] ml-auto flex items-center"
+            >
+              <ClipboardCopyIcon className="h-4 w-4 text-black dark:text-white" />
+            </Tooltip>
+          ),
+        enableSorting: false,
+      },
+      {
+        accessorKey: 'streamId',
+        header: '',
+        cell: (info) =>
+          network && (
+            <Link href={`/salaries/withdraw/${network}/${info.getValue()}`}>
+              <a className="row-action-links">Withdraw</a>
+            </Link>
+          ),
+        enableSorting: false,
+      },
+      {
         id: 'history',
         header: '',
         cell: ({ cell }) =>
@@ -224,7 +278,7 @@ export function DefaultStreamTable({ data }: { data: IStream[] }) {
           ),
       },
     ],
-    [t]
+    [t, network]
   );
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -240,5 +294,5 @@ export function DefaultStreamTable({ data }: { data: IStream[] }) {
     getSortedRowModel: getSortedRowModel(),
   });
 
-  return <Table instance={instance} hidePagination={true} />;
+  return <Table instance={instance} hidePagination={true} maxWidthColumn={7} />;
 }
