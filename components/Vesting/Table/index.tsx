@@ -1,16 +1,30 @@
 import { ColumnDef, getCoreRowModel, useReactTable, getSortedRowModel, SortingState } from '@tanstack/react-table';
+import { DisclosureState } from 'ariakit';
 import Table from 'components/Table';
-import React from 'react';
+import * as React from 'react';
 import { IVesting } from 'types';
 import { formatAddress } from 'utils/address';
 import { useAccount } from 'wagmi';
+import { IChartValues } from '../types';
 import ChartButton from './CustomValues/ChartButton';
 import ClaimButton from './CustomValues/ClaimButton';
 import ExplorerLink from './CustomValues/ExplorerLink';
 import Status, { statusAccessorFn } from './CustomValues/Status';
 import Unclaimed from './CustomValues/Unclaimed';
 
-export default function VestingTable({ data }: { data: IVesting[] }) {
+export default function VestingTable({
+  data,
+  chartValues,
+  chartDialog,
+  claimDialog,
+  claimValues,
+}: {
+  data: IVesting[];
+  chartValues: React.MutableRefObject<IChartValues | null>;
+  chartDialog: DisclosureState;
+  claimDialog: DisclosureState;
+  claimValues: React.MutableRefObject<IVesting | null>;
+}) {
   const [{ data: accountData }] = useAccount();
 
   const columns = React.useMemo<ColumnDef<IVesting>[]>(
@@ -64,12 +78,16 @@ export default function VestingTable({ data }: { data: IVesting[] }) {
       {
         id: 'claim',
         header: '',
-        cell: ({ cell }) => cell.row.original && <ClaimButton data={cell.row.original} />,
+        cell: ({ cell }) =>
+          cell.row.original && (
+            <ClaimButton data={cell.row.original} claimDialog={claimDialog} claimValues={claimValues} />
+          ),
       },
       {
         id: 'chart',
         header: '',
-        cell: ({ cell }) => cell.row.original && <ChartButton data={cell.row.original} />,
+        cell: ({ cell }) =>
+          cell.row.original && <ChartButton data={cell.row.original} chartValues={chartValues} dialog={chartDialog} />,
       },
       {
         id: 'viewContract',
@@ -83,7 +101,7 @@ export default function VestingTable({ data }: { data: IVesting[] }) {
           ),
       },
     ],
-    [accountData]
+    [accountData, chartValues, chartDialog, claimDialog, claimValues]
   );
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
