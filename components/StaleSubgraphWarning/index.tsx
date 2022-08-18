@@ -1,6 +1,6 @@
+import * as React from 'react';
 import { useNetworkProvider } from 'hooks';
 import useGetSubgraphDelay from 'queries/useGetSubgraphDelay';
-import React from 'react';
 
 export default function StaleSubgraphWarning() {
   const { data } = useGetSubgraphDelay();

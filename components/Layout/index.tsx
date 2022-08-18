@@ -58,6 +58,7 @@ export default function Layout({ children, className, noBanner = false, ...props
       <main className={classNames('flex-1', className)} {...props}>
         {children}
       </main>
+
       <OnboardDialog dialog={onboardDialog} />
       <Footer />
       <CustomToast />

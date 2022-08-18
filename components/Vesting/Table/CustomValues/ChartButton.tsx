@@ -1,15 +1,18 @@
 import * as React from 'react';
-import { useDialogState } from 'ariakit';
-import { FormDialog } from 'components/Dialog';
+import { DisclosureState } from 'ariakit';
 import { IVesting } from 'types';
-import dynamic from 'next/dynamic';
+import { IChartValues } from 'components/Vesting/types';
 
-const VestingChart = dynamic(() => import('../../Charts/VestingChart'), { ssr: false });
-
-export default function ChartButton({ data }: { data: IVesting }) {
-  const dialog = useDialogState();
-
-  const { vestingPeriod, amount, startTime, vestedDays, cliffPeriod } = React.useMemo(() => {
+export default function ChartButton({
+  data,
+  dialog,
+  chartValues,
+}: {
+  data: IVesting;
+  dialog: DisclosureState;
+  chartValues: React.MutableRefObject<IChartValues | null>;
+}) {
+  const values = React.useMemo(() => {
     const vestingPeriod = (Number(data.endTime) - Number(data.startTime)) / 86400;
     const amount = Number(data.totalLocked) / 10 ** Number(data.tokenDecimals);
     const startTime = new Date(Number(data.startTime) * 1000);
@@ -24,24 +27,14 @@ export default function ChartButton({ data }: { data: IVesting }) {
     return { vestingPeriod, amount, startTime, vestedDays, cliffPeriod };
   }, [data]);
 
+  const showChart = () => {
+    chartValues.current = { ...values, tokenSymbol: data.tokenSymbol };
+    dialog.toggle();
+  };
+
   return (
-    <>
-      <button className="row-action-links" onClick={dialog.toggle}>
-        Chart
-      </button>
-      <FormDialog dialog={dialog} title={`${data.tokenSymbol}`} className="max-w-[36rem]">
-        <div className="h-[360px]">
-          {dialog.open && (
-            <VestingChart
-              amount={amount}
-              vestingPeriod={vestingPeriod}
-              cliffPeriod={cliffPeriod}
-              startTime={startTime}
-              vestedDays={vestedDays}
-            />
-          )}
-        </div>
-      </FormDialog>
-    </>
+    <button className="row-action-links" onClick={showChart}>
+      Chart
+    </button>
   );
 }

@@ -1,6 +1,6 @@
+import * as React from 'react';
 import { useLocale } from 'hooks';
 import { useTranslations } from 'next-intl';
-import React from 'react';
 import { IHistory } from 'types';
 import { downloadInvoice } from 'utils/downloadInvoice';
 import { useAccount } from 'wagmi';
