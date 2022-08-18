@@ -4,7 +4,7 @@ import { useDialogState } from 'ariakit';
 import BigNumber from 'bignumber.js';
 import { FormDialog, TransactionDialog } from 'components/Dialog';
 import { InputAmount, InputText, SubmitButton } from 'components/Form';
-import React from 'react';
+import * as React from 'react';
 import toast from 'react-hot-toast';
 import { BeatLoader } from 'react-spinners';
 import { IVesting } from 'types';
@@ -26,8 +26,8 @@ export default function ClaimButton({ data }: { data: IVesting }) {
     'claim',
     {
       overrides: {
-        gasLimit: 180000
-      }
+        gasLimit: 180000,
+      },
     }
   );
   const claimDialog = useDialogState();

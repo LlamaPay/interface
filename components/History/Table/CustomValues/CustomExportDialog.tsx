@@ -2,7 +2,7 @@ import { Switch } from '@headlessui/react';
 import { DisclosureState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
 import { InputText, SubmitButton } from 'components/Form';
-import React from 'react';
+import * as React from 'react';
 import { IHistory } from 'types';
 import { formatAddress } from 'utils/address';
 import { downloadCustomHistory } from 'utils/downloadCsv';

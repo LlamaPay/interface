@@ -1,5 +1,5 @@
 import { useLocale } from 'hooks';
-import React from 'react';
+import * as React from 'react';
 import { IVesting } from 'types';
 
 export default function Unclaimed({ data }: { data: IVesting }) {

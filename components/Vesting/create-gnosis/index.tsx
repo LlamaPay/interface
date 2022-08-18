@@ -9,7 +9,7 @@ import toast from 'react-hot-toast';
 import { createERC20Contract } from 'utils/tokenUtils';
 import { getAddress, Interface } from 'ethers/lib/utils';
 import { useProvider } from 'wagmi';
-import React from 'react';
+import * as React from 'react';
 import { ERC20Interface } from 'utils/contract';
 import { BeatLoader } from 'react-spinners';
 import { Switch } from '@headlessui/react';
