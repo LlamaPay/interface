@@ -1,3 +1,4 @@
+import * as React from 'react';
 import Fallback, { FallbackContainer } from 'components/Fallback';
 import useGetVestingInfo from 'queries/useGetVestingInfo';
 import Table from './Table';
@@ -8,7 +9,6 @@ import classNames from 'classnames';
 import { IVesting } from 'types';
 import { useTranslations } from 'next-intl';
 import { useDialogState } from 'ariakit';
-import * as React from 'react';
 import dynamic from 'next/dynamic';
 import { FormDialog } from 'components/Dialog';
 import { IChartValues } from './types';

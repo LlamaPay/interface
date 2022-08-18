@@ -1,7 +1,7 @@
+import * as React from 'react';
 import { ColumnDef, getCoreRowModel, useReactTable, getSortedRowModel, SortingState } from '@tanstack/react-table';
 import { DisclosureState } from 'ariakit';
 import Table from 'components/Table';
-import * as React from 'react';
 import { IVesting } from 'types';
 import { formatAddress } from 'utils/address';
 import { useAccount } from 'wagmi';
