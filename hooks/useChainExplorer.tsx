@@ -16,8 +16,12 @@ export const useChainExplorer = () => {
         : { name: null, url: null };
     }
 
-    if (pathname === '/salaries/[chain]/[address]' || pathname === '/vesting/[chain]/[address]') {
-      const chainParam = query.chain;
+    if (
+      pathname === '/salaries/[chain]/[address]' ||
+      pathname === '/vesting/[chain]/[address]' ||
+      pathname === '/yearn'
+    ) {
+      const chainParam = pathname === '/yearn' ? 'ethereum' : query.chain;
 
       const isParamChainId = Number.isNaN(Number(chainParam));
 

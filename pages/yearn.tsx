@@ -12,14 +12,14 @@ interface StreamsProps {
   logoURI: StaticImageData;
 }
 
-const Streams: NextPage<StreamsProps> = (props) => {
+const Yearn: NextPage<StreamsProps> = (props) => {
   return <Salaries {...props} />;
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ query, locale }) => {
-  const data = await getSalariesInfo({ locale, chain: query.chain, address: query.address });
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+  const data = await getSalariesInfo({ locale, chain: 'ethereum', address: 'ychad.eth' });
 
   return data;
 };
 
-export default Streams;
+export default Yearn;

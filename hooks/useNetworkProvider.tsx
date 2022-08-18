@@ -27,9 +27,10 @@ export const useNetworkProvider = () => {
     pathname === '/salaries/[chain]/[address]' ||
     pathname === '/salaries/withdraw' ||
     pathname === '/salaries/withdraw/[chain]/[stream]' ||
-    pathname === '/vesting/[chain]/[address]'
+    pathname === '/vesting/[chain]/[address]' ||
+    pathname === '/yearn'
   ) {
-    const chainParam = query.chain;
+    const chainParam = pathname === '/yearn' ? 'ethereum' : query.chain;
 
     const isParamChainId = chainParam && !Number.isNaN(Number(chainParam));
 
