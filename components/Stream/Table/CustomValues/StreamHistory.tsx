@@ -112,7 +112,7 @@ const StreamedYTD: React.FC<{ data: IStream; shouldRun: boolean }> = ({ data, sh
   const [ytdAmount, setYtdAmount] = React.useState<string | null>(null);
   const intl = useIntl();
   const setYTD = React.useCallback(() => {
-    console.log('this is caleld');
+    //console.log('this is caleld');
     const curYear = new Date().getFullYear();
     if (data === undefined) {
       setYtdAmount(null);
