@@ -5,7 +5,7 @@ import BigNumber from 'bignumber.js';
 import { ContractCallContext, ContractCallResults, Multicall } from 'ethereum-multicall';
 import { ethers } from 'ethers';
 import { useNetworkProvider } from 'hooks';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { IVesting } from 'types';
 import { networkDetails } from 'utils/constants';
 import { erc20ABI, useAccount } from 'wagmi';

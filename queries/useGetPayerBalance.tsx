@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { IBalance, ITokenLists } from 'types';
 import { useAccount } from 'wagmi';
 import BigNumber from 'bignumber.js';
@@ -17,8 +17,7 @@ const fetchBalance = async (
     const res = await Promise.allSettled(tokens.map((c) => c.llamaTokenContract.balances(id)));
 
     const data = res.flatMap((d, index) => {
-      const amount =
-        (d.status === 'fulfilled' && new BigNumber(d.value.toString()).dividedBy(10 ** 20)) ?? null;
+      const amount = (d.status === 'fulfilled' && new BigNumber(d.value.toString()).dividedBy(10 ** 20)) ?? null;
 
       // filter zero balance tokens
       if (!amount || !(Number(amount) > 0)) return [];
@@ -44,7 +43,7 @@ const fetchBalance = async (
   }
 };
 
-function useGetPayerBalance(contracts: ITokenLists[] | null, tokensKey: string, replacementPayerAddress?:string) {
+function useGetPayerBalance(contracts: ITokenLists[] | null, tokensKey: string, replacementPayerAddress?: string) {
   const [{ data: accountData }] = useAccount();
   const { provider } = useNetworkProvider();
 

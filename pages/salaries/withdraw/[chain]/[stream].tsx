@@ -1,7 +1,7 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import * as React from 'react';
 import Layout from 'components/Layout';
-import { dehydrate, QueryClient } from 'react-query';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { chainDetails } from 'utils/network';
 import { useStreamByIdQuery } from 'services/generated/graphql';
 import defaultImage from 'public/empty-token.webp';
@@ -239,7 +239,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery(
-    'StreamById',
+    ['StreamById'],
     useStreamByIdQuery.fetcher(
       {
         endpoint: network?.subgraphEndpoint ?? '',

@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import { getAddress } from 'ethers/lib/utils';
 import { useNetworkProvider } from 'hooks';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { StreamAndHistoryQuery } from 'services/generated/graphql';
 import { MAINNET_ENS_RESOLVER, networkDetails } from 'utils/constants';
 import mainnetResolver from 'abis/mainnetResolver';

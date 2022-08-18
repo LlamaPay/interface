@@ -6,7 +6,7 @@ import botContract from 'abis/botContract';
 import { InputAmount, InputText, SubmitButton } from 'components/Form';
 import React from 'react';
 import toast from 'react-hot-toast';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import useGetBotInfo from 'queries/useGetBotInfo';
 import { formatAddress } from 'utils/address';
 import { zeroAdd } from 'utils/constants';

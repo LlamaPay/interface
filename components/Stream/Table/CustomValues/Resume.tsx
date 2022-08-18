@@ -1,7 +1,7 @@
 import llamaContract from 'abis/llamaContract';
 import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { IStream } from 'types';
 import { useContractWrite } from 'wagmi';
 

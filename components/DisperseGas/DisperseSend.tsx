@@ -6,7 +6,7 @@ import toast from 'react-hot-toast';
 import { BeatLoader } from 'react-spinners';
 import { networkDetails } from 'utils/constants';
 import { useContractWrite, useNetwork } from 'wagmi';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 
 interface DisperseSendProps {

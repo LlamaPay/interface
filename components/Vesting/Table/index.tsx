@@ -1,6 +1,6 @@
 import { ColumnDef, getCoreRowModel, useReactTable, getSortedRowModel, SortingState } from '@tanstack/react-table';
 import Table from 'components/Table';
-import React from 'react';
+import * as React from 'react';
 import { IVesting } from 'types';
 import { formatAddress } from 'utils/address';
 import { useAccount } from 'wagmi';
@@ -19,14 +19,18 @@ export default function VestingTable({ data }: { data: IVesting[] }) {
         accessorFn: (row) => `${row.tokenName} (${row.tokenSymbol})`,
         id: 'token',
         header: 'Token',
-        cell: (info) => <ExplorerLink query={info.cell.row.original.token} value={info.getValue()} />,
+        cell: (info) => (
+          <ExplorerLink query={info.cell.row.original.token} value={info.getValue() as React.ReactNode} />
+        ),
       },
       {
         accessorFn: (row) =>
           accountData?.address.toLowerCase() === row.recipient.toLowerCase() ? row.admin : row.recipient,
         id: 'funderOrRecipient',
         header: 'Funder/Recipient',
-        cell: (info) => <ExplorerLink query={info.getValue()} value={formatAddress(info.getValue())} />,
+        cell: (info) => (
+          <ExplorerLink query={info.getValue() as string} value={formatAddress(info.getValue() as string)} />
+        ),
         enableSorting: false,
       },
       {

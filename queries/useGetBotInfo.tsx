@@ -2,7 +2,7 @@ import { BaseProvider } from '@ethersproject/providers';
 import botContract from 'abis/botContract';
 import { ethers } from 'ethers';
 import { useNetworkProvider } from 'hooks';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { botContractCreation, networkDetails, zeroAdd } from 'utils/constants';
 import { erc20ABI, useAccount } from 'wagmi';
 

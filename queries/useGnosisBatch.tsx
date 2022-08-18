@@ -1,5 +1,5 @@
 import SafeAppsSDK from '@gnosis.pm/safe-apps-sdk/dist/src/sdk';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 
 interface IUseGnosisBatch {
   calls: { [key: string]: string[] };

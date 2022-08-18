@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
 import { useNetworkProvider } from 'hooks';
 import { Provider } from 'utils/contract';
@@ -37,7 +37,7 @@ const fetchPayers = async (userAddress: string, tokens: IToken[] | null, provide
 };
 
 // query that returns lastPayerUpdate, totalPaidPerSec when user address is passed
-function usePayers(tokens: IToken[] | null, tokensKey: string, replacementAddress?:string) {
+function usePayers(tokens: IToken[] | null, tokensKey: string, replacementAddress?: string) {
   const [{ data: accountData }] = useAccount();
   const { provider } = useNetworkProvider();
 
