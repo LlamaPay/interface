@@ -257,47 +257,49 @@ export default function BotFunds({
               </div>
             </form>
           </section>
-          <div className="flex space-x-2">
-            <span className="text-md font-evo">
-              {botInfo?.redirect === zeroAdd || !botInfo?.redirect
-                ? 'Redirect not Set'
-                : `Redirecting Withdrawals to ${formatAddress(botInfo?.redirect)}`}
-            </span>
-            {botInfo?.redirect !== zeroAdd && botInfo?.redirect && (
-              <button className="row-action-links" onClick={onCancelRedirect}>
-                Remove
-              </button>
-            )}
-          </div>
-          <section className="border px-2 py-2">
-            {botInfo && (
+          {botInfo?.llamaPayToToken && (
+            <>
               <div className="flex space-x-2">
-                <div className="w-full">
-                  <InputText
-                    name="redirectTo"
-                    isRequired
-                    label="Redirect Withdrawals To"
-                    placeholder="0x..."
-                    handleChange={(e) => setRedirectAddress(e.target.value)}
-                  />
-                </div>
-                <div className="w-1/4">
-                  <label className="input-label">Token</label>
-                  <select onChange={(e) => setSelectedToken(e.target.value)} name="token" className="input-field">
-                    <option value={''}></option>
-                    {Object.keys(botInfo?.llamaPayToToken).map((p) => (
-                      <option key={p} value={p}>
-                        {botInfo?.llamaPayToToken[p]}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <SubmitButton onClick={onRedirect} className="bottom-0 h-min w-2/5 place-self-end">
-                  Redirect
-                </SubmitButton>
+                <span className="text-md font-evo">
+                  {botInfo?.redirect === zeroAdd || !botInfo?.redirect
+                    ? 'Redirect not Set'
+                    : `Redirecting Withdrawals to ${formatAddress(botInfo?.redirect)}`}
+                </span>
+                {botInfo?.redirect !== zeroAdd && botInfo?.redirect && (
+                  <button className="row-action-links" onClick={onCancelRedirect}>
+                    Remove
+                  </button>
+                )}
               </div>
-            )}
-          </section>
+              <section className="border px-2 py-2">
+                <div className="flex space-x-2">
+                  <div className="w-full">
+                    <InputText
+                      name="redirectTo"
+                      isRequired
+                      label="Redirect Withdrawals To"
+                      placeholder="0x..."
+                      handleChange={(e) => setRedirectAddress(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-1/4">
+                    <label className="input-label">Token</label>
+                    <select onChange={(e) => setSelectedToken(e.target.value)} name="token" className="input-field">
+                      <option value={''}></option>
+                      {Object.keys(botInfo?.llamaPayToToken).map((p) => (
+                        <option key={p} value={p}>
+                          {botInfo?.llamaPayToToken[p]}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <SubmitButton onClick={onRedirect} className="bottom-0 h-min w-2/5 place-self-end">
+                    Redirect
+                  </SubmitButton>
+                </div>
+              </section>
+            </>
+          )}
           <div>
             <span>Schedule for All Streams:</span>
           </div>
@@ -353,27 +355,27 @@ export default function BotFunds({
           <div>
             <span> Scheduled Streams:</span>
           </div>
-          {botInfo?.toInclude && (
-            <div className="overflow-x-auto">
-              <table className="border">
-                <thead>
-                  <tr>
-                    <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">Type</th>
-                    <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
-                      Address Related
-                    </th>
-                    <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">Token</th>
-                    <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
-                      Amount/Month
-                    </th>
-                    <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
-                      Frequency
-                    </th>
-                    <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white"></th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {Object.keys(botInfo.toInclude).map((p) => (
+          <div className="overflow-x-auto">
+            <table className="border">
+              <thead>
+                <tr>
+                  <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">Type</th>
+                  <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+                    Address Related
+                  </th>
+                  <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">Token</th>
+                  <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+                    Amount/Month
+                  </th>
+                  <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+                    Frequency
+                  </th>
+                  <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white"></th>
+                </tr>
+              </thead>
+              <tbody>
+                {botInfo?.toInclude &&
+                  Object.keys(botInfo.toInclude).map((p) => (
                     <tr key={p} className="table-row">
                       <td className="table-description text-center dark:text-white">
                         <span>
@@ -433,10 +435,9 @@ export default function BotFunds({
                       </td>
                     </tr>
                   ))}
-                </tbody>
-              </table>
-            </div>
-          )}
+              </tbody>
+            </table>
+          </div>
         </span>
       </FormDialog>
     </>
