@@ -167,7 +167,7 @@
   }
 
   .claim-amount .animate-shimmer {
-    @apply !h-[36px];
+    @apply !h-[36px] rounded;
   }
 
   .claim-amount svg {

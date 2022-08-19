@@ -1,26 +1,26 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import * as React from 'react';
-import Layout from 'components/Layout';
-import { dehydrate, QueryClient } from 'react-query';
-import { chainDetails } from 'utils/network';
-import { useStreamByIdQuery } from 'services/generated/graphql';
-import defaultImage from 'public/empty-token.webp';
-import Image, { StaticImageData } from 'next/image';
-import { useIntl, useTranslations } from 'next-intl';
 import { useRouter } from 'next/router';
-import { FallbackContainer } from 'components/Fallback';
+import Link from 'next/link';
+import Image, { StaticImageData } from 'next/image';
+import { dehydrate, QueryClient } from 'react-query';
+import { useDialogState } from 'ariakit';
+import { useNetwork } from 'wagmi';
+import { useIntl, useTranslations } from 'next-intl';
 import { BeatLoader } from 'react-spinners';
-import { useGetEns } from 'queries/useResolveEns';
+import Layout from 'components/Layout';
+import { FallbackContainer } from 'components/Fallback';
 import Tooltip from 'components/Tooltip';
-import { secondsByDuration } from 'utils/constants';
 import { Push, TotalStreamed, Withdrawable } from 'components/Stream/Table/CustomValues';
+import { WalletSelector } from 'components/Web3';
+import { StreamIcon } from 'components/Icons';
 import { useNetworkProvider, useTokenList } from 'hooks';
 import { formatStream } from 'hooks/useFormatStreamAndHistory';
-import { useNetwork } from 'wagmi';
-import { WalletSelector } from 'components/Web3';
-import { useDialogState } from 'ariakit';
-import { StreamIcon } from 'components/Icons';
-import Link from 'next/link';
+import { useGetEns } from 'queries/useResolveEns';
+import { chainDetails } from 'utils/network';
+import { secondsByDuration } from 'utils/constants';
+import { useStreamByIdQuery } from 'services/generated/graphql';
+import defaultImage from 'public/empty-token.webp';
 
 interface ClaimPageProps {
   streamId: string;
@@ -60,7 +60,7 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
 
   const { provider } = useNetworkProvider();
 
-  const formattedStream = stream && provider && formatStream({ stream, address: stream.payee.id, provider });
+  const salaryData = stream && provider && formatStream({ stream, address: stream.payee.id, provider });
 
   const { data: payeeEns } = useGetEns(stream?.payee?.id ?? '');
   const { data: payerEns } = useGetEns(stream?.payer?.id ?? '');
@@ -71,9 +71,26 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
 
   const walletDailog = useDialogState();
 
-  const tokenLogo =
-    tokenList?.find((t) => t.tokenAddress.toLowerCase() === stream?.token?.address?.toLowerCase())?.logoURI ??
-    defaultImage;
+  const tokenLogo = tokenList?.find(
+    (t) => t.tokenAddress.toLowerCase() === stream?.token?.address?.toLowerCase()
+  )?.logoURI;
+
+  const addTokenToWallet = () => {
+    if (typeof window !== 'undefined' && window.ethereum && stream?.token?.symbol) {
+      window.ethereum.request({
+        method: 'wallet_watchAsset',
+        params: {
+          type: 'ERC20',
+          options: {
+            address: stream?.token.address, // The address that the token is at.
+            symbol: stream?.token.symbol, // A ticker symbol or shorthand, up to 5 chars.
+            decimals: stream.token.decimals, // The number of decimals in the token
+            image: tokenLogo, // A string url of the token logo
+          },
+        },
+      });
+    }
+  };
 
   return (
     <Layout className="mt-12 flex w-full flex-col gap-[30px] dark:bg-[#161818]">
@@ -157,11 +174,11 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
             <div className="mt-[-28px] flex items-center gap-[10px] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
               <div className="flex items-center rounded-full">
                 <Image
-                  src={tokenLogo}
+                  src={tokenLogo || defaultImage}
                   alt={stream.token.name || 'Token'}
                   objectFit="contain"
                   width="16px"
-                  height="15px"
+                  height="16px"
                 />
               </div>
               <p>
@@ -182,25 +199,28 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
               </Link>
             </div>
 
-            {formattedStream && (
+            {/* TODO add translations */}
+            {salaryData && (
               <>
                 <h2 className="font-exo mt-8 text-lg text-[#4E575F] dark:text-[#9ca3af]">{t1('totalStreamed')}</h2>
                 <span className="claim-amount">
-                  <TotalStreamed data={formattedStream} />
+                  <TotalStreamed data={salaryData} />
                 </span>
                 <h2 className="font-exo mt-8 text-lg text-[#4E575F] dark:text-[#9ca3af]">{t1('withdrawable')}</h2>
                 <span className="claim-amount">
-                  <Withdrawable data={formattedStream} />
+                  <Withdrawable data={salaryData} />
                 </span>
+
+                {/* 
+                   Ask user to connect wallet before withdrawing
+                */}
                 {!networkData.chain ? (
                   <button className="form-submit-button mt-8" onClick={walletDailog.toggle}>
                     {t0('connectWallet')}
                   </button>
-                ) : chainId === networkData.chain?.id ? (
-                  <span className="claim-button">
-                    <Push data={formattedStream} buttonName="Withdraw" />
-                  </span>
-                ) : (
+                ) : chainId !== networkData.chain?.id ? (
+                  // Check if user is on same network with the chain on which salary is streaming
+                  // else switch to the right network
                   <button
                     className="form-submit-button mt-8"
                     disabled={!switchNetwork || chainId === null}
@@ -208,6 +228,28 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
                   >
                     Switch Network
                   </button>
+                ) : (
+                  <>
+                    <span className="claim-button">
+                      <Push data={salaryData} buttonName="Withdraw" />
+                    </span>
+                    <button
+                      type="button"
+                      className="form-submit-button mt-4 flex flex-1 items-center justify-center gap-[4px] rounded-[10px] bg-white font-normal text-[#23BD8F]"
+                      disabled={typeof window === 'undefined' || !window.ethereum}
+                      onClick={addTokenToWallet}
+                    >
+                      <span>Add</span>
+                      <Image
+                        src={tokenLogo || defaultImage}
+                        alt={stream.token.name || 'Token'}
+                        objectFit="contain"
+                        width="16px"
+                        height="16px"
+                      />
+                      <span>{`${stream.token.symbol} to wallet`}</span>
+                    </button>
+                  </>
                 )}
               </>
             )}
