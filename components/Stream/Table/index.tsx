@@ -27,6 +27,7 @@ import Schedule from '../../Schedule/Schedule';
 import { useNetworkProvider } from 'hooks';
 import Tooltip from 'components/Tooltip';
 import { ClipboardCopyIcon } from '@heroicons/react/outline';
+import classNames from 'classnames';
 
 export function StreamTable({ data }: { data: IStream[] }) {
   const addressStore = useAddressStore();
@@ -77,18 +78,26 @@ export function StreamTable({ data }: { data: IStream[] }) {
         accessorKey: 'streamId',
         id: 'linkToStream',
         header: '',
-        cell: (info) =>
-          network && (
-            <Tooltip
-              content="Copy link to stream"
-              onClick={() =>
-                navigator.clipboard.writeText(`https://llamapay.io/salaries/withdraw/${network}/${info.getValue()}`)
-              }
-              className="relative top-[1px] ml-auto flex items-center"
-            >
-              <ClipboardCopyIcon className="h-4 w-4 text-black dark:text-white" />
-            </Tooltip>
-          ),
+        cell: (info) => {
+          const data = info.cell.row.original;
+
+          return (
+            network && (
+              <Tooltip
+                content="Copy link to stream"
+                onClick={() =>
+                  navigator.clipboard.writeText(`https://llamapay.io/salaries/withdraw/${network}/${info.getValue()}`)
+                }
+                className={classNames(
+                  'relative top-[1px] ml-auto flex items-center',
+                  !data || data.streamType === 'incomingStream' ? 'mr-[-98px]' : ''
+                )}
+              >
+                <ClipboardCopyIcon className="h-4 w-4 text-black dark:text-white" />
+              </Tooltip>
+            )
+          );
+        },
         enableSorting: false,
       },
 
