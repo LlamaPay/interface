@@ -137,7 +137,7 @@ export default function BotFunds({
     if (!botInfo?.toInclude) return;
     const ele = botInfo.toInclude[p];
     cancelWithdraw({
-      args: [ele.llamaPay, ele.from, ele.to, ele.amountPerSec, ele.starts, ele.frequency],
+      args: [ele.token, ele.from, ele.to, ele.amountPerSec, ele.starts, ele.frequency],
     }).then((data) => {
       if (data.error) {
         toast.error(data.error.message);
@@ -257,7 +257,7 @@ export default function BotFunds({
               </div>
             </form>
           </section>
-          {botInfo?.llamaPayToToken && (
+          {botInfo?.tokenSymbols && (
             <>
               <div className="flex space-x-2">
                 <span className="text-md font-evo">
@@ -286,9 +286,9 @@ export default function BotFunds({
                     <label className="input-label">Token</label>
                     <select onChange={(e) => setSelectedToken(e.target.value)} name="token" className="input-field">
                       <option value={''}></option>
-                      {Object.keys(botInfo?.llamaPayToToken).map((p) => (
+                      {Object.keys(botInfo?.tokenSymbols).map((p) => (
                         <option key={p} value={p}>
-                          {botInfo?.llamaPayToToken[p]}
+                          {botInfo?.tokenSymbols[p]}
                         </option>
                       ))}
                     </select>

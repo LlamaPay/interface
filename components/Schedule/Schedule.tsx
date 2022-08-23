@@ -63,7 +63,7 @@ export default function Schedule({
     warningDialog.show();
     scheduleWithdraw({
       args: [
-        data.llamaContractAddress,
+        data.token.address,
         data.payerAddress,
         data.payeeAddress,
         data.amountPerSec,

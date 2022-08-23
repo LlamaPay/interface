@@ -43,11 +43,10 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
         newArr.push(event);
         withdraws[id] = newArr;
       }
-      const llamaPayToToken: any = {};
+      const tokenSymbols: any = {};
       const toInclude: {
         [key: string]: {
           owner: string;
-          llamaPay: string;
           from: string;
           to: string;
           token: string;
@@ -60,24 +59,23 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
       for (const i in withdraws) {
         const last = withdraws[i][withdraws[i].length - 1];
         if (last.event === 'WithdrawCancelled') continue;
-        if (llamaPayToToken[last.args.token] === undefined && last.args.llamaPay !== zeroAdd) {
+        if (tokenSymbols[last.args.token] === undefined && last.args.llamaPay !== zeroAdd) {
           const tokenContract = new ethers.Contract(last.args.token, erc20ABI, provider);
-          llamaPayToToken[last.args.token] = await tokenContract.symbol();
+          tokenSymbols[last.args.token] = await tokenContract.symbol();
         }
         toInclude[i] = {
           owner: last.args.owner,
-          llamaPay: last.args.llamaPay,
           from: last.args.from,
           to: last.args.to,
           token: last.args.token,
-          tokenSymbol: llamaPayToToken[last.args.token],
+          tokenSymbol: tokenSymbols[last.args.token],
           amountPerSec: last.args.amountPerSec,
           starts: last.args.starts,
           frequency: last.args.frequency,
         };
       }
       const redirect = await contract.redirects(userAddress);
-      return { toInclude, redirect, llamaPayToToken };
+      return { toInclude, redirect, tokenSymbols };
     }
   } catch (error) {
     console.error(error);
