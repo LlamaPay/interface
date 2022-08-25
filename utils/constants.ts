@@ -49,6 +49,8 @@ export const BOT_AVALANCHE = '0xB7CAa90CDbB8746F54B19F2f85E86b99598b268c';
 export const BOT_MAINNET = '0x4E20D5404ebDE5a12aD555e50186efE3E2d5553d';
 export const BOT_POLYGON = '0x4E20D5404ebDE5a12aD555e50186efE3E2d5553d';
 export const BOT_OPTIMISM = '0x4E20D5404ebDE5a12aD555e50186efE3E2d5553d';
+export const BOT_FANTOM = '0x4E20D5404ebDE5a12aD555e50186efE3E2d5553d';
+export const BOT_BSC = '0x4E20D5404ebDE5a12aD555e50186efE3E2d5553d';
 
 export const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
 export const alchemyId = 'PwvZx2hO2XpToWXSw9sgJJt1eBgjkRUr';
@@ -173,7 +175,7 @@ export const networkDetails: INetworkDetails = {
     chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ftm.tools/'),
     llamapayFactoryAddress: FACTORY_FANTOM,
     disperseAddress: DISPERSE_DEFAULT,
-    botAddress: '',
+    botAddress: BOT_FANTOM,
     blockExplorerURL: 'https://ftmscan.com/',
     blockExplorerName: 'FTMScan',
     prefix: 'fantom',
@@ -229,7 +231,7 @@ export const networkDetails: INetworkDetails = {
     chainProviders: new ethers.providers.JsonRpcProvider('https://bsc-dataseed.binance.org'),
     llamapayFactoryAddress: FACTORY_BSC,
     disperseAddress: DISPERSE_DEFAULT,
-    botAddress: '',
+    botAddress: BOT_BSC,
     blockExplorerURL: 'https://www.bscscan.com/',
     blockExplorerName: 'BscScan',
     prefix: 'bsc',
@@ -381,18 +383,18 @@ export const chains: Chain[] = [
       },
     ],
   },
-  {
-    id: 1088,
-    name: 'Metis',
-    nativeCurrency: { name: 'Metis', symbol: 'METIS', decimals: 18 },
-    rpcUrls: ['https://andromeda.metis.io/?owner=1088'],
-    blockExplorers: [
-      {
-        name: 'Andromeda Metis Explorer',
-        url: 'https://andromeda-explorer.metis.io/',
-      },
-    ],
-  },
+  // {
+  //   id: 1088,
+  //   name: 'Metis',
+  //   nativeCurrency: { name: 'Metis', symbol: 'METIS', decimals: 18 },
+  //   rpcUrls: ['https://andromeda.metis.io/?owner=1088'],
+  //   blockExplorers: [
+  //     {
+  //       name: 'Andromeda Metis Explorer',
+  //       url: 'https://andromeda-explorer.metis.io/',
+  //     },
+  //   ],
+  // },
 ];
 
 export const secondsByDuration: ISecondsByDuration = {
@@ -421,6 +423,8 @@ export const botContractCreation: { [key: number]: number } = {
   1: 15398276,
   137: 32239105,
   10: 20322837,
+  250: 45625744,
+  56: 20739491,
 };
 
-export const botDeployedOn: number[] = [43114, 5, 1, 137, 10];
+export const botDeployedOn: number[] = [43114, 5, 1, 137, 10, 250, 56];
