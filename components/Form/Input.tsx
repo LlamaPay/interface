@@ -2,7 +2,15 @@ import classNames from 'classnames';
 import { useTranslations } from 'next-intl';
 import { InputElement } from './types';
 
-export const InputAmount = ({ name, label, isRequired, className, handleChange, ...props }: InputElement) => {
+export const InputAmount = ({
+  name,
+  label,
+  isRequired,
+  className,
+  handleChange,
+  handleClick,
+  ...props
+}: InputElement) => {
   return (
     <label>
       <span className="input-label">{label}</span>
@@ -21,6 +29,7 @@ export const InputAmount = ({ name, label, isRequired, className, handleChange, 
         inputMode="decimal"
         title="Enter numbers only."
         onChange={handleChange}
+        onClick={handleClick}
         {...props}
       />
     </label>

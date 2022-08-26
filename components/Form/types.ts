@@ -9,6 +9,7 @@ export interface InputElement {
   placeholder?: string;
   optional?: boolean;
   pattern?: string;
+  handleClick?: (e: React.MouseEvent<HTMLInputElement>) => void;
 }
 
 export interface InputWithTokenElement extends InputElement {
