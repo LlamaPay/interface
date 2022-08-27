@@ -58,7 +58,6 @@ export default function Schedule({
   }
 
   function handleCalendarClick(e: any) {
-    console.log(new Date(e).toISOString().slice(0, 10));
     setFormData((prev) => ({ ...prev, ['startDate']: new Date(e).toISOString().slice(0, 10) }));
     setShowCalendar(false);
   }
