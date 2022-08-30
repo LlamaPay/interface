@@ -1106,8 +1106,6 @@ export type _Block_ = {
   hash?: Maybe<Scalars['Bytes']>;
   /** The block number */
   number: Scalars['Int'];
-  /** Timestamp of the block if available, format depends on the chain */
-  timestamp?: Maybe<Scalars['String']>;
 };
 
 /** The type for the top-level _meta field */

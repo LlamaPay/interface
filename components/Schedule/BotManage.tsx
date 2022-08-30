@@ -11,7 +11,6 @@ import useGetBotInfo from 'queries/useGetBotInfo';
 import { formatAddress } from 'utils/address';
 import { zeroAdd } from 'utils/constants';
 import { useApproveTokenForMaxAmt } from 'queries/useTokenApproval';
-import Calendar from 'react-calendar';
 
 export default function BotFunds({
   dialog,
@@ -32,7 +31,6 @@ export default function BotFunds({
   });
   const [redirectAddress, setRedirectAddress] = React.useState<string | null>(null);
   const [selectedToken, setSelectedToken] = React.useState<string>('');
-  const [showCalendar, setShowCalendar] = React.useState<boolean>(false);
 
   const { data: botInfo } = useGetBotInfo();
   const { mutate: approveMax } = useApproveTokenForMaxAmt();
@@ -156,12 +154,6 @@ export default function BotFunds({
 
   function handleChange(value: string, type: keyof typeof formData) {
     setFormData((prev) => ({ ...prev, [type]: value }));
-  }
-
-  function handleCalendarClick(e: any) {
-    console.log(new Date(e).toISOString().slice(0, 10));
-    setFormData((prev) => ({ ...prev, ['startDate']: new Date(e).toISOString().slice(0, 10) }));
-    setShowCalendar(false);
   }
 
   function handleSchedule(e: string) {
@@ -325,7 +317,6 @@ export default function BotFunds({
                     placeholder="YYYY-MM-DD"
                     pattern="\d{4}-\d{2}-\d{2}"
                     value={formData.startDate}
-                    onClick={(e) => setShowCalendar(true)}
                   />
                   <button
                     type="button"
@@ -346,11 +337,6 @@ export default function BotFunds({
                 </select>
               </div>
             </div>
-            {showCalendar && (
-              <section className="max-w-xs place-self-center border px-2 py-2">
-                <Calendar onChange={(e: any) => handleCalendarClick(e)} />
-              </section>
-            )}
             <div>
               <button
                 onClick={(e) => handleSchedule('incoming')}

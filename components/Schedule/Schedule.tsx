@@ -11,7 +11,6 @@ import { useQueryClient } from 'react-query';
 import { Switch } from '@headlessui/react';
 import { useApproveTokenForMaxAmt } from 'queries/useTokenApproval';
 import BotDepositWarning from './BotDepositWarning';
-import Calendar from 'react-calendar';
 
 export default function Schedule({
   data,
@@ -30,7 +29,6 @@ export default function Schedule({
   const [hasRedirect, setHasRedirect] = React.useState<boolean>(false);
   const [redirectAddress, setRedirectAddress] = React.useState<string | null>(null);
   const { mutate: approveMax } = useApproveTokenForMaxAmt();
-  const [showCalendar, setShowCalendar] = React.useState<boolean>(false);
 
   const [{}, scheduleWithdraw] = useContractWrite(
     {
@@ -55,12 +53,6 @@ export default function Schedule({
 
   function handleChange(value: string, type: keyof typeof formData) {
     setFormData((prev) => ({ ...prev, [type]: value }));
-  }
-
-  function handleCalendarClick(e: any) {
-    console.log(new Date(e).toISOString().slice(0, 10));
-    setFormData((prev) => ({ ...prev, ['startDate']: new Date(e).toISOString().slice(0, 10) }));
-    setShowCalendar(false);
   }
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -129,9 +121,9 @@ export default function Schedule({
       <button onClick={dialog.toggle} className="row-action-links w-full text-right">
         Schedule
       </button>
-      <FormDialog dialog={dialog} title={'Schedule Withdraw'}>
+      <FormDialog dialog={dialog} title={'Schedule Withdraw'} className="h-min">
         <span className="space-y-4 text-[#303030] dark:text-white">
-          <form className="mx-auto flex flex-col gap-4" onSubmit={onSubmit}>
+          <form className="mx-auto flex max-w-xl flex-col gap-4" onSubmit={onSubmit}>
             <div>
               <label className="input-label">Frequency</label>
               <select name="frequency" className="input-field w-full">
@@ -141,62 +133,60 @@ export default function Schedule({
                 <option value="monthly">Every 30 Days</option>
               </select>
             </div>
-            <label className="input-label">Start Date</label>
-            <div className="relative flex">
-              <input
-                className="input-field"
-                onChange={(e) => handleChange(e.target.value, 'startDate')}
-                required
-                autoComplete="off"
-                autoCorrect="off"
-                placeholder="YYYY-MM-DD"
-                pattern="\d{4}-\d{2}-\d{2}"
-                value={formData.startDate}
-                onClick={(e) => setShowCalendar(true)}
-              />
-              <button
-                type="button"
-                className="absolute bottom-[5px] top-[10px] right-[5px] rounded-lg border border-[#4E575F] px-2 text-xs font-bold text-[#4E575F] disabled:cursor-not-allowed"
-                onClick={onCurrentDate}
-              >
-                {'Today'}
-              </button>
-            </div>
-            {showCalendar && (
-              <section className="max-w-xs place-self-center border px-2 py-2">
-                <Calendar onChange={(e: any) => handleCalendarClick(e)} />
-              </section>
-            )}
-            {data.payeeAddress.toLowerCase() === accountData?.address.toLowerCase() && (
-              <div className="flex space-x-1">
-                <span>Redirect Withdraw</span>
-                <Switch
-                  checked={hasRedirect}
-                  onChange={setHasRedirect}
-                  className={`${
-                    hasRedirect ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
-                  } relative inline-flex h-6 w-11 items-center rounded-full`}
-                >
-                  <span
-                    className={`${
-                      hasRedirect ? 'translate-x-6' : 'translate-x-1'
-                    } inline-block h-4 w-4 transform rounded-full bg-white`}
+            <section>
+              <div className="w-full space-y-1">
+                <label className="input-label">Start Date</label>
+                <div className="relative flex">
+                  <input
+                    className="input-field"
+                    onChange={(e) => handleChange(e.target.value, 'startDate')}
+                    required
+                    autoComplete="off"
+                    autoCorrect="off"
+                    placeholder="YYYY-MM-DD"
+                    pattern="\d{4}-\d{2}-\d{2}"
+                    value={formData.startDate}
                   />
-                </Switch>
+                  <button
+                    type="button"
+                    className="absolute bottom-[5px] top-[10px] right-[5px] rounded-lg border border-[#4E575F] px-2 text-xs font-bold text-[#4E575F] disabled:cursor-not-allowed"
+                    onClick={onCurrentDate}
+                  >
+                    {'Today'}
+                  </button>
+                </div>
+                {data.payeeAddress.toLowerCase() === accountData?.address.toLowerCase() && (
+                  <div className="flex space-x-1">
+                    <span>Redirect Withdraw</span>
+                    <Switch
+                      checked={hasRedirect}
+                      onChange={setHasRedirect}
+                      className={`${
+                        hasRedirect ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
+                      } relative inline-flex h-6 w-11 items-center rounded-full`}
+                    >
+                      <span
+                        className={`${
+                          hasRedirect ? 'translate-x-6' : 'translate-x-1'
+                        } inline-block h-4 w-4 transform rounded-full bg-white`}
+                      />
+                    </Switch>
+                  </div>
+                )}
+                {hasRedirect && (
+                  <div className="w-full">
+                    <InputText
+                      name="redirectTo"
+                      isRequired
+                      label="Redirect Withdrawals To"
+                      placeholder="0x..."
+                      handleChange={(e) => setRedirectAddress(e.target.value)}
+                    />
+                  </div>
+                )}
               </div>
-            )}
-            {hasRedirect && (
-              <div className="">
-                <InputText
-                  name="redirectTo"
-                  isRequired
-                  label="Redirect Withdrawals To"
-                  placeholder="0x..."
-                  handleChange={(e) => setRedirectAddress(e.target.value)}
-                />
-              </div>
-            )}
-            <SubmitButton className="mt-5">Schedule</SubmitButton>
+              <SubmitButton className="mt-5">Schedule</SubmitButton>
+            </section>
           </form>
         </span>
       </FormDialog>
