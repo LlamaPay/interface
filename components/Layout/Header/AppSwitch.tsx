@@ -10,7 +10,8 @@ export default function AppSwitch() {
     router.pathname.includes('/salaries') ||
     router.pathname === '/create' ||
     router.pathname === '/streams' ||
-    router.pathname === '/withdraw';
+    router.pathname === '/withdraw' ||
+    router.pathname === '/yearn';
 
   const isVesting = router.pathname.includes('/vesting');
 
