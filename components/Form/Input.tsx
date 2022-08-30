@@ -36,17 +36,7 @@ export const InputAmount = ({
   );
 };
 
-export const InputText = ({
-  name,
-  label,
-  isRequired,
-  className,
-  optional,
-  showValue,
-  handleChange,
-  handleClick,
-  ...props
-}: InputElement) => {
+export const InputText = ({ name, label, isRequired, className, optional, handleChange, ...props }: InputElement) => {
   const t = useTranslations('Forms');
   return (
     <label>
@@ -63,8 +53,6 @@ export const InputText = ({
         type="text"
         spellCheck="false"
         onChange={handleChange}
-        onClick={handleClick}
-        value={showValue}
         {...props}
       />
     </label>

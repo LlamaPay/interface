@@ -10,7 +10,6 @@ export interface InputElement {
   optional?: boolean;
   pattern?: string;
   handleClick?: (e: React.MouseEvent<HTMLInputElement>) => void;
-  showValue?: string | number | readonly string[] | undefined;
 }
 
 export interface InputWithTokenElement extends InputElement {
