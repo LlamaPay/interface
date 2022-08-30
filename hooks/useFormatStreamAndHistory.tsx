@@ -51,22 +51,6 @@ export function useFormatStreamAndHistory({
         };
       });
 
-      for (let i = 0; i < formattedHistory.length; i++) {
-        if (
-          i === formattedHistory.length - 1 ||
-          formattedHistory[i].eventType !== 'Deposit' ||
-          formattedHistory[i].txHash !== formattedHistory[i + 1].txHash
-        )
-          continue;
-        let index = i + 1;
-        while (index < formattedHistory.length - 1 && formattedHistory[i].txHash === formattedHistory[index].txHash) {
-          index++;
-        }
-        const event = formattedHistory[index];
-        formattedHistory[index] = formattedHistory[i];
-        formattedHistory[i] = event;
-      }
-
       return {
         streams: formattedStreams.length > 0 ? formattedStreams : null,
         history: formattedHistory.length > 0 ? formattedHistory : null,
