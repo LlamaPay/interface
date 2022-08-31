@@ -59,7 +59,7 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
       for (const i in withdraws) {
         const last = withdraws[i][withdraws[i].length - 1];
         if (last.event === 'WithdrawCancelled') continue;
-        if (tokenSymbols[last.args.token] === undefined && last.args.llamaPay !== zeroAdd) {
+        if (tokenSymbols[last.args.token] === undefined && last.args.token !== zeroAdd) {
           const tokenContract = new ethers.Contract(last.args.token, erc20ABI, provider);
           tokenSymbols[last.args.token] = await tokenContract.symbol();
         }
