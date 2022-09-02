@@ -226,9 +226,9 @@ export const networkDetails: INetworkDetails = {
     vestingFactory: VESTING_FACTORY_ARBITRUM,
   },
   56: {
-    rpcUrl: 'https://bsc-dataseed.binance.org',
+    rpcUrl: 'https://rpc.ankr.com/bsc',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bsc',
-    chainProviders: new ethers.providers.JsonRpcProvider('https://bsc-dataseed.binance.org'),
+    chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/bsc'),
     llamapayFactoryAddress: FACTORY_BSC,
     disperseAddress: DISPERSE_DEFAULT,
     botAddress: BOT_BSC,
@@ -424,7 +424,7 @@ export const botContractCreation: { [key: number]: number } = {
   137: 32239105,
   10: 20322837,
   250: 45625744,
-  56: 20739491,
+  56: 20763900,
 };
 
 export const botDeployedOn: number[] = [43114, 5, 1, 137, 10, 250, 56];

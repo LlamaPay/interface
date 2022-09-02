@@ -22,10 +22,10 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
       let events: ethers.Event[] = [];
       do {
         const start = currBlock;
-        if (currBlock + 1024 > endBlock) {
+        if (currBlock + 2048 > endBlock) {
           currBlock = endBlock;
         } else {
-          currBlock += 1024;
+          currBlock += 2048;
         }
         const queriedEvents = await contract.queryFilter(filters, start, currBlock);
         events = events.concat(queriedEvents);
