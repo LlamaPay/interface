@@ -34,7 +34,7 @@ export default function BotFunds({
   const [selectedToken, setSelectedToken] = React.useState<string>('');
   const [showCalendar, setShowCalendar] = React.useState<boolean>(false);
 
-  const { data: botInfo } = useGetBotInfo();
+  const { data: botInfo, isLoading } = useGetBotInfo();
   const { mutate: approveMax } = useApproveTokenForMaxAmt();
 
   const [{ data: balance }] = useContractRead(
@@ -264,49 +264,6 @@ export default function BotFunds({
               </div>
             </form>
           </section>
-          {botInfo?.tokenSymbols && (
-            <>
-              <div className="flex space-x-2">
-                <span className="text-md font-evo">
-                  {botInfo?.redirect === zeroAdd || !botInfo?.redirect
-                    ? 'Redirect not Set'
-                    : `Redirecting Withdrawals to ${formatAddress(botInfo?.redirect)}`}
-                </span>
-                {botInfo?.redirect !== zeroAdd && botInfo?.redirect && (
-                  <button className="row-action-links" onClick={onCancelRedirect}>
-                    Remove
-                  </button>
-                )}
-              </div>
-              <section className="border px-2 py-2">
-                <div className="flex space-x-2">
-                  <div className="w-full">
-                    <InputText
-                      name="redirectTo"
-                      isRequired
-                      label="Redirect Withdrawals To"
-                      placeholder="0x..."
-                      handleChange={(e) => setRedirectAddress(e.target.value)}
-                    />
-                  </div>
-                  <div className="w-1/4">
-                    <label className="input-label">Token</label>
-                    <select onChange={(e) => setSelectedToken(e.target.value)} name="token" className="input-field">
-                      <option value={''}></option>
-                      {Object.keys(botInfo?.tokenSymbols).map((p) => (
-                        <option key={p} value={p}>
-                          {botInfo?.tokenSymbols[p]}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                  <SubmitButton onClick={onRedirect} className="bottom-0 h-min w-2/5 place-self-end">
-                    Redirect
-                  </SubmitButton>
-                </div>
-              </section>
-            </>
-          )}
           <div>
             <span>Schedule for All Streams:</span>
           </div>
@@ -365,92 +322,142 @@ export default function BotFunds({
               </button>
             </div>
           </section>
-          <div>
-            <span> Scheduled Streams:</span>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="border">
-              <thead>
-                <tr>
-                  <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">Type</th>
-                  <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
-                    Address Related
-                  </th>
-                  <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">Token</th>
-                  <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
-                    Amount/Month
-                  </th>
-                  <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
-                    Frequency
-                  </th>
-                  <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {botInfo?.toInclude &&
-                  Object.keys(botInfo.toInclude).map((p) => (
-                    <tr key={p} className="table-row">
-                      <td className="table-description text-center dark:text-white">
-                        <span>
-                          {botInfo.toInclude[p].from.toLowerCase() === accountAddress.toLowerCase()
-                            ? 'Outgoing'
-                            : botInfo.toInclude[p].to.toLowerCase() === accountAddress.toLowerCase()
-                            ? 'Incoming'
-                            : 'Owner'}
-                        </span>
-                      </td>
-                      <td className="table-description text-center dark:text-white">
-                        <span>
-                          {botInfo.toInclude[p].from === zeroAdd || botInfo.toInclude[p].to === zeroAdd
-                            ? 'All'
-                            : botInfo.toInclude[p].from.toLowerCase() === accountAddress.toLowerCase()
-                            ? formatAddress(botInfo.toInclude[p].to)
-                            : botInfo.toInclude[p].from.toLowerCase() === accountAddress.toLowerCase()
-                            ? formatAddress(botInfo.toInclude[p].to)
-                            : formatAddress(botInfo.toInclude[p].from)}
-                        </span>
-                      </td>
-                      <td className="table-description text-center dark:text-white">
-                        <span>
-                          {botInfo.toInclude[p].from === zeroAdd || botInfo.toInclude[p].to === zeroAdd
-                            ? 'All'
-                            : botInfo.toInclude[p].tokenSymbol}
-                        </span>
-                      </td>
-                      <td className="table-description text-center dark:text-white">
-                        <span>
-                          {botInfo.toInclude[p].from === zeroAdd || botInfo.toInclude[p].to === zeroAdd
-                            ? 'All'
-                            : ((botInfo.toInclude[p].amountPerSec * secondsByDuration['month']) / 1e20).toFixed(5)}
-                        </span>
-                      </td>
-                      <td className="table-description text-center dark:text-white">
-                        <span>
-                          {botInfo.toInclude[p].frequency === secondsByDuration['day']
-                            ? 'Every Day'
-                            : botInfo.toInclude[p].frequency === secondsByDuration['week']
-                            ? 'Every 7 Days'
-                            : botInfo.toInclude[p].frequency === secondsByDuration['biweek']
-                            ? 'Every 14 Days'
-                            : botInfo.toInclude[p].frequency === secondsByDuration['month']
-                            ? 'Every 30 days'
-                            : ''}
-                        </span>
-                      </td>
-                      <td className="table-description">
-                        <div className="text-center">
-                          {botInfo.toInclude[p].owner.toLowerCase() === accountAddress.toLowerCase() && (
-                            <button className="row-action-links" onClick={(e) => handleCancel(p)}>
-                              Cancel
-                            </button>
-                          )}
-                        </div>
-                      </td>
+          {isLoading && (
+            <div className="pt-1">
+              <span>Loading Redirect and Schedule Info...</span>
+            </div>
+          )}
+          {!isLoading && (
+            <div>
+              <div className="flex space-x-2">
+                <span className="text-md font-evo">
+                  {botInfo?.redirect === zeroAdd || !botInfo?.redirect
+                    ? 'Redirect not Set'
+                    : `Redirecting Withdrawals to ${formatAddress(botInfo?.redirect)}`}
+                </span>
+                {botInfo?.redirect !== zeroAdd && botInfo?.redirect && (
+                  <button className="row-action-links" onClick={onCancelRedirect}>
+                    Remove
+                  </button>
+                )}
+              </div>
+              <section className="border px-2 py-2">
+                <div className="flex space-x-2">
+                  <div className="w-full">
+                    <InputText
+                      name="redirectTo"
+                      isRequired
+                      label="Redirect Withdrawals To"
+                      placeholder="0x..."
+                      handleChange={(e) => setRedirectAddress(e.target.value)}
+                    />
+                  </div>
+                  <div className="w-1/4">
+                    <label className="input-label">Token</label>
+                    <select onChange={(e) => setSelectedToken(e.target.value)} name="token" className="input-field">
+                      <option value={''}></option>
+                      {Object.keys(botInfo?.tokenSymbols).map((p) => (
+                        <option key={p} value={p}>
+                          {botInfo?.tokenSymbols[p]}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                  <SubmitButton onClick={onRedirect} className="bottom-0 h-min w-2/5 place-self-end">
+                    Redirect
+                  </SubmitButton>
+                </div>
+              </section>
+              <div>
+                <span>Scheduled Streams:</span>
+              </div>
+              <div className="overflow-x-auto">
+                <table className="border">
+                  <thead>
+                    <tr>
+                      <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">Type</th>
+                      <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+                        Address Related
+                      </th>
+                      <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+                        Token
+                      </th>
+                      <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+                        Amount/Month
+                      </th>
+                      <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+                        Frequency
+                      </th>
+                      <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white"></th>
                     </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
+                  </thead>
+                  <tbody>
+                    {botInfo?.toInclude &&
+                      Object.keys(botInfo.toInclude).map((p) => (
+                        <tr key={p} className="table-row">
+                          <td className="table-description text-center dark:text-white">
+                            <span>
+                              {botInfo.toInclude[p].from.toLowerCase() === accountAddress.toLowerCase()
+                                ? 'Outgoing'
+                                : botInfo.toInclude[p].to.toLowerCase() === accountAddress.toLowerCase()
+                                ? 'Incoming'
+                                : 'Owner'}
+                            </span>
+                          </td>
+                          <td className="table-description text-center dark:text-white">
+                            <span>
+                              {botInfo.toInclude[p].from === zeroAdd || botInfo.toInclude[p].to === zeroAdd
+                                ? 'All'
+                                : botInfo.toInclude[p].from.toLowerCase() === accountAddress.toLowerCase()
+                                ? formatAddress(botInfo.toInclude[p].to)
+                                : botInfo.toInclude[p].from.toLowerCase() === accountAddress.toLowerCase()
+                                ? formatAddress(botInfo.toInclude[p].to)
+                                : formatAddress(botInfo.toInclude[p].from)}
+                            </span>
+                          </td>
+                          <td className="table-description text-center dark:text-white">
+                            <span>
+                              {botInfo.toInclude[p].from === zeroAdd || botInfo.toInclude[p].to === zeroAdd
+                                ? 'All'
+                                : botInfo.toInclude[p].tokenSymbol}
+                            </span>
+                          </td>
+                          <td className="table-description text-center dark:text-white">
+                            <span>
+                              {botInfo.toInclude[p].from === zeroAdd || botInfo.toInclude[p].to === zeroAdd
+                                ? 'All'
+                                : ((botInfo.toInclude[p].amountPerSec * secondsByDuration['month']) / 1e20).toFixed(5)}
+                            </span>
+                          </td>
+                          <td className="table-description text-center dark:text-white">
+                            <span>
+                              {botInfo.toInclude[p].frequency === secondsByDuration['day']
+                                ? 'Every Day'
+                                : botInfo.toInclude[p].frequency === secondsByDuration['week']
+                                ? 'Every 7 Days'
+                                : botInfo.toInclude[p].frequency === secondsByDuration['biweek']
+                                ? 'Every 14 Days'
+                                : botInfo.toInclude[p].frequency === secondsByDuration['month']
+                                ? 'Every 30 days'
+                                : ''}
+                            </span>
+                          </td>
+                          <td className="table-description">
+                            <div className="text-center">
+                              {botInfo.toInclude[p].owner.toLowerCase() === accountAddress.toLowerCase() && (
+                                <button className="row-action-links" onClick={(e) => handleCancel(p)}>
+                                  Cancel
+                                </button>
+                              )}
+                            </div>
+                          </td>
+                        </tr>
+                      ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
         </span>
       </FormDialog>
     </>
