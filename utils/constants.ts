@@ -44,7 +44,7 @@ export const DISPERSE_METER = '0x8e5455983a70da3d1e66719636e907d63eca40b7';
 export const DISPERSE_METIS = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 export const DISPERSE_GOERLI = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 
-export const BOT_GOERLI = '0xCF20e72159F6704c9a705D3aa61b430Cf651d7Ac';
+export const BOT_GOERLI = '0xc5A4fec44fbDE08A7c9dE6e07b60De60aC074Ab9';
 export const BOT_AVALANCHE = '0x57547F79d8344ACCAb21DC0a9c9d186e240353d7';
 export const BOT_MAINNET = '0xc5A4fec44fbDE08A7c9dE6e07b60De60aC074Ab9';
 export const BOT_POLYGON = '0xc5A4fec44fbDE08A7c9dE6e07b60De60aC074Ab9';
@@ -418,7 +418,7 @@ export const whitelist: ITokenWhitelist = {
 export const zeroAdd: string = '0x0000000000000000000000000000000000000000';
 
 export const botContractCreation: { [key: number]: number } = {
-  5: 7415885,
+  5: 7524336,
   43114: 19491402,
   1: 15466169,
   137: 32643821,
