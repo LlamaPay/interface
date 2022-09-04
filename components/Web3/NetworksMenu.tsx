@@ -15,9 +15,12 @@ import { chainDetails } from 'utils/network';
 import Image from 'next/image';
 import defaultImage from 'public/empty-token.webp';
 import { useTranslations } from 'next-intl';
+import useGetStreamsOnAllNetworks from 'queries/useGetStreamsOnAllNetworks';
 
 export const NetworksMenu = () => {
   const [{ data }, switchNetwork] = useNetwork();
+
+  const { data: activeStreams } = useGetStreamsOnAllNetworks();
 
   const chain = data.chain;
 
@@ -89,6 +92,7 @@ export const NetworksMenu = () => {
                     />
                   </div>
                   <span>{value.name}</span>
+                  <span className="ml-auto pl-4">{activeStreams?.find((s) => s.id === value.id)?.streams}</span>
                 </SelectItem>
               );
             })}
@@ -118,6 +122,7 @@ export const NetworksMenu = () => {
                     />
                   </div>
                   <span>{value.name}</span>
+                  <span className="ml-auto pl-4">{activeStreams?.find((s) => s.id === value.id)?.streams}</span>
                 </SelectItem>
               );
             })}
