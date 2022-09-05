@@ -36,8 +36,19 @@ export const NetworksMenu = () => {
 
   if (!data || !chain || !switchNetwork) return null;
 
-  const mainnets = data.chains.filter((chain) => !chain.testnet);
-  const testnets = data.chains.filter((chain) => chain.testnet);
+  const allChains = data.chains.sort((a, b) => {
+    const chain1 = activeStreams?.find((c) => c.id === a.id)?.streams ?? 0;
+    const chain2 = activeStreams?.find((c) => c.id === b.id)?.streams ?? 0;
+
+    if (!chain1 && !chain2) {
+      return 0;
+    }
+
+    return chain2 - chain1;
+  });
+
+  const mainnets = allChains.filter((chain) => !chain.testnet);
+  const testnets = allChains.filter((chain) => chain.testnet);
 
   return (
     <>
@@ -81,7 +92,7 @@ export const NetworksMenu = () => {
                   className="flex cursor-pointer scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-[#666666] outline-none active-item:text-black active:text-black aria-disabled:opacity-40 dark:text-white"
                   onClick={() => switchNetwork(value.id)}
                 >
-                  <div className="flex h-5 w-5 items-center rounded-full">
+                  <div className="flex h-5 w-5 flex-shrink-0 items-center rounded-full">
                     <Image
                       src={network?.logoURI ?? defaultImage}
                       alt={t('logoAlt', { name: value.name })}
@@ -111,7 +122,7 @@ export const NetworksMenu = () => {
                   className="flex cursor-pointer scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-[#666666] outline-none active-item:text-black active:text-black aria-disabled:opacity-40 dark:text-white"
                   onClick={() => switchNetwork(value.id)}
                 >
-                  <div className="flex h-5 w-5 items-center rounded-full">
+                  <div className="flex h-5 w-5 flex-shrink-0 items-center rounded-full">
                     <Image
                       src={network?.logoURI ?? defaultImage}
                       alt={t('logoAlt', { name: value.name })}

@@ -21,7 +21,10 @@ async function fetchStreams(address?: string) {
       )
     );
 
-    return chains.map((chain, index) => ({ id: chain.id, streams: data[index]?.user?.streams.length }));
+    return chains.map((chain, index) => ({
+      id: chain.id,
+      streams: data[index]?.user?.streams.length,
+    }));
   } catch (error) {
     return null;
   }
