@@ -51,6 +51,7 @@ export const BOT_POLYGON = '0xc5A4fec44fbDE08A7c9dE6e07b60De60aC074Ab9';
 export const BOT_OPTIMISM = '0xc5A4fec44fbDE08A7c9dE6e07b60De60aC074Ab9';
 export const BOT_FANTOM = '0xc5A4fec44fbDE08A7c9dE6e07b60De60aC074Ab9';
 export const BOT_BSC = '0xc5A4fec44fbDE08A7c9dE6e07b60De60aC074Ab9';
+export const BOT_ARBITRUM = '0xB1870E647c4F7eE5DccFB3e4A98be9F888b184e0';
 
 export const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
 export const alchemyId = 'PwvZx2hO2XpToWXSw9sgJJt1eBgjkRUr';
@@ -217,7 +218,7 @@ export const networkDetails: INetworkDetails = {
     chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/arbitrum'),
     llamapayFactoryAddress: FACTORY_ARBITRUM,
     disperseAddress: DISPERSE_ARBITRUM,
-    botAddress: '',
+    botAddress: BOT_ARBITRUM,
     blockExplorerURL: 'https://arbiscan.io/',
     blockExplorerName: 'Arbiscan',
     prefix: 'arbitrum',
@@ -425,6 +426,7 @@ export const botContractCreation: { [key: number]: number } = {
   10: 21825387,
   250: 46278811,
   56: 21013175,
+  42161: 23462203,
 };
 
-export const botDeployedOn: number[] = [43114, 5, 1, 137, 10, 250, 56];
+export const botDeployedOn: number[] = [43114, 5, 1, 137, 10, 250, 56, 42161];
