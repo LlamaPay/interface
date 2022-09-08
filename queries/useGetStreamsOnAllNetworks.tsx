@@ -8,17 +8,19 @@ async function fetchStreams(address?: string) {
     if (!address) return [];
 
     const data = await Promise.all(
-      chains.map((chain) =>
-        useStreamAndHistoryQuery.fetcher(
-          {
-            endpoint: networkDetails[chain.id]?.subgraphEndpoint ?? '',
-          },
-          {
-            id: address?.toLowerCase() ?? '',
-            network: chain?.name ?? '',
-          }
-        )()
-      )
+      chains
+        .filter((chain) => chain.id !== 82)
+        .map((chain) =>
+          useStreamAndHistoryQuery.fetcher(
+            {
+              endpoint: networkDetails[chain.id]?.subgraphEndpoint ?? '',
+            },
+            {
+              id: address?.toLowerCase() ?? '',
+              network: chain?.name ?? '',
+            }
+          )()
+        )
     );
 
     return chains.map((chain, index) => ({
@@ -26,6 +28,7 @@ async function fetchStreams(address?: string) {
       streams: data[index]?.user?.streams.length,
     }));
   } catch (error) {
+    // console.log(error);
     return null;
   }
 }
