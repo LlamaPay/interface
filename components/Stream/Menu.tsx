@@ -4,7 +4,6 @@ import { useDialogState } from 'ariakit';
 import { Menu, MenuButton, MenuItem, useMenuState } from 'ariakit/menu';
 import DisperseGasMoney from 'components/DisperseGas';
 import { FuelIcon, WalletIcon } from 'components/Icons';
-import BotFunds from 'components/Schedule/BotManage';
 import WithdrawAll from 'components/WithdrawAll';
 import { useNetworkProvider } from 'hooks';
 import { useTranslations } from 'next-intl';
@@ -25,7 +24,6 @@ export default function StreamMenu() {
 
   const shareableUrl = `/salaries/${network}/${ensName ?? accountData?.address}`;
   const disperseGasGialog = useDialogState();
-  const botDialog = useDialogState();
 
   const t = useTranslations('Streams');
 
@@ -51,15 +49,6 @@ export default function StreamMenu() {
         state={menu}
         className="shadow-2 z-10 min-w-[10rem] rounded-xl border border-[#EAEAEA] bg-white p-2 dark:border-[#252525] dark:bg-[#202020]"
       >
-        {chainId && botDeployedOn.includes(chainId) && (
-          <MenuItem
-            onClick={botDialog.toggle}
-            className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white dark:hover:text-[#cccccc]"
-          >
-            <span className="dark:text-white dark:hover:text-[#cccccc]">Manage Bot</span>
-            <ChipIcon className="h-4 w-4" />
-          </MenuItem>
-        )}
         <MenuItem
           className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white dark:hover:text-[#cccccc]"
           onClick={disperseGasGialog.toggle}
@@ -94,14 +83,6 @@ export default function StreamMenu() {
         </MenuItem>
       </Menu>
       <DisperseGasMoney dialog={disperseGasGialog} />
-      {chainId && accountData && botDeployedOn.includes(chainId) && (
-        <BotFunds
-          dialog={botDialog}
-          chainId={chainId}
-          accountAddress={accountData?.address}
-          nativeCurrency={nativeCurrency?.symbol}
-        />
-      )}
     </>
   );
 }
