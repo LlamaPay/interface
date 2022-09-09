@@ -32,8 +32,17 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
     toSend: new Date(Date.now()).toISOString().slice(0, 10),
   });
   const [showCalendar, setShowCalendar] = React.useState<boolean>(false);
-  function handleChange(value: string, type: keyof typeof formData) {
+  async function handleChange(value: string, type: keyof typeof formData) {
     setFormData((prev) => ({ ...prev, [type]: value }));
+    const tokenContract = createERC20Contract({ tokenAddress: getAddress(formData.token), provider });
+    const decimals = await tokenContract.decimals();
+    const formattedAmount = new BigNumber(formData.amount).times(10 ** decimals).toFixed(0);
+    checkApproval({
+      tokenDetails: { tokenContract, llamaContractAddress: spender, decimals },
+      userAddress: userAddress,
+      approvedForAmount: formattedAmount,
+      checkTokenApproval,
+    });
   }
   function onCurrentDate() {
     setFormData((prev) => ({ ...prev, ['toSend']: new Date(Date.now()).toISOString().slice(0, 10) }));
@@ -49,7 +58,6 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
     const decimals = await tokenContract.decimals();
     const formattedAmount = new BigNumber(formData.amount).times(10 ** decimals).toFixed(0);
     const formattedToSend = new Date(formData.toSend).getTime() / 1e3;
-
     if (isApproved) {
       create({
         args: [formData.sendTo, formData.token, formattedAmount, formattedToSend],
@@ -131,7 +139,6 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
               </section>
             )}
             <SubmitButton className="mt-5">
-              {' '}
               {checkingApproval || approvingToken ? (
                 <BeatLoader size={6} color="white" />
               ) : isApproved ? (
