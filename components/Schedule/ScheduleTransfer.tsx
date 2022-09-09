@@ -34,6 +34,7 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
   const [showCalendar, setShowCalendar] = React.useState<boolean>(false);
   async function handleChange(value: string, type: keyof typeof formData) {
     setFormData((prev) => ({ ...prev, [type]: value }));
+    if (!formData.token.startsWith('0x') || formData.token.length != 42 || formData.amount == '') return;
     const tokenContract = createERC20Contract({ tokenAddress: getAddress(formData.token), provider });
     const decimals = await tokenContract.decimals();
     const formattedAmount = new BigNumber(formData.amount).times(10 ** decimals).toFixed(0);
