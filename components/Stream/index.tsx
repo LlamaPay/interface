@@ -66,7 +66,7 @@ export function StreamSection() {
           nativeCurrency={nativeCurrency?.symbol}
         />
       )}
-      {chainId && accountData && <ScheduleTransfer dialog={scheduleTransferDialog} />}
+      {chainId && accountData && <ScheduleTransfer dialog={scheduleTransferDialog} userAddress={accountData.address} />}
     </>
   );
 }
