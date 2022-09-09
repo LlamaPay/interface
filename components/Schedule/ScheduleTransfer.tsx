@@ -3,7 +3,7 @@ import { DisclosureState } from 'ariakit';
 import BigNumber from 'bignumber.js';
 import { FormDialog } from 'components/Dialog';
 import { InputAmount, InputText, SubmitButton } from 'components/Form';
-import { checkApproval } from 'components/Form/utils';
+import { checkApproval, createContractAndCheckApproval } from 'components/Form/utils';
 import { getAddress } from 'ethers/lib/utils';
 import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval';
 import * as React from 'react';
@@ -12,11 +12,13 @@ import { BeatLoader } from 'react-spinners';
 import { createERC20Contract } from 'utils/tokenUtils';
 import { useContractWrite, useProvider } from 'wagmi';
 
+const spender = '0x54976f3e6c0c150172a01bf594ee9e360115af00';
+
 export default function ScheduleTransfer({ dialog, userAddress }: { dialog: DisclosureState; userAddress: string }) {
   const provider = useProvider();
   const { mutate: checkTokenApproval, data: isApproved, isLoading: checkingApproval } = useCheckTokenApproval();
   const { mutate: approveToken, isLoading: approvingToken } = useApproveToken();
-  const spender = '0x54976f3e6c0c150172a01bf594ee9e360115af00';
+
   const [{ loading }, create] = useContractWrite(
     {
       addressOrName: spender,
@@ -31,43 +33,69 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
     sendTo: '',
     toSend: new Date(Date.now()).toISOString().slice(0, 10),
   });
+
   const [showCalendar, setShowCalendar] = React.useState<boolean>(false);
-  async function handleChange(value: string, type: keyof typeof formData) {
+
+  const checkApprovalOnChange = (token: string, amount: string) => {
+    if (userAddress && provider && token.startsWith('0x') && token.length === 42 && amount !== '') {
+      createContractAndCheckApproval({
+        userAddress,
+        tokenAddress: token,
+        provider,
+        approvalFn: checkTokenApproval,
+        approvedForAmount: amount,
+        approveForAddress: spender,
+      });
+    }
+  };
+
+  const handleChange = (value: string | boolean, type: keyof typeof formData) => {
     setFormData((prev) => ({ ...prev, [type]: value }));
-    if (!formData.token.startsWith('0x') || formData.token.length != 42 || formData.amount == '') return;
-    const tokenContract = createERC20Contract({ tokenAddress: getAddress(formData.token), provider });
-    const decimals = await tokenContract.decimals();
-    const formattedAmount = new BigNumber(formData.amount).times(10 ** decimals).toFixed(0);
-    checkApproval({
-      tokenDetails: { tokenContract, llamaContractAddress: spender, decimals },
-      userAddress: userAddress,
-      approvedForAmount: formattedAmount,
-      checkTokenApproval,
-    });
-  }
+  };
+
+  const handleTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({ ...prev, token: e.target.value }));
+    checkApprovalOnChange(e.target.value, formData.amount);
+  };
+
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setFormData((prev) => ({ ...prev, amount: e.target.value }));
+    checkApprovalOnChange(formData.token, e.target.value);
+  };
+
   function onCurrentDate() {
     setFormData((prev) => ({ ...prev, ['toSend']: new Date(Date.now()).toISOString().slice(0, 10) }));
   }
+
   function handleCalendarClick(e: any) {
     setFormData((prev) => ({ ...prev, ['toSend']: new Date(e).toISOString().slice(0, 10) }));
     setShowCalendar(false);
   }
+
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
-    const tokenContract = createERC20Contract({ tokenAddress: getAddress(formData.token), provider });
+    const form = e.target as HTMLFormElement;
+    const recipientAddress = form.sendTo?.value;
+    const tokenAddress = form.token?.value;
+    const scheduledAmount = form.amount?.value;
+    const scheduledDate = form.toSend?.value;
+
+    const tokenContract = createERC20Contract({ tokenAddress: getAddress(tokenAddress), provider });
     const decimals = await tokenContract.decimals();
-    const formattedAmount = new BigNumber(formData.amount).times(10 ** decimals).toFixed(0);
-    const formattedToSend = new Date(formData.toSend).getTime() / 1e3;
+    const formattedAmount = new BigNumber(scheduledAmount).times(10 ** decimals).toFixed(0);
+    const formattedscheduledDate = new Date(scheduledDate).getTime() / 1e3;
+
     if (isApproved) {
       create({
-        args: [formData.sendTo, formData.token, formattedAmount, formattedToSend],
+        args: [recipientAddress, tokenAddress, formattedAmount, formattedscheduledDate],
       });
+      // form.reset();
       setFormData({ token: '', amount: '', sendTo: '', toSend: new Date(Date.now()).toISOString().slice(0, 10) });
     } else {
       approveToken(
         {
-          tokenAddress: formData.token,
+          tokenAddress,
           amountToApprove: formattedAmount,
           spenderAddress: spender,
         },
@@ -84,6 +112,7 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
       );
     }
   }
+
   return (
     <>
       <FormDialog dialog={dialog} title="Schedule Transfer" className="h-min max-w-xl">
@@ -96,19 +125,11 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
               placeholder="0x..."
               handleChange={(e) => handleChange(e.target.value, 'sendTo')}
             />
-            <InputText
-              name="token"
-              isRequired
-              label="Token"
-              placeholder="0x..."
-              handleChange={(e) => handleChange(e.target.value, 'token')}
-            />
-            <InputAmount
-              name="amount"
-              label="Amount"
-              isRequired
-              handleChange={(e) => handleChange(e.target.value, 'amount')}
-            />
+
+            <InputText name="token" isRequired label="Token" placeholder="0x..." handleChange={handleTokenChange} />
+
+            <InputAmount name="amount" label="Amount" isRequired handleChange={handleAmountChange} />
+
             <div className="flex space-x-1 pb-2">
               <div className="w-full">
                 <label className="input-label">To Send</label>
@@ -122,7 +143,7 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
                     placeholder="YYYY-MM-DD"
                     pattern="\d{4}-\d{2}-\d{2}"
                     value={formData.toSend}
-                    onClick={(e) => setShowCalendar(true)}
+                    onClick={() => setShowCalendar(true)}
                   />
                   <button
                     type="button"
@@ -134,11 +155,13 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
                 </div>
               </div>
             </div>
+
             {showCalendar && (
               <section className="max-w-xs place-self-center border px-2 py-2">
                 <Calendar onChange={(e: any) => handleCalendarClick(e)} />
               </section>
             )}
+
             <SubmitButton className="mt-5">
               {checkingApproval || approvingToken ? (
                 <BeatLoader size={6} color="white" />
