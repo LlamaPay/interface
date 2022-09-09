@@ -5,9 +5,12 @@ import { FormDialog } from 'components/Dialog';
 import { InputAmount, InputText, SubmitButton } from 'components/Form';
 import { checkApproval, createContractAndCheckApproval } from 'components/Form/utils';
 import { getAddress } from 'ethers/lib/utils';
+import useGetScheduledTransfers from 'queries/useGetScheduledTransfers';
 import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval';
 import * as React from 'react';
 import Calendar from 'react-calendar';
+import toast from 'react-hot-toast';
+import { useQueryClient } from 'react-query';
 import { BeatLoader } from 'react-spinners';
 import { createERC20Contract } from 'utils/tokenUtils';
 import { useContractWrite, useProvider } from 'wagmi';
@@ -18,6 +21,8 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
   const provider = useProvider();
   const { mutate: checkTokenApproval, data: isApproved, isLoading: checkingApproval } = useCheckTokenApproval();
   const { mutate: approveToken, isLoading: approvingToken } = useApproveToken();
+  const { data: scheduleInfo, isLoading } = useGetScheduledTransfers();
+  const queryClient = useQueryClient();
 
   const [{ loading }, create] = useContractWrite(
     {
@@ -89,6 +94,17 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
     if (isApproved) {
       create({
         args: [recipientAddress, tokenAddress, formattedAmount, formattedscheduledDate],
+      }).then((data) => {
+        if (data.error) {
+          toast.error(data.error.message);
+        } else {
+          const toastid = toast.loading('Creating Scheduled Transfer');
+          data.data.wait().then((receipt) => {
+            toast.dismiss(toastid);
+            receipt.status === 1 ? toast.success('Successfully Created') : toast.error('Failed to Create');
+          });
+          queryClient.invalidateQueries();
+        }
       });
       // form.reset();
       setFormData({ token: '', amount: '', sendTo: '', toSend: new Date(Date.now()).toISOString().slice(0, 10) });
