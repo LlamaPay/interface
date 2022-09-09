@@ -101,11 +101,13 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
         },
         {
           onSettled: () => {
-            checkApproval({
-              tokenDetails: { tokenContract, llamaContractAddress: spender, decimals },
-              userAddress: userAddress,
-              approvedForAmount: formattedAmount,
-              checkTokenApproval,
+            createContractAndCheckApproval({
+              userAddress,
+              tokenAddress,
+              provider,
+              approvalFn: checkTokenApproval,
+              approvedForAmount: scheduledAmount,
+              approveForAddress: spender,
             });
           },
         }

@@ -137,6 +137,14 @@ export default function CreateVesting({ factory }: { factory: string }) {
         {
           onSettled: () => {
             // llamacontractAddress is approveForAddress
+            // createContractAndCheckApproval({
+            //   userAddress: accountData?.address,
+            //   tokenAddress: vestedToken,
+            //   provider,
+            //   approvalFn: checkTokenApproval,
+            //   approvedForAmount: vestingAmount,
+            //   approveForAddress: factory,
+            // });
             checkApproval({
               tokenDetails: { tokenContract, llamaContractAddress: factory, decimals },
               userAddress: accountData?.address,
