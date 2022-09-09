@@ -137,6 +137,7 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
                 <label className="input-label">To Send</label>
                 <div className="relative flex">
                   <input
+                    name="toSend"
                     className="input-field"
                     onChange={(e) => handleChange(e.target.value, 'toSend')}
                     required
