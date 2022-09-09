@@ -3,7 +3,7 @@ import { useDialogState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
 import { InputText, SubmitButton } from 'components/Form';
 import { IStream } from 'types';
-import { useAccount, useContractRead, useContractWrite } from 'wagmi';
+import { useAccount, useContractWrite } from 'wagmi';
 import { networkDetails, secondsByDuration } from 'utils/constants';
 import botContract from 'abis/botContract';
 import toast from 'react-hot-toast';

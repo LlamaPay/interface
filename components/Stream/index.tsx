@@ -12,6 +12,7 @@ import { botDeployedOn } from 'utils/constants';
 import BotFunds from 'components/Schedule/BotManage';
 import { useAccount } from 'wagmi';
 import { useNetworkProvider } from 'hooks';
+import ScheduleTransfer from 'components/Schedule/ScheduleTransfer';
 
 export function StreamSection() {
   const { data, isLoading, error } = useStreamsAndHistory();
@@ -19,6 +20,7 @@ export function StreamSection() {
   const t = useTranslations('Streams');
 
   const botDialog = useDialogState();
+  const scheduleTransferDialog = useDialogState();
   const [{ data: accountData }] = useAccount();
   const { nativeCurrency, chainId } = useNetworkProvider();
 
@@ -36,7 +38,12 @@ export function StreamSection() {
               <a className="primary-button py-2 px-4 text-sm font-bold">{t('create')}</a>
             </Link>
 
-            {/* <a className="primary-button py-2 px-4 text-sm font-bold">{'Schedule Transfer'}</a> */}
+            {accountData && (
+              <button onClick={scheduleTransferDialog.toggle} className="primary-button py-2 px-4 text-sm font-bold">
+                {'Scheduled Transfers'}
+              </button>
+            )}
+
             {chainId && botDeployedOn.includes(chainId) && (
               <button onClick={botDialog.toggle} className="primary-button py-2 px-4 text-sm font-bold">
                 {'Manage Bot'}
@@ -59,6 +66,7 @@ export function StreamSection() {
           nativeCurrency={nativeCurrency?.symbol}
         />
       )}
+      {chainId && accountData && <ScheduleTransfer dialog={scheduleTransferDialog} />}
     </>
   );
 }
