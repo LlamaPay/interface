@@ -12,6 +12,7 @@ import Calendar from 'react-calendar';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import { BeatLoader } from 'react-spinners';
+import { formatAddress } from 'utils/address';
 import { createERC20Contract } from 'utils/tokenUtils';
 import { useContractWrite, useProvider } from 'wagmi';
 
@@ -133,7 +134,7 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
 
   return (
     <>
-      <FormDialog dialog={dialog} title="Schedule Transfer" className="h-min max-w-xl">
+      <FormDialog dialog={dialog} title="Schedule Transfer" className="h-min">
         <span className="space-y-4 text-[#303030] dark:text-white">
           <form onSubmit={onSubmit}>
             <InputText
@@ -191,6 +192,65 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
               )}
             </SubmitButton>
           </form>
+          {isLoading && (
+            <div>
+              <span>Loading Transfer Info...</span>
+            </div>
+          )}
+          {!isLoading && (
+            <div className="overflow-x-auto">
+              <table className="border">
+                <thead>
+                  <tr>
+                    <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">Type</th>
+                    <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+                      Address Related
+                    </th>
+                    <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">Amount</th>
+                    <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+                      To Send
+                    </th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {Object.keys(scheduleInfo).map((p) => (
+                    <tr key={p} className="table-row">
+                      <td className="table-description text-center dark:text-white">
+                        <span>
+                          {scheduleInfo[p].from.toLowerCase() === userAddress.toLowerCase()
+                            ? 'To'
+                            : scheduleInfo[p].to.toLowerCase() === userAddress.toLowerCase()
+                            ? 'From'
+                            : 'IDK'}
+                        </span>
+                      </td>
+                      <td className="table-description text-center dark:text-white">
+                        <span>
+                          {scheduleInfo[p].from === userAddress.toLowerCase()
+                            ? formatAddress(scheduleInfo[p].to)
+                            : formatAddress(scheduleInfo[p].from)}
+                        </span>
+                      </td>
+                      <td className="table-description text-center dark:text-white">
+                        <span>
+                          {`${scheduleInfo[p].amount / 10 ** scheduleInfo[p].decimals} ${scheduleInfo[p].tokenSymbol}`}
+                        </span>
+                      </td>
+                      <td className="table-description text-center dark:text-white">
+                        <span>{new Date(Number(scheduleInfo[p].toSend) * 1e3).toISOString().slice(0, 10)}</span>
+                      </td>
+                      <td className="table-description">
+                        <div className="text-center">
+                          <button className="row-action-links">Rug</button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </span>
       </FormDialog>
     </>

@@ -42,6 +42,8 @@ async function getScheduledTransfers(
         const from = event.args.from.toLowerCase();
         const to = event.args.to.toLowerCase();
         const amount = Number(event.args.amount);
+        const toSend = Number(event.args.toRelease);
+        // const toSend = new Date(Number(event.args.toRelease) * 1e3).toISOString().slice(0, 10);
         const id = event.args.id;
         if (userAddress !== from && userAddress != to) continue;
         if (event.event === 'Created') {
@@ -50,12 +52,18 @@ async function getScheduledTransfers(
             from,
             to,
             amount,
+            toSend,
           };
         } else if (event.event === 'Redeemed' || event.event === 'Rugged') {
           delete toInclude[id];
         }
       }
-      console.log(toInclude);
+
+      for (const i in toInclude) {
+        const tokenContract = new ethers.Contract(toInclude[i].token, erc20ABI, provider);
+        toInclude[i].tokenSymbol = await tokenContract.symbol();
+        toInclude[i].decimals = await tokenContract.decimals();
+      }
       return toInclude;
     }
   } catch (error) {
