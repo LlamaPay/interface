@@ -16,6 +16,8 @@ import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval
 import type { ITokenBalance } from 'queries/useTokenBalances';
 import { formatAddress } from 'utils/address';
 import { SCHEDULED_CONTRACTS_SPENDER } from 'utils/constants';
+import { createERC20Contract } from 'utils/tokenUtils';
+import { getAddress } from 'ethers/lib/utils';
 
 export default function ScheduleTransfer({
   dialog,
@@ -134,10 +136,11 @@ export default function ScheduleTransfer({
     const scheduledAmount = form.amount?.value;
     const scheduledDate = form.toSend?.value;
 
-    const tokenDetails = tokens?.find((t) => t.tokenAddress === tokenAddress);
+    if (tokenAddress !== '' && scheduledAmount) {
+      const tokenContract = createERC20Contract({ tokenAddress: getAddress(tokenAddress), provider });
+      const decimals = await tokenContract.decimals();
 
-    if (tokenDetails && scheduledAmount) {
-      const formattedAmount = new BigNumber(scheduledAmount).times(10 ** tokenDetails?.decimals).toFixed(0);
+      const formattedAmount = new BigNumber(scheduledAmount).times(10 ** decimals).toFixed(0);
 
       const formattedscheduledDate = new Date(scheduledDate).getTime() / 1e3;
 
@@ -168,7 +171,7 @@ export default function ScheduleTransfer({
       } else {
         approveToken(
           {
-            tokenAddress: tokenDetails.tokenAddress,
+            tokenAddress: tokenAddress,
             amountToApprove: formattedAmount,
             spenderAddress: SCHEDULED_CONTRACTS_SPENDER,
           },
@@ -176,7 +179,7 @@ export default function ScheduleTransfer({
             onSettled: () => {
               createContractAndCheckApproval({
                 userAddress,
-                tokenAddress: tokenDetails.tokenAddress,
+                tokenAddress: tokenAddress,
                 provider,
                 approvalFn: checkTokenApproval,
                 approvedForAmount: scheduledAmount,
@@ -204,7 +207,12 @@ export default function ScheduleTransfer({
           />
 
           <div className="mb-5">
-            <SelectToken label="Token" tokens={tokenOptions} handleTokenChange={handleTokenChange} />
+            <SelectToken
+              label="Token"
+              tokens={tokenOptions}
+              handleTokenChange={handleTokenChange}
+              hideNewTokenForm={true}
+            />
             <AvailableAmount selectedToken={selectedToken} title="Available to Schedule" />
           </div>
 
