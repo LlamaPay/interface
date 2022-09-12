@@ -5,6 +5,8 @@ import { useNetworkProvider } from 'hooks';
 import { useQuery } from 'react-query';
 import { erc20ABI, useAccount } from 'wagmi';
 
+const txcontract = '0xfF00899b2dec27677Da79FA0061827eeE17D3f91';
+
 async function getScheduledTransfers(
   userAddress: string | undefined,
   provider: BaseProvider | null,
@@ -18,7 +20,6 @@ async function getScheduledTransfers(
     } else if (!chainId) {
       throw new Error('Cannot get Chain ID');
     } else {
-      const txcontract = '0x54976f3e6c0c150172a01bf594ee9e360115af00';
       const contract = new ethers.Contract(txcontract, scheduledTransfer, provider);
       const endBlock = await provider.getBlockNumber();
       let currBlock = 7549761;
@@ -41,8 +42,8 @@ async function getScheduledTransfers(
         const token = event.args.token;
         const from = event.args.from.toLowerCase();
         const to = event.args.to.toLowerCase();
-        const amount = Number(event.args.amount);
-        const toSend = Number(event.args.toRelease);
+        const amount = event.args.amount;
+        const toSend = event.args.toRelease;
         // const toSend = new Date(Number(event.args.toRelease) * 1e3).toISOString().slice(0, 10);
         const id = event.args.id;
         if (userAddress !== from && userAddress != to) continue;

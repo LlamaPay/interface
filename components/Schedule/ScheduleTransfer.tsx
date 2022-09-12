@@ -16,7 +16,7 @@ import { formatAddress } from 'utils/address';
 import { createERC20Contract } from 'utils/tokenUtils';
 import { useContractWrite, useProvider } from 'wagmi';
 
-const spender = '0x54976f3e6c0c150172a01bf594ee9e360115af00';
+const spender = '0xfF00899b2dec27677Da79FA0061827eeE17D3f91';
 
 export default function ScheduleTransfer({ dialog, userAddress }: { dialog: DisclosureState; userAddress: string }) {
   const provider = useProvider();
@@ -25,12 +25,20 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
   const { data: scheduleInfo, isLoading } = useGetScheduledTransfers();
   const queryClient = useQueryClient();
 
-  const [{ loading }, create] = useContractWrite(
+  const [{}, create] = useContractWrite(
     {
       addressOrName: spender,
       contractInterface: scheduledTransfer,
     },
     'create'
+  );
+
+  const [{}, rugpull] = useContractWrite(
+    {
+      addressOrName: spender,
+      contractInterface: scheduledTransfer,
+    },
+    'rugpull'
   );
 
   const [formData, setFormData] = React.useState({
@@ -59,9 +67,9 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
     setFormData((prev) => ({ ...prev, [type]: value }));
   };
 
-  const handleTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({ ...prev, token: e.target.value }));
-    checkApprovalOnChange(e.target.value, formData.amount);
+  const handleTokenChange = (e: string) => {
+    setFormData((prev) => ({ ...prev, token: e }));
+    checkApprovalOnChange(e, formData.amount);
   };
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -76,6 +84,24 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
   function handleCalendarClick(e: any) {
     setFormData((prev) => ({ ...prev, ['toSend']: new Date(e).toISOString().slice(0, 10) }));
     setShowCalendar(false);
+  }
+
+  function onRug(key: string) {
+    rugpull({
+      args: [scheduleInfo[key].token, scheduleInfo[key].to, scheduleInfo[key].amount, scheduleInfo[key].toSend],
+    }).then((data) => {
+      dialog.hide();
+      if (data.error) {
+        toast.error(data.error.message);
+      } else {
+        const toastid = toast.loading('Rugging');
+        data.data.wait().then((receipt) => {
+          toast.dismiss(toastid);
+          receipt.status === 1 ? toast.success('Successfully Rugged') : toast.error('Failed to Rugged');
+        });
+        queryClient.invalidateQueries();
+      }
+    });
   }
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
@@ -94,8 +120,9 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
 
     if (isApproved) {
       create({
-        args: [recipientAddress, tokenAddress, formattedAmount, formattedscheduledDate],
+        args: [tokenAddress, recipientAddress, formattedAmount, formattedscheduledDate],
       }).then((data) => {
+        dialog.hide();
         if (data.error) {
           toast.error(data.error.message);
         } else {
@@ -146,7 +173,6 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
             />
 
             <InputText name="token" isRequired label="Token" placeholder="0x..." handleChange={handleTokenChange} />
-
             <InputAmount name="amount" label="Amount" isRequired handleChange={handleAmountChange} />
 
             <div className="flex space-x-1 pb-2">
@@ -210,7 +236,7 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
                     <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
                       To Send
                     </th>
-                    <th></th>
+                    <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white"></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -242,7 +268,9 @@ export default function ScheduleTransfer({ dialog, userAddress }: { dialog: Disc
                       </td>
                       <td className="table-description">
                         <div className="text-center">
-                          <button className="row-action-links">Rug</button>
+                          <button onClick={(e) => onRug(p)} className="row-action-links">
+                            Rug
+                          </button>
                         </div>
                       </td>
                     </tr>

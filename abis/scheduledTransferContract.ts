@@ -1,15 +1,35 @@
 const scheduledTransfer: any = [
   { inputs: [], name: 'AlreadyExists', type: 'error' },
   { inputs: [], name: 'DoesNotExist', type: 'error' },
-  { inputs: [], name: 'TooEarly', type: 'error' },
+  { inputs: [], name: 'RedeemingTooEarly', type: 'error' },
   {
     anonymous: false,
     inputs: [
-      { indexed: false, internalType: 'address', name: 'token', type: 'address' },
-      { indexed: false, internalType: 'address', name: 'from', type: 'address' },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'token',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'from',
+        type: 'address',
+      },
       { indexed: false, internalType: 'address', name: 'to', type: 'address' },
-      { indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' },
-      { indexed: false, internalType: 'uint256', name: 'toRelease', type: 'uint256' },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'toRelease',
+        type: 'uint256',
+      },
       { indexed: false, internalType: 'bytes32', name: 'id', type: 'bytes32' },
     ],
     name: 'Created',
@@ -18,10 +38,31 @@ const scheduledTransfer: any = [
   {
     anonymous: false,
     inputs: [
-      { indexed: false, internalType: 'address', name: 'token', type: 'address' },
-      { indexed: false, internalType: 'address', name: 'from', type: 'address' },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'token',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'from',
+        type: 'address',
+      },
       { indexed: false, internalType: 'address', name: 'to', type: 'address' },
-      { indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'toRelease',
+        type: 'uint256',
+      },
       { indexed: false, internalType: 'bytes32', name: 'id', type: 'bytes32' },
     ],
     name: 'Redeemed',
@@ -30,10 +71,31 @@ const scheduledTransfer: any = [
   {
     anonymous: false,
     inputs: [
-      { indexed: false, internalType: 'address', name: 'token', type: 'address' },
-      { indexed: false, internalType: 'address', name: 'from', type: 'address' },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'token',
+        type: 'address',
+      },
+      {
+        indexed: false,
+        internalType: 'address',
+        name: 'from',
+        type: 'address',
+      },
       { indexed: false, internalType: 'address', name: 'to', type: 'address' },
-      { indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'amount',
+        type: 'uint256',
+      },
+      {
+        indexed: false,
+        internalType: 'uint256',
+        name: 'toRelease',
+        type: 'uint256',
+      },
       { indexed: false, internalType: 'bytes32', name: 'id', type: 'bytes32' },
     ],
     name: 'Rugged',
@@ -41,10 +103,21 @@ const scheduledTransfer: any = [
   },
   {
     inputs: [
+      { internalType: 'bytes[]', name: 'calls', type: 'bytes[]' },
+      { internalType: 'bool', name: 'revertOnFail', type: 'bool' },
+    ],
+    name: 'batch',
+    outputs: [],
+    stateMutability: 'payable',
+    type: 'function',
+  },
+  {
+    inputs: [
       { internalType: 'address', name: '_token', type: 'address' },
       { internalType: 'address', name: '_from', type: 'address' },
       { internalType: 'address', name: '_to', type: 'address' },
       { internalType: 'uint256', name: '_amount', type: 'uint256' },
+      { internalType: 'uint256', name: '_toRelease', type: 'uint256' },
     ],
     name: 'calcHash',
     outputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
@@ -53,8 +126,8 @@ const scheduledTransfer: any = [
   },
   {
     inputs: [
-      { internalType: 'address', name: '_to', type: 'address' },
       { internalType: 'address', name: '_token', type: 'address' },
+      { internalType: 'address', name: '_to', type: 'address' },
       { internalType: 'uint256', name: '_amount', type: 'uint256' },
       { internalType: 'uint256', name: '_toRelease', type: 'uint256' },
     ],
@@ -64,11 +137,35 @@ const scheduledTransfer: any = [
     type: 'function',
   },
   {
+    inputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
+    name: 'isActive',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [
+      { internalType: 'contract IERC20Permit', name: 'token', type: 'address' },
+      { internalType: 'address', name: 'from', type: 'address' },
+      { internalType: 'address', name: 'to', type: 'address' },
+      { internalType: 'uint256', name: 'amount', type: 'uint256' },
+      { internalType: 'uint256', name: 'deadline', type: 'uint256' },
+      { internalType: 'uint8', name: 'v', type: 'uint8' },
+      { internalType: 'bytes32', name: 'r', type: 'bytes32' },
+      { internalType: 'bytes32', name: 's', type: 'bytes32' },
+    ],
+    name: 'permitToken',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
     inputs: [
       { internalType: 'address', name: '_token', type: 'address' },
       { internalType: 'address', name: '_from', type: 'address' },
       { internalType: 'address', name: '_to', type: 'address' },
       { internalType: 'uint256', name: '_amount', type: 'uint256' },
+      { internalType: 'uint256', name: '_toRelease', type: 'uint256' },
     ],
     name: 'redeem',
     outputs: [],
@@ -77,20 +174,14 @@ const scheduledTransfer: any = [
   },
   {
     inputs: [
-      { internalType: 'address', name: '_to', type: 'address' },
       { internalType: 'address', name: '_token', type: 'address' },
+      { internalType: 'address', name: '_to', type: 'address' },
       { internalType: 'uint256', name: '_amount', type: 'uint256' },
+      { internalType: 'uint256', name: '_toRelease', type: 'uint256' },
     ],
     name: 'rugpull',
     outputs: [],
     stateMutability: 'nonpayable',
-    type: 'function',
-  },
-  {
-    inputs: [{ internalType: 'bytes32', name: '', type: 'bytes32' }],
-    name: 'toRelease',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
     type: 'function',
   },
 ];
