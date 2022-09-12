@@ -53,6 +53,8 @@ export const BOT_FANTOM = '0xc5A4fec44fbDE08A7c9dE6e07b60De60aC074Ab9';
 export const BOT_BSC = '0xc5A4fec44fbDE08A7c9dE6e07b60De60aC074Ab9';
 export const BOT_ARBITRUM = '0xB1870E647c4F7eE5DccFB3e4A98be9F888b184e0';
 
+export const SCHEDULED_CONTRACTS_SPENDER = '0xfF00899b2dec27677Da79FA0061827eeE17D3f91';
+
 export const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
 export const alchemyId = 'PwvZx2hO2XpToWXSw9sgJJt1eBgjkRUr';
 export const etherscanKey = 'DDH7EVWI1AQHBNPX5PYRSDM5SHCVBKX58Q';

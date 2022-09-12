@@ -1,21 +1,23 @@
 import * as React from 'react';
 import Link from 'next/link';
+import { useAccount } from 'wagmi';
+import { useDialogState } from 'ariakit';
+import { useTranslations } from 'next-intl';
 import Fallback, { FallbackContainer } from 'components/Fallback';
 import { StreamIcon } from 'components/Icons';
-import useStreamsAndHistory from 'queries/useStreamsAndHistory';
-import { StreamTable, DefaultStreamTable } from './Table';
-import { IStreamAndHistory } from 'types';
-import StreamMenu from './Menu';
-import { useTranslations } from 'next-intl';
-import { useDialogState } from 'ariakit';
-import { botDeployedOn } from 'utils/constants';
 import BotFunds from 'components/Schedule/BotManage';
-import { useAccount } from 'wagmi';
-import { useNetworkProvider } from 'hooks';
 import ScheduleTransfer from 'components/Schedule/ScheduleTransfer';
+import { StreamTable, DefaultStreamTable } from './Table';
+import StreamMenu from './Menu';
+import { useNetworkProvider } from 'hooks';
+import useStreamsAndHistory from 'queries/useStreamsAndHistory';
+import useTokenBalances from 'queries/useTokenBalances';
+import { botDeployedOn } from 'utils/constants';
+import type { IStreamAndHistory } from 'types';
 
 export function StreamSection() {
   const { data, isLoading, error } = useStreamsAndHistory();
+  const { data: tokens } = useTokenBalances();
 
   const t = useTranslations('Streams');
 
@@ -66,7 +68,9 @@ export function StreamSection() {
           nativeCurrency={nativeCurrency?.symbol}
         />
       )}
-      {chainId && accountData && <ScheduleTransfer dialog={scheduleTransferDialog} userAddress={accountData.address} />}
+      {chainId && accountData && tokens && (
+        <ScheduleTransfer dialog={scheduleTransferDialog} userAddress={accountData.address} tokens={tokens} />
+      )}
     </>
   );
 }
