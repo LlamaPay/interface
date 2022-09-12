@@ -91,8 +91,12 @@ export default function ScheduleTransfer({
     if (data) {
       setTokenAddress(data.tokenAddress);
       setSelectedToken(data);
-      checkApprovalOnChange(token, formData.amount);
-    } else setTokenAddress(token);
+    } else {
+      setTokenAddress(token);
+      setSelectedToken(null);
+    }
+
+    checkApprovalOnChange(token, formData.amount);
   };
 
   const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {

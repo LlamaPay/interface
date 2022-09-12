@@ -97,6 +97,22 @@ export const SelectToken = React.forwardRef<HTMLButtonElement, ISelectTokenProps
                   )}
                 </ComboboxItem>
               ))}
+
+              {hideNewTokenForm && combobox.matches.length === 0 && combobox.value.length === 42 && (
+                <div
+                  role="option"
+                  aria-selected="false"
+                  className="rounded hover:bg-neutral-100 dark:hover:bg-neutral-600"
+                  onClick={() => {
+                    select.setValue(combobox.value);
+                    handleTokenChange(combobox.value);
+                    dialog.toggle();
+                    select.toggle();
+                  }}
+                >
+                  <TokenItem value={combobox.value} showBalance />
+                </div>
+              )}
             </ComboboxList>
 
             {!hideNewTokenForm && (
