@@ -11,6 +11,7 @@ import ClaimButton from './CustomValues/ClaimButton';
 import ExplorerLink from './CustomValues/ExplorerLink';
 import Status, { statusAccessorFn } from './CustomValues/Status';
 import Unclaimed from './CustomValues/Unclaimed';
+import RugpullVestingButton from './CustomValues/RugpullVestingButton';
 
 export default function VestingTable({
   data,
@@ -86,6 +87,11 @@ export default function VestingTable({
           cell.row.original && (
             <ClaimButton data={cell.row.original} claimDialog={claimDialog} claimValues={claimValues} />
           ),
+      },
+      {
+        id: 'rug',
+        header: '',
+        cell: ({ cell }) => cell.row.original && <RugpullVestingButton data={cell.row.original} />,
       },
       {
         id: 'chart',
