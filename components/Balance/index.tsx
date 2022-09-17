@@ -67,7 +67,7 @@ const Balance = (props: { address?: string }) => {
   const t = useTranslations('Common');
 
   return (
-    <div className="mr-auto w-full">
+    <div className="mr-auto w-full pt-[30px]">
       <div className={showFallback ? 'w-full max-w-2xl' : 'w-full max-w-fit'}>
         <div className="section-header flex w-full flex-wrap items-center justify-between gap-[0.625rem]">
           <span className="flex items-center gap-[0.625rem]">
