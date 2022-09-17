@@ -416,7 +416,7 @@ export const whitelist: ITokenWhitelist = {
   },
 };
 
-export const zeroAdd: string = '0x0000000000000000000000000000000000000000';
+export const zeroAdd = '0x0000000000000000000000000000000000000000';
 
 export const botContractCreation: { [key: number]: number } = {
   5: 7524336,
