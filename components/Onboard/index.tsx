@@ -40,7 +40,7 @@ export default function OnboardDialog({ dialog, className }: IOnboardProps) {
       return (
         <>
           <Coins />
-          <h1 className="font-exo my-6 font-bold text-[#303030] dark:text-white">{t2('worksWithAllTokens')}</h1>
+          <h1 className="font-exo my-6 font-bold text-lp-gray-6 dark:text-white">{t2('worksWithAllTokens')}</h1>
           <p className="text-xs" style={{ lineHeight: '22px' }}>
             {t1('description')}
           </p>
@@ -50,7 +50,7 @@ export default function OnboardDialog({ dialog, className }: IOnboardProps) {
 
     return (
       <>
-        <h1 className="font-exo break-words text-[2rem] font-bold text-[#303030] dark:text-white">{t1('welcome')}</h1>
+        <h1 className="font-exo break-words text-[2rem] font-bold text-lp-gray-6 dark:text-white">{t1('welcome')}</h1>
         <p className="my-8 break-words text-xs font-semibold" style={{ lineHeight: '22px' }}>
           {t1('description')}
         </p>

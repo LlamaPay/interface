@@ -129,36 +129,36 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
             {index > 0 && <hr className="mb-0 mt-2 border-dashed" />}
 
             <label>
-              <span className="input-label dark:text-white">{t1('addressToStream')}</span>
+              <span className="input-labe">{t1('addressToStream')}</span>
               <input
                 placeholder={t1('recipientAddress')}
                 {...register(`streams.${index}.addressToStream` as const, {
                   required: true,
                   pattern: /^0x[a-fA-F0-9]{40}$/,
                 })}
-                className="input-field dark:border-[#252525] dark:bg-[#202020] dark:text-white"
+                className="input-field"
                 autoComplete="off"
                 autoCorrect="off"
                 type="text"
                 spellCheck="false"
               />
               {errors?.streams?.[index]?.addressToStream?.type === 'required' && (
-                <p className="mt-1 text-xs text-red-500 dark:text-white">{t1('requiredField')}</p>
+                <p className="mt-1 text-xs text-red-500 dark:text-red-600">{t1('requiredField')}</p>
               )}
               {errors?.streams?.[index]?.addressToStream?.type === 'pattern' && (
-                <p className="mt-1 text-xs text-red-500 dark:text-white">{t1('validAddress')}</p>
+                <p className="mt-1 text-xs text-red-500 dark:text-red-600">{t1('validAddress')}</p>
               )}
             </label>
 
             <label>
               <span className="input-label">
-                <span className="mr-1 dark:text-white">{t1('associateName')}</span>
-                <small className="text-neutral-500 ">{`(${t1('optional')})`}</small>
+                <span className="mr-1">{t1('associateName')}</span>
+                <small className="text-neutral-500">{`(${t1('optional')})`}</small>
               </span>
               <input
                 placeholder={t1('fastIdentification')}
                 {...register(`streams.${index}.shortName` as const)}
-                className="input-field dark:border-[#252525] dark:bg-[#202020] dark:text-white"
+                className="input-field"
                 autoComplete="off"
                 autoCorrect="off"
                 type="text"
@@ -181,7 +181,6 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                   <SelectToken
                     handleTokenChange={field.onChange}
                     tokens={tokenOptions}
-                    className="border border-neutral-300 bg-transparent py-[3px] shadow-none dark:border-neutral-700 dark:bg-stone-800 dark:text-white"
                     label={t1('selectTokenFromBalances')}
                     {...field}
                   />
@@ -191,7 +190,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
 
             <div>
               <div>
-                <label htmlFor={`stream-amount-${index}`} className="input-label dark:text-white">
+                <label htmlFor={`stream-amount-${index}`} className="input-label">
                   {t1('amountToStream')}
                 </label>
 
@@ -202,7 +201,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                       required: true,
                       pattern: /^[0-9]*[.,]?[0-9]*$/,
                     })}
-                    className="input-field dark:border-[#252525] dark:bg-[#202020]"
+                    className="input-field"
                     autoComplete="off"
                     autoCorrect="off"
                     type="text"
@@ -217,7 +216,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                     {...register(`streams.${index}.streamDuration` as const, {
                       required: true,
                     })}
-                    className="absolute right-1 bottom-1 top-2 my-auto flex w-full max-w-[24%] items-center truncate rounded border-0 bg-zinc-100 p-2 pr-4 text-sm shadow-sm dark:bg-stone-600"
+                    className="order-lp-gray-1 absolute right-1 bottom-1 top-2 my-auto flex w-full max-w-[24%] items-center truncate rounded-[10px] p-2 pr-4 text-sm shadow-sm dark:border-lp-gray-2 dark:bg-lp-gray-5"
                     style={{ backgroundSize: '1.25rem', backgroundPosition: 'calc(100% - 4px) 55%' }}
                   >
                     <option value="week">{t0('week')}</option>
@@ -233,17 +232,17 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                 </span>
               </div>
               {errors?.streams?.[index]?.amountToStream?.type === 'required' && (
-                <p className="mt-1 text-xs text-red-500">{t1('requiredField')}</p>
+                <p className="mt-1 text-xs text-red-500 dark:text-red-600">{t1('requiredField')}</p>
               )}
               {errors?.streams?.[index]?.amountToStream?.type === 'pattern' && (
-                <p className="mt-1 text-xs text-red-500">{t1('validNumber')}</p>
+                <p className="mt-1 text-xs text-red-500 dark:text-red-600">{t1('validNumber')}</p>
               )}
             </div>
 
             <div>
               <button
                 type="button"
-                className="w-fit rounded-[10px] border border-green-400 py-[6px] px-6 text-sm font-normal shadow-sm disabled:cursor-not-allowed disabled:opacity-50"
+                className="w-fit rounded-[10px] border border-green-400 py-[6px] px-6 text-sm font-normal shadow-sm disabled:cursor-not-allowed disabled:opacity-50 dark:border-green-800"
                 style={{ marginRight: '0.6em' }}
                 disabled={false}
                 onClick={() =>
@@ -261,7 +260,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
               {fields.length > 1 && (
                 <button
                   type="button"
-                  className="w-fit rounded-[10px] border border-red-400 py-[6px] px-6 text-sm font-normal shadow-sm disabled:cursor-not-allowed disabled:opacity-50"
+                  className="w-fit rounded-[10px] border border-red-400 py-[6px] px-6 text-sm font-normal shadow-sm disabled:cursor-not-allowed disabled:opacity-50 dark:border-red-800"
                   disabled={fields.length <= 1}
                   onClick={() => remove(index)}
                 >

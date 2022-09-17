@@ -10,10 +10,10 @@ export default function Hero({ noBanner, onboardDialog }: { noBanner: boolean; o
   const t1 = useTranslations('Common');
   const t2 = useTranslations('Banner');
 
-  if (!displayBanner) return <div className="h-[30px] dark:bg-[#161818]"></div>;
+  if (!displayBanner) return <div className="h-[30px] dark:bg-lp-gray-8"></div>;
 
   return (
-    <section className="relative -z-10 mb-[30px] flex flex-row flex-wrap items-center justify-center gap-6 bg-[#D9F2F4]/70 px-2 py-[52px] text-[#303030] dark:bg-[#151515]">
+    <section className="relative -z-10 mb-[30px] flex flex-row flex-wrap items-center justify-center gap-6 bg-[#D9F2F4]/70 px-2 py-[52px] text-lp-gray-6 dark:bg-[#151515]">
       <button
         className="absolute right-3 top-3 p-2"
         onClick={() => {
@@ -40,15 +40,15 @@ export default function Hero({ noBanner, onboardDialog }: { noBanner: boolean; o
         <span className="dark:text-white">{t2('description')}</span>
         <span className="mx-auto flex flex-col gap-3 sm:mx-0 sm:flex-row">
           <button
-            className="shadow-1 whitespace-nowrap rounded-[10px] border border-[#1BDBAD] bg-white py-[10px] px-10 font-bold text-[#23BD8F] dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"
+            className="shadow-1 whitespace-nowrap rounded-[10px] border border-lp-secondary bg-white py-[10px] px-10 font-bold text-lp-primary dark:border-lp-secondary dark:bg-lp-primary dark:text-white"
             onClick={onboardDialog.toggle}
           >
             {t1('getStarted')}
           </button>
           {process.env.NEXT_PUBLIC_SAFE === 'false' ? (
             <a
-              className="shadow-1 whitespace-nowrap rounded-[10px] border border-[#1BDBAD] bg-white py-[10px] px-10 font-bold
-          text-[#23BD8F] dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"
+              className="shadow-1 whitespace-nowrap rounded-[10px] border border-lp-secondary bg-white py-[10px] px-10 font-bold
+          text-lp-primary dark:border-lp-secondary dark:bg-lp-primary dark:text-white"
               href="https://docs.llamapay.io/llamapay/gnosis-safe/adding-as-a-custom-app"
               target="_blank"
               rel="noreferrer noopener"

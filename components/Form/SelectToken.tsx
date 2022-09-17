@@ -101,10 +101,7 @@ export const SelectToken = React.forwardRef<HTMLButtonElement, ISelectTokenProps
         <SelectArrow className="relative right-[-2px]" />
       </Select>
 
-      <Dialog
-        state={dialog}
-        className="shadow-2 dark:bg-[#] absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex max-h-[80vh] max-w-lg flex-col overflow-auto rounded bg-white dark:bg-[#333336] sm:left-8 sm:right-8"
-      >
+      <Dialog state={dialog} className="dialog h-full">
         {newTokenForm ? (
           <NewTokenForm setNewTokenForm={setNewTokenForm} />
         ) : (
@@ -120,7 +117,7 @@ export const SelectToken = React.forwardRef<HTMLButtonElement, ISelectTokenProps
               state={combobox}
               autoSelect
               placeholder={t1('searchNameOrAddress')}
-              className="m-4 rounded border px-3 py-[10px] slashed-zero dark:border-neutral-700"
+              className="input-field m-4 w-[revert]"
             />
             <ComboboxList state={combobox} className="m-4 mt-0 cursor-pointer list-none overflow-auto">
               {combobox.matches.map((token) => (
@@ -212,7 +209,7 @@ const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<Rea
         </DialogDismiss>
       </header>
       <form className="m-4 mt-[10%]" onSubmit={handleSubmit}>
-        <InputText name="tokenAddress" isRequired={true} label={t1('tokenAddress')} />
+        <InputText name="tokenAddress" isRequired={true} label={t1('tokenAddress')} placeholder="0x..." />
         <SubmitButton className="!mt-4 rounded" disabled={isLoading}>
           {isLoading ? (
             <BeatLoader size={6} color="white" />

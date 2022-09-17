@@ -129,7 +129,7 @@ export default function Schedule({
         Schedule
       </button>
       <FormDialog dialog={dialog} title={'Schedule Withdraw'}>
-        <span className="space-y-4 text-[#303030] dark:text-white">
+        <span className="space-y-4 text-lp-gray-6 dark:text-white">
           <form className="mx-auto flex flex-col gap-4" onSubmit={onSubmit}>
             <div>
               <label className="input-label">Frequency</label>
@@ -173,7 +173,7 @@ export default function Schedule({
                   checked={hasRedirect}
                   onChange={setHasRedirect}
                   className={`${
-                    hasRedirect ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
+                    hasRedirect ? 'bg-lp-primary' : 'bg-gray-200 dark:bg-[#252525]'
                   } relative inline-flex h-6 w-11 items-center rounded-full`}
                 >
                   <span

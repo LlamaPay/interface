@@ -10,9 +10,9 @@ interface HomePageProps {
   noBanner: boolean;
 }
 
-const Home: NextPage<HomePageProps> = ({ noBanner }) => {
+const Home: NextPage<HomePageProps> = () => {
   return (
-    <Layout className="flex flex-col gap-[30px]" noBanner={noBanner}>
+    <Layout className="flex flex-col gap-[30px]">
       <section className="app-section">
         <Balance />
       </section>

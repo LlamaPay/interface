@@ -86,7 +86,7 @@ export const NetworksMenu = () => {
                 <SelectItem
                   key={value.id}
                   value={value.id?.toString()}
-                  className="flex cursor-pointer scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-[#666666] outline-none active-item:text-black active:text-black aria-disabled:opacity-40 dark:text-white"
+                  className="flex cursor-pointer scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-lp-gray-2 outline-none active-item:text-black active:text-black aria-disabled:opacity-40 dark:text-white"
                   onClick={() => switchNetwork(value.id)}
                 >
                   <div className="flex h-5 w-5 flex-shrink-0 items-center rounded-full">
@@ -116,7 +116,7 @@ export const NetworksMenu = () => {
                 <SelectItem
                   key={value.id}
                   value={value.id?.toString()}
-                  className="flex cursor-pointer scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-[#666666] outline-none active-item:text-black active:text-black aria-disabled:opacity-40 dark:text-white"
+                  className="flex cursor-pointer scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-lp-gray-2 outline-none active-item:text-black active:text-black aria-disabled:opacity-40 dark:text-white"
                   onClick={() => switchNetwork(value.id)}
                 >
                   <div className="flex h-5 w-5 flex-shrink-0 items-center rounded-full">

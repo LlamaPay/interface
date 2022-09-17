@@ -64,15 +64,15 @@ export const StreamHistory = ({ data, className }: StreamHistoryProps) => {
         {t0('history')}
       </button>
       <FormDialog dialog={dialog} title={t0('streamHistory')} className="v-min h-min dark:text-white">
-        <section className="text-[#303030]">
+        <section className="text-lp-gray-6">
           <StreamedYTD data={data} shouldRun={dialog.open} />
           <table className=" w-full border-separate" style={{ borderSpacing: '0 2px' }}>
             <thead>
               <tr>
-                <th className="px-4 py-[6px] text-left text-sm font-medium text-[#3D3D3D] dark:text-white">
+                <th className="px-4 py-[6px] text-left text-sm font-medium text-lp-gray-4 dark:text-white">
                   {t0('eventType')}
                 </th>
-                <th className="px-4 py-[6px] text-left text-sm font-medium text-[#3D3D3D] dark:text-white">
+                <th className="px-4 py-[6px] text-left text-sm font-medium text-lp-gray-4 dark:text-white">
                   {t0('timestamp')}
                 </th>
               </tr>

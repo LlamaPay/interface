@@ -138,12 +138,12 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
         <form className="mt-4 flex flex-col" onSubmit={handleSubmit}>
           <div>
             <div>
-              <label className="input-label dark:text-white" htmlFor="tableDFAmountToDeposit">
+              <label className="input-label" htmlFor="tableDFAmountToDeposit">
                 {t1('topupAmount')}
               </label>
               <div className="relative flex">
                 <input
-                  className="input-field dark:border-[#252525] dark:bg-[#202020] dark:text-white"
+                  className="input-field"
                   name="amount"
                   id="tableDFAmountToDeposit"
                   required
@@ -162,7 +162,7 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
                 />
                 <button
                   type="button"
-                  className="absolute bottom-[5px] top-[10px] right-[5px] rounded-lg border border-[#4E575F] px-2 text-xs font-bold text-[#4E575F] disabled:cursor-not-allowed"
+                  className="absolute bottom-[5px] top-[10px] right-[5px] rounded-lg border border-lp-gray-1 px-2 text-xs font-bold disabled:cursor-not-allowed dark:border-lp-gray-2"
                   disabled={!data}
                   onClick={fillMaxAmountOnClick}
                 >
