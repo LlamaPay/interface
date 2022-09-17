@@ -36,11 +36,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function B({ label, ch
   });
 
   const renderMenuButton = (menuButtonProps: MenuButtonProps) => (
-    <MenuButton
-      state={menu}
-      className="shadow-1 rounded-2xl border border-[#f7f8fa] bg-white py-2 px-4 text-[#3D3D3D] dark:border-[#202020] dark:bg-[#202020] dark:text-[#23BD8F]"
-      {...menuButtonProps}
-    >
+    <MenuButton state={menu} className="nav-button h-[42px] border-transparent" {...menuButtonProps}>
       {label}
     </MenuButton>
   );

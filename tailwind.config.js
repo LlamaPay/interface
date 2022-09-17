@@ -18,6 +18,7 @@ module.exports = {
         'lp-gray-5': '#333336',
         'lp-gray-6': '#303030',
         'lp-gray-7': '#30313D',
+        'lp-gray-8': '#161818',
         'lp-green-1': '#DCF5F0',
         'lp-green-2': '#BFF1E7',
         'lp-green-3': '#55E2C3',
