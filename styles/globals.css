@@ -48,20 +48,20 @@
   }
 
   .nav-button {
-    @apply shadow-1 rounded-2xl border border-[#1BDBAD] bg-white py-2 px-4 font-medium text-[#23BD8F];
+    @apply shadow-1 rounded-[10px] border border-lp-secondary bg-lp-white py-2 px-4 font-medium text-lp-primary dark:border-transparent dark:bg-lp-green-4 dark:text-lp-white;
   }
 
   .primary-button {
-    @apply whitespace-nowrap rounded bg-[#23BD8F] py-2 px-8 text-sm font-bold text-white disabled:cursor-not-allowed;
+    @apply whitespace-nowrap rounded bg-[#23BD8F] py-2 px-8 text-sm font-bold text-lp-white disabled:cursor-not-allowed;
     box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.14), 0px 1px 5px rgba(0, 0, 0, 0.12);
   }
 
   .secondary-button {
-    @apply primary-button bg-white text-[#23BD8F];
+    @apply primary-button bg-lp-white text-lp-primary;
   }
 
   .form-submit-button {
-    @apply shadow-1 w-full rounded-[10px] border border-[#1BDBAD] bg-[#23BD8F] py-2 px-3 font-semibold text-white disabled:cursor-not-allowed;
+    @apply shadow-1 w-full rounded-[10px] border border-lp-secondary bg-[#23BD8F] py-2 px-3 font-semibold text-lp-white disabled:cursor-not-allowed;
   }
 
   .input-label {
@@ -97,7 +97,7 @@
   }
 
   .dark .row-action-links {
-    @apply text-xs text-white underline opacity-80;
+    @apply text-xs text-lp-white underline opacity-80;
   }
 
   .animate-shimmer {
@@ -112,7 +112,7 @@
   }
 
   .table-row {
-    @apply bg-white odd:bg-neutral-100 dark:bg-neutral-900 dark:odd:bg-neutral-800;
+    @apply bg-lp-white odd:bg-neutral-100 dark:bg-neutral-900 dark:odd:bg-neutral-800;
   }
 
   .table-description {
@@ -138,7 +138,7 @@
   }
 
   .dialog {
-    @apply shadow-2 absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex h-fit max-h-[80vh] max-w-lg flex-col overflow-auto rounded-2xl border border-[#EAEAEA] bg-white p-4 sm:left-8 sm:right-8;
+    @apply shadow-2 absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex h-fit max-h-[80vh] max-w-lg flex-col overflow-auto rounded-2xl border border-[#EAEAEA] bg-lp-white p-4 sm:left-8 sm:right-8;
   }
 
   .dark .dialog {
