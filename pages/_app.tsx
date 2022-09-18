@@ -15,7 +15,7 @@ function App({ Component, pageProps }: AppProps) {
   const [queryClient] = React.useState(() => new QueryClient());
 
   return (
-    <ThemeProvider defaultTheme="system" attribute="class">
+    <ThemeProvider defaultTheme="light" attribute="class">
       <NextIntlProvider messages={pageProps.messages}>
         <WalletProvider>
           <QueryClientProvider client={queryClient}>
