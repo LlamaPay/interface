@@ -35,13 +35,8 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
 
       <OnboardDialog dialog={onboardDialog} />
 
-      <React.Suspense
-        fallback={
-          <footer className="mt-20 bg-lp-gray-5 p-[30px] md:px-[30px] lg:min-h-[420px] lg:p-[60px] xl:min-h-[480px] xl:p-[120px]" />
-        }
-      >
-        <Footer />
-      </React.Suspense>
+      <Footer />
+
       <CustomToast />
     </>
   );
