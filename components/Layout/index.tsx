@@ -1,9 +1,9 @@
 import * as React from 'react';
 import Head from 'next/head';
-import dynamic from 'next/dynamic';
 import { useDialogState } from 'ariakit';
 import classNames from 'classnames';
 import Header from './Header';
+import Footer from './Footer';
 import OnboardDialog from 'components/Onboard';
 import CustomToast from 'components/CustomToast';
 import StaleSubgraphWarning from 'components/StaleSubgraphWarning';
@@ -13,10 +13,6 @@ interface ILayoutProps {
   className?: string;
   noBanner?: boolean;
 }
-
-const Footer = dynamic(() => import('./Footer'), {
-  ssr: false,
-});
 
 export default function Layout({ children, className, ...props }: ILayoutProps) {
   const onboardDialog = useDialogState();
@@ -38,7 +34,14 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
       </main>
 
       <OnboardDialog dialog={onboardDialog} />
-      <Footer />
+
+      <React.Suspense
+        fallback={
+          <footer className="mt-20 bg-lp-gray-5 p-[30px] md:px-[30px] lg:min-h-[420px] lg:p-[60px] xl:min-h-[480px] xl:p-[120px]" />
+        }
+      >
+        <Footer />
+      </React.Suspense>
       <CustomToast />
     </>
   );
