@@ -23,11 +23,11 @@ export default function CreateVesting({ factory }: { factory: string }) {
     vestedToken: '',
     vestedAmount: '',
     vestingTime: '',
-    vestingDuration: 'year',
+    vestingDuration: 'month',
     includeCliff: false,
     includeCustomStart: false,
     cliffTime: '',
-    cliffDuration: 'year',
+    cliffDuration: 'month',
     startDate: '',
   });
 
