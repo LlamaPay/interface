@@ -8,3 +8,4 @@ export { LlamaPay } from './LlamaPay';
 export { Coins } from './Coins';
 export { FuelIcon } from './Fuel';
 export { WalletIcon } from './Wallet';
+export { NeutralLogo } from './NeutralLogo';

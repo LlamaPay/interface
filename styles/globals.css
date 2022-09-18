@@ -159,6 +159,14 @@
     @apply form-submit-button mt-8 text-base no-underline opacity-100 dark:!text-lp-black;
   }
 
+  .footer-graphic {
+    @apply absolute right-0 top-[-8px] z-0 md:top-[-10px] xl:top-[-16px];
+  }
+
+  .footer-graphic img {
+    @apply !h-[240px] md:!h-[280px] lg:!h-[360px] xl:!h-[410px];
+  }
+
   @media (max-width: 360px) {
     .balance-wrap {
       flex-direction: column !important;
