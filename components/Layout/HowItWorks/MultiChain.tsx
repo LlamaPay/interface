@@ -1,12 +1,10 @@
 export function MultiChain() {
   return (
     <svg
-      width="84"
-      height="87"
       viewBox="0 0 84 87"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="flex-shrink-0"
+      className="h-[52px] flex-shrink-0 self-start sm:h-[88px] sm:self-center"
     >
       <g clipPath="url(#clip0_910_55654)">
         <path

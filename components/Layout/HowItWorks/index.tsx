@@ -26,17 +26,17 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
       </div>
 
       <div className="flex flex-col gap-4 lg:flex-row">
-        <div className="flex flex-1 flex-col flex-nowrap gap-4 rounded-[6px] bg-lp-green-2 p-6 text-lg dark:bg-lp-green-4 dark:bg-opacity-30 sm:flex-row sm:items-center sm:gap-10">
+        <div className="flex flex-1 flex-col flex-nowrap gap-4 rounded-[6px] bg-lp-green-2 p-6 dark:bg-lp-green-4 dark:bg-opacity-30 sm:flex-row sm:items-center sm:gap-10 sm:text-lg">
           <GasEfficient />
           <div className="flex flex-col gap-2 sm:gap-[10px]">
-            <h2 className="font-exo text-[1.625rem] font-bold">Gas efficient</h2>
+            <h2 className="font-exo text-xl font-bold sm:text-[1.625rem]">Gas efficient</h2>
             <p>Deploying a LlamaPay stream is 3.2-3.7x cheaper than other services.</p>
           </div>
         </div>
-        <div className="flex flex-1 flex-col flex-nowrap gap-4 rounded-[6px] bg-lp-green-2 p-6 text-lg dark:bg-lp-green-4 dark:bg-opacity-30 sm:flex-row sm:items-center sm:gap-10">
+        <div className="flex flex-1 flex-col flex-nowrap gap-4 rounded-[6px] bg-lp-green-2 p-6 dark:bg-lp-green-4 dark:bg-opacity-30 sm:flex-row sm:items-center sm:gap-10 sm:text-lg">
           <MultiChain />
           <div className="flex flex-col gap-2 sm:gap-[10px]">
-            <h2 className="font-exo text-[1.625rem] font-bold">Multi-chain</h2>
+            <h2 className="font-exo text-xl font-bold sm:text-[1.625rem]">Multi-chain</h2>
             <p>Available on all EVM chains with all contracts sharing the same address across chains.</p>
           </div>
         </div>

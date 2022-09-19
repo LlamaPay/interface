@@ -1,12 +1,10 @@
 export default function GasEfficient() {
   return (
     <svg
-      width="79"
-      height="88"
       viewBox="0 0 79 88"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      className="mb-[-6px] mr-[-8px] flex-shrink-0"
+      className="mb-[-6px] mr-[-8px] h-[52px] flex-shrink-0 self-start sm:h-[88px] sm:self-center"
     >
       <g clipPath="url(#clip0_910_55618)">
         <path
