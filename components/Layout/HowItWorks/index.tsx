@@ -5,7 +5,7 @@ import { MultiChain } from './MultiChain';
 // TODO add translations
 export default function HowItWorks({ onboardDialog }: { onboardDialog: DisclosureState }) {
   return (
-    <div className="flex flex-col items-center justify-between gap-16 bg-lp-green-1 py-[72px] px-[30px] text-base text-lp-gray-5 dark:bg-lp-gray-5 dark:text-lp-white lg:px-[60px] xl:px-[120px]">
+    <div className="mb-[-5rem] flex flex-col items-center justify-between gap-16 bg-lp-green-1 py-[72px] px-[30px] text-base text-lp-gray-5 dark:bg-lp-gray-5 dark:text-lp-white lg:px-[60px] xl:px-[120px]">
       <div className="space-y-5">
         <h2 className="font-exo mx-auto flex flex-col text-center text-4xl">
           <span className="font-bold">Automate transactions</span>
@@ -26,21 +26,63 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
       </div>
 
       <div className="flex flex-col gap-4 lg:flex-row">
-        <div className="flex flex-1 flex-col flex-nowrap gap-4 rounded-[6px] bg-lp-green-2 p-6 dark:bg-lp-green-4 dark:bg-opacity-30 sm:flex-row sm:items-center sm:gap-10 sm:text-lg">
-          <GasEfficient />
-          <div className="flex flex-col gap-2 sm:gap-[10px]">
-            <h2 className="font-exo text-xl font-bold sm:text-[1.625rem]">Gas efficient</h2>
-            <p>Deploying a LlamaPay stream is 3.2-3.7x cheaper than other services.</p>
-          </div>
-        </div>
-        <div className="flex flex-1 flex-col flex-nowrap gap-4 rounded-[6px] bg-lp-green-2 p-6 dark:bg-lp-green-4 dark:bg-opacity-30 sm:flex-row sm:items-center sm:gap-10 sm:text-lg">
-          <MultiChain />
-          <div className="flex flex-col gap-2 sm:gap-[10px]">
-            <h2 className="font-exo text-xl font-bold sm:text-[1.625rem]">Multi-chain</h2>
-            <p>Available on all EVM chains with all contracts sharing the same address across chains.</p>
-          </div>
-        </div>
+        {features.map((feature) => (
+          <article
+            key={feature.name}
+            className="flex max-w-xl flex-1 flex-col flex-nowrap gap-4 rounded-[6px] bg-lp-green-2 p-6 dark:bg-lp-green-4 dark:bg-opacity-30 sm:flex-row sm:items-center sm:gap-10 sm:text-lg lg:max-w-full"
+          >
+            {feature.logo}
+            <div className="flex flex-col gap-2 sm:gap-[10px]">
+              <h2 className="font-exo text-xl font-bold sm:text-[1.625rem]">{feature.name}</h2>
+              <p>{feature.description}</p>
+            </div>
+          </article>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-1 gap-[10px] lg:grid-cols-2">
+        {pros.map((pro) => (
+          <article
+            key={pro.name}
+            className="col-span-1 flex max-w-xl flex-col gap-[10px] rounded-[6px] bg-lp-white p-8 text-center dark:bg-lp-green-4 sm:text-lg lg:max-w-full"
+          >
+            <h2 className="font-exo text-xl font-bold dark:text-lp-primary sm:text-[1.625rem]">{pro.name}</h2>
+            <p>{pro.description}</p>
+          </article>
+        ))}
       </div>
     </div>
   );
 }
+
+const features = [
+  {
+    name: 'Gas efficient',
+    description: 'Deploying a LlamaPay stream is 3.2-3.7x cheaper than other services.',
+    logo: <GasEfficient />,
+  },
+  {
+    name: 'Multi-chain',
+    description: 'Available on all EVM chains with all contracts sharing the same address across chains',
+    logo: <MultiChain />,
+  },
+];
+
+const pros = [
+  {
+    name: 'Anyone can trigger a claim',
+    description: 'Receive payment into centralized exchanges via a 3rd party wallet triggering the claim.',
+  },
+  {
+    name: 'Never run out of balance',
+    description: 'Opt to borrow money to fund streams, for when you forget to top-up your balance.',
+  },
+  {
+    name: 'No precision errors',
+    description: 'LlamaPay operates internally with 20 decimals which will keep precision errors to a minimum.',
+  },
+  {
+    name: 'Stream indefinitely',
+    description: 'Use LlamaPay to create streams with no end date - or set a custom end date. ',
+  },
+];
