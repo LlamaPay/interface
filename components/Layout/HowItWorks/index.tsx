@@ -40,6 +40,38 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
         ))}
       </div>
 
+      <div className="flex flex-col">
+        <h2 className="font-exo mx-auto text-center text-4xl">
+          How it <span className="font-bold">works</span>
+        </h2>
+
+        <span className="nav-button mx-auto my-4 flex w-fit items-center justify-between gap-3 py-2 px-3">
+          <span className="flex-1 whitespace-nowrap rounded-[10px] bg-lp-primary py-1 px-3 text-lp-white dark:text-lp-black">
+            For Payers
+          </span>
+          <span className="flex-1 whitespace-nowrap py-1 px-3">For Payees</span>
+        </span>
+
+        <div className="my-4 flex flex-col gap-4 lg:flex-row">
+          <div className="rounded-[6px] bg-lp-white py-4 px-11 text-center dark:bg-lp-green-4 sm:text-lg">
+            <h2 className="font-exo font-medium sm:text-xl">Input payee information</h2>
+          </div>
+          <div className="rounded-[6px] bg-lp-white py-4 px-11 text-center dark:bg-lp-green-4 sm:text-lg">
+            <h2 className="font-exo font-medium sm:text-xl">Enter amount & frequency</h2>
+          </div>
+          <div className="rounded-[6px] bg-lp-white py-4 px-11 text-center dark:bg-lp-green-4 sm:text-lg">
+            <h2 className="font-exo font-medium sm:text-xl">Start Streaming!</h2>
+          </div>
+        </div>
+
+        <button
+          className="nav-button mx-auto mt-[30px] mb-[56px] w-full max-w-[420px] dark:bg-lp-secondary dark:text-lp-black"
+          onClick={onboardDialog.toggle}
+        >
+          Start here
+        </button>
+      </div>
+
       <div className="grid grid-cols-1 gap-[10px] lg:grid-cols-2">
         {pros.map((pro) => (
           <article
