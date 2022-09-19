@@ -50,7 +50,7 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
           How it <span className="font-bold">works</span>
         </h2>
 
-        <span className="nav-button mx-auto my-4 flex w-fit items-center justify-between gap-3 py-2 px-3">
+        <span className="nav-button mx-auto my-4 flex w-fit items-center justify-between gap-3 py-1 px-1">
           <span className="flex-1 whitespace-nowrap rounded-[10px] bg-lp-primary py-1 px-3 text-lp-white dark:text-lp-black">
             For Payers
           </span>
@@ -93,7 +93,7 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
         <h2 className="font-exo text-center text-2xl">
           Used by <span className="font-bold">employees and employers</span>
         </h2>
-        <div className="flex w-full flex-col items-center rounded-[6px] bg-lp-green-3 dark:bg-lp-gray-3">
+        <div className="flex w-full flex-col items-center bg-lp-green-3 dark:bg-lp-gray-3">
           <div className="relative z-20 mt-[-28px] mb-[-60px] flex flex-col gap-[10px] rounded-[6px] bg-lp-white px-6 py-10 shadow-[0px_4px_12px_rgba(0,0,0,0.15)] dark:bg-lp-green-4">
             <h1 className="font-exo flex items-center gap-[6px] text-3xl font-semibold text-lp-gray-4 dark:text-white">
               <StreamIcon />

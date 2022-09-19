@@ -3,7 +3,7 @@
 
 import { NeutralLogo } from 'components/Icons';
 import Image from 'next/image';
-import graphic from './graphic.png';
+import footerGraphic from 'public/footerGraphic.svg';
 
 // TODO add translations
 // TODO add ante widget
@@ -46,7 +46,7 @@ const Footer = () => {
       </div>
 
       <div className="footer-graphic">
-        <Image src={graphic} alt="" objectFit="contain" />
+        <Image src={footerGraphic} alt="" objectFit="contain" />
       </div>
     </footer>
   );
