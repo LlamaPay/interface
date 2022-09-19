@@ -3,12 +3,14 @@ import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useDialogState } from 'ariakit';
 import classNames from 'classnames';
+import { useAccount } from 'wagmi';
 import Header from './Header';
 import Hero from './Hero';
 import Footer from './Footer';
 import OnboardDialog from 'components/Onboard';
 import CustomToast from 'components/CustomToast';
 import StaleSubgraphWarning from 'components/StaleSubgraphWarning';
+import HowItWorks from './HowItWorks';
 
 interface ILayoutProps {
   children: React.ReactNode;
@@ -17,6 +19,7 @@ interface ILayoutProps {
 }
 
 export default function Layout({ children, className, ...props }: ILayoutProps) {
+  const [{ data }] = useAccount();
   const onboardDialog = useDialogState();
   const router = useRouter();
 
@@ -33,11 +36,16 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
 
       <Header onboardDialog={onboardDialog} />
 
-      {router.pathname === '/' && <Hero onboardDialog={onboardDialog} />}
-
-      <main className={classNames('flex-1', className)} {...props}>
-        {children}
-      </main>
+      {router.pathname === '/' && !data ? (
+        <>
+          <Hero onboardDialog={onboardDialog} />
+          <HowItWorks onboardDialog={onboardDialog} />
+        </>
+      ) : (
+        <main className={classNames('flex-1', className)} {...props}>
+          {children}
+        </main>
+      )}
 
       <OnboardDialog dialog={onboardDialog} />
 

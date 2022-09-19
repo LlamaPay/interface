@@ -9,7 +9,7 @@ import graphic from './graphic.png';
 // TODO add ante widget
 const Footer = () => {
   return (
-    <footer className="relative mt-20 flex flex-col flex-wrap gap-12 bg-lp-gray-5 p-[30px] text-lp-white md:px-[30px] lg:min-h-[420px] lg:p-[60px] xl:min-h-[480px] xl:flex-row xl:justify-between xl:p-[120px]">
+    <footer className="relative mt-20 flex flex-col flex-wrap gap-12 bg-lp-gray-5 p-[30px] text-lp-white lg:min-h-[420px] lg:p-[60px] xl:min-h-[480px] xl:flex-row xl:justify-between xl:p-[120px]">
       <div className="z-10 flex flex-col gap-4 2xl:gap-8">
         <NeutralLogo />
         <p className="flex w-fit flex-wrap gap-[2px] rounded text-base text-lp-secondary backdrop-blur-xl xl:flex-col">

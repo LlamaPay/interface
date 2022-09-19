@@ -1,3 +1,5 @@
+import '@fontsource/exo-2/300.css';
+import '@fontsource/exo-2/400.css';
 import '@fontsource/exo-2/500.css';
 import '@fontsource/exo-2/600.css';
 import '@fontsource/exo-2/700.css';
