@@ -18,10 +18,10 @@ export default function AppSwitch() {
   return (
     <span className="nav-button hidden items-center justify-between gap-3 py-1 px-1 lg:flex">
       <Link href="/" passHref>
-        <a className={classNames('py-1 px-2', isSalaries && activeClasses)}>Salaries</a>
+        <a className={classNames('flex-1 py-1 px-3', isSalaries && activeClasses)}>Salaries</a>
       </Link>
       <Link href="/vesting" passHref>
-        <a className={classNames('py-1 px-2', isVesting && activeClasses)}>Vesting</a>
+        <a className={classNames('flex-1 py-1 px-3', isVesting && activeClasses)}>Vesting</a>
       </Link>
     </span>
   );

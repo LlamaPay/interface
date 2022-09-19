@@ -167,7 +167,7 @@
     @apply !h-[240px] md:!h-[280px] lg:!h-[360px] xl:!h-[410px];
   }
 
-  @media (max-width: 360px) {
+  @media (max-width: 22.5rem) {
     .balance-wrap {
       flex-direction: column !important;
       align-items: start !important;
@@ -175,6 +175,12 @@
 
     .balance-wrap > *:last-child {
       margin-left: 2rem;
+    }
+  }
+
+  @media (min-width: 80rem) {
+    .app-hero {
+      background-image: url('/heroGraphic.svg');
     }
   }
 }
