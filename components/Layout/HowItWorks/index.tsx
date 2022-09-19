@@ -1,9 +1,14 @@
-import { DisclosureState } from 'ariakit';
+import Image from 'next/image';
+import { DisclosureState, Select, SelectArrow, SelectLabel, useSelectState } from 'ariakit';
+import { InputAmountWithDuration } from 'components/Form';
+import { StreamIcon } from 'components/Icons';
 import GasEfficient from './GasEfficient';
 import { MultiChain } from './MultiChain';
 
 // TODO add translations
 export default function HowItWorks({ onboardDialog }: { onboardDialog: DisclosureState }) {
+  const select = useSelectState();
+
   return (
     <div className="mb-[-5rem] flex flex-col items-center justify-between gap-16 bg-lp-green-1 py-[72px] px-[30px] text-base text-lp-gray-5 dark:bg-lp-gray-5 dark:text-lp-white lg:px-[60px] xl:px-[120px]">
       <div className="space-y-5">
@@ -82,6 +87,66 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
             <p>{pro.description}</p>
           </article>
         ))}
+      </div>
+
+      <div className="mt-5 flex w-[calc(100vw-16px)] select-none flex-col gap-16 lg:mb-[-72px]">
+        <h2 className="font-exo text-center text-2xl">
+          Used by <span className="font-bold">employees and employers</span>
+        </h2>
+        <div className="flex w-full flex-col items-center rounded-[6px] bg-lp-green-3 dark:bg-lp-gray-3">
+          <div className="relative z-20 mt-[-28px] mb-[-60px] flex flex-col gap-[10px] rounded-[6px] bg-lp-white px-6 py-10 shadow-[0px_4px_12px_rgba(0,0,0,0.15)] dark:bg-lp-green-4">
+            <h1 className="font-exo flex items-center gap-[6px] text-3xl font-semibold text-lp-gray-4 dark:text-white">
+              <StreamIcon />
+              <span>Create a New Stream</span>
+            </h1>
+
+            <label>
+              <span className="input-label">Enter the recipients address</span>
+              <input
+                className="input-field text-sm font-semibold placeholder:text-lp-gray-4 dark:placeholder:text-lp-silver"
+                placeholder="0x..."
+                disabled
+              />
+            </label>
+
+            <label>
+              <span className="input-label">Add a nickname</span>
+              <input
+                placeholder="Alice"
+                className="input-field text-sm font-semibold placeholder:text-lp-gray-4 dark:placeholder:text-lp-silver"
+                disabled
+              />
+            </label>
+
+            <SelectLabel state={select} className="input-label mt-[4px] mb-[-8px] dark:text-white">
+              Select token
+            </SelectLabel>
+            <Select state={select} className="input-field flex w-full items-center gap-1 !py-[0px]" disabled>
+              <Image
+                src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
+                alt=""
+                height={20}
+                width={20}
+              />
+              <span className="dark:text-silver mr-auto text-sm font-semibold text-lp-gray-4">USDC</span>
+              <SelectArrow />
+            </Select>
+
+            <InputAmountWithDuration
+              name=""
+              placeholder="5000"
+              selectInputName=""
+              label="Amount to Stream"
+              isRequired={false}
+              className="dark:text-silver text-sm font-semibold text-lp-gray-4"
+              disabled
+            />
+
+            <button className="form-submit-button mt-2 mb-3 disabled:cursor-default" disabled>
+              Create
+            </button>
+          </div>
+        </div>
       </div>
     </div>
   );

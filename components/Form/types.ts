@@ -32,4 +32,6 @@ export interface InputAmountWithDaysProps {
   className?: string;
   handleChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   handleSelectChange?: (e: React.ChangeEvent<HTMLSelectElement>) => void;
+  disabled?: boolean;
+  placeholder?: string;
 }
