@@ -6,7 +6,7 @@ import Image from 'next/image';
 // TODO add translations
 export default function Hero({ onboardDialog }: { onboardDialog: DisclosureState }) {
   return (
-    <div className="relative isolate flex flex-col flex-wrap gap-6 overflow-clip bg-lp-secondary px-8 py-10 text-lp-gray-5 dark:bg-lp-green-4 dark:text-lp-white sm:p-10 lg:gap-8 lg:p-[60px] xl:px-[145px] xl:py-[100px]">
+    <div className="relative isolate flex flex-col flex-wrap gap-3 overflow-clip bg-lp-secondary px-8 py-10 text-lp-gray-5 dark:bg-lp-green-4 dark:text-lp-white sm:p-10 lg:gap-5 lg:p-[60px] xl:px-[145px] xl:py-[100px]">
       <h1 className="font-exo relative top-[-6px] z-10 text-4xl font-bold lg:top-[-12px] lg:text-5xl lg:leading-[56px]">
         Stream seamless <br /> recurring crypto <br /> payments!
       </h1>
@@ -25,4 +25,13 @@ export default function Hero({ onboardDialog }: { onboardDialog: DisclosureState
       </div>
     </div>
   );
+}
+
+{
+  /* <div className="mt-[11px] mb-[64px]">
+<h2 className="font-exo text-2xl font-medium">
+  <span className="font-bold">Trusted </span>by remarkable organizations
+</h2>
+<div></div>
+</div> */
 }

@@ -10,8 +10,8 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
   const select = useSelectState();
 
   return (
-    <div className="mb-[-5rem] flex flex-col items-center justify-between gap-16 bg-lp-green-1 py-[72px] px-[30px] text-base text-lp-gray-5 dark:bg-lp-gray-5 dark:text-lp-white lg:px-[60px] xl:px-[120px]">
-      <div className="space-y-5">
+    <div className="mb-[-5rem] flex flex-col items-center justify-between gap-16 bg-lp-green-1 py-[72px] px-[30px] text-base text-lp-gray-5 dark:bg-lp-gray-5 dark:text-lp-white lg:px-[60px] xl:px-[145px]">
+      <div className="space-y-4">
         <h2 className="font-exo mx-auto flex flex-col text-center text-4xl">
           <span className="font-bold">Automate transactions</span>
           <span>and stream them by the second.</span>
@@ -23,18 +23,11 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
         </p>
       </div>
 
-      <div className="mt-[11px] mb-[64px]">
-        <h2 className="font-exo text-2xl font-medium">
-          <span className="font-bold">Trusted </span>by remarkable organizations
-        </h2>
-        <div></div>
-      </div>
-
-      <div className="flex flex-col gap-4 lg:flex-row">
+      <div className="flex w-full flex-col gap-4 lg:flex-row">
         {features.map((feature) => (
           <article
             key={feature.name}
-            className="flex max-w-xl flex-1 flex-col flex-nowrap gap-4 rounded-[6px] bg-lp-green-2 p-6 dark:bg-lp-green-4 dark:bg-opacity-30 sm:flex-row sm:items-center sm:gap-10 sm:text-lg lg:max-w-full"
+            className="flex max-w-xl flex-1 flex-col flex-nowrap gap-4 rounded-[6px] bg-lp-green-2 p-6 dark:bg-lp-green-4 dark:bg-opacity-30 sm:flex-row sm:items-center sm:gap-10 sm:text-lg lg:w-full lg:max-w-full"
           >
             {feature.logo}
             <div className="flex flex-col gap-2 sm:gap-[10px]">
@@ -45,7 +38,7 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
         ))}
       </div>
 
-      <div className="flex flex-col">
+      <div className="flex w-full flex-col">
         <h2 className="font-exo mx-auto text-center text-4xl">
           How it <span className="font-bold">works</span>
         </h2>
@@ -57,7 +50,7 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
           <span className="flex-1 whitespace-nowrap py-1 px-3">For Payees</span>
         </span>
 
-        <div className="my-4 flex flex-col gap-4 lg:flex-row">
+        <div className="my-4 mx-auto grid grid-cols-[repeat(1,minmax(0,26.25rem))] gap-4 xl:w-full xl:grid-cols-3">
           <div className="rounded-[6px] bg-lp-white py-4 px-11 text-center dark:bg-lp-green-4 sm:text-lg">
             <h2 className="font-exo font-medium sm:text-xl">Input payee information</h2>
           </div>
@@ -70,14 +63,14 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
         </div>
 
         <button
-          className="nav-button mx-auto mt-[30px] mb-[56px] w-full max-w-[420px] dark:bg-lp-secondary dark:text-lp-black"
+          className="nav-button mx-auto mt-[30px] mb-[56px] w-full max-w-[26.25rem] dark:bg-lp-secondary dark:text-lp-black"
           onClick={onboardDialog.toggle}
         >
           Start here
         </button>
       </div>
 
-      <div className="grid grid-cols-1 gap-[10px] lg:grid-cols-2">
+      <div className="grid w-full grid-cols-1 gap-[10px] lg:grid-cols-2">
         {pros.map((pro) => (
           <article
             key={pro.name}
@@ -94,7 +87,7 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
           Used by <span className="font-bold">employees and employers</span>
         </h2>
         <div className="flex w-full flex-col items-center bg-lp-green-3 dark:bg-lp-gray-3">
-          <div className="relative z-20 mt-[-28px] mb-[-60px] flex flex-col gap-[10px] rounded-[6px] bg-lp-white px-6 py-10 shadow-[0px_4px_12px_rgba(0,0,0,0.15)] dark:bg-lp-green-4">
+          <div className="relative z-20 mt-[-36px] mb-[-60px] flex flex-col gap-[10px] rounded-[6px] bg-lp-white px-6 py-10 shadow-[0px_4px_12px_rgba(0,0,0,0.15)] dark:bg-lp-green-4">
             <h1 className="font-exo flex items-center gap-[6px] text-3xl font-semibold text-lp-gray-4 dark:text-white">
               <StreamIcon />
               <span>Create a New Stream</span>
