@@ -84,7 +84,7 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
               viewBox="0 0 60 60"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="absolute top-0"
+              className="absolute top-0 dark:hidden"
             >
               <circle
                 cx="29.8436"
@@ -114,7 +114,7 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
               viewBox="0 0 127 127"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="absolute bottom-3 right-3"
+              className="absolute bottom-3 right-3 dark:hidden"
             >
               <circle
                 cx="63.3153"
@@ -178,7 +178,7 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
               viewBox="0 0 83 83"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="absolute top-0"
+              className="absolute top-0 dark:hidden"
             >
               <circle
                 cx="41.4189"
@@ -208,7 +208,7 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
               viewBox="0 0 83 83"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="absolute bottom-0 right-0 left-0 mx-auto"
+              className="absolute bottom-0 right-0 left-0 mx-auto dark:hidden"
             >
               <circle
                 cx="41.4189"
@@ -270,7 +270,7 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
               viewBox="0 0 83 83"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="absolute right-10 top-[-12px]"
+              className="absolute right-10 top-[-12px] dark:hidden"
             >
               <circle
                 cx="41.4189"
@@ -300,7 +300,7 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
               viewBox="0 0 83 83"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
-              className="absolute left-2 bottom-8"
+              className="absolute left-2 bottom-8 dark:hidden"
             >
               <circle
                 cx="41.4189"
@@ -386,7 +386,7 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
                 height={20}
                 width={20}
               />
-              <span className="dark:text-silver mr-auto text-sm font-semibold text-lp-gray-4">USDC</span>
+              <span className="mr-auto text-sm font-semibold text-lp-gray-4 dark:text-lp-silver">USDC</span>
               <SelectArrow />
             </Select>
 
@@ -396,7 +396,7 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
               selectInputName=""
               label="Amount to Stream"
               isRequired={false}
-              className="dark:text-silver text-sm font-semibold text-lp-gray-4"
+              className="text-sm font-semibold text-lp-gray-4 placeholder:text-lp-gray-4 dark:text-lp-silver dark:placeholder:text-lp-silver"
               disabled
             />
 
