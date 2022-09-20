@@ -11,7 +11,7 @@ const Widget = dynamic(() => import('./AnteWIdget'), {
 // TODO add translations
 const Footer = () => {
   return (
-    <footer className="relative mt-20 flex flex-col flex-wrap gap-12 bg-lp-gray-5 p-[1.875rem] text-lp-white lg:min-h-[26.25rem] lg:p-[3.75rem] xl:min-h-[30rem] xl:flex-row xl:justify-between xl:px-[145px] xl:py-[125px]">
+    <footer className="relative mt-20 flex flex-col flex-wrap gap-12 bg-lp-gray-5 p-10 text-lp-white sm:p-20 lg:min-h-[26.25rem] xl:min-h-[30rem] xl:flex-row xl:justify-between xl:p-24">
       <div className="z-10 flex flex-col gap-4 2xl:gap-8">
         <NeutralLogo />
         <p className="flex w-fit flex-wrap gap-[2px] rounded text-sm text-lp-secondary backdrop-blur-xl lg:text-base xl:flex-col">

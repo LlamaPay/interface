@@ -1,44 +1,38 @@
-import Image, { StaticImageData } from 'next/image';
+import { ReactNode } from 'react';
+import Image from 'next/image';
 import { DisclosureState } from 'ariakit';
 import Tooltip from 'components/Tooltip';
 import heroGraphic from 'public/heroGraphic.svg';
-import defillama from 'public/userIcons/defillama.jpeg';
+import Yearn from './Icons/Yearn';
+import Convex from './Icons/Convex';
+import Vector from './Icons/Vector';
+import BiFi from './Icons/Bifi';
+import Frax from './Icons/Frax';
+import Fantom from './Icons/Fantom';
+import DefiLlama from './Icons/DefiLlama';
+import Spookyswap from './Icons/Spookyswap';
+import Curve from './Icons/Curve';
 
-// TODO add translations
 export default function Hero({ onboardDialog }: { onboardDialog: DisclosureState }) {
   return (
-    <div className="relative isolate flex flex-col flex-wrap gap-5 overflow-clip bg-lp-secondary px-8 py-10 text-lp-gray-5 dark:bg-lp-green-4 dark:text-lp-white sm:p-10 lg:p-[3.75rem] xl:px-[145px] xl:pt-[6.25rem]">
-      <h1 className="font-exo relative top-[-0.375rem] z-10 text-5xl font-bold lg:top-[-0.75rem] lg:leading-[3.5rem]">
+    <div className="relative isolate flex flex-col flex-wrap gap-5 overflow-clip bg-lp-secondary p-10 text-lp-gray-5 dark:bg-lp-green-4 dark:text-lp-white sm:p-20 xl:p-24">
+      <h1 className="font-exo relative z-10 text-5xl font-bold leading-[3.5rem]">
         Stream seamless <br /> recurring crypto <br /> payments!
       </h1>
-      <p className="z-10 w-fit text-xl">
+      <p className="z-10 w-fit text-xl dark:opacity-80">
         Automate salaries by streaming them - so <br /> employees can withdraw whenever they want.{' '}
       </p>
 
-      <div className="mt-[11px] mb-[64px] flex flex-col gap-3">
-        <h2 className="font-exo text-lg font-medium">
+      <div className="mt-[11px] mb-[64px] flex flex-col gap-5">
+        <h2 className="font-exo text-xl font-medium">
           <span className="font-bold">Trusted </span>by remarkable organizations
         </h2>
 
-        <div className="z-10 flex gap-2">
+        <div className="3xl:max-w-full z-10 flex flex-wrap gap-8 text-lp-white lg:max-w-xl">
           {users.map((user) => (
-            <>
-              {!user.logo ? (
-                <p>{user.name}</p>
-              ) : (
-                <Tooltip content={user.name} key={user.name}>
-                  <Image
-                    src={user.logo}
-                    alt={user.name}
-                    height={24}
-                    width={24}
-                    objectFit="contain"
-                    className={user.name !== 'tubby cats' ? 'rounded-full' : ''}
-                    priority
-                  />
-                </Tooltip>
-              )}
-            </>
+            <Tooltip content={user.name} key={user.name} className="hover:cursor-default">
+              <div className="flex items-center">{user.logo}</div>
+            </Tooltip>
           ))}
         </div>
       </div>
@@ -59,28 +53,32 @@ export default function Hero({ onboardDialog }: { onboardDialog: DisclosureState
 
 interface IUser {
   name: string;
-  logo?: string | StaticImageData;
+  logo: ReactNode;
 }
 
 const users: Array<IUser> = [
   {
     name: 'Convex Finance',
-    logo: 'https://defillama.com/icons/convex-finance.jpg',
+    logo: <Convex />,
   },
   {
     name: 'Curve Finance',
-    logo: 'https://defillama.com/icons/curve.jpg',
+    logo: <Curve />,
   },
-  { name: 'DefiLlama', logo: defillama },
-  { name: 'Fantom Foundation', logo: 'https://defillama.com/icons/fantom.jpg' },
+  {
+    name: 'DefiLlama',
+    logo: <DefiLlama />,
+  },
+  { name: 'Fantom Foundation', logo: <Fantom /> },
   {
     name: 'Frax Finance',
-    logo: 'https://defillama.com/icons/frax-finance.jpg',
+    logo: <Frax />,
   },
-  { name: 'SpookySwap', logo: 'https://defillama.com/icons/spookyswap.jpg' },
+  { name: 'SpookySwap', logo: <Spookyswap /> },
+  { name: 'Vector Finance', logo: <Vector /> },
   {
     name: 'Yearn Finance',
-    logo: 'https://defillama.com/icons/yearn-finance.jpg',
+    logo: <Yearn />,
   },
-  { name: 'BiFi', logo: 'https://defillama.com/icons/bifi.jpg' },
+  { name: 'BiFi', logo: <BiFi /> },
 ];
