@@ -1,9 +1,12 @@
-import AnteWidget from '@antefinance/ante-widget-react';
-import '@antefinance/ante-widget/dist/widget.css';
-
 import { NeutralLogo } from 'components/Icons';
+import dynamic from 'next/dynamic';
 import Image from 'next/image';
 import footerGraphic from 'public/footerGraphic.svg';
+import * as React from 'react';
+
+const Widget = dynamic(() => import('./Widget.tsx'), {
+  ssr: false,
+});
 
 // TODO add translations
 const Footer = () => {
@@ -48,9 +51,7 @@ const Footer = () => {
         <Image src={footerGraphic} alt="" objectFit="contain" />
       </div>
 
-      <div className="fixed bottom-2 right-2">
-        <AnteWidget.Protocol name="LlamaPay" chain="0x1" />
-      </div>
+      <Widget />
     </footer>
   );
 };
