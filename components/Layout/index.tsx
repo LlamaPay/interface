@@ -20,7 +20,10 @@ interface ILayoutProps {
 
 export default function Layout({ children, className, ...props }: ILayoutProps) {
   const [{ data }] = useAccount();
+
   const onboardDialog = useDialogState();
+  const walletDialog = useDialogState();
+
   const router = useRouter();
 
   return (
@@ -34,11 +37,11 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
       </Head>
       <StaleSubgraphWarning />
 
-      <Header onboardDialog={onboardDialog} />
+      <Header onboardDialog={onboardDialog} walletDialog={walletDialog} />
 
       {router.pathname === '/' && !data ? (
         <>
-          <Hero onboardDialog={onboardDialog} />
+          <Hero walletDialog={walletDialog} />
           <HowItWorks onboardDialog={onboardDialog} />
         </>
       ) : (
