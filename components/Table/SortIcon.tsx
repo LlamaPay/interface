@@ -3,7 +3,11 @@ import classNames from 'classnames';
 export default function SortIcon({ dir }: { dir: string | boolean }) {
   return (
     <span className="flex flex-col space-y-[-4px] text-[11px]">
-      <span role="img" aria-label="caret-up" className={classNames(dir === 'asc' ? 'text-[#23BD8F]' : 'text-gray-400')}>
+      <span
+        role="img"
+        aria-label="caret-up"
+        className={classNames(dir === 'asc' ? 'text-lp-primary' : 'text-gray-400')}
+      >
         <svg
           viewBox="0 0 1024 1024"
           focusable="false"
@@ -19,7 +23,7 @@ export default function SortIcon({ dir }: { dir: string | boolean }) {
       <span
         role="img"
         aria-label="caret-down"
-        className={classNames(dir === 'desc' ? 'text-[#23BD8F]' : 'text-gray-400')}
+        className={classNames(dir === 'desc' ? 'text-lp-primary' : 'text-gray-400')}
       >
         <svg
           viewBox="0 0 1024 1024"

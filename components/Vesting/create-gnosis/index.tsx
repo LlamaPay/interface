@@ -278,7 +278,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
                   {...register(`vestingContracts.${index}.includeCliff` as const)}
                   className={`${
                     getValues(`vestingContracts.${index}.includeCliff`)
-                      ? 'bg-[#23BD8F]'
+                      ? 'bg-lp-primary'
                       : 'bg-gray-200 dark:bg-[#252525]'
                   } relative inline-flex h-6 w-11 items-center rounded-full`}
                   checked={getValues(`vestingContracts.${index}.includeCliff`)}
@@ -300,7 +300,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
                   {...register(`vestingContracts.${index}.includeCustomStart` as const)}
                   className={`${
                     getValues(`vestingContracts.${index}.includeCustomStart`)
-                      ? 'bg-[#23BD8F]'
+                      ? 'bg-lp-primary'
                       : 'bg-gray-200 dark:bg-[#252525]'
                   } relative inline-flex h-6 w-11 items-center rounded-full`}
                   checked={getValues(`vestingContracts.${index}.includeCustomStart`)}

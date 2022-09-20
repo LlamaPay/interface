@@ -62,7 +62,7 @@ export default function BotDepositWarning({
   return (
     <>
       <FormDialog dialog={dialog} title="Deposit Into Bot" className="h-min">
-        <span className="space-y-4 text-[#303030] dark:text-white">
+        <span className="space-y-4 text-lp-gray-6 dark:text-white">
           <span>{`Balance: ${(Number(balance) / 1e18).toFixed(5)} ${nativeCurrency}`}</span>
           <div>
             <span>{'Bot requires funds to pay for gas. Please add funds!'}</span>

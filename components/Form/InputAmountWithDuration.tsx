@@ -11,6 +11,7 @@ export const InputAmountWithDuration = ({
   className,
   handleChange,
   handleSelectChange,
+  disabled,
   ...props
 }: InputAmountWithDaysProps) => {
   const t0 = useTranslations('Common');
@@ -38,6 +39,7 @@ export const InputAmountWithDuration = ({
           inputMode="decimal"
           title="Enter numbers only."
           onChange={handleChange}
+          disabled={disabled}
           {...props}
         />
         <label htmlFor={selectInputName} className="sr-only">
@@ -47,10 +49,11 @@ export const InputAmountWithDuration = ({
           name={selectInputName}
           id={selectInputName}
           required={isRequired}
-          className="absolute right-1 bottom-1 top-2 my-auto flex w-full max-w-[24%] items-center truncate rounded border-0 bg-zinc-100 p-2 pr-4 text-sm shadow-sm dark:bg-stone-600"
+          className="absolute right-1 bottom-1 top-2 my-auto flex w-full max-w-[24%] items-center truncate rounded border-lp-gray-1 pr-4 text-sm shadow-sm dark:border-lp-gray-2 dark:bg-lp-gray-5"
           style={{ backgroundSize: '1.25rem', backgroundPosition: 'calc(100% - 4px) 55%' }}
           onChange={handleSelectChange}
           defaultValue="month"
+          disabled={disabled}
         >
           <option value="year">{t0('year')}</option>
           <option value="month">{t0('month')}</option>

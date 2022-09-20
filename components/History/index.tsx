@@ -16,7 +16,7 @@ export function HistorySection() {
       <div className="section-header">
         <span className="flex items-center gap-[0.625rem]">
           <HistoryIcon />
-          <h1 className="font-exo dark:text-white">{t('heading')}</h1>
+          <h1 className="font-exo">{t('heading')}</h1>
         </span>
       </div>
 
@@ -45,7 +45,7 @@ export function AltHistorySection({
       <div className="section-header">
         <span className="flex items-center gap-[0.625rem]">
           <HistoryIcon />
-          <h1 className="font-exo dark:text-white">{t('heading')}</h1>
+          <h1 className="font-exo">{t('heading')}</h1>
         </span>
       </div>
       {isLoading || isError || !data?.history || data.history?.length < 1 ? (

@@ -25,7 +25,7 @@ const ConnectWallet = () => {
 
   const hideConnectors = connecting || accountDataLoading;
 
-  const t = useTranslations('OnboardWalletConnect')
+  const t = useTranslations('OnboardWalletConnect');
 
   return (
     <div className="mt-12 flex flex-1 flex-col overflow-auto sm:mt-[104px]">
@@ -46,9 +46,7 @@ const ConnectWallet = () => {
           </>
         )}
       </main>
-      {!accountData && (
-        <p className="my-7 w-full px-5 text-center text-xs text-[#303030]">{t('footer')}</p>
-      )}
+      {!accountData && <p className="my-7 w-full px-5 text-center text-xs text-lp-gray-6">{t('footer')}</p>}
     </div>
   );
 };

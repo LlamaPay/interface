@@ -135,9 +135,9 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
   const t = useTranslations('Common');
 
   return (
-    <Layout className="app-section mx-auto mt-12 flex w-full flex-col items-center pb-8 dark:bg-[#161818]">
+    <Layout className="app-section mx-auto mt-12 flex w-full flex-col items-center pb-8 dark:bg-lp-gray-8">
       <section className="z-2 mx-auto flex w-full max-w-lg flex-col gap-5">
-        <h1 className="font-exo flex items-center gap-[0.625rem] text-2xl font-semibold text-[#3D3D3D]">
+        <h1 className="font-exo flex items-center gap-[0.625rem] text-2xl font-semibold text-lp-gray-4">
           <StreamIcon />
           <span className="dark:text-white">Withdraw on Behalf of Another Wallet</span>
         </h1>
@@ -172,7 +172,7 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
       {!showFallback && addressToFetch && !isLoading && (
         <section className="mt-20">
           <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-            <h2 className="flex flex-wrap items-center gap-[0.625rem] text-[#3D3D3D]">
+            <h2 className="flex flex-wrap items-center gap-[0.625rem] text-lp-gray-4">
               <BalanceIcon />
               <span>
                 <span className="dark:text-white">Streams of</span>{' '}
@@ -194,7 +194,7 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
             <button
               onClick={sendAllOnClick}
               disabled={!accountData || unsupported || isError || !formattedData.streams}
-              className="secondary-button flex w-fit items-center justify-between gap-4 whitespace-nowrap py-2 px-8 text-sm font-bold disabled:cursor-not-allowed dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"
+              className="secondary-button flex w-fit items-center justify-between gap-4 whitespace-nowrap py-2 px-8 text-sm font-bold disabled:cursor-not-allowed dark:border-lp-secondary dark:bg-lp-primary dark:text-white"
             >
               <span>{t0('sendAll')}</span>
               <CashIcon className="h-4 w-4" />
@@ -210,22 +210,22 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
               <table>
                 <thead>
                   <tr>
-                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D] dark:text-white">
+                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-lp-gray-4 dark:text-white">
                       {t2('name')}
                     </th>
-                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D] dark:text-white">
+                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-lp-gray-4 dark:text-white">
                       {t2('address')}
                     </th>
-                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D] dark:text-white">
+                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-lp-gray-4 dark:text-white">
                       {t2('token')}
                     </th>
-                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D] dark:text-white">
+                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-lp-gray-4 dark:text-white">
                       {t2('amount')}
                     </th>
-                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D] dark:text-white">
+                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-lp-gray-4 dark:text-white">
                       {t1('withdrawable')}
                     </th>
-                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D] dark:text-white"></th>
+                    <th className="whitespace-nowrap border py-[6px] px-4 text-left text-sm font-semibold text-lp-gray-4 dark:text-white"></th>
                   </tr>
                 </thead>
                 <tbody>

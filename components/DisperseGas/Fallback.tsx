@@ -22,7 +22,7 @@ export default function DisperseFallback({
           </label>
           <button
             type="button"
-            className="rounded border border-[#1BDBAD] bg-white py-2 px-4 text-sm font-normal text-[#23BD8F] dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"
+            className="rounded border border-lp-secondary bg-white py-2 px-4 text-sm font-normal text-lp-primary dark:border-lp-secondary dark:bg-lp-primary dark:text-white"
             disabled
           >
             {t('splitEqually')}

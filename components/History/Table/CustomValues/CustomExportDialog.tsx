@@ -129,7 +129,7 @@ export function CustomExportDialog({ data, dialog }: { data: IHistory[]; dialog:
             checked={hasAssignNames}
             onChange={setHasAssignNames}
             className={`${
-              hasAssignNames ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
+              hasAssignNames ? 'bg-lp-primary' : 'bg-gray-200 dark:bg-[#252525]'
             } relative inline-flex h-6 w-11 items-center rounded-full`}
           >
             <span
@@ -143,8 +143,8 @@ export function CustomExportDialog({ data, dialog }: { data: IHistory[]; dialog:
           <table className="w-full">
             <thead>
               <tr>
-                <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">Address</th>
-                <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">Name</th>
+                <th className="table-description text-sm font-semibold !text-lp-gray-4 dark:!text-white">Address</th>
+                <th className="table-description text-sm font-semibold !text-lp-gray-4 dark:!text-white">Name</th>
               </tr>
             </thead>
             <tbody>

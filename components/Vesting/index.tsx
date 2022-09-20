@@ -33,7 +33,7 @@ export default function VestingTable() {
   return (
     <section className="w-full">
       <div className="section-header flex w-full flex-wrap items-center justify-between">
-        <h1 className="font-exo dark:text-white">Vesting</h1>
+        <h1 className="font-exo">Vesting</h1>
         <Link href="/vesting/create" aria-disabled={!vestingFactory}>
           <a
             className={classNames(
@@ -102,7 +102,7 @@ export function AltVestingSection({ isLoading, isError, data }: IAltVestingSecti
   return (
     <section className="w-full">
       <div className="section-header">
-        <h1 className="font-exo dark:text-white">Streams</h1>
+        <h1 className="font-exo">Streams</h1>
       </div>
       {isLoading || isError || !data || data.length < 1 ? (
         <FallbackContainer>

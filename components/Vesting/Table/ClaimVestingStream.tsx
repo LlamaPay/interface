@@ -105,7 +105,7 @@ export default function ClaimVesting({
               checked={hasCustomBeneficiary}
               onChange={setHasCustomBeneficiary}
               className={`${
-                hasCustomBeneficiary ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
+                hasCustomBeneficiary ? 'bg-lp-primary' : 'bg-gray-200 dark:bg-[#252525]'
               } relative inline-flex h-6 w-11 items-center rounded-full`}
             >
               <span

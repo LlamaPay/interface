@@ -94,9 +94,9 @@ export const Modify = ({ data }: ModifyProps) => {
       )}
 
       <FormDialog dialog={dialog} title={t1('modify')} className="h-min">
-        <span className="space-y-4 text-[#303030]">
+        <span className="space-y-4 text-lp-gray-6">
           <section>
-            <h2 className="font-medium text-[#3D3D3D] dark:text-white">{t2('currentStream')}</h2>
+            <h2 className="font-medium text-lp-gray-4 dark:text-white">{t2('currentStream')}</h2>
             <div className="my-1 rounded border p-2 dark:border-stone-700">
               <div className="flex items-center space-x-2">
                 <span className="dark:text-white">{t0('you')}</span>
@@ -116,22 +116,15 @@ export const Modify = ({ data }: ModifyProps) => {
             </div>
           </section>
           <section>
-            <h2 className="my-1 font-medium text-[#3D3D3D] dark:text-white">{t2('updateStream')}</h2>
+            <h2 className="my-1 font-medium text-lp-gray-4 dark:text-white">{t2('updateStream')}</h2>
             <form
               className="flex flex-col gap-4 rounded border px-2 pt-[2px] dark:border-stone-700 dark:text-white"
               onSubmit={updateStream}
             >
-              <InputText
-                name="updatedAddress"
-                className="dark:bg-[#121212] dark:text-white"
-                label={t0('address')}
-                isRequired
-                placeholder={t2('recipientAddress')}
-              />
+              <InputText name="updatedAddress" label={t0('address')} isRequired placeholder={t2('recipientAddress')} />
 
               <InputAmountWithDuration
                 name="updatedAmount"
-                className="dark:bg-[#121212] dark:text-white"
                 label={t0('amount')}
                 selectInputName="modifiedStreamDuration"
                 isRequired

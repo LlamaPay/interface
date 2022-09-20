@@ -83,12 +83,7 @@ const WithdrawForm = ({ data, formDialog }: IFormProps) => {
       <FormDialog title={data.title} dialog={formDialog} className="h-fit">
         <form className="mt-4 flex flex-col space-y-4" onSubmit={handleSubmit}>
           <div>
-            <InputAmount
-              name="amount"
-              label={`${t0('amount')} ${data.symbol}`}
-              isRequired
-              className="dark:border-[#252525] dark:bg-[#202020] dark:text-white"
-            />
+            <InputAmount name="amount" label={`${t0('amount')} ${data.symbol}`} isRequired />
             <AvailableAmount
               title={t1('availableForWithdrawl')}
               selectedToken={data.selectedToken}
@@ -99,11 +94,11 @@ const WithdrawForm = ({ data, formDialog }: IFormProps) => {
             {isLoading && !withdrawAll.current ? <BeatLoader size={6} color="white" /> : t0('withdraw')}
           </SubmitButton>
         </form>
-        <p className="my-3 text-center font-light text-[#303030]">{t0('or')}</p>
+        <p className="my-3 text-center font-light text-lp-gray-1">{t0('or')}</p>
         <SubmitButton
           disabled={isLoading}
           onClick={withdrawAllTokens}
-          className="bg-white text-[#23BD8F] dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"
+          className="bg-lp-white text-lp-primary dark:border-transparent dark:bg-lp-gray-5 dark:text-lp-white"
         >
           {isLoading && withdrawAll.current ? <BeatLoader size={6} color="gray" /> : t1('withdrawAll')}
         </SubmitButton>

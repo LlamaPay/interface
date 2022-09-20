@@ -35,7 +35,7 @@ const Streams: NextPage<StreamsProps> = ({ address, resolvedAddress, network, ch
   const { data, isLoading, error } = useGetVestingInfoByQueryParams({ address: resolvedAddress, provider, chainId });
 
   return (
-    <Layout className="mt-12 flex w-full flex-col gap-[30px] dark:bg-[#161818]">
+    <Layout className="mt-12 flex w-full flex-col gap-[30px] dark:bg-lp-gray-8">
       <section className="app-section">
         <div>
           <Link href="/">
@@ -77,7 +77,7 @@ const Streams: NextPage<StreamsProps> = ({ address, resolvedAddress, network, ch
       </section>
 
       {network ? (
-        <section className="app-section flex h-full flex-1 flex-col gap-[50px] bg-[#D9F2F4]/10 py-[22px] dark:bg-[#161818]">
+        <section className="app-section flex h-full flex-1 flex-col gap-[50px] bg-[#D9F2F4]/10 py-[22px] dark:bg-lp-gray-8">
           <AltVestingSection isLoading={isLoading} isError={error ? true : false} data={data} />
         </section>
       ) : (

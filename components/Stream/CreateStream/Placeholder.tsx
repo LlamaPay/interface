@@ -47,7 +47,7 @@ const Placeholder = () => {
       <div className="mt-2 flex flex-col gap-3 sm:flex-row">
         <button
           type="button"
-          className="form-submit-button flex-1 rounded-[10px] bg-white text-[#23BD8F]"
+          className="form-submit-button flex-1 rounded-[10px] bg-white text-lp-primary"
           disabled={true}
         >
           {t('addStream')}

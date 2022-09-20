@@ -72,7 +72,7 @@ export default function HeaderMenu({
           label={
             <div className="flex flex-col gap-1 p-2">
               <span className="text-xs text-neutral-500">{t('connectedAs')}</span>
-              <p className="font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40">
+              <p className="font-normal text-lp-gray-2 outline-none active-item:text-black aria-disabled:opacity-40">
                 {address}
               </p>
             </div>
@@ -87,7 +87,7 @@ export default function HeaderMenu({
       {networkData && chain && switchNetwork && isSm && (
         <Menu
           label={chain?.name ?? t('unsupported')}
-          className="flex items-center justify-between p-2 font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 sm:hidden"
+          className="flex items-center justify-between p-2 font-normal text-lp-gray-2 outline-none active-item:text-black aria-disabled:opacity-40 sm:hidden"
         >
           {mainnets.map((value) => {
             const { network } = chainDetails(value?.id?.toString());

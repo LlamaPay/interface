@@ -44,7 +44,7 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, resolvedAd
   const t = useTranslations('Common');
 
   return (
-    <Layout className="mt-12 flex w-full flex-col gap-[30px] dark:bg-[#161818]">
+    <Layout className="mt-12 flex w-full flex-col gap-[30px] dark:bg-lp-gray-8">
       <section className="app-section">
         <div>
           <Link href="/">
@@ -84,10 +84,10 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, resolvedAd
           </div>
         </div>
       </section>
-      <section className="app-section dark:bg-[#161818]">
+      <section className="app-section dark:bg-lp-gray-8">
         <Balance address={address} />
       </section>
-      <section className="app-section flex h-full flex-1 flex-col gap-[50px] bg-[#D9F2F4]/10 py-[22px] dark:bg-[#161818]">
+      <section className="app-section flex h-full flex-1 flex-col gap-[50px] bg-[#D9F2F4]/10 py-[22px] dark:bg-lp-gray-8">
         <AltStreamSection isLoading={isLoading} isError={isError} data={streamsAndHistory} />
         <AltHistorySection isLoading={isLoading} isError={isError} data={streamsAndHistory} />
       </section>
