@@ -10,28 +10,28 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
   const select = useSelectState();
 
   return (
-    <div className="mb-[-5rem] flex flex-col items-center justify-between gap-16 bg-lp-green-1 py-[4.5rem] px-[1.875rem] text-base text-lp-gray-5 dark:bg-lp-gray-5 dark:text-lp-white lg:px-[3.75rem] xl:px-[145px]">
+    <div className="mb-[-5rem] flex flex-col items-center justify-between gap-16 bg-lp-green-1 py-[4.5rem] px-[1.875rem] text-lp-gray-5 dark:bg-lp-gray-5 dark:text-lp-white lg:px-[3.75rem] xl:px-[145px]">
       <div className="space-y-4">
         <h2 className="font-exo mx-auto flex flex-col text-center text-[2.5rem] leading-[3rem]">
           <span className="font-bold">Automate transactions</span>
           <span>and stream them by the second.</span>
         </h2>
-        <p className="max-w-[56rem] text-center text-lg">
+        <p className="max-w-[56rem] text-center text-xl">
           LlamaPay is a multi-chain protocol that allows you to automate transactions and stream them by the second.
           Recipients can withdraw these funds at any time, eliminating the need for manual reoccuring payment
           transactions.
         </p>
       </div>
 
-      <div className="flex w-full flex-col gap-4 lg:flex-row">
+      <div className="flex flex-col gap-4 lg:w-full lg:flex-row">
         {features.map((feature) => (
           <article
             key={feature.name}
-            className="flex max-w-xl flex-1 flex-col flex-nowrap gap-4 rounded-[0.375rem] bg-lp-green-2 p-6 dark:bg-lp-green-4 dark:bg-opacity-30 sm:flex-row sm:items-center sm:gap-10 sm:text-lg lg:w-full lg:max-w-full"
+            className="flex max-w-xl flex-1 flex-col flex-nowrap gap-4 rounded-[0.375rem] bg-lp-green-2 p-6 text-xl dark:bg-lp-green-4 dark:bg-opacity-30 sm:flex-row sm:items-center sm:gap-10 lg:w-full lg:max-w-full"
           >
             {feature.logo}
             <div className="flex flex-col gap-2 sm:gap-[0.625rem]">
-              <h2 className="font-exo text-xl font-bold sm:text-[1.625rem]">{feature.name}</h2>
+              <h2 className="font-exo text-[1.875rem] font-bold">{feature.name}</h2>
               <p>{feature.description}</p>
             </div>
           </article>
@@ -332,25 +332,26 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
         </button>
       </div>
 
-      <div className="grid w-full grid-cols-1 gap-[0.625rem] lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-[0.625rem] lg:w-full lg:grid-cols-2">
         {pros.map((pro) => (
           <article
             key={pro.name}
-            className="col-span-1 flex max-w-xl flex-col gap-[0.625rem] rounded-[0.375rem] bg-lp-white p-8 text-center dark:bg-lp-green-4 sm:text-lg lg:max-w-full"
+            className="col-span-1 flex max-w-xl flex-col gap-[0.625rem] rounded-[0.375rem] bg-lp-white p-8 text-center text-xl dark:bg-lp-green-4 lg:max-w-full"
           >
-            <h2 className="font-exo text-xl font-bold dark:text-lp-primary sm:text-[1.625rem]">{pro.name}</h2>
+            <h2 className="font-exo text-[1.875rem] font-bold dark:text-lp-primary">{pro.name}</h2>
             <p>{pro.description}</p>
           </article>
         ))}
       </div>
 
-      <div className="mt-5 flex w-[calc(100vw-16px)] select-none flex-col gap-16 lg:mb-[-4.5rem]">
-        <h2 className="font-exo text-center text-2xl">
+      <div className="mt-5 flex w-[calc(100vw-16px)] select-none flex-col gap-20 lg:mb-[-4.5rem]">
+        <h2 className="font-exo text-center text-[1.75rem]">
           Used by <span className="font-bold">employees and employers</span>
         </h2>
+
         <div className="flex w-full flex-col items-center bg-lp-green-3 dark:bg-lp-gray-3">
           <div className="relative z-20 mt-[-2.25rem] mb-[-3.75rem] flex flex-col gap-[0.625rem] rounded-[0.375rem] bg-lp-white px-6 py-10 shadow-[0px_4px_12px_rgba(0,0,0,0.15)] dark:bg-lp-green-4">
-            <h1 className="font-exo flex items-center gap-[0.375rem] text-3xl font-semibold text-lp-gray-4 dark:text-white">
+            <h1 className="font-exo flex items-center gap-[0.375rem] text-4xl font-semibold text-lp-gray-4 dark:text-white">
               <StreamIcon />
               <span>Create a New Stream</span>
             </h1>
