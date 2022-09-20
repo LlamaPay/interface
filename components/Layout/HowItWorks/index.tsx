@@ -10,7 +10,7 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
   const select = useSelectState();
 
   return (
-    <div className="mb-[-5rem] flex flex-col items-center justify-between gap-16 bg-lp-green-1 py-[72px] px-[30px] text-base text-lp-gray-5 dark:bg-lp-gray-5 dark:text-lp-white lg:px-[60px] xl:px-[145px]">
+    <div className="mb-[-5rem] flex flex-col items-center justify-between gap-16 bg-lp-green-1 py-[4.5rem] px-[1.875rem] text-base text-lp-gray-5 dark:bg-lp-gray-5 dark:text-lp-white lg:px-[3.75rem] xl:px-[145px]">
       <div className="space-y-4">
         <h2 className="font-exo mx-auto flex flex-col text-center text-4xl">
           <span className="font-bold">Automate transactions</span>
@@ -27,10 +27,10 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
         {features.map((feature) => (
           <article
             key={feature.name}
-            className="flex max-w-xl flex-1 flex-col flex-nowrap gap-4 rounded-[6px] bg-lp-green-2 p-6 dark:bg-lp-green-4 dark:bg-opacity-30 sm:flex-row sm:items-center sm:gap-10 sm:text-lg lg:w-full lg:max-w-full"
+            className="flex max-w-xl flex-1 flex-col flex-nowrap gap-4 rounded-[0.375rem] bg-lp-green-2 p-6 dark:bg-lp-green-4 dark:bg-opacity-30 sm:flex-row sm:items-center sm:gap-10 sm:text-lg lg:w-full lg:max-w-full"
           >
             {feature.logo}
-            <div className="flex flex-col gap-2 sm:gap-[10px]">
+            <div className="flex flex-col gap-2 sm:gap-[0.625rem]">
               <h2 className="font-exo text-xl font-bold sm:text-[1.625rem]">{feature.name}</h2>
               <p>{feature.description}</p>
             </div>
@@ -44,37 +44,37 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
         </h2>
 
         <span className="nav-button mx-auto my-4 flex w-fit items-center justify-between gap-3 py-1 px-1">
-          <span className="flex-1 whitespace-nowrap rounded-[10px] bg-lp-primary py-1 px-3 text-lp-white dark:text-lp-black">
+          <span className="flex-1 whitespace-nowrap rounded-[0.625rem] bg-lp-primary py-1 px-3 text-lp-white dark:text-lp-black">
             For Payers
           </span>
           <span className="flex-1 whitespace-nowrap py-1 px-3">For Payees</span>
         </span>
 
         <div className="my-4 mx-auto grid grid-cols-[repeat(1,minmax(0,26.25rem))] gap-4 xl:w-full xl:grid-cols-3">
-          <div className="rounded-[6px] bg-lp-white py-4 px-11 text-center dark:bg-lp-green-4 sm:text-lg">
+          <div className="rounded-[0.375rem] bg-lp-white py-4 px-11 text-center dark:bg-lp-green-4 sm:text-lg">
             <h2 className="font-exo font-medium sm:text-xl">Input payee information</h2>
           </div>
-          <div className="rounded-[6px] bg-lp-white py-4 px-11 text-center dark:bg-lp-green-4 sm:text-lg">
+          <div className="rounded-[0.375rem] bg-lp-white py-4 px-11 text-center dark:bg-lp-green-4 sm:text-lg">
             <h2 className="font-exo font-medium sm:text-xl">Enter amount & frequency</h2>
           </div>
-          <div className="rounded-[6px] bg-lp-white py-4 px-11 text-center dark:bg-lp-green-4 sm:text-lg">
+          <div className="rounded-[0.375rem] bg-lp-white py-4 px-11 text-center dark:bg-lp-green-4 sm:text-lg">
             <h2 className="font-exo font-medium sm:text-xl">Start Streaming!</h2>
           </div>
         </div>
 
         <button
-          className="nav-button mx-auto mt-[30px] mb-[56px] w-full max-w-[26.25rem] dark:bg-lp-secondary dark:text-lp-black"
+          className="nav-button mx-auto mt-[1.875rem] mb-[3.5rem] w-full max-w-[26.25rem] dark:bg-lp-secondary dark:text-lp-black"
           onClick={onboardDialog.toggle}
         >
           Start here
         </button>
       </div>
 
-      <div className="grid w-full grid-cols-1 gap-[10px] lg:grid-cols-2">
+      <div className="grid w-full grid-cols-1 gap-[0.625rem] lg:grid-cols-2">
         {pros.map((pro) => (
           <article
             key={pro.name}
-            className="col-span-1 flex max-w-xl flex-col gap-[10px] rounded-[6px] bg-lp-white p-8 text-center dark:bg-lp-green-4 sm:text-lg lg:max-w-full"
+            className="col-span-1 flex max-w-xl flex-col gap-[0.625rem] rounded-[0.375rem] bg-lp-white p-8 text-center dark:bg-lp-green-4 sm:text-lg lg:max-w-full"
           >
             <h2 className="font-exo text-xl font-bold dark:text-lp-primary sm:text-[1.625rem]">{pro.name}</h2>
             <p>{pro.description}</p>
@@ -82,13 +82,13 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
         ))}
       </div>
 
-      <div className="mt-5 flex w-[calc(100vw-16px)] select-none flex-col gap-16 lg:mb-[-72px]">
+      <div className="mt-5 flex w-[calc(100vw-16px)] select-none flex-col gap-16 lg:mb-[-4.5rem]">
         <h2 className="font-exo text-center text-2xl">
           Used by <span className="font-bold">employees and employers</span>
         </h2>
         <div className="flex w-full flex-col items-center bg-lp-green-3 dark:bg-lp-gray-3">
-          <div className="relative z-20 mt-[-36px] mb-[-60px] flex flex-col gap-[10px] rounded-[6px] bg-lp-white px-6 py-10 shadow-[0px_4px_12px_rgba(0,0,0,0.15)] dark:bg-lp-green-4">
-            <h1 className="font-exo flex items-center gap-[6px] text-3xl font-semibold text-lp-gray-4 dark:text-white">
+          <div className="relative z-20 mt-[-2.25rem] mb-[-3.75rem] flex flex-col gap-[0.625rem] rounded-[0.375rem] bg-lp-white px-6 py-10 shadow-[0px_4px_12px_rgba(0,0,0,0.15)] dark:bg-lp-green-4">
+            <h1 className="font-exo flex items-center gap-[0.375rem] text-3xl font-semibold text-lp-gray-4 dark:text-white">
               <StreamIcon />
               <span>Create a New Stream</span>
             </h1>
@@ -111,10 +111,10 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
               />
             </label>
 
-            <SelectLabel state={select} className="input-label mt-[4px] mb-[-8px] dark:text-white">
+            <SelectLabel state={select} className="input-label mt-1 mb-[-0.5rem] dark:text-white">
               Select token
             </SelectLabel>
-            <Select state={select} className="input-field flex w-full items-center gap-1 !py-[0px]" disabled>
+            <Select state={select} className="input-field flex w-full items-center gap-1 !py-0" disabled>
               <Image
                 src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
                 alt=""
