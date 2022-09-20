@@ -1,12 +1,11 @@
-// import AnteWidget from '@antefinance/ante-widget-react';
-// import '@antefinance/ante-widget/dist/widget.css';
+import AnteWidget from '@antefinance/ante-widget-react';
+import '@antefinance/ante-widget/dist/widget.css';
 
 import { NeutralLogo } from 'components/Icons';
 import Image from 'next/image';
 import footerGraphic from 'public/footerGraphic.svg';
 
 // TODO add translations
-// TODO add ante widget
 const Footer = () => {
   return (
     <footer className="relative mt-20 flex flex-col flex-wrap gap-12 bg-lp-gray-5 p-[1.875rem] text-lp-white lg:min-h-[26.25rem] lg:p-[3.75rem] xl:min-h-[30rem] xl:flex-row xl:justify-between xl:px-[145px] xl:py-[125px]">
@@ -48,9 +47,11 @@ const Footer = () => {
       <div className="footer-graphic">
         <Image src={footerGraphic} alt="" objectFit="contain" />
       </div>
+
+      <div className="fixed bottom-2 right-2">
+        <AnteWidget.Protocol name="LlamaPay" chain="0x1" />
+      </div>
     </footer>
   );
 };
 export default Footer;
-
-//  <AnteWidget.Protocol name="LlamaPay" chain="0x1" />
