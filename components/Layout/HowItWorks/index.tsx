@@ -2,8 +2,8 @@ import Image from 'next/image';
 import { DisclosureState, Select, SelectArrow, SelectLabel, useSelectState } from 'ariakit';
 import { InputAmountWithDuration } from 'components/Form';
 import { StreamIcon } from 'components/Icons';
-import GasEfficient from './GasEfficient';
-import { MultiChain } from './MultiChain';
+import gasEfficient from 'public/gasEfficient.svg';
+import multiChain from 'public/multiChain.svg';
 
 // TODO add translations
 export default function HowItWorks({ onboardDialog }: { onboardDialog: DisclosureState }) {
@@ -29,7 +29,9 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
             key={feature.name}
             className="flex max-w-xl flex-1 flex-col flex-nowrap gap-4 rounded-[0.375rem] bg-lp-green-2 p-6 text-xl dark:bg-lp-green-4 dark:bg-opacity-30 sm:flex-row sm:items-center sm:gap-10 lg:w-full lg:max-w-full"
           >
-            {feature.logo}
+            <div className="h-[52px] flex-shrink-0 self-start sm:h-[88px] sm:self-center">
+              <Image src={feature.logo} alt={feature.logo} objectFit="contain" />
+            </div>
             <div className="flex flex-col gap-2 sm:gap-[0.625rem]">
               <h2 className="font-exo text-[1.875rem] font-bold">{feature.name}</h2>
               <p>{feature.description}</p>
@@ -412,12 +414,12 @@ const features = [
   {
     name: 'Gas efficient',
     description: 'Deploying a LlamaPay stream is 3.2-3.7x cheaper than other services.',
-    logo: <GasEfficient />,
+    logo: gasEfficient,
   },
   {
     name: 'Multi-chain',
     description: 'Available on all EVM chains with all contracts sharing the same address across chains',
-    logo: <MultiChain />,
+    logo: multiChain,
   },
 ];
 
