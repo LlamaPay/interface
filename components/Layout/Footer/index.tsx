@@ -4,7 +4,7 @@ import Image from 'next/image';
 import footerGraphic from 'public/footerGraphic.svg';
 import * as React from 'react';
 
-const Widget = dynamic(() => import('./Widget.tsx'), {
+const Widget = dynamic(() => import('./AnteWIdget'), {
   ssr: false,
 });
 
