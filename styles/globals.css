@@ -174,7 +174,7 @@
   }
 
   .hero-graphic img {
-    @apply ml-auto object-right;
+    @apply ml-auto object-right-bottom;
   }
 
   .footer-graphic {
@@ -193,66 +193,6 @@
 
     .balance-wrap > *:last-child {
       margin-left: 2rem;
-    }
-  }
-
-  @media (min-width: 768px) {
-    .hero-graphic {
-      @apply top-auto right-[-140px];
-    }
-  }
-
-  @media (min-width: 870px) {
-    .hero-graphic {
-      @apply top-[40px];
-    }
-  }
-
-  @media (min-width: 1024px) {
-    .hero-graphic {
-      @apply top-auto bottom-0 right-[-140px];
-    }
-  }
-
-  @media (min-width: 1185px) {
-    .hero-graphic {
-      @apply top-[60px] right-[-212px];
-    }
-  }
-
-  @media (min-width: 1200px) {
-    .hero-graphic {
-      @apply top-[60px] right-[-200px];
-    }
-  }
-
-  @media (min-width: 1280px) {
-    .hero-graphic {
-      @apply top-[100px] right-[-232px];
-    }
-  }
-
-  @media (min-width: 1396px) {
-    .hero-graphic {
-      @apply right-[-128px];
-    }
-  }
-
-  @media (min-width: 1420px) {
-    .hero-graphic {
-      @apply right-[-100px];
-    }
-  }
-
-  @media (min-width: 1536px) {
-    .hero-graphic {
-      @apply right-[-12px];
-    }
-  }
-
-  @media (min-width: 1650px) {
-    .hero-graphic {
-      @apply right-0 ml-auto;
     }
   }
 }

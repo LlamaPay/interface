@@ -43,6 +43,11 @@ const Footer = () => {
                 Documentation
               </a>
             </li>
+            <li>
+              <a href="https://github.com/LlamaPay" target="_blank" rel="noreferrer noopener">
+                Github
+              </a>
+            </li>
           </ul>
         </div>
       </div>

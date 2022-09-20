@@ -1,7 +1,9 @@
-import * as React from 'react';
+import Image, { StaticImageData } from 'next/image';
 import { DisclosureState } from 'ariakit';
+import Tooltip from 'components/Tooltip';
 import heroGraphic from 'public/heroGraphic.svg';
-import Image from 'next/image';
+import defillama from 'public/userIcons/defillama.jpeg';
+import tubbycats from 'public/userIcons/tubbycats.png';
 
 // TODO add translations
 export default function Hero({ onboardDialog }: { onboardDialog: DisclosureState }) {
@@ -13,8 +15,37 @@ export default function Hero({ onboardDialog }: { onboardDialog: DisclosureState
       <p className="z-10 w-fit text-xl">
         Automate salaries by streaming them - so <br /> employees can withdraw whenever they want.{' '}
       </p>
+
+      <div className="mt-[11px] mb-[64px] flex flex-col gap-3">
+        <h2 className="font-exo text-lg font-medium">
+          <span className="font-bold">Trusted </span>by remarkable organizations
+        </h2>
+
+        <div className="z-10 flex gap-2">
+          {users.map((user) => (
+            <>
+              {!user.logo ? (
+                <p>{user.name}</p>
+              ) : (
+                <Tooltip content={user.name} key={user.name}>
+                  <Image
+                    src={user.logo}
+                    alt={user.name}
+                    height={24}
+                    width={24}
+                    objectFit="contain"
+                    className={user.name !== 'tubby cats' ? 'rounded-full' : ''}
+                    priority
+                  />
+                </Tooltip>
+              )}
+            </>
+          ))}
+        </div>
+      </div>
+
       <button
-        className="primary-button z-10 mt-8 w-full max-w-[26.25rem] border-none bg-lp-white text-lg font-semibold text-lp-primary dark:bg-lp-secondary dark:text-lp-black lg:mt-20"
+        className="primary-button z-10 w-full max-w-[26.25rem] border-none bg-lp-white text-lg font-semibold text-lp-primary dark:bg-lp-secondary dark:text-lp-black"
         onClick={onboardDialog.toggle}
       >
         Start here
@@ -27,11 +58,30 @@ export default function Hero({ onboardDialog }: { onboardDialog: DisclosureState
   );
 }
 
-{
-  /* <div className="mt-[11px] mb-[64px]">
-<h2 className="font-exo text-2xl font-medium">
-  <span className="font-bold">Trusted </span>by remarkable organizations
-</h2>
-<div></div>
-</div> */
+interface IUser {
+  name: string;
+  logo?: string | StaticImageData;
 }
+
+const users: Array<IUser> = [
+  {
+    name: 'Convex Finance',
+    logo: 'https://defillama.com/icons/convex-finance.jpg',
+  },
+  {
+    name: 'Curve Finance',
+    logo: 'https://defillama.com/icons/curve.jpg',
+  },
+  { name: 'DefiLlama', logo: defillama },
+  { name: 'Fantom Foundation', logo: 'https://defillama.com/icons/fantom.jpg' },
+  {
+    name: 'Frax Finance',
+    logo: 'https://defillama.com/icons/frax-finance.jpg',
+  },
+  { name: 'SpookySwap', logo: 'https://defillama.com/icons/spookyswap.jpg' },
+  {
+    name: 'Yearn Finance',
+    logo: 'https://defillama.com/icons/yearn-finance.jpg',
+  },
+  { name: 'BiFi', logo: 'https://defillama.com/icons/bifi.jpg' },
+];
