@@ -19,7 +19,7 @@ const useStreamsAndHistory = () => {
       network: network || '',
     },
     {
-      refetchInterval: 10000,
+      refetchInterval: 30000,
     }
   );
 

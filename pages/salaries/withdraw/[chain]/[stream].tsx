@@ -45,7 +45,7 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
       network: network || 'noNetwork',
     },
     {
-      refetchInterval: network ? 20000 : false,
+      refetchInterval: network ? 30000 : false,
     }
   );
 
