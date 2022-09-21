@@ -68,7 +68,7 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
       network: network || '',
     },
     {
-      refetchInterval: 10000,
+      refetchInterval: 30000,
     }
   );
 

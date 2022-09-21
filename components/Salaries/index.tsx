@@ -32,7 +32,7 @@ export default function Salaries({ subgraphEndpoint, address, resolvedAddress, n
       network: network,
     },
     {
-      refetchInterval: network ? 20000 : false,
+      refetchInterval: network ? 30000 : false,
     }
   );
 
