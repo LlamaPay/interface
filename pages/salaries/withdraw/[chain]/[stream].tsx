@@ -45,7 +45,7 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
       network: network || 'noNetwork',
     },
     {
-      refetchInterval: network ? 20000 : false,
+      refetchInterval: network ? 30000 : false,
     }
   );
 
@@ -93,7 +93,7 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
   };
 
   return (
-    <Layout className="mt-12 flex w-full flex-col gap-[30px] dark:bg-[#161818]">
+    <Layout className="mt-12 flex w-full flex-col gap-[30px] dark:bg-lp-gray-8">
       <section className="mx-auto w-full max-w-lg px-2">
         <h1 className="font-exo pb-1 text-3xl">Salary</h1>
         {!showFallback && (
@@ -235,7 +235,7 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
                     </span>
                     <button
                       type="button"
-                      className="form-submit-button mt-4 flex flex-1 items-center justify-center gap-[4px] rounded-[10px] bg-white font-normal text-[#23BD8F]"
+                      className="form-submit-button mt-4 flex flex-1 items-center justify-center gap-[4px] rounded-[10px] bg-lp-white font-normal text-lp-primary dark:bg-lp-gray-5 dark:text-lp-white"
                       disabled={typeof window === 'undefined' || !window.ethereum}
                       onClick={addTokenToWallet}
                     >

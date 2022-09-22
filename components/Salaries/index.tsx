@@ -32,7 +32,7 @@ export default function Salaries({ subgraphEndpoint, address, resolvedAddress, n
       network: network,
     },
     {
-      refetchInterval: network ? 20000 : false,
+      refetchInterval: network ? 30000 : false,
     }
   );
 
@@ -46,7 +46,7 @@ export default function Salaries({ subgraphEndpoint, address, resolvedAddress, n
 
   // TODO add translations
   return (
-    <Layout className="mt-12 flex w-full flex-col gap-[30px] dark:bg-[#161818]">
+    <Layout className="mt-12 flex w-full flex-col gap-[30px] dark:bg-lp-gray-8">
       <section className="app-section">
         <div>
           <Link href="/">
@@ -57,7 +57,7 @@ export default function Salaries({ subgraphEndpoint, address, resolvedAddress, n
           </Link>
 
           <div className="section-header ml-0 max-w-fit">
-            <h1 className="font-exo py-1 text-3xl dark:text-white">Salaries</h1>
+            <h1 className="font-exo py-1 text-3xl">Salaries</h1>
 
             <div className="mt-[5px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
               <div className="flex items-center rounded-full">
@@ -88,10 +88,10 @@ export default function Salaries({ subgraphEndpoint, address, resolvedAddress, n
       </section>
       {network ? (
         <>
-          <section className="app-section dark:bg-[#161818]">
+          <section className="app-section dark:bg-lp-gray-8">
             <Balance address={address} />
           </section>
-          <section className="app-section flex h-full flex-1 flex-col gap-[50px] bg-[#D9F2F4]/10 py-[22px] dark:bg-[#161818]">
+          <section className="app-section flex h-full flex-1 flex-col gap-[50px] bg-[#D9F2F4]/10 py-[22px] dark:bg-lp-gray-8">
             <AltStreamSection isLoading={isLoading} isError={isError} data={streamsAndHistory} />
             <AltHistorySection isLoading={isLoading} isError={isError} data={streamsAndHistory} />
           </section>

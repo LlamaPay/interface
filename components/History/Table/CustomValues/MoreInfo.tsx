@@ -30,9 +30,9 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
   return (
     <>
       <FormDialog dialog={dialog} title={t0('moreInfo')} className="h-min">
-        <span className="space-y-4 text-[#3D3D3D]">
+        <span className="space-y-4 text-lp-gray-4">
           <section>
-            <h1 className="font-medium text-[#303030] dark:text-white">{t0('token')}</h1>
+            <h1 className="font-medium text-lp-gray-6 dark:text-white">{t0('token')}</h1>
             <div className="my-1 rounded border p-2 dark:border-stone-700">
               <div className="flex space-x-1">
                 <p className="dark:text-white">{data.stream?.token.name}</p>
@@ -43,7 +43,7 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
 
           {data.eventType === 'StreamModified' && (
             <section>
-              <h1 className="font-medium text-[#303030] dark:text-white">{t0('oldStream')}</h1>
+              <h1 className="font-medium text-lp-gray-6 dark:text-white">{t0('oldStream')}</h1>
               <div className="my-1 rounded border p-2 dark:border-stone-700">
                 <div className="flex space-x-1">
                   <p className="dark:text-white">{t0('payer')}:</p>
@@ -79,7 +79,7 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
           )}
 
           <section>
-            <h1 className="font-medium text-[#303030] dark:text-white">
+            <h1 className="font-medium text-lp-gray-6 dark:text-white">
               {data.eventType === 'StreamModified' ? t0('newStream') : t0('stream')}
             </h1>
             <div className="my-1 rounded border p-2 dark:border-stone-700">
@@ -118,7 +118,7 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
           </section>
 
           <section>
-            <h1 className="font-medium text-[#303030] dark:text-white">{t0('eventTimestamp')}</h1>
+            <h1 className="font-medium text-lp-gray-6 dark:text-white">{t0('eventTimestamp')}</h1>
             <p className="dark:text-white">
               {intl.formatDateTime(new Date(Number(data.createdTimestamp) * 1e3), {
                 hour12: false,

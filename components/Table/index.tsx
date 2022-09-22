@@ -35,7 +35,7 @@ const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV, custom
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="whitespace-nowrap py-[6px] px-4 text-left text-sm font-semibold text-[#3D3D3D] dark:text-white"
+                    className="whitespace-nowrap py-[6px] px-4 text-left text-sm font-semibold text-lp-gray-4 dark:text-white"
                   >
                     {header.isPlaceholder ? null : (
                       <span
@@ -82,13 +82,13 @@ const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV, custom
           <div className="flex flex-1 items-center justify-between gap-2">
             <div className="flex gap-2">
               {downloadToCSV && (
-                <button className="bg-none text-xs text-[#303030] underline dark:text-white" onClick={downloadToCSV}>
+                <button className="bg-none text-xs text-lp-gray-6 underline dark:text-white" onClick={downloadToCSV}>
                   {t('exportCSV')}
                 </button>
               )}
               {customHistory && (
                 <button
-                  className="bg-none text-xs text-[#303030] underline dark:text-white"
+                  className="bg-none text-xs text-lp-gray-6 underline dark:text-white"
                   onClick={customHistory.toggle}
                 >
                   {'Custom Export'}

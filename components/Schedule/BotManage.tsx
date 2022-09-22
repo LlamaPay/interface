@@ -247,7 +247,7 @@ export default function BotFunds({
   return (
     <>
       <FormDialog dialog={dialog} title="Manage Bot" className="h-min min-w-fit	">
-        <span className="space-y-4 text-[#303030] dark:text-white">
+        <span className="space-y-4 text-lp-gray-6 dark:text-white">
           <div className="flex space-x-2">
             <span>{`Balance: ${(Number(balance) / 1e18).toFixed(5)} ${nativeCurrency}`}</span>
             <button className="row-action-links" onClick={handleRefund}>
@@ -375,20 +375,20 @@ export default function BotFunds({
                 <table className="border">
                   <thead>
                     <tr>
-                      <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">Type</th>
-                      <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+                      <th className="table-description text-sm font-semibold !text-lp-gray-4 dark:!text-white">Type</th>
+                      <th className="table-description text-sm font-semibold !text-lp-gray-4 dark:!text-white">
                         Address Related
                       </th>
-                      <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+                      <th className="table-description text-sm font-semibold !text-lp-gray-4 dark:!text-white">
                         Token
                       </th>
-                      <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+                      <th className="table-description text-sm font-semibold !text-lp-gray-4 dark:!text-white">
                         Amount/Month
                       </th>
-                      <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+                      <th className="table-description text-sm font-semibold !text-lp-gray-4 dark:!text-white">
                         Frequency
                       </th>
-                      <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white"></th>
+                      <th className="table-description text-sm font-semibold !text-lp-gray-4 dark:!text-white"></th>
                     </tr>
                   </thead>
                   <tbody>

@@ -77,7 +77,6 @@ const Form = ({
           <SelectToken
             handleTokenChange={handleTokenChange}
             tokens={tokenOptions}
-            className="border border-neutral-300 bg-transparent py-[3px] shadow-none dark:border-neutral-700 dark:bg-stone-800"
             label={t0('selectTokenFromBalances')}
           />
         </span>
@@ -103,7 +102,7 @@ const Form = ({
       </form>
 
       <button
-        className="form-submit-button mx-auto mt-7 flex w-full max-w-xs items-center justify-center gap-2 bg-white text-[#23BD8F] dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"
+        className="form-submit-button mx-auto mt-7 flex w-full max-w-xs items-center justify-center gap-2 bg-white text-lp-primary dark:border-lp-secondary dark:bg-lp-primary dark:text-white"
         onClick={() => setCreateStream(false)}
       >
         <ArrowLeftIcon className="h-4 w-4" />

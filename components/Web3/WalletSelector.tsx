@@ -76,7 +76,7 @@ export const WalletSelector = ({ dialog }: Props) => {
               </a>
             </p>
             <button
-              className="nav-button mt-5 dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"
+              className="nav-button mt-5"
               onClick={() => {
                 disconnect();
                 dialog.toggle();

@@ -16,7 +16,7 @@ export default function AvailableAmount({
   if (!selectedToken) return null;
 
   return (
-    <div className="mt-[5px] flex flex-wrap items-center justify-between gap-4 rounded bg-[#E7E7E7]/40 px-2 py-1 text-xs text-[#4E575F] dark:bg-[#252525] dark:text-white">
+    <div className="mt-[5px] flex flex-wrap items-center justify-between gap-4 rounded bg-[#E7E7E7]/40 px-2 py-1 text-xs text-[#4E575F] dark:bg-[#222222] dark:text-white">
       <span>{title}</span>
       <div className="flex items-center gap-2 truncate">
         <div className="flex h-[14px] w-[14px] flex-shrink-0 items-center rounded-full">

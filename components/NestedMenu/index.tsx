@@ -12,7 +12,7 @@ export type MenuItemProps = HTMLAttributes<HTMLDivElement> & {
 export const MenuItem = forwardRef<HTMLDivElement, MenuItemProps>(function A({ label, ...props }, ref) {
   return (
     <BaseMenuItem
-      className="flex scroll-m-2 items-center justify-between gap-4 p-2 font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white dark:hover:text-[#cccccc]"
+      className="flex scroll-m-2 items-center justify-between gap-4 p-2 font-normal text-lp-gray-2 outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white dark:hover:text-[#cccccc]"
       ref={ref}
       {...props}
     >
@@ -36,11 +36,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function B({ label, ch
   });
 
   const renderMenuButton = (menuButtonProps: MenuButtonProps) => (
-    <MenuButton
-      state={menu}
-      className="shadow-1 rounded-2xl border border-[#f7f8fa] bg-white py-2 px-4 text-[#3D3D3D] dark:border-[#202020] dark:bg-[#202020] dark:text-[#23BD8F]"
-      {...menuButtonProps}
-    >
+    <MenuButton state={menu} className="nav-button h-[42px] border-transparent" {...menuButtonProps}>
       {label}
     </MenuButton>
   );
@@ -59,7 +55,7 @@ export const Menu = forwardRef<HTMLDivElement, MenuProps>(function B({ label, ch
         // MenuItem components into a single component, so it works as a
         // submenu button.
         <BaseMenuItem
-          className="flex scroll-m-2 items-center justify-between gap-4 p-2 font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white"
+          className="flex scroll-m-2 items-center justify-between gap-4 p-2 font-normal text-lp-gray-2 outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white"
           ref={ref}
           {...props}
         >

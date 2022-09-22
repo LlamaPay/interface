@@ -67,12 +67,12 @@ const Balance = (props: { address?: string }) => {
   const t = useTranslations('Common');
 
   return (
-    <div className="mr-auto w-full">
+    <div className="mr-auto w-full pt-[30px]">
       <div className={showFallback ? 'w-full max-w-2xl' : 'w-full max-w-fit'}>
         <div className="section-header flex w-full flex-wrap items-center justify-between gap-[0.625rem]">
           <span className="flex items-center gap-[0.625rem]">
             <BalanceIcon />
-            <h1 className="font-exo dark:text-white">{t1('heading')}</h1>
+            <h1 className="font-exo">{t1('heading')}</h1>
           </span>
 
           {showActions && (
@@ -101,16 +101,16 @@ const Balance = (props: { address?: string }) => {
             <table className="border-separate" style={{ borderSpacing: '0 10px' }}>
               <thead>
                 <tr>
-                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D] dark:text-white">
+                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-lp-gray-4 dark:text-white">
                     {t0('token')}
                   </th>
-                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D] dark:text-white">
+                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-lp-gray-4 dark:text-white">
                     {t1('balance')}
                   </th>
-                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D] dark:text-white">
+                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-lp-gray-4 dark:text-white">
                     {t1('toDepleted')}
                   </th>
-                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-[#3D3D3D] dark:text-white">
+                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-lp-gray-4 dark:text-white">
                     {t1('monthlyCost')}
                   </th>
                   <th></th>
@@ -119,7 +119,7 @@ const Balance = (props: { address?: string }) => {
               <tbody>
                 {balances?.map((b) => (
                   <tr key={b.address}>
-                    <th className="w-full whitespace-nowrap rounded-l border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-left text-sm font-normal text-[#3D3D3D] dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white">
+                    <th className="w-full whitespace-nowrap rounded-l border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-left text-sm font-normal text-lp-gray-4 dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white">
                       <div className="flex items-center space-x-2">
                         <span className="h-[18px] w-[18px] rounded-full">
                           <Image src={b.logoURI} alt={t('logoAlt', { name: b.name })} width="18px" height="18px" />
@@ -142,20 +142,20 @@ const Balance = (props: { address?: string }) => {
                       </div>
                     </th>
                     <td
-                      className="whitespace-nowrap border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D] dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white"
+                      className="whitespace-nowrap border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-lp-gray-4 dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white"
                       style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
                     >
                       <BalanceAndSymbol data={b} />
                     </td>
                     <td
-                      className="whitespace-nowrap border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D] dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white"
+                      className="whitespace-nowrap border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-lp-gray-4 dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white"
                       style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
                     >
                       <UntilDepleted data={b} />
                     </td>
                     <td
                       className={classNames(
-                        'whitespace-nowrap border border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D] dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white',
+                        'whitespace-nowrap border border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-lp-gray-4 dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white',
                         showActions ? 'border-r-0' : 'rounded-r'
                       )}
                       style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
@@ -164,7 +164,7 @@ const Balance = (props: { address?: string }) => {
                     </td>
                     {showActions && (
                       <td
-                        className="rounded-r border border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-[#3D3D3D] dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white"
+                        className="rounded-r border border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-lp-gray-4 dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white"
                         style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
                       >
                         <span className="flex gap-3">

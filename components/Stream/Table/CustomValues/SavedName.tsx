@@ -84,7 +84,7 @@ export function SavedName({ data }: { data: IStream }) {
             </button>
             <input
               name="updatedName"
-              className="w-full rounded border border-neutral-300 px-3 py-[11px] slashed-zero dark:border-neutral-700 dark:bg-stone-800"
+              className="input-field"
               value={savedAddress}
               onChange={(e) => setSavedAddress(e.target.value)}
               autoComplete="off"

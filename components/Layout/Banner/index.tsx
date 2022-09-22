@@ -21,7 +21,7 @@ const Banner = () => {
         </script>
         <script>{`;(function(){document.documentElement.classList.add('has-banner')})()`}</script>
       </Head>
-      <div role="banner" id="banner" className="relative hidden w-full bg-[#1BDBAD] p-2 text-black">
+      <div role="banner" id="banner" className="relative hidden w-full bg-lp-secondary p-2 text-black">
         <p className="mr-6 text-center text-xs">
           Always make sure the URL is <strong>llamapay.io</strong> - Press (Ctrl+D or Cmd+D) to bookmark it to be safe.
         </p>

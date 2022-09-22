@@ -112,7 +112,7 @@ export default function SendToPayees({
           <button
             onClick={onSplitEqually}
             type="button"
-            className="rounded border border-[#1BDBAD] bg-white py-2 px-4 text-sm font-normal text-[#23BD8F] dark:border-[#1BDBAD] dark:bg-[#23BD8F] dark:text-white"
+            className="rounded border border-lp-secondary bg-white py-2 px-4 text-sm font-normal text-lp-primary dark:border-lp-secondary dark:bg-lp-primary dark:text-white"
           >
             {t('splitEqually')}
           </button>
@@ -140,14 +140,14 @@ export default function SendToPayees({
         <table className="border">
           <thead>
             <tr>
-              <th className="table-description text-sm font-semibold !text-[#3D3D3D]"></th>
-              <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+              <th className="table-description text-sm font-semibold !text-lp-gray-4"></th>
+              <th className="table-description text-sm font-semibold !text-lp-gray-4 dark:!text-white">
                 {t('nameOrAddress')}
               </th>
-              <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+              <th className="table-description text-sm font-semibold !text-lp-gray-4 dark:!text-white">
                 {t('payeeBalance')}
               </th>
-              <th className="table-description text-sm font-semibold !text-[#3D3D3D] dark:!text-white">
+              <th className="table-description text-sm font-semibold !text-lp-gray-4 dark:!text-white">
                 {t('amountToSend')}
               </th>
             </tr>

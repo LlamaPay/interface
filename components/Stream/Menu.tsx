@@ -38,7 +38,7 @@ export default function StreamMenu() {
     <>
       <MenuButton
         state={menu}
-        className="secondary-button shadow-1 cursor-pointer px-2 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 dark:bg-[#202020]"
+        className="secondary-button shadow-1 min-h-[36px] cursor-pointer px-2 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 dark:bg-[#202020]"
         disabled={!accountData || unsupported}
         style={{ pointerEvents: 'initial' }}
       >
@@ -47,10 +47,10 @@ export default function StreamMenu() {
       </MenuButton>
       <Menu
         state={menu}
-        className="shadow-2 z-10 min-w-[10rem] rounded-xl border border-[#EAEAEA] bg-white p-2 dark:border-[#252525] dark:bg-[#202020]"
+        className="shadow-2 z-10 min-w-[10rem] rounded-xl border border-[#EAEAEA] bg-white p-2 dark:border-[#252525] dark:bg-lp-gray-4"
       >
         <MenuItem
-          className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white dark:hover:text-[#cccccc]"
+          className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-lp-gray-2 outline-none active-item:text-black aria-disabled:opacity-40 dark:text-white dark:hover:text-[#cccccc]"
           onClick={disperseGasGialog.toggle}
         >
           <span className="dark:text-white dark:hover:text-[#cccccc]">{`${t('disperse')} ${
@@ -59,23 +59,23 @@ export default function StreamMenu() {
           <FuelIcon />
         </MenuItem>
         <MenuItem
-          className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white dark:hover:text-[#cccccc]"
+          className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-lp-gray-2 outline-none active-item:text-black aria-disabled:opacity-40 dark:text-white dark:hover:text-[#cccccc]"
           onClick={() => router.push('/withdraw')}
         >
           <span className="dark:text-white dark:hover:text-[#cccccc]">{t('withdrawAnotherWallet')}</span>
           <WalletIcon />
         </MenuItem>
-        <MenuItem className="flex scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:hover:text-[#cccccc]">
+        <MenuItem className="flex scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-lp-gray-2 outline-none active-item:text-black aria-disabled:opacity-40 dark:hover:text-[#cccccc]">
           <WithdrawAll />
         </MenuItem>
-        <MenuItem className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white dark:hover:text-[#cccccc]">
+        <MenuItem className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-lp-gray-2 outline-none active-item:text-black aria-disabled:opacity-40 dark:text-white dark:hover:text-[#cccccc]">
           <a href={shareableUrl} target="_blank" rel="noreferrer noopener">
             {'Show Public Page'}
           </a>
           <ShareIcon className="h-4 w-4" />
         </MenuItem>
         <MenuItem
-          className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-[#666666] outline-none active-item:text-black aria-disabled:opacity-40 dark:bg-[#202020] dark:text-white dark:hover:text-[#cccccc]"
+          className="flex cursor-pointer scroll-m-2 items-center justify-between gap-4 p-2 text-sm font-normal text-lp-gray-2 outline-none active-item:text-black aria-disabled:opacity-40 dark:text-white dark:hover:text-[#cccccc]"
           onClick={clearLocalStorage}
         >
           <span className="dark:text-white dark:hover:text-[#cccccc]">{'Clear Names'}</span>

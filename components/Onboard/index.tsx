@@ -40,7 +40,7 @@ export default function OnboardDialog({ dialog, className }: IOnboardProps) {
       return (
         <>
           <Coins />
-          <h1 className="font-exo my-6 font-bold text-[#303030] dark:text-white">{t2('worksWithAllTokens')}</h1>
+          <h1 className="font-exo my-6 font-bold text-lp-gray-6 dark:text-white">{t2('worksWithAllTokens')}</h1>
           <p className="text-xs" style={{ lineHeight: '22px' }}>
             {t1('description')}
           </p>
@@ -50,7 +50,7 @@ export default function OnboardDialog({ dialog, className }: IOnboardProps) {
 
     return (
       <>
-        <h1 className="font-exo break-words text-[2rem] font-bold text-[#303030] dark:text-white">{t1('welcome')}</h1>
+        <h1 className="font-exo break-words text-[2rem] font-bold text-lp-gray-6 dark:text-white">{t1('welcome')}</h1>
         <p className="my-8 break-words text-xs font-semibold" style={{ lineHeight: '22px' }}>
           {t1('description')}
         </p>
@@ -66,12 +66,12 @@ export default function OnboardDialog({ dialog, className }: IOnboardProps) {
     <Dialog
       state={dialog}
       className={classNames(
-        'absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex max-h-[80vh] max-w-3xl flex-col overflow-auto rounded-2xl border border-[#EAEAEA] bg-white shadow-[0px_0px_9px_-2px_rgba(0,0,0,0.16)] dark:border-neutral-500 sm:left-8 sm:right-8 sm:flex-row',
+        'absolute top-8 left-4 right-4 bottom-8 z-50 m-auto mx-auto mt-auto flex max-h-[80vh] max-w-3xl flex-col overflow-auto rounded-2xl border border-[#EAEAEA] bg-white shadow-[0px_0px_9px_-2px_rgba(0,0,0,0.16)] dark:border-lp-gray-3 sm:left-8 sm:right-8 sm:flex-row',
         className
       )}
       id="onboard-form"
     >
-      <section className="relative flex w-full flex-col justify-center border-[#EAEAEA] bg-[#F9FDFB] p-7 dark:border-neutral-500 dark:bg-[#202020] sm:max-w-[16rem] sm:border-r">
+      <section className="relative flex w-full flex-col justify-center border-[#EAEAEA] bg-[#F9FDFB] p-7 dark:border-lp-gray-3 dark:bg-[#202020] sm:max-w-[16rem] sm:border-r">
         <button onClick={dialog.toggle} className="absolute top-4 right-4 sm:hidden">
           <span className="sr-only">{t0('close')}</span>
           <svg width="14" height="14" viewBox="0 0 14 14" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -91,7 +91,7 @@ export default function OnboardDialog({ dialog, className }: IOnboardProps) {
           {t1('learnMore')}
         </a>
       </section>
-      <section className="relative flex flex-1 flex-col dark:border-neutral-500 dark:bg-[#202020] md:overflow-clip">
+      <section className="relative flex flex-1 flex-col dark:border-lp-gray-3 dark:bg-[#202020] md:overflow-clip">
         <div
           style={{
             position: 'absolute',
@@ -107,7 +107,7 @@ export default function OnboardDialog({ dialog, className }: IOnboardProps) {
           className="hidden md:block"
         ></div>
 
-        <header className="border-color[#EAEAEA] z-10 flex items-baseline p-5 dark:border-neutral-500 dark:bg-[#202020] sm:border-b">
+        <header className="border-color[#EAEAEA] z-10 flex items-baseline p-5 dark:border-lp-gray-3 dark:bg-[#202020] sm:border-b">
           <h1 className="font-exo flex-1 text-center text-2xl font-semibold dark:text-white">{mainHeader()}</h1>
           <button onClick={dialog.toggle} className="absolute top-[30px] right-[30px] hidden sm:inline">
             <span className="sr-only">{t0('close')}</span>

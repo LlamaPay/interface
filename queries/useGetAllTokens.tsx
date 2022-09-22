@@ -20,7 +20,7 @@ const useGetAllTokens = () => {
     { endpoint },
     { network: network || '' },
     {
-      refetchInterval: 10000,
+      refetchInterval: 30000,
     }
   );
 

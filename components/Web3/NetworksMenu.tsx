@@ -55,10 +55,7 @@ export const NetworksMenu = () => {
       <SelectLabel state={select} className="hidden sm:sr-only">
         {t('network')}
       </SelectLabel>
-      <Select
-        state={select}
-        className="nav-button hidden items-center justify-between gap-2 dark:border-[#252525] dark:bg-[#202020] dark:text-white sm:flex"
-      >
+      <Select state={select} className="nav-button hidden items-center justify-between gap-2 sm:flex">
         <>
           <div className="flex h-5 w-5 items-center rounded-full">
             <Image
@@ -89,7 +86,7 @@ export const NetworksMenu = () => {
                 <SelectItem
                   key={value.id}
                   value={value.id?.toString()}
-                  className="flex cursor-pointer scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-[#666666] outline-none active-item:text-black active:text-black aria-disabled:opacity-40 dark:text-white"
+                  className="flex cursor-pointer scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-lp-gray-2 outline-none active-item:text-black active:text-black aria-disabled:opacity-40 dark:text-white"
                   onClick={() => switchNetwork(value.id)}
                 >
                   <div className="flex h-5 w-5 flex-shrink-0 items-center rounded-full">
@@ -119,7 +116,7 @@ export const NetworksMenu = () => {
                 <SelectItem
                   key={value.id}
                   value={value.id?.toString()}
-                  className="flex cursor-pointer scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-[#666666] outline-none active-item:text-black active:text-black aria-disabled:opacity-40 dark:text-white"
+                  className="flex cursor-pointer scroll-m-2 items-center gap-4 whitespace-nowrap p-2 font-normal text-lp-gray-2 outline-none active-item:text-black active:text-black aria-disabled:opacity-40 dark:text-white"
                   onClick={() => switchNetwork(value.id)}
                 >
                   <div className="flex h-5 w-5 flex-shrink-0 items-center rounded-full">

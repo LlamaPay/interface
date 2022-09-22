@@ -18,7 +18,7 @@ const Create: NextPage = () => {
   const factory = chainId ? networkDetails[chainId]?.vestingFactory : null;
 
   return (
-    <Layout className="app-section mx-auto mt-12 flex w-full flex-col items-center space-y-6 pb-[10rem] dark:bg-[#161818]">
+    <Layout className="app-section mx-auto mt-12 flex w-full flex-col items-center space-y-6 pb-[10rem] dark:bg-lp-gray-8">
       {factory ? (
         process.env.NEXT_PUBLIC_SAFE === 'true' ? (
           <CreateGnosisVesting factory={factory} />
@@ -27,7 +27,7 @@ const Create: NextPage = () => {
         )
       ) : (
         <>
-          <span className="font-exo text-2xl font-semibold text-[#3D3D3D] dark:text-white">Set Up Vesting</span>
+          <span className="font-exo text-2xl font-semibold text-lp-gray-4 dark:text-white">Set Up Vesting</span>
           <FallbackContainer>
             <p>{!accountData ? t('connectWallet') : unsupported ? t('notSupported') : t('sus')}</p>
           </FallbackContainer>

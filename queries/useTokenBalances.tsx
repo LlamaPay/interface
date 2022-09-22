@@ -73,7 +73,7 @@ function useTokenBalances() {
     ['allTokenBalances', listKey],
     () => fetchBalance({ userAddress, tokens, provider }),
     {
-      refetchInterval: 10000,
+      refetchInterval: 30000,
     }
   );
 

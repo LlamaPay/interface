@@ -1,14 +1,16 @@
-import Head from 'next/head';
 import * as React from 'react';
-import Header from './Header';
-import classNames from 'classnames';
-import CustomToast from 'components/CustomToast';
-import Hero from 'components/Hero';
-import OnboardDialog from 'components/Onboard';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useDialogState } from 'ariakit';
+import classNames from 'classnames';
+import { useAccount } from 'wagmi';
+import Header from './Header';
+import Hero from './Hero';
+import Footer from './Footer';
+import OnboardDialog from 'components/Onboard';
+import CustomToast from 'components/CustomToast';
 import StaleSubgraphWarning from 'components/StaleSubgraphWarning';
-import dynamic from 'next/dynamic';
+import HowItWorks from './HowItWorks';
 
 interface ILayoutProps {
   children: React.ReactNode;
@@ -16,14 +18,13 @@ interface ILayoutProps {
   noBanner?: boolean;
 }
 
-const Footer = dynamic(() => import('./Footer'), {
-  ssr: false,
-});
-
-export default function Layout({ children, className, noBanner = false, ...props }: ILayoutProps) {
-  const router = useRouter();
+export default function Layout({ children, className, ...props }: ILayoutProps) {
+  const [{ data }] = useAccount();
 
   const onboardDialog = useDialogState();
+  const walletDialog = useDialogState();
+
+  const router = useRouter();
 
   return (
     <>
@@ -35,32 +36,24 @@ export default function Layout({ children, className, noBanner = false, ...props
         />
       </Head>
       <StaleSubgraphWarning />
-      <Header onboardDialog={onboardDialog} />
-      {/* <div className="absolute top-0 bottom-0 right-0 left-0 overflow-hidden">
-        <div
-          style={{
-            background: 'linear-gradient(195deg, #EFEFEF 13.39%, rgba(196, 196, 196, 0) 75.41%)',
-            transform: 'rotate(20deg)',
-          }}
-          className="absolute left-[-60vw] top-[-80vh] -z-10 h-screen w-screen rounded-full"
-        ></div>
-        <div
-          style={{
-            background: 'linear-gradient(200.1deg, #D9F4E6 13.39%, rgba(255, 255, 255, 0) 75.41%)',
-            transform: 'rotate(90deg)',
-            top: 'calc(-50vh)',
-          }}
-          className="absolute left-[50vw] -z-10 h-[100vh] w-screen rounded-full"
-        ></div>
-      </div> */}
-      {router.pathname === '/' && <Hero noBanner={noBanner} onboardDialog={onboardDialog} />}
 
-      <main className={classNames('flex-1', className)} {...props}>
-        {children}
-      </main>
+      <Header onboardDialog={onboardDialog} walletDialog={walletDialog} />
+
+      {router.pathname === '/' && !data ? (
+        <>
+          <Hero walletDialog={walletDialog} />
+          <HowItWorks onboardDialog={onboardDialog} />
+        </>
+      ) : (
+        <main className={classNames('flex-1', className)} {...props}>
+          {children}
+        </main>
+      )}
 
       <OnboardDialog dialog={onboardDialog} />
+
       <Footer />
+
       <CustomToast />
     </>
   );

@@ -158,7 +158,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
             <span className="">Return</span>
           </a>
         </Link>
-        <h1 className="font-exo my-2 text-2xl font-semibold text-[#3D3D3D] dark:text-white">Set Up Vesting</h1>
+        <h1 className="font-exo my-2 text-2xl font-semibold text-lp-gray-4 dark:text-white">Set Up Vesting</h1>
         <InputText label={'Recipient Address'} name="recipientAddress" isRequired />
         <InputText label={'Vested Token Address'} name="vestedToken" handleChange={handleVestTokenChange} isRequired />
         <InputAmount label={'Vesting Amount'} name="vestingAmount" handleChange={handleVestAmountChange} isRequired />
@@ -208,7 +208,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
               }
             }}
             className={`${
-              formData.includeCliff ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
+              formData.includeCliff ? 'bg-lp-primary' : 'bg-gray-200 dark:bg-[#252525]'
             } relative inline-flex h-6 w-11 items-center rounded-full`}
           >
             <span
@@ -228,7 +228,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
               }
             }}
             className={`${
-              formData.includeCustomStart ? 'bg-[#23BD8F]' : 'bg-gray-200 dark:bg-[#252525]'
+              formData.includeCustomStart ? 'bg-lp-primary' : 'bg-gray-200 dark:bg-[#252525]'
             } relative inline-flex h-6 w-11 items-center rounded-full`}
           >
             <span

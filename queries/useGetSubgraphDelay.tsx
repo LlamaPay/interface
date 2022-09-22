@@ -70,6 +70,6 @@ export default function useGetSubgraphDelay() {
   const chainId = data.chain?.id;
 
   return useQuery(['subgraphDelay', chainId], () => getSubgraphDelay({ chainId }), {
-    refetchInterval: 10000,
+    refetchInterval: 30000,
   });
 }
