@@ -81,7 +81,7 @@ export const Push = ({ data, buttonName }: PushProps) => {
       {data.paused ? (
         ''
       ) : (
-        <button onClick={handleClick} className="row-action-links dark:text-white">
+        <button onClick={handleClick} className="rounded rounded bg-[#23BD8F] px-2 py-1 font-bold dark:text-white">
           {buttonName === 'Withdraw' ? t0('withdraw') : t1('send')}
         </button>
       )}
