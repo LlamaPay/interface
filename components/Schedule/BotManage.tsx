@@ -35,6 +35,7 @@ export default function BotFunds({
   const [showCalendar, setShowCalendar] = React.useState<boolean>(false);
 
   const { data: botInfo, isLoading } = useGetBotInfo();
+
   const { mutate: approveMax } = useApproveTokenForMaxAmt();
 
   const [{ data: balance }] = useContractRead(
@@ -356,11 +357,12 @@ export default function BotFunds({
                     <label className="input-label">Token</label>
                     <select onChange={(e) => setSelectedToken(e.target.value)} name="token" className="input-field">
                       <option value={''}></option>
-                      {Object.keys(botInfo?.tokenSymbols).map((p) => (
-                        <option key={p} value={p}>
-                          {botInfo?.tokenSymbols[p]}
-                        </option>
-                      ))}
+                      {botInfo?.tokenSymbols &&
+                        Object.keys(botInfo?.tokenSymbols).map((p) => (
+                          <option key={p} value={p}>
+                            {botInfo?.tokenSymbols[p]}
+                          </option>
+                        ))}
                     </select>
                   </div>
                   <SubmitButton onClick={onRedirect} className="bottom-0 h-min w-2/5 place-self-end">
