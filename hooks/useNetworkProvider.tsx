@@ -53,7 +53,7 @@ export const useNetworkProvider = () => {
 
   return {
     provider: chainDetails ? chainDetails.chainProviders : null,
-    network: name,
+    network: name?.toLowerCase() === 'mainnet' ? 'Ethereum' : name,
     chainId,
     nativeCurrency: data.chain?.nativeCurrency,
     unsupported: data.chain?.unsupported,
