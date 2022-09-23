@@ -164,6 +164,7 @@ const DepositAndCreate = ({ tokens, userAddress, dialog }: IStreamFormProps) => 
             label="What token do you want to Deposit and Create a Stream?"
             tokens={tokenOptions}
             handleTokenChange={handleTokenChange}
+            tokenBalanceOf="wallet"
           />
           <AvailableAmount selectedToken={selectedToken} title="Available for Deposit" />
         </div>

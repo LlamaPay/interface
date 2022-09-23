@@ -35,6 +35,7 @@ const CreateStreamOnly = ({ tokens, dialog }: IStreamFormProps) => {
             tokens={tokenOptions}
             className="border border-neutral-300 bg-transparent py-[3px] shadow-none dark:border-neutral-700 dark:bg-stone-800"
             label="Select Token from Balances"
+            tokenBalanceOf="lpContract"
           />
         </span>
 

@@ -19,14 +19,27 @@ interface ISelectTokenProps {
   tokens: string[];
   label?: string;
   className?: string;
+  tokenBalanceOf: 'none' | 'wallet' | 'lpContract';
 }
 
-function Token({ value, shortName, showBalance }: { value: string; shortName?: boolean; showBalance?: boolean }) {
+function Token({
+  value,
+  shortName,
+  tokenBalanceOf,
+}: {
+  value: string;
+  shortName?: boolean;
+  tokenBalanceOf?: 'none' | 'wallet' | 'lpContract';
+}) {
   const { data: tokens } = useTokenBalances();
 
   const data = React.useMemo(() => {
+    if (tokenBalanceOf === 'lpContract') {
+      return tokens ? tokens.find((t) => t.tokenAddress === value) : null;
+    }
+
     return tokens ? tokens.find((t) => t.tokenAddress === value) : null;
-  }, [value, tokens]);
+  }, [value, tokens, tokenBalanceOf]);
 
   const t = useTranslations('Common');
 
@@ -52,7 +65,8 @@ function Token({ value, shortName, showBalance }: { value: string; shortName?: b
           <div className="truncate">{value}</div>
         )}
       </div>
-      {showBalance && (
+
+      {tokenBalanceOf !== 'none' && (
         <div className="ml-4 whitespace-nowrap slashed-zero text-gray-600 dark:text-gray-400">
           {data?.balance && `${data.balance} ${data?.symbol}`}
         </div>
@@ -62,7 +76,7 @@ function Token({ value, shortName, showBalance }: { value: string; shortName?: b
 }
 
 export const SelectToken = React.forwardRef<HTMLButtonElement, ISelectTokenProps>(function S(
-  { handleTokenChange, tokens, label, className },
+  { handleTokenChange, tokens, label, className, tokenBalanceOf },
   ref
 ) {
   const [newTokenForm, setNewTokenForm] = React.useState(false);
@@ -97,7 +111,7 @@ export const SelectToken = React.forwardRef<HTMLButtonElement, ISelectTokenProps
         }}
         ref={ref}
       >
-        {<Token value={select.value} shortName />}
+        {<Token value={select.value} shortName tokenBalanceOf="none" />}
         <SelectArrow className="relative right-[-2px]" />
       </Select>
 
@@ -134,7 +148,7 @@ export const SelectToken = React.forwardRef<HTMLButtonElement, ISelectTokenProps
                 >
                   {(props) => (
                     <SelectItem {...props}>
-                      <Token value={token} showBalance />
+                      <Token value={token} tokenBalanceOf={tokenBalanceOf} />
                     </SelectItem>
                   )}
                 </ComboboxItem>

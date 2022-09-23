@@ -11,6 +11,7 @@ export const InputWithTokenSelect = ({
   handleTokenChange,
   handleInputChange,
   tokenOptions,
+  tokenBalanceOf,
   ...props
 }: InputWithTokenSelectProps) => {
   return (
@@ -42,6 +43,7 @@ export const InputWithTokenSelect = ({
             handleTokenChange={handleTokenChange}
             tokens={tokenOptions}
             className="absolute right-[4px] bottom-[4px] top-[8px] my-auto w-min max-w-[40%] border-lp-gray-1 shadow-sm dark:border-lp-gray-2"
+            tokenBalanceOf={tokenBalanceOf}
           />
         )}
       </div>

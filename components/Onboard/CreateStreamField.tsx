@@ -78,6 +78,7 @@ const Form = ({
             handleTokenChange={handleTokenChange}
             tokens={tokenOptions}
             label={t0('selectTokenFromBalances')}
+            tokenBalanceOf="lpContract"
           />
         </span>
 
