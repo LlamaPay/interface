@@ -22,6 +22,7 @@ export interface InputWithTokenSelectProps extends InputElement {
   handleTokenChange: (token: string) => void;
   handleInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   tokenOptions: string[];
+  tokenBalanceOf: 'none' | 'wallet' | 'lpContract';
 }
 
 export interface InputAmountWithDaysProps {

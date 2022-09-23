@@ -74,6 +74,7 @@ export function DepositForm({
             tokens={tokenOptions}
             handleTokenChange={handleTokenChange}
             className="bg-white"
+            tokenBalanceOf="wallet"
           />
           <AvailableAmount selectedToken={selectedToken} title={t1('availableForDeposit')} />
         </div>

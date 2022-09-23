@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { IBalance } from 'types';
 import { useIntl } from 'next-intl';
+import { useBalances } from 'hooks';
 
 interface BalanceAndSymbolProps {
   data: IBalance;
@@ -34,4 +35,14 @@ export const BalanceAndSymbol = ({ data }: BalanceAndSymbolProps) => {
         `${intl.formatNumber(balanceState, { maximumFractionDigits: 5, minimumFractionDigits: 5 })} ${data.symbol}`}
     </span>
   );
+};
+
+export const TokenBalance = ({ address, symbol }: { address: string; symbol: string }) => {
+  const { balances } = useBalances();
+
+  const data = balances?.find((b) => b.address === address);
+
+  if (!data) return <>{`0.00000 ${symbol}`}</>;
+
+  return <BalanceAndSymbol data={data} />;
 };

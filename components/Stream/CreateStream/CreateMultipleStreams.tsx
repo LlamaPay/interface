@@ -182,6 +182,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                     handleTokenChange={field.onChange}
                     tokens={tokenOptions}
                     label={t1('selectTokenFromBalances')}
+                    tokenBalanceOf="lpContract"
                     {...field}
                   />
                 )}
