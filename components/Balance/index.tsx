@@ -141,32 +141,20 @@ const Balance = (props: { address?: string }) => {
                         )}
                       </div>
                     </th>
-                    <td
-                      className="whitespace-nowrap border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-lp-gray-4 dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white"
-                      style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
-                    >
+                    <td className={classNames(tableCellClassnames, 'border-r-0')} style={tableCellInlineStyles}>
                       <BalanceAndSymbol data={b} />
                     </td>
-                    <td
-                      className="whitespace-nowrap border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-lp-gray-4 dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white"
-                      style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
-                    >
+                    <td className={classNames(tableCellClassnames, 'border-r-0')} style={tableCellInlineStyles}>
                       <UntilDepleted data={b} />
                     </td>
                     <td
-                      className={classNames(
-                        'whitespace-nowrap border border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-lp-gray-4 dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white',
-                        showActions ? 'border-r-0' : 'rounded-r'
-                      )}
-                      style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
+                      className={classNames(tableCellClassnames, showActions ? 'border-r-0' : 'rounded-r')}
+                      style={tableCellInlineStyles}
                     >
                       <MonthlyCost data={b} />
                     </td>
                     {showActions && (
-                      <td
-                        className="rounded-r border border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-lp-gray-4 dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white"
-                        style={{ borderLeft: '1px dashed rgb(176 175 186 / 20%)' }}
-                      >
+                      <td className={classNames(tableCellClassnames, 'rounded-r')} style={tableCellInlineStyles}>
                         <span className="flex gap-3">
                           <button
                             className="whitespace-nowrap text-xs text-black/80 underline disabled:cursor-not-allowed dark:text-white"
@@ -207,6 +195,12 @@ const Balance = (props: { address?: string }) => {
       </div>
     </div>
   );
+};
+
+const tableCellClassnames =
+  'whitespace-nowrap border border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-sm text-lp-gray-4 dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white';
+const tableCellInlineStyles = {
+  borderLeft: '1px dashed rgb(176 175 186 / 20%)',
 };
 
 export default Balance;

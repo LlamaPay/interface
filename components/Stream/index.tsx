@@ -1,26 +1,17 @@
 import * as React from 'react';
 import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import Fallback, { FallbackContainer } from 'components/Fallback';
 import { StreamIcon } from 'components/Icons';
-import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 import { StreamTable, DefaultStreamTable } from './Table';
-import { IStreamAndHistory } from 'types';
+import type { IStreamAndHistory } from 'types';
 import StreamMenu from './Menu';
-import { useTranslations } from 'next-intl';
-import { useDialogState } from 'ariakit';
-import { botDeployedOn } from 'utils/constants';
-import BotFunds from 'components/Schedule/BotManage';
-import { useAccount } from 'wagmi';
-import { useNetworkProvider } from 'hooks';
+import useStreamsAndHistory from 'queries/useStreamsAndHistory';
 
 export function StreamSection() {
   const { data, isLoading, error } = useStreamsAndHistory();
 
   const t = useTranslations('Streams');
-
-  const botDialog = useDialogState();
-  const [{ data: accountData }] = useAccount();
-  const { nativeCurrency, chainId } = useNetworkProvider();
 
   return (
     <>
@@ -37,11 +28,7 @@ export function StreamSection() {
             </Link>
 
             {/* <a className="primary-button py-2 px-4 text-sm font-bold">{'Schedule Transfer'}</a> */}
-            {chainId && botDeployedOn.includes(chainId) && (
-              <button onClick={botDialog.toggle} className="primary-button py-2 px-4 text-sm font-bold">
-                {'Manage Bot'}
-              </button>
-            )}
+
             <StreamMenu />
           </div>
         </div>
@@ -51,14 +38,6 @@ export function StreamSection() {
           <StreamTable data={data.streams} />
         )}
       </section>
-      {chainId && accountData && botDeployedOn.includes(chainId) && (
-        <BotFunds
-          dialog={botDialog}
-          chainId={chainId}
-          accountAddress={accountData?.address}
-          nativeCurrency={nativeCurrency?.symbol}
-        />
-      )}
     </>
   );
 }
