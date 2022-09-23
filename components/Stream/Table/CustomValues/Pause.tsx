@@ -23,6 +23,7 @@ export function Pause({ data }: PauseProps) {
     }
   );
   const { mutate: gnosisBatch } = useGnosisBatch();
+
   const queryClient = useQueryClient();
 
   function onPause() {

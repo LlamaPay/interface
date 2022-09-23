@@ -13,6 +13,7 @@ import Image from 'next/image';
 import defaultImage from 'public/empty-token.webp';
 import { useQueryClient } from 'react-query';
 import { useTranslations } from 'next-intl';
+import { TokenBalance } from 'components/Balance/BalanceAndSymbol';
 
 interface ISelectTokenProps {
   handleTokenChange: (token: string) => void;
@@ -65,12 +66,13 @@ function Token({
           <div className="truncate">{value}</div>
         )}
       </div>
-
-      {tokenBalanceOf !== 'none' && (
-        <div className="ml-4 whitespace-nowrap slashed-zero text-gray-600 dark:text-gray-400">
-          {data?.balance && `${data.balance} ${data?.symbol}`}
-        </div>
-      )}
+      <div className="ml-4 whitespace-nowrap slashed-zero text-gray-600 dark:text-gray-400">
+        {tokenBalanceOf === 'none' ? null : tokenBalanceOf === 'lpContract' ? (
+          <TokenBalance address={value} symbol={data?.symbol ?? ''} />
+        ) : (
+          <> {data?.balance && `${data.balance} ${data?.symbol}`}</>
+        )}
+      </div>{' '}
     </div>
   );
 }
