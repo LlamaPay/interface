@@ -9,13 +9,15 @@ import { useContractWrite } from 'wagmi';
 import { useTranslations } from 'next-intl';
 import { LlamaContractInterface } from 'utils/contract';
 import useGnosisBatch from 'queries/useGnosisBatch';
+import classNames from 'classnames';
 
 interface PushProps {
   buttonName: 'Send' | 'Withdraw';
   data: IStream;
+  className?: string;
 }
 
-export const Push = ({ data, buttonName }: PushProps) => {
+export const Push = ({ data, buttonName, className }: PushProps) => {
   const [transactionHash, setTransactionHash] = React.useState<string | null>(null);
 
   const [{}, withdraw] = useContractWrite(
@@ -81,7 +83,10 @@ export const Push = ({ data, buttonName }: PushProps) => {
       {data.paused ? (
         ''
       ) : (
-        <button onClick={handleClick} className="primary-button my-[-2px] px-3 py-1 text-sm  font-medium shadow-none">
+        <button
+          onClick={handleClick}
+          className={classNames('primary-button my-[-2px] px-3 py-1 text-sm  font-medium shadow-none', className)}
+        >
           {buttonName === 'Withdraw' ? t0('withdraw') : t1('send')}
         </button>
       )}

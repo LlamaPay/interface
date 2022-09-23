@@ -230,9 +230,12 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
                   </button>
                 ) : (
                   <>
-                    <span className="claim-button">
-                      <Push data={salaryData} buttonName="Withdraw" />
-                    </span>
+                    <Push
+                      data={salaryData}
+                      buttonName="Withdraw"
+                      className="mt-8 w-full border border-transparent py-[7px] px-3 text-base !font-semibold"
+                    />
+
                     <button
                       type="button"
                       className="form-submit-button mt-4 flex flex-1 items-center justify-center gap-[4px] rounded-[10px] bg-lp-white font-normal text-lp-primary dark:bg-lp-gray-5 dark:text-lp-white"
