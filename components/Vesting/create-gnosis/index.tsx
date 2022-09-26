@@ -126,7 +126,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
           includeCustomStart: Number(columns[4]) > 0 ? true : false,
           cliffTime: (Number(columns[3]) / secondsByDuration['month']).toString(),
           cliffDuration: 'month',
-          startDate: new Date(Number(columns[4]) * 1e3).toISOString().slice(0, 10),
+          startDate: columns[4],
         });
       }
       remove(0);
