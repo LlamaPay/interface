@@ -120,11 +120,11 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
         append({
           recipientAddress: columns[0],
           vestedAmount: columns[1],
-          vestingTime: (Number(columns[2]) / secondsByDuration['month']).toString(),
+          vestingTime: columns[2],
           vestingDuration: 'month',
           includeCliff: Number(columns[3]) > 0 ? true : false,
           includeCustomStart: Number(columns[4]) > 0 ? true : false,
-          cliffTime: (Number(columns[3]) / secondsByDuration['month']).toString(),
+          cliffTime: columns[3],
           cliffDuration: 'month',
           startDate: columns[4],
         });
