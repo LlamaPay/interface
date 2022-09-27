@@ -123,7 +123,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
           vestingTime: columns[2],
           vestingDuration: 'month',
           includeCliff: Number(columns[3]) > 0 ? true : false,
-          includeCustomStart: Number(columns[4]) > 0 ? true : false,
+          includeCustomStart: columns[4] != '' ? true : false,
           cliffTime: columns[3],
           cliffDuration: 'month',
           startDate: columns[4],
