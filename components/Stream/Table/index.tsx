@@ -34,7 +34,10 @@ export function StreamTable({ data }: { data: IStream[] }) {
   const { nativeCurrency, chainId, network } = useNetworkProvider();
   const t = useTranslations('Table');
 
-  const columns = React.useMemo<ColumnDef<IStream>[]>(
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+  const hasReason = data.some((e) => e.reason !== null);
+
+  let columns = React.useMemo<ColumnDef<IStream>[]>(
     () => [
       {
         id: 'userName',
@@ -59,6 +62,12 @@ export function StreamTable({ data }: { data: IStream[] }) {
         id: 'amountPerSec',
         header: t('amountPerSec'),
         cell: (info) => <AmtPerMonth data={info.getValue() as number} />,
+        enableMultiSort: true,
+      },
+      {
+        id: 'reason',
+        header: 'Reason',
+        cell: ({ cell }) => cell.row.original && <p className="text-center">{cell.row.original.reason ?? 'N/A'}</p>,
         enableMultiSort: true,
       },
       {
@@ -182,7 +191,9 @@ export function StreamTable({ data }: { data: IStream[] }) {
     [t, chainId, nativeCurrency?.symbol, network]
   );
 
-  const [sorting, setSorting] = React.useState<SortingState>([]);
+  if (!hasReason) {
+    columns = columns.filter((e) => e.id !== 'reason');
+  }
 
   const instance = useReactTable({
     data,
