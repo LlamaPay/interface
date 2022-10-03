@@ -64,7 +64,7 @@ export default function ClaimVesting({
       if (data.error) {
         toast.error('Failed to Claim Tokens');
       } else {
-        const toastid = toast.loading('Claiming All Tokens');
+        const toastid = toast.loading('Claiming Tokens');
         setTransactionHash(data.data.hash);
         claimDialog.hide();
         transactionDialog.show();
