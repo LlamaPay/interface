@@ -70,9 +70,7 @@ export default function ClaimVesting({
         transactionDialog.show();
         data.data.wait().then((receipt) => {
           toast.dismiss(toastid);
-          receipt.status === 1
-            ? toast.success('Successfully Claimed All Tokens')
-            : toast.error('Failed to Claim All Tokens');
+          receipt.status === 1 ? toast.success('Successfully Claimed Tokens') : toast.error('Failed to Claim Tokens');
         });
       }
     });
