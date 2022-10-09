@@ -26,13 +26,13 @@ function getDate(data: IVesting, intl: any) {
 }
 
 export function getStatus(data: IVesting) {
-  if (Date.now() / 1e3 < Number(data.startTime) + Number(data.cliffLength)) {
+  if (Number(data.disabledAt) <= Date.now() / 1e3) {
+    return `Vesting Stopped by Admin`;
+  } else if (Date.now() / 1e3 < Number(data.startTime) + Number(data.cliffLength)) {
     const tilStart = ((Number(data.startTime) + Number(data.cliffLength) - Date.now() / 1e3) / 86400).toFixed(2);
     return `Vesting Starts in ${tilStart} Days`;
   } else if (data.totalClaimed === data.totalLocked) {
     return `Vesting Ended`;
-  } else if (Number(data.disabledAt) <= Date.now() / 1e3) {
-    return `Vesting Stopped by Admin`;
   } else {
     const amtPerMonth: string = (
       (Number(data.totalLocked) / 10 ** Number(data.tokenDecimals) / (Number(data.endTime) - Number(data.startTime))) *
@@ -43,15 +43,15 @@ export function getStatus(data: IVesting) {
 }
 
 export function statusAccessorFn(data: IVesting) {
-  if (Date.now() / 1e3 < Number(data.startTime) + Number(data.cliffLength)) {
+  if (Number(data.disabledAt) <= Date.now() / 1e3) {
+    // `Vesting Stopped by Admin`
+    return -1;
+  } else if (Date.now() / 1e3 < Number(data.startTime) + Number(data.cliffLength)) {
     const tilStart = ((Number(data.startTime) + Number(data.cliffLength) - Date.now() / 1e3) / 86400).toFixed(2);
     // `Vesting Starts in ${tilStart} Days`
     return tilStart;
   } else if (data.totalClaimed === data.totalLocked) {
     // `Vesting Ended`
-    return -1;
-  } else if (Number(data.disabledAt) <= Date.now() / 1e3) {
-    // `Vesting Stopped by Admin`
     return -1;
   } else {
     // `Vesting ${amtPerMonth}/month`
