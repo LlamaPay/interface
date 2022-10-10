@@ -6,8 +6,7 @@ export default function GnosisSafeWarning() {
   const dialog = useDialogState();
 
   React.useEffect(() => {
-    const origin: string | undefined | null = window.location.ancestorOrigins[0];
-    if (process.env.NEXT_PUBLIC_SAFE === 'false' && origin === 'https://gnosis-safe.io') {
+    if (process.env.NEXT_PUBLIC_SAFE === 'false' && window.location !== window.parent.location) {
       dialog.show();
     }
   }, []);
