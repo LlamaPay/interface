@@ -11,6 +11,7 @@ import OnboardDialog from 'components/Onboard';
 import CustomToast from 'components/CustomToast';
 import StaleSubgraphWarning from 'components/StaleSubgraphWarning';
 import HowItWorks from './HowItWorks';
+import GnosisSafeWarning from 'components/GnosisSafeWarning';
 
 interface ILayoutProps {
   children: React.ReactNode;
@@ -55,6 +56,8 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
       <Footer />
 
       <CustomToast />
+
+      <GnosisSafeWarning />
     </>
   );
 }
