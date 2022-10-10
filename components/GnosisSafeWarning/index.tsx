@@ -1,5 +1,6 @@
 import { useDialogState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
+import Link from 'next/link';
 import * as React from 'react';
 
 export default function GnosisSafeWarning() {
@@ -13,7 +14,18 @@ export default function GnosisSafeWarning() {
 
   return (
     <FormDialog title="Switch to Gnosis App" dialog={dialog}>
-      <p>"idk what to put here"</p>
+      <div className="mt-1 space-y-2">
+        <p>{'You are currently not on the LlamaPay Gnosis app!'}</p>
+        <p>{'Please switch to the Gnosis app to have full functionality.'}</p>
+        <a
+          href="https://docs.llamapay.io/llamapay/gnosis-safe"
+          target="_blank"
+          rel="noreferrer noopener"
+          className="underline"
+        >
+          Read More
+        </a>
+      </div>
     </FormDialog>
   );
 }
