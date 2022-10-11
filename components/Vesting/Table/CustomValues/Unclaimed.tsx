@@ -6,7 +6,9 @@ export default function Unclaimed({ data }: { data: IVesting }) {
   const [balanceState, setBalanceState] = React.useState<number | null>(null);
   const { locale } = useLocale();
   const setState = React.useCallback(() => {
-    if (
+    if (Number(data.disabledAt) <= Date.now() / 1e3) {
+      setBalanceState(Number(data.unclaimed) / 10 ** data.tokenDecimals);
+    } else if (
       Date.now() / 1e3 > Number(data.endTime) ||
       Date.now() / 1e3 < Number(data.startTime) + Number(data.cliffLength)
     ) {
