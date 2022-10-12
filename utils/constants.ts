@@ -186,7 +186,7 @@ export const networkDetails: INetworkDetails = {
   },
   1: {
     rpcUrl: 'https://rpc.ankr.com/eth',
-    subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-mainnet',
+    subgraphEndpoint: 'https://llamapay.polarsync.app/',
     chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/eth'),
     llamapayFactoryAddress: FACTORY_MAINNET,
     disperseAddress: DISPERSE_DEFAULT,
