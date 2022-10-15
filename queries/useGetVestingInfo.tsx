@@ -23,18 +23,30 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
       const factoryContract = new ethers.Contract(factoryAddress, vestingFactory, provider);
       const multicall = new Multicall({ ethersProvider: provider, tryAggregate: true });
       
-      const amtOfContracts = 295;//await factoryContract.escrows_length({ gasLimit: 1000000 });
+      const amtOfContracts = await factoryContract.escrows_length({ gasLimit: 1000000 });
+
+      const runMulticall = async (calls:any[])=>{
+        const pending = []
+        for(let i=0; i<calls.length; i+=200){
+          pending.push(multicall.call(calls.slice(i, i+200)))
+        }
+        return (await Promise.all(pending)).reduce((all, r)=>{
+          Object.assign(all, r.results);
+          return all;
+        }, {} as any)
+      }
+
       const vestingContractsContext: ContractCallContext[] = Array.from({ length: Number(amtOfContracts) }, (_, k) => ({
         reference: k.toString(),
         contractAddress: factoryAddress,
         abi: vestingFactory,
         calls: [{ reference: 'escrow', methodName: 'escrows', methodParameters: [k] }],
       }));
-      const vestingContractsResults: ContractCallResults = await multicall.call(vestingContractsContext);
-      const vestingContractInfoContext: ContractCallContext[] = Object.keys(vestingContractsResults.results).map(
+      const vestingContractsResults: any[] = await runMulticall(vestingContractsContext);
+      const vestingContractInfoContext: ContractCallContext[] = Object.keys(vestingContractsResults).map(
         (p: any) => ({
-          reference: vestingContractsResults.results[p].callsReturnContext[0].returnValues[0],
-          contractAddress: vestingContractsResults.results[p].callsReturnContext[0].returnValues[0],
+          reference: vestingContractsResults[p].callsReturnContext[0].returnValues[0],
+          contractAddress: vestingContractsResults[p].callsReturnContext[0].returnValues[0],
           abi: vestingEscrow,
           calls: [
             { reference: 'unclaimed', methodName: 'unclaimed', methodParameters: [] },
@@ -51,11 +63,11 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
           ],
         })
       );
-      const vestingContractInfoResults = await multicall.call(vestingContractInfoContext);
-      const tokenContractCallContext: ContractCallContext[] = Object.keys(vestingContractInfoResults.results).map(
+      const vestingContractInfoResults = await runMulticall(vestingContractInfoContext);
+      const tokenContractCallContext: ContractCallContext[] = Object.keys(vestingContractInfoResults).map(
         (p: any) => ({
-          reference: vestingContractInfoResults.results[p].callsReturnContext[3].returnValues[0],
-          contractAddress: vestingContractInfoResults.results[p].callsReturnContext[3].returnValues[0],
+          reference: vestingContractInfoResults[p].callsReturnContext[3].returnValues[0],
+          contractAddress: vestingContractInfoResults[p].callsReturnContext[3].returnValues[0],
           abi: erc20ABI,
           calls: [
             { reference: 'name', methodName: 'name', methodParameters: [] },
@@ -64,16 +76,16 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
           ],
         })
       );
-      const tokenContractCallResults: ContractCallResults = await multicall.call(tokenContractCallContext);
+      const tokenContractCallResults: any[] = await runMulticall(tokenContractCallContext);
       const results: IVesting[] = [];
 
-      for (const key in vestingContractInfoResults.results) {
-        const vestingReturnContext = vestingContractInfoResults.results[key].callsReturnContext;
+      for (const key in vestingContractInfoResults) {
+        const vestingReturnContext = vestingContractInfoResults[key].callsReturnContext;
         const recipient = vestingReturnContext[2].returnValues[0].toLowerCase();
         const admin = vestingReturnContext[9].returnValues[0].toLowerCase();
         if (userAddress.toLowerCase() !== recipient && userAddress.toLowerCase() !== admin) continue;
         const tokenReturnContext =
-          tokenContractCallResults.results[vestingReturnContext[3].returnValues[0]].callsReturnContext;
+          tokenContractCallResults[vestingReturnContext[3].returnValues[0]].callsReturnContext;
         results.push({
           contract: key,
           unclaimed: new BigNumber(vestingReturnContext[0].returnValues[0].hex).toString(),
