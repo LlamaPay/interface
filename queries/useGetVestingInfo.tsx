@@ -10,7 +10,6 @@ import { IVesting } from 'types';
 import { networkDetails } from 'utils/constants';
 import { erc20ABI, useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
-import { id } from 'ethers/lib/utils';
 
 async function getVestingInfo(userAddress: string | undefined, provider: BaseProvider | null, chainId: number | null) {
   try {
@@ -36,7 +35,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
       if (chainId === 1) {
         const GET_ETH_SUBGRAPH = gql`
         {
-          vestingEscrows(where: {admin: "${userAddress.toLowerCase()}", recipient: "${userAddress.toLowerCase()}"}) {
+          vestingEscrows(where: {admin: "${userAddress.toLowerCase()}"}) {
             id
             admin
             recipient
@@ -55,6 +54,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
             GET_ETH_SUBGRAPH
           )
         ).vestingEscrows;
+        console.log(escrows);
         const vestingContractInfoContext: ContractCallContext[] = Object.keys(escrows).map((p: any) => ({
           reference: escrows[p].id,
           contractAddress: escrows[p].id,
