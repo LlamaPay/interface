@@ -33,7 +33,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
         }, {} as any);
       };
       if (chainId === 1) {
-        const GET_ETH_SUBGRAPH = gql`
+        const GET_ADMIN = gql`
         {
           vestingEscrows(where: {admin: "${userAddress.toLowerCase()}"}) {
             id
@@ -48,13 +48,29 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
           }
         }
         `;
-        const escrows = (
-          await request(
-            'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-vesting-mainnet',
-            GET_ETH_SUBGRAPH
-          )
+        const GET_RECIPIENT = gql`
+        {
+          vestingEscrows(where: {recipient: "${userAddress.toLowerCase()}"}) {
+            id
+            admin
+            recipient
+            token {
+              id
+              symbol
+              name
+              decimals
+            }
+          }
+        }
+        `;
+        const admins = (
+          await request('https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-vesting-mainnet', GET_ADMIN)
         ).vestingEscrows;
-        console.log(escrows);
+        const recipients = (
+          await request('https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-vesting-mainnet', GET_RECIPIENT)
+        ).vestingEscrows;
+        const escrows = admins.concat(recipients);
+
         const vestingContractInfoContext: ContractCallContext[] = Object.keys(escrows).map((p: any) => ({
           reference: escrows[p].id,
           contractAddress: escrows[p].id,
@@ -76,7 +92,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
         const vestingContractInfoResults = await runMulticall(vestingContractInfoContext);
         for (const i in escrows) {
           const vestingReturnContext = vestingContractInfoResults[escrows[i].id].callsReturnContext;
-          results.push({
+          const result = {
             contract: escrows[i].id,
             unclaimed: new BigNumber(vestingReturnContext[0].returnValues[0].hex).toString(),
             locked: new BigNumber(vestingReturnContext[1].returnValues[0].hex).toString(),
@@ -93,7 +109,9 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
             admin: escrows[i].admin,
             disabledAt: new BigNumber(vestingReturnContext[10].returnValues[0].hex).toString(),
             timestamp: Date.now() / 1e3,
-          });
+          };
+          if (results.includes(result)) continue;
+          results.push(result);
         }
       } else {
         const factoryAddress = networkDetails[chainId].vestingFactory;
