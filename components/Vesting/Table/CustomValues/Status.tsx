@@ -6,9 +6,10 @@ import { secondsByDuration } from 'utils/constants';
 
 export default function Status({ data }: { data: IVesting }) {
   const intl = useIntl();
+  const { locale } = useLocale();
 
   const value = (
-    <span className="font-exo text-center slashed-zero tabular-nums dark:text-white">{getStatus(data)}</span>
+    <span className="font-exo text-center slashed-zero tabular-nums dark:text-white">{getStatus(data, locale)}</span>
   );
 
   if (Date.now() / 1e3 < Number(data.startTime) + Number(data.cliffLength)) {
@@ -26,8 +27,7 @@ function getDate(data: IVesting, intl: any) {
   return intl.formatDateTime(new Date((Number(data.startTime) + Number(data.cliffLength)) * 1e3), { hour12: false });
 }
 
-export function getStatus(data: IVesting) {
-  const { locale } = useLocale();
+export function getStatus(data: IVesting, locale: string) {
   if (Number(data.disabledAt) <= Date.now() / 1e3) {
     return `Vesting Stopped by Admin`;
   } else if (Date.now() / 1e3 < Number(data.startTime) + Number(data.cliffLength)) {
