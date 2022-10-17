@@ -1,4 +1,5 @@
 import Tooltip from 'components/Tooltip';
+import { useLocale } from 'hooks';
 import { useIntl } from 'next-intl';
 import { IVesting } from 'types';
 import { secondsByDuration } from 'utils/constants';
@@ -26,6 +27,7 @@ function getDate(data: IVesting, intl: any) {
 }
 
 export function getStatus(data: IVesting) {
+  const { locale } = useLocale();
   if (Number(data.disabledAt) <= Date.now() / 1e3) {
     return `Vesting Stopped by Admin`;
   } else if (Date.now() / 1e3 < Number(data.startTime) + Number(data.cliffLength)) {
@@ -37,7 +39,7 @@ export function getStatus(data: IVesting) {
     const amtPerMonth: string = (
       (Number(data.totalLocked) / 10 ** Number(data.tokenDecimals) / (Number(data.endTime) - Number(data.startTime))) *
       secondsByDuration['month']
-    ).toFixed(5);
+    ).toLocaleString(locale, { minimumFractionDigits: 5, maximumFractionDigits: 5 });
     return `Vesting ${amtPerMonth}/month`;
   }
 }

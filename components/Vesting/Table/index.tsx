@@ -12,6 +12,7 @@ import ExplorerLink from './CustomValues/ExplorerLink';
 import Status, { statusAccessorFn } from './CustomValues/Status';
 import Unclaimed from './CustomValues/Unclaimed';
 import RugpullVestingButton from './CustomValues/RugpullVestingButton';
+import { useLocale } from 'hooks';
 
 export default function VestingTable({
   data,
@@ -27,6 +28,7 @@ export default function VestingTable({
   claimValues: React.MutableRefObject<IVesting | null>;
 }) {
   const [{ data: accountData }] = useAccount();
+  const { locale } = useLocale();
 
   const columns = React.useMemo<ColumnDef<IVesting>[]>(
     () => [
@@ -55,7 +57,7 @@ export default function VestingTable({
         cell: (info) =>
           info.cell.row.original && (
             <span className="font-exo text-center slashed-zero tabular-nums dark:text-white">
-              {info.getValue<number>()?.toFixed(5)}
+              {info.getValue<number>()?.toLocaleString(locale, { minimumFractionDigits: 5, maximumFractionDigits: 5 })}
             </span>
           ),
       },
@@ -65,7 +67,7 @@ export default function VestingTable({
         header: 'Claimed',
         cell: (info) => (
           <span className="font-exo text-center slashed-zero tabular-nums dark:text-white">
-            {info.getValue<number>()?.toFixed(5)}
+            {info.getValue<number>()?.toLocaleString(locale, { minimumFractionDigits: 5, maximumFractionDigits: 5 })}
           </span>
         ),
       },
