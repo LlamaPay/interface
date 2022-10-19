@@ -33,7 +33,7 @@ export function StreamTable({ data }: { data: IStream[] }) {
   const addressStore = useAddressStore();
   const { nativeCurrency, chainId, network } = useNetworkProvider();
   const t = useTranslations('Table');
-
+  const [timeframe, setTimeframe] = React.useState<number>(3);
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
   let columns = React.useMemo<ColumnDef<IStream>[]>(
@@ -60,7 +60,9 @@ export function StreamTable({ data }: { data: IStream[] }) {
         accessorFn: (row) => amtPerMonthFormatter(row.amountPerSec),
         id: 'amountPerSec',
         header: t('amountPerSec'),
-        cell: (info) => <AmtPerMonth data={info.getValue() as number} />,
+        cell: (info) => (
+          <AmtPerMonth data={info.row.original.amountPerSec} timeframe={timeframe} setTimeframe={setTimeframe} />
+        ),
         enableMultiSort: true,
       },
       {
@@ -219,6 +221,7 @@ export function DefaultStreamTable({ data }: { data: IStream[] }) {
   const t = useTranslations('Table');
 
   const { network } = useNetworkProvider();
+  const [timeframe, setTimeframe] = React.useState<number>(3);
 
   let columns = React.useMemo<ColumnDef<IStream>[]>(
     () => [
@@ -244,7 +247,9 @@ export function DefaultStreamTable({ data }: { data: IStream[] }) {
         accessorFn: (row) => amtPerMonthFormatter(row.amountPerSec),
         id: 'amountPerSec',
         header: t('amountPerSec'),
-        cell: (info) => <AmtPerMonth data={info.getValue() as number} />,
+        cell: (info) => (
+          <AmtPerMonth data={info.row.original.amountPerSec} timeframe={timeframe} setTimeframe={setTimeframe} />
+        ),
         enableMultiSort: true,
       },
       {
