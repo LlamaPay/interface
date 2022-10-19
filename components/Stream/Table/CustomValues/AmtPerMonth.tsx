@@ -1,18 +1,14 @@
 import * as React from 'react';
 import { useIntl, useTranslations } from 'next-intl';
 import { secondsByDuration } from 'utils/constants';
+import { useTimeframeStore } from 'store/timeframe';
 
 // const timeframes = ['hour', 'day', 'week', 'month', 'year'];
 
-export const AmtPerMonth = ({
-  data,
-  timeframe,
-  setTimeframe,
-}: {
-  data: string;
-  timeframe: number;
-  setTimeframe: React.Dispatch<React.SetStateAction<number>>;
-}) => {
+export const AmtPerMonth = ({ data }: { data: number | string }) => {
+  const timeframe = useTimeframeStore((state) => state.timeframe);
+  const setTimeframe = useTimeframeStore((state) => state.setTimeframe);
+
   const t = useTranslations('Common');
   const intl = useIntl();
 
