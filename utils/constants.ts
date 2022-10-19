@@ -399,6 +399,7 @@ export const chains: Chain[] = [
 ];
 
 export const secondsByDuration: ISecondsByDuration = {
+  hour: 60 * 60,
   day: 24 * 60 * 60,
   week: 7 * 24 * 60 * 60,
   biweek: 2 * 7 * 24 * 60 * 60,
@@ -430,3 +431,5 @@ export const botContractCreation: { [key: number]: number } = {
 };
 
 export const botDeployedOn: number[] = [43114, 5, 1, 137, 10, 250, 56, 42161];
+
+export const timeframes = ['Hour', 'Day', 'Week', 'Month', 'Year'];
