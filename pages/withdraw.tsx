@@ -241,7 +241,7 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
                         <TokenName data={stream} />
                       </td>
                       <td className="table-description border-solid dark:border-white">
-                        <AmtPerMonth data={amtPerMonthFormatter(stream.amountPerSec)} />
+                        <AmtPerMonth data={stream.amountPerSec} />
                       </td>
                       <td className="table-description border-solid dark:border-white">
                         <Withdrawable data={stream} />
