@@ -1,4 +1,4 @@
-import { IHistory, IStream } from 'types';
+import { IHistory, IStream, IVesting } from 'types';
 import { secondsByDuration } from './constants';
 
 export function download(filename: string, text: string) {
@@ -74,6 +74,42 @@ export const downloadHistory = (data: IHistory[]) => {
   });
 
   download('history.csv', rows.map((r) => r.join(',')).join('\n'));
+};
+
+export const downloadVesting = (data: IVesting[]) => {
+  const rows = [
+    [
+      'Vesting Contract',
+      'Token Contract',
+      'Token Name',
+      'Admin',
+      'Recipient',
+      'Total Vesting',
+      'Claimed',
+      'Unclaimed',
+      'Starts',
+      'Ends',
+      'Disabled At',
+    ],
+  ];
+
+  data.forEach((d) => {
+    const divisor: number = 10 ** d.tokenDecimals;
+    rows.push([
+      d.contract,
+      d.token,
+      d.tokenName,
+      d.admin,
+      d.recipient,
+      (Number(d.totalLocked) / divisor).toString(),
+      (Number(d.totalClaimed) / divisor).toString(),
+      (Number(d.unclaimed) / divisor).toString(),
+      d.startTime,
+      d.endTime,
+      d.disabledAt,
+    ]);
+  });
+  download(`vesting-[${Math.floor(Date.now() / 1e3)}].csv`, rows.map((r) => r.join(',')).join('\n'));
 };
 
 export const downloadCustomHistory = (

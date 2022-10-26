@@ -13,6 +13,7 @@ import Status, { statusAccessorFn } from './CustomValues/Status';
 import Unclaimed from './CustomValues/Unclaimed';
 import RugpullVestingButton from './CustomValues/RugpullVestingButton';
 import { useLocale } from 'hooks';
+import { downloadVesting } from 'utils/downloadCsv';
 
 export default function VestingTable({
   data,
@@ -130,5 +131,7 @@ export default function VestingTable({
     debugTable: true,
   });
 
-  return <Table instance={instance} hidePagination={true} maxWidthColumn={7} />;
+  const downloadToCSV = React.useCallback(() => downloadVesting(data), [data]);
+
+  return <Table instance={instance} hidePagination={true} maxWidthColumn={7} downloadToCSV={downloadToCSV} />;
 }
