@@ -97,7 +97,7 @@ export default function HowItWorks({ onboardDialog }: { onboardDialog: Disclosur
 
       <div className="mt-5 flex w-[calc(100vw-16px)] select-none flex-col gap-20 lg:mb-[-4.5rem]">
         <h2 className="font-exo text-center text-[1.75rem]">
-          Used by <span className="font-bold">employees and employers</span>
+          Used by <span className="font-bold">founders and team members</span>
         </h2>
 
         <div className="flex w-full flex-col items-center bg-lp-green-3 dark:bg-lp-gray-3">
