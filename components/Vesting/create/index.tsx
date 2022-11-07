@@ -17,6 +17,7 @@ import { checkApproval, createContractAndCheckApproval } from 'components/Form/u
 import ChartWrapper from '../Charts/ChartWrapper';
 import { IVestingElements } from '../types';
 import Calendar from 'react-calendar';
+import EOAWarning from './EOAWarning';
 
 export default function CreateVesting({ factory }: { factory: string }) {
   const [formData, setFormData] = React.useState({
@@ -33,12 +34,14 @@ export default function CreateVesting({ factory }: { factory: string }) {
 
   const [vestingData, setVestingData] = React.useState<IVestingData | null>(null);
   const [showCalendar, setShowCalendar] = React.useState<boolean>(false);
+  const [recipient, setRecipient] = React.useState<string | null>(null);
 
   const { mutate: checkTokenApproval, data: isApproved, isLoading: checkingApproval } = useCheckTokenApproval();
 
   const { mutate: approveToken, isLoading: approvingToken } = useApproveToken();
 
   const confirmDialog = useDialogState();
+  const eoaWarningDialog = useDialogState();
 
   const provider = useProvider();
   const [{ data: accountData }] = useAccount();
@@ -104,48 +107,54 @@ export default function CreateVesting({ factory }: { factory: string }) {
     const decimals = await tokenContract.decimals();
     const formattedAmt = new BigNumber(vestingAmount).times(10 ** decimals).toFixed(0);
 
-    if (isApproved) {
-      setVestingData({
-        recipientAddress,
-        vestedToken,
-        tokenDecimals: Number(decimals),
-        vestingAmount: formattedAmt,
-        vestingDuration: fmtVestingTime,
-        cliffTime: fmtCliffTime,
-        startTime,
-      });
-      confirmDialog.show();
-      form.reset();
-      setFormData({
-        vestedToken: '',
-        vestedAmount: '',
-        vestingTime: '',
-        vestingDuration: 'year',
-        includeCliff: false,
-        includeCustomStart: false,
-        cliffTime: '',
-        cliffDuration: 'year',
-        startDate: '',
-      });
-    } else {
-      approveToken(
-        {
-          tokenAddress: vestedToken,
-          amountToApprove: formattedAmt,
-          spenderAddress: factory,
-        },
-        {
-          onSettled: () => {
-            // llamacontractAddress is approveForAddress
-            checkApproval({
-              tokenDetails: { tokenContract, llamaContractAddress: factory, decimals },
-              userAddress: accountData?.address,
-              approvedForAmount: vestingAmount,
-              checkTokenApproval,
-            });
+    const isEOA = (await provider.getCode(recipientAddress)) === '0x' ? true : false;
+    if (isEOA) {
+      if (isApproved) {
+        setVestingData({
+          recipientAddress,
+          vestedToken,
+          tokenDecimals: Number(decimals),
+          vestingAmount: formattedAmt,
+          vestingDuration: fmtVestingTime,
+          cliffTime: fmtCliffTime,
+          startTime,
+        });
+        confirmDialog.show();
+        form.reset();
+        setFormData({
+          vestedToken: '',
+          vestedAmount: '',
+          vestingTime: '',
+          vestingDuration: 'year',
+          includeCliff: false,
+          includeCustomStart: false,
+          cliffTime: '',
+          cliffDuration: 'year',
+          startDate: '',
+        });
+      } else {
+        approveToken(
+          {
+            tokenAddress: vestedToken,
+            amountToApprove: formattedAmt,
+            spenderAddress: factory,
           },
-        }
-      );
+          {
+            onSettled: () => {
+              // llamacontractAddress is approveForAddress
+              checkApproval({
+                tokenDetails: { tokenContract, llamaContractAddress: factory, decimals },
+                userAddress: accountData?.address,
+                approvedForAmount: vestingAmount,
+                checkTokenApproval,
+              });
+            },
+          }
+        );
+      }
+    } else {
+      setRecipient(recipientAddress);
+      eoaWarningDialog.show();
     }
   }
 
@@ -253,6 +262,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
       </form>
 
       {vestingData && <Confirm dialog={confirmDialog} vestingData={vestingData} factory={factory} />}
+      <EOAWarning address={recipient} dialog={eoaWarningDialog} />
     </section>
   );
 }

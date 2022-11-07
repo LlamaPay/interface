@@ -16,6 +16,8 @@ import { Switch } from '@headlessui/react';
 import { IVestingGnosisFormValues } from '../types';
 import MultipleStreamChartWrapper from '../Charts/MultipleStreamChartWrapper';
 import { useQueryClient } from 'react-query';
+import EOAWarning from '../create/EOAWarning';
+import { useDialogState } from 'ariakit';
 
 const factoryAbi = [
   {
@@ -40,6 +42,8 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
   const { mutate: gnosisBatch, isLoading: gnosisLoading } = useGnosisBatch();
   const [tokenAddress, setTokenAddress] = React.useState<string>('');
   const [csvFile, setCsvFile] = React.useState<File | null>(null);
+  const [recipient, setRecipient] = React.useState<string | null>(null);
+  const eoaWarningDialog = useDialogState();
   const provider = useProvider();
   const queryClient = useQueryClient();
 
@@ -75,6 +79,12 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
       const info = data.vestingContracts[i];
       const fmtVestingTime = new BigNumber(info.vestingTime).times(secondsByDuration[info.vestingDuration]).toFixed(0);
       const date = info.includeCustomStart ? new Date(info.startDate) : new Date(Date.now());
+      const isEOA = (await provider.getCode(info.recipientAddress)) === '0x' ? true : false;
+      if (!isEOA) {
+        setRecipient(info.recipientAddress);
+        eoaWarningDialog.show();
+        return;
+      }
       if (date.toString() === 'Invalid Date') {
         toast.error('Invalid Date');
         return;
@@ -361,6 +371,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
           {gnosisLoading ? <BeatLoader size={6} color="white" /> : 'Create Contracts'}
         </SubmitButton>
       </form>
+      <EOAWarning address={recipient} dialog={eoaWarningDialog} />
     </>
   );
 }
