@@ -1,3 +1,4 @@
+import { SafeConnector } from '@gnosis.pm/safe-apps-wagmi';
 import * as React from 'react';
 import { chains, defaultProvider, infuraId, networkDetails } from 'utils/constants';
 import { GnosisConnector } from 'utils/GnosisConnector';
@@ -7,11 +8,7 @@ import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 
 const connectors = () => {
   return process.env.NEXT_PUBLIC_SAFE === 'true'
-    ? [
-        new GnosisConnector({
-          chains,
-        }),
-      ]
+    ? [new SafeConnector({ chains })]
     : [
         new InjectedConnector({
           chains,
