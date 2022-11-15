@@ -42,18 +42,20 @@ export default function ReasonButton({ data }: { data: IVesting }) {
   return (
     <>
       {data.admin.toLowerCase() === accountData?.address.toLowerCase() && (
-        <button onClick={dialog.toggle} className="row-action-links">
-          Reason
-        </button>
+        <>
+          <button onClick={dialog.toggle} className="row-action-links">
+            Reason
+          </button>
+          <FormDialog dialog={dialog} title={'Add Reason'}>
+            <span className="space-y-4 text-lp-gray-6 dark:text-white">
+              <form className="mx-auto flex flex-col gap-4" onSubmit={onSubmit}>
+                <InputText name="reason" isRequired placeholder="Reason" label="Reason" />
+                <SubmitButton className="mt-5">Add Reason</SubmitButton>
+              </form>
+            </span>
+          </FormDialog>
+        </>
       )}
-      <FormDialog dialog={dialog} title={'Add Reason'}>
-        <span className="space-y-4 text-lp-gray-6 dark:text-white">
-          <form className="mx-auto flex flex-col gap-4" onSubmit={onSubmit}>
-            <InputText name="reason" isRequired placeholder="Reason" label="Reason" />
-            <SubmitButton className="mt-5">Add Reason</SubmitButton>
-          </form>
-        </span>
-      </FormDialog>
     </>
   );
 }
