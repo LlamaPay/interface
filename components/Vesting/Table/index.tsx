@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { ColumnDef, getCoreRowModel, useReactTable, getSortedRowModel, SortingState } from '@tanstack/react-table';
-import { DisclosureState } from 'ariakit';
+import { DisclosureState, useDisclosureState } from 'ariakit';
 import Table from 'components/Table';
 import { IVesting } from 'types';
 import { formatAddress } from 'utils/address';
@@ -14,6 +14,7 @@ import Unclaimed from './CustomValues/Unclaimed';
 import RugpullVestingButton from './CustomValues/RugpullVestingButton';
 import { useLocale } from 'hooks';
 import { downloadVesting } from 'utils/downloadCsv';
+import ReasonButton from './CustomValues/ReasonButton';
 
 export default function VestingTable({
   data,
@@ -31,7 +32,7 @@ export default function VestingTable({
   const [{ data: accountData }] = useAccount();
   const { locale } = useLocale();
 
-  const columns = React.useMemo<ColumnDef<IVesting>[]>(
+  let columns = React.useMemo<ColumnDef<IVesting>[]>(
     () => [
       {
         accessorFn: (row) => `${row.tokenName} (${row.tokenSymbol})`,
@@ -78,6 +79,12 @@ export default function VestingTable({
         cell: ({ cell }) => cell.row.original && <Unclaimed data={cell.row.original} />,
       },
       {
+        accessorKey: 'reason',
+        header: 'Reason',
+        cell: ({ cell }) =>
+          cell.row.original && <p>{cell.row.original.reason !== null ? cell.row.original.reason : 'N/A'}</p>,
+      },
+      {
         accessorFn: (row) => statusAccessorFn(row),
         id: 'status',
         header: 'Status',
@@ -90,6 +97,11 @@ export default function VestingTable({
           cell.row.original && (
             <ClaimButton data={cell.row.original} claimDialog={claimDialog} claimValues={claimValues} />
           ),
+      },
+      {
+        id: 'addReason',
+        header: '',
+        cell: ({ cell }) => cell.row.original && <ReasonButton data={cell.row.original} />,
       },
       {
         id: 'rug',
@@ -118,7 +130,10 @@ export default function VestingTable({
   );
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
-
+  const hasReason = data.some((e) => e.reason !== null);
+  if (!hasReason) {
+    columns = columns.filter((e) => e.id !== 'reason');
+  }
   const instance = useReactTable({
     data,
     columns,

@@ -10,6 +10,7 @@ import { IVesting } from 'types';
 import { networkDetails } from 'utils/constants';
 import { erc20ABI, useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
+import vestingReasons from 'abis/vestingReasons';
 
 async function getVestingInfo(userAddress: string | undefined, provider: BaseProvider | null, chainId: number | null) {
   try {
@@ -90,8 +91,17 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
           ],
         }));
         const vestingContractInfoResults = await runMulticall(vestingContractInfoContext);
+        const vestingContractReasonContext: ContractCallContext[] = Object.keys(escrows).map((p: any) => ({
+          reference: escrows[p].id.toLowerCase(),
+          abi: vestingReasons,
+          contractAddress: networkDetails[chainId].vestingReason,
+          calls: [{ reference: 'reason', methodName: 'reasons', methodParameters: [escrows[p].id] }],
+        }));
+        const vestingContractReasonResults = await runMulticall(vestingContractReasonContext);
         for (const i in escrows) {
           const vestingReturnContext = vestingContractInfoResults[escrows[i].id].callsReturnContext;
+          const reason =
+            vestingContractReasonResults[escrows[i].id.toLowerCase()].callsReturnContext[0].returnValues[0];
           const result = {
             contract: escrows[i].id,
             unclaimed: new BigNumber(vestingReturnContext[0].returnValues[0].hex).toString(),
@@ -109,6 +119,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
             admin: escrows[i].admin,
             disabledAt: new BigNumber(vestingReturnContext[10].returnValues[0].hex).toString(),
             timestamp: Date.now() / 1e3,
+            reason: reason !== '' ? reason : null,
           };
           if (results.includes(result)) continue;
           results.push(result);
@@ -149,6 +160,24 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
             ],
           })
         );
+        let vestingContractReasonResults;
+        if (networkDetails[chainId].vestingReason !== '') {
+          const vestingContractReasonContext: ContractCallContext[] = Object.keys(vestingContractsResults).map(
+            (p: any) => ({
+              reference: vestingContractsResults[p].callsReturnContext[0].returnValues[0].toLowerCase(),
+              abi: vestingReasons,
+              contractAddress: networkDetails[chainId].vestingReason,
+              calls: [
+                {
+                  reference: 'reason',
+                  methodName: 'reasons',
+                  methodParameters: [vestingContractsResults[p].callsReturnContext[0].returnValues[0]],
+                },
+              ],
+            })
+          );
+          vestingContractReasonResults = await runMulticall(vestingContractReasonContext);
+        }
         const vestingContractInfoResults = await runMulticall(vestingContractInfoContext);
         const tokenContractCallContext: ContractCallContext[] = Object.keys(vestingContractInfoResults).map(
           (p: any) => ({
@@ -170,6 +199,10 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
           if (userAddress.toLowerCase() !== recipient && userAddress.toLowerCase() !== admin) continue;
           const tokenReturnContext =
             tokenContractCallResults[vestingReturnContext[3].returnValues[0]].callsReturnContext;
+          const reason =
+            networkDetails[chainId].vestingReason === ''
+              ? ''
+              : vestingContractReasonResults[key.toLowerCase()].callsReturnContext[0].returnValues[0];
           results.push({
             contract: key,
             unclaimed: new BigNumber(vestingReturnContext[0].returnValues[0].hex).toString(),
@@ -187,6 +220,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
             admin: admin,
             disabledAt: new BigNumber(vestingReturnContext[10].returnValues[0].hex).toString(),
             timestamp: Date.now() / 1e3,
+            reason: reason !== '' ? reason : null,
           });
         }
       }

@@ -117,4 +117,5 @@ export interface IVesting {
   admin: string;
   disabledAt: string;
   timestamp: number;
+  reason: string | null;
 }

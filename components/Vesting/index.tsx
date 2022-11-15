@@ -95,6 +95,7 @@ export function AltVestingSection({ isLoading, isError, data }: IAltVestingSecti
 
   const chartDialog = useDialogState();
   const claimDialog = useDialogState();
+  const reasonDialog = useDialogState();
 
   const chartValues = React.useRef<IChartValues | null>(null);
   const claimValues = React.useRef<IVesting | null>(null);
@@ -113,7 +114,7 @@ export function AltVestingSection({ isLoading, isError, data }: IAltVestingSecti
           ) : null}
         </FallbackContainer>
       ) : (
-        <Table {...{ data, chartValues, chartDialog, claimDialog, claimValues }} />
+        <Table {...{ data, chartValues, chartDialog, claimDialog, reasonDialog, claimValues }} />
       )}
 
       <React.Suspense fallback={null}>
