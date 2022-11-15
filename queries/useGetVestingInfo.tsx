@@ -161,7 +161,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
           })
         );
         let vestingContractReasonResults;
-        if (networkDetails[chainId].vestingReason !== '') {
+        if (networkDetails[chainId].vestingReason !== '0x0000000000000000000000000000000000000000') {
           const vestingContractReasonContext: ContractCallContext[] = Object.keys(vestingContractsResults).map(
             (p: any) => ({
               reference: vestingContractsResults[p].callsReturnContext[0].returnValues[0].toLowerCase(),
@@ -200,7 +200,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
           const tokenReturnContext =
             tokenContractCallResults[vestingReturnContext[3].returnValues[0]].callsReturnContext;
           const reason =
-            networkDetails[chainId].vestingReason === ''
+            networkDetails[chainId].vestingReason === '0x0000000000000000000000000000000000000000'
               ? ''
               : vestingContractReasonResults[key.toLowerCase()].callsReturnContext[0].returnValues[0];
           results.push({

@@ -112,7 +112,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'ethereum',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
     vestingFactory: VESTING_FACTORY_RINKEBY,
-    vestingReason: '',
+    vestingReason: '0x0000000000000000000000000000000000000000',
   },
   42: {
     rpcUrl: `https://kovan.infura.io/v3/${infuraId}`,
@@ -130,7 +130,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'ethereum',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
     vestingFactory: VESTING_FACTORY_KOVAN,
-    vestingReason: '',
+    vestingReason: '0x0000000000000000000000000000000000000000',
   },
   43113: {
     rpcUrl: 'https://api.avax-test.network/ext/bc/C/rpc',
@@ -144,7 +144,7 @@ export const networkDetails: INetworkDetails = {
     prefix: 'avax',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchex/info/logo.png',
     vestingFactory: VESTING_FACTORY_FUJI,
-    vestingReason: '',
+    vestingReason: '0x0000000000000000000000000000000000000000',
   },
   43114: {
     rpcUrl: 'https://api.avax.network/ext/bc/C/rpc',
@@ -174,7 +174,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/polygon/info/logo.png',
     tokenListId: 'polygon-pos',
     vestingFactory: VESTING_FACTORY_POLYGON,
-    vestingReason: '',
+    vestingReason: '0x0000000000000000000000000000000000000000',
   },
   250: {
     rpcUrl: 'https://rpc.ftm.tools/',
@@ -189,7 +189,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/fantom/info/logo.png',
     tokenListId: 'fantom',
     vestingFactory: VESTING_FACTORY_FANTOM,
-    vestingReason: '',
+    vestingReason: '0x0000000000000000000000000000000000000000',
   },
   1: {
     rpcUrl: 'https://rpc.ankr.com/eth',
@@ -219,7 +219,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/optimism/info/logo.png',
     tokenListId: 'optimistic-ethereum',
     vestingFactory: VESTING_FACTORY_OPTIMISM,
-    vestingReason: '',
+    vestingReason: '0x0000000000000000000000000000000000000000',
   },
   42161: {
     rpcUrl: 'https://arb1.arbitrum.io/rpc',
@@ -234,7 +234,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/arbitrum/info/logo.png',
     tokenListId: 'arbitrum-one',
     vestingFactory: VESTING_FACTORY_ARBITRUM,
-    vestingReason: '',
+    vestingReason: '0x0000000000000000000000000000000000000000',
   },
   56: {
     rpcUrl: 'https://rpc.ankr.com/bsc',
@@ -249,7 +249,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png',
     tokenListId: 'binance-smart-chain',
     vestingFactory: VESTING_FACTORY_BSC,
-    vestingReason: '',
+    vestingReason: '0x0000000000000000000000000000000000000000',
   },
   100: {
     rpcUrl: 'https://xdai-rpc.gateway.pokt.network',
@@ -264,7 +264,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/xdai/info/logo.png',
     tokenListId: 'xdai',
     vestingFactory: VESTING_FACTORY_XDAI,
-    vestingReason: '',
+    vestingReason: '0x0000000000000000000000000000000000000000',
   },
   82: {
     rpcUrl: 'https://rpc.meter.io',
@@ -279,7 +279,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://assets.coingecko.com/coins/images/11848/large/mtrg-logo.png?1595062273',
     tokenListId: 'meter',
     vestingFactory: VESTING_FACTORY_METER,
-    vestingReason: '',
+    vestingReason: '0x0000000000000000000000000000000000000000',
   },
   5: {
     rpcUrl: `https://goerli.infura.io/v3/${infuraId}`,
@@ -312,7 +312,7 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'metis-andromeda',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/metis/info/logo.png',
     vestingFactory: VESTING_FACTORY_METIS,
-    vestingReason: '',
+    vestingReason: '0x0000000000000000000000000000000000000000',
   },
 };
 
