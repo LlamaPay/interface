@@ -79,7 +79,7 @@ export default function VestingTable({
         cell: ({ cell }) => cell.row.original && <Unclaimed data={cell.row.original} />,
       },
       {
-        accessorKey: 'reason',
+        id: 'reason',
         header: 'Reason',
         cell: ({ cell }) =>
           cell.row.original && <p>{cell.row.original.reason !== null ? cell.row.original.reason : 'N/A'}</p>,
