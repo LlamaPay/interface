@@ -222,7 +222,7 @@ export const networkDetails: INetworkDetails = {
     vestingReason: '0x0000000000000000000000000000000000000000',
   },
   42161: {
-    rpcUrl: 'https://arb1.arbitrum.io/rpc',
+    rpcUrl: 'https://rpc.ankr.com/arbitrum',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-arbitrum',
     chainProviders: new ethers.providers.JsonRpcProvider('https://arb1.arbitrum.io/rpc'),
     llamapayFactoryAddress: FACTORY_ARBITRUM,
