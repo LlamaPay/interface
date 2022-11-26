@@ -1,14 +1,28 @@
 import { useDialogState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
+import { useNetworkProvider } from 'hooks';
 import Link from 'next/link';
 import * as React from 'react';
+import { useAccount } from 'wagmi';
 
 export default function GnosisSafeWarning() {
   const dialog = useDialogState();
+  const { provider } = useNetworkProvider();
+  const [{ data: accountData }] = useAccount();
 
   React.useEffect(() => {
-    if (process.env.NEXT_PUBLIC_SAFE === 'false' && window.location !== window.parent.location) {
-      dialog.show();
+    async function checkCode() {
+      const isContract =
+        (await provider?.getCode(accountData?.address || '0x0000000000000000000000000000000000000000')) !== '0x';
+      if (isContract) {
+        dialog.show();
+      }
+    }
+    if (process.env.NEXT_PUBLIC_SAFE === 'false') {
+      checkCode();
+      if (window.location !== window.parent.location) {
+        dialog.show();
+      }
     }
   }, []);
 
