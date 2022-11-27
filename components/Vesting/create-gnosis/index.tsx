@@ -42,7 +42,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
   const { mutate: gnosisBatch, isLoading: gnosisLoading } = useGnosisBatch();
   const [tokenAddress, setTokenAddress] = React.useState<string>('');
   const [csvFile, setCsvFile] = React.useState<File | null>(null);
-  const [recipient, setRecipient] = React.useState<string | null>(null);
+  const [notEOAArr, setNotEAArr] = React.useState<(string | null)[]>([]);
   const eoaWarningDialog = useDialogState();
   const provider = useProvider();
   const queryClient = useQueryClient();
@@ -74,16 +74,15 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
     const tokenContract = createERC20Contract({ tokenAddress: getAddress(tokenAddress), provider });
     const decimals = await tokenContract.decimals();
     const createCalls: string[] = [];
+    const notEOAs: string[] = [];
     let toApprove = new BigNumber(0);
     for (const i in data.vestingContracts) {
       const info = data.vestingContracts[i];
       const fmtVestingTime = new BigNumber(info.vestingTime).times(secondsByDuration[info.vestingDuration]).toFixed(0);
       const date = info.includeCustomStart ? new Date(info.startDate) : new Date(Date.now());
-      const isEOA = true//(await provider.getCode(info.recipientAddress)) === '0x';
+      const isEOA = (await provider.getCode(info.recipientAddress)) === '0x';
       if (!isEOA) {
-        setRecipient(info.recipientAddress);
-        eoaWarningDialog.show();
-        return;
+        notEOAs.push(info.recipientAddress);
       }
       if (date.toString() === 'Invalid Date') {
         toast.error('Invalid Date');
@@ -104,6 +103,9 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
       ]);
       createCalls.push(call);
       toApprove = toApprove.plus(fmtVestingAmount);
+    }
+    if (notEOAs.length > 0) {
+      setNotEAArr(notEOAs);
     }
     const calls: { [key: string]: string[] } = {};
     calls[tokenAddress] = [ERC20Interface.encodeFunctionData('approve', [factory, toApprove.toFixed(0)])];
@@ -371,7 +373,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
           {gnosisLoading ? <BeatLoader size={6} color="white" /> : 'Create Contracts'}
         </SubmitButton>
       </form>
-      <EOAWarning address={recipient} dialog={eoaWarningDialog} />
+      <EOAWarning address={notEOAArr} dialog={eoaWarningDialog} />
     </>
   );
 }
