@@ -12,10 +12,11 @@ export default function GnosisSafeWarning() {
 
   React.useEffect(() => {
     async function checkCode() {
-      const isContract =
-        (await provider?.getCode(accountData?.address || '0x0000000000000000000000000000000000000000')) !== '0x';
-      if (isContract) {
-        dialog.show();
+      if (accountData?.address) {
+        const isContract = (await provider?.getCode(accountData?.address)) !== '0x';
+        if (isContract) {
+          dialog.show();
+        }
       }
     }
     if (process.env.NEXT_PUBLIC_SAFE === 'false') {
