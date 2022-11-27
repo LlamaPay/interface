@@ -79,7 +79,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
       const info = data.vestingContracts[i];
       const fmtVestingTime = new BigNumber(info.vestingTime).times(secondsByDuration[info.vestingDuration]).toFixed(0);
       const date = info.includeCustomStart ? new Date(info.startDate) : new Date(Date.now());
-      const isEOA = (await provider.getCode(info.recipientAddress)) === '0x' ? true : false;
+      const isEOA = true//(await provider.getCode(info.recipientAddress)) === '0x';
       if (!isEOA) {
         setRecipient(info.recipientAddress);
         eoaWarningDialog.show();
