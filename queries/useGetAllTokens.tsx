@@ -27,7 +27,7 @@ const useGetAllTokens = () => {
   // format the data in memo, instead of react query's select as graphql trigger rerenders multiple times when using it
   const tokens: IToken[] | null = React.useMemo(() => {
     if (data?.tokens && provider) {
-      return data?.tokens.map((c) => ({
+      const result = data?.tokens.map((c) => ({
         tokenAddress: getAddress(c.address),
         llamaContractAddress: getAddress(c.contract?.id),
         name: c.name,
@@ -36,6 +36,7 @@ const useGetAllTokens = () => {
         tokenContract: createERC20Contract({ tokenAddress: getAddress(c.address), provider }),
         llamaTokenContract: createContract(getAddress(c.contract?.id), provider),
       }));
+      return result.filter((c) => c.tokenAddress.toLowerCase() !== '0x0000000000000000000000000000000000001010');
     } else return null;
   }, [data, provider]);
 
