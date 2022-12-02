@@ -147,9 +147,9 @@ export const networkDetails: INetworkDetails = {
     vestingReason: '0x0000000000000000000000000000000000000000',
   },
   43114: {
-    rpcUrl: 'https://api.avax.network/ext/bc/C/rpc',
+    rpcUrl: 'https://rpc.ankr.com/avalanche',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-avalanche-mainnet',
-    chainProviders: new ethers.providers.JsonRpcProvider('https://api.avax.network/ext/bc/C/rpc'),
+    chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/avalanche'),
     llamapayFactoryAddress: FACTORY_AVALANCHE,
     disperseAddress: DISPERSE_AVALANCHE,
     botAddress: BOT_AVALANCHE,
@@ -159,7 +159,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchex/info/logo.png',
     tokenListId: 'avalanche',
     vestingFactory: VESTING_FACTORY_AVALANCHE,
-    vestingReason: '',
+    vestingReason: '0x0000000000000000000000000000000000000000',
   },
   137: {
     rpcUrl: 'https://polygon-rpc.com/',
