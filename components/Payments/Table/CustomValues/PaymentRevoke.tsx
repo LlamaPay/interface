@@ -38,7 +38,7 @@ export default function PaymentRevokeButton({ data }: { data: IPayments }) {
   return (
     <>
       {data.active && data.payer.toLowerCase() === accountData?.address.toLowerCase() && (
-        <button onClick={handleRevoke} className="row-action-links font-exo float-right dark:text-white">
+        <button onClick={handleRevoke} className="row-action-links font-exo float-left dark:text-white">
           Revoke
         </button>
       )}

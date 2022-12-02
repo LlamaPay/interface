@@ -12,7 +12,14 @@ function getStatus(data: IPayments) {
   } else if (!data.active) {
     return `Redeemed`;
   } else {
-    return `Executes in: ${((data.release - Date.now() / 1e3) / 86400).toFixed(2)} days`;
+    const delta = data.release - Date.now() / 1e3;
+    if (3600 >= delta) {
+      return `Executes in ${(delta / 60).toFixed(2)} minutes`;
+    } else if (86400 >= delta) {
+      return `Executes in ${(delta / 3600).toFixed(2)} hours`;
+    } else {
+      return `Executes in: ${(delta / 86400).toFixed(2)} days`;
+    }
   }
 }
 

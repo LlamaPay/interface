@@ -6,6 +6,7 @@ import * as React from 'react';
 import { IPayments } from 'types';
 import { formatAddress } from 'utils/address';
 import { useAccount } from 'wagmi';
+import PaymentRevokeButton from './CustomValues/PaymentRevoke';
 import PaymentStatus, { paymentStatusAccessorFn } from './CustomValues/PaymentStatus';
 
 export default function PaymentsTableActual({ data }: { data: any }) {
@@ -55,6 +56,7 @@ export default function PaymentsTableActual({ data }: { data: any }) {
       {
         id: 'revoke',
         header: '',
+        cell: (i) => i.row.original && <PaymentRevokeButton data={i.row.original} />,
       },
     ],
     []
