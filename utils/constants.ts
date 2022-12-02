@@ -72,6 +72,8 @@ interface INetworkDetails {
     tokenListId?: string;
     vestingFactory: string;
     vestingReason: string;
+    paymentsContract?: string;
+    paymentsGraphApi?: string;
   };
 }
 
@@ -298,6 +300,8 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
     vestingFactory: VESTING_FACTORY_GOERLI,
     vestingReason: '0xA83965c2EBCD3d809f59030D2f7d3c6C646deD3D',
+    paymentsContract: '0x02266E3b5cE26d62Ea73Ea7f2C542EBc24121c01',
+    paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-goerli',
   },
   1088: {
     rpcUrl: 'https://andromeda.metis.io/?owner=1088',
