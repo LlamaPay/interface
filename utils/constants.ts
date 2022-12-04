@@ -177,6 +177,8 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'polygon-pos',
     vestingFactory: VESTING_FACTORY_POLYGON,
     vestingReason: '0x0000000000000000000000000000000000000000',
+    paymentsContract: '0x02266E3b5cE26d62Ea73Ea7f2C542EBc24121c01',
+    paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-polygon',
   },
   250: {
     rpcUrl: 'https://rpc.ftm.tools/',
@@ -252,6 +254,8 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'binance-smart-chain',
     vestingFactory: VESTING_FACTORY_BSC,
     vestingReason: '0x0000000000000000000000000000000000000000',
+    paymentsContract: '0x02266E3b5cE26d62Ea73Ea7f2C542EBc24121c01',
+    paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-bsc',
   },
   100: {
     rpcUrl: 'https://xdai-rpc.gateway.pokt.network',
