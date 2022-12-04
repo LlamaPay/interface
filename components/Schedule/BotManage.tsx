@@ -35,6 +35,7 @@ export default function BotFunds({
   const [showCalendar, setShowCalendar] = React.useState<boolean>(false);
 
   const { data: botInfo, isLoading } = useGetBotInfo();
+  console.log(botInfo);
 
   const { mutate: approveMax } = useApproveTokenForMaxAmt();
 
@@ -433,13 +434,13 @@ export default function BotFunds({
                           </td>
                           <td className="table-description text-center dark:text-white">
                             <span>
-                              {botInfo.toInclude[p].frequency === secondsByDuration['day']
+                              {Number(botInfo.toInclude[p].frequency) === Number(secondsByDuration['day'])
                                 ? 'Every Day'
-                                : botInfo.toInclude[p].frequency === secondsByDuration['week']
+                                : Number(botInfo.toInclude[p].frequency) === Number(secondsByDuration['week'])
                                 ? 'Every 7 Days'
-                                : botInfo.toInclude[p].frequency === secondsByDuration['biweek']
+                                : Number(botInfo.toInclude[p].frequency) === Number(secondsByDuration['biweek'])
                                 ? 'Every 14 Days'
-                                : botInfo.toInclude[p].frequency === secondsByDuration['month']
+                                : Number(botInfo.toInclude[p].frequency) === Number(secondsByDuration['month'])
                                 ? 'Every 30 days'
                                 : ''}
                             </span>

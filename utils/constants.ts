@@ -72,6 +72,7 @@ interface INetworkDetails {
     tokenListId?: string;
     vestingFactory: string;
     vestingReason: string;
+    botSubgraph?: string;
   };
 }
 
@@ -160,6 +161,7 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'avalanche',
     vestingFactory: VESTING_FACTORY_AVALANCHE,
     vestingReason: '0x0000000000000000000000000000000000000000',
+    botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-avax',
   },
   137: {
     rpcUrl: 'https://polygon-rpc.com/',
@@ -175,6 +177,7 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'polygon-pos',
     vestingFactory: VESTING_FACTORY_POLYGON,
     vestingReason: '0x0000000000000000000000000000000000000000',
+    botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-polygon',
   },
   250: {
     rpcUrl: 'https://rpc.ftm.tools/',
@@ -190,6 +193,7 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'fantom',
     vestingFactory: VESTING_FACTORY_FANTOM,
     vestingReason: '0x0000000000000000000000000000000000000000',
+    botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-fantom',
   },
   1: {
     rpcUrl: 'https://rpc.ankr.com/eth',
@@ -205,6 +209,7 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'ethereum',
     vestingFactory: VESTING_FACTORY_MAINNET,
     vestingReason: '0xA83965c2EBCD3d809f59030D2f7d3c6C646deD3D',
+    botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-mainnet',
   },
   10: {
     rpcUrl: 'https://mainnet.optimism.io',
@@ -220,6 +225,7 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'optimistic-ethereum',
     vestingFactory: VESTING_FACTORY_OPTIMISM,
     vestingReason: '0x0000000000000000000000000000000000000000',
+    botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-optimism',
   },
   42161: {
     rpcUrl: 'https://arb1.arbitrum.io/rpc',
@@ -250,6 +256,7 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'binance-smart-chain',
     vestingFactory: VESTING_FACTORY_BSC,
     vestingReason: '0x0000000000000000000000000000000000000000',
+    botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-bsc',
   },
   100: {
     rpcUrl: 'https://xdai-rpc.gateway.pokt.network',
@@ -298,6 +305,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
     vestingFactory: VESTING_FACTORY_GOERLI,
     vestingReason: '0xA83965c2EBCD3d809f59030D2f7d3c6C646deD3D',
+    botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-goerli',
   },
   1088: {
     rpcUrl: 'https://andromeda.metis.io/?owner=1088',
@@ -434,17 +442,6 @@ export const whitelist: ITokenWhitelist = {
 
 export const zeroAdd = '0x0000000000000000000000000000000000000000';
 
-export const botContractCreation: { [key: number]: number } = {
-  5: 7524336,
-  43114: 19491402,
-  1: 15466169,
-  137: 32643821,
-  10: 21825387,
-  250: 46278811,
-  56: 21013175,
-  42161: 23462203,
-};
-
-export const botDeployedOn: number[] = [43114, 5, 1, 137, 10, 250, 56, 42161];
+export const botDeployedOn: number[] = [43114, 5, 1, 137, 10, 250, 56];
 
 export const timeframes = ['Hour', 'Day', 'Week', 'Month', 'Year'];
