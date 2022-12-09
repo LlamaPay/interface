@@ -23,6 +23,7 @@ export const FACTORY_BSC = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_XDAI = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_METER = '0xc666badd040d5e471d2b77296fef46165ffe5132';
 export const FACTORY_METIS = '0x43634d1C608f16Fb0f4926c12b54124C93030600';
+export const FACTORY_KAVA = '0xCA052D073591C0C059675B6F7F95cE75a4Ab8fc8';
 
 export const VESTING_FACTORY_AVALANCHE = '0xB93427b83573C8F27a08A909045c3e809610411a';
 export const VESTING_FACTORY_POLYGON = '0xB93427b83573C8F27a08A909045c3e809610411a';
@@ -34,6 +35,7 @@ export const VESTING_FACTORY_BSC = '0xB93427b83573C8F27a08A909045c3e809610411a';
 export const VESTING_FACTORY_XDAI = '0xB93427b83573C8F27a08A909045c3e809610411a';
 export const VESTING_FACTORY_METER = '0x6B24Fe659D1E91f8800E86600DE577A4cA8814a6';
 export const VESTING_FACTORY_METIS = '0xB93427b83573C8F27a08A909045c3e809610411a';
+export const VESTING_FACTORY_KAVA = '0xB93427b83573C8F27a08A909045c3e809610411a';
 
 export const MAINNET_ENS_RESOLVER = '0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C';
 
@@ -43,6 +45,7 @@ export const DISPERSE_ARBITRUM = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 export const DISPERSE_METER = '0x8e5455983a70da3d1e66719636e907d63eca40b7';
 export const DISPERSE_METIS = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 export const DISPERSE_GOERLI = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
+export const DISPERSE_KAVA = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 
 export const BOT_GOERLI = '0xc5A4fec44fbDE08A7c9dE6e07b60De60aC074Ab9';
 export const BOT_AVALANCHE = '0x57547F79d8344ACCAb21DC0a9c9d186e240353d7';
@@ -322,6 +325,21 @@ export const networkDetails: INetworkDetails = {
     vestingFactory: VESTING_FACTORY_METIS,
     vestingReason: '0x0000000000000000000000000000000000000000',
   },
+  2222: {
+    rpcUrl: 'https://evm.kava.io',
+    subgraphEndpoint: 'https://the-graph.kava.io/subgraphs/name/nemusonaneko/llamapay-subgraph/',
+    chainProviders: new ethers.providers.JsonRpcProvider('https://evm.kava.io'),
+    llamapayFactoryAddress: FACTORY_KAVA,
+    disperseAddress: DISPERSE_KAVA,
+    botAddress: '',
+    blockExplorerURL: 'https://explorer.kava.io/',
+    blockExplorerName: 'Kava Explorer',
+    prefix: 'kava',
+    tokenListId: 'kava-evm',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/kava/info/logo.png',
+    vestingFactory: VESTING_FACTORY_KAVA,
+    vestingReason: '0x0000000000000000000000000000000000000000',
+  },
 };
 
 export const defaultChains: Chain[] = allChains.filter(
@@ -404,6 +422,18 @@ export const chains: Chain[] = [
       {
         name: 'Meter Blockchain Explorer',
         url: 'https://scan.meter.io/',
+      },
+    ],
+  },
+  {
+    id: 2222,
+    name: 'Kava',
+    nativeCurrency: { name: 'Kava', symbol: 'KAVA', decimals: 18 },
+    rpcUrls: ["https://evm.kava.io'"],
+    blockExplorers: [
+      {
+        name: 'Kava Explorer',
+        url: 'https://explorer.kava.io/',
       },
     ],
   },
