@@ -119,3 +119,16 @@ export interface IVesting {
   timestamp: number;
   reason: string | null;
 }
+
+export interface IPayments {
+  tokenName: string;
+  tokenSymbol: string;
+  tokenAddress: string;
+  tokenDecimals: number;
+  payer: string;
+  payee: string;
+  amount: number;
+  release: number;
+  active: boolean;
+  revoked: boolean;
+}

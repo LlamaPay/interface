@@ -75,6 +75,8 @@ interface INetworkDetails {
     tokenListId?: string;
     vestingFactory: string;
     vestingReason: string;
+    paymentsContract?: string;
+    paymentsGraphApi?: string;
     botSubgraph?: string;
   };
 }
@@ -180,6 +182,8 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'polygon-pos',
     vestingFactory: VESTING_FACTORY_POLYGON,
     vestingReason: '0x0000000000000000000000000000000000000000',
+    paymentsContract: '0x02266E3b5cE26d62Ea73Ea7f2C542EBc24121c01',
+    paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-polygon',
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-polygon',
   },
   250: {
@@ -259,6 +263,8 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'binance-smart-chain',
     vestingFactory: VESTING_FACTORY_BSC,
     vestingReason: '0x0000000000000000000000000000000000000000',
+    paymentsContract: '0x02266E3b5cE26d62Ea73Ea7f2C542EBc24121c01',
+    paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-bsc',
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-bsc',
   },
   100: {
@@ -308,6 +314,8 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
     vestingFactory: VESTING_FACTORY_GOERLI,
     vestingReason: '0xA83965c2EBCD3d809f59030D2f7d3c6C646deD3D',
+    paymentsContract: '0x02266E3b5cE26d62Ea73Ea7f2C542EBc24121c01',
+    paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-goerli',
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-goerli',
   },
   1088: {

@@ -8,7 +8,7 @@ interface FallbackProps {
   isLoading?: boolean;
   isError: boolean;
   noData: boolean;
-  type: 'streams' | 'history' | 'balances' | 'payeesList' | 'vestingStreams';
+  type: 'streams' | 'history' | 'balances' | 'payeesList' | 'vestingStreams' | 'payments';
   showLoader?: boolean;
   supressWalletConnection?: boolean;
 }
@@ -55,6 +55,15 @@ const Fallback = ({ isLoading, isError, noData, type, supressWalletConnection, s
       emptyDataMessage = 'Create a Vesting Contract to see a list of your streams';
       defaultMessage = !accountData
         ? 'Connect Wallet to see your vesting streams'
+        : unsupported
+        ? t0('networkNotSupported')
+        : null;
+      break;
+    case 'payments':
+      errorMessage = t0('error');
+      emptyDataMessage = 'Create a Payment to see a list of payments';
+      defaultMessage = !accountData
+        ? 'Connect Wallet to see your payments'
         : unsupported
         ? t0('networkNotSupported')
         : null;
