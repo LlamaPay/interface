@@ -1,6 +1,7 @@
 import classNames from 'classnames';
-import Fallback from 'components/Fallback';
+import Fallback, { FallbackContainer } from 'components/Fallback';
 import { useNetworkProvider } from 'hooks';
+import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import useGetPaymentsInfo from 'queries/useGetPaymentsInfo';
 import { networkDetails } from 'utils/constants';
@@ -14,6 +15,8 @@ export default function PaymentsTable() {
       ? networkDetails[chainId].paymentsContract
       : null
     : null;
+  const unsupported = paymentsContract ? false : true;
+  const t0 = useTranslations('Common');
 
   return (
     <section className="w-full">
@@ -31,14 +34,20 @@ export default function PaymentsTable() {
           </a>
         </Link>
       </div>
-      {isLoading || error || !data || data.length < 1 ? (
-        <Fallback
-          isLoading={isLoading}
-          isError={error ? true : false}
-          noData={true}
-          type={'payments'}
-          showLoader={true}
-        />
+      {isLoading || error || !data || data.length < 1 || unsupported ? (
+        unsupported ? (
+          <FallbackContainer>
+            <p>{t0('networkNotSupported')}</p>
+          </FallbackContainer>
+        ) : (
+          <Fallback
+            isLoading={isLoading}
+            isError={error ? true : false}
+            noData={true}
+            type={'payments'}
+            showLoader={true}
+          />
+        )
       ) : (
         <PaymentsTableActual data={data} />
       )}
