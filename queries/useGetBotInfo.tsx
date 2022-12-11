@@ -3,8 +3,9 @@ import botContract from 'abis/botContract';
 import { ethers } from 'ethers';
 import { useNetworkProvider } from 'hooks';
 import { useQuery } from 'react-query';
-import { botContractCreation, networkDetails, zeroAdd } from 'utils/constants';
+import { networkDetails, zeroAdd } from 'utils/constants';
 import { erc20ABI, useAccount } from 'wagmi';
+import { gql, request } from 'graphql-request';
 
 async function getBotInfo(userAddress: string | undefined, provider: BaseProvider | null, chainId: number | null) {
   try {
@@ -15,34 +16,36 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
     } else if (!chainId) {
       throw new Error('Cannot get Chain ID');
     } else {
-      const contract = new ethers.Contract(networkDetails[chainId].botAddress, botContract, provider);
-      const endBlock = await provider.getBlockNumber();
-      let currBlock = botContractCreation[chainId];
-      const filters = contract.filters;
-      let events: ethers.Event[] = [];
-      do {
-        const start = currBlock;
-        if (currBlock + 2048 > endBlock) {
-          currBlock = endBlock;
-        } else {
-          currBlock += 2048;
+      if (!networkDetails[chainId].botSubgraph) throw new Error('No subgraph');
+      const get_from = gql`
+        {
+          schedules(where: { from: "${userAddress}", active: true }) {
+            owner
+            token
+            from
+            to
+            amountPerSec
+            starts
+            frequency
+          }
         }
-        const queriedEvents = await contract.queryFilter(filters, start, currBlock);
-        events = events.concat(queriedEvents);
-      } while (currBlock < endBlock);
-      const withdraws: any = {};
-      for (const i in events) {
-        const event = events[i];
-        if (!event.args) continue;
-        const id = event.args.id;
-        const user = userAddress.toLowerCase();
-        const from = event.args.from.toLowerCase();
-        const to = event.args.to.toLowerCase();
-        if (from !== user && to !== user) continue;
-        const newArr = withdraws[id] ?? [];
-        newArr.push(event);
-        withdraws[id] = newArr;
-      }
+      `;
+      const get_to = gql`
+        {
+          schedules(where: { to: "${userAddress}", active: true }) {
+            owner
+            token
+            from
+            to
+            amountPerSec
+            starts
+            frequency
+          }
+        }
+      `;
+      const froms = (await request(networkDetails[chainId].botSubgraph!, get_from)).schedules;
+      const tos = (await request(networkDetails[chainId].botSubgraph!, get_from)).schedules;
+      const schedules = froms.concat(tos);
       const tokenSymbols: any = {};
       const toInclude: {
         [key: string]: {
@@ -56,24 +59,24 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
           frequency: number;
         };
       } = {};
-      for (const i in withdraws) {
-        const last = withdraws[i][withdraws[i].length - 1];
-        if (last.event === 'WithdrawCancelled') continue;
-        if (tokenSymbols[last.args.token] === undefined && last.args.token !== zeroAdd) {
-          const tokenContract = new ethers.Contract(last.args.token, erc20ABI, provider);
-          tokenSymbols[last.args.token] = await tokenContract.symbol();
+      for (const i in schedules) {
+        const schedule = schedules[i];
+        if (tokenSymbols[schedule.token] === undefined && schedule.token !== zeroAdd) {
+          const tokenContract = new ethers.Contract(schedule.token, erc20ABI, provider);
+          tokenSymbols[schedule.token] = await tokenContract.symbol();
         }
-        toInclude[i] = {
-          owner: last.args.owner,
-          from: last.args.from,
-          to: last.args.to,
-          token: last.args.token,
-          tokenSymbol: tokenSymbols[last.args.token],
-          amountPerSec: last.args.amountPerSec,
-          starts: last.args.starts,
-          frequency: last.args.frequency,
+        toInclude[schedule] = {
+          owner: schedule.owner,
+          from: schedule.from,
+          to: schedule.to,
+          token: schedule.token,
+          tokenSymbol: tokenSymbols[schedule.token],
+          amountPerSec: schedule.amountPerSec,
+          starts: schedule.starts,
+          frequency: schedule.frequency,
         };
       }
+      const contract = new ethers.Contract(networkDetails[chainId].botAddress, botContract, provider);
       const redirect = await contract.redirects(userAddress);
       return { toInclude, redirect, tokenSymbols };
     }
@@ -87,8 +90,8 @@ export default function useGetBotInfo() {
   const { provider, chainId } = useNetworkProvider();
   const [{ data: accountData }] = useAccount();
   return useQuery(
-    ['botInfo', accountData?.address, chainId],
-    () => getBotInfo(accountData?.address, provider, chainId),
+    ['botInfo', accountData?.address.toLowerCase(), chainId],
+    () => getBotInfo(accountData?.address.toLowerCase(), provider, chainId),
     {
       refetchInterval: 180000,
     }

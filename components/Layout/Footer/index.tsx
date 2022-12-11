@@ -29,7 +29,7 @@ const Footer = () => {
               </a>
             </li>
             <li>
-              <a href="https://discord.gg/buPFYXzDDd" target="_blank" rel="noreferrer noopener">
+              <a href="https://discord.defillama.com/" target="_blank" rel="noreferrer noopener">
                 Discord
               </a>
             </li>

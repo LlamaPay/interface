@@ -23,6 +23,7 @@ export const FACTORY_BSC = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_XDAI = '0xde1C04855c2828431ba637675B6929A684f84C7F';
 export const FACTORY_METER = '0xc666badd040d5e471d2b77296fef46165ffe5132';
 export const FACTORY_METIS = '0x43634d1C608f16Fb0f4926c12b54124C93030600';
+export const FACTORY_KAVA = '0xCA052D073591C0C059675B6F7F95cE75a4Ab8fc8';
 
 export const VESTING_FACTORY_AVALANCHE = '0xB93427b83573C8F27a08A909045c3e809610411a';
 export const VESTING_FACTORY_POLYGON = '0xB93427b83573C8F27a08A909045c3e809610411a';
@@ -34,6 +35,7 @@ export const VESTING_FACTORY_BSC = '0xB93427b83573C8F27a08A909045c3e809610411a';
 export const VESTING_FACTORY_XDAI = '0xB93427b83573C8F27a08A909045c3e809610411a';
 export const VESTING_FACTORY_METER = '0x6B24Fe659D1E91f8800E86600DE577A4cA8814a6';
 export const VESTING_FACTORY_METIS = '0xB93427b83573C8F27a08A909045c3e809610411a';
+export const VESTING_FACTORY_KAVA = '0xB93427b83573C8F27a08A909045c3e809610411a';
 
 export const MAINNET_ENS_RESOLVER = '0x3671aE578E63FdF66ad4F3E12CC0c0d71Ac7510C';
 
@@ -43,6 +45,7 @@ export const DISPERSE_ARBITRUM = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 export const DISPERSE_METER = '0x8e5455983a70da3d1e66719636e907d63eca40b7';
 export const DISPERSE_METIS = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 export const DISPERSE_GOERLI = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
+export const DISPERSE_KAVA = '0x6F9fB43274e9011804Bf516e78CaF5e89856301A';
 
 export const BOT_GOERLI = '0xc5A4fec44fbDE08A7c9dE6e07b60De60aC074Ab9';
 export const BOT_AVALANCHE = '0x57547F79d8344ACCAb21DC0a9c9d186e240353d7';
@@ -74,6 +77,7 @@ interface INetworkDetails {
     vestingReason: string;
     paymentsContract?: string;
     paymentsGraphApi?: string;
+    botSubgraph?: string;
   };
 }
 
@@ -149,9 +153,9 @@ export const networkDetails: INetworkDetails = {
     vestingReason: '0x0000000000000000000000000000000000000000',
   },
   43114: {
-    rpcUrl: 'https://api.avax.network/ext/bc/C/rpc',
+    rpcUrl: 'https://rpc.ankr.com/avalanche',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-avalanche-mainnet',
-    chainProviders: new ethers.providers.JsonRpcProvider('https://api.avax.network/ext/bc/C/rpc'),
+    chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/avalanche'),
     llamapayFactoryAddress: FACTORY_AVALANCHE,
     disperseAddress: DISPERSE_AVALANCHE,
     botAddress: BOT_AVALANCHE,
@@ -161,7 +165,8 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchex/info/logo.png',
     tokenListId: 'avalanche',
     vestingFactory: VESTING_FACTORY_AVALANCHE,
-    vestingReason: '',
+    vestingReason: '0x0000000000000000000000000000000000000000',
+    botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-avax',
   },
   137: {
     rpcUrl: 'https://polygon-rpc.com/',
@@ -179,6 +184,7 @@ export const networkDetails: INetworkDetails = {
     vestingReason: '0x0000000000000000000000000000000000000000',
     paymentsContract: '0x02266E3b5cE26d62Ea73Ea7f2C542EBc24121c01',
     paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-polygon',
+    botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-polygon',
   },
   250: {
     rpcUrl: 'https://rpc.ftm.tools/',
@@ -194,6 +200,7 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'fantom',
     vestingFactory: VESTING_FACTORY_FANTOM,
     vestingReason: '0x0000000000000000000000000000000000000000',
+    botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-fantom',
   },
   1: {
     rpcUrl: 'https://rpc.ankr.com/eth',
@@ -209,6 +216,7 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'ethereum',
     vestingFactory: VESTING_FACTORY_MAINNET,
     vestingReason: '0xA83965c2EBCD3d809f59030D2f7d3c6C646deD3D',
+    botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-mainnet',
   },
   10: {
     rpcUrl: 'https://mainnet.optimism.io',
@@ -224,6 +232,7 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'optimistic-ethereum',
     vestingFactory: VESTING_FACTORY_OPTIMISM,
     vestingReason: '0x0000000000000000000000000000000000000000',
+    botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-optimism',
   },
   42161: {
     rpcUrl: 'https://arb1.arbitrum.io/rpc',
@@ -256,6 +265,7 @@ export const networkDetails: INetworkDetails = {
     vestingReason: '0x0000000000000000000000000000000000000000',
     paymentsContract: '0x02266E3b5cE26d62Ea73Ea7f2C542EBc24121c01',
     paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-bsc',
+    botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-bsc',
   },
   100: {
     rpcUrl: 'https://xdai-rpc.gateway.pokt.network',
@@ -306,6 +316,7 @@ export const networkDetails: INetworkDetails = {
     vestingReason: '0xA83965c2EBCD3d809f59030D2f7d3c6C646deD3D',
     paymentsContract: '0x02266E3b5cE26d62Ea73Ea7f2C542EBc24121c01',
     paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-goerli',
+    botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-goerli',
   },
   1088: {
     rpcUrl: 'https://andromeda.metis.io/?owner=1088',
@@ -320,6 +331,21 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'metis-andromeda',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/metis/info/logo.png',
     vestingFactory: VESTING_FACTORY_METIS,
+    vestingReason: '0x0000000000000000000000000000000000000000',
+  },
+  2222: {
+    rpcUrl: 'https://evm.kava.io',
+    subgraphEndpoint: 'https://the-graph.kava.io/subgraphs/name/nemusonaneko/llamapay-subgraph/',
+    chainProviders: new ethers.providers.JsonRpcProvider('https://evm.kava.io'),
+    llamapayFactoryAddress: FACTORY_KAVA,
+    disperseAddress: DISPERSE_KAVA,
+    botAddress: '',
+    blockExplorerURL: 'https://explorer.kava.io/',
+    blockExplorerName: 'Kava Explorer',
+    prefix: 'kava',
+    tokenListId: 'kava-evm',
+    logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/kava/info/logo.png',
+    vestingFactory: VESTING_FACTORY_KAVA,
     vestingReason: '0x0000000000000000000000000000000000000000',
   },
 };
@@ -407,6 +433,18 @@ export const chains: Chain[] = [
       },
     ],
   },
+  {
+    id: 2222,
+    name: 'Kava',
+    nativeCurrency: { name: 'Kava', symbol: 'KAVA', decimals: 18 },
+    rpcUrls: ["https://evm.kava.io'"],
+    blockExplorers: [
+      {
+        name: 'Kava Explorer',
+        url: 'https://explorer.kava.io/',
+      },
+    ],
+  },
   // {
   //   id: 1088,
   //   name: 'Metis',
@@ -442,17 +480,6 @@ export const whitelist: ITokenWhitelist = {
 
 export const zeroAdd = '0x0000000000000000000000000000000000000000';
 
-export const botContractCreation: { [key: number]: number } = {
-  5: 7524336,
-  43114: 19491402,
-  1: 15466169,
-  137: 32643821,
-  10: 21825387,
-  250: 46278811,
-  56: 21013175,
-  42161: 23462203,
-};
-
-export const botDeployedOn: number[] = [43114, 5, 1, 137, 10, 250, 56, 42161];
+export const botDeployedOn: number[] = [43114, 5, 1, 137, 10, 250, 56];
 
 export const timeframes = ['Hour', 'Day', 'Week', 'Month', 'Year'];

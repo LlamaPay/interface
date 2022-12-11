@@ -127,7 +127,6 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
       } else {
         const factoryAddress = networkDetails[chainId].vestingFactory;
         const factoryContract = new ethers.Contract(factoryAddress, vestingFactory, provider);
-
         const amtOfContracts = await factoryContract.escrows_length({ gasLimit: 1000000 });
 
         const vestingContractsContext: ContractCallContext[] = Array.from(
