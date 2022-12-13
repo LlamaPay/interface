@@ -152,6 +152,19 @@ export default function HeaderMenu({
         />
       )}
 
+      {isLg && (
+        <MenuItem
+          label={
+            <Link passHref href="/payments">
+              <div className="flex w-full items-center justify-between gap-4 font-normal">
+                <span className="cursor-pointer">Payments</span>
+                <CashIcon className="h-4 w-4" />
+              </div>
+            </Link>
+          }
+        />
+      )}
+
       <Menu label={t2('language')}>
         {locales.map((locale) => (
           <MenuItem

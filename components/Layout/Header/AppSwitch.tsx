@@ -15,6 +15,8 @@ export default function AppSwitch() {
 
   const isVesting = router.pathname.includes('/vesting');
 
+  const isPayments = router.pathname.includes('/payments');
+
   return (
     <span className="nav-button hidden items-center justify-between gap-3 py-1 px-1 lg:flex">
       <Link href="/" passHref>
@@ -22,6 +24,9 @@ export default function AppSwitch() {
       </Link>
       <Link href="/vesting" passHref>
         <a className={classNames('flex-1 py-1 px-3', isVesting && activeClasses)}>Vesting</a>
+      </Link>
+      <Link href="/payments" passHref>
+        <a className={classNames('flex-1 py-1 px-3', isPayments && activeClasses)}>Payments</a>
       </Link>
     </span>
   );
