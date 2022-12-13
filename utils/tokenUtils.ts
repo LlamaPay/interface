@@ -18,11 +18,28 @@ interface ICheckTokenResponse {
   err: string | null;
 }
 
+interface ICheckMultipleTokensResponse {
+  allApproved: boolean;
+  res: { [key: string]: boolean } | null;
+  err: string | null;
+}
+
 export interface ICheckTokenAllowance {
   token?: Contract;
   userAddress?: string;
   approveForAddress?: string;
   approvedForAmount?: string;
+}
+
+export interface ICheckMultipleTokenAllowance {
+  userAddress?: string;
+  tokens: {
+    [key: string]: {
+      token: Contract;
+      approveForAddress?: string;
+      approvedForAmount?: string;
+    };
+  };
 }
 
 // Checks if user has approved this token
@@ -41,5 +58,28 @@ export const checkHasApprovedEnough = async ({
   } catch (err) {
     // console.log(err);
     return { res: false, err: 'Something went wrong' };
+  }
+};
+
+export const checkHasApprovedEnoughMultiple = async (
+  data: ICheckMultipleTokenAllowance
+): Promise<ICheckMultipleTokensResponse> => {
+  try {
+    if (!data.userAddress || !data.tokens) throw new Error('Invalid arguments');
+    let res: { [key: string]: boolean } = {};
+    let allApproved = true;
+    for (const token in data.tokens) {
+      const currToken = data.tokens[token];
+      const result: boolean = (await currToken.token.allowance(data.userAddress, currToken.approveForAddress)).gte(
+        currToken.approvedForAmount
+      );
+      if (!result) {
+        allApproved = !allApproved;
+      }
+      res[token] = result;
+    }
+    return { allApproved, res, err: null };
+  } catch (error) {
+    return { allApproved: false, res: null, err: 'Something went wrong' };
   }
 };

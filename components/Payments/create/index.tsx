@@ -1,10 +1,10 @@
 import { ArrowCircleLeftIcon } from '@heroicons/react/solid';
-import { getAddress, Interface } from 'ethers/lib/utils';
+import { getAddress, Interface, isAddress } from 'ethers/lib/utils';
 import { useNetworkProvider } from 'hooks';
 import Link from 'next/link';
-import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval';
+import { useApproveToken, useCheckMultipleTokenApproval, useCheckTokenApproval } from 'queries/useTokenApproval';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { createERC20Contract } from 'utils/tokenUtils';
+import { checkHasApprovedEnoughMultiple, createERC20Contract, ICheckMultipleTokenAllowance } from 'utils/tokenUtils';
 import BigNumber from 'bignumber.js';
 import paymentsContract from 'abis/paymentsContract';
 import { useAccount, useContractWrite } from 'wagmi';
@@ -15,6 +15,7 @@ import { Contract } from 'ethers';
 import { useQueryClient } from 'react-query';
 import useGnosisBatch from 'queries/useGnosisBatch';
 import { networkDetails } from 'utils/constants';
+import { ERC20Interface } from 'utils/contract';
 
 interface IPaymentFormValues {
   payments: {
@@ -29,14 +30,20 @@ interface ITokenInfo {
   [key: string]: {
     tokenContract: Contract;
     toApprove: number;
-    decimals: number;
   };
+}
+
+interface ICall {
+  token: string;
+  payee: string;
+  amount: string;
+  release: string;
 }
 
 const contractInterface = new Interface(paymentsContract);
 
 export default function CreatePayment({ contract }: { contract: string }) {
-  const { register, control, handleSubmit, reset } = useForm<IPaymentFormValues>({
+  const { register, control, handleSubmit, reset, getValues, setValue, watch } = useForm<IPaymentFormValues>({
     defaultValues: {
       payments: [
         {
@@ -57,7 +64,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
   const { provider, chainId } = useNetworkProvider();
   const [{ data: accountData }] = useAccount();
   const { mutate: approveToken } = useApproveToken();
-  const [approved, setApproved] = React.useState<boolean>(true);
+  const { mutate: checkApproval, data: approvalData } = useCheckMultipleTokenApproval();
   const { mutate: gnosisBatch } = useGnosisBatch();
   const [csvFile, setCsvFile] = React.useState<File | null>(null);
   const queryClient = useQueryClient();
@@ -97,94 +104,149 @@ export default function CreatePayment({ contract }: { contract: string }) {
     'batch'
   );
 
+  async function onChange(index: number, eventType: string, value: string) {
+    if (process.env.NEXT_PUBLIC_SAFE === 'true') return;
+    if (!chainId) return;
+    if (!provider) return;
+    if (eventType === 'amount') {
+      setValue(`payments.${index}.amount`, value);
+    } else if (eventType === 'token') {
+      setValue(`payments.${index}.token`, value);
+    }
+    let decimals: { [key: string]: number } = {};
+    let tokenAndAmount: { [key: string]: string } = {};
+    for (let i = 0; i < fields.length; i++) {
+      const token = getValues(`payments.${i}.token`).toLowerCase();
+      const amount = getValues(`payments.${i}.amount`);
+      if (!isAddress(token)) continue;
+      if (!decimals[token]) {
+        decimals[token] = await createERC20Contract({ tokenAddress: getAddress(token), provider }).decimals();
+      }
+      if (!tokenAndAmount[token]) {
+        tokenAndAmount[token] = BigNumber(amount)
+          .times(10 ** decimals[token])
+          .toFixed(0);
+      } else {
+        tokenAndAmount[token] = BigNumber(tokenAndAmount[token])
+          .plus(BigNumber(amount).times(10 ** decimals[token]))
+          .toFixed(0);
+      }
+      let toCheck: ICheckMultipleTokenAllowance = {
+        userAddress: accountData?.address,
+        tokens: {},
+      };
+      for (const token in tokenAndAmount) {
+        toCheck.tokens[token] = {
+          token: createERC20Contract({ tokenAddress: getAddress(token), provider }),
+          approvedForAmount: tokenAndAmount[token],
+          approveForAddress: networkDetails[chainId].paymentsContract,
+        };
+      }
+      checkApproval(toCheck);
+    }
+  }
+
   async function onSubmit(data: IPaymentFormValues) {
     if (!provider) return;
-    const batchCall: string[] = [];
-    const tokenInfo: ITokenInfo = {};
+    if (!chainId) return;
+    let decimals: { [key: string]: number } = {};
+    let tokenAndAmount: { [key: string]: string } = {};
+    let convertedCalls: ICall[] = [];
+    let calls: string[] = [];
     try {
-      for (const i in data.payments) {
-        const payment = data.payments[i];
-        const token = payment.token.toLowerCase();
-        if (!tokenInfo[token]) {
-          const tokenContract = createERC20Contract({ tokenAddress: getAddress(token), provider });
-          tokenInfo[token] = {
-            tokenContract: tokenContract,
-            toApprove: Number(payment.amount),
-            decimals: await tokenContract.decimals(),
-          };
+      for (let i = 0; i < data.payments.length; i++) {
+        const token = getValues(`payments.${i}.token`).toLocaleLowerCase();
+        const payee = getValues(`payments.${i}.payee`);
+        const amount = getValues(`payments.${i}.amount`);
+        const release = getValues(`payments.${i}.release`);
+        if (!decimals[token]) {
+          decimals[token] = await createERC20Contract({ tokenAddress: getAddress(token), provider }).decimals();
+        }
+        if (!tokenAndAmount[token]) {
+          tokenAndAmount[token] = BigNumber(amount)
+            .times(10 ** decimals[token])
+            .toFixed(0);
         } else {
-          tokenInfo[token].toApprove += Number(payment.amount);
+          tokenAndAmount[token] = BigNumber(tokenAndAmount[token])
+            .plus(BigNumber(amount).times(10 ** decimals[token]))
+            .toFixed(0);
         }
-      }
-
-      if (process.env.NEXT_PUBLIC_SAFE === 'false') {
-        let allApproved = true;
-        for (const token in tokenInfo) {
-          const info = tokenInfo[token];
-          const approveFor = new BigNumber(info.toApprove).times(10 ** info.decimals).toFixed(0);
-          const isApproved = (await info.tokenContract.allowance(accountData?.address, contract)).gte(approveFor);
-          if (!isApproved) {
-            approveToken({
-              tokenAddress: getAddress(token),
-              amountToApprove: approveFor,
-              spenderAddress: contract,
-            });
-            allApproved = false;
-          }
-        }
-        if (!allApproved) return;
-        data.payments.forEach((payment) => {
-          const token = payment.token.toLowerCase();
-          const call = contractInterface.encodeFunctionData('create', [
-            getAddress(token),
-            getAddress(payment.payee),
-            new BigNumber(payment.amount).times(10 ** tokenInfo[token].decimals).toFixed(0),
-            new Date(payment.release).getTime() / 1e3,
-          ]);
-          batchCall.push(call);
+        convertedCalls.push({
+          token: getAddress(token),
+          payee: getAddress(payee),
+          amount: BigNumber(amount)
+            .times(10 ** decimals[token])
+            .toFixed(0),
+          release: (new Date(release).getTime() / 1e3).toFixed(0),
         });
-
-        batch({ args: [batchCall, true] }).then((data) => {
-          if (data.error) {
-            toast.error(data.error.message);
+        if (process.env.NEXT_PUBLIC_SAFE === 'false') {
+          let toCheck: ICheckMultipleTokenAllowance = {
+            userAddress: accountData?.address,
+            tokens: {},
+          };
+          for (const token in tokenAndAmount) {
+            toCheck.tokens[token] = {
+              token: createERC20Contract({ tokenAddress: getAddress(token), provider }),
+              approvedForAmount: tokenAndAmount[token],
+              approveForAddress: networkDetails[chainId].paymentsContract,
+            };
+          }
+          checkApproval(toCheck);
+          if (!approvalData || !approvalData.allApproved) {
+            if (!approvalData) {
+              for (const i in toCheck) {
+                approveToken({
+                  spenderAddress: networkDetails[chainId].paymentsContract!,
+                  amountToApprove: toCheck.tokens[i].approvedForAmount!,
+                  tokenAddress: i,
+                });
+              }
+            } else {
+              for (const i in approvalData.res) {
+                if (approvalData.res[i]) continue;
+                approveToken({
+                  spenderAddress: networkDetails[chainId].paymentsContract!,
+                  amountToApprove: toCheck.tokens[i].approvedForAmount!,
+                  tokenAddress: i,
+                });
+              }
+            }
           } else {
-            const toastid = toast.loading('Creating');
-            data.data.wait().then((receipt) => {
-              toast.dismiss(toastid);
-              receipt.status === 1 ? toast.success('Successfully Created') : toast.error('Failed to Create');
+            convertedCalls.forEach((c) => {
+              calls.push(contractInterface.encodeFunctionData('create', [c.token, c.payee, c.amount, c.release]));
+            });
+            batch({ args: [calls, true] }).then((data) => {
+              if (data.error) {
+                toast.error(data.error.message);
+              } else {
+                const toastid = toast.loading('Creating');
+                data.data.wait().then((receipt) => {
+                  toast.dismiss(toastid);
+                  receipt.status === 1 ? toast.success('Successfully Created') : toast.error('Failed to Create');
+                });
+              }
+              queryClient.invalidateQueries();
             });
           }
-          queryClient.invalidateQueries();
-        });
-      } else {
-        const call: { [key: string]: string[] } = {};
-        if (!chainId || !networkDetails[chainId!].paymentsContract) return;
-        for (const token in tokenInfo) {
-          const info = tokenInfo[token];
-          const tokenInterface = info.tokenContract.interface;
-          const approveFor = new BigNumber(info.toApprove).times(10 ** info.decimals).toFixed(0);
-          call[token] = [
-            tokenInterface.encodeFunctionData('approve', [
-              getAddress(networkDetails[chainId].paymentsContract!),
-              approveFor,
-            ]),
-          ];
+        } else {
+          const call: { [key: string]: string[] } = {};
+          for (const token in tokenAndAmount) {
+            call[token] = [
+              ERC20Interface.encodeFunctionData('approve', [
+                getAddress(networkDetails[chainId].paymentsContract!),
+                tokenAndAmount[token],
+              ]),
+            ];
+          }
+          convertedCalls.forEach((c) => {
+            calls.push(contractInterface.encodeFunctionData('create', [c.token, c.payee, c.amount, c.release]));
+          });
+          call[networkDetails[chainId].paymentsContract!] = calls;
+          gnosisBatch({ calls: call });
         }
-        data.payments.forEach((payment) => {
-          const token = payment.token.toLowerCase();
-          const call = contractInterface.encodeFunctionData('create', [
-            getAddress(token),
-            getAddress(payment.payee),
-            new BigNumber(payment.amount).times(10 ** tokenInfo[token].decimals).toFixed(0),
-            new Date(payment.release).getTime() / 1e3,
-          ]);
-          batchCall.push(call);
-        });
-        call[networkDetails[chainId].paymentsContract!] = batchCall;
-        gnosisBatch({ calls: call });
       }
-    } catch (error: any) {
-      toast.error(error);
+    } catch (error) {
+      console.error(error);
     }
   }
 
@@ -224,6 +286,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
                   autoCorrect="off"
                   type="text"
                   spellCheck="false"
+                  onChange={(e) => onChange(index, 'token', e.target.value)}
                 />
               </label>
               <label>
@@ -242,7 +305,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
                 />
               </label>
               <label>
-                <span className="input-label dark:text-white">{'Amount Vested'}</span>
+                <span className="input-label dark:text-white">{'Amount'}</span>
                 <input
                   placeholder="0.0"
                   {...register(`payments.${index}.amount` as const, {
@@ -255,6 +318,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
                   type="text"
                   spellCheck="false"
                   inputMode="decimal"
+                  onChange={(e) => onChange(index, 'amount', e.target.value)}
                 />
               </label>
               <label>
@@ -303,7 +367,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
           );
         })}
         <SubmitButton className="mt-5">
-          {process.env.NEXT_PUBLIC_SAFE === 'true' ? 'Create' : approved ? 'Create' : 'Approve'}
+          {process.env.NEXT_PUBLIC_SAFE === 'true' ? 'Create' : approvalData?.allApproved ? 'Create' : 'Approve'}
         </SubmitButton>
       </form>
     </>

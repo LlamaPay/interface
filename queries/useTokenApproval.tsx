@@ -3,7 +3,12 @@ import { Contract, Signer } from 'ethers';
 import { getAddress } from 'ethers/lib/utils';
 import { useMutation, useQueryClient } from 'react-query';
 import { ITransactionError, ITransactionSuccess } from 'types';
-import { checkHasApprovedEnough, ICheckTokenAllowance } from 'utils/tokenUtils';
+import {
+  checkHasApprovedEnough,
+  checkHasApprovedEnoughMultiple,
+  ICheckMultipleTokenAllowance,
+  ICheckTokenAllowance,
+} from 'utils/tokenUtils';
 import { erc20ABI, useSigner } from 'wagmi';
 
 interface IUseApproveToken {
@@ -12,7 +17,16 @@ interface IUseApproveToken {
   amountToApprove: string;
 }
 
+interface IUseApproveMultipleTokens {
+  tokenAndAmount: { [key: string]: string };
+  spender: string;
+}
+
 interface IApproveToken extends IUseApproveToken {
+  signer?: Signer;
+}
+
+interface IApproveMultipleTokens extends IUseApproveMultipleTokens {
   signer?: Signer;
 }
 
@@ -30,6 +44,16 @@ const checkApproval = async (data: ICheckTokenAllowance) => {
     } else return res;
   } catch (error) {
     return false;
+  }
+};
+
+const checkMultipleApproval = async (data: ICheckMultipleTokenAllowance) => {
+  try {
+    const { allApproved, res, err } = await checkHasApprovedEnoughMultiple(data);
+    if (err) return null;
+    return { allApproved, res };
+  } catch (error) {
+    return null;
   }
 };
 
@@ -63,6 +87,10 @@ const approveTokenForMaxAmt = async ({ tokenAddress, signer, spenderAddress }: A
 
 export function useCheckTokenApproval() {
   return useMutation((data: ICheckTokenAllowance) => checkApproval(data));
+}
+
+export function useCheckMultipleTokenApproval() {
+  return useMutation((data: ICheckMultipleTokenAllowance) => checkMultipleApproval(data));
 }
 
 export function useApproveToken() {
