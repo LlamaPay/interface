@@ -167,6 +167,8 @@ export const networkDetails: INetworkDetails = {
     vestingFactory: VESTING_FACTORY_AVALANCHE,
     vestingReason: '0x0000000000000000000000000000000000000000',
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-avax',
+    paymentsContract: '0x4c48F145e0c80d97bFbc983dd2CbEbEE5d84FA0c',
+    paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-avalanche',
   },
   137: {
     rpcUrl: 'https://polygon-rpc.com/',
@@ -201,6 +203,8 @@ export const networkDetails: INetworkDetails = {
     vestingFactory: VESTING_FACTORY_FANTOM,
     vestingReason: '0x0000000000000000000000000000000000000000',
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-fantom',
+    paymentsContract: '0xDa33d4B2753B3C2439cA52678E1A506e4C5294d1',
+    paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-fantom',
   },
   1: {
     rpcUrl: 'https://rpc.ankr.com/eth',
@@ -233,6 +237,8 @@ export const networkDetails: INetworkDetails = {
     vestingFactory: VESTING_FACTORY_OPTIMISM,
     vestingReason: '0x0000000000000000000000000000000000000000',
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-optimism',
+    paymentsContract: '0xb4E9D1F7b32937f04B856ec1Ca39AC83E9404779',
+    paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-optimism',
   },
   42161: {
     rpcUrl: 'https://arb1.arbitrum.io/rpc',
