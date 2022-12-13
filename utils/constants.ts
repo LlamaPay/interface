@@ -221,6 +221,8 @@ export const networkDetails: INetworkDetails = {
     vestingFactory: VESTING_FACTORY_MAINNET,
     vestingReason: '0xA83965c2EBCD3d809f59030D2f7d3c6C646deD3D',
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-mainnet',
+    paymentsContract: '0x056e39bDD2D35F4EB27478369BdAde51e0532b72',
+    paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-mainnet',
   },
   10: {
     rpcUrl: 'https://mainnet.optimism.io',
