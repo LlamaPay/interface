@@ -145,17 +145,17 @@ export function StreamTable({ data }: { data: IStream[] }) {
           return <>{data.paused ? <Resume data={data} /> : <Pause data={data} />}</>;
         },
       },
-      {
-        id: 'history',
-        header: '',
-        cell: ({ cell }) => {
-          const data = cell.row.original;
+      // {
+      //   id: 'history',
+      //   header: '',
+      //   cell: ({ cell }) => {
+      //     const data = cell.row.original;
 
-          if (!data) return null;
+      //     if (!data) return null;
 
-          return <StreamHistory data={data} />;
-        },
-      },
+      //     return <StreamHistory data={data} />;
+      //   },
+      // },
       {
         id: 'schedule',
         header: '',
