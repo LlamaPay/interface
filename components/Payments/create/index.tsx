@@ -113,8 +113,8 @@ export default function CreatePayment({ contract }: { contract: string }) {
     } else if (eventType === 'token') {
       setValue(`payments.${index}.token`, value);
     }
-    let decimals: { [key: string]: number } = {};
-    let tokenAndAmount: { [key: string]: string } = {};
+    const decimals: { [key: string]: number } = {};
+    const tokenAndAmount: { [key: string]: string } = {};
     for (let i = 0; i < fields.length; i++) {
       const token = getValues(`payments.${i}.token`).toLowerCase();
       const amount = getValues(`payments.${i}.amount`);
@@ -131,7 +131,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
           .plus(BigNumber(amount).times(10 ** decimals[token]))
           .toFixed(0);
       }
-      let toCheck: ICheckMultipleTokenAllowance = {
+      const toCheck: ICheckMultipleTokenAllowance = {
         userAddress: accountData?.address,
         tokens: {},
       };
@@ -149,10 +149,10 @@ export default function CreatePayment({ contract }: { contract: string }) {
   async function onSubmit(data: IPaymentFormValues) {
     if (!provider) return;
     if (!chainId) return;
-    let decimals: { [key: string]: number } = {};
-    let tokenAndAmount: { [key: string]: string } = {};
-    let convertedCalls: ICall[] = [];
-    let calls: string[] = [];
+    const decimals: { [key: string]: number } = {};
+    const tokenAndAmount: { [key: string]: string } = {};
+    const convertedCalls: ICall[] = [];
+    const calls: string[] = [];
     try {
       for (let i = 0; i < data.payments.length; i++) {
         const token = getValues(`payments.${i}.token`).toLocaleLowerCase();
@@ -180,7 +180,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
           release: (new Date(release).getTime() / 1e3).toFixed(0),
         });
         if (process.env.NEXT_PUBLIC_SAFE === 'false') {
-          let toCheck: ICheckMultipleTokenAllowance = {
+          const toCheck: ICheckMultipleTokenAllowance = {
             userAddress: accountData?.address,
             tokens: {},
           };
