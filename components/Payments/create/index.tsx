@@ -7,16 +7,15 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { createERC20Contract, ICheckMultipleTokenAllowance } from 'utils/tokenUtils';
 import BigNumber from 'bignumber.js';
 import paymentsContract from 'abis/paymentsContract';
-import { erc20ABI, useAccount, useContractWrite, useSigner } from 'wagmi';
+import { useAccount, useContractWrite, useSigner } from 'wagmi';
 import toast from 'react-hot-toast';
 import { SubmitButton } from 'components/Form';
 import React from 'react';
 import { useQueryClient } from 'react-query';
 import useGnosisBatch from 'queries/useGnosisBatch';
 import { networkDetails } from 'utils/constants';
-import { createWriteContract, ERC20Interface } from 'utils/contract';
-import { Contract, ethers, Signer } from 'ethers';
-import useBatchCalls from 'queries/useBatchCalls';
+import { ERC20Interface } from 'utils/contract';
+import { BeatLoader } from 'react-spinners';
 
 interface IPaymentFormValues {
   payments: {
@@ -60,7 +59,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
   const [{ data: signer }] = useSigner();
   const { mutate: checkApproval, data: approvalData } = useCheckMultipleTokenApproval();
   const { mutate: gnosisBatch } = useGnosisBatch();
-  const { mutate: approveToken } = useApproveToken();
+  const { mutate: approveToken, isLoading: approving } = useApproveToken();
   const [csvFile, setCsvFile] = React.useState<File | null>(null);
   const queryClient = useQueryClient();
 
@@ -211,8 +210,9 @@ export default function CreatePayment({ contract }: { contract: string }) {
                 toast.dismiss(toastid);
                 receipt.status === 1 ? toast.success('Successfully Created') : toast.error('Failed to Create');
               });
+              checkApproval(toCheck);
+              queryClient.invalidateQueries();
             }
-            queryClient.invalidateQueries();
           });
         }
       } else {
@@ -260,7 +260,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
           return (
             <section className="flex flex-col gap-4" key={field.id}>
               <label>
-                <span className="input-label dark:text-white">{'Token Address'}</span>
+                <span className="input-label dark:text-white">{'Token Address (ERC-20 only)'}</span>
                 <input
                   placeholder="Token Address"
                   {...register(`payments.${index}.token` as const, {
@@ -291,7 +291,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
                 />
               </label>
               <label>
-                <span className="input-label dark:text-white">{'Amount'}</span>
+                <span className="input-label dark:text-white">{'Amount To Send'}</span>
                 <input
                   placeholder="0.0"
                   {...register(`payments.${index}.amount` as const, {
@@ -308,7 +308,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
                 />
               </label>
               <label>
-                <span className="input-label dark:text-white">{'Date'}</span>
+                <span className="input-label dark:text-white">{'Date (Executes UTC-0)'}</span>
                 <input
                   placeholder="YYYY-MM-DD"
                   {...register(`payments.${index}.release` as const, {
@@ -353,7 +353,15 @@ export default function CreatePayment({ contract }: { contract: string }) {
           );
         })}
         <SubmitButton className="mt-5">
-          {process.env.NEXT_PUBLIC_SAFE === 'true' ? 'Create' : approvalData?.allApproved ? 'Create' : 'Approve'}
+          {approving ? (
+            <BeatLoader size={6} color="white" />
+          ) : process.env.NEXT_PUBLIC_SAFE === 'true' ? (
+            'Create'
+          ) : approvalData?.allApproved ? (
+            'Create'
+          ) : (
+            'Approve'
+          )}
         </SubmitButton>
       </form>
     </>
