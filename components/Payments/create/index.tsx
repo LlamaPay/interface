@@ -2,16 +2,15 @@ import { ArrowCircleLeftIcon } from '@heroicons/react/solid';
 import { getAddress, Interface, isAddress } from 'ethers/lib/utils';
 import { useNetworkProvider } from 'hooks';
 import Link from 'next/link';
-import { useApproveToken, useCheckMultipleTokenApproval, useCheckTokenApproval } from 'queries/useTokenApproval';
+import { useApproveToken, useCheckMultipleTokenApproval } from 'queries/useTokenApproval';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { checkHasApprovedEnoughMultiple, createERC20Contract, ICheckMultipleTokenAllowance } from 'utils/tokenUtils';
+import { createERC20Contract, ICheckMultipleTokenAllowance } from 'utils/tokenUtils';
 import BigNumber from 'bignumber.js';
 import paymentsContract from 'abis/paymentsContract';
 import { useAccount, useContractWrite } from 'wagmi';
 import toast from 'react-hot-toast';
 import { SubmitButton } from 'components/Form';
 import React from 'react';
-import { Contract } from 'ethers';
 import { useQueryClient } from 'react-query';
 import useGnosisBatch from 'queries/useGnosisBatch';
 import { networkDetails } from 'utils/constants';
@@ -24,13 +23,6 @@ interface IPaymentFormValues {
     amount: string;
     release: string;
   }[];
-}
-
-interface ITokenInfo {
-  [key: string]: {
-    tokenContract: Contract;
-    toApprove: number;
-  };
 }
 
 interface ICall {

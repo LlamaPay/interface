@@ -74,7 +74,7 @@ export const checkHasApprovedEnoughMultiple = async (
         currToken.approvedForAmount
       );
       if (!result) {
-        allApproved = !allApproved;
+        allApproved = false;
       }
       res[token] = result;
     }
