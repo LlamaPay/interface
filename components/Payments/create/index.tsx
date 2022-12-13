@@ -36,7 +36,7 @@ interface ITokenInfo {
 const contractInterface = new Interface(paymentsContract);
 
 export default function CreatePayment({ contract }: { contract: string }) {
-  const { register, control, handleSubmit } = useForm<IPaymentFormValues>({
+  const { register, control, handleSubmit, reset } = useForm<IPaymentFormValues>({
     defaultValues: {
       payments: [
         {
@@ -59,7 +59,35 @@ export default function CreatePayment({ contract }: { contract: string }) {
   const { mutate: approveToken } = useApproveToken();
   const [approved, setApproved] = React.useState<boolean>(false);
   const { mutate: gnosisBatch } = useGnosisBatch();
+  const [csvFile, setCsvFile] = React.useState<File | null>(null);
   const queryClient = useQueryClient();
+
+  function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
+    if (!e.target.files) return;
+    setCsvFile(e.target.files[0]);
+  }
+
+  async function importCSV(e: any) {
+    e.preventDefault();
+    if (!csvFile) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      if (!e.target || !e.target.result) return;
+      reset();
+      const rows = e.target.result?.toString().split('\n');
+      for (let i = 1; i < rows.length; i++) {
+        const columns = rows[i].split(',');
+        append({
+          token: columns[0],
+          payee: columns[1],
+          amount: columns[2],
+          release: columns[3],
+        });
+      }
+      remove(0);
+    };
+    reader.readAsText(csvFile);
+  }
 
   React.useCallback(async () => {
     if (process.env.NEXT_PUBLIC_SAFE === 'true') return;
@@ -123,13 +151,11 @@ export default function CreatePayment({ contract }: { contract: string }) {
       }
 
       if (process.env.NEXT_PUBLIC_SAFE === 'false') {
-        let approved = true;
         for (const token in tokenInfo) {
           const info = tokenInfo[token];
           const approveFor = new BigNumber(info.toApprove).times(10 ** info.decimals).toFixed(0);
           const isApproved = (await info.tokenContract.allowance(accountData?.address, contract)).gte(approveFor);
           if (!isApproved) {
-            approved = false;
             approveToken({
               tokenAddress: getAddress(token),
               amountToApprove: approveFor,
@@ -162,6 +188,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
           }
           queryClient.invalidateQueries();
         });
+        setApproved(false);
       } else {
         const call: { [key: string]: string[] } = {};
         if (!chainId || !networkDetails[chainId!].paymentsContract) return;
@@ -203,6 +230,15 @@ export default function CreatePayment({ contract }: { contract: string }) {
             <span className="">Return</span>
           </a>
         </Link>
+        <form>
+          <input type="file" accept=".csv" onChange={(e) => handleFileChange(e)} />
+          <button
+            className="rounded-3xl border px-3 py-[6px] text-sm dark:border-[#252525] dark:bg-[#252525]"
+            onClick={(e) => importCSV(e)}
+          >
+            Import
+          </button>
+        </form>
       </div>
       <form className="mx-auto flex max-w-xl flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
         {fields.map((field, index) => {
@@ -255,11 +291,11 @@ export default function CreatePayment({ contract }: { contract: string }) {
                 />
               </label>
               <label>
-                <span className="input-label dark:text-white">{'Time and Date'}</span>
+                <span className="input-label dark:text-white">{'Date'}</span>
                 <input
-                  placeholder="YYYY-MM-DD HH:MM"
+                  placeholder="YYYY-MM-DD"
                   {...register(`payments.${index}.release` as const, {
-                    pattern: /\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}/,
+                    pattern: /\d{4}-\d{2}-\d{2}/,
                   })}
                   className="input-field dark:border-[#252525] dark:bg-[#202020] dark:text-white"
                   autoComplete="off"
