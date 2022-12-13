@@ -57,7 +57,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
   const { provider, chainId } = useNetworkProvider();
   const [{ data: accountData }] = useAccount();
   const { mutate: approveToken } = useApproveToken();
-  const [approved, setApproved] = React.useState<boolean>(false);
+  const [approved, setApproved] = React.useState<boolean>(true);
   const { mutate: gnosisBatch } = useGnosisBatch();
   const [csvFile, setCsvFile] = React.useState<File | null>(null);
   const queryClient = useQueryClient();
@@ -89,39 +89,6 @@ export default function CreatePayment({ contract }: { contract: string }) {
     reader.readAsText(csvFile);
   }
 
-  React.useCallback(async () => {
-    if (process.env.NEXT_PUBLIC_SAFE === 'true') return;
-    try {
-      if (!provider) return;
-      const tokenInfo: ITokenInfo = {};
-      for (const i in fields) {
-        const payment = fields[i];
-        const token = payment.token.toLowerCase();
-        if (!tokenInfo[token]) {
-          const tokenContract = createERC20Contract({ tokenAddress: getAddress(token), provider });
-          tokenInfo[token] = {
-            tokenContract: tokenContract,
-            toApprove: Number(payment.amount),
-            decimals: await tokenContract.decimals(),
-          };
-        } else {
-          tokenInfo[token].toApprove += Number(payment.amount);
-        }
-      }
-      for (const token in tokenInfo) {
-        const info = tokenInfo[token];
-        const approveFor = new BigNumber(info.toApprove).times(10 ** info.decimals).toFixed(0);
-        const isApproved = (await info.tokenContract.allowance(accountData?.address, contract)).gte(approveFor);
-        if (!isApproved) {
-          setApproved(false);
-        }
-      }
-      setApproved(true);
-    } catch (error: any) {
-      toast.error(error);
-    }
-  }, [fields]);
-
   const [{}, batch] = useContractWrite(
     {
       addressOrName: contract,
@@ -151,6 +118,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
       }
 
       if (process.env.NEXT_PUBLIC_SAFE === 'false') {
+        let allApproved = true;
         for (const token in tokenInfo) {
           const info = tokenInfo[token];
           const approveFor = new BigNumber(info.toApprove).times(10 ** info.decimals).toFixed(0);
@@ -161,10 +129,10 @@ export default function CreatePayment({ contract }: { contract: string }) {
               amountToApprove: approveFor,
               spenderAddress: contract,
             });
-            setApproved(true);
+            allApproved = false;
           }
         }
-        if (!approved) return;
+        if (!allApproved) return;
         data.payments.forEach((payment) => {
           const token = payment.token.toLowerCase();
           const call = contractInterface.encodeFunctionData('create', [
@@ -188,7 +156,6 @@ export default function CreatePayment({ contract }: { contract: string }) {
           }
           queryClient.invalidateQueries();
         });
-        setApproved(false);
       } else {
         const call: { [key: string]: string[] } = {};
         if (!chainId || !networkDetails[chainId!].paymentsContract) return;

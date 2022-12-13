@@ -37,7 +37,7 @@ export default function PaymentsTable() {
       {isLoading || error || !data || data.length < 1 || unsupported ? (
         unsupported ? (
           <FallbackContainer>
-            <p>{t0('networkNotSupported')}</p>
+            <p>Network Not Supported</p>
           </FallbackContainer>
         ) : (
           <Fallback
