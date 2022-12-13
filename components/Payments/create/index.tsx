@@ -7,14 +7,16 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { createERC20Contract, ICheckMultipleTokenAllowance } from 'utils/tokenUtils';
 import BigNumber from 'bignumber.js';
 import paymentsContract from 'abis/paymentsContract';
-import { useAccount, useContractWrite } from 'wagmi';
+import { erc20ABI, useAccount, useContractWrite, useSigner } from 'wagmi';
 import toast from 'react-hot-toast';
 import { SubmitButton } from 'components/Form';
 import React from 'react';
 import { useQueryClient } from 'react-query';
 import useGnosisBatch from 'queries/useGnosisBatch';
 import { networkDetails } from 'utils/constants';
-import { ERC20Interface } from 'utils/contract';
+import { createWriteContract, ERC20Interface } from 'utils/contract';
+import { Contract, ethers, Signer } from 'ethers';
+import useBatchCalls from 'queries/useBatchCalls';
 
 interface IPaymentFormValues {
   payments: {
@@ -55,9 +57,10 @@ export default function CreatePayment({ contract }: { contract: string }) {
 
   const { provider, chainId } = useNetworkProvider();
   const [{ data: accountData }] = useAccount();
-  const { mutate: approveToken } = useApproveToken();
+  const [{ data: signer }] = useSigner();
   const { mutate: checkApproval, data: approvalData } = useCheckMultipleTokenApproval();
   const { mutate: gnosisBatch } = useGnosisBatch();
+  const { mutate: approveToken } = useApproveToken();
   const [csvFile, setCsvFile] = React.useState<File | null>(null);
   const queryClient = useQueryClient();
 
@@ -141,6 +144,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
   async function onSubmit(data: IPaymentFormValues) {
     if (!provider) return;
     if (!chainId) return;
+    if (!signer) return;
     const decimals: { [key: string]: number } = {};
     const tokenAndAmount: { [key: string]: string } = {};
     const convertedCalls: ICall[] = [];
@@ -171,71 +175,61 @@ export default function CreatePayment({ contract }: { contract: string }) {
             .toFixed(0),
           release: (new Date(release).getTime() / 1e3).toFixed(0),
         });
-        if (process.env.NEXT_PUBLIC_SAFE === 'false') {
-          const toCheck: ICheckMultipleTokenAllowance = {
-            userAddress: accountData?.address,
-            tokens: {},
+      }
+      if (process.env.NEXT_PUBLIC_SAFE === 'false') {
+        const toCheck: ICheckMultipleTokenAllowance = {
+          userAddress: accountData?.address,
+          tokens: {},
+        };
+        for (const token in tokenAndAmount) {
+          toCheck.tokens[token] = {
+            token: createERC20Contract({ tokenAddress: getAddress(token), provider }),
+            approvedForAmount: tokenAndAmount[token],
+            approveForAddress: networkDetails[chainId].paymentsContract,
           };
-          for (const token in tokenAndAmount) {
-            toCheck.tokens[token] = {
-              token: createERC20Contract({ tokenAddress: getAddress(token), provider }),
-              approvedForAmount: tokenAndAmount[token],
-              approveForAddress: networkDetails[chainId].paymentsContract,
-            };
-          }
-          checkApproval(toCheck);
-          if (!approvalData || !approvalData.allApproved) {
-            if (!approvalData) {
-              for (const i in toCheck) {
-                approveToken({
-                  spenderAddress: networkDetails[chainId].paymentsContract!,
-                  amountToApprove: toCheck.tokens[i].approvedForAmount!,
-                  tokenAddress: i,
-                });
-              }
-            } else {
-              for (const i in approvalData.res) {
-                if (approvalData.res[i]) continue;
-                approveToken({
-                  spenderAddress: networkDetails[chainId].paymentsContract!,
-                  amountToApprove: toCheck.tokens[i].approvedForAmount!,
-                  tokenAddress: i,
-                });
-              }
-            }
-          } else {
-            convertedCalls.forEach((c) => {
-              calls.push(contractInterface.encodeFunctionData('create', [c.token, c.payee, c.amount, c.release]));
+        }
+        checkApproval(toCheck);
+        if (!approvalData || !approvalData.allApproved) {
+          Object.keys(toCheck.tokens).map((p) => {
+            const token = toCheck.tokens[p];
+            approveToken({
+              amountToApprove: token.approvedForAmount!,
+              spenderAddress: token.approveForAddress!,
+              tokenAddress: p,
             });
-            batch({ args: [calls, true] }).then((data) => {
-              if (data.error) {
-                toast.error(data.error.message);
-              } else {
-                const toastid = toast.loading('Creating');
-                data.data.wait().then((receipt) => {
-                  toast.dismiss(toastid);
-                  receipt.status === 1 ? toast.success('Successfully Created') : toast.error('Failed to Create');
-                });
-              }
-              queryClient.invalidateQueries();
-            });
-          }
+          });
         } else {
-          const call: { [key: string]: string[] } = {};
-          for (const token in tokenAndAmount) {
-            call[token] = [
-              ERC20Interface.encodeFunctionData('approve', [
-                getAddress(networkDetails[chainId].paymentsContract!),
-                tokenAndAmount[token],
-              ]),
-            ];
-          }
           convertedCalls.forEach((c) => {
             calls.push(contractInterface.encodeFunctionData('create', [c.token, c.payee, c.amount, c.release]));
           });
-          call[networkDetails[chainId].paymentsContract!] = calls;
-          gnosisBatch({ calls: call });
+          batch({ args: [calls, true] }).then((data) => {
+            if (data.error) {
+              toast.error(data.error.message);
+            } else {
+              const toastid = toast.loading('Creating');
+              data.data.wait().then((receipt) => {
+                toast.dismiss(toastid);
+                receipt.status === 1 ? toast.success('Successfully Created') : toast.error('Failed to Create');
+              });
+            }
+            queryClient.invalidateQueries();
+          });
         }
+      } else {
+        const call: { [key: string]: string[] } = {};
+        for (const token in tokenAndAmount) {
+          call[token] = [
+            ERC20Interface.encodeFunctionData('approve', [
+              getAddress(networkDetails[chainId].paymentsContract!),
+              tokenAndAmount[token],
+            ]),
+          ];
+        }
+        convertedCalls.forEach((c) => {
+          calls.push(contractInterface.encodeFunctionData('create', [c.token, c.payee, c.amount, c.release]));
+        });
+        call[networkDetails[chainId].paymentsContract!] = calls;
+        gnosisBatch({ calls: call });
       }
     } catch (error) {
       console.error(error);
