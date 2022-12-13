@@ -22,7 +22,13 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
       throw new Error('Cannot get Chain ID');
     } else {
       const results: IVesting[] = [];
-      const multicall = new Multicall({ ethersProvider: provider, tryAggregate: true });
+      const multicall =
+        chainId === 2222
+          ? new Multicall({
+              nodeUrl: networkDetails[2222].rpcUrl,
+              multicallCustomContractAddress: '0x30A62aA52Fa099C4B227869EB6aeaDEda054d121',
+            })
+          : new Multicall({ ethersProvider: provider, tryAggregate: true });
       const runMulticall = async (calls: any[]) => {
         const pending = [];
         for (let i = 0; i < calls.length; i += 200) {

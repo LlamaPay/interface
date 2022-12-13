@@ -55,7 +55,36 @@ export default function CreatePayment({ contract }: { contract: string }) {
   const { provider } = useNetworkProvider();
   const [{ data: accountData }] = useAccount();
   const { mutate: approveToken } = useApproveToken();
+  const [approved, setApproved] = React.useState<boolean>(false);
   const queryClient = useQueryClient();
+
+  const onChange = React.useCallback(async () => {
+    if (!provider) return;
+    const tokenInfo: ITokenInfo = {};
+    for (const i in fields) {
+      const payment = fields[i];
+      const token = payment.token.toLowerCase();
+      if (!tokenInfo[token]) {
+        const tokenContract = createERC20Contract({ tokenAddress: getAddress(token), provider });
+        tokenInfo[token] = {
+          tokenContract: tokenContract,
+          toApprove: Number(payment.amount),
+          decimals: await tokenContract.decimals(),
+        };
+      } else {
+        tokenInfo[token].toApprove += Number(payment.amount);
+      }
+    }
+    for (const token in tokenInfo) {
+      const info = tokenInfo[token];
+      const approveFor = new BigNumber(info.toApprove).times(10 ** info.decimals).toFixed(0);
+      const isApproved = (await info.tokenContract.allowance(accountData?.address, contract)).gte(approveFor);
+      if (!isApproved) {
+        setApproved(false);
+      }
+    }
+    setApproved(true);
+  }, [fields]);
 
   const [{}, batch] = useContractWrite(
     {
@@ -80,6 +109,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
           toApprove: Number(payment.amount),
           decimals: await tokenContract.decimals(),
         };
+        setApproved(true);
       } else {
         tokenInfo[token].toApprove += Number(payment.amount);
       }
@@ -230,7 +260,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
             </section>
           );
         })}
-        <SubmitButton className="mt-5">{'Create'}</SubmitButton>
+        <SubmitButton className="mt-5">{approved ? 'Create' : 'Approve'}</SubmitButton>
       </form>
     </>
   );
