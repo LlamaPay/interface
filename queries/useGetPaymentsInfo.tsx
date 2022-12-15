@@ -11,9 +11,10 @@ async function getPaymentsInfo(userAddress: string | undefined, chainId: number 
     if (!chainId) throw new Error('No Chain ID');
     if (!networkDetails[chainId].paymentsGraphApi || !networkDetails[chainId].paymentsContract)
       throw new Error('No Payments contract or api');
-    const query = gql`
+    const queryFrom = gql`
         {
           escrows(where: { payer: "${userAddress}" }) {
+            id
             token {
                 name
                 symbol
@@ -29,21 +30,47 @@ async function getPaymentsInfo(userAddress: string | undefined, chainId: number 
           }
         }
       `;
-    const escrows = (await request(networkDetails[chainId].paymentsGraphApi!, query)).escrows;
+    const queryTo = gql`
+        {
+          escrows(where: { payee: "${userAddress}" }) {
+            id
+            token {
+                name
+                symbol
+                address
+                decimals
+            }
+            payer
+            payee
+            amount
+            release
+            active
+            revoked
+          }
+        }
+      `;
+    const froms = (await request(networkDetails[chainId].paymentsGraphApi!, queryFrom)).escrows;
+    const tos = (await request(networkDetails[chainId].paymentsGraphApi!, queryTo)).escrows;
     const results: IPayments[] = [];
+    const ids: string[] = [];
+    const escrows = froms.concat(tos);
     escrows.forEach((escrow: any) => {
-      results.push({
-        tokenName: escrow.token.name,
-        tokenSymbol: escrow.token.symbol,
-        tokenAddress: escrow.token.address,
-        tokenDecimals: Number(escrow.token.decimals),
-        payer: escrow.payer,
-        payee: escrow.payee,
-        amount: Number(escrow.amount),
-        release: Number(escrow.release),
-        active: escrow.active,
-        revoked: escrow.revoked,
-      });
+      if (!ids.includes(escrow.id)) {
+        results.push({
+          id: escrow.id,
+          tokenName: escrow.token.name,
+          tokenSymbol: escrow.token.symbol,
+          tokenAddress: escrow.token.address,
+          tokenDecimals: Number(escrow.token.decimals),
+          payer: escrow.payer,
+          payee: escrow.payee,
+          amount: Number(escrow.amount),
+          release: Number(escrow.release),
+          active: escrow.active,
+          revoked: escrow.revoked,
+        });
+        ids.push(escrow.id);
+      }
     });
     return results;
   } catch (error) {

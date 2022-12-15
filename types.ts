@@ -121,6 +121,7 @@ export interface IVesting {
 }
 
 export interface IPayments {
+  id: string;
   tokenName: string;
   tokenSymbol: string;
   tokenAddress: string;
