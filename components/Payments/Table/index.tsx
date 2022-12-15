@@ -15,6 +15,16 @@ export default function PaymentsTableActual({ data }: { data: any }) {
   const columns = React.useMemo<ColumnDef<IPayments>[]>(
     () => [
       {
+        accessorFn: (row) => `${accountData?.address.toLowerCase() === row.payee.toLowerCase() ? 'From' : 'To'}`,
+        id: 'type',
+        header: 'Type',
+        cell: (i) => (
+          <span className="font-exo text-center slashed-zero tabular-nums dark:text-white">
+            {i.row.original.payee.toLowerCase() === accountData?.address.toLowerCase() ? 'From' : 'To'}
+          </span>
+        ),
+      },
+      {
         accessorFn: (row) => `${row.tokenName} (${row.tokenSymbol})`,
         id: 'token',
         header: 'Token',
