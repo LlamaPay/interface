@@ -256,6 +256,8 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'arbitrum-one',
     vestingFactory: VESTING_FACTORY_ARBITRUM,
     vestingReason: '0x0000000000000000000000000000000000000000',
+    paymentsContract: '0x1564d7bFa4bc921A748Aedb3b71E578672528734',
+    paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-arbitrum',
   },
   56: {
     rpcUrl: 'https://rpc.ankr.com/bsc',
