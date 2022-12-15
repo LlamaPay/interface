@@ -48,6 +48,7 @@ export default function PaymentsTableActual({ data }: { data: any }) {
           ),
       },
       {
+        accessorFn: (row) => new Date(row.release * 1e3).toLocaleString(locale),
         id: 'releases',
         header: 'Releases',
         cell: (i) =>

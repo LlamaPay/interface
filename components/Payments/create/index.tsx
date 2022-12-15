@@ -172,7 +172,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
           amount: BigNumber(amount)
             .times(10 ** decimals[token])
             .toFixed(0),
-          release: (new Date(release).getTime() / 1e3).toFixed(0),
+          release: (new Date(`${release} 00:00`).getTime() / 1e3).toFixed(0),
         });
       }
       if (process.env.NEXT_PUBLIC_SAFE === 'false') {
@@ -316,7 +316,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
                 />
               </label>
               <label>
-                <span className="input-label dark:text-white">{'Date (Executes UTC-0)'}</span>
+                <span className="input-label dark:text-white">{'Date To Release'}</span>
                 <input
                   placeholder="YYYY-MM-DD"
                   {...register(`payments.${index}.release` as const, {
