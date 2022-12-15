@@ -191,12 +191,20 @@ export default function CreatePayment({ contract }: { contract: string }) {
         if (!approvalData || !approvalData.allApproved) {
           Object.keys(toCheck.tokens).map((p) => {
             const token = toCheck.tokens[p];
-            approveToken({
-              amountToApprove: token.approvedForAmount!,
-              spenderAddress: token.approveForAddress!,
-              tokenAddress: p,
-            });
+            approveToken(
+              {
+                amountToApprove: token.approvedForAmount!,
+                spenderAddress: token.approveForAddress!,
+                tokenAddress: p,
+              },
+              {
+                onSettled: () => {
+                  checkApproval(toCheck);
+                },
+              }
+            );
           });
+          checkApproval(toCheck);
         } else {
           convertedCalls.forEach((c) => {
             calls.push(contractInterface.encodeFunctionData('create', [c.token, c.payee, c.amount, c.release]));
