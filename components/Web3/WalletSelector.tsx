@@ -59,7 +59,7 @@ export const WalletSelector = ({ dialog }: Props) => {
           <div className="mt-3 flex flex-col gap-2">
             <p className="text-sm font-thin">{`${t('connectedWith')} ${accountData.connector?.name}`}</p>
             <p className="flex items-center gap-4 break-words">
-              <span>
+              <span className="truncate">
                 {accountData.ens?.name ? `${accountData.ens?.name} (${formattedAddress})` : accountData.address}
               </span>
               <a
