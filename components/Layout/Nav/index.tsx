@@ -17,6 +17,8 @@ export function Nav() {
 
   const isPayments = router.pathname.includes('/payments');
 
+  const isTokenSalaries = router.pathname.includes('/token-salaries');
+
   return (
     <nav className="hidden min-w-[224px] flex-col gap-[10px] px-8 lg:flex">
       <Link href="/" passHref>
@@ -27,6 +29,9 @@ export function Nav() {
       </Link>
       <Link href="/payments" passHref>
         <a className={classNames('font-medium', isPayments && activeClasses)}>Payments</a>
+      </Link>
+      <Link href="/token-salaries" passHref>
+        <a className={classNames('font-medium', isTokenSalaries && activeClasses)}>Token Salaries</a>
       </Link>
 
       <span className="my-6 h-[1px] bg-llama-teal-2 dark:bg-lp-gray-7" />

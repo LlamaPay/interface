@@ -17,7 +17,6 @@ import classNames from 'classnames';
 interface ILayoutProps {
   children: React.ReactNode;
   className?: string;
-  noBanner?: boolean;
 }
 
 export default function Layout({ children, className, ...props }: ILayoutProps) {

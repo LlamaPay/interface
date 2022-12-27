@@ -6,10 +6,6 @@ const withBundleAnalyzer = require('@next/bundle-analyzer')({
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  experimental: {
-    legacyBrowsers: false,
-    browsersListForSwc: true,
-  },
   i18n: {
     locales: ['en', 'fr-FR', 'pt-PT', 'es-ES', 'el-GR', 'ja-JP'],
     defaultLocale: 'en',
