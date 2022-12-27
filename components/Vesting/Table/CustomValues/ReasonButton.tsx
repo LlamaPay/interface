@@ -1,4 +1,4 @@
-import vestingReasons from 'abis/vestingReasons';
+import { vestingReasons } from 'lib/abis/vestingReasons';
 import { useDisclosureState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
 import { InputText, SubmitButton } from 'components/Form';

@@ -1,4 +1,4 @@
-const paymentsContract: any = [
+export const paymentsContract = [
   { inputs: [], name: 'INVALID_TIME', type: 'error' },
   { inputs: [], name: 'IS_ACTIVE', type: 'error' },
   { inputs: [], name: 'NOT_ACTIVE', type: 'error' },
@@ -125,5 +125,3 @@ const paymentsContract: any = [
     type: 'function',
   },
 ];
-
-export default paymentsContract;

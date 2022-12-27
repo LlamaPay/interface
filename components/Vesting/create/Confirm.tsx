@@ -4,7 +4,7 @@ import { FormDialog } from 'components/Dialog';
 import { SubmitButton } from 'components/Form';
 import { useIntl } from 'next-intl';
 import { useContractWrite } from 'wagmi';
-import vestingFactoryReadable from 'abis/vestingFactoryReadable';
+import { vestingFactoryReadable } from 'lib/abis/vestingFactoryReadable';
 import { useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
 import { TransactionDialog } from 'components/Dialog';
@@ -111,19 +111,13 @@ export default function Confirm({ vestingData, dialog, factory }: IConfirmProps)
               </>
             )}
             <p>{`Ends: ${intl.formatDateTime(
-              new Date(
-                (Number(vestingData.startTime) + Number(vestingData.vestingDuration)) *
-                  1e3
-              ),
+              new Date((Number(vestingData.startTime) + Number(vestingData.vestingDuration)) * 1e3),
               {
                 dateStyle: 'short',
                 timeStyle: 'short',
               }
             )} (${intl.formatDateTime(
-              new Date(
-                (Number(vestingData.startTime) + Number(vestingData.vestingDuration)) *
-                  1e3
-              ),
+              new Date((Number(vestingData.startTime) + Number(vestingData.vestingDuration)) * 1e3),
               {
                 dateStyle: 'short',
                 timeStyle: 'short',

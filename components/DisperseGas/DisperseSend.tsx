@@ -1,5 +1,5 @@
 import * as React from 'react';
-import disperseContract from 'abis/disperseContract';
+import { disperseContract } from 'lib/abis/disperseContract';
 import { DisclosureState } from 'ariakit';
 import BigNumber from 'bignumber.js';
 import toast from 'react-hot-toast';

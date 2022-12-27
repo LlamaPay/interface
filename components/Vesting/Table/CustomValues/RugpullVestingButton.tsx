@@ -1,4 +1,4 @@
-import vestingContractReadable from 'abis/vestingContractReadable';
+import { vestingContractReadable } from 'lib/abis/vestingContractReadable';
 import toast from 'react-hot-toast';
 import { IVesting } from 'types';
 import { useAccount, useContractWrite } from 'wagmi';

@@ -1,8 +1,8 @@
 import { BaseProvider } from '@ethersproject/providers';
-import vestingEscrow from 'abis/vestingEscrow';
-import vestingFactory from 'abis/vestingFactory';
+import { vestingEscrow } from 'lib/abis/vestingEscrow';
+import { vestingFactory } from 'lib/abis/vestingFactory';
 import BigNumber from 'bignumber.js';
-import { ContractCallContext, ContractCallResults, Multicall } from 'ethereum-multicall';
+import { ContractCallContext, Multicall } from 'ethereum-multicall';
 import { ethers } from 'ethers';
 import { useNetworkProvider } from 'hooks';
 import { useQuery } from 'react-query';
@@ -10,7 +10,7 @@ import { IVesting } from 'types';
 import { networkDetails } from 'utils/constants';
 import { erc20ABI, useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
-import vestingReasons from 'abis/vestingReasons';
+import { vestingReasons } from 'lib/abis/vestingReasons';
 
 async function getVestingInfo(userAddress: string | undefined, provider: BaseProvider | null, chainId: number | null) {
   try {

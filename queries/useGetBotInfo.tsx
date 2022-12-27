@@ -1,5 +1,5 @@
 import { BaseProvider } from '@ethersproject/providers';
-import botContract from 'abis/botContract';
+import { botContract } from 'lib/abis/botContract';
 import { ethers } from 'ethers';
 import { useNetworkProvider } from 'hooks';
 import { useQuery } from 'react-query';

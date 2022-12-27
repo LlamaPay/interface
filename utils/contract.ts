@@ -1,6 +1,6 @@
-import llamaContract from 'abis/llamaContract';
-import llamaContractABI from 'abis/llamaContract';
-import factoryABI from 'abis/llamaFactory';
+import { llamaContract } from 'lib/abis/llamaContract';
+import { llamaContract as llamaContractABI } from 'lib/abis/llamaContract';
+import { factory as factoryABI } from 'lib/abis/llamaFactory';
 import { ethers, Signer } from 'ethers';
 import { getAddress, Interface } from 'ethers/lib/utils';
 import { erc20ABI } from 'wagmi';

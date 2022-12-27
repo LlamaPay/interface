@@ -1,4 +1,4 @@
-import llamaContract from 'abis/llamaContract';
+import { llamaContract } from 'lib/abis/llamaContract';
 import { useTranslations } from 'next-intl';
 import useGnosisBatch from 'queries/useGnosisBatch';
 import toast from 'react-hot-toast';

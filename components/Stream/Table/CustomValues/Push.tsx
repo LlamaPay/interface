@@ -1,5 +1,5 @@
 import * as React from 'react';
-import llamaContract from 'abis/llamaContract';
+import { llamaContract } from 'lib/abis/llamaContract';
 import { useDialogState } from 'ariakit';
 import { TransactionDialog } from 'components/Dialog';
 import toast from 'react-hot-toast';

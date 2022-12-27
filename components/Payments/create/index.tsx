@@ -6,7 +6,7 @@ import { useApproveToken, useCheckMultipleTokenApproval } from 'queries/useToken
 import { useFieldArray, useForm } from 'react-hook-form';
 import { createERC20Contract, ICheckMultipleTokenAllowance } from 'utils/tokenUtils';
 import BigNumber from 'bignumber.js';
-import paymentsContract from 'abis/paymentsContract';
+import { paymentsContract } from 'lib/abis/paymentsContract';
 import { useAccount, useContractWrite, useSigner } from 'wagmi';
 import toast from 'react-hot-toast';
 import { SubmitButton } from 'components/Form';

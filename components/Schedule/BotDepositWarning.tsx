@@ -1,4 +1,4 @@
-import botContract from 'abis/botContract';
+import { botContract } from 'lib/abis/botContract';
 import { DisclosureState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
 import { InputAmount, SubmitButton } from 'components/Form';

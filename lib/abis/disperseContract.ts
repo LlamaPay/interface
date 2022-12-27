@@ -1,4 +1,4 @@
-const disperseContract = [
+export const disperseContract = [
   {
     constant: false,
     inputs: [
@@ -38,5 +38,3 @@ const disperseContract = [
     type: 'function',
   },
 ];
-
-export default disperseContract;

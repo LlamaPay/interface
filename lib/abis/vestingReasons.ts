@@ -1,4 +1,4 @@
-const vestingReasons: any = [
+export const vestingReasons = [
   { inputs: [], name: 'NOT_ADMIN', type: 'error' },
   {
     inputs: [
@@ -18,5 +18,3 @@ const vestingReasons: any = [
     type: 'function',
   },
 ];
-
-export default vestingReasons;

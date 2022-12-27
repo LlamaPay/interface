@@ -1,4 +1,4 @@
-const botContract: any = [
+export const botContract = [
   {
     inputs: [
       {
@@ -609,5 +609,3 @@ const botContract: any = [
     type: 'function',
   },
 ];
-
-export default botContract;

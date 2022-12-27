@@ -7,7 +7,7 @@ import { DisclosureState, useDialogState } from 'ariakit';
 import { useAccount, useContractWrite } from 'wagmi';
 import BigNumber from 'bignumber.js';
 import toast from 'react-hot-toast';
-import vestingContractReadable from 'abis/vestingContractReadable';
+import { vestingContractReadable } from 'lib/abis/vestingContractReadable';
 import { IVesting } from 'types';
 
 export default function ClaimVesting({

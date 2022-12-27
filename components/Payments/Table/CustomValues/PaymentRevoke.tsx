@@ -1,4 +1,4 @@
-import paymentsContract from 'abis/paymentsContract';
+import { paymentsContract } from 'lib/abis/paymentsContract';
 import { useNetworkProvider } from 'hooks';
 import toast from 'react-hot-toast';
 import { IPayments } from 'types';

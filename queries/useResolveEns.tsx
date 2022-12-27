@@ -3,9 +3,10 @@ import { getAddress } from 'ethers/lib/utils';
 import { useNetworkProvider } from 'hooks';
 import { useQuery } from 'react-query';
 import { StreamAndHistoryQuery } from 'services/generated/graphql';
-import { MAINNET_ENS_RESOLVER, networkDetails } from 'utils/constants';
-import mainnetResolver from 'abis/mainnetResolver';
+import { networkDetails } from 'utils/constants';
+import { mainnetResolver } from 'lib/abis/mainnetResolver';
 import { chainDetails } from 'utils/network';
+import { MAINNET_ENS_RESOLVER } from 'lib/contracts';
 
 export interface IEnsResolve {
   [key: string]: string | null;
