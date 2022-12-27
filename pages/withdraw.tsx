@@ -135,7 +135,7 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
   const t = useTranslations('Common');
 
   return (
-    <Layout className="app-section mx-auto mt-12 flex w-full flex-col items-center pb-8 dark:bg-lp-gray-8">
+    <Layout>
       <section className="z-2 mx-auto flex w-full max-w-lg flex-col gap-5">
         <h1 className="font-exo flex items-center gap-[0.625rem] text-2xl font-semibold text-lp-gray-4">
           <StreamIcon />

@@ -27,8 +27,6 @@ export function StreamSection() {
               <a className="primary-button py-2 px-4 text-sm font-bold">{t('create')}</a>
             </Link>
 
-            {/* <a className="primary-button py-2 px-4 text-sm font-bold">{'Schedule Transfer'}</a> */}
-
             <StreamMenu />
           </div>
         </div>

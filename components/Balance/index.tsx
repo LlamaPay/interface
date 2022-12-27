@@ -67,133 +67,131 @@ const Balance = (props: { address?: string }) => {
   const t = useTranslations('Common');
 
   return (
-    <div className="mr-auto w-full pt-[30px]">
-      <div className={showFallback ? 'w-full max-w-2xl' : 'w-full max-w-fit'}>
-        <div className="section-header flex w-full flex-wrap items-center justify-between gap-[0.625rem]">
-          <span className="flex items-center gap-[0.625rem]">
-            <BalanceIcon />
-            <h1 className="font-exo">{t1('heading')}</h1>
-          </span>
+    <section className={classNames('-mt-2', showFallback ? 'w-full' : 'w-fit')}>
+      <div className="section-header flex w-full flex-wrap items-center justify-between gap-[0.625rem]">
+        <span className="flex items-center gap-[0.625rem]">
+          <BalanceIcon />
+          <h1 className="font-exo">{t1('heading')}</h1>
+        </span>
 
-          {showActions && (
-            <button
-              className="primary-button"
-              disabled={isLoading || tokensLoading || !accountData || !tokens}
-              onClick={() => {
-                depositFieldDialog.toggle();
-              }}
-            >
-              {isLoading || tokensLoading ? <BeatLoader size={6} color="white" /> : <>{t1('deposit')}</>}
-            </button>
-          )}
-        </div>
-
-        {showFallback ? (
-          <Fallback
-            isLoading={isLoading}
-            isError={isError}
-            noData={noBalances}
-            supressWalletConnection={!showActions}
-            type="balances"
-          />
-        ) : (
-          <div className="mt-[-10px] overflow-x-auto">
-            <table className="border-separate" style={{ borderSpacing: '0 10px' }}>
-              <thead>
-                <tr>
-                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-lp-gray-4 dark:text-white">
-                    {t0('token')}
-                  </th>
-                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-lp-gray-4 dark:text-white">
-                    {t1('balance')}
-                  </th>
-                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-lp-gray-4 dark:text-white">
-                    {t1('toDepleted')}
-                  </th>
-                  <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-lp-gray-4 dark:text-white">
-                    {t1('monthlyCost')}
-                  </th>
-                  <th></th>
-                </tr>
-              </thead>
-              <tbody>
-                {balances?.map((b) => (
-                  <tr key={b.address}>
-                    <th className="w-full whitespace-nowrap rounded-l border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-left text-sm font-normal text-lp-gray-4 dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white">
-                      <div className="flex items-center space-x-2">
-                        <span className="h-[18px] w-[18px] rounded-full">
-                          <Image src={b.logoURI} alt={t('logoAlt', { name: b.name })} width="18px" height="18px" />
-                        </span>
-                        {chainExplorer ? (
-                          <a
-                            href={
-                              id === 82 || id === 1088
-                                ? `${chainExplorer}address/${b.contractAddress}`
-                                : `${chainExplorer}/address/${b.contractAddress}`
-                            }
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {b.name || b.address}
-                          </a>
-                        ) : (
-                          <span>{b.name || b.address}</span>
-                        )}
-                      </div>
-                    </th>
-                    <td className={classNames(tableCellClassnames, 'border-r-0')} style={tableCellInlineStyles}>
-                      <BalanceAndSymbol data={b} />
-                    </td>
-                    <td className={classNames(tableCellClassnames, 'border-r-0')} style={tableCellInlineStyles}>
-                      <UntilDepleted data={b} />
-                    </td>
-                    <td
-                      className={classNames(tableCellClassnames, showActions ? 'border-r-0' : 'rounded-r')}
-                      style={tableCellInlineStyles}
-                    >
-                      <MonthlyCost data={b} />
-                    </td>
-                    {showActions && (
-                      <td className={classNames(tableCellClassnames, 'rounded-r')} style={tableCellInlineStyles}>
-                        <span className="flex gap-3">
-                          <button
-                            className="whitespace-nowrap text-xs text-black/80 underline disabled:cursor-not-allowed dark:text-white"
-                            onClick={() => handleToken('withdraw', b)}
-                            disabled={Number.isNaN(b.amount) || Number(b.amount) <= 0}
-                          >
-                            {t0('withdraw')}
-                          </button>
-                          <button
-                            className="primary-button py-1 px-[6px] text-xs font-medium"
-                            onClick={() => handleToken('deposit', b)}
-                          >
-                            {t1('topup')}
-                          </button>
-                        </span>
-                      </td>
-                    )}
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        )}
-
-        {formData.current && (
-          <>
-            {formData?.current?.actionType === 'deposit' ? (
-              <DepositForm data={formData.current} formDialog={depositFormDialog} />
-            ) : (
-              <WithdrawForm data={formData.current} formDialog={withdrawFormDialog} />
-            )}
-          </>
-        )}
-
-        {tokens && accountData && (
-          <DepositField tokens={tokens} userAddress={accountData.address} dialog={depositFieldDialog} />
+        {showActions && (
+          <button
+            className="primary-button"
+            disabled={isLoading || tokensLoading || !accountData || !tokens}
+            onClick={() => {
+              depositFieldDialog.toggle();
+            }}
+          >
+            {isLoading || tokensLoading ? <BeatLoader size={6} color="white" /> : <>{t1('deposit')}</>}
+          </button>
         )}
       </div>
-    </div>
+
+      {showFallback ? (
+        <Fallback
+          isLoading={isLoading}
+          isError={isError}
+          noData={noBalances}
+          supressWalletConnection={!showActions}
+          type="balances"
+        />
+      ) : (
+        <div className="mt-[-10px] max-w-[calc(100vw-16px)] overflow-x-auto">
+          <table className="border-separate" style={{ borderSpacing: '0 10px' }}>
+            <thead>
+              <tr>
+                <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-lp-gray-4 dark:text-white">
+                  {t0('token')}
+                </th>
+                <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-lp-gray-4 dark:text-white">
+                  {t1('balance')}
+                </th>
+                <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-lp-gray-4 dark:text-white">
+                  {t1('toDepleted')}
+                </th>
+                <th className="whitespace-nowrap px-4 py-[6px] text-left text-sm font-semibold text-lp-gray-4 dark:text-white">
+                  {t1('monthlyCost')}
+                </th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {balances?.map((b) => (
+                <tr key={b.address}>
+                  <th className="whitespace-nowrap rounded-l border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-left text-sm font-normal text-lp-gray-4 dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white">
+                    <div className="flex items-center space-x-2">
+                      <span className="h-[18px] w-[18px] rounded-full">
+                        <Image src={b.logoURI} alt={t('logoAlt', { name: b.name })} width="18px" height="18px" />
+                      </span>
+                      {chainExplorer ? (
+                        <a
+                          href={
+                            id === 82 || id === 1088
+                              ? `${chainExplorer}address/${b.contractAddress}`
+                              : `${chainExplorer}/address/${b.contractAddress}`
+                          }
+                          target="_blank"
+                          rel="noopener noreferrer"
+                        >
+                          {b.name || b.address}
+                        </a>
+                      ) : (
+                        <span>{b.name || b.address}</span>
+                      )}
+                    </div>
+                  </th>
+                  <td className={classNames(tableCellClassnames, 'border-r-0')} style={tableCellInlineStyles}>
+                    <BalanceAndSymbol data={b} />
+                  </td>
+                  <td className={classNames(tableCellClassnames, 'border-r-0')} style={tableCellInlineStyles}>
+                    <UntilDepleted data={b} />
+                  </td>
+                  <td
+                    className={classNames(tableCellClassnames, showActions ? 'border-r-0' : 'rounded-r')}
+                    style={tableCellInlineStyles}
+                  >
+                    <MonthlyCost data={b} />
+                  </td>
+                  {showActions && (
+                    <td className={classNames(tableCellClassnames, 'rounded-r')} style={tableCellInlineStyles}>
+                      <span className="flex gap-3">
+                        <button
+                          className="whitespace-nowrap text-xs text-black/80 underline disabled:cursor-not-allowed dark:text-white"
+                          onClick={() => handleToken('withdraw', b)}
+                          disabled={Number.isNaN(b.amount) || Number(b.amount) <= 0}
+                        >
+                          {t0('withdraw')}
+                        </button>
+                        <button
+                          className="primary-button py-1 px-[6px] text-xs font-medium"
+                          onClick={() => handleToken('deposit', b)}
+                        >
+                          {t1('topup')}
+                        </button>
+                      </span>
+                    </td>
+                  )}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {formData.current && (
+        <>
+          {formData?.current?.actionType === 'deposit' ? (
+            <DepositForm data={formData.current} formDialog={depositFormDialog} />
+          ) : (
+            <WithdrawForm data={formData.current} formDialog={withdrawFormDialog} />
+          )}
+        </>
+      )}
+
+      {tokens && accountData && (
+        <DepositField tokens={tokens} userAddress={accountData.address} dialog={depositFieldDialog} />
+      )}
+    </section>
   );
 };
 

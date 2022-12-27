@@ -12,14 +12,10 @@ interface HomePageProps {
 
 const Home: NextPage<HomePageProps> = () => {
   return (
-    <Layout className="flex flex-col gap-[30px]">
-      <section className="app-section">
-        <Balance />
-      </section>
-      <section className="app-section flex h-full flex-1 flex-col gap-[50px] py-[22px]">
-        <StreamSection />
-        <HistorySection />
-      </section>
+    <Layout className="flex flex-col gap-12">
+      <Balance />
+      <StreamSection />
+      <HistorySection />
     </Layout>
   );
 };

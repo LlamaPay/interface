@@ -35,7 +35,6 @@ export default function BotFunds({
   const [showCalendar, setShowCalendar] = React.useState<boolean>(false);
 
   const { data: botInfo, isLoading } = useGetBotInfo();
-  console.log(botInfo);
 
   const { mutate: approveMax } = useApproveTokenForMaxAmt();
 

@@ -18,7 +18,7 @@ const Create: NextPage = () => {
   const factory = chainId ? networkDetails[chainId]?.vestingFactory : null;
 
   return (
-    <Layout className="app-section mx-auto mt-12 flex w-full flex-col items-center space-y-6 pb-[10rem] dark:bg-lp-gray-8">
+    <Layout>
       {factory ? (
         process.env.NEXT_PUBLIC_SAFE === 'true' ? (
           <CreateGnosisVesting factory={factory} />

@@ -13,7 +13,7 @@ export const Account = ({ showAccountInfo }: Props) => {
   const formattedAddress = formatAddress(data.address);
 
   return (
-    <button className="nav-button hidden md:block" onClick={showAccountInfo}>
+    <button className="nav-button-v2 hidden md:block" onClick={showAccountInfo}>
       {data.ens?.name ?? formattedAddress}
     </button>
   );
