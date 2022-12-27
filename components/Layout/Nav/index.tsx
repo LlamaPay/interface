@@ -22,21 +22,21 @@ export function Nav() {
     <nav className="hidden min-w-[224px] flex-col gap-3 px-8 lg:flex">
       <Group name="Salaries" isOpen={isSalaries || router.pathname === '/create' || router.pathname === '/withdraw'}>
         <LinkItem name="Streams" href="/" isActive={isSalaries} />
-
+        <Spacer />
         <LinkItem name="Create" href="/create" isActive={router.pathname === '/create'} />
-
+        <Spacer />
         <LinkItem name="Withdraw" href="/withdraw" isActive={router.pathname === '/withdraw'} />
       </Group>
 
       <Group name="Vesting" isOpen={isVesting}>
         <LinkItem name="Streams" href="/vesting" isActive={isVesting && router.pathname !== '/vesting/create'} />
-
+        <Spacer />
         <LinkItem name="Create" href="/create" isActive={router.pathname === '/vesting/create'} />
       </Group>
 
       <Group name="Payments" isOpen={isPayments}>
         <LinkItem name="Streams" href="/payments" isActive={isVesting && router.pathname !== '/payments/create'} />
-
+        <Spacer />
         <LinkItem name="Create" href="/create" isActive={router.pathname === '/payments/create'} />
       </Group>
 
@@ -46,7 +46,7 @@ export function Nav() {
           href="/token-salaries"
           isActive={isTokenSalaries && router.pathname !== '/token-salaries/create'}
         />
-
+        <Spacer />
         <LinkItem name="Create" href="/token-salaries/create" isActive={router.pathname === '/token-salaries/create'} />
       </Group>
 
@@ -82,14 +82,17 @@ const Group = ({ name, isOpen, children }: { name: string; isOpen: boolean; chil
   );
 };
 
+const Spacer = () => {
+  return (
+    <li className="border-l border-llama-gray-300 px-2">
+      <div className="h-[0.5rem]"></div>
+    </li>
+  );
+};
+
 const LinkItem = ({ isActive, href, name }: { isActive: boolean; href: string; name: string }) => {
   return (
-    <li
-      className={classNames(
-        'border-l border-llama-gray-300 px-2 pt-2 first-of-type:pt-0',
-        isActive && 'border-llama-green-500'
-      )}
-    >
+    <li className={classNames('border-l border-llama-gray-300 px-2', isActive && 'border-llama-green-500')}>
       <Link href={href} passHref>
         <a
           className={classNames('text-sm font-medium', isActive && 'font-bold text-llama-green-500 dark:text-lp-white')}

@@ -17,4 +17,5 @@ export const createFactoryWriteContract = (factoryAddress: string, signer: Signe
   new ethers.Contract(getAddress(factoryAddress), factoryABI, signer);
 
 export const LlamaContractInterface = new Interface(llamaContract);
+
 export const ERC20Interface = new Interface(erc20ABI);

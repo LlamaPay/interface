@@ -3,7 +3,7 @@ export interface ILocale {
   id: string;
 }
 
-const localeNames: ILocale[] = [
+export const localeNames: Array<ILocale> = [
   {
     name: 'English',
     id: 'en',
@@ -29,5 +29,3 @@ const localeNames: ILocale[] = [
     id: 'ja-JP',
   },
 ];
-
-export default localeNames;
