@@ -1,4 +1,4 @@
-export const paymentsContract = [
+export const paymentsContractABI = [
   { inputs: [], name: 'INVALID_TIME', type: 'error' },
   { inputs: [], name: 'IS_ACTIVE', type: 'error' },
   { inputs: [], name: 'NOT_ACTIVE', type: 'error' },

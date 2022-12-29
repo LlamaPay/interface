@@ -1,4 +1,4 @@
-export const disperseContract = [
+export const disperseContractABI = [
   {
     constant: false,
     inputs: [

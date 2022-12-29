@@ -1,4 +1,5 @@
-import { vestingReasons } from 'lib/abis/vestingReasons';
+import * as React from 'react';
+import { vestingReasonsABI } from 'lib/abis/vestingReasons';
 import { useDisclosureState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
 import { InputText, SubmitButton } from 'components/Form';
@@ -15,7 +16,7 @@ export default function ReasonButton({ data }: { data: IVesting }) {
   const [{}, addReason] = useContractWrite(
     {
       addressOrName: networkDetails[chainId ?? 0].vestingReason,
-      contractInterface: vestingReasons,
+      contractInterface: vestingReasonsABI,
     },
     'addReason'
   );

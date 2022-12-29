@@ -7,6 +7,8 @@ import useCreateScheduledTransferContract from 'queries/useCreateScheduledTransf
 import { TransactionDialog } from 'components/Dialog';
 import { useDialogState } from 'ariakit';
 import { StreamIcon } from 'components/Icons';
+import { useNetworkProvider } from 'hooks';
+import { networkDetails } from 'lib/networkDetails';
 
 interface IFormElements {
   oracleAddress: { value: string };
@@ -17,7 +19,11 @@ const Home: NextPage = () => {
 
   const txDialogState = useDialogState();
 
-  const { mutateAsync, isLoading } = useCreateScheduledTransferContract();
+  const { chainId } = useNetworkProvider();
+
+  const factoryAddress = chainId ? networkDetails[chainId].scheduledTransferFactory : null;
+
+  const { mutateAsync, isLoading } = useCreateScheduledTransferContract({ factoryAddress });
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -44,8 +50,8 @@ const Home: NextPage = () => {
 
         <InputText name="oracleAddress" isRequired={true} label="Oracle Address" placeholder="0x..." />
 
-        <SubmitButton disabled={isLoading} className="mt-2">
-          {isLoading ? <BeatLoader size={6} color="white" /> : 'Create'}
+        <SubmitButton disabled={!factoryAddress || isLoading} className="mt-2">
+          {!factoryAddress ? 'Chain not supported' : isLoading ? <BeatLoader size={6} color="white" /> : 'Create'}
         </SubmitButton>
       </form>
 

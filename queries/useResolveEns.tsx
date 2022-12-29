@@ -4,7 +4,7 @@ import { useNetworkProvider } from 'hooks';
 import { useQuery } from 'react-query';
 import { StreamAndHistoryQuery } from 'services/generated/graphql';
 import { networkDetails } from 'lib/networkDetails';
-import { mainnetResolver } from 'lib/abis/mainnetResolver';
+import { mainnetResolverABI } from 'lib/abis/mainnetResolver';
 import { chainDetails } from 'utils/network';
 import { MAINNET_ENS_RESOLVER } from 'lib/contracts';
 
@@ -21,7 +21,7 @@ async function resolveEns(data: StreamAndHistoryQuery | undefined, address: stri
     } else if (!address) {
       throw new Error('No Address');
     } else {
-      const contract = new ethers.Contract(getAddress(MAINNET_ENS_RESOLVER), mainnetResolver, mainnetProvider);
+      const contract = new ethers.Contract(getAddress(MAINNET_ENS_RESOLVER), mainnetResolverABI, mainnetProvider);
       const streams = data?.user?.streams ?? [];
       const history = data?.user?.historicalEvents ?? [];
 

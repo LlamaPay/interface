@@ -1,4 +1,4 @@
-export const botContract = [
+export const botContractABI = [
   {
     inputs: [
       {

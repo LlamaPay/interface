@@ -1,4 +1,4 @@
-export const vestingReasons = [
+export const vestingReasonsABI = [
   { inputs: [], name: 'NOT_ADMIN', type: 'error' },
   {
     inputs: [

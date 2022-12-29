@@ -1,4 +1,4 @@
-export const mainnetResolver = [
+export const mainnetResolverABI = [
   {
     inputs: [{ internalType: 'contract ENS', name: '_ens', type: 'address' }],
     stateMutability: 'nonpayable',

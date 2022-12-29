@@ -6,7 +6,7 @@ import { IStream } from 'types';
 import { useAccount, useContractWrite } from 'wagmi';
 import { networkDetails } from 'lib/networkDetails';
 import { secondsByDuration } from 'utils/constants';
-import { botContract } from 'lib/abis/botContract';
+import { botContractABI } from 'lib/abis/botContract';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import { Switch } from '@headlessui/react';
@@ -36,7 +36,7 @@ export default function Schedule({
   const [{}, scheduleWithdraw] = useContractWrite(
     {
       addressOrName: botAddress,
-      contractInterface: botContract,
+      contractInterface: botContractABI,
     },
     'scheduleWithdraw'
   );
@@ -44,7 +44,7 @@ export default function Schedule({
   const [{}, setRedirect] = useContractWrite(
     {
       addressOrName: botAddress,
-      contractInterface: botContract,
+      contractInterface: botContractABI,
     },
     'setRedirect'
   );

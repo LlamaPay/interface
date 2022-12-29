@@ -1,5 +1,5 @@
 import { BaseProvider } from '@ethersproject/providers';
-import { botContract } from 'lib/abis/botContract';
+import { botContractABI } from 'lib/abis/botContract';
 import { ethers } from 'ethers';
 import { useNetworkProvider } from 'hooks';
 import { useQuery } from 'react-query';
@@ -77,7 +77,7 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
           frequency: schedule.frequency,
         };
       }
-      const contract = new ethers.Contract(networkDetails[chainId].botAddress, botContract, provider);
+      const contract = new ethers.Contract(networkDetails[chainId].botAddress, botContractABI, provider);
       const redirect = await contract.redirects(userAddress);
       return { toInclude, redirect, tokenSymbols };
     }

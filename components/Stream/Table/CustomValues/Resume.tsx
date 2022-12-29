@@ -1,4 +1,4 @@
-import { llamaContract } from 'lib/abis/llamaContract';
+import { llamaContractABI } from 'lib/abis/llamaContract';
 import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
@@ -13,7 +13,7 @@ export function Resume({ data }: ResumeProps) {
   const [{}, createStreamWithReason] = useContractWrite(
     {
       addressOrName: data.llamaContractAddress,
-      contractInterface: llamaContract,
+      contractInterface: llamaContractABI,
     },
     'createStreamWithReason',
     {
@@ -24,7 +24,7 @@ export function Resume({ data }: ResumeProps) {
   const [{}, createStream] = useContractWrite(
     {
       addressOrName: data.llamaContractAddress,
-      contractInterface: llamaContract,
+      contractInterface: llamaContractABI,
     },
     'createStream',
     {

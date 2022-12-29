@@ -6,7 +6,7 @@ import { useApproveToken, useCheckMultipleTokenApproval } from 'queries/useToken
 import { useFieldArray, useForm } from 'react-hook-form';
 import { createERC20Contract, ICheckMultipleTokenAllowance } from 'utils/tokenUtils';
 import BigNumber from 'bignumber.js';
-import { paymentsContract } from 'lib/abis/paymentsContract';
+import { paymentsContractABI } from 'lib/abis/paymentsContract';
 import { useAccount, useContractWrite, useSigner } from 'wagmi';
 import toast from 'react-hot-toast';
 import { SubmitButton } from 'components/Form';
@@ -33,7 +33,7 @@ interface ICall {
   release: string;
 }
 
-const contractInterface = new Interface(paymentsContract);
+const contractInterface = new Interface(paymentsContractABI);
 
 export default function CreatePayment({ contract }: { contract: string }) {
   const { register, control, handleSubmit, reset, getValues, setValue, watch } = useForm<IPaymentFormValues>({
@@ -93,7 +93,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
   const [{}, batch] = useContractWrite(
     {
       addressOrName: contract,
-      contractInterface: paymentsContract,
+      contractInterface: paymentsContractABI,
     },
     'batch'
   );

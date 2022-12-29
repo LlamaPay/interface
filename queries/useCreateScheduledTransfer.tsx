@@ -3,9 +3,7 @@ import { getAddress } from 'ethers/lib/utils';
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSigner } from 'wagmi';
-import { useNetworkProvider } from 'hooks';
-import { scheduledTransfers } from 'lib/abis/scheduledTransfers';
-import { networkDetails } from 'lib/networkDetails';
+import { scheduledTransfersABI } from 'lib/abis/scheduledTransfers';
 import { ITransactionError, ITransactionSuccess } from 'types';
 
 interface ICreateContract {
@@ -31,23 +29,17 @@ const create = async ({ factoryAddress, signer, oracleAddress }: ICreate) => {
       throw new Error('Invalid Factory Address');
     }
 
-    const contract = new ethers.Contract(getAddress(factoryAddress), scheduledTransfers, signer);
+    const contract = new ethers.Contract(getAddress(factoryAddress), scheduledTransfersABI, signer);
 
-    return await contract.createContract(getAddress(oracleAddress), {
-      gasLimit: 250000,
-    });
+    return await contract.createContract(getAddress(oracleAddress));
   } catch (error: any) {
     throw new Error(error.message || (error?.reason ?? "Couldn't create contract"));
   }
 };
 
-export default function useCreateScheduledTransferContract() {
+export default function useCreateScheduledTransferContract({ factoryAddress }: { factoryAddress?: string | null }) {
   const [{ data: signer }] = useSigner();
   const queryClient = useQueryClient();
-
-  const { chainId } = useNetworkProvider();
-
-  const factoryAddress = chainId ? networkDetails[chainId].scheduledTransferFactory : null;
 
   return useMutation<ITransactionSuccess, ITransactionError, ICreateContract, unknown>(
     ({ oracleAddress }: ICreateContract) => create({ factoryAddress, signer, oracleAddress }),

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { llamaContract } from 'lib/abis/llamaContract';
+import { llamaContractABI } from 'lib/abis/llamaContract';
 import { useDialogState } from 'ariakit';
 import { TransactionDialog } from 'components/Dialog';
 import toast from 'react-hot-toast';
@@ -23,7 +23,7 @@ export const Push = ({ data, buttonName, className }: PushProps) => {
   const [{}, withdraw] = useContractWrite(
     {
       addressOrName: data.llamaContractAddress,
-      contractInterface: llamaContract,
+      contractInterface: llamaContractABI,
     },
     'withdraw',
     {

@@ -1,4 +1,4 @@
-export const factory = [
+export const factoryABI = [
   {
     anonymous: false,
     inputs: [

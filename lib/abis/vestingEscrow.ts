@@ -1,4 +1,4 @@
-export const vestingEscrow = [
+export const vestingEscrowABI = [
   {
     name: 'Fund',
     inputs: [

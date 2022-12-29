@@ -4,7 +4,7 @@ import { FormDialog } from 'components/Dialog';
 import { SubmitButton } from 'components/Form';
 import { useIntl } from 'next-intl';
 import { useContractWrite } from 'wagmi';
-import { vestingFactoryReadable } from 'lib/abis/vestingFactoryReadable';
+import { vestingFactoryReadableABI } from 'lib/abis/vestingFactoryReadable';
 import { useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
 import { TransactionDialog } from 'components/Dialog';
@@ -36,7 +36,7 @@ export default function Confirm({ vestingData, dialog, factory }: IConfirmProps)
   const [{ loading }, deploy_vesting_contract] = useContractWrite(
     {
       addressOrName: factory,
-      contractInterface: vestingFactoryReadable,
+      contractInterface: vestingFactoryReadableABI,
     },
     'deploy_vesting_contract'
   );

@@ -1,4 +1,4 @@
-export const vestingFactory: any = [
+export const vestingFactoryABI: any = [
   {
     name: 'VestingEscrowCreated',
     inputs: [

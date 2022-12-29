@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { disperseContract } from 'lib/abis/disperseContract';
+import { disperseContractABI } from 'lib/abis/disperseContract';
 import { DisclosureState } from 'ariakit';
 import BigNumber from 'bignumber.js';
 import toast from 'react-hot-toast';
@@ -21,7 +21,7 @@ export default function DisperseSend({ dialog, data, setTransactionHash, transac
   const [{ loading }, disperseEther] = useContractWrite(
     {
       addressOrName: networkDetails[Number(network.chain?.id)].disperseAddress,
-      contractInterface: disperseContract,
+      contractInterface: disperseContractABI,
     },
     'disperseEther'
   );
