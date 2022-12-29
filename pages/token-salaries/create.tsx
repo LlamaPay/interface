@@ -9,6 +9,7 @@ import { useDialogState } from 'ariakit';
 import { StreamIcon } from 'components/Icons';
 import { useNetworkProvider } from 'hooks';
 import { networkDetails } from 'lib/networkDetails';
+import { useRouter } from 'next/router';
 
 interface IFormElements {
   oracleAddress: { value: string };
@@ -16,6 +17,8 @@ interface IFormElements {
 }
 
 const Home: NextPage = () => {
+  const router = useRouter();
+
   const [txHash, setTxHash] = React.useState('');
 
   const txDialogState = useDialogState();
@@ -38,6 +41,7 @@ const Home: NextPage = () => {
           setTxHash(data.hash);
           txDialogState.toggle();
           form.reset();
+          router.push('/token-salaries/outgoing');
         },
       }
     );
@@ -52,7 +56,7 @@ const Home: NextPage = () => {
         </h1>
 
         <InputText name="oracleAddress" isRequired={true} label="Oracle Address" placeholder="0x..." />
-        <InputText name="tokenAddress" isRequired={true} label="Tokens Address" placeholder="0x..." />
+        <InputText name="tokenAddress" isRequired={true} label="Token Address" placeholder="0x..." />
 
         <SubmitButton disabled={!factoryAddress || isLoading} className="mt-2">
           {!factoryAddress ? 'Chain not supported' : isLoading ? <BeatLoader size={6} color="white" /> : 'Create'}
