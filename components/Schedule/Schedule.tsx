@@ -141,32 +141,37 @@ export default function Schedule({
                 <option value="monthly">Every 30 Days</option>
               </select>
             </div>
-            <label className="input-label">Start Date</label>
-            <div className="relative flex">
-              <input
-                className="input-field"
-                onChange={(e) => handleChange(e.target.value, 'startDate')}
-                required
-                autoComplete="off"
-                autoCorrect="off"
-                placeholder="YYYY-MM-DD"
-                pattern="\d{4}-\d{2}-\d{2}"
-                value={formData.startDate}
-                onClick={(e) => setShowCalendar(true)}
-              />
-              <button
-                type="button"
-                className="absolute bottom-[5px] top-[10px] right-[5px] rounded-lg border border-[#4E575F] px-2 text-xs font-bold text-[#4E575F] disabled:cursor-not-allowed"
-                onClick={onCurrentDate}
-              >
-                {'Today'}
-              </button>
+
+            <div>
+              <label className="input-label">Start Date</label>
+              <div className="relative flex">
+                <input
+                  className="input-field"
+                  onChange={(e) => handleChange(e.target.value, 'startDate')}
+                  required
+                  autoComplete="off"
+                  autoCorrect="off"
+                  placeholder="YYYY-MM-DD"
+                  pattern="\d{4}-\d{2}-\d{2}"
+                  value={formData.startDate}
+                  onClick={(e) => setShowCalendar(true)}
+                />
+                <button
+                  type="button"
+                  className="absolute bottom-[5px] top-[10px] right-[5px] rounded-lg border border-[#4E575F] px-2 text-xs font-bold text-[#4E575F] disabled:cursor-not-allowed"
+                  onClick={onCurrentDate}
+                >
+                  {'Today'}
+                </button>
+              </div>
             </div>
+
             {showCalendar && (
               <section className="max-w-xs place-self-center border px-2 py-2">
                 <Calendar onChange={(e: any) => handleCalendarClick(e)} />
               </section>
             )}
+
             {data.payeeAddress.toLowerCase() === accountData?.address.toLowerCase() && (
               <div className="flex space-x-1">
                 <span>Redirect Withdraw</span>

@@ -65,7 +65,7 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.target as typeof e.target & IFormElements;
+    const form = e.target as HTMLFormElement & IFormElements;
     const amount = form.amount?.value;
 
     if (amount) {

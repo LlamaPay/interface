@@ -38,7 +38,7 @@ export const Modify = ({ data }: ModifyProps) => {
 
   const updateStream = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.target as typeof e.target & IUpdatedFormElements;
+    const form = e.target as HTMLFormElement & IUpdatedFormElements;
     const updatedAddress = form.updatedAddress?.value;
     const updatedAmount = form.updatedAmount?.value;
     const modifiedStreamDuration = form.modifiedStreamDuration?.value;

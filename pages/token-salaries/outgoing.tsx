@@ -7,16 +7,11 @@ import { useGetScheduledTransfers } from 'queries/useGetScheduledTransfers';
 import { FallbackContainer, FallbackContainerLoader } from 'components/Fallback';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { formatAddress } from 'utils/address';
-import { PlusIcon } from '@heroicons/react/solid';
-import Tooltip from 'components/Tooltip';
-import BigNumber from 'bignumber.js';
+import { OutgoingPool } from 'components/ScheduledTransfers/OutgoingPool';
 
 const Home: NextPage = () => {
   const [{ data: accountData }] = useAccount();
   const [{ data: networkData }] = useNetwork();
-
-  const explorerUrl = networkData?.chain?.id ? networkDetails[networkData.chain.id]?.blockExplorerURL : null;
 
   const graphEndpoint = networkData?.chain?.id ? networkDetails[networkData.chain.id]?.scheduledTransferSubgraph : null;
 
@@ -60,218 +55,13 @@ const Home: NextPage = () => {
         ) : (
           <>
             {data.map((pool) => (
-              <div
-                key={pool.poolContract}
-                className="max-w-[calc(100vw-32px)] overflow-x-auto md:max-w-[calc(100vw-48px)] lg:max-w-[calc(100vw-256px)] [&:not(:first-of-type)]:mt-4"
-              >
-                <table className="border-collapse text-lp-gray-4 dark:text-white">
-                  <tbody>
-                    <tr>
-                      <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-left text-sm font-semibold dark:border-lp-gray-7">
-                        Pool
-                      </th>
-                      <td className="table-description border border-solid border-llama-teal-2 text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                        {explorerUrl ? (
-                          <a
-                            href={`${explorerUrl}/address/${pool.poolContract}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {pool.poolContract}
-                          </a>
-                        ) : (
-                          pool.poolContract
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-left text-sm font-semibold dark:border-lp-gray-7">
-                        Token
-                      </th>
-                      <td className="table-description border border-solid border-llama-teal-2 text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                        {explorerUrl ? (
-                          <a
-                            href={`${explorerUrl}/address/${pool.token.address}`}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                          >
-                            {`${pool.token.name || pool.token.address}`}
-                          </a>
-                        ) : (
-                          <>{`${pool.token.name || pool.token.address}`}</>
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-left text-sm font-semibold dark:border-lp-gray-7">
-                        Oracle
-                      </th>
-                      <td className="table-description border border-solid border-llama-teal-2 text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                        {explorerUrl ? (
-                          <a href={`${explorerUrl}/address/${pool.oracle}`} target="_blank" rel="noopener noreferrer">
-                            {pool.oracle}
-                          </a>
-                        ) : (
-                          <>{pool.oracle}</>
-                        )}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-left text-sm font-semibold dark:border-lp-gray-7">
-                        <Tooltip content="Max usd price for the token that the oracle will be allowed to report">
-                          Max Price
-                        </Tooltip>
-                      </th>
-                      <td className="table-description border border-solid border-llama-teal-2 text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                        {pool.maxPrice
-                          ? `${formatMaxPrice(pool.maxPrice, pool.token.decimals || 18).toLocaleString(undefined, {
-                              maximumFractionDigits: 2,
-                            })} ${pool.token.symbol}`
-                          : ''}
-                      </td>
-                    </tr>
-                    <tr>
-                      <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-left text-sm font-semibold dark:border-lp-gray-7">
-                        Payments
-                      </th>
-                      <td className="overflow-x-auto border border-solid border-llama-teal-2 text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                        <table className="w-full border-collapse">
-                          <thead>
-                            <tr>
-                              <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
-                                Payee
-                              </th>
-                              <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
-                                Start
-                              </th>
-                              <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
-                                End
-                              </th>
-                              <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
-                                Amount USD
-                              </th>
-                              <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
-                                Redirects
-                              </th>
-                              <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
-                                Frequency
-                              </th>
-                            </tr>
-                          </thead>
-                          <tbody className="border border-llama-teal-2 dark:border-lp-gray-7">
-                            {pool.payments.map((payment) => (
-                              <tr key={payment.id}>
-                                <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                                  {explorerUrl ? (
-                                    <a
-                                      href={`${explorerUrl}/address/${payment.payee}`}
-                                      target="_blank"
-                                      rel="noopener noreferrer"
-                                    >
-                                      {formatAddress(payment.payee)}
-                                    </a>
-                                  ) : (
-                                    <>{formatAddress(payment.payee)}</>
-                                  )}
-                                </td>
-                                <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                                  {payment.starts
-                                    ? new Date(Number(payment.starts) * 1000).toLocaleDateString() +
-                                      ', ' +
-                                      new Date(Number(payment.starts) * 1000).toLocaleTimeString()
-                                    : ''}
-                                </td>
-                                <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                                  {payment.ends
-                                    ? new Date(Number(payment.ends) * 1000).toLocaleDateString() +
-                                      ', ' +
-                                      new Date(Number(payment.ends) * 1000).toLocaleTimeString()
-                                    : ''}
-                                </td>
-                                <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                                  {payment.usdAmount
-                                    ? '$' +
-                                      (Number(payment.usdAmount) / 1e18).toLocaleString(undefined, {
-                                        maximumFractionDigits: 2,
-                                      })
-                                    : ''}
-                                </td>
-                                <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                                  {payment.redirects}
-                                </td>
-                                <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                                  {formatFrequency(payment.frequency)}
-                                </td>
-                              </tr>
-                            ))}
-                            <tr>
-                              <td
-                                className="table-description border border-solid border-llama-teal-2 py-4 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white"
-                                colSpan={6}
-                              >
-                                <button className="form-submit-button font-normalqq mx-auto flex max-w-fit flex-nowrap items-center gap-1">
-                                  <PlusIcon className="h-4 w-4" />
-                                  <span>New Payment</span>
-                                </button>
-                              </td>
-                            </tr>
-                          </tbody>
-                        </table>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
+              <OutgoingPool key={pool.poolContract} pool={pool} />
             ))}
           </>
         )}
       </div>
     </Layout>
   );
-};
-
-const formatFrequency = (frequency: string) => {
-  const days = Number(frequency) / (24 * 3600);
-
-  if (days < 1) {
-    const hours = Number(frequency) / 3600;
-
-    if (hours < 1) {
-      const minutes = Number(frequency) / 60;
-
-      return (
-        minutes.toLocaleString(undefined, {
-          maximumFractionDigits: 4,
-        }) +
-        ' minute' +
-        (minutes !== 1 ? 's' : '')
-      );
-    }
-
-    return (
-      hours.toLocaleString(undefined, {
-        maximumFractionDigits: 4,
-      }) +
-      ' hour' +
-      (hours !== 1 ? 's' : '')
-    );
-  }
-
-  return (
-    days.toLocaleString(undefined, {
-      maximumFractionDigits: 4,
-    }) +
-    ' day' +
-    (days !== 1 ? 's' : '')
-  );
-};
-
-const formatMaxPrice = (maxPrice: number, decimals: number) => {
-  const decimalOffset = 10 ** (18 - Number(decimals));
-
-  const usdPrice = new BigNumber(new BigNumber(1e28).div(decimalOffset)).div(Number(maxPrice)).toFixed(2);
-
-  return Number(usdPrice);
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {

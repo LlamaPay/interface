@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 import { useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
 
-interface IScheduledTransferContract {
+export interface IScheduledTransferContract {
   poolContract: string;
   oracle: string;
   maxPrice: number | null;
