@@ -41,7 +41,7 @@ const fetchScheduledTransfers = async ({
       graphEndpoint,
       gql`
         {
-          pools {
+          pools (where: { owner: "${userAddress}" }) {
             poolContract
             oracle
             maxPrice
@@ -84,5 +84,3 @@ export function useGetScheduledTransfers({ graphEndpoint }: { graphEndpoint?: st
     }
   );
 }
-
-// (where: { owner: "${userAddress}" })
