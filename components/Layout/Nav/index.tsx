@@ -16,8 +16,6 @@ export function Nav() {
 
   const isPayments = router.pathname.includes('/payments');
 
-  const isTokenSalaries = router.pathname.includes('/token-salaries');
-
   return (
     <nav className="hidden min-w-[224px] flex-col gap-3 px-8 lg:flex">
       <Group name="Salaries" isOpen={isSalaries || router.pathname === '/create' || router.pathname === '/withdraw'}>
@@ -40,11 +38,17 @@ export function Nav() {
         <LinkItem name="Create" href="/create" isActive={router.pathname === '/payments/create'} />
       </Group>
 
-      <Group name="Token Salaries" isOpen={isTokenSalaries}>
+      <Group name="Token Salaries" isOpen={router.pathname.includes('/token-salaries')}>
         <LinkItem
-          name="Scheduled Transfers"
-          href="/token-salaries"
-          isActive={isTokenSalaries && router.pathname !== '/token-salaries/create'}
+          name="Incoming"
+          href="/token-salaries/incoming"
+          isActive={router.pathname === '/token-salaries/incoming'}
+        />
+        <Spacer />
+        <LinkItem
+          name="Outgoing"
+          href="/token-salaries/outgoing"
+          isActive={router.pathname === '/token-salaries/outgoing'}
         />
         <Spacer />
         <LinkItem name="Create" href="/token-salaries/create" isActive={router.pathname === '/token-salaries/create'} />

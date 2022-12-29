@@ -31,6 +31,7 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
           }
         }
       `;
+
       const get_to = gql`
         {
           schedules(where: { to: "${userAddress}", active: true }) {
@@ -44,10 +45,14 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
           }
         }
       `;
+
       const froms = (await request(networkDetails[chainId].botSubgraph!, get_from)).schedules;
-      const tos = (await request(networkDetails[chainId].botSubgraph!, get_from)).schedules;
+      const tos = (await request(networkDetails[chainId].botSubgraph!, get_to)).schedules;
+
       const schedules = froms.concat(tos);
+
       const tokenSymbols: any = {};
+
       const toInclude: {
         [key: string]: {
           owner: string;

@@ -6,10 +6,6 @@ import { networkDetails } from 'lib/networkDetails';
 const fetchTokenPrice = async (id: string, prefix: string | null) => {
   if (!id || !prefix) return null;
 
-  // remove later this is used for testing
-  // id = '0xc7198437980c041c805a1edcba50c1ce5db95118';
-  // prefix = 'avax';
-
   const { data } = await axios.post(
     'https://coins.llama.fi/prices',
     JSON.stringify({
