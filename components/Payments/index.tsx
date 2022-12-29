@@ -3,7 +3,7 @@ import Fallback, { FallbackContainer } from 'components/Fallback';
 import { useNetworkProvider } from 'hooks';
 import Link from 'next/link';
 import useGetPaymentsInfo from 'queries/useGetPaymentsInfo';
-import { networkDetails } from 'utils/constants';
+import { networkDetails } from 'lib/networkDetails';
 import PaymentsTableActual from './Table';
 
 export default function PaymentsTable() {

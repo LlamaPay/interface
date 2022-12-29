@@ -2,7 +2,7 @@ import * as React from 'react';
 import Fallback, { FallbackContainer } from 'components/Fallback';
 import useGetVestingInfo from 'queries/useGetVestingInfo';
 import { useNetworkProvider } from 'hooks';
-import { networkDetails } from 'utils/constants';
+import { networkDetails } from 'lib/networkDetails';
 import Link from 'next/link';
 import classNames from 'classnames';
 import { IVesting } from 'types';

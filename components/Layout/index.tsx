@@ -20,12 +20,12 @@ interface ILayoutProps {
 }
 
 export default function Layout({ children, className, ...props }: ILayoutProps) {
+  const router = useRouter();
+
   const [{ data }] = useAccount();
 
   const onboardDialog = useDialogState();
   const walletDialog = useDialogState();
-
-  const router = useRouter();
 
   return (
     <>

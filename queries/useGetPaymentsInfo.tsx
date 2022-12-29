@@ -2,7 +2,7 @@ import { useNetworkProvider } from 'hooks';
 import { useQuery } from 'react-query';
 import { useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
-import { networkDetails } from 'utils/constants';
+import { networkDetails } from 'lib/networkDetails';
 import { IPayments } from 'types';
 
 async function getPaymentsInfo(userAddress: string | undefined, chainId: number | null) {

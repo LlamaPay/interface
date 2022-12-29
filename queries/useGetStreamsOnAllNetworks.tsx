@@ -1,27 +1,28 @@
 import { useAccount } from 'wagmi';
 import { useQuery } from 'react-query';
 import { useStreamAndHistoryQuery } from 'services/generated/graphql';
-import { chains, networkDetails } from 'utils/constants';
+import { networkDetails } from 'lib/networkDetails';
+import { chains } from 'lib/chains';
 
 async function fetchStreams(address?: string) {
   try {
     if (!address) return [];
 
-    const data = await Promise.all(
-      chains
-        .filter((chain) => chain.id !== 82)
-        .map((chain) =>
-          useStreamAndHistoryQuery.fetcher(
-            {
-              endpoint: networkDetails[chain.id]?.subgraphEndpoint ?? '',
-            },
-            {
-              id: address?.toLowerCase() ?? '',
-              network: chain?.name ?? '',
-            }
-          )()
-        )
+    const res = await Promise.allSettled(
+      chains.map((chain) =>
+        useStreamAndHistoryQuery.fetcher(
+          {
+            endpoint: networkDetails[chain.id]?.subgraphEndpoint ?? '',
+          },
+          {
+            id: address?.toLowerCase() ?? '',
+            network: chain?.name ?? '',
+          }
+        )()
+      )
     );
+
+    const data = res.map((r) => (r.status === 'fulfilled' ? r.value : null));
 
     return chains.map((chain, index) => ({
       id: chain.id,

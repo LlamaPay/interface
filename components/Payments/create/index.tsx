@@ -13,7 +13,7 @@ import { SubmitButton } from 'components/Form';
 import React from 'react';
 import { useQueryClient } from 'react-query';
 import useGnosisBatch from 'queries/useGnosisBatch';
-import { networkDetails } from 'utils/constants';
+import { networkDetails } from 'lib/networkDetails';
 import { ERC20Interface } from 'utils/contract';
 import { BeatLoader } from 'react-spinners';
 

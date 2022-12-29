@@ -6,7 +6,7 @@ import { useNetworkProvider } from 'hooks';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import { IVesting } from 'types';
-import { networkDetails } from 'utils/constants';
+import { networkDetails } from 'lib/networkDetails';
 import { useAccount, useContractWrite } from 'wagmi';
 
 export default function ReasonButton({ data }: { data: IVesting }) {

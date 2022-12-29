@@ -1,4 +1,5 @@
-import { networkDetails, defaultSubgraphEndpoint } from 'utils/constants';
+import { defaultSubgraphEndpoint } from 'utils/constants';
+import { networkDetails } from 'lib/networkDetails';
 import { useNetworkProvider } from './useNetworkProvider';
 
 export const useGraphEndpoint = () => {

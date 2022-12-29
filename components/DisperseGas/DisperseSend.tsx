@@ -4,7 +4,7 @@ import { DisclosureState } from 'ariakit';
 import BigNumber from 'bignumber.js';
 import toast from 'react-hot-toast';
 import { BeatLoader } from 'react-spinners';
-import { networkDetails } from 'utils/constants';
+import { networkDetails } from 'lib/networkDetails';
 import { useContractWrite, useNetwork } from 'wagmi';
 import { useQueryClient } from 'react-query';
 import { useTranslations } from 'next-intl';

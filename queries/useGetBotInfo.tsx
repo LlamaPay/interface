@@ -3,7 +3,8 @@ import { botContract } from 'lib/abis/botContract';
 import { ethers } from 'ethers';
 import { useNetworkProvider } from 'hooks';
 import { useQuery } from 'react-query';
-import { networkDetails, zeroAdd } from 'utils/constants';
+import { zeroAdd } from 'utils/constants';
+import { networkDetails } from 'lib/networkDetails';
 import { erc20ABI, useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
 

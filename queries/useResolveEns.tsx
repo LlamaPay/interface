@@ -3,7 +3,7 @@ import { getAddress } from 'ethers/lib/utils';
 import { useNetworkProvider } from 'hooks';
 import { useQuery } from 'react-query';
 import { StreamAndHistoryQuery } from 'services/generated/graphql';
-import { networkDetails } from 'utils/constants';
+import { networkDetails } from 'lib/networkDetails';
 import { mainnetResolver } from 'lib/abis/mainnetResolver';
 import { chainDetails } from 'utils/network';
 import { MAINNET_ENS_RESOLVER } from 'lib/contracts';
@@ -68,7 +68,7 @@ const { network: mainnet } = chainDetails('1');
 async function fetchEns(address: string) {
   const userAddress = await mainnet?.chainProviders
     .lookupAddress(address)
-    .then((ens) => ens || address)
+    .then((ens: string | null) => ens || address)
     .catch(() => address);
 
   return userAddress;
