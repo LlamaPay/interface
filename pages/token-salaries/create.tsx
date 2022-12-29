@@ -12,6 +12,7 @@ import { networkDetails } from 'lib/networkDetails';
 
 interface IFormElements {
   oracleAddress: { value: string };
+  tokenAddress: { value: string };
 }
 
 const Home: NextPage = () => {
@@ -27,14 +28,16 @@ const Home: NextPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.target as typeof e.target & IFormElements;
+    const form = e.target as HTMLFormElement & IFormElements;
     const oracleAddress = form.oracleAddress?.value;
+    const tokenAddress = form.tokenAddress?.value;
     mutateAsync(
-      { oracleAddress },
+      { oracleAddress, tokenAddress },
       {
         onSuccess: (data) => {
           setTxHash(data.hash);
           txDialogState.toggle();
+          form.reset();
         },
       }
     );
@@ -49,6 +52,7 @@ const Home: NextPage = () => {
         </h1>
 
         <InputText name="oracleAddress" isRequired={true} label="Oracle Address" placeholder="0x..." />
+        <InputText name="tokenAddress" isRequired={true} label="Tokens Address" placeholder="0x..." />
 
         <SubmitButton disabled={!factoryAddress || isLoading} className="mt-2">
           {!factoryAddress ? 'Chain not supported' : isLoading ? <BeatLoader size={6} color="white" /> : 'Create'}

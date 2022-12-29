@@ -8,6 +8,7 @@ import { ITransactionError, ITransactionSuccess } from 'types';
 
 interface ICreateContract {
   oracleAddress?: string;
+  tokenAddress?: string;
 }
 
 interface ICreate extends ICreateContract {
@@ -15,14 +16,14 @@ interface ICreate extends ICreateContract {
   signer?: Signer;
 }
 
-const create = async ({ factoryAddress, signer, oracleAddress }: ICreate) => {
+const create = async ({ factoryAddress, signer, oracleAddress, tokenAddress }: ICreate) => {
   try {
     if (!signer) {
       throw new Error("Couldn't get signer");
     }
 
-    if (!oracleAddress) {
-      throw new Error('Invalid address');
+    if (!oracleAddress || !tokenAddress) {
+      throw new Error('Invalid addresses');
     }
 
     if (!factoryAddress) {
@@ -31,7 +32,7 @@ const create = async ({ factoryAddress, signer, oracleAddress }: ICreate) => {
 
     const contract = new ethers.Contract(getAddress(factoryAddress), scheduledTransfersABI, signer);
 
-    return await contract.createContract(getAddress(oracleAddress));
+    return await contract.createContract(getAddress(oracleAddress), getAddress(tokenAddress));
   } catch (error: any) {
     throw new Error(error.message || (error?.reason ?? "Couldn't create contract"));
   }
@@ -42,7 +43,8 @@ export default function useCreateScheduledTransferContract({ factoryAddress }: {
   const queryClient = useQueryClient();
 
   return useMutation<ITransactionSuccess, ITransactionError, ICreateContract, unknown>(
-    ({ oracleAddress }: ICreateContract) => create({ factoryAddress, signer, oracleAddress }),
+    ({ oracleAddress, tokenAddress }: ICreateContract) =>
+      create({ factoryAddress, signer, oracleAddress, tokenAddress }),
     {
       onSuccess: (data) => {
         const toastId = toast.loading('Confirming transaction');
