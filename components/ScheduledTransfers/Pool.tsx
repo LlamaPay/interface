@@ -44,6 +44,9 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
 
   const { mutateAsync } = useCreateScheduledTransferPayment({ poolAddress: pool.poolContract });
 
+  const offset = new Date().getTimezoneOffset();
+  const minDate = new Date(new Date().getTime() - offset * 60 * 1000).toISOString().split('T')[0];
+
   const createScheduledPayment = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement & IFormElements;
@@ -53,12 +56,17 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
     const paymentEndAt = form.paymentEndAt?.valueAsNumber;
     const frequency = form.frequency?.value;
 
+    const startData =
+      (new Date(minDate).getTime() === paymentStartAt ? new Date().getTime() + 10 * 60 * 1000 : paymentStartAt) / 1000;
+    const endDate =
+      (new Date(minDate).getTime() === paymentEndAt ? new Date().getTime() + 10 * 60 * 1000 : paymentEndAt) / 1000;
+
     mutateAsync(
       {
         toAddress,
         usdAmount: new BigNumber(usdAmount).times(1e8).toFixed(0),
-        paymentStartAt: paymentStartAt && paymentStartAt / 1000,
-        paymentEndAt: paymentEndAt && paymentEndAt / 1000,
+        paymentStartAt: paymentStartAt && startData.toFixed(0),
+        paymentEndAt: paymentEndAt && endDate.toFixed(0),
         frequency: Number(frequency) * 24 * 3600,
       },
       {
@@ -71,9 +79,6 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
       }
     );
   };
-
-  const offset = new Date().getTimezoneOffset();
-  const minDate = new Date(new Date().getTime() - offset * 60 * 1000).toISOString().split('T')[0];
 
   return (
     <>

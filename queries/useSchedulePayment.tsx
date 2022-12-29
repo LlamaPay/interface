@@ -10,8 +10,8 @@ import { scheduledPaymentsContractABI } from 'lib/abis/scheduledPaymentsContract
 interface ICreateContract {
   toAddress?: string;
   usdAmount?: string;
-  paymentStartAt?: number;
-  paymentEndAt?: number;
+  paymentStartAt?: string | number;
+  paymentEndAt?: string | number;
   frequency?: number;
 }
 
