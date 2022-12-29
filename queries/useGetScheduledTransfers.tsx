@@ -2,7 +2,23 @@ import { useQuery } from 'react-query';
 import { useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
 
-export interface IScheduledTransferContract {
+export interface IScheduledTransferPayment {
+  payee: string;
+  id: string;
+  lastPaid: string;
+  streamId: string;
+  usdAmount: string;
+  starts: string;
+  redirects: string | null;
+  frequency: string;
+  ends: string;
+  pool: {
+    owner: string;
+    poolContract: string;
+  };
+}
+
+export interface IScheduledTransferPool {
   poolContract: string;
   oracle: string;
   maxPrice: number | null;
@@ -12,20 +28,10 @@ export interface IScheduledTransferContract {
     name: string | null;
     symbol: string | null;
   };
-  payments: Array<{
-    payee: string;
-    id: string;
-    lastPaid: string;
-    streamId: string;
-    usdAmount: string;
-    starts: string;
-    redirects: string | null;
-    frequency: string;
-    ends: string;
-  }>;
+  payments: Array<IScheduledTransferPayment>;
 }
 
-const fetchScheduledTransfers = async ({
+const fetchScheduledTransferPools = async ({
   userAddress,
   graphEndpoint,
 }: {
@@ -61,6 +67,10 @@ const fetchScheduledTransfers = async ({
               redirects
               frequency
               ends
+              pool {
+                owner
+                poolContract
+              }
             }
           }
         }
@@ -73,12 +83,65 @@ const fetchScheduledTransfers = async ({
   }
 };
 
-export function useGetScheduledTransfers({ graphEndpoint }: { graphEndpoint?: string | null }) {
+const fetchScheduledPayments = async ({
+  userAddress,
+  graphEndpoint,
+}: {
+  userAddress?: string;
+  graphEndpoint?: string | null;
+}) => {
+  try {
+    if (!userAddress || !graphEndpoint) {
+      return [];
+    }
+
+    const res = await request(
+      graphEndpoint,
+      gql`
+        {
+          payments (where: { payee: "${userAddress}" }) {
+            payee
+            id
+            lastPaid
+            streamId
+            usdAmount
+            starts
+            redirects
+            frequency
+            ends
+            pool {
+              owner
+              poolContract
+            }
+          }
+        }
+      `
+    );
+
+    return res.payments ?? [];
+  } catch (error: any) {
+    throw new Error(error.message || (error?.reason ?? "Couldn't fetch scheduled payments"));
+  }
+};
+
+export function useGetScheduledTransferPools({ graphEndpoint }: { graphEndpoint?: string | null }) {
   const [{ data: accountData }] = useAccount();
 
-  return useQuery<Array<IScheduledTransferContract>>(
-    ['scheduledTransfers', accountData?.address, graphEndpoint],
-    () => fetchScheduledTransfers({ userAddress: accountData?.address, graphEndpoint }),
+  return useQuery<Array<IScheduledTransferPool>>(
+    ['scheduledTransferPools', accountData?.address, graphEndpoint],
+    () => fetchScheduledTransferPools({ userAddress: accountData?.address, graphEndpoint }),
+    {
+      refetchInterval: 30_000,
+    }
+  );
+}
+
+export function useGetScheduledPayments({ graphEndpoint }: { graphEndpoint?: string | null }) {
+  const [{ data: accountData }] = useAccount();
+
+  return useQuery<Array<IScheduledTransferPayment>>(
+    ['scheduledPayments', accountData?.address, graphEndpoint],
+    () => fetchScheduledPayments({ userAddress: accountData?.address, graphEndpoint }),
     {
       refetchInterval: 30_000,
     }

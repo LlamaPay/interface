@@ -3,11 +3,11 @@ import * as React from 'react';
 import Layout from 'components/Layout';
 import { useAccount, useNetwork } from 'wagmi';
 import { networkDetails } from 'lib/networkDetails';
-import { useGetScheduledTransfers } from 'queries/useGetScheduledTransfers';
+import { useGetScheduledTransferPools } from 'queries/useGetScheduledTransfers';
 import { FallbackContainer, FallbackContainerLoader } from 'components/Fallback';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
-import { OutgoingPool } from 'components/ScheduledTransfers/OutgoingPool';
+import { ScheduledTransferPool } from 'components/ScheduledTransfers/Pool';
 
 const Home: NextPage = () => {
   const [{ data: accountData }] = useAccount();
@@ -15,7 +15,7 @@ const Home: NextPage = () => {
 
   const graphEndpoint = networkData?.chain?.id ? networkDetails[networkData.chain.id]?.scheduledTransferSubgraph : null;
 
-  const { data, isLoading, isError } = useGetScheduledTransfers({ graphEndpoint });
+  const { data, isLoading, isError } = useGetScheduledTransferPools({ graphEndpoint });
 
   const t0 = useTranslations('Common');
 
@@ -55,7 +55,7 @@ const Home: NextPage = () => {
         ) : (
           <>
             {data.map((pool) => (
-              <OutgoingPool key={pool.poolContract} pool={pool} />
+              <ScheduledTransferPool key={pool.poolContract} pool={pool} />
             ))}
           </>
         )}

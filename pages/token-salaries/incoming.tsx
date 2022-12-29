@@ -3,20 +3,18 @@ import * as React from 'react';
 import Layout from 'components/Layout';
 import { useAccount, useNetwork } from 'wagmi';
 import { networkDetails } from 'lib/networkDetails';
-import { useGetScheduledTransfers } from 'queries/useGetScheduledTransfers';
+import { useGetScheduledPayments } from 'queries/useGetScheduledTransfers';
 import { FallbackContainer, FallbackContainerLoader } from 'components/Fallback';
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
+import { ScheduledTransferPayment } from 'components/ScheduledTransfers/Payment';
 
 const Home: NextPage = () => {
   const [{ data: accountData }] = useAccount();
   const [{ data: networkData }] = useNetwork();
 
-  const explorerUrl = networkData?.chain?.id ? networkDetails[networkData?.chain?.id].blockExplorerURL : '';
-
   const graphEndpoint = networkData?.chain?.id ? networkDetails[networkData.chain.id]?.scheduledTransferSubgraph : null;
 
-  const { data, isLoading, isError } = useGetScheduledTransfers({ graphEndpoint });
+  const { data, isLoading, isError } = useGetScheduledPayments({ graphEndpoint });
 
   const t0 = useTranslations('Common');
 
@@ -32,7 +30,7 @@ const Home: NextPage = () => {
   return (
     <Layout className="flex flex-col gap-12">
       <div>
-        <h1 className="font-exo section-header">Your Contracts</h1>
+        <h1 className="font-exo section-header">Scheduled Payments</h1>
         {showFallback ? (
           <FallbackContainer>
             {!accountData ? (
@@ -43,20 +41,14 @@ const Home: NextPage = () => {
               <FallbackContainerLoader />
             ) : isError || !data ? (
               <p>{t0('error')}</p>
-            ) : data.length === 1 ? (
-              <p>
-                Create a <Link href="/token-salaries/create">contract</Link> to schedule transfers
-              </p>
+            ) : data.length === 0 ? (
+              <p>You don't have any scheduled incoming payments</p>
             ) : null}
           </FallbackContainer>
         ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>Pool</th>
-              </tr>
-            </thead>
-          </table>
+          <div className="max-w-[calc(100vw-32px)] overflow-x-auto md:max-w-[calc(100vw-48px)] lg:max-w-[calc(100vw-256px)] [&:not(:first-of-type)]:mt-4">
+            <ScheduledTransferPayment payments={data} isIncoming />
+          </div>
         )}
       </div>
     </Layout>

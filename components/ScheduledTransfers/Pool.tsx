@@ -1,16 +1,15 @@
 import * as React from 'react';
-import { PlusIcon } from '@heroicons/react/solid';
 import { useDialogState } from 'ariakit';
 import { FormDialog, TransactionDialog } from 'components/Dialog';
 import { InputAmount, InputText, SubmitButton } from 'components/Form';
 import Tooltip from 'components/Tooltip';
 import { networkDetails } from 'lib/networkDetails';
-import type { IScheduledTransferContract } from 'queries/useGetScheduledTransfers';
+import type { IScheduledTransferPool } from 'queries/useGetScheduledTransfers';
 import { useCreateScheduledTransferPayment } from 'queries/useSchedulePayment';
-import { formatAddress } from 'utils/address';
 import { useNetwork } from 'wagmi';
-import { formatFrequency, formatMaxPrice } from './utils';
+import { formatMaxPrice } from './utils';
 import BigNumber from 'bignumber.js';
+import { ScheduledTransferPayment } from './Payment';
 
 interface IFormElements {
   toAddress: {
@@ -32,7 +31,7 @@ interface IFormElements {
   };
 }
 
-export function OutgoingPool({ pool }: { pool: IScheduledTransferContract }) {
+export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }) {
   const [{ data: networkData }] = useNetwork();
 
   const explorerUrl = networkData?.chain?.id ? networkDetails[networkData.chain.id]?.blockExplorerURL : null;
@@ -75,8 +74,6 @@ export function OutgoingPool({ pool }: { pool: IScheduledTransferContract }) {
 
   const offset = new Date().getTimezoneOffset();
   const minDate = new Date(new Date().getTime() - offset * 60 * 1000).toISOString().split('T')[0];
-
-  console.log({ pool });
 
   return (
     <>
@@ -127,7 +124,7 @@ export function OutgoingPool({ pool }: { pool: IScheduledTransferContract }) {
             </tr>
             <tr>
               <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-left text-sm font-semibold dark:border-lp-gray-7">
-                <Tooltip content="Max usd price for the token that the oracle will be allowed to report">
+                <Tooltip content="Max USD price for the token that the oracle will be allowed to report">
                   Max Price
                 </Tooltip>
               </th>
@@ -144,91 +141,7 @@ export function OutgoingPool({ pool }: { pool: IScheduledTransferContract }) {
                 Payments
               </th>
               <td className="overflow-x-auto border border-solid border-llama-teal-2 text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                <table className="w-full border-collapse">
-                  <thead>
-                    <tr>
-                      <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
-                        Payee
-                      </th>
-                      <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
-                        Start
-                      </th>
-                      <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
-                        End
-                      </th>
-                      <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
-                        Amount USD
-                      </th>
-                      <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
-                        Redirects
-                      </th>
-                      <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
-                        Frequency
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="border border-llama-teal-2 dark:border-lp-gray-7">
-                    {pool.payments.map((payment) => (
-                      <tr key={payment.id}>
-                        <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                          {explorerUrl ? (
-                            <a
-                              href={`${explorerUrl}/address/${payment.payee}`}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              {formatAddress(payment.payee)}
-                            </a>
-                          ) : (
-                            <>{formatAddress(payment.payee)}</>
-                          )}
-                        </td>
-                        <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                          {payment.starts
-                            ? new Date(Number(payment.starts) * 1000).toLocaleDateString() +
-                              ', ' +
-                              new Date(Number(payment.starts) * 1000).toLocaleTimeString()
-                            : ''}
-                        </td>
-                        <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                          {payment.ends
-                            ? new Date(Number(payment.ends) * 1000).toLocaleDateString() +
-                              ', ' +
-                              new Date(Number(payment.ends) * 1000).toLocaleTimeString()
-                            : ''}
-                        </td>
-                        <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                          {payment.usdAmount
-                            ? '$' +
-                              (Number(payment.usdAmount) / 1e8).toLocaleString(undefined, {
-                                maximumFractionDigits: 2,
-                              })
-                            : ''}
-                        </td>
-                        <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                          {payment.redirects}
-                        </td>
-                        <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                          {formatFrequency(payment.frequency)}
-                        </td>
-                      </tr>
-                    ))}
-                    <tr>
-                      <td
-                        className="table-description border border-solid border-llama-teal-2 py-4 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white"
-                        colSpan={6}
-                      >
-                        <button
-                          className="form-submit-button font-normalqq mx-auto flex max-w-fit flex-nowrap items-center gap-1"
-                          onClick={newPaymentDialog.toggle}
-                        >
-                          <PlusIcon className="h-4 w-4" />
-                          <span>New Payment</span>
-                        </button>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
+                <ScheduledTransferPayment payments={pool.payments} newPaymentDialog={newPaymentDialog} />
               </td>
             </tr>
           </tbody>
