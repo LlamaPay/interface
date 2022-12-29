@@ -8,6 +8,9 @@ import { FallbackContainer, FallbackContainerLoader } from 'components/Fallback'
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import { formatAddress } from 'utils/address';
+import { PlusIcon } from '@heroicons/react/solid';
+import Tooltip from 'components/Tooltip';
+import BigNumber from 'bignumber.js';
 
 const Home: NextPage = () => {
   const [{ data: accountData }] = useAccount();
@@ -115,11 +118,15 @@ const Home: NextPage = () => {
                     </tr>
                     <tr>
                       <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-left text-sm font-semibold dark:border-lp-gray-7">
-                        Max Price
+                        <Tooltip content="Max usd price for the token that the oracle will be allowed to report">
+                          Max Price
+                        </Tooltip>
                       </th>
                       <td className="table-description border border-solid border-llama-teal-2 text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                        {pool.maxPrice && pool.token.decimals
-                          ? `${(pool.maxPrice / 10 ** pool.token.decimals).toFixed(2)} ${pool.token.symbol}`
+                        {pool.maxPrice
+                          ? `${formatMaxPrice(pool.maxPrice, pool.token.decimals || 18).toLocaleString(undefined, {
+                              maximumFractionDigits: 2,
+                            })} ${pool.token.symbol}`
                           : ''}
                       </td>
                     </tr>
@@ -198,14 +205,15 @@ const Home: NextPage = () => {
                               </tr>
                             ))}
                             <tr>
-                              {pool.payments.length === 0 && (
-                                <td
-                                  className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white"
-                                  colSpan={6}
-                                >
-                                  Schedule a Payment
-                                </td>
-                              )}
+                              <td
+                                className="table-description border border-solid border-llama-teal-2 py-4 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white"
+                                colSpan={6}
+                              >
+                                <button className="form-submit-button font-normalqq mx-auto flex max-w-fit flex-nowrap items-center gap-1">
+                                  <PlusIcon className="h-4 w-4" />
+                                  <span>New Payment</span>
+                                </button>
+                              </td>
                             </tr>
                           </tbody>
                         </table>
@@ -256,6 +264,14 @@ const formatFrequency = (frequency: string) => {
     ' day' +
     (days !== 1 ? 's' : '')
   );
+};
+
+const formatMaxPrice = (maxPrice: number, decimals: number) => {
+  const decimalOffset = 10 ** (18 - Number(decimals));
+
+  const usdPrice = new BigNumber(new BigNumber(1e28).div(decimalOffset)).div(Number(maxPrice)).toFixed(2);
+
+  return Number(usdPrice);
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {

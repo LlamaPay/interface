@@ -3,12 +3,14 @@ import { getAddress } from 'ethers/lib/utils';
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSigner } from 'wagmi';
-import { scheduledTransfersABI } from 'lib/abis/scheduledTransfers';
+import { scheduledTransfersFactoryABI } from 'lib/abis/scheduledTransfersFactory';
 import { ITransactionError, ITransactionSuccess } from 'types';
+import { useRouter } from 'next/router';
 
 interface ICreateContract {
   oracleAddress?: string;
   tokenAddress?: string;
+  maxPrice?: string;
 }
 
 interface ICreate extends ICreateContract {
@@ -16,7 +18,7 @@ interface ICreate extends ICreateContract {
   signer?: Signer;
 }
 
-const create = async ({ factoryAddress, signer, oracleAddress, tokenAddress }: ICreate) => {
+const create = async ({ factoryAddress, signer, oracleAddress, tokenAddress, maxPrice }: ICreate) => {
   try {
     if (!signer) {
       throw new Error("Couldn't get signer");
@@ -30,9 +32,13 @@ const create = async ({ factoryAddress, signer, oracleAddress, tokenAddress }: I
       throw new Error('Invalid Factory Address');
     }
 
-    const contract = new ethers.Contract(getAddress(factoryAddress), scheduledTransfersABI, signer);
+    if (!maxPrice) {
+      throw new Error('Invalid Price');
+    }
 
-    return await contract.createContract(getAddress(oracleAddress), getAddress(tokenAddress));
+    const contract = new ethers.Contract(getAddress(factoryAddress), scheduledTransfersFactoryABI, signer);
+
+    return await contract.createContract(getAddress(oracleAddress), getAddress(tokenAddress), maxPrice);
   } catch (error: any) {
     throw new Error(error.message || (error?.reason ?? "Couldn't create contract"));
   }
@@ -40,11 +46,14 @@ const create = async ({ factoryAddress, signer, oracleAddress, tokenAddress }: I
 
 export default function useCreateScheduledTransferContract({ factoryAddress }: { factoryAddress?: string | null }) {
   const [{ data: signer }] = useSigner();
+
   const queryClient = useQueryClient();
 
+  const router = useRouter();
+
   return useMutation<ITransactionSuccess, ITransactionError, ICreateContract, unknown>(
-    ({ oracleAddress, tokenAddress }: ICreateContract) =>
-      create({ factoryAddress, signer, oracleAddress, tokenAddress }),
+    ({ oracleAddress, tokenAddress, maxPrice }: ICreateContract) =>
+      create({ factoryAddress, signer, oracleAddress, tokenAddress, maxPrice }),
     {
       onSuccess: (data) => {
         const toastId = toast.loading('Confirming transaction');
@@ -56,6 +65,8 @@ export default function useCreateScheduledTransferContract({ factoryAddress }: {
             queryClient.invalidateQueries();
             if (res.status === 1) {
               toast.success('Contract created successfully');
+
+              router.push('/token-salaries/outgoing');
             } else {
               toast.error('Failed to create contract');
             }

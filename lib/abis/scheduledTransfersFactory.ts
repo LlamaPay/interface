@@ -1,4 +1,4 @@
-export const scheduledTransfersABI = [
+export const scheduledTransfersFactoryABI = [
   { inputs: [{ internalType: 'bytes', name: 'innerError', type: 'bytes' }], name: 'BatchError', type: 'error' },
   {
     anonymous: false,
@@ -7,6 +7,7 @@ export const scheduledTransfersABI = [
       { indexed: false, internalType: 'address', name: 'owner', type: 'address' },
       { indexed: false, internalType: 'address', name: 'token', type: 'address' },
       { indexed: false, internalType: 'address', name: 'oracle', type: 'address' },
+      { indexed: false, internalType: 'uint256', name: 'maxPrice', type: 'uint256' },
     ],
     name: 'PoolCreated',
     type: 'event',
@@ -25,10 +26,18 @@ export const scheduledTransfersABI = [
     inputs: [
       { internalType: 'address', name: '_oracle', type: 'address' },
       { internalType: 'address', name: '_token', type: 'address' },
+      { internalType: 'uint256', name: '_maxPrice', type: 'uint256' },
     ],
     name: 'createContract',
     outputs: [{ internalType: 'address', name: 'createdContract', type: 'address' }],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'maxPrice',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
     type: 'function',
   },
   {

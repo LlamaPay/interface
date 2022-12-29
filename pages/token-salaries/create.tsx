@@ -1,7 +1,7 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import * as React from 'react';
 import Layout from 'components/Layout';
-import { InputText, SubmitButton } from 'components/Form';
+import { InputAmount, InputText, SubmitButton } from 'components/Form';
 import { BeatLoader } from 'react-spinners';
 import useCreateScheduledTransferContract from 'queries/useCreateScheduledTransfer';
 import { TransactionDialog } from 'components/Dialog';
@@ -9,17 +9,22 @@ import { useDialogState } from 'ariakit';
 import { StreamIcon } from 'components/Icons';
 import { useNetworkProvider } from 'hooks';
 import { networkDetails } from 'lib/networkDetails';
-import { useRouter } from 'next/router';
+import { useTokenPrice } from 'queries/useTokenPrice';
+import { useNetwork } from 'wagmi';
+import BigNumber from 'bignumber.js';
 
 interface IFormElements {
   oracleAddress: { value: string };
   tokenAddress: { value: string };
+  maxPrice: { value: string };
 }
 
 const Home: NextPage = () => {
-  const router = useRouter();
+  const [{ data: networkData }] = useNetwork();
 
-  const [txHash, setTxHash] = React.useState('');
+  const [tokenAddress, setTokenAddress] = React.useState('');
+
+  const txHash = React.useRef('');
 
   const txDialogState = useDialogState();
 
@@ -29,19 +34,27 @@ const Home: NextPage = () => {
 
   const { mutateAsync, isLoading } = useCreateScheduledTransferContract({ factoryAddress });
 
+  const { data: tokenPrice } = useTokenPrice(tokenAddress);
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement & IFormElements;
+
     const oracleAddress = form.oracleAddress?.value;
     const tokenAddress = form.tokenAddress?.value;
+    const maxPriceUSD = form.maxPriceUSD?.value;
+
+    const decimalOffset = 10 ** (18 - Number(tokenPrice?.decimals ?? 18));
+
+    const formattedPrice = new BigNumber(1e28).div(new BigNumber(maxPriceUSD).multipliedBy(decimalOffset)).toFixed(0);
+
     mutateAsync(
-      { oracleAddress, tokenAddress },
+      { oracleAddress, tokenAddress, maxPrice: formattedPrice },
       {
         onSuccess: (data) => {
-          setTxHash(data.hash);
+          txHash.current = data.hash;
           txDialogState.toggle();
           form.reset();
-          router.push('/token-salaries/outgoing');
         },
       }
     );
@@ -55,15 +68,41 @@ const Home: NextPage = () => {
           <span>Create Scheduled Transfers Contract</span>
         </h1>
 
-        <InputText name="oracleAddress" isRequired={true} label="Oracle Address" placeholder="0x..." />
-        <InputText name="tokenAddress" isRequired={true} label="Token Address" placeholder="0x..." />
+        <InputText name="oracleAddress" isRequired label="Oracle Address" placeholder="0x..." />
 
-        <SubmitButton disabled={!factoryAddress || isLoading} className="mt-2">
+        <InputText
+          name="tokenAddress"
+          isRequired
+          label="Token Address"
+          placeholder="0x..."
+          handleChange={(e) => setTokenAddress(e.target.value)}
+        />
+
+        <InputAmount name="maxPriceUSD" isRequired label="Max Price (USD)" placeholder="1000" />
+        <small className="-mt-2 flex min-h-[1.5rem] flex-col">
+          {tokenPrice && tokenAddress.length === 42 ? (
+            <span className="rounded bg-[#E7E7E7]/40 px-2 py-1 text-xs text-[#4E575F] dark:bg-[#222222] dark:text-white">
+              {`1 ${tokenPrice.symbol} = $${tokenPrice.price.toLocaleString()}`}
+            </span>
+          ) : (
+            ''
+          )}
+        </small>
+
+        <SubmitButton
+          disabled={
+            !factoryAddress ||
+            isLoading ||
+            tokenAddress.length !== 42 ||
+            (networkData?.chain?.testnet ? false : !tokenPrice)
+          }
+          className="mt-2"
+        >
           {!factoryAddress ? 'Chain not supported' : isLoading ? <BeatLoader size={6} color="white" /> : 'Create'}
         </SubmitButton>
       </form>
 
-      <TransactionDialog dialog={txDialogState} transactionHash={txHash || ''} />
+      <TransactionDialog dialog={txDialogState} transactionHash={txHash.current || ''} />
     </Layout>
   );
 };

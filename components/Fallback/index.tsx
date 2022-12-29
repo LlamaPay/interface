@@ -74,7 +74,7 @@ const Fallback = ({ isLoading, isError, noData, type, supressWalletConnection, s
     <FallbackContainer>
       {defaultMessage ||
         (isLoading ? (
-          <FallbackContainerLoader />
+          <>{showLoader && <FallbackContainerLoader />}</>
         ) : isError ? (
           <p>{errorMessage}</p>
         ) : noData ? (
