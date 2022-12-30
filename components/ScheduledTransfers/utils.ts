@@ -36,10 +36,18 @@ export const formatFrequency = (frequency: string) => {
   );
 };
 
-export const formatMaxPrice = (maxPrice: number, decimals: number) => {
+export const getMaxPriceInUSD = (maxPrice: number, decimals: number) => {
   const decimalOffset = 10 ** (18 - Number(decimals));
 
   const usdPrice = new BigNumber(new BigNumber(1e28).div(decimalOffset)).div(Number(maxPrice)).toFixed(2);
 
   return Number(usdPrice);
+};
+
+export const getFormattedMaxPrice = (maxPriceUSD: number, decimals: number) => {
+  const decimalOffset = 10 ** (18 - Number(decimals ?? 18));
+
+  const formattedPrice = new BigNumber(1e28).div(new BigNumber(maxPriceUSD).multipliedBy(decimalOffset)).toFixed(0);
+
+  return formattedPrice;
 };

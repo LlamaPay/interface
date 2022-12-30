@@ -6,10 +6,11 @@ import Tooltip from 'components/Tooltip';
 import { networkDetails } from 'lib/networkDetails';
 import type { IScheduledTransferPool } from 'queries/useGetScheduledTransfers';
 import { useCreateScheduledTransferPayment } from 'queries/useSchedulePayment';
-import { useNetwork } from 'wagmi';
-import { formatMaxPrice } from './utils';
+import { useContractWrite, useNetwork } from 'wagmi';
+import { getFormattedMaxPrice, getMaxPriceInUSD } from './utils';
 import BigNumber from 'bignumber.js';
 import { ScheduledTransferPayment } from './Payment';
+import { scheduledPaymentsContractABI } from 'lib/abis/scheduledPaymentsContract';
 
 interface IFormElements {
   toAddress: {
@@ -80,6 +81,16 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
     );
   };
 
+  const [{ loading }, setMaxPrice] = useContractWrite(
+    {
+      addressOrName: pool.poolContract,
+      contractInterface: scheduledPaymentsContractABI,
+    },
+    'setMaxPrice'
+  );
+
+  const formattedPrice = getFormattedMaxPrice(900, 18);
+
   return (
     <>
       <div className="max-w-[calc(100vw-32px)] overflow-x-auto md:max-w-[calc(100vw-48px)] lg:max-w-[calc(100vw-256px)] [&:not(:first-of-type)]:mt-4">
@@ -129,13 +140,13 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
             </tr>
             <tr>
               <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-left text-sm font-semibold dark:border-lp-gray-7">
-                <Tooltip content="Max USD price for the token that the oracle will be allowed to report">
-                  Max Price
+                <Tooltip content="Min USD price for the token that the oracle will be allowed to report">
+                  Min Price
                 </Tooltip>
               </th>
               <td className="table-description border border-solid border-llama-teal-2 text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
                 {pool.maxPrice
-                  ? `$${formatMaxPrice(pool.maxPrice, pool.token.decimals || 18).toLocaleString(undefined, {
+                  ? `$${getMaxPriceInUSD(pool.maxPrice, pool.token.decimals || 18).toLocaleString(undefined, {
                       maximumFractionDigits: 2,
                     })}`
                   : ''}

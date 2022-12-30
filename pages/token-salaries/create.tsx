@@ -11,7 +11,7 @@ import { useNetworkProvider } from 'hooks';
 import { networkDetails } from 'lib/networkDetails';
 import { useTokenPrice } from 'queries/useTokenPrice';
 import { useNetwork } from 'wagmi';
-import BigNumber from 'bignumber.js';
+import { getFormattedMaxPrice } from 'components/ScheduledTransfers/utils';
 
 interface IFormElements {
   oracleAddress: { value: string };
@@ -42,11 +42,9 @@ const Home: NextPage = () => {
 
     const oracleAddress = form.oracleAddress?.value;
     const tokenAddress = form.tokenAddress?.value;
-    const maxPriceUSD = form.maxPriceUSD?.value;
+    const minPriceUSD = form.minPriceUSD?.value;
 
-    const decimalOffset = 10 ** (18 - Number(tokenPrice?.decimals ?? 18));
-
-    const formattedPrice = new BigNumber(1e28).div(new BigNumber(maxPriceUSD).multipliedBy(decimalOffset)).toFixed(0);
+    const formattedPrice = getFormattedMaxPrice(minPriceUSD, tokenPrice?.decimals);
 
     mutateAsync(
       { oracleAddress, tokenAddress, maxPrice: formattedPrice },
@@ -78,7 +76,7 @@ const Home: NextPage = () => {
           handleChange={(e) => setTokenAddress(e.target.value)}
         />
 
-        <InputAmount name="maxPriceUSD" isRequired label="Max Price (USD)" placeholder="1000" />
+        <InputAmount name="minPriceUSD" isRequired label="Min Price (USD)" placeholder="1000" />
         <small className="-mt-2 flex min-h-[1.5rem] flex-col">
           {tokenPrice && tokenAddress.length === 42 ? (
             <span className="rounded bg-[#E7E7E7]/40 px-2 py-1 text-xs text-[#4E575F] dark:bg-[#222222] dark:text-white">
