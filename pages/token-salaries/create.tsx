@@ -10,8 +10,9 @@ import { StreamIcon } from 'components/Icons';
 import { useNetworkProvider } from 'hooks';
 import { networkDetails } from 'lib/networkDetails';
 import { useTokenPrice } from 'queries/useTokenPrice';
-import { useNetwork } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import { getFormattedMaxPrice } from 'components/ScheduledTransfers/utils';
+import { WalletSelector } from 'components/Web3';
 
 interface IFormElements {
   oracleAddress: { value: string };
@@ -20,6 +21,7 @@ interface IFormElements {
 }
 
 const Home: NextPage = () => {
+  const [{ data: accountData }] = useAccount();
   const [{ data: networkData }] = useNetwork();
 
   const [tokenAddress, setTokenAddress] = React.useState('');
@@ -27,6 +29,8 @@ const Home: NextPage = () => {
   const txHash = React.useRef('');
 
   const txDialogState = useDialogState();
+
+  const walletDialog = useDialogState();
 
   const { chainId } = useNetworkProvider();
 
@@ -87,20 +91,28 @@ const Home: NextPage = () => {
           )}
         </small>
 
-        <SubmitButton
-          disabled={
-            !factoryAddress ||
-            isLoading ||
-            tokenAddress.length !== 42 ||
-            (networkData?.chain?.testnet ? false : !tokenPrice)
-          }
-          className="mt-2"
-        >
-          {!factoryAddress ? 'Chain not supported' : isLoading ? <BeatLoader size={6} color="white" /> : 'Create'}
-        </SubmitButton>
+        {!accountData ? (
+          <SubmitButton type="button" className="mt-2" onClick={walletDialog.toggle}>
+            Connect Wallet
+          </SubmitButton>
+        ) : (
+          <SubmitButton
+            disabled={
+              !factoryAddress ||
+              isLoading ||
+              tokenAddress.length !== 42 ||
+              (networkData?.chain?.testnet ? false : !tokenPrice)
+            }
+            className="mt-2"
+          >
+            {!factoryAddress ? 'Chain not supported' : isLoading ? <BeatLoader size={6} color="white" /> : 'Create'}
+          </SubmitButton>
+        )}
       </form>
 
       <TransactionDialog dialog={txDialogState} transactionHash={txHash.current || ''} />
+
+      <WalletSelector dialog={walletDialog} />
     </Layout>
   );
 };
