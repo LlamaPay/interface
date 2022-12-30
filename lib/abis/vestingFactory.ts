@@ -1,4 +1,4 @@
-const vestingFactory: any = [
+export const vestingFactoryABI: any = [
   {
     name: 'VestingEscrowCreated',
     inputs: [
@@ -79,5 +79,3 @@ const vestingFactory: any = [
     gas: 2478,
   },
 ];
-
-export default vestingFactory;

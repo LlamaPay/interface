@@ -1,10 +1,9 @@
 import classNames from 'classnames';
 import Fallback, { FallbackContainer } from 'components/Fallback';
 import { useNetworkProvider } from 'hooks';
-import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import useGetPaymentsInfo from 'queries/useGetPaymentsInfo';
-import { networkDetails } from 'utils/constants';
+import { networkDetails } from 'lib/networkDetails';
 import PaymentsTableActual from './Table';
 
 export default function PaymentsTable() {
@@ -16,10 +15,9 @@ export default function PaymentsTable() {
       : null
     : null;
   const unsupported = paymentsContract ? false : true;
-  const t0 = useTranslations('Common');
 
   return (
-    <section className="w-full">
+    <section className="-mt-2 w-full">
       <div className="section-header flex w-full flex-wrap items-center justify-between">
         <h1 className="font-exo">Payments</h1>
         <Link href="/payments/create" aria-disabled={!paymentsContract}>

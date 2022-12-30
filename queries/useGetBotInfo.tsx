@@ -1,9 +1,10 @@
 import { BaseProvider } from '@ethersproject/providers';
-import botContract from 'abis/botContract';
+import { botContractABI } from 'lib/abis/botContract';
 import { ethers } from 'ethers';
 import { useNetworkProvider } from 'hooks';
 import { useQuery } from 'react-query';
-import { networkDetails, zeroAdd } from 'utils/constants';
+import { zeroAdd } from 'utils/constants';
+import { networkDetails } from 'lib/networkDetails';
 import { erc20ABI, useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
 
@@ -30,6 +31,7 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
           }
         }
       `;
+
       const get_to = gql`
         {
           schedules(where: { to: "${userAddress}", active: true }) {
@@ -43,10 +45,14 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
           }
         }
       `;
+
       const froms = (await request(networkDetails[chainId].botSubgraph!, get_from)).schedules;
-      const tos = (await request(networkDetails[chainId].botSubgraph!, get_from)).schedules;
+      const tos = (await request(networkDetails[chainId].botSubgraph!, get_to)).schedules;
+
       const schedules = froms.concat(tos);
+
       const tokenSymbols: any = {};
+
       const toInclude: {
         [key: string]: {
           owner: string;
@@ -76,7 +82,7 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
           frequency: schedule.frequency,
         };
       }
-      const contract = new ethers.Contract(networkDetails[chainId].botAddress, botContract, provider);
+      const contract = new ethers.Contract(networkDetails[chainId].botAddress, botContractABI, provider);
       const redirect = await contract.redirects(userAddress);
       return { toInclude, redirect, tokenSymbols };
     }

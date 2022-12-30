@@ -70,16 +70,16 @@ const Fallback = ({ isLoading, isError, noData, type, supressWalletConnection, s
       break;
   }
 
-  const loader = showLoader ? (
-    <span className="relative top-[2px]">
-      <BeatLoader size={6} />
-    </span>
-  ) : null;
-
   return (
     <FallbackContainer>
       {defaultMessage ||
-        (isLoading ? loader : isError ? <p>{errorMessage}</p> : noData ? <p>{emptyDataMessage}</p> : null)}
+        (isLoading ? (
+          <>{showLoader && <FallbackContainerLoader />}</>
+        ) : isError ? (
+          <p>{errorMessage}</p>
+        ) : noData ? (
+          <p>{emptyDataMessage}</p>
+        ) : null)}
     </FallbackContainer>
   );
 };
@@ -91,5 +91,11 @@ export function FallbackContainer({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
+
+export const FallbackContainerLoader = () => (
+  <span className="relative top-[2px]">
+    <BeatLoader size={6} />
+  </span>
+);
 
 export default Fallback;

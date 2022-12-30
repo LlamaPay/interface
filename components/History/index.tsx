@@ -48,6 +48,7 @@ export function AltHistorySection({
           <h1 className="font-exo">{t('heading')}</h1>
         </span>
       </div>
+
       {isLoading || isError || !data?.history || data.history?.length < 1 ? (
         <FallbackContainer>
           {isLoading ? null : isError ? (

@@ -184,7 +184,7 @@ const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<Rea
 
     setIsError(false);
 
-    const form = e.target as typeof e.target & { tokenAddress: { value: string } };
+    const form = e.target as HTMLFormElement & { tokenAddress: { value: string } };
     const tokenAddress = form.tokenAddress?.value;
     mutate(
       { tokenAddress },

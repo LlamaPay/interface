@@ -1,4 +1,4 @@
-const llamaContract = [
+export const llamaContractABI = [
   { inputs: [], stateMutability: 'nonpayable', type: 'constructor' },
   {
     anonymous: false,
@@ -289,5 +289,3 @@ const llamaContract = [
     type: 'function',
   },
 ];
-
-export default llamaContract;

@@ -28,7 +28,7 @@ export function useCreateStreamForm({ tokens, dialog }: { tokens: ITokenBalance[
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const form = e.target as typeof e.target & IFormElements;
+    const form = e.target as HTMLFormElement & IFormElements;
     const amountToStream = form.amountToStream.value;
     const streamDuration = form.streamDuration?.value;
     const payeeAddress = form.addressToStream?.value;

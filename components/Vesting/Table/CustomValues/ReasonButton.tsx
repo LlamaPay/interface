@@ -1,4 +1,5 @@
-import vestingReasons from 'abis/vestingReasons';
+import * as React from 'react';
+import { vestingReasonsABI } from 'lib/abis/vestingReasons';
 import { useDisclosureState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
 import { InputText, SubmitButton } from 'components/Form';
@@ -6,7 +7,7 @@ import { useNetworkProvider } from 'hooks';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import { IVesting } from 'types';
-import { networkDetails } from 'utils/constants';
+import { networkDetails } from 'lib/networkDetails';
 import { useAccount, useContractWrite } from 'wagmi';
 
 export default function ReasonButton({ data }: { data: IVesting }) {
@@ -15,7 +16,7 @@ export default function ReasonButton({ data }: { data: IVesting }) {
   const [{}, addReason] = useContractWrite(
     {
       addressOrName: networkDetails[chainId ?? 0].vestingReason,
-      contractInterface: vestingReasons,
+      contractInterface: vestingReasonsABI,
     },
     'addReason'
   );

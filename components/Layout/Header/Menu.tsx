@@ -50,9 +50,9 @@ export default function HeaderMenu({
 
   const size = useWindowSize();
 
-  const isSm = size && size.width && size.width < 640;
+  const isMaxWidthSm = size && size.width && size.width < 640;
 
-  const isLg = size && size.width && size.width < 1024;
+  const isMaxWidthLg = size && size.width && size.width < 1024;
 
   const t = useTranslations('Common');
 
@@ -84,7 +84,7 @@ export default function HeaderMenu({
         <MenuItem label={t('connectWallet')} className="break-words p-2 md:hidden" onClick={walletDialog.toggle} />
       )}
 
-      {networkData && chain && switchNetwork && isSm && (
+      {networkData && chain && switchNetwork && isMaxWidthSm && (
         <Menu
           label={chain?.name ?? t('unsupported')}
           className="flex items-center justify-between p-2 font-normal text-lp-gray-2 outline-none active-item:text-black aria-disabled:opacity-40 sm:hidden"
@@ -126,7 +126,7 @@ export default function HeaderMenu({
         onClick={onboardDialog.toggle}
       />
 
-      {isLg && (
+      {isMaxWidthLg && (
         <MenuItem
           label={
             <Link passHref href="/">
@@ -139,7 +139,7 @@ export default function HeaderMenu({
         />
       )}
 
-      {isLg && (
+      {isMaxWidthLg && (
         <MenuItem
           label={
             <Link passHref href="/vesting">
@@ -152,7 +152,7 @@ export default function HeaderMenu({
         />
       )}
 
-      {isLg && (
+      {isMaxWidthLg && (
         <MenuItem
           label={
             <Link passHref href="/payments">
@@ -176,49 +176,55 @@ export default function HeaderMenu({
         ))}
       </Menu>
 
-      <MenuItem
-        label={
-          <a
-            href="https://docs.llamapay.io/"
-            target="_blank"
-            rel="noreferrer noopener"
-            className="flex w-full items-center justify-between gap-4 font-normal"
-          >
-            <span>{t2('docs')}</span>
-            <BookOpenIcon className="h-4 w-4" />
-          </a>
-        }
-      />
+      {isMaxWidthLg && (
+        <MenuItem
+          label={
+            <a
+              href="https://docs.llamapay.io/"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="flex w-full items-center justify-between gap-4 font-normal"
+            >
+              <span>{t2('docs')}</span>
+              <BookOpenIcon className="h-4 w-4" />
+            </a>
+          }
+        />
+      )}
 
-      <MenuItem
-        label={
-          <a
-            href="https://docs.llamapay.io/llamapay/gnosis-safe/adding-as-a-custom-app"
-            target="_blank"
-            rel="noreferrer noopener"
-            className="flex w-full items-center justify-between gap-4 font-normal"
-          >
-            <span>Gnosis Safe</span>
-            <LibraryIcon className="h-4 w-4" />
-          </a>
-        }
-      />
+      {isMaxWidthLg && (
+        <MenuItem
+          label={
+            <a
+              href="https://docs.llamapay.io/llamapay/gnosis-safe/adding-as-a-custom-app"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="flex w-full items-center justify-between gap-4 font-normal"
+            >
+              <span>Gnosis Safe</span>
+              <LibraryIcon className="h-4 w-4" />
+            </a>
+          }
+        />
+      )}
 
-      <MenuItem
-        label={
-          <a
-            href="https://github.com/banteg/ape-llamapay"
-            target="_blank"
-            rel="noreferrer noopener"
-            className="flex w-full items-center justify-between gap-4 font-normal"
-          >
-            <span>Ape SDK</span>
-            <TerminalIcon className="h-4 w-4" />
-          </a>
-        }
-      />
+      {isMaxWidthLg && (
+        <MenuItem
+          label={
+            <a
+              href="https://github.com/banteg/ape-llamapay"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="flex w-full items-center justify-between gap-4 font-normal"
+            >
+              <span>Ape SDK</span>
+              <TerminalIcon className="h-4 w-4" />
+            </a>
+          }
+        />
+      )}
 
-      {isMounted && (
+      {isMounted && isMaxWidthLg && (
         <MenuItem
           label={
             <>

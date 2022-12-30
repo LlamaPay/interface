@@ -93,9 +93,9 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
   };
 
   return (
-    <Layout className="mt-12 flex w-full flex-col gap-[30px] dark:bg-lp-gray-8">
+    <Layout>
       <section className="mx-auto w-full max-w-lg px-2">
-        <h1 className="font-exo pb-1 text-3xl">Salary</h1>
+        <h1 className="font-exo pb-1 text-3xl">Stream</h1>
         {!showFallback && (
           <>
             <div className="flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">

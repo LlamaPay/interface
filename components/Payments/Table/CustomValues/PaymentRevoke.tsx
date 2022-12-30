@@ -1,8 +1,9 @@
-import paymentsContract from 'abis/paymentsContract';
+import { paymentsContractABI } from 'lib/abis/paymentsContract';
 import { useNetworkProvider } from 'hooks';
 import toast from 'react-hot-toast';
 import { IPayments } from 'types';
-import { networkDetails, zeroAdd } from 'utils/constants';
+import { networkDetails } from 'lib/networkDetails';
+import { zeroAdd } from 'utils/constants';
 import { useAccount, useContractWrite } from 'wagmi';
 
 export default function PaymentRevokeButton({ data }: { data: IPayments }) {
@@ -16,7 +17,7 @@ export default function PaymentRevokeButton({ data }: { data: IPayments }) {
   const [{}, revoke] = useContractWrite(
     {
       addressOrName: contract,
-      contractInterface: paymentsContract,
+      contractInterface: paymentsContractABI,
     },
     'revoke'
   );

@@ -1,4 +1,4 @@
-import vestingContractReadable from 'abis/vestingContractReadable';
+import { vestingContractReadableABI } from 'lib/abis/vestingContractReadable';
 import toast from 'react-hot-toast';
 import { IVesting } from 'types';
 import { useAccount, useContractWrite } from 'wagmi';
@@ -7,7 +7,7 @@ export default function RugpullVestingButton({ data }: { data: IVesting }) {
   const [{}, rug_pull] = useContractWrite(
     {
       addressOrName: data.contract,
-      contractInterface: vestingContractReadable,
+      contractInterface: vestingContractReadableABI,
     },
     'rug_pull',
     {

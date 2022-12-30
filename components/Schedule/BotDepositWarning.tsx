@@ -1,4 +1,4 @@
-import botContract from 'abis/botContract';
+import { botContractABI } from 'lib/abis/botContract';
 import { DisclosureState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
 import { InputAmount, SubmitButton } from 'components/Form';
@@ -21,7 +21,7 @@ export default function BotDepositWarning({
   const [{ data: balance }] = useContractRead(
     {
       addressOrName: botAddress,
-      contractInterface: botContract,
+      contractInterface: botContractABI,
     },
     'balances',
     {
@@ -32,7 +32,7 @@ export default function BotDepositWarning({
   const [{}, deposit] = useContractWrite(
     {
       addressOrName: botAddress,
-      contractInterface: botContract,
+      contractInterface: botContractABI,
     },
     'deposit'
   );

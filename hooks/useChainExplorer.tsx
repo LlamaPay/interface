@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
 import * as React from 'react';
-import { chains, networkDetails } from 'utils/constants';
+import { networkDetails } from 'lib/networkDetails';
+import { chains } from 'lib/chains';
 import { useNetwork } from 'wagmi';
 
 export const useChainExplorer = () => {

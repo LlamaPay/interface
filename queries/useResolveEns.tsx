@@ -3,9 +3,10 @@ import { getAddress } from 'ethers/lib/utils';
 import { useNetworkProvider } from 'hooks';
 import { useQuery } from 'react-query';
 import { StreamAndHistoryQuery } from 'services/generated/graphql';
-import { MAINNET_ENS_RESOLVER, networkDetails } from 'utils/constants';
-import mainnetResolver from 'abis/mainnetResolver';
+import { networkDetails } from 'lib/networkDetails';
+import { mainnetResolverABI } from 'lib/abis/mainnetResolver';
 import { chainDetails } from 'utils/network';
+import { MAINNET_ENS_RESOLVER } from 'lib/contracts';
 
 export interface IEnsResolve {
   [key: string]: string | null;
@@ -20,7 +21,7 @@ async function resolveEns(data: StreamAndHistoryQuery | undefined, address: stri
     } else if (!address) {
       throw new Error('No Address');
     } else {
-      const contract = new ethers.Contract(getAddress(MAINNET_ENS_RESOLVER), mainnetResolver, mainnetProvider);
+      const contract = new ethers.Contract(getAddress(MAINNET_ENS_RESOLVER), mainnetResolverABI, mainnetProvider);
       const streams = data?.user?.streams ?? [];
       const history = data?.user?.historicalEvents ?? [];
 
@@ -67,7 +68,7 @@ const { network: mainnet } = chainDetails('1');
 async function fetchEns(address: string) {
   const userAddress = await mainnet?.chainProviders
     .lookupAddress(address)
-    .then((ens) => ens || address)
+    .then((ens: string | null) => ens || address)
     .catch(() => address);
 
   return userAddress;

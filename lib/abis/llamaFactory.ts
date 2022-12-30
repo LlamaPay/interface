@@ -1,4 +1,4 @@
-const factory = [
+export const factoryABI = [
   {
     anonymous: false,
     inputs: [
@@ -47,5 +47,3 @@ const factory = [
     type: 'function',
   },
 ];
-
-export default factory;

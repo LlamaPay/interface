@@ -1,16 +1,16 @@
 import { BaseProvider } from '@ethersproject/providers';
-import vestingEscrow from 'abis/vestingEscrow';
-import vestingFactory from 'abis/vestingFactory';
 import BigNumber from 'bignumber.js';
-import { ContractCallContext, ContractCallResults, Multicall } from 'ethereum-multicall';
+import { ContractCallContext, Multicall } from 'ethereum-multicall';
 import { ethers } from 'ethers';
 import { useNetworkProvider } from 'hooks';
 import { useQuery } from 'react-query';
 import { IVesting } from 'types';
-import { networkDetails } from 'utils/constants';
+import { networkDetails } from 'lib/networkDetails';
 import { erc20ABI, useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
-import vestingReasons from 'abis/vestingReasons';
+import { vestingEscrowABI } from 'lib/abis/vestingEscrow';
+import { vestingFactoryABI } from 'lib/abis/vestingFactory';
+import { vestingReasonsABI } from 'lib/abis/vestingReasons';
 
 async function getVestingInfo(userAddress: string | undefined, provider: BaseProvider | null, chainId: number | null) {
   try {
@@ -81,7 +81,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
         const vestingContractInfoContext: ContractCallContext[] = Object.keys(escrows).map((p: any) => ({
           reference: escrows[p].id,
           contractAddress: escrows[p].id,
-          abi: vestingEscrow,
+          abi: vestingEscrowABI,
           calls: [
             { reference: 'unclaimed', methodName: 'unclaimed', methodParameters: [] },
             { reference: 'locked', methodName: 'locked', methodParameters: [] },
@@ -99,7 +99,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
         const vestingContractInfoResults = await runMulticall(vestingContractInfoContext);
         const vestingContractReasonContext: ContractCallContext[] = Object.keys(escrows).map((p: any) => ({
           reference: escrows[p].id.toLowerCase(),
-          abi: vestingReasons,
+          abi: vestingReasonsABI,
           contractAddress: networkDetails[chainId].vestingReason,
           calls: [{ reference: 'reason', methodName: 'reasons', methodParameters: [escrows[p].id] }],
         }));
@@ -132,7 +132,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
         }
       } else {
         const factoryAddress = networkDetails[chainId].vestingFactory;
-        const factoryContract = new ethers.Contract(factoryAddress, vestingFactory, provider);
+        const factoryContract = new ethers.Contract(factoryAddress, vestingFactoryABI, provider);
         const amtOfContracts = await factoryContract.escrows_length({ gasLimit: 1000000 });
 
         const vestingContractsContext: ContractCallContext[] = Array.from(
@@ -140,7 +140,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
           (_, k) => ({
             reference: k.toString(),
             contractAddress: factoryAddress,
-            abi: vestingFactory,
+            abi: vestingFactoryABI,
             calls: [{ reference: 'escrow', methodName: 'escrows', methodParameters: [k] }],
           })
         );
@@ -149,7 +149,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
           (p: any) => ({
             reference: vestingContractsResults[p].callsReturnContext[0].returnValues[0],
             contractAddress: vestingContractsResults[p].callsReturnContext[0].returnValues[0],
-            abi: vestingEscrow,
+            abi: vestingEscrowABI,
             calls: [
               { reference: 'unclaimed', methodName: 'unclaimed', methodParameters: [] },
               { reference: 'locked', methodName: 'locked', methodParameters: [] },
@@ -170,7 +170,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
           const vestingContractReasonContext: ContractCallContext[] = Object.keys(vestingContractsResults).map(
             (p: any) => ({
               reference: vestingContractsResults[p].callsReturnContext[0].returnValues[0].toLowerCase(),
-              abi: vestingReasons,
+              abi: vestingReasonsABI,
               contractAddress: networkDetails[chainId].vestingReason,
               calls: [
                 {

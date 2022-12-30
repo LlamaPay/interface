@@ -2,7 +2,6 @@ import * as React from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useDialogState } from 'ariakit';
-import classNames from 'classnames';
 import { useAccount } from 'wagmi';
 import Header from './Header';
 import Hero from './Hero';
@@ -12,20 +11,21 @@ import CustomToast from 'components/CustomToast';
 import StaleSubgraphWarning from 'components/StaleSubgraphWarning';
 import HowItWorks from './HowItWorks';
 import GnosisSafeWarning from 'components/GnosisSafeWarning';
+import { Nav } from './Nav';
+import classNames from 'classnames';
 
 interface ILayoutProps {
   children: React.ReactNode;
   className?: string;
-  noBanner?: boolean;
 }
 
 export default function Layout({ children, className, ...props }: ILayoutProps) {
+  const router = useRouter();
+
   const [{ data }] = useAccount();
 
   const onboardDialog = useDialogState();
   const walletDialog = useDialogState();
-
-  const router = useRouter();
 
   return (
     <>
@@ -46,9 +46,12 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
           <HowItWorks onboardDialog={onboardDialog} />
         </>
       ) : (
-        <main className={classNames('flex-1', className)} {...props}>
-          {children}
-        </main>
+        <div className="flex flex-1 py-9 px-2 md:px-6 lg:px-8 lg:pl-0">
+          <Nav />
+          <main className={classNames('mx-auto max-w-7xl flex-1', className)} {...props}>
+            {children}
+          </main>
+        </div>
       )}
 
       <OnboardDialog dialog={onboardDialog} />

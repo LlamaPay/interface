@@ -70,7 +70,7 @@ export default function PaymentsTableActual({ data }: { data: any }) {
         cell: (i) => i.row.original && <PaymentRevokeButton data={i.row.original} />,
       },
     ],
-    []
+    [accountData?.address, locale]
   );
 
   const [sorting, setSorting] = React.useState<SortingState>([]);

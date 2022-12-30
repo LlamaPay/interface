@@ -5,7 +5,7 @@ import CreateGnosisVesting from 'components/Vesting/create-gnosis';
 import { useNetworkProvider } from 'hooks';
 import { GetServerSideProps, NextPage } from 'next';
 import { useTranslations } from 'next-intl';
-import { networkDetails } from 'utils/constants';
+import { networkDetails } from 'lib/networkDetails';
 import { useAccount } from 'wagmi';
 
 const Create: NextPage = () => {
@@ -18,7 +18,7 @@ const Create: NextPage = () => {
   const factory = chainId ? networkDetails[chainId]?.vestingFactory : null;
 
   return (
-    <Layout className="app-section mx-auto mt-12 flex w-full flex-col items-center space-y-6 pb-[10rem] dark:bg-lp-gray-8">
+    <Layout>
       {factory ? (
         process.env.NEXT_PUBLIC_SAFE === 'true' ? (
           <CreateGnosisVesting factory={factory} />

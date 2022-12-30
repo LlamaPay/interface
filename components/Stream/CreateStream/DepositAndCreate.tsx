@@ -95,7 +95,7 @@ const DepositAndCreate = ({ tokens, userAddress, dialog }: IStreamFormProps) => 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    const form = e.target as typeof e.target & IFormElements;
+    const form = e.target as HTMLFormElement & IFormElements;
 
     const amountToDeposit = form.amountToDeposit?.value;
     const amountToStream = form.amountToStream?.value;

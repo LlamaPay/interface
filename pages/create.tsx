@@ -19,9 +19,9 @@ const Create: NextPage = () => {
   const t = useTranslations('CreateStream');
 
   return (
-    <Layout className="app-section mx-auto mt-12 flex w-full flex-col items-center space-y-6 pb-[10rem] dark:bg-lp-gray-8">
+    <Layout>
       {!accountData || unsupported ? (
-        <section className="z-2 flex w-full max-w-lg flex-col">
+        <section className="z-2 mx-auto flex w-full max-w-lg flex-col">
           <h1 className="font-exo mb-5 flex items-center gap-[0.625rem] text-2xl font-semibold text-lp-gray-4">
             <StreamIcon />
             <span>{t('createANewStream')}</span>

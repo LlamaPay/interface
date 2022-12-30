@@ -55,7 +55,7 @@ export const NetworksMenu = () => {
       <SelectLabel state={select} className="hidden sm:sr-only">
         {t('network')}
       </SelectLabel>
-      <Select state={select} className="nav-button hidden items-center justify-between gap-2 sm:flex">
+      <Select state={select} className="nav-button-v2 hidden items-center justify-between gap-2 sm:flex">
         <>
           <div className="flex h-5 w-5 items-center rounded-full">
             <Image
@@ -74,7 +74,7 @@ export const NetworksMenu = () => {
       {select.mounted && (
         <SelectPopover
           state={select}
-          className="shadow-2 z-10 max-h-[280px] w-fit min-w-[12rem] overflow-y-auto rounded-xl border border-[#EAEAEA] bg-white p-2 dark:border-[#252525] dark:bg-[#202020] "
+          className="z-10 max-h-[280px] w-fit min-w-[12rem] overflow-y-auto rounded-lg border border-llama-teal-2 bg-white p-2 drop-shadow-sm dark:border-lp-gray-7 dark:bg-[#202020]"
         >
           <SelectGroup>
             <SelectGroupLabel className="p-2 text-sm font-normal text-neutral-500 dark:text-white">

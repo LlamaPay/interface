@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { DisclosureState } from 'ariakit';
 import { FormDialog } from 'components/Dialog';
-import { networkDetails, secondsByDuration } from 'utils/constants';
+import { networkDetails } from 'lib/networkDetails';
+import { secondsByDuration } from 'utils/constants';
 import { useContractRead, useContractWrite } from 'wagmi';
-import botContract from 'abis/botContract';
+import { botContractABI } from 'lib/abis/botContract';
 import { InputAmount, InputText, SubmitButton } from 'components/Form';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
@@ -35,14 +36,13 @@ export default function BotFunds({
   const [showCalendar, setShowCalendar] = React.useState<boolean>(false);
 
   const { data: botInfo, isLoading } = useGetBotInfo();
-  console.log(botInfo);
 
   const { mutate: approveMax } = useApproveTokenForMaxAmt();
 
   const [{ data: balance }] = useContractRead(
     {
       addressOrName: botAddress,
-      contractInterface: botContract,
+      contractInterface: botContractABI,
     },
     'balances',
     {
@@ -53,7 +53,7 @@ export default function BotFunds({
   const [{}, refund] = useContractWrite(
     {
       addressOrName: botAddress,
-      contractInterface: botContract,
+      contractInterface: botContractABI,
     },
     'refund'
   );
@@ -61,14 +61,14 @@ export default function BotFunds({
   const [{}, deposit] = useContractWrite(
     {
       addressOrName: botAddress,
-      contractInterface: botContract,
+      contractInterface: botContractABI,
     },
     'deposit'
   );
   const [{}, cancelWithdraw] = useContractWrite(
     {
       addressOrName: botAddress,
-      contractInterface: botContract,
+      contractInterface: botContractABI,
     },
     'cancelWithdraw'
   );
@@ -76,7 +76,7 @@ export default function BotFunds({
   const [{}, scheduleWithdraw] = useContractWrite(
     {
       addressOrName: botAddress,
-      contractInterface: botContract,
+      contractInterface: botContractABI,
     },
     'scheduleWithdraw'
   );
@@ -84,7 +84,7 @@ export default function BotFunds({
   const [{}, setRedirect] = useContractWrite(
     {
       addressOrName: botAddress,
-      contractInterface: botContract,
+      contractInterface: botContractABI,
     },
     'setRedirect'
   );
@@ -92,7 +92,7 @@ export default function BotFunds({
   const [{}, cancelRedirect] = useContractWrite(
     {
       addressOrName: botAddress,
-      contractInterface: botContract,
+      contractInterface: botContractABI,
     },
     'cancelRedirect'
   );

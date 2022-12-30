@@ -1,6 +1,5 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import * as React from 'react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 import Image, { StaticImageData } from 'next/image';
 import { dehydrate, QueryClient } from 'react-query';
@@ -11,7 +10,6 @@ import { AltVestingSection } from 'components/Vesting';
 import { FallbackContainer } from 'components/Fallback';
 import { useNetworkProvider } from 'hooks';
 import { useGetVestingInfoByQueryParams } from 'queries/useGetVestingInfo';
-import { ArrowCircleLeftIcon } from '@heroicons/react/outline';
 import defaultImage from 'public/empty-token.webp';
 import { useStreamAndHistoryQuery } from 'services/generated/graphql';
 import { chainDetails } from 'utils/network';
@@ -35,57 +33,42 @@ const Streams: NextPage<StreamsProps> = ({ address, resolvedAddress, network, ch
   const { data, isLoading, error } = useGetVestingInfoByQueryParams({ address: resolvedAddress, provider, chainId });
 
   return (
-    <Layout className="mt-12 flex w-full flex-col gap-[30px] dark:bg-lp-gray-8">
-      <section className="app-section">
-        <div>
-          <Link href="/">
-            <a className="relative top-[-18px] flex items-center gap-2">
-              <ArrowCircleLeftIcon className="h-5 w-5" />
-              <span>Home</span>
-            </a>
-          </Link>
-
-          <div className="section-header ml-0 max-w-fit">
-            <h1 className="font-exo px-0 py-1 text-3xl dark:text-white">Vesting</h1>
-
-            <div className="mt-[5px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
-              <div className="flex items-center rounded-full">
-                <Image
-                  src={logoURI || defaultImage}
-                  alt={network ? t('logoAlt', { name: network }) : 'Fallback Logo'}
-                  objectFit="contain"
-                  width="21px"
-                  height="24px"
-                />
-              </div>
-              <p className="truncate whitespace-nowrap">{network || query.chain}</p>
+    <Layout className="flex flex-col gap-12">
+      <div>
+        <div className="section-header ml-0 max-w-fit">
+          <div className="mt-[5px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
+            <div className="flex items-center rounded-full">
+              <Image
+                src={logoURI || defaultImage}
+                alt={network ? t('logoAlt', { name: network }) : 'Fallback Logo'}
+                objectFit="contain"
+                width="21px"
+                height="24px"
+              />
             </div>
-
-            {address && (
-              <div className="mt-[5px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
-                <BalanceIcon />
-                <p className="space-x-1 truncate whitespace-nowrap">
-                  <span>{address}</span>
-                  {address.toLowerCase() !== resolvedAddress.toLowerCase() && (
-                    <span className="hidden md:inline-block">{` (${resolvedAddress})`}</span>
-                  )}
-                </p>
-              </div>
-            )}
+            <p className="truncate whitespace-nowrap">{network || query.chain}</p>
           </div>
+
+          {address && (
+            <div className="mt-[5px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
+              <BalanceIcon />
+              <p className="space-x-1 truncate whitespace-nowrap">
+                <span>{address}</span>
+                {address.toLowerCase() !== resolvedAddress.toLowerCase() && (
+                  <span className="hidden md:inline-block">{` (${resolvedAddress})`}</span>
+                )}
+              </p>
+            </div>
+          )}
         </div>
-      </section>
+      </div>
 
       {network ? (
-        <section className="app-section flex h-full flex-1 flex-col gap-[50px] bg-[#D9F2F4]/10 py-[22px] dark:bg-lp-gray-8">
-          <AltVestingSection isLoading={isLoading} isError={error ? true : false} data={data} />
-        </section>
+        <AltVestingSection isLoading={isLoading} isError={error ? true : false} data={data} />
       ) : (
-        <section className="app-section">
-          <FallbackContainer>
-            <p>{t('networkNotSupported')}</p>
-          </FallbackContainer>
-        </section>
+        <FallbackContainer>
+          <p>{t('networkNotSupported')}</p>
+        </FallbackContainer>
       )}
     </Layout>
   );

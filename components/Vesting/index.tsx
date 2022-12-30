@@ -1,9 +1,8 @@
 import * as React from 'react';
 import Fallback, { FallbackContainer } from 'components/Fallback';
 import useGetVestingInfo from 'queries/useGetVestingInfo';
-import Table from './Table';
 import { useNetworkProvider } from 'hooks';
-import { networkDetails } from 'utils/constants';
+import { networkDetails } from 'lib/networkDetails';
 import Link from 'next/link';
 import classNames from 'classnames';
 import { IVesting } from 'types';
@@ -11,12 +10,13 @@ import { useTranslations } from 'next-intl';
 import { useDialogState } from 'ariakit';
 import dynamic from 'next/dynamic';
 import { FormDialog } from 'components/Dialog';
-import { IChartValues } from './types';
+import type { IChartValues } from './types';
+import VestingTable from './Table';
 import ClaimVesting from './Table/ClaimVestingStream';
 
 const VestingChart = dynamic(() => import('./Charts/VestingChart'), { ssr: false });
 
-export default function VestingTable() {
+export default function VestingSection() {
   const { chainId } = useNetworkProvider();
 
   const vestingFactory = chainId ? networkDetails[chainId]?.vestingFactory : null;
@@ -31,7 +31,7 @@ export default function VestingTable() {
   const claimValues = React.useRef<IVesting | null>(null);
 
   return (
-    <section className="w-full">
+    <section className="-mt-2 w-full">
       <div className="section-header flex w-full flex-wrap items-center justify-between">
         <h1 className="font-exo">Vesting</h1>
         <Link href="/vesting/create" aria-disabled={!vestingFactory}>
@@ -56,7 +56,7 @@ export default function VestingTable() {
           showLoader={true}
         />
       ) : (
-        <Table {...{ data, chartValues, chartDialog, claimDialog, claimValues }} />
+        <VestingTable {...{ data, chartValues, chartDialog, claimDialog, claimValues }} />
       )}
 
       <React.Suspense fallback={null}>
@@ -105,6 +105,7 @@ export function AltVestingSection({ isLoading, isError, data }: IAltVestingSecti
       <div className="section-header">
         <h1 className="font-exo">Streams</h1>
       </div>
+
       {isLoading || isError || !data || data.length < 1 ? (
         <FallbackContainer>
           {isLoading ? null : isError ? (
@@ -114,7 +115,7 @@ export function AltVestingSection({ isLoading, isError, data }: IAltVestingSecti
           ) : null}
         </FallbackContainer>
       ) : (
-        <Table {...{ data, chartValues, chartDialog, claimDialog, reasonDialog, claimValues }} />
+        <VestingTable {...{ data, chartValues, chartDialog, claimDialog, reasonDialog, claimValues }} />
       )}
 
       <React.Suspense fallback={null}>

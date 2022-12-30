@@ -12,8 +12,6 @@ import { useFormatStreamAndHistory, useNetworkProvider } from 'hooks';
 import { chainDetails } from 'utils/network';
 import { useTranslations } from 'next-intl';
 import Balance from 'components/Balance';
-import Link from 'next/link';
-import { ArrowCircleLeftIcon } from '@heroicons/react/outline';
 
 interface StreamsProps {
   subgraphEndpoint: string;
@@ -44,53 +42,43 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, resolvedAd
   const t = useTranslations('Common');
 
   return (
-    <Layout className="mt-12 flex w-full flex-col gap-[30px] dark:bg-lp-gray-8">
-      <section className="app-section">
-        <div>
-          <Link href="/">
-            <a className="relative top-[-18px] flex items-center gap-2">
-              <ArrowCircleLeftIcon className="h-5 w-5" />
-              <span>Home</span>
-            </a>
-          </Link>
+    <Layout className="-mt-2 flex flex-col gap-12">
+      <div>
+        <div className="div-header ml-0 max-w-fit">
+          {network && (
+            <div className="mt-[5px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
+              <div className="flex items-center rounded-full">
+                <Image
+                  src={logoURI || defaultImage}
+                  alt={t('logoAlt', { name: network })}
+                  objectFit="contain"
+                  width="21px"
+                  height="24px"
+                />
+              </div>
+              <p className="truncate whitespace-nowrap">{network}</p>
+            </div>
+          )}
 
-          <div className="section-header ml-0 max-w-fit">
-            <h1 className="font-exo py-1 text-3xl dark:text-white">{t('streamsAndHistory')}</h1>
-            {network && (
-              <div className="mt-[5px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
-                <div className="flex items-center rounded-full">
-                  <Image
-                    src={logoURI || defaultImage}
-                    alt={t('logoAlt', { name: network })}
-                    objectFit="contain"
-                    width="21px"
-                    height="24px"
-                  />
-                </div>
-                <p className="truncate whitespace-nowrap">{network}</p>
-              </div>
-            )}
-            {address && (
-              <div className="mt-[5px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
-                <BalanceIcon />
-                <p className="space-x-1 truncate whitespace-nowrap">
-                  <span>{address}</span>
-                  {address.toLowerCase() !== resolvedAddress.toLowerCase() && (
-                    <span className="hidden md:inline-block">{` (${resolvedAddress})`}</span>
-                  )}
-                </p>
-              </div>
-            )}
-          </div>
+          {address && (
+            <div className="mt-[5px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
+              <BalanceIcon />
+              <p className="space-x-1 truncate whitespace-nowrap">
+                <span>{address}</span>
+                {address.toLowerCase() !== resolvedAddress.toLowerCase() && (
+                  <span className="hidden md:inline-block">{` (${resolvedAddress})`}</span>
+                )}
+              </p>
+            </div>
+          )}
         </div>
-      </section>
-      <section className="app-section dark:bg-lp-gray-8">
-        <Balance address={address} />
-      </section>
-      <section className="app-section flex h-full flex-1 flex-col gap-[50px] bg-[#D9F2F4]/10 py-[22px] dark:bg-lp-gray-8">
-        <AltStreamSection isLoading={isLoading} isError={isError} data={streamsAndHistory} />
-        <AltHistorySection isLoading={isLoading} isError={isError} data={streamsAndHistory} />
-      </section>
+      </div>
+
+      <Balance address={address} />
+
+      <AltStreamSection isLoading={isLoading} isError={isError} data={streamsAndHistory} />
+
+      <AltHistorySection isLoading={isLoading} isError={isError} data={streamsAndHistory} />
     </Layout>
   );
 };

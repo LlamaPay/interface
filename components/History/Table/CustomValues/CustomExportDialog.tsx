@@ -25,7 +25,7 @@ export function CustomExportDialog({ data, dialog }: { data: IHistory[]; dialog:
 
   function downloadCSV(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    console.log(formData);
+
     downloadCustomHistory(
       data,
       { start: formData.start, end: formData.end },

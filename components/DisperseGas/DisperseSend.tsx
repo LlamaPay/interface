@@ -1,10 +1,10 @@
 import * as React from 'react';
-import disperseContract from 'abis/disperseContract';
+import { disperseContractABI } from 'lib/abis/disperseContract';
 import { DisclosureState } from 'ariakit';
 import BigNumber from 'bignumber.js';
 import toast from 'react-hot-toast';
 import { BeatLoader } from 'react-spinners';
-import { networkDetails } from 'utils/constants';
+import { networkDetails } from 'lib/networkDetails';
 import { useContractWrite, useNetwork } from 'wagmi';
 import { useQueryClient } from 'react-query';
 import { useTranslations } from 'next-intl';
@@ -21,7 +21,7 @@ export default function DisperseSend({ dialog, data, setTransactionHash, transac
   const [{ loading }, disperseEther] = useContractWrite(
     {
       addressOrName: networkDetails[Number(network.chain?.id)].disperseAddress,
-      contractInterface: disperseContract,
+      contractInterface: disperseContractABI,
     },
     'disperseEther'
   );
