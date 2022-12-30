@@ -64,20 +64,20 @@ export function ScheduledTransferPayment({
 
         <tbody className="border border-llama-teal-2 dark:border-lp-gray-7">
           {payments
-            .filter((payment) => Number(payment.ends) * 1000 < Date.now())
+            .filter((payment) => Number(payment.ends) * 1000 > Date.now())
             .map((payment) => (
               <tr key={payment.id}>
                 <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
                   {explorerUrl ? (
                     <a
-                      href={`${explorerUrl}/address/${isIncoming ? payment.pool.owner : payment.payee}`}
+                      href={`${explorerUrl}/address/${isIncoming ? payment.pool.owner : payment.history[0].to}`}
                       target="_blank"
                       rel="noopener noreferrer"
                     >
-                      {formatAddress(isIncoming ? payment.pool.owner : payment.payee)}
+                      {formatAddress(isIncoming ? payment.pool.owner : payment.history[0].to)}
                     </a>
                   ) : (
-                    <>{formatAddress(isIncoming ? payment.pool.owner : payment.payee)}</>
+                    <>{formatAddress(isIncoming ? payment.pool.owner : payment.history[0].to)}</>
                   )}
                 </td>
                 <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">

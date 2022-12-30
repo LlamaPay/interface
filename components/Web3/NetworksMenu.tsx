@@ -105,7 +105,7 @@ export const NetworksMenu = () => {
               );
             })}
           </SelectGroup>
-          <SelectSeparator className="my-2" />
+          <SelectSeparator className="my-2 border-llama-teal-1 dark:border-lp-gray-7" />
           <SelectGroup>
             <SelectGroupLabel className="p-2 text-sm font-normal text-neutral-500 dark:text-white">
               Testnets

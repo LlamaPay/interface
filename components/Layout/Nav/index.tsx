@@ -88,7 +88,7 @@ const Group = ({ name, isOpen, children }: { name: string; isOpen: boolean; chil
 
 const Spacer = () => {
   return (
-    <li className="border-l border-llama-gray-300 px-2">
+    <li className="border-l border-llama-gray-300 px-2 dark:border-lp-gray-7">
       <div className="h-[0.5rem]"></div>
     </li>
   );
@@ -96,7 +96,12 @@ const Spacer = () => {
 
 const LinkItem = ({ isActive, href, name }: { isActive: boolean; href: string; name: string }) => {
   return (
-    <li className={classNames('border-l border-llama-gray-300 px-2', isActive && 'border-llama-green-500')}>
+    <li
+      className={classNames(
+        'border-l border-llama-gray-300 px-2 dark:border-lp-gray-7',
+        isActive && '!border-llama-green-500'
+      )}
+    >
       <Link href={href} passHref>
         <a
           className={classNames('text-sm font-medium', isActive && 'font-bold text-llama-green-500 dark:text-lp-white')}

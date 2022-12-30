@@ -3,7 +3,6 @@ import { useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
 
 export interface IScheduledTransferPayment {
-  payee: string;
   id: string;
   lastPaid: string;
   streamId: string;
@@ -16,6 +15,7 @@ export interface IScheduledTransferPayment {
     owner: string;
     poolContract: string;
   };
+  history: Array<{ to: string }>;
 }
 
 export interface IScheduledTransferPool {
@@ -58,7 +58,6 @@ const fetchScheduledTransferPools = async ({
               name
             }
             payments {
-              payee
               id
               lastPaid
               streamId
@@ -70,6 +69,9 @@ const fetchScheduledTransferPools = async ({
               pool {
                 owner
                 poolContract
+              }
+              history {
+                to
               }
             }
           }
@@ -99,8 +101,7 @@ const fetchScheduledPayments = async ({
       graphEndpoint,
       gql`
         {
-          payments (where: { payee: "${userAddress}" }) {
-            payee
+          payments (where: { history_: { to: "${userAddress}" }}) {
             id
             lastPaid
             streamId
@@ -112,6 +113,9 @@ const fetchScheduledPayments = async ({
             pool {
               owner
               poolContract
+            }
+            history {
+              to
             }
           }
         }
