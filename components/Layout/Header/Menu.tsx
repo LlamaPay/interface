@@ -127,42 +127,29 @@ export default function HeaderMenu({
       />
 
       {isMaxWidthLg && (
-        <MenuItem
-          label={
-            <Link passHref href="/">
-              <div className="flex w-full items-center justify-between gap-4 font-normal">
-                <span className="cursor-pointer">Salaries</span>
-                <CashIcon className="h-4 w-4" />
-              </div>
-            </Link>
-          }
-        />
-      )}
+        <>
+          <Menu label="Salaries">
+            <MenuItem label={<Link href="/">Streams</Link>} />
+            <MenuItem label={<Link href="/create">Create</Link>} />
+            <MenuItem label={<Link href="/withdraw">Withdraw</Link>} />
+          </Menu>
 
-      {isMaxWidthLg && (
-        <MenuItem
-          label={
-            <Link passHref href="/vesting">
-              <div className="flex w-full items-center justify-between gap-4 font-normal">
-                <span className="cursor-pointer">Vesting</span>
-                <ChartPieIcon className="h-4 w-4" />
-              </div>
-            </Link>
-          }
-        />
-      )}
+          <Menu label="Vesting">
+            <MenuItem label={<Link href="/vesting">Streams</Link>} />
+            <MenuItem label={<Link href="/vesting/create">Create</Link>} />
+          </Menu>
 
-      {isMaxWidthLg && (
-        <MenuItem
-          label={
-            <Link passHref href="/payments">
-              <div className="flex w-full items-center justify-between gap-4 font-normal">
-                <span className="cursor-pointer">Payments</span>
-                <CashIcon className="h-4 w-4" />
-              </div>
-            </Link>
-          }
-        />
+          <Menu label="Payments">
+            <MenuItem label={<Link href="/payments">Streams</Link>} />
+            <MenuItem label={<Link href="/payments/create">Create</Link>} />
+          </Menu>
+
+          <Menu label="Token Salaries">
+            <MenuItem label={<Link href="/token-salaries/incoming">Incoming</Link>} />
+            <MenuItem label={<Link href="/token-salaries/outgoing">Outgoing</Link>} />
+            <MenuItem label={<Link href="/token-salaries/create">Create</Link>} />
+          </Menu>
+        </>
       )}
 
       <Menu label={t2('language')}>

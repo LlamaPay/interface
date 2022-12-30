@@ -29,13 +29,13 @@ export function Nav() {
       <Group name="Vesting" isOpen={isVesting}>
         <LinkItem name="Streams" href="/vesting" isActive={isVesting && router.pathname !== '/vesting/create'} />
         <Spacer />
-        <LinkItem name="Create" href="/create" isActive={router.pathname === '/vesting/create'} />
+        <LinkItem name="Create" href="/vesting/create" isActive={router.pathname === '/vesting/create'} />
       </Group>
 
       <Group name="Payments" isOpen={isPayments}>
         <LinkItem name="Streams" href="/payments" isActive={isVesting && router.pathname !== '/payments/create'} />
         <Spacer />
-        <LinkItem name="Create" href="/create" isActive={router.pathname === '/payments/create'} />
+        <LinkItem name="Create" href="/payments/create" isActive={router.pathname === '/payments/create'} />
       </Group>
 
       <Group name="Token Salaries" isOpen={router.pathname.includes('/token-salaries')}>
