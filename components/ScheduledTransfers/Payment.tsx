@@ -218,7 +218,7 @@ const Redirects = ({
   return (
     <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
       <button className="primary-button py-1 px-[6px] text-xs font-medium" onClick={redirectDialog.toggle}>
-        Update Redirect
+        Redirect
       </button>
 
       <FormDialog dialog={redirectDialog} title={'Redirects'}>
