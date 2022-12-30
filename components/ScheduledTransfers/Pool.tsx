@@ -11,8 +11,12 @@ import { getFormattedMaxPrice, getMaxPriceInUSD } from './utils';
 import BigNumber from 'bignumber.js';
 import { ScheduledTransferPayment } from './Payment';
 import { scheduledPaymentsContractABI } from 'lib/abis/scheduledPaymentsContract';
+import { getAddress } from 'ethers/lib/utils';
+import toast from 'react-hot-toast';
+import { useQueryClient } from 'react-query';
+import { BeatLoader } from 'react-spinners';
 
-interface IFormElements {
+interface INewPaymentFormElements {
   toAddress: {
     value: string;
   };
@@ -32,6 +36,18 @@ interface IFormElements {
   };
 }
 
+interface IUpdateOracleFormElements {
+  newOracleAddress: {
+    value: string;
+  };
+}
+
+interface IUpdateMaxPriceFormElements {
+  newMinPrice: {
+    value: string;
+  };
+}
+
 export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }) {
   const [{ data: networkData }] = useNetwork();
 
@@ -43,6 +59,12 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
 
   const newPaymentDialog = useDialogState();
 
+  const minPriceDialog = useDialogState();
+
+  const oracleDialog = useDialogState();
+
+  const queryClient = useQueryClient();
+
   const { mutateAsync } = useCreateScheduledTransferPayment({ poolAddress: pool.poolContract });
 
   const offset = new Date().getTimezoneOffset();
@@ -50,7 +72,7 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
 
   const createScheduledPayment = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const form = e.target as HTMLFormElement & IFormElements;
+    const form = e.target as HTMLFormElement & INewPaymentFormElements;
     const toAddress = form.toAddress?.value;
     const usdAmount = form.usdAmount?.value;
     const paymentStartAt = form.paymentStartAt?.valueAsNumber;
@@ -81,7 +103,7 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
     );
   };
 
-  const [{ loading }, setMaxPrice] = useContractWrite(
+  const [{ loading: updatingMinPrice }, setMinPrice] = useContractWrite(
     {
       addressOrName: pool.poolContract,
       contractInterface: scheduledPaymentsContractABI,
@@ -89,7 +111,79 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
     'setMaxPrice'
   );
 
-  const formattedPrice = getFormattedMaxPrice(900, 18);
+  const [{ loading: updatingOracle }, changeOracle] = useContractWrite(
+    {
+      addressOrName: pool.poolContract,
+      contractInterface: scheduledPaymentsContractABI,
+    },
+    'changeOracle'
+  );
+
+  const updateMinPrice = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const form = e.target as HTMLFormElement & IUpdateMaxPriceFormElements;
+
+    const newMinPrice = form.newMinPrice?.value;
+
+    if (pool.token.decimals && newMinPrice) {
+      const formattedPrice = getFormattedMaxPrice(Number(newMinPrice), pool.token.decimals || 18);
+
+      setMinPrice({ args: [formattedPrice] }).then((res) => {
+        if (res.error) {
+          minPriceDialog.hide();
+          toast.error(res.error.message);
+        } else {
+          const toastid = toast.loading(`Confirming Transaction`);
+
+          minPriceDialog.hide();
+
+          txHash.current = res.data.hash;
+
+          txDialogState.toggle();
+
+          res.data?.wait().then((receipt) => {
+            toast.dismiss(toastid);
+
+            receipt.status === 1 ? toast.success('Transaction Success') : toast.error('Transaction Failed');
+          });
+
+          queryClient.invalidateQueries();
+        }
+      });
+    }
+  };
+
+  const updateOracle = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const form = e.target as HTMLFormElement & IUpdateOracleFormElements;
+
+    const newOracleAddress = form.newOracleAddress?.value;
+
+    changeOracle({ args: [getAddress(newOracleAddress)] }).then((res) => {
+      if (res.error) {
+        oracleDialog.hide();
+        toast.error(res.error.message);
+      } else {
+        const toastid = toast.loading(`Confirming Transaction`);
+
+        oracleDialog.hide();
+
+        txHash.current = res.data.hash;
+
+        txDialogState.toggle();
+
+        res.data?.wait().then((receipt) => {
+          toast.dismiss(toastid);
+
+          receipt.status === 1 ? toast.success('Transaction Success') : toast.error('Transaction Failed');
+        });
+
+        queryClient.invalidateQueries();
+      }
+    });
+  };
 
   return (
     <>
@@ -129,13 +223,20 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
                 Oracle
               </th>
               <td className="table-description border border-solid border-llama-teal-2 text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                {explorerUrl ? (
-                  <a href={`${explorerUrl}/address/${pool.oracle}`} target="_blank" rel="noopener noreferrer">
-                    {pool.oracle}
-                  </a>
-                ) : (
-                  <>{pool.oracle}</>
-                )}
+                <span className="flex flex-wrap items-center justify-between gap-4">
+                  <span>
+                    {explorerUrl ? (
+                      <a href={`${explorerUrl}/address/${pool.oracle}`} target="_blank" rel="noopener noreferrer">
+                        {pool.oracle}
+                      </a>
+                    ) : (
+                      <>{pool.oracle}</>
+                    )}
+                  </span>
+                  <button className="primary-button py-1 px-[6px] text-xs font-medium" onClick={oracleDialog.toggle}>
+                    Change
+                  </button>
+                </span>
               </td>
             </tr>
             <tr>
@@ -145,11 +246,19 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
                 </Tooltip>
               </th>
               <td className="table-description border border-solid border-llama-teal-2 text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                {pool.maxPrice
-                  ? `$${getMaxPriceInUSD(pool.maxPrice, pool.token.decimals || 18).toLocaleString(undefined, {
-                      maximumFractionDigits: 2,
-                    })}`
-                  : ''}
+                <span className="flex flex-wrap items-center justify-between gap-4">
+                  <span>
+                    {pool.maxPrice
+                      ? `$${getMaxPriceInUSD(pool.maxPrice, pool.token.decimals || 18).toLocaleString(undefined, {
+                          maximumFractionDigits: 2,
+                        })}`
+                      : ''}
+                  </span>
+
+                  <button className="primary-button py-1 px-[6px] text-xs font-medium" onClick={minPriceDialog.toggle}>
+                    Change
+                  </button>
+                </span>
               </td>
             </tr>
             <tr>
@@ -184,6 +293,30 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
             <InputText name="frequency" label="Frequency (Days)" placeholder="1" isRequired />
 
             <SubmitButton className="mt-5">Create</SubmitButton>
+          </form>
+        </span>
+      </FormDialog>
+
+      <FormDialog dialog={minPriceDialog} title={'Min Price'}>
+        <span className="space-y-4 text-lp-gray-6 dark:text-white">
+          <form className="mx-auto flex flex-col gap-4" onSubmit={updateMinPrice}>
+            <InputAmount name="newMinPrice" label="New Minimum Price (USD)" placeholder="1000" isRequired />
+
+            <SubmitButton className="mt-5">
+              {updatingMinPrice ? <BeatLoader size={6} color="white" /> : 'Update'}
+            </SubmitButton>
+          </form>
+        </span>
+      </FormDialog>
+
+      <FormDialog dialog={oracleDialog} title={'Oracle'}>
+        <span className="space-y-4 text-lp-gray-6 dark:text-white">
+          <form className="mx-auto flex flex-col gap-4" onSubmit={updateOracle}>
+            <InputText name="newOracleAddress" label="New Address" placeholder="0x..." isRequired />
+
+            <SubmitButton className="mt-5">
+              {updatingOracle ? <BeatLoader size={6} color="white" /> : 'Update'}
+            </SubmitButton>
           </form>
         </span>
       </FormDialog>
