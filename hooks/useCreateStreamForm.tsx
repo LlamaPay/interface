@@ -1,11 +1,11 @@
 import * as React from 'react';
 import BigNumber from 'bignumber.js';
-import { ITokenBalance } from 'queries/useTokenBalances';
+import type { ITokenBalance } from '~/queries/useTokenBalances';
 import { DisclosureState } from 'ariakit';
-import useStreamToken from 'queries/useStreamToken';
-import { IFormElements } from 'components/Stream/CreateStream/types';
-import { secondsByDuration } from 'utils/constants';
-import { useAddressStore } from 'store/address';
+import useStreamToken from '~/queries/useStreamToken';
+import type { IFormElements } from '~/components/Stream/CreateStream/types';
+import { secondsByDuration } from '~/utils/constants';
+import { useAddressStore } from '~/store/address';
 
 export function useCreateStreamForm({ tokens, dialog }: { tokens: ITokenBalance[]; dialog?: DisclosureState }) {
   const { mutate: streamToken, isLoading: confirmingStream, data: transactionDetails } = useStreamToken();

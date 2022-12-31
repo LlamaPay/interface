@@ -1,7 +1,7 @@
-import { botContractABI } from 'lib/abis/botContract';
+import { botContractABI } from '~/lib/abis/botContract';
 import { DisclosureState } from 'ariakit';
-import { FormDialog } from 'components/Dialog';
-import { InputAmount, SubmitButton } from 'components/Form';
+import { FormDialog } from '~/components/Dialog';
+import { InputAmount, SubmitButton } from '~/components/Form';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import { useContractRead, useContractWrite } from 'wagmi';

@@ -1,7 +1,7 @@
-import React, { createContext } from 'react';
+import * as React from 'react';
 import initSdk from '@gnosis.pm/safe-apps-sdk';
 
-export const SafeContext = createContext<any>({});
+export const SafeContext = React.createContext<any>({});
 
 type Props = {
   children: React.ReactNode;

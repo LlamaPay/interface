@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { InputAmountWithMaxButton, SelectToken } from 'components/Form';
+import { InputAmountWithMaxButton, SelectToken } from '~/components/Form';
 import { BeatLoader } from 'react-spinners';
 import { DisclosureState, useDialogState } from 'ariakit';
-import { FormDialog, TransactionDialog } from 'components/Dialog';
-import { useDepositForm } from 'hooks';
-import { ITokenBalance } from 'queries/useTokenBalances';
-import AvailableAmount from 'components/AvailableAmount';
+import { FormDialog, TransactionDialog } from '~/components/Dialog';
+import { useDepositForm } from '~/hooks';
+import type { ITokenBalance } from '~/queries/useTokenBalances';
+import AvailableAmount from '~/components/AvailableAmount';
 import { useTranslations } from 'next-intl';
 
 interface IDepositFieldprops {

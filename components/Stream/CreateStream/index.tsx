@@ -1,10 +1,10 @@
 import * as React from 'react';
 import Placeholder from './Placeholder';
 import ErrorBoundary from './ErrorBoundary';
-import { useBalances } from 'hooks';
+import { useBalances } from '~/hooks';
 import { useAccount } from 'wagmi';
-import { StreamIcon } from 'components/Icons';
-import useTokenBalances from 'queries/useTokenBalances';
+import { StreamIcon } from '~/components/Icons';
+import useTokenBalances from '~/queries/useTokenBalances';
 import CreateMultipleStreams from './CreateMultipleStreams';
 import { useTranslations } from 'next-intl';
 

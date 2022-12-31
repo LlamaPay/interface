@@ -1,15 +1,15 @@
 import * as React from 'react';
 import BigNumber from 'bignumber.js';
-import useWithdrawByPayer from 'queries/useWithdrawTokenByPayer';
-import { IFormElements, IFormProps } from './types';
-import { InputAmount, SubmitButton } from 'components/Form';
+import useWithdrawByPayer from '~/queries/useWithdrawTokenByPayer';
+import type { IFormElements, IFormProps } from './types';
+import { InputAmount, SubmitButton } from '~/components/Form';
 import { BeatLoader } from 'react-spinners';
-import { FormDialog, TransactionDialog } from 'components/Dialog';
+import { FormDialog, TransactionDialog } from '~/components/Dialog';
 import { useDialogState } from 'ariakit';
-import AvailableAmount from 'components/AvailableAmount';
+import AvailableAmount from '~/components/AvailableAmount';
 import { useTranslations } from 'next-intl';
-import useGnosisBatch from 'queries/useGnosisBatch';
-import { LlamaContractInterface } from 'utils/contract';
+import useGnosisBatch from '~/queries/useGnosisBatch';
+import { LlamaContractInterface } from '~/utils/contract';
 
 const WithdrawForm = ({ data, formDialog }: IFormProps) => {
   const { mutate, isLoading, data: transaction } = useWithdrawByPayer();

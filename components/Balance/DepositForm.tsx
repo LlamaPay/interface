@@ -1,17 +1,17 @@
 import * as React from 'react';
 import BigNumber from 'bignumber.js';
 import { useAccount } from 'wagmi';
-import useDepositToken from 'queries/useDepositToken';
-import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval';
-import { IFormElements, IFormProps } from './types';
-import { checkApproval } from 'components/Form/utils';
-import { SubmitButton } from 'components/Form';
+import useDepositToken from '~/queries/useDepositToken';
+import { useApproveToken, useCheckTokenApproval } from '~/queries/useTokenApproval';
+import type { IFormElements, IFormProps } from './types';
+import { checkApproval } from '~/components/Form/utils';
+import { SubmitButton } from '~/components/Form';
 import { BeatLoader } from 'react-spinners';
-import { FormDialog, TransactionDialog } from 'components/Dialog';
+import { FormDialog, TransactionDialog } from '~/components/Dialog';
 import { useDialogState } from 'ariakit';
 import Image from 'next/image';
-import AvailableAmount from 'components/AvailableAmount';
-import useDepositGnosis from 'queries/useDepositGnosis';
+import AvailableAmount from '~/components/AvailableAmount';
+import useDepositGnosis from '~/queries/useDepositGnosis';
 import { useTranslations } from 'next-intl';
 
 const DepositForm = ({ data, formDialog }: IFormProps) => {

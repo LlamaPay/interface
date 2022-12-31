@@ -1,11 +1,11 @@
 import { useQuery } from 'react-query';
-import { IBalance, ITokenLists } from 'types';
+import type { IBalance, ITokenLists } from '~/types';
 import { useAccount } from 'wagmi';
 import BigNumber from 'bignumber.js';
-import { createERC20Contract } from 'utils/tokenUtils';
+import { createERC20Contract } from '~/utils/tokenUtils';
 import { getAddress } from 'ethers/lib/utils';
-import { useNetworkProvider } from 'hooks';
-import { Provider } from 'utils/contract';
+import { useNetworkProvider } from '~/hooks';
+import { Provider } from '~/utils/contract';
 
 const fetchBalance = async (
   id: string,

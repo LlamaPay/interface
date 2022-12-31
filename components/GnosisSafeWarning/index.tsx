@@ -1,7 +1,6 @@
 import { useDialogState } from 'ariakit';
-import { FormDialog } from 'components/Dialog';
-import { useNetworkProvider } from 'hooks';
-import Link from 'next/link';
+import { FormDialog } from '~/components/Dialog';
+import { useNetworkProvider } from '~/hooks';
 import * as React from 'react';
 import { useAccount } from 'wagmi';
 

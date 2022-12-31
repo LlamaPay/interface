@@ -1,7 +1,7 @@
-import Layout from 'components/Layout';
+import Layout from '~/components/Layout';
 import * as React from 'react';
 import { GetServerSideProps, NextPage } from 'next';
-import VestingSection from 'components/Vesting';
+import VestingSection from '~/components/Vesting';
 
 const Vesting: NextPage = () => {
   return (

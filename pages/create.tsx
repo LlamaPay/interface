@@ -1,13 +1,13 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import * as React from 'react';
-import Layout from 'components/Layout';
-import { CreateStream } from 'components/Stream';
+import Layout from '~/components/Layout';
+import { CreateStream } from '~/components/Stream';
 import { useAccount } from 'wagmi';
-import { useNetworkProvider } from 'hooks';
-import useStreamsAndHistory from 'queries/useStreamsAndHistory';
-import { StreamIcon } from 'components/Icons';
+import { useNetworkProvider } from '~/hooks';
+import useStreamsAndHistory from '~/queries/useStreamsAndHistory';
+import { StreamIcon } from '~/components/Icons';
 import { useTranslations } from 'next-intl';
-import { FallbackContainer } from 'components/Fallback';
+import { FallbackContainer } from '~/components/Fallback';
 
 const Create: NextPage = () => {
   const [{ data: accountData }] = useAccount();

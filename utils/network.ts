@@ -1,5 +1,5 @@
-import { networkDetails } from 'lib/networkDetails';
-import { chains } from 'lib/chains';
+import { networkDetails } from '~/lib/networkDetails';
+import { chains } from '~/lib/chains';
 
 export function chainDetails(chainId: unknown) {
   if (typeof chainId !== 'string') return {};

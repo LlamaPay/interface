@@ -4,15 +4,15 @@ import { useRouter } from 'next/router';
 import Image, { StaticImageData } from 'next/image';
 import { dehydrate, QueryClient } from 'react-query';
 import { useTranslations } from 'next-intl';
-import Layout from 'components/Layout';
-import { BalanceIcon } from 'components/Icons';
-import { AltVestingSection } from 'components/Vesting';
-import { FallbackContainer } from 'components/Fallback';
-import { useNetworkProvider } from 'hooks';
-import { useGetVestingInfoByQueryParams } from 'queries/useGetVestingInfo';
-import defaultImage from 'public/empty-token.webp';
-import { useStreamAndHistoryQuery } from 'services/generated/graphql';
-import { chainDetails } from 'utils/network';
+import Layout from '~/components/Layout';
+import { BalanceIcon } from '~/components/Icons';
+import { AltVestingSection } from '~/components/Vesting';
+import { FallbackContainer } from '~/components/Fallback';
+import { useNetworkProvider } from '~/hooks';
+import { useGetVestingInfoByQueryParams } from '~/queries/useGetVestingInfo';
+import defaultImage from '~/public/empty-token.webp';
+import { useStreamAndHistoryQuery } from '~/services/generated/graphql';
+import { chainDetails } from '~/utils/network';
 
 interface StreamsProps {
   subgraphEndpoint: string;

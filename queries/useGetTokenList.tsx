@@ -1,6 +1,6 @@
 import { useQuery } from 'react-query';
 import axios from 'axios';
-import { useNetworkProvider } from 'hooks';
+import { useNetworkProvider } from '~/hooks';
 
 interface ITokenList {
   [key: string]: {

@@ -8,8 +8,8 @@ import {
   SortingState,
   getSortedRowModel,
 } from '@tanstack/react-table';
-import Table from 'components/Table';
-import { IHistory } from 'types';
+import Table from '~/components/Table';
+import type { IHistory } from '~/types';
 import {
   ActionName,
   HistoryActions,
@@ -21,7 +21,7 @@ import {
   historyAmountFormatter,
   eventAgeFormatter,
 } from './CustomValues';
-import { downloadHistory } from 'utils/downloadCsv';
+import { downloadHistory } from '~/utils/downloadCsv';
 import { useTranslations } from 'next-intl';
 import { useDialogState } from 'ariakit';
 

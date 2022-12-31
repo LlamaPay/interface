@@ -1,4 +1,4 @@
-import { InputAmountWithDuration, InputText, SelectToken, SubmitButton } from 'components/Form';
+import { InputAmountWithDuration, InputText, SelectToken, SubmitButton } from '~/components/Form';
 import { useTranslations } from 'next-intl';
 import { BeatLoader } from 'react-spinners';
 

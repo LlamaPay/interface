@@ -1,6 +1,6 @@
 import { BaseProvider } from '@ethersproject/providers';
 import { BigNumber } from 'ethers';
-import { useNetworkProvider } from 'hooks';
+import { useNetworkProvider } from '~/hooks';
 import { useQuery } from 'react-query';
 
 async function fetchBalance(id: string, provider: BaseProvider | null) {

@@ -1,19 +1,19 @@
 import * as React from 'react';
 import { ColumnDef, getCoreRowModel, useReactTable, getSortedRowModel, SortingState } from '@tanstack/react-table';
 import { DisclosureState } from 'ariakit';
-import Table from 'components/Table';
-import { IVesting } from 'types';
-import { formatAddress } from 'utils/address';
+import Table from '~/components/Table';
+import type { IVesting } from '~/types';
+import { formatAddress } from '~/utils/address';
 import { useAccount } from 'wagmi';
-import { IChartValues } from '../types';
+import type { IChartValues } from '../types';
 import ChartButton from './CustomValues/ChartButton';
 import ClaimButton from './CustomValues/ClaimButton';
 import ExplorerLink from './CustomValues/ExplorerLink';
 import Status, { statusAccessorFn } from './CustomValues/Status';
 import Unclaimed from './CustomValues/Unclaimed';
 import RugpullVestingButton from './CustomValues/RugpullVestingButton';
-import { useLocale } from 'hooks';
-import { downloadVesting } from 'utils/downloadCsv';
+import { useLocale } from '~/hooks';
+import { downloadVesting } from '~/utils/downloadCsv';
 import ReasonButton from './CustomValues/ReasonButton';
 
 export default function VestingTable({

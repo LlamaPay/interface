@@ -1,6 +1,6 @@
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
-import { ITokenBalance } from 'queries/useTokenBalances';
+import type { ITokenBalance } from '~/queries/useTokenBalances';
 
 export default function AvailableAmount({
   selectedToken,

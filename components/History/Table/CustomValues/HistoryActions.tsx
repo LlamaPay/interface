@@ -1,6 +1,6 @@
 import { useDialogState } from 'ariakit';
 import { useTranslations } from 'next-intl';
-import { IHistory } from 'types';
+import type { IHistory } from '~/types';
 import { MoreInfo } from './MoreInfo';
 import { WithdrawInvoice } from './WithdrawInvoice';
 

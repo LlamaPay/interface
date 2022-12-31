@@ -2,15 +2,15 @@ import * as React from 'react';
 import { useRouter } from 'next/router';
 import Image, { StaticImageData } from 'next/image';
 import { useTranslations } from 'next-intl';
-import Layout from 'components/Layout';
-import { BalanceIcon } from 'components/Icons';
-import { AltStreamSection } from 'components/Stream';
-import { AltHistorySection } from 'components/History';
-import Balance from 'components/Balance';
-import { FallbackContainer } from 'components/Fallback';
-import { useFormatStreamAndHistory, useNetworkProvider } from 'hooks';
-import { useStreamAndHistoryQuery } from 'services/generated/graphql';
-import defaultImage from 'public/empty-token.webp';
+import Layout from '~/components/Layout';
+import { BalanceIcon } from '~/components/Icons';
+import { AltStreamSection } from '~/components/Stream';
+import { AltHistorySection } from '~/components/History';
+import Balance from '~/components/Balance';
+import { FallbackContainer } from '~/components/Fallback';
+import { useFormatStreamAndHistory, useNetworkProvider } from '~/hooks';
+import { useStreamAndHistoryQuery } from '~/services/generated/graphql';
+import defaultImage from '~/public/empty-token.webp';
 
 interface ISalaryProps {
   subgraphEndpoint: string;

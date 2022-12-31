@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useNetworkProvider } from 'hooks';
-import { networkDetails } from 'lib/networkDetails';
+import { useNetworkProvider } from '~/hooks';
+import { networkDetails } from '~/lib/networkDetails';
 
 export default function ExplorerLink({ value, query }: { value: React.ReactNode; query: string }) {
   const { chainId } = useNetworkProvider();

@@ -1,4 +1,4 @@
-import { ITokenList } from 'types';
+import type { ITokenList } from '~/types';
 
 const goerli: ITokenList = {
   '0xc778417e063141139fce010982780140aa0cd5ab': {

@@ -1,5 +1,5 @@
 import { DialogState } from 'ariakit';
-import { FormDialog } from 'components/Dialog';
+import { FormDialog } from '~/components/Dialog';
 
 export default function EOAWarning({ address, dialog }: { address: (string | null)[]; dialog: DialogState }) {
   return (

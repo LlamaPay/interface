@@ -1,12 +1,12 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
-import Fallback, { FallbackContainer } from 'components/Fallback';
-import { StreamIcon } from 'components/Icons';
+import Fallback, { FallbackContainer } from '~/components/Fallback';
+import { StreamIcon } from '~/components/Icons';
 import { StreamTable, DefaultStreamTable } from './Table';
-import type { IStreamAndHistory } from 'types';
+import type { IStreamAndHistory } from '~/types';
 import StreamMenu from './Menu';
-import useStreamsAndHistory from 'queries/useStreamsAndHistory';
+import useStreamsAndHistory from '~/queries/useStreamsAndHistory';
 
 export function StreamSection() {
   const { data, isLoading, error } = useStreamsAndHistory();

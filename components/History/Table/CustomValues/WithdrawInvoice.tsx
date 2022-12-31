@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { useLocale } from 'hooks';
+import { useLocale } from '~/hooks';
 import { useTranslations } from 'next-intl';
-import { IHistory } from 'types';
-import { downloadInvoice } from 'utils/downloadInvoice';
+import type { IHistory } from '~/types';
+import { downloadInvoice } from '~/utils/downloadInvoice';
 import { useAccount } from 'wagmi';
 
 export function WithdrawInvoice({ data }: { data: IHistory }) {

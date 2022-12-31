@@ -1,7 +1,7 @@
 import { dehydrate, QueryClient } from 'react-query';
-import { chainDetails } from 'utils/network';
-import { useStreamAndHistoryQuery } from 'services/generated/graphql';
-import defaultImage from 'public/empty-token.webp';
+import { chainDetails } from '~/utils/network';
+import { useStreamAndHistoryQuery } from '~/services/generated/graphql';
+import defaultImage from '~/public/empty-token.webp';
 
 interface ISalariesInfo {
   chain: string | string[] | undefined;

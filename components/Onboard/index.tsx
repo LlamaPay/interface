@@ -3,7 +3,7 @@ import { DisclosureState } from 'ariakit';
 import { Dialog } from 'ariakit/dialog';
 import classNames from 'classnames';
 import { useAccount, useConnect } from 'wagmi';
-import { Coins } from 'components/Icons';
+import { Coins } from '~/components/Icons';
 import ConnectWallet from './ConnectWallet';
 import DepositField from './DepostField';
 import CreateStreamField from './CreateStreamField';

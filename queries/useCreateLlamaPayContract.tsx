@@ -1,10 +1,10 @@
 import { Signer } from 'ethers';
 import { getAddress } from 'ethers/lib/utils';
-import { useNetworkProvider } from 'hooks';
+import { useNetworkProvider } from '~/hooks';
 import { useMutation, useQueryClient } from 'react-query';
-import { ITransactionError, ITransactionSuccess } from 'types';
-import { networkDetails } from 'lib/networkDetails';
-import { createFactoryWriteContract } from 'utils/contract';
+import type { ITransactionError, ITransactionSuccess } from '~/types';
+import { networkDetails } from '~/lib/networkDetails';
+import { createFactoryWriteContract } from '~/utils/contract';
 import { useSigner } from 'wagmi';
 
 interface ICreateContract {

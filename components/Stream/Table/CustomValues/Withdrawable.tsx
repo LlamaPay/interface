@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { IStream } from 'types';
-import { formatBalance } from 'utils/amount';
-import useWithdrawable from 'queries/useWithdrawable';
-import Tooltip from 'components/Tooltip';
+import type { IStream } from '~/types';
+import { formatBalance } from '~/utils/amount';
+import useWithdrawable from '~/queries/useWithdrawable';
+import Tooltip from '~/components/Tooltip';
 import { ExclamationCircleIcon, ExclamationIcon } from '@heroicons/react/solid';
 import { useIntl, useTranslations } from 'next-intl';
 

@@ -1,10 +1,10 @@
 import { useState } from 'react';
 import Image from 'next/image';
 import { DisclosureState, Select, SelectArrow, SelectLabel, useSelectState } from 'ariakit';
-import { InputAmountWithDuration } from 'components/Form';
-import { StreamIcon } from 'components/Icons';
-import gasEfficient from 'public/gasEfficient.svg';
-import multiChain from 'public/multiChain.svg';
+import { InputAmountWithDuration } from '~/components/Form';
+import { StreamIcon } from '~/components/Icons';
+import gasEfficient from '~/public/gasEfficient.svg';
+import multiChain from '~/public/multiChain.svg';
 import classNames from 'classnames';
 import Payer from './Payer';
 import Payee from './Payee';

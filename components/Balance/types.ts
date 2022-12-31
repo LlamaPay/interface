@@ -1,6 +1,6 @@
 import { DisclosureState } from 'ariakit';
 import { Contract } from 'ethers';
-import { ITokenBalance } from 'queries/useTokenBalances';
+import type { ITokenBalance } from '~/queries/useTokenBalances';
 
 export type TokenAction = 'deposit' | 'withdraw';
 

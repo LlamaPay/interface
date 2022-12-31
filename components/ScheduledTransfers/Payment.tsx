@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { PlusIcon } from '@heroicons/react/solid';
 import { DisclosureState, useDialogState } from 'ariakit';
-import { FormDialog, TransactionDialog } from 'components/Dialog';
-import { InputText, SubmitButton } from 'components/Form';
+import { FormDialog, TransactionDialog } from '~/components/Dialog';
+import { InputText, SubmitButton } from '~/components/Form';
 import { getAddress } from 'ethers/lib/utils';
-import { networkDetails } from 'lib/networkDetails';
-import { IScheduledTransferPayment } from 'queries/useGetScheduledTransfers';
+import { networkDetails } from '~/lib/networkDetails';
+import type { IScheduledTransferPayment } from '~/queries/useGetScheduledTransfers';
 import { useQueryClient } from 'react-query';
 import { BeatLoader } from 'react-spinners';
-import { formatAddress } from 'utils/address';
+import { formatAddress } from '~/utils/address';
 import { useContractWrite, useNetwork } from 'wagmi';
 import { formatFrequency } from './utils';
 import toast from 'react-hot-toast';
-import { scheduledPaymentsContractABI } from 'lib/abis/scheduledPaymentsContract';
+import { scheduledPaymentsContractABI } from '~/lib/abis/scheduledPaymentsContract';
 
 export function ScheduledTransferPayment({
   payments,

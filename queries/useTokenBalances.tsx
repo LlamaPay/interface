@@ -1,9 +1,9 @@
 import { useQuery } from 'react-query';
-import { ITokenLists } from 'types';
+import type { ITokenLists } from '~/types';
 import { useAccount } from 'wagmi';
 import BigNumber from 'bignumber.js';
-import { useNetworkProvider, useTokenList } from 'hooks';
-import { Provider } from 'utils/contract';
+import { useNetworkProvider, useTokenList } from '~/hooks';
+import { Provider } from '~/utils/contract';
 import { Contract } from 'ethers';
 
 interface IFetchBalance {

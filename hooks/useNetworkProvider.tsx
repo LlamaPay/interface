@@ -1,7 +1,7 @@
 import { ethers } from 'ethers';
 import { useRouter } from 'next/router';
-import { networkDetails } from 'lib/networkDetails';
-import { chains } from 'lib/chains';
+import { networkDetails } from '~/lib/networkDetails';
+import { chains } from '~/lib/chains';
 import { useNetwork } from 'wagmi';
 
 export type Provider = ethers.providers.BaseProvider;

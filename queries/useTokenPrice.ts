@@ -1,7 +1,7 @@
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import { useNetwork } from 'wagmi';
-import { networkDetails } from 'lib/networkDetails';
+import { networkDetails } from '~/lib/networkDetails';
 
 const fetchTokenPrice = async (id: string, prefix: string | null) => {
   if (!id || !prefix || id.length !== 42) return null;

@@ -1,5 +1,5 @@
 import { useIntl } from 'next-intl';
-import { IBalance } from 'types';
+import type { IBalance } from '~/types';
 
 interface MonthlyCostProps {
   data: IBalance;

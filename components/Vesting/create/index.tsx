@@ -1,21 +1,21 @@
 import * as React from 'react';
-import { InputAmount, InputAmountWithDuration, InputText, SubmitButton } from 'components/Form';
+import { InputAmount, InputAmountWithDuration, InputText, SubmitButton } from '~/components/Form';
 import { Switch } from '@headlessui/react';
-import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval';
+import { useApproveToken, useCheckTokenApproval } from '~/queries/useTokenApproval';
 import { useAccount, useProvider } from 'wagmi';
 import BigNumber from 'bignumber.js';
 import { BeatLoader } from 'react-spinners';
-import { secondsByDuration } from 'utils/constants';
+import { secondsByDuration } from '~/utils/constants';
 import toast from 'react-hot-toast';
 import { useDialogState } from 'ariakit';
 import Link from 'next/link';
 import { ArrowCircleLeftIcon } from '@heroicons/react/outline';
 import Confirm, { IVestingData } from './Confirm';
-import { createERC20Contract } from 'utils/tokenUtils';
+import { createERC20Contract } from '~/utils/tokenUtils';
 import { getAddress } from 'ethers/lib/utils';
-import { checkApproval, createContractAndCheckApproval } from 'components/Form/utils';
+import { checkApproval, createContractAndCheckApproval } from '~/components/Form/utils';
 import ChartWrapper from '../Charts/ChartWrapper';
-import { IVestingElements } from '../types';
+import type { IVestingElements } from '../types';
 import Calendar from 'react-calendar';
 import EOAWarning from './EOAWarning';
 

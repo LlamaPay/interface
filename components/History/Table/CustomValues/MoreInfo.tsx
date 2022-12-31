@@ -1,10 +1,10 @@
 import { DisclosureState } from 'ariakit';
-import { FormDialog } from 'components/Dialog';
-import { UserHistoryFragment } from 'services/generated/graphql';
-import { useChainExplorer } from 'hooks';
+import { FormDialog } from '~/components/Dialog';
+import { UserHistoryFragment } from '~/services/generated/graphql';
+import { useChainExplorer } from '~/hooks';
 import { ExternalLinkIcon } from '@heroicons/react/outline';
-import { secondsByDuration } from 'utils/constants';
-import { formatAmountInTable } from 'utils/amount';
+import { secondsByDuration } from '~/utils/constants';
+import { formatAmountInTable } from '~/utils/amount';
 import { useIntl, useTranslations } from 'next-intl';
 
 interface MoreInfoProps {

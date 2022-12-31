@@ -1,14 +1,14 @@
 import * as React from 'react';
-import { llamaContractABI } from 'lib/abis/llamaContract';
+import { llamaContractABI } from '~/lib/abis/llamaContract';
 import { useDialogState } from 'ariakit';
-import { TransactionDialog } from 'components/Dialog';
+import { TransactionDialog } from '~/components/Dialog';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
-import { IStream, ITransaction } from 'types';
+import type { IStream, ITransaction } from '~/types';
 import { useContractWrite } from 'wagmi';
 import { useTranslations } from 'next-intl';
-import { LlamaContractInterface } from 'utils/contract';
-import useGnosisBatch from 'queries/useGnosisBatch';
+import { LlamaContractInterface } from '~/utils/contract';
+import useGnosisBatch from '~/queries/useGnosisBatch';
 import classNames from 'classnames';
 
 interface PushProps {

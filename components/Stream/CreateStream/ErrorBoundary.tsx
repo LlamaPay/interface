@@ -1,4 +1,4 @@
-import { FallbackContainer } from 'components/Fallback';
+import { FallbackContainer } from '~/components/Fallback';
 
 const ErrorBoundary = ({ message }: { message: string }) => {
   return (

@@ -1,4 +1,4 @@
-import { ITokenList } from 'types';
+import type { ITokenList } from '~/types';
 
 const CHAIN_ID = 43113;
 

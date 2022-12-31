@@ -1,8 +1,8 @@
 import { useAccount } from 'wagmi';
 import { useQuery } from 'react-query';
-import { useStreamAndHistoryQuery } from 'services/generated/graphql';
-import { networkDetails } from 'lib/networkDetails';
-import { chains } from 'lib/chains';
+import { useStreamAndHistoryQuery } from '~/services/generated/graphql';
+import { networkDetails } from '~/lib/networkDetails';
+import { chains } from '~/lib/chains';
 
 async function fetchStreams(address?: string) {
   try {

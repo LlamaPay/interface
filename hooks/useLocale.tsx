@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router';
-import { localeNames, ILocale } from 'lib/locales';
+import { localeNames, ILocale } from '~/lib/locales';
 
 interface IReturnProps {
   locale: string;

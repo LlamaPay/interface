@@ -1,6 +1,6 @@
-import { useNetworkProvider } from 'hooks';
+import { useNetworkProvider } from '~/hooks';
 import { useIntl } from 'next-intl';
-import { useGetNativeBalance } from 'queries/useGetNativeBalance';
+import { useGetNativeBalance } from '~/queries/useGetNativeBalance';
 
 interface PayeeBalanceProps {
   id: string;

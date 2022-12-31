@@ -1,6 +1,6 @@
 import * as React from 'react';
-import Tooltip from 'components/Tooltip';
-import { IBalance } from 'types';
+import Tooltip from '~/components/Tooltip';
+import type { IBalance } from '~/types';
 import { useIntl, useTranslations } from 'next-intl';
 
 interface UntilDepletedProps {

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Connector, useAccount, useConnect } from 'wagmi';
-import { useChainExplorer, useIsMounted } from 'hooks';
-import { formatAddress } from 'utils/address';
+import { useChainExplorer, useIsMounted } from '~/hooks';
+import { formatAddress } from '~/utils/address';
 import { Dialog, DialogHeading, DisclosureState } from 'ariakit';
 import { XIcon } from '@heroicons/react/solid';
 import { useTranslations } from 'next-intl';

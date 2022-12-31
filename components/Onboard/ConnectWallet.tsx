@@ -1,6 +1,6 @@
 import * as React from 'react';
-import AnimatedStream from 'components/AnimatedStream';
-import { useIsMounted } from 'hooks';
+import AnimatedStream from '~/components/AnimatedStream';
+import { useIsMounted } from '~/hooks';
 import { Connector, useAccount, useConnect } from 'wagmi';
 import { useTranslations } from 'next-intl';
 

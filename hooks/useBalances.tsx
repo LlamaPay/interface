@@ -1,6 +1,6 @@
 import * as React from 'react';
-import useGetPayerBalance from 'queries/useGetPayerBalance';
-import usePayers from 'queries/usePayers';
+import useGetPayerBalance from '~/queries/useGetPayerBalance';
+import usePayers from '~/queries/usePayers';
 import { useNetworkProvider } from './useNetworkProvider';
 import { useTokenList } from '.';
 

@@ -1,17 +1,17 @@
 import * as React from 'react';
-import { ITokenBalance } from 'queries/useTokenBalances';
-import { SelectToken, SubmitButton } from 'components/Form';
+import type { ITokenBalance } from '~/queries/useTokenBalances';
+import { SelectToken, SubmitButton } from '~/components/Form';
 import { BeatLoader } from 'react-spinners';
-import { useAddressStore } from 'store/address';
+import { useAddressStore } from '~/store/address';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
-import useBatchCalls from 'queries/useBatchCalls';
-import { LlamaContractInterface } from 'utils/contract';
+import useBatchCalls from '~/queries/useBatchCalls';
+import { LlamaContractInterface } from '~/utils/contract';
 import { getAddress } from 'ethers/lib/utils';
 import BigNumber from 'bignumber.js';
-import { secondsByDuration } from 'utils/constants';
-import useStreamToken from 'queries/useStreamToken';
+import { secondsByDuration } from '~/utils/constants';
+import useStreamToken from '~/queries/useStreamToken';
 import { useTranslations } from 'next-intl';
-import useGnosisBatch from 'queries/useGnosisBatch';
+import useGnosisBatch from '~/queries/useGnosisBatch';
 import { ExclamationCircleIcon } from '@heroicons/react/outline';
 
 type FormValues = {

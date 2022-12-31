@@ -1,18 +1,18 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import * as React from 'react';
-import Layout from 'components/Layout';
-import { InputAmount, InputText, SubmitButton } from 'components/Form';
+import Layout from '~/components/Layout';
+import { InputAmount, InputText, SubmitButton } from '~/components/Form';
 import { BeatLoader } from 'react-spinners';
-import useCreateScheduledTransferContract from 'queries/useCreateScheduledTransfer';
-import { TransactionDialog } from 'components/Dialog';
+import useCreateScheduledTransferContract from '~/queries/useCreateScheduledTransfer';
+import { TransactionDialog } from '~/components/Dialog';
 import { useDialogState } from 'ariakit';
-import { StreamIcon } from 'components/Icons';
-import { useNetworkProvider } from 'hooks';
-import { networkDetails } from 'lib/networkDetails';
-import { useTokenPrice } from 'queries/useTokenPrice';
+import { StreamIcon } from '~/components/Icons';
+import { useNetworkProvider } from '~/hooks';
+import { networkDetails } from '~/lib/networkDetails';
+import { useTokenPrice } from '~/queries/useTokenPrice';
 import { useAccount, useNetwork } from 'wagmi';
-import { getFormattedMaxPrice } from 'components/ScheduledTransfers/utils';
-import { WalletSelector } from 'components/Web3';
+import { getFormattedMaxPrice } from '~/components/ScheduledTransfers/utils';
+import { WalletSelector } from '~/components/Web3';
 
 interface IFormElements {
   oracleAddress: { value: string };

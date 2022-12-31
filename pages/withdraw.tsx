@@ -1,12 +1,12 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import * as React from 'react';
-import Layout from 'components/Layout';
+import Layout from '~/components/Layout';
 import { useAccount } from 'wagmi';
-import { useChainExplorer, useFormatStreamAndHistory, useGraphEndpoint, useNetworkProvider } from 'hooks';
+import { useChainExplorer, useFormatStreamAndHistory, useGraphEndpoint, useNetworkProvider } from '~/hooks';
 import { useTranslations } from 'next-intl';
-import { BalanceIcon, StreamIcon } from 'components/Icons';
-import { InputText, SubmitButton } from 'components/Form';
-import { useStreamAndHistoryQuery } from 'services/generated/graphql';
+import { BalanceIcon, StreamIcon } from '~/components/Icons';
+import { InputText, SubmitButton } from '~/components/Form';
+import { useStreamAndHistoryQuery } from '~/services/generated/graphql';
 import { BeatLoader } from 'react-spinners';
 import {
   AmtPerMonth,
@@ -16,17 +16,17 @@ import {
   streamAddressFormatter,
   TokenName,
   Withdrawable,
-} from 'components/Stream/Table/CustomValues';
+} from '~/components/Stream/Table/CustomValues';
 import { CashIcon } from '@heroicons/react/solid';
-import useBatchCalls from 'queries/useBatchCalls';
-import useGnosisBatch from 'queries/useGnosisBatch';
-import { LlamaContractInterface } from 'utils/contract';
-import { chainDetails } from 'utils/network';
-import defaultImage from 'public/empty-token.webp';
+import useBatchCalls from '~/queries/useBatchCalls';
+import useGnosisBatch from '~/queries/useGnosisBatch';
+import { LlamaContractInterface } from '~/utils/contract';
+import { chainDetails } from '~/utils/network';
+import defaultImage from '~/public/empty-token.webp';
 import Image from 'next/image';
-import { networkDetails } from 'lib/networkDetails';
+import { networkDetails } from '~/lib/networkDetails';
 import { useRouter } from 'next/router';
-import { FallbackContainer } from 'components/Fallback';
+import { FallbackContainer } from '~/components/Fallback';
 
 interface ICall {
   [key: string]: string[];

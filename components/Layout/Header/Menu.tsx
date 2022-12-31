@@ -1,13 +1,13 @@
 import { BookOpenIcon, LibraryIcon, MoonIcon, PlayIcon, SunIcon, TerminalIcon } from '@heroicons/react/outline';
 import { DisclosureState } from 'ariakit';
-import { Menu, MenuItem } from 'components/NestedMenu';
-import { useIsMounted, useLocale, useWindowSize } from 'hooks';
+import { Menu, MenuItem } from '~/components/NestedMenu';
+import { useIsMounted, useLocale, useWindowSize } from '~/hooks';
 import { useTranslations } from 'next-intl';
 import Image from 'next/image';
-import { formatAddress } from 'utils/address';
-import { chainDetails } from 'utils/network';
+import { formatAddress } from '~/utils/address';
+import { chainDetails } from '~/utils/network';
 import { useAccount, useNetwork } from 'wagmi';
-import defaultImage from 'public/empty-token.webp';
+import defaultImage from '~/public/empty-token.webp';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
 

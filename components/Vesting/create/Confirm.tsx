@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { DisclosureState, useDialogState } from 'ariakit';
-import { FormDialog } from 'components/Dialog';
-import { SubmitButton } from 'components/Form';
+import { FormDialog } from '~/components/Dialog';
+import { SubmitButton } from '~/components/Form';
 import { useIntl } from 'next-intl';
 import { useContractWrite } from 'wagmi';
-import { vestingFactoryReadableABI } from 'lib/abis/vestingFactoryReadable';
+import { vestingFactoryReadableABI } from '~/lib/abis/vestingFactoryReadable';
 import { useQueryClient } from 'react-query';
 import toast from 'react-hot-toast';
-import { TransactionDialog } from 'components/Dialog';
+import { TransactionDialog } from '~/components/Dialog';
 import { BeatLoader } from 'react-spinners';
 
 export interface IVestingData {

@@ -5,10 +5,10 @@ import { DisclosureState } from 'ariakit';
 import { useTranslations } from 'next-intl';
 import { MoonIcon, SunIcon } from '@heroicons/react/outline';
 import Menu from './Menu';
-import { NetworksMenu, Account, WalletSelector } from 'components/Web3';
-import { Logo } from 'components/Icons';
+import { NetworksMenu, Account, WalletSelector } from '~/components/Web3';
+import { Logo } from '~/components/Icons';
 import { useTheme } from 'next-themes';
-import { useIsMounted } from 'hooks';
+import { useIsMounted } from '~/hooks';
 
 const Header = ({ onboardDialog, walletDialog }: { onboardDialog: DisclosureState; walletDialog: DisclosureState }) => {
   const [{ data }] = useAccount();

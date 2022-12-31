@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { DisclosureState } from 'ariakit';
-import { FormDialog } from 'components/Dialog';
-import { networkDetails } from 'lib/networkDetails';
-import { secondsByDuration } from 'utils/constants';
+import { FormDialog } from '~/components/Dialog';
+import { networkDetails } from '~/lib/networkDetails';
+import { secondsByDuration } from '~/utils/constants';
 import { useContractRead, useContractWrite } from 'wagmi';
-import { botContractABI } from 'lib/abis/botContract';
-import { InputAmount, InputText, SubmitButton } from 'components/Form';
+import { botContractABI } from '~/lib/abis/botContract';
+import { InputAmount, InputText, SubmitButton } from '~/components/Form';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
-import useGetBotInfo from 'queries/useGetBotInfo';
-import { formatAddress } from 'utils/address';
-import { zeroAdd } from 'utils/constants';
-import { useApproveTokenForMaxAmt } from 'queries/useTokenApproval';
+import useGetBotInfo from '~/queries/useGetBotInfo';
+import { formatAddress } from '~/utils/address';
+import { zeroAdd } from '~/utils/constants';
+import { useApproveTokenForMaxAmt } from '~/queries/useTokenApproval';
 import Calendar from 'react-calendar';
 
 export default function BotFunds({

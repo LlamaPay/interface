@@ -1,7 +1,7 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { ColumnDef, getCoreRowModel, useReactTable, getSortedRowModel, SortingState } from '@tanstack/react-table';
-import Table from 'components/Table';
+import Table from '~/components/Table';
 import {
   TotalStreamed,
   Withdrawable,
@@ -19,13 +19,13 @@ import {
   streamAddressFormatter,
   totalStreamedFormatter,
 } from './CustomValues';
-import { IStream } from 'types';
-import { downloadStreams } from 'utils/downloadCsv';
-import { useAddressStore } from 'store/address';
+import type { IStream } from '~/types';
+import { downloadStreams } from '~/utils/downloadCsv';
+import { useAddressStore } from '~/store/address';
 import { useTranslations } from 'next-intl';
 import Schedule from '../../Schedule/Schedule';
-import { useNetworkProvider } from 'hooks';
-import Tooltip from 'components/Tooltip';
+import { useNetworkProvider } from '~/hooks';
+import Tooltip from '~/components/Tooltip';
 import { ClipboardCopyIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
 

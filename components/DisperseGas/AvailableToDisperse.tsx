@@ -1,8 +1,8 @@
 import Image from 'next/image';
-import { chainDetails } from 'utils/network';
+import { chainDetails } from '~/utils/network';
 import { useNetwork } from 'wagmi';
-import defaultImage from 'public/empty-token.webp';
-import { useGetNativeBalance } from 'queries/useGetNativeBalance';
+import defaultImage from '~/public/empty-token.webp';
+import { useGetNativeBalance } from '~/queries/useGetNativeBalance';
 import { useIntl, useTranslations } from 'next-intl';
 
 export default function AvailableToDisperse({ id }: { id: string }) {

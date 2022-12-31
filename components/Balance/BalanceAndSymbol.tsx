@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { IBalance } from 'types';
+import type { IBalance } from '~/types';
 import { useIntl } from 'next-intl';
-import { useBalances } from 'hooks';
+import { useBalances } from '~/hooks';
 
 interface BalanceAndSymbolProps {
   data: IBalance;

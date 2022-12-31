@@ -1,10 +1,10 @@
 import { useQuery } from 'react-query';
 import { useAccount } from 'wagmi';
-import { useNetworkProvider } from 'hooks';
-import { Provider } from 'utils/contract';
-import { IPayer, IToken } from 'types';
+import { useNetworkProvider } from '~/hooks';
+import { Provider } from '~/utils/contract';
+import type { IPayer, IToken } from '~/types';
 import BigNumber from 'bignumber.js';
-import { createERC20Contract } from 'utils/tokenUtils';
+import { createERC20Contract } from '~/utils/tokenUtils';
 import { getAddress } from 'ethers/lib/utils';
 
 const fetchPayers = async (userAddress: string, tokens: IToken[] | null, provider: Provider | null) => {
@@ -37,7 +37,7 @@ const fetchPayers = async (userAddress: string, tokens: IToken[] | null, provide
 };
 
 // query that returns lastPayerUpdate, totalPaidPerSec when user address is passed
-function usePayers(tokens: IToken[] | null, tokensKey: string, replacementAddress?:string) {
+function usePayers(tokens: IToken[] | null, tokensKey: string, replacementAddress?: string) {
   const [{ data: accountData }] = useAccount();
   const { provider } = useNetworkProvider();
 

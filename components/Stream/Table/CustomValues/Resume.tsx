@@ -1,8 +1,8 @@
-import { llamaContractABI } from 'lib/abis/llamaContract';
+import { llamaContractABI } from '~/lib/abis/llamaContract';
 import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
-import { IStream } from 'types';
+import type { IStream } from '~/types';
 import { useContractWrite } from 'wagmi';
 
 interface ResumeProps {

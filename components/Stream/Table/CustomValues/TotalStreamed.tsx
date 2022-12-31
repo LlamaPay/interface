@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useIntl } from 'next-intl';
-import { IStream } from 'types';
+import type { IStream } from '~/types';
 
 export const TotalStreamed = ({ data }: { data: IStream }) => {
   const [amount, setAmount] = React.useState<string | null>(null);

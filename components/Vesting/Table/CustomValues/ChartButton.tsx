@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { DisclosureState } from 'ariakit';
-import { IVesting } from 'types';
-import { IChartValues } from 'components/Vesting/types';
+import type { IVesting } from '~/types';
+import type { IChartValues } from '~/components/Vesting/types';
 
 export default function ChartButton({
   data,

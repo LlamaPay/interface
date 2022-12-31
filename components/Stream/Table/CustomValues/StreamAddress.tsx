@@ -1,8 +1,8 @@
 import * as React from 'react';
-import Tooltip from 'components/Tooltip';
-import { IStream } from 'types';
-import { formatAddress } from 'utils/address';
-import { useChainExplorer } from 'hooks';
+import Tooltip from '~/components/Tooltip';
+import type { IStream } from '~/types';
+import { formatAddress } from '~/utils/address';
+import { useChainExplorer } from '~/hooks';
 
 interface IStreamAddressProps {
   valueToSort: string;

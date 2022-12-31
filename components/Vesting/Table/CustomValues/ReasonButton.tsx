@@ -1,13 +1,13 @@
 import * as React from 'react';
-import { vestingReasonsABI } from 'lib/abis/vestingReasons';
+import { vestingReasonsABI } from '~/lib/abis/vestingReasons';
 import { useDisclosureState } from 'ariakit';
-import { FormDialog } from 'components/Dialog';
-import { InputText, SubmitButton } from 'components/Form';
-import { useNetworkProvider } from 'hooks';
+import { FormDialog } from '~/components/Dialog';
+import { InputText, SubmitButton } from '~/components/Form';
+import { useNetworkProvider } from '~/hooks';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
-import { IVesting } from 'types';
-import { networkDetails } from 'lib/networkDetails';
+import type { IVesting } from '~/types';
+import { networkDetails } from '~/lib/networkDetails';
 import { useAccount, useContractWrite } from 'wagmi';
 
 export default function ReasonButton({ data }: { data: IVesting }) {

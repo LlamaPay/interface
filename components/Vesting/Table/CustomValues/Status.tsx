@@ -1,8 +1,8 @@
-import Tooltip from 'components/Tooltip';
-import { useLocale } from 'hooks';
+import Tooltip from '~/components/Tooltip';
+import { useLocale } from '~/hooks';
 import { useIntl } from 'next-intl';
-import { IVesting } from 'types';
-import { secondsByDuration } from 'utils/constants';
+import type { IVesting } from '~/types';
+import { secondsByDuration } from '~/utils/constants';
 
 export default function Status({ data }: { data: IVesting }) {
   const intl = useIntl();

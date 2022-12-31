@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useDialogState } from 'ariakit';
 import classNames from 'classnames';
-import { FormDialog } from 'components/Dialog';
-import { useChainExplorer } from 'hooks';
+import { FormDialog } from '~/components/Dialog';
+import { useChainExplorer } from '~/hooks';
 import { useIntl, useTranslations } from 'next-intl';
-import { IStream } from 'types';
+import type { IStream } from '~/types';
 
 interface StreamHistoryProps {
   data: IStream;
@@ -131,7 +131,7 @@ const StreamedYTD: React.FC<{ data: IStream; shouldRun: boolean }> = ({ data, sh
         setYtdAmount(intl.formatNumber(totalAmount, { maximumFractionDigits: 5, minimumFractionDigits: 5 }));
       }
     }
-  }, [data]);
+  }, [data, intl]);
 
   React.useEffect(() => {
     let id: ReturnType<typeof setInterval> | undefined = undefined;

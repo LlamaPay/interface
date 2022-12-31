@@ -2,7 +2,7 @@ import { useQuery } from 'react-query';
 import axios from 'axios';
 import { gql, request } from 'graphql-request';
 import { useNetwork } from 'wagmi';
-import { networkDetails } from 'lib/networkDetails';
+import { networkDetails } from '~/lib/networkDetails';
 
 interface useGetSubgraphDelayProps {
   chainId: number | undefined;

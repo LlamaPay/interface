@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { DisclosureState, useDialogState } from 'ariakit';
-import { FormDialog, TransactionDialog } from 'components/Dialog';
+import { FormDialog, TransactionDialog } from '~/components/Dialog';
 import { useAccount } from 'wagmi';
-import { useNetworkProvider } from 'hooks';
+import { useNetworkProvider } from '~/hooks';
 import SendToPayees from './SendToPayees';
-import useStreamsAndHistory from 'queries/useStreamsAndHistory';
-import { IStream } from 'types';
+import useStreamsAndHistory from '~/queries/useStreamsAndHistory';
+import type { IStream } from '~/types';
 import DisperseFallback from './Fallback';
 import { useTranslations } from 'next-intl';
 

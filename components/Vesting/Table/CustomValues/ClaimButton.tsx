@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { DisclosureState } from 'ariakit';
-import { IVesting } from 'types';
+import type { IVesting } from '~/types';
 import { useAccount } from 'wagmi';
 
 export default function ClaimButton({

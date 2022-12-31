@@ -11,11 +11,11 @@ import {
 } from 'ariakit/select';
 import { SelectorIcon } from '@heroicons/react/solid';
 import { useNetwork } from 'wagmi';
-import { chainDetails } from 'utils/network';
+import { chainDetails } from '~/utils/network';
 import Image from 'next/image';
-import defaultImage from 'public/empty-token.webp';
+import defaultImage from '~/public/empty-token.webp';
 import { useTranslations } from 'next-intl';
-import useGetStreamsOnAllNetworks from 'queries/useGetStreamsOnAllNetworks';
+import useGetStreamsOnAllNetworks from '~/queries/useGetStreamsOnAllNetworks';
 
 export const NetworksMenu = () => {
   const [{ data }, switchNetwork] = useNetwork();

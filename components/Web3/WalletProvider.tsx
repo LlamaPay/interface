@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { defaultProvider, infuraId } from 'utils/constants';
-import { networkDetails } from 'lib/networkDetails';
-import { chains } from 'lib/chains';
-import { GnosisConnector } from 'utils/GnosisConnector';
+import { defaultProvider, infuraId } from '~/utils/constants';
+import { networkDetails } from '~/lib/networkDetails';
+import { chains } from '~/lib/chains';
+import { GnosisConnector } from '~/utils/GnosisConnector';
 import { Connector, Provider } from 'wagmi';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';

@@ -1,9 +1,9 @@
-import { useNetworkProvider } from 'hooks';
+import { useNetworkProvider } from '~/hooks';
 import { useQuery } from 'react-query';
 import { useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
-import { networkDetails } from 'lib/networkDetails';
-import { IPayments } from 'types';
+import { networkDetails } from '~/lib/networkDetails';
+import type { IPayments } from '~/types';
 
 async function getPaymentsInfo(userAddress: string | undefined, chainId: number | null) {
   try {

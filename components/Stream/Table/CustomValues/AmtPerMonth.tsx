@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useIntl, useTranslations } from 'next-intl';
-import { secondsByDuration } from 'utils/constants';
-import { useTimeframeStore } from 'store/timeframe';
+import { secondsByDuration } from '~/utils/constants';
+import { useTimeframeStore } from '~/store/timeframe';
 
 // const timeframes = ['hour', 'day', 'week', 'month', 'year'];
 

@@ -1,9 +1,9 @@
-import Tooltip from 'components/Tooltip';
-import { useChainExplorer } from 'hooks';
+import Tooltip from '~/components/Tooltip';
+import { useChainExplorer } from '~/hooks';
 import { useTranslations } from 'next-intl';
 import * as React from 'react';
-import { useAddressStore } from 'store/address';
-import { formatAddress } from 'utils/address';
+import { useAddressStore } from '~/store/address';
+import { formatAddress } from '~/utils/address';
 import { useAccount } from 'wagmi';
 
 export function SavedName({ value, ens }: { value: string; eventType: string; ens: string | null }) {

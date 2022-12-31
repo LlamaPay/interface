@@ -1,6 +1,6 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import { IHistory } from 'types';
+import type { IHistory } from '~/types';
 
 export function downloadInvoice(data: IHistory, locale: string, reqAddress: string) {
   const doc = new jsPDF('portrait', 'mm', 'a4');

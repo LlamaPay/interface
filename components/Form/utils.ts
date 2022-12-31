@@ -1,9 +1,9 @@
 import BigNumber from 'bignumber.js';
 import { getAddress } from 'ethers/lib/utils';
-import { Provider } from 'hooks/useNetworkProvider';
+import { Provider } from '~/hooks/useNetworkProvider';
 import debounce from 'lodash.debounce';
-import { IToken } from 'types';
-import { createERC20Contract } from 'utils/tokenUtils';
+import type { IToken } from '~/types';
+import { createERC20Contract } from '~/utils/tokenUtils';
 
 type TokenDetails = Pick<IToken, 'decimals' | 'tokenContract' | 'llamaContractAddress'>;
 

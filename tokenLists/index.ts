@@ -1,4 +1,4 @@
-import { ITokenList } from 'types';
+import type { ITokenList } from '~/types';
 import fuji from './fuji';
 import goerli from './goerli';
 

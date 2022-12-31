@@ -1,7 +1,7 @@
 import { useIntl, useTranslations } from 'next-intl';
-import { IHistory } from 'types';
-import { formatAmountInTable } from 'utils/amount';
-import { secondsByDuration } from 'utils/constants';
+import type { IHistory } from '~/types';
+import { formatAmountInTable } from '~/utils/amount';
+import { secondsByDuration } from '~/utils/constants';
 
 export function Amount({ value, data }: { value: string; data: IHistory }) {
   const t = useTranslations('Common');

@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { useChainExplorer, useTokenList } from 'hooks';
+import { useChainExplorer, useTokenList } from '~/hooks';
 import Image from 'next/image';
-import defaultImage from 'public/empty-token.webp';
-import { IStream } from 'types';
+import defaultImage from '~/public/empty-token.webp';
+import type { IStream } from '~/types';
 import { useTranslations } from 'next-intl';
 
 export function TokenName({ data }: { data: IStream }) {

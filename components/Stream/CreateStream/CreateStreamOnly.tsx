@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { InputAmountWithDuration, InputText, SelectToken, SubmitButton } from 'components/Form';
-import { IStreamFormProps } from './types';
+import { InputAmountWithDuration, InputText, SelectToken, SubmitButton } from '~/components/Form';
+import type { IStreamFormProps } from './types';
 import { BeatLoader } from 'react-spinners';
-import { TransactionDialog } from 'components/Dialog';
-import { useCreateStreamForm } from 'hooks';
+import { TransactionDialog } from '~/components/Dialog';
+import { useCreateStreamForm } from '~/hooks';
 
 const CreateStreamOnly = ({ tokens, dialog }: IStreamFormProps) => {
   const { tokenOptions, handleTokenChange, handleSubmit, transactionDetails, confirmingStream } = useCreateStreamForm({

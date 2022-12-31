@@ -1,9 +1,9 @@
 import * as React from 'react';
-import useStreamsAndHistory from 'queries/useStreamsAndHistory';
-import Fallback, { FallbackContainer } from 'components/Fallback';
-import { HistoryIcon } from 'components/Icons';
+import useStreamsAndHistory from '~/queries/useStreamsAndHistory';
+import Fallback, { FallbackContainer } from '~/components/Fallback';
+import { HistoryIcon } from '~/components/Icons';
 import { HistoryTable } from './Table';
-import { IStreamAndHistory } from 'types';
+import type { IStreamAndHistory } from '~/types';
 import { useTranslations } from 'next-intl';
 
 export function HistorySection() {

@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useFormatStreamAndHistory, useGraphEndpoint, useNetworkProvider } from 'hooks';
-import { useStreamAndHistoryQuery } from 'services/generated/graphql';
+import { useFormatStreamAndHistory, useGraphEndpoint, useNetworkProvider } from '~/hooks';
+import { useStreamAndHistoryQuery } from '~/services/generated/graphql';
 import { useAccount } from 'wagmi';
 
 const useStreamsAndHistory = () => {

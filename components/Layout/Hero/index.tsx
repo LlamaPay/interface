@@ -1,8 +1,8 @@
 import { ReactNode } from 'react';
 import Image from 'next/image';
 import { DisclosureState } from 'ariakit';
-import Tooltip from 'components/Tooltip';
-import heroGraphic from 'public/heroGraphic.svg';
+import Tooltip from '~/components/Tooltip';
+import heroGraphic from '~/public/heroGraphic.svg';
 import Yearn from './Icons/Yearn';
 import Convex from './Icons/Convex';
 import Vector from './Icons/Vector';

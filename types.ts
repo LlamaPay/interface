@@ -1,5 +1,5 @@
 import { Contract } from 'ethers';
-import { UserHistoryFragment } from 'services/generated/graphql';
+import { UserHistoryFragment } from '~/services/generated/graphql';
 
 export interface IToken {
   tokenAddress: string;

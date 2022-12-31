@@ -1,10 +1,10 @@
 import { ColumnDef, getCoreRowModel, getSortedRowModel, SortingState, useReactTable } from '@tanstack/react-table';
-import Table from 'components/Table';
-import ExplorerLink from 'components/Vesting/Table/CustomValues/ExplorerLink';
-import { useLocale } from 'hooks';
+import Table from '~/components/Table';
+import ExplorerLink from '~/components/Vesting/Table/CustomValues/ExplorerLink';
+import { useLocale } from '~/hooks';
 import * as React from 'react';
-import { IPayments } from 'types';
-import { formatAddress } from 'utils/address';
+import type { IPayments } from '~/types';
+import { formatAddress } from '~/utils/address';
 import { useAccount } from 'wagmi';
 import PaymentRevokeButton from './CustomValues/PaymentRevoke';
 import PaymentStatus, { paymentStatusAccessorFn } from './CustomValues/PaymentStatus';

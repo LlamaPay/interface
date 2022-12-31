@@ -3,7 +3,7 @@ import { XIcon } from '@heroicons/react/solid';
 import { DisclosureState } from 'ariakit';
 import { Dialog, DialogDismiss } from 'ariakit/dialog';
 import classNames from 'classnames';
-import { useChainExplorer } from 'hooks';
+import { useChainExplorer } from '~/hooks';
 import { useTranslations } from 'next-intl';
 
 interface FormDialogProps {

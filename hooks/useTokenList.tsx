@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { useNetworkProvider } from 'hooks';
-import tokenLists from 'tokenLists';
-import useGetAllTokens from 'queries/useGetAllTokens';
-import { ITokenLists } from 'types';
-import { useGetTokenList } from 'queries/useGetTokenList';
-import { blacklist, whitelist } from 'utils/constants';
+import { useNetworkProvider } from '~/hooks';
+import tokenLists from '~/tokenLists';
+import useGetAllTokens from '~/queries/useGetAllTokens';
+import type { ITokenLists } from '~/types';
+import { useGetTokenList } from '~/queries/useGetTokenList';
+import { blacklist, whitelist } from '~/utils/constants';
 
 export function useTokenList() {
   const { chainId } = useNetworkProvider();

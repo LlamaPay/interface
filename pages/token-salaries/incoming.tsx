@@ -1,12 +1,12 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import * as React from 'react';
-import Layout from 'components/Layout';
+import Layout from '~/components/Layout';
 import { useAccount, useNetwork } from 'wagmi';
-import { networkDetails } from 'lib/networkDetails';
-import { useGetScheduledPayments } from 'queries/useGetScheduledTransfers';
-import { FallbackContainer, FallbackContainerLoader } from 'components/Fallback';
+import { networkDetails } from '~/lib/networkDetails';
+import { useGetScheduledPayments } from '~/queries/useGetScheduledTransfers';
+import { FallbackContainer, FallbackContainerLoader } from '~/components/Fallback';
 import { useTranslations } from 'next-intl';
-import { ScheduledTransferPayment } from 'components/ScheduledTransfers/Payment';
+import { ScheduledTransferPayment } from '~/components/ScheduledTransfers/Payment';
 
 const Home: NextPage = () => {
   const [{ data: accountData }] = useAccount();

@@ -6,11 +6,11 @@ import { useAccount } from 'wagmi';
 import Header from './Header';
 import Hero from './Hero';
 import Footer from './Footer';
-import OnboardDialog from 'components/Onboard';
-import CustomToast from 'components/CustomToast';
-import StaleSubgraphWarning from 'components/StaleSubgraphWarning';
+import OnboardDialog from '~/components/Onboard';
+import CustomToast from '~/components/CustomToast';
+import StaleSubgraphWarning from '~/components/StaleSubgraphWarning';
 import HowItWorks from './HowItWorks';
-import GnosisSafeWarning from 'components/GnosisSafeWarning';
+import GnosisSafeWarning from '~/components/GnosisSafeWarning';
 import { Nav } from './Nav';
 import classNames from 'classnames';
 

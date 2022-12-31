@@ -1,11 +1,11 @@
 import * as React from 'react';
 import BigNumber from 'bignumber.js';
-import { checkApproval } from 'components/Form/utils';
-import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval';
-import useDepositToken from 'queries/useDepositToken';
-import { ITokenBalance } from 'queries/useTokenBalances';
+import { checkApproval } from '~/components/Form/utils';
+import { useApproveToken, useCheckTokenApproval } from '~/queries/useTokenApproval';
+import useDepositToken from '~/queries/useDepositToken';
+import type { ITokenBalance } from '~/queries/useTokenBalances';
 import { DisclosureState } from 'ariakit';
-import useDepositGnosis from 'queries/useDepositGnosis';
+import useDepositGnosis from '~/queries/useDepositGnosis';
 
 // TODO show loading and error states on dialogs without using toasts
 // TODO reset form on submit

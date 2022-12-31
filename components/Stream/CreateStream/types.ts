@@ -1,6 +1,6 @@
 import { DisclosureState } from 'ariakit';
-import { ITokenBalance } from 'queries/useTokenBalances';
-import { IToken } from 'types';
+import type { ITokenBalance } from '~/queries/useTokenBalances';
+import type { IToken } from '~/types';
 
 export interface TokenOption {
   label: string;

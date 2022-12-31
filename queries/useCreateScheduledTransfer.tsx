@@ -3,8 +3,8 @@ import { getAddress } from 'ethers/lib/utils';
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSigner } from 'wagmi';
-import { scheduledTransfersFactoryABI } from 'lib/abis/scheduledTransfersFactory';
-import { ITransactionError, ITransactionSuccess } from 'types';
+import { scheduledTransfersFactoryABI } from '~/lib/abis/scheduledTransfersFactory';
+import type { ITransactionError, ITransactionSuccess } from '~/types';
 import { useRouter } from 'next/router';
 
 interface ICreateContract {

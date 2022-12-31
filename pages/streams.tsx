@@ -1,17 +1,17 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import * as React from 'react';
-import Layout from 'components/Layout';
-import { BalanceIcon } from 'components/Icons';
+import Layout from '~/components/Layout';
+import { BalanceIcon } from '~/components/Icons';
 import { dehydrate, QueryClient } from 'react-query';
-import { useStreamAndHistoryQuery } from 'services/generated/graphql';
-import defaultImage from 'public/empty-token.webp';
+import { useStreamAndHistoryQuery } from '~/services/generated/graphql';
+import defaultImage from '~/public/empty-token.webp';
 import Image, { StaticImageData } from 'next/image';
-import { AltStreamSection } from 'components/Stream';
-import { AltHistorySection } from 'components/History';
-import { useFormatStreamAndHistory, useNetworkProvider } from 'hooks';
-import { chainDetails } from 'utils/network';
+import { AltStreamSection } from '~/components/Stream';
+import { AltHistorySection } from '~/components/History';
+import { useFormatStreamAndHistory, useNetworkProvider } from '~/hooks';
+import { chainDetails } from '~/utils/network';
 import { useTranslations } from 'next-intl';
-import Balance from 'components/Balance';
+import Balance from '~/components/Balance';
 
 interface StreamsProps {
   subgraphEndpoint: string;

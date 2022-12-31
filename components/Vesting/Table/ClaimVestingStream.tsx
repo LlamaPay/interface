@@ -1,14 +1,14 @@
 import * as React from 'react';
 import { Switch } from '@headlessui/react';
-import { FormDialog, TransactionDialog } from 'components/Dialog';
-import { InputAmount, InputText, SubmitButton } from 'components/Form';
+import { FormDialog, TransactionDialog } from '~/components/Dialog';
+import { InputAmount, InputText, SubmitButton } from '~/components/Form';
 import { BeatLoader } from 'react-spinners';
 import { DisclosureState, useDialogState } from 'ariakit';
 import { useAccount, useContractWrite } from 'wagmi';
 import BigNumber from 'bignumber.js';
 import toast from 'react-hot-toast';
-import { vestingContractReadableABI } from 'lib/abis/vestingContractReadable';
-import { IVesting } from 'types';
+import { vestingContractReadableABI } from '~/lib/abis/vestingContractReadable';
+import type { IVesting } from '~/types';
 
 export default function ClaimVesting({
   claimValues,

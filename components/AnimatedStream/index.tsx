@@ -1,4 +1,4 @@
-import { LlamaPay, StreamArrows } from 'components/Icons';
+import { LlamaPay, StreamArrows } from '~/components/Icons';
 
 const AnimatedStream = () => {
   return (

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useNetworkProvider } from 'hooks';
+import { useNetworkProvider } from '~/hooks';
 import { useTranslations } from 'next-intl';
 import { BeatLoader } from 'react-spinners';
 import { useAccount } from 'wagmi';

@@ -1,10 +1,10 @@
-import { llamaContractABI } from 'lib/abis/llamaContract';
+import { llamaContractABI } from '~/lib/abis/llamaContract';
 import { useTranslations } from 'next-intl';
-import useGnosisBatch from 'queries/useGnosisBatch';
+import useGnosisBatch from '~/queries/useGnosisBatch';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
-import { IStream } from 'types';
-import { LlamaContractInterface } from 'utils/contract';
+import type { IStream } from '~/types';
+import { LlamaContractInterface } from '~/utils/contract';
 import { useContractWrite } from 'wagmi';
 
 interface PauseProps {

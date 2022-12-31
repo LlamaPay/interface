@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useTranslations } from 'next-intl';
-import { ITokenBalance } from 'queries/useTokenBalances';
+import type { ITokenBalance } from '~/queries/useTokenBalances';
 
 interface IProps {
   inputAmount: string;

@@ -1,17 +1,17 @@
 import * as React from 'react';
 import { useDialogState } from 'ariakit';
 import { ArrowRightIcon } from '@heroicons/react/solid';
-import { FormDialog, TransactionDialog } from 'components/Dialog';
-import { IStream } from 'types';
-import { useAddressStore } from 'store/address';
-import { InputAmountWithDuration, InputText, SubmitButton } from 'components/Form';
+import { FormDialog, TransactionDialog } from '~/components/Dialog';
+import type { IStream } from '~/types';
+import { useAddressStore } from '~/store/address';
+import { InputAmountWithDuration, InputText, SubmitButton } from '~/components/Form';
 import BigNumber from 'bignumber.js';
-import { secondsByDuration } from 'utils/constants';
-import useModifyStream from 'queries/useModifyStream';
+import { secondsByDuration } from '~/utils/constants';
+import useModifyStream from '~/queries/useModifyStream';
 import { BeatLoader } from 'react-spinners';
 import { useIntl, useTranslations } from 'next-intl';
-import { LlamaContractInterface } from 'utils/contract';
-import useGnosisBatch from 'queries/useGnosisBatch';
+import { LlamaContractInterface } from '~/utils/contract';
+import useGnosisBatch from '~/queries/useGnosisBatch';
 
 interface ModifyProps {
   data: IStream;

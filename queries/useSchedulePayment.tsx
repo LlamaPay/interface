@@ -3,9 +3,9 @@ import { getAddress } from 'ethers/lib/utils';
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from 'react-query';
 import { useSigner } from 'wagmi';
-import { ITransactionError, ITransactionSuccess } from 'types';
+import type { ITransactionError, ITransactionSuccess } from '~/types';
 import { useRouter } from 'next/router';
-import { scheduledPaymentsContractABI } from 'lib/abis/scheduledPaymentsContract';
+import { scheduledPaymentsContractABI } from '~/lib/abis/scheduledPaymentsContract';
 
 interface ICreateContract {
   toAddress?: string;

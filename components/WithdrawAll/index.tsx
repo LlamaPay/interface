@@ -1,11 +1,11 @@
 import * as React from 'react';
-import { useNetworkProvider } from 'hooks';
-import useStreamsAndHistory from 'queries/useStreamsAndHistory';
-import useBatchCalls from 'queries/useBatchCalls';
+import { useNetworkProvider } from '~/hooks';
+import useStreamsAndHistory from '~/queries/useStreamsAndHistory';
+import useBatchCalls from '~/queries/useBatchCalls';
 import { useAccount } from 'wagmi';
 import { CashIcon } from '@heroicons/react/outline';
-import { LlamaContractInterface } from 'utils/contract';
-import useGnosisBatch from 'queries/useGnosisBatch';
+import { LlamaContractInterface } from '~/utils/contract';
+import useGnosisBatch from '~/queries/useGnosisBatch';
 import { useTranslations } from 'next-intl';
 
 interface ICall {

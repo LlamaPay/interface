@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { useLocale } from 'hooks';
-import { IVesting } from 'types';
+import { useLocale } from '~/hooks';
+import type { IVesting } from '~/types';
 
 export default function Unclaimed({ data }: { data: IVesting }) {
   const [balanceState, setBalanceState] = React.useState<number | null>(null);

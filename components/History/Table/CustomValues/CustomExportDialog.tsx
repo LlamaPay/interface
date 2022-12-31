@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { Switch } from '@headlessui/react';
 import { DisclosureState } from 'ariakit';
-import { FormDialog } from 'components/Dialog';
-import { InputText, SubmitButton } from 'components/Form';
-import { IHistory } from 'types';
-import { formatAddress } from 'utils/address';
-import { downloadCustomHistory } from 'utils/downloadCsv';
+import { FormDialog } from '~/components/Dialog';
+import { InputText, SubmitButton } from '~/components/Form';
+import type { IHistory } from '~/types';
+import { formatAddress } from '~/utils/address';
+import { downloadCustomHistory } from '~/utils/downloadCsv';
 import Calendar from 'react-calendar';
 
 interface ICustomExportElements {

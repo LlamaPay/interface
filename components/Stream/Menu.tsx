@@ -5,13 +5,13 @@ import { DotsVerticalIcon } from '@heroicons/react/solid';
 import { useDialogState } from 'ariakit';
 import { Menu, MenuButton, MenuItem, useMenuState } from 'ariakit/menu';
 import { useAccount, useEnsLookup } from 'wagmi';
-import DisperseGasMoney from 'components/DisperseGas';
-import { FuelIcon, RobotIcon, WalletIcon } from 'components/Icons';
-import WithdrawAll from 'components/WithdrawAll';
-import { useNetworkProvider } from 'hooks';
+import DisperseGasMoney from '~/components/DisperseGas';
+import { FuelIcon, RobotIcon, WalletIcon } from '~/components/Icons';
+import WithdrawAll from '~/components/WithdrawAll';
+import { useNetworkProvider } from '~/hooks';
 
-import { botDeployedOn } from 'utils/constants';
-import BotFunds from 'components/Schedule/BotManage';
+import { botDeployedOn } from '~/utils/constants';
+import BotFunds from '~/components/Schedule/BotManage';
 
 export default function StreamMenu() {
   const menu = useMenuState({ gutter: 8 });

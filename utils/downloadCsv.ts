@@ -1,4 +1,4 @@
-import { IHistory, IStream, IVesting } from 'types';
+import type { IHistory, IStream, IVesting } from '~/types';
 import { secondsByDuration } from './constants';
 
 export function download(filename: string, text: string) {
@@ -132,7 +132,7 @@ export const downloadCustomHistory = (
       if (earnedByEach[d.addressRelated] === undefined) {
         earnedByEach[d.addressRelated] = Number(d.amount) / 10 ** Number(d.token.decimals);
       } else {
-        let newTotal = (earnedByEach[d.addressRelated] += Number(d.amount) / 10 ** Number(d.token.decimals));
+        const newTotal = (earnedByEach[d.addressRelated] += Number(d.amount) / 10 ** Number(d.token.decimals));
         earnedByEach[d.addressRelated] = newTotal;
       }
     }

@@ -2,15 +2,15 @@ import { BaseProvider } from '@ethersproject/providers';
 import BigNumber from 'bignumber.js';
 import { ContractCallContext, Multicall } from 'ethereum-multicall';
 import { ethers } from 'ethers';
-import { useNetworkProvider } from 'hooks';
+import { useNetworkProvider } from '~/hooks';
 import { useQuery } from 'react-query';
-import { IVesting } from 'types';
-import { networkDetails } from 'lib/networkDetails';
+import type { IVesting } from '~/types';
+import { networkDetails } from '~/lib/networkDetails';
 import { erc20ABI, useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
-import { vestingEscrowABI } from 'lib/abis/vestingEscrow';
-import { vestingFactoryABI } from 'lib/abis/vestingFactory';
-import { vestingReasonsABI } from 'lib/abis/vestingReasons';
+import { vestingEscrowABI } from '~/lib/abis/vestingEscrow';
+import { vestingFactoryABI } from '~/lib/abis/vestingFactory';
+import { vestingReasonsABI } from '~/lib/abis/vestingReasons';
 
 async function getVestingInfo(userAddress: string | undefined, provider: BaseProvider | null, chainId: number | null) {
   try {

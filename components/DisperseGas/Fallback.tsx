@@ -1,4 +1,4 @@
-import Fallback from 'components/Fallback';
+import Fallback from '~/components/Fallback';
 import { useTranslations } from 'next-intl';
 
 export default function DisperseFallback({

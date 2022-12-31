@@ -1,5 +1,5 @@
 import dynamic from 'next/dynamic';
-import { FallbackContainer } from 'components/Fallback';
+import { FallbackContainer } from '~/components/Fallback';
 
 const VestingChart = dynamic(() => import('./VestingChart'), { ssr: false });
 

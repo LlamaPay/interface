@@ -1,6 +1,6 @@
 import { Control, useWatch } from 'react-hook-form';
 import ChartWrapper from './ChartWrapper';
-import { IVestingGnosisFormValues } from '../types';
+import type { IVestingGnosisFormValues } from '../types';
 
 export default function MultipleStreamChartWrapper({
   control,

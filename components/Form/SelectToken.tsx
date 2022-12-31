@@ -6,14 +6,14 @@ import classNames from 'classnames';
 import { XIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/solid';
 import { InputText } from './Input';
 import { SubmitButton } from './Button';
-import useCreateLlamaPayContract from 'queries/useCreateLlamaPayContract';
+import useCreateLlamaPayContract from '~/queries/useCreateLlamaPayContract';
 import { BeatLoader } from 'react-spinners';
-import useTokenBalances from 'queries/useTokenBalances';
+import useTokenBalances from '~/queries/useTokenBalances';
 import Image from 'next/image';
-import defaultImage from 'public/empty-token.webp';
+import defaultImage from '~/public/empty-token.webp';
 import { useQueryClient } from 'react-query';
 import { useTranslations } from 'next-intl';
-import { TokenBalance } from 'components/Balance/BalanceAndSymbol';
+import { TokenBalance } from '~/components/Balance/BalanceAndSymbol';
 
 interface ISelectTokenProps {
   handleTokenChange: (token: string) => void;

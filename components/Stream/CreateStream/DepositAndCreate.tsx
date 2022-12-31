@@ -6,16 +6,16 @@ import {
   InputText,
   SelectToken,
   SubmitButton,
-} from 'components/Form';
-import useStreamToken from 'queries/useStreamToken';
-import { useApproveToken, useCheckTokenApproval } from 'queries/useTokenApproval';
-import { IFormElements, IStreamFormProps } from './types';
-import { secondsByDuration } from 'utils/constants';
-import { checkApproval } from 'components/Form/utils';
+} from '~/components/Form';
+import useStreamToken from '~/queries/useStreamToken';
+import { useApproveToken, useCheckTokenApproval } from '~/queries/useTokenApproval';
+import type { IFormElements, IStreamFormProps } from './types';
+import { secondsByDuration } from '~/utils/constants';
+import { checkApproval } from '~/components/Form/utils';
 import { BeatLoader } from 'react-spinners';
-import { TransactionDialog } from 'components/Dialog';
-import AvailableAmount from 'components/AvailableAmount';
-import { ITokenBalance } from 'queries/useTokenBalances';
+import { TransactionDialog } from '~/components/Dialog';
+import AvailableAmount from '~/components/AvailableAmount';
+import type { ITokenBalance } from '~/queries/useTokenBalances';
 
 const DepositAndCreate = ({ tokens, userAddress, dialog }: IStreamFormProps) => {
   const { mutate: streamToken, isLoading: confirmingStream, data: transactionDetails } = useStreamToken();

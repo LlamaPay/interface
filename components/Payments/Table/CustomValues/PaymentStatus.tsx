@@ -1,4 +1,4 @@
-import { IPayments } from 'types';
+import type { IPayments } from '~/types';
 
 export default function PaymentStatus({ data }: { data: IPayments }) {
   return (

@@ -1,7 +1,7 @@
-import Tooltip from 'components/Tooltip';
-import { useChainExplorer } from 'hooks';
+import Tooltip from '~/components/Tooltip';
+import { useChainExplorer } from '~/hooks';
 import { useIntl } from 'next-intl';
-import { IHistory } from 'types';
+import type { IHistory } from '~/types';
 
 export function eventAgeFormatter(timestamp: string): string {
   const timePassed = Date.now() / 1e3 - Number(timestamp);

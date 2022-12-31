@@ -1,8 +1,8 @@
 import { Signer } from 'ethers';
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from 'react-query';
-import { ITransactionError, ITransactionSuccess } from 'types';
-import { createWriteContract } from 'utils/contract';
+import type { ITransactionError, ITransactionSuccess } from '~/types';
+import { createWriteContract } from '~/utils/contract';
 import { useSigner } from 'wagmi';
 
 interface IUseBatchCalls {

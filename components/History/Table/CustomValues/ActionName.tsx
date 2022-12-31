@@ -1,8 +1,8 @@
 import { CashIcon, CogIcon, InboxInIcon, PauseIcon, PlayIcon, PlusIcon, XIcon } from '@heroicons/react/solid';
-import Tooltip from 'components/Tooltip';
-import { useChainExplorer } from 'hooks';
+import Tooltip from '~/components/Tooltip';
+import { useChainExplorer } from '~/hooks';
 import { useTranslations } from 'next-intl';
-import { IHistory } from 'types';
+import type { IHistory } from '~/types';
 
 export function ActionName({ data }: { data: IHistory }) {
   const { url: chainExplorer, id } = useChainExplorer();

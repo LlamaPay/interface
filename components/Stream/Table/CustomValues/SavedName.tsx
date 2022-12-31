@@ -1,13 +1,13 @@
 import * as React from 'react';
 import { ArrowDownIcon, ArrowUpIcon, PencilIcon } from '@heroicons/react/solid';
 import { useDialogState } from 'ariakit';
-import { FormDialog } from 'components/Dialog';
-import Tooltip from 'components/Tooltip';
-import { useAddressStore } from 'store/address';
-import { IStream } from 'types';
-import { formatAddress } from 'utils/address';
+import { FormDialog } from '~/components/Dialog';
+import Tooltip from '~/components/Tooltip';
+import { useAddressStore } from '~/store/address';
+import type { IStream } from '~/types';
+import { formatAddress } from '~/utils/address';
 import Link from 'next/link';
-import { useNetworkProvider } from 'hooks';
+import { useNetworkProvider } from '~/hooks';
 import { useTranslations } from 'next-intl';
 
 export function SavedName({ data }: { data: IStream }) {

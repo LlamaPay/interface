@@ -1,10 +1,10 @@
 import { getAddress } from 'ethers/lib/utils';
-import { useGraphEndpoint, useNetworkProvider } from 'hooks';
+import { useGraphEndpoint, useNetworkProvider } from '~/hooks';
 import * as React from 'react';
-import { useGetAllTokensQuery } from 'services/generated/graphql';
-import { IToken } from 'types';
-import { createContract } from 'utils/contract';
-import { createERC20Contract } from 'utils/tokenUtils';
+import { useGetAllTokensQuery } from '~/services/generated/graphql';
+import type { IToken } from '~/types';
+import { createContract } from '~/utils/contract';
+import { createERC20Contract } from '~/utils/tokenUtils';
 
 const useGetAllTokens = () => {
   // get subgraph endpoint

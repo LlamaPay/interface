@@ -2,13 +2,13 @@ import BigNumber from 'bignumber.js';
 import { Contract, Signer } from 'ethers';
 import { getAddress } from 'ethers/lib/utils';
 import { useMutation, useQueryClient } from 'react-query';
-import { ITransactionError, ITransactionSuccess } from 'types';
+import type { ITransactionError, ITransactionSuccess } from '~/types';
 import {
   checkHasApprovedEnough,
   checkHasApprovedEnoughMultiple,
   ICheckMultipleTokenAllowance,
   ICheckTokenAllowance,
-} from 'utils/tokenUtils';
+} from '~/utils/tokenUtils';
 import { erc20ABI, useSigner } from 'wagmi';
 
 interface IUseApproveToken {

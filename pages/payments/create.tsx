@@ -1,10 +1,10 @@
-import { FallbackContainer } from 'components/Fallback';
-import Layout from 'components/Layout';
-import CreatePayment from 'components/Payments/create';
-import { useNetworkProvider } from 'hooks';
+import { FallbackContainer } from '~/components/Fallback';
+import Layout from '~/components/Layout';
+import CreatePayment from '~/components/Payments/create';
+import { useNetworkProvider } from '~/hooks';
 import { NextPage } from 'next';
 import { useTranslations } from 'next-intl';
-import { networkDetails } from 'lib/networkDetails';
+import { networkDetails } from '~/lib/networkDetails';
 import { useAccount } from 'wagmi';
 
 const Create: NextPage = () => {

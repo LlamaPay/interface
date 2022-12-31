@@ -1,16 +1,16 @@
 import * as React from 'react';
-import { llamaContractABI } from 'lib/abis/llamaContract';
+import { llamaContractABI } from '~/lib/abis/llamaContract';
 import { useDialogState } from 'ariakit';
-import { TransactionDialog } from 'components/Dialog';
+import { TransactionDialog } from '~/components/Dialog';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
-import { IStream } from 'types';
+import type { IStream } from '~/types';
 import { useContractWrite } from 'wagmi';
 import { Interface } from 'ethers/lib/utils';
-import useBatchCalls from 'queries/useBatchCalls';
+import useBatchCalls from '~/queries/useBatchCalls';
 import { useTranslations } from 'next-intl';
-import { LlamaContractInterface } from 'utils/contract';
-import useGnosisBatch from 'queries/useGnosisBatch';
+import { LlamaContractInterface } from '~/utils/contract';
+import useGnosisBatch from '~/queries/useGnosisBatch';
 
 interface CancelProps {
   data: IStream;

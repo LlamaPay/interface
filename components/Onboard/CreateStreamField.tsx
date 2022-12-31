@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { ArrowLeftIcon } from '@heroicons/react/solid';
-import { useCreateStreamForm, useTokenList } from 'hooks';
-import { InputAmountWithDuration, InputText, SelectToken, SubmitButton } from 'components/Form';
+import { useCreateStreamForm, useTokenList } from '~/hooks';
+import { InputAmountWithDuration, InputText, SelectToken, SubmitButton } from '~/components/Form';
 import { BeatLoader } from 'react-spinners';
-import useTokenBalances, { ITokenBalance } from 'queries/useTokenBalances';
-import AnimatedStream from 'components/AnimatedStream';
+import useTokenBalances, { ITokenBalance } from '~/queries/useTokenBalances';
+import AnimatedStream from '~/components/AnimatedStream';
 import { useTranslations } from 'next-intl';
 import { ExclamationCircleIcon } from '@heroicons/react/outline';
 

@@ -1,10 +1,10 @@
 import { getAddress } from 'ethers/lib/utils';
-import useResolveEns, { IEnsResolve } from 'queries/useResolveEns';
+import useResolveEns, { IEnsResolve } from '~/queries/useResolveEns';
 import * as React from 'react';
-import { StreamAndHistoryQuery } from 'services/generated/graphql';
-import { IStream, IStreamAndHistory } from 'types';
-import { createContract } from 'utils/contract';
-import { createERC20Contract } from 'utils/tokenUtils';
+import { StreamAndHistoryQuery } from '~/services/generated/graphql';
+import type { IStream, IStreamAndHistory } from '~/types';
+import { createContract } from '~/utils/contract';
+import { createERC20Contract } from '~/utils/tokenUtils';
 import { Provider } from './useNetworkProvider';
 
 export function useFormatStreamAndHistory({

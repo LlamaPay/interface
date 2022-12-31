@@ -1,16 +1,16 @@
 import * as React from 'react';
 import { useDialogState } from 'ariakit';
-import { FormDialog } from 'components/Dialog';
-import { InputText, SubmitButton } from 'components/Form';
-import { IStream } from 'types';
+import { FormDialog } from '~/components/Dialog';
+import { InputText, SubmitButton } from '~/components/Form';
+import type { IStream } from '~/types';
 import { useAccount, useContractWrite } from 'wagmi';
-import { networkDetails } from 'lib/networkDetails';
-import { secondsByDuration } from 'utils/constants';
-import { botContractABI } from 'lib/abis/botContract';
+import { networkDetails } from '~/lib/networkDetails';
+import { secondsByDuration } from '~/utils/constants';
+import { botContractABI } from '~/lib/abis/botContract';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import { Switch } from '@headlessui/react';
-import { useApproveTokenForMaxAmt } from 'queries/useTokenApproval';
+import { useApproveTokenForMaxAmt } from '~/queries/useTokenApproval';
 import BotDepositWarning from './BotDepositWarning';
 import Calendar from 'react-calendar';
 

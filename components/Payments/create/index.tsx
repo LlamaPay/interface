@@ -1,20 +1,20 @@
 import { ArrowCircleLeftIcon } from '@heroicons/react/solid';
 import { getAddress, Interface, isAddress } from 'ethers/lib/utils';
-import { useNetworkProvider } from 'hooks';
+import { useNetworkProvider } from '~/hooks';
 import Link from 'next/link';
-import { useApproveToken, useCheckMultipleTokenApproval } from 'queries/useTokenApproval';
+import { useApproveToken, useCheckMultipleTokenApproval } from '~/queries/useTokenApproval';
 import { useFieldArray, useForm } from 'react-hook-form';
-import { createERC20Contract, ICheckMultipleTokenAllowance } from 'utils/tokenUtils';
+import { createERC20Contract, ICheckMultipleTokenAllowance } from '~/utils/tokenUtils';
 import BigNumber from 'bignumber.js';
-import { paymentsContractABI } from 'lib/abis/paymentsContract';
+import { paymentsContractABI } from '~/lib/abis/paymentsContract';
 import { useAccount, useContractWrite, useSigner } from 'wagmi';
 import toast from 'react-hot-toast';
-import { SubmitButton } from 'components/Form';
-import React from 'react';
+import { SubmitButton } from '~/components/Form';
+import * as React from 'react';
 import { useQueryClient } from 'react-query';
-import useGnosisBatch from 'queries/useGnosisBatch';
-import { networkDetails } from 'lib/networkDetails';
-import { ERC20Interface } from 'utils/contract';
+import useGnosisBatch from '~/queries/useGnosisBatch';
+import { networkDetails } from '~/lib/networkDetails';
+import { ERC20Interface } from '~/utils/contract';
 import { BeatLoader } from 'react-spinners';
 
 interface IPaymentFormValues {
