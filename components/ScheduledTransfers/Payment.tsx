@@ -63,81 +63,79 @@ export function ScheduledTransferPayment({
         </thead>
 
         <tbody className="border border-llama-teal-2 dark:border-lp-gray-7">
-          {payments
-            .filter((payment) => Number(payment.ends) * 1000 > Date.now())
-            .map((payment) => (
-              <tr key={payment.id}>
-                <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                  {explorerUrl ? (
-                    <a
-                      href={`${explorerUrl}/address/${isIncoming ? payment.pool.owner : payment.history[0].to}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                    >
-                      {formatAddress(isIncoming ? payment.pool.owner : payment.history[0].to)}
-                    </a>
-                  ) : (
-                    <>{formatAddress(isIncoming ? payment.pool.owner : payment.history[0].to)}</>
-                  )}
-                </td>
-                <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                  {payment.starts
-                    ? new Date(Number(payment.starts) * 1000).toLocaleDateString() +
-                      ', ' +
-                      new Date(Number(payment.starts) * 1000).toLocaleTimeString()
-                    : ''}
-                </td>
-                <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                  {payment.ends
-                    ? new Date(Number(payment.ends) * 1000).toLocaleDateString() +
-                      ', ' +
-                      new Date(Number(payment.ends) * 1000).toLocaleTimeString()
-                    : ''}
-                </td>
-                <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                  {payment.lastPaid !== payment.starts
-                    ? new Date(Number(payment.lastPaid) * 1000).toLocaleDateString() +
-                      ', ' +
-                      new Date(Number(payment.lastPaid) * 1000).toLocaleTimeString()
-                    : ''}
-                </td>
-                <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                  {payment.usdAmount
-                    ? '$' +
-                      (Number(payment.usdAmount) / 1e8).toLocaleString(undefined, {
-                        maximumFractionDigits: 2,
-                      })
-                    : ''}
-                </td>
-                <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                  {explorerUrl && payment.redirects ? (
-                    <a href={`${explorerUrl}/address/${payment.redirects}`} target="_blank" rel="noopener noreferrer">
-                      {formatAddress(payment.redirects)}
-                    </a>
-                  ) : (
-                    ''
-                  )}
-                </td>
-                <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                  {formatFrequency(payment.frequency)}
-                </td>
-                {isIncoming ? (
-                  <Redirects
-                    txHash={txHash}
-                    txDialogState={txDialogState}
-                    streamId={payment.streamId}
-                    poolContract={payment.pool.poolContract}
-                  />
+          {payments.map((payment) => (
+            <tr key={payment.id}>
+              <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
+                {explorerUrl ? (
+                  <a
+                    href={`${explorerUrl}/address/${isIncoming ? payment.pool.owner : payment.history[0].to}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {formatAddress(isIncoming ? payment.pool.owner : payment.history[0].to)}
+                  </a>
                 ) : (
-                  <CancelTransfer
-                    txHash={txHash}
-                    txDialogState={txDialogState}
-                    streamId={payment.streamId}
-                    poolContract={payment.pool.poolContract}
-                  />
+                  <>{formatAddress(isIncoming ? payment.pool.owner : payment.history[0].to)}</>
                 )}
-              </tr>
-            ))}
+              </td>
+              <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
+                {payment.starts
+                  ? new Date(Number(payment.starts) * 1000).toLocaleDateString() +
+                    ', ' +
+                    new Date(Number(payment.starts) * 1000).toLocaleTimeString()
+                  : ''}
+              </td>
+              <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
+                {payment.ends
+                  ? new Date(Number(payment.ends) * 1000).toLocaleDateString() +
+                    ', ' +
+                    new Date(Number(payment.ends) * 1000).toLocaleTimeString()
+                  : ''}
+              </td>
+              <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
+                {payment.lastPaid !== payment.starts
+                  ? new Date(Number(payment.lastPaid) * 1000).toLocaleDateString() +
+                    ', ' +
+                    new Date(Number(payment.lastPaid) * 1000).toLocaleTimeString()
+                  : ''}
+              </td>
+              <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
+                {payment.usdAmount
+                  ? '$' +
+                    (Number(payment.usdAmount) / 1e8).toLocaleString(undefined, {
+                      maximumFractionDigits: 2,
+                    })
+                  : ''}
+              </td>
+              <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
+                {explorerUrl && payment.redirects ? (
+                  <a href={`${explorerUrl}/address/${payment.redirects}`} target="_blank" rel="noopener noreferrer">
+                    {formatAddress(payment.redirects)}
+                  </a>
+                ) : (
+                  ''
+                )}
+              </td>
+              <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
+                {formatFrequency(payment.frequency)}
+              </td>
+              {isIncoming ? (
+                <Redirects
+                  txHash={txHash}
+                  txDialogState={txDialogState}
+                  streamId={payment.streamId}
+                  poolContract={payment.pool.poolContract}
+                />
+              ) : (
+                <CancelTransfer
+                  txHash={txHash}
+                  txDialogState={txDialogState}
+                  streamId={payment.streamId}
+                  poolContract={payment.pool.poolContract}
+                />
+              )}
+            </tr>
+          ))}
 
           {newPaymentDialog && (
             <tr>

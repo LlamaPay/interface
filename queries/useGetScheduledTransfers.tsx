@@ -31,6 +31,17 @@ export interface IScheduledTransferPool {
   payments: Array<IScheduledTransferPayment>;
 }
 
+export interface IScheduledTransferHistory {
+  to: string | null;
+  txHash: string;
+  usdAmount: string | null;
+  eventType: string;
+  createdTimestamp: string;
+  pool: {
+    owner: string;
+  };
+}
+
 const fetchScheduledTransferPools = async ({
   userAddress,
   graphEndpoint,
@@ -43,7 +54,7 @@ const fetchScheduledTransferPools = async ({
       return [];
     }
 
-    const res = await request(
+    const res: { pools: Array<IScheduledTransferPool> } = await request(
       graphEndpoint,
       gql`
         {
@@ -79,7 +90,12 @@ const fetchScheduledTransferPools = async ({
       `
     );
 
-    return res.pools ?? [];
+    return (
+      res.pools.map((pool) => ({
+        ...pool,
+        payments: pool.payments.filter((payment) => Number(payment.ends) * 1000 > Date.now()),
+      })) ?? []
+    );
   } catch (error: any) {
     throw new Error(error.message || (error?.reason ?? "Couldn't fetch scheduled transfers"));
   }
@@ -97,7 +113,7 @@ const fetchScheduledPayments = async ({
       return [];
     }
 
-    const res = await request(
+    const res: { payments: Array<IScheduledTransferPayment> } = await request(
       graphEndpoint,
       gql`
         {
@@ -122,9 +138,62 @@ const fetchScheduledPayments = async ({
       `
     );
 
-    return res.payments ?? [];
+    return res.payments.filter((payment) => Number(payment.ends) * 1000 > Date.now()) ?? [];
   } catch (error: any) {
     throw new Error(error.message || (error?.reason ?? "Couldn't fetch scheduled payments"));
+  }
+};
+
+const fetchScheduledTransfersHistory = async ({
+  userAddress,
+  graphEndpoint,
+  isPoolOwnersHistory,
+}: {
+  userAddress?: string;
+  graphEndpoint?: string | null;
+  isPoolOwnersHistory?: boolean;
+}) => {
+  try {
+    if (!userAddress || !graphEndpoint) {
+      return [];
+    }
+
+    const res: { historyEvents: Array<IScheduledTransferHistory> } = await request(
+      graphEndpoint,
+      isPoolOwnersHistory
+        ? gql`
+            {
+              historyEvents(orderBy: createdTimestamp, orderDirection: desc, where: { pool_: { owner: "${userAddress}" } }) {
+                to
+                txHash
+                usdAmount
+                eventType
+                createdTimestamp
+                pool {
+                  owner
+                }
+              }
+            }
+          `
+        : gql`
+            {
+              historyEvents(orderBy: createdTimestamp, orderDirection: desc, where: { to: "${userAddress}" }) {
+                to
+                txHash
+                usdAmount
+                eventType
+                createdTimestamp
+                pool {
+                  owner
+                }
+              }
+            }
+          `
+    );
+
+    return res.historyEvents ?? [];
+  } catch (error: any) {
+    throw new Error(error.message || (error?.reason ?? "Couldn't fetch history"));
   }
 };
 
@@ -146,6 +215,24 @@ export function useGetScheduledPayments({ graphEndpoint }: { graphEndpoint?: str
   return useQuery<Array<IScheduledTransferPayment>>(
     ['scheduledPayments', accountData?.address, graphEndpoint],
     () => fetchScheduledPayments({ userAddress: accountData?.address, graphEndpoint }),
+    {
+      refetchInterval: 30_000,
+    }
+  );
+}
+
+export function useGetScheduledTransfersHistory({
+  graphEndpoint,
+  isPoolOwnersHistory,
+}: {
+  graphEndpoint?: string | null;
+  isPoolOwnersHistory?: boolean;
+}) {
+  const [{ data: accountData }] = useAccount();
+
+  return useQuery<Array<IScheduledTransferHistory>>(
+    ['scheduledTransfersHistory', accountData?.address, graphEndpoint, isPoolOwnersHistory],
+    () => fetchScheduledTransfersHistory({ userAddress: accountData?.address, graphEndpoint, isPoolOwnersHistory }),
     {
       refetchInterval: 30_000,
     }
