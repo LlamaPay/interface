@@ -133,6 +133,8 @@ export const networkDetails: INetworkDetails = {
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-optimism',
     paymentsContract: CONTRACTS.PAYMENTS_OPTIMISM,
     paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-optimism',
+    scheduledTransferFactory: CONTRACTS.SCHEDULED_TRANSFERS_FACTORY_OPTIMISM,
+    scheduledTransferSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/scheduledtransfers-optimism',
   },
   42161: {
     rpcUrl: 'https://arb1.arbitrum.io/rpc',
