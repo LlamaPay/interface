@@ -282,7 +282,7 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
 
             <label>
               <span className="input-label">Start</span>
-              <input type="date" name="paymentStartAt" min={minDate} className="input-field" required />
+              <input type="date" name="paymentStartAt" className="input-field" required />
             </label>
 
             <label>
