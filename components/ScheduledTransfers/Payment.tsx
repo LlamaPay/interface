@@ -69,22 +69,26 @@ export function ScheduledTransferPayment({
           {payments.map((payment) => (
             <tr key={payment.id}>
               <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                {explorerUrl ? (
-                  <a
-                    href={`${explorerUrl}/address/${payment.pool.token.address}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {payment.pool.token.name && payment.pool.token.symbol
-                      ? `${payment.pool.token.name} (${payment.pool.token.symbol})`
-                      : formatAddress(payment.pool.token.address)}
-                  </a>
+                {payment.pool.token ? (
+                  explorerUrl ? (
+                    <a
+                      href={`${explorerUrl}/address/${payment.pool.token.address}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      {payment.pool.token.name && payment.pool.token.symbol
+                        ? `${payment.pool.token.name} (${payment.pool.token.symbol})`
+                        : formatAddress(payment.pool.token.address)}
+                    </a>
+                  ) : (
+                    `${
+                      payment.pool.token.name && payment.pool.token.symbol
+                        ? `${payment.pool.token.name} (${payment.pool.token.symbol})`
+                        : formatAddress(payment.pool.token.address)
+                    }`
+                  )
                 ) : (
-                  `${
-                    payment.pool.token.name && payment.pool.token.symbol
-                      ? `${payment.pool.token.name} (${payment.pool.token.symbol})`
-                      : formatAddress(payment.pool.token.address)
-                  }`
+                  ''
                 )}
               </td>
               <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">

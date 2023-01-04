@@ -15,6 +15,7 @@ import { getAddress } from 'ethers/lib/utils';
 import toast from 'react-hot-toast';
 import { useQueryClient } from 'react-query';
 import { BeatLoader } from 'react-spinners';
+import { secondsByDuration } from '~/utils/constants';
 
 interface INewPaymentFormElements {
   toAddress: {
@@ -85,6 +86,7 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
 
   const offset = new Date().getTimezoneOffset();
   const minDate = new Date(new Date().getTime() - offset * 60 * 1000).toISOString().split('T')[0];
+  const monthlyCost = pool.payments.reduce((acc, curr) => acc + Number(curr.usdPerSec) * secondsByDuration['month'], 0);
 
   const createScheduledPayment = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -325,6 +327,7 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
                         ? `${Number(balance) / 10 ** pool.token.decimals} ${pool.token.symbol}`
                         : balance
                     })`}</a>
+                    <a>{`(Monthly Cost: $${(monthlyCost / 1e8).toFixed(2)} USD)`}</a>
                   </span>
                   <span className="flex space-x-2">
                     <button className="primary-button py-1 px-[6px] text-xs font-medium" onClick={depositDialog.toggle}>

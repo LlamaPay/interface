@@ -1,6 +1,7 @@
 import { useQuery } from 'react-query';
 import { useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
+import BigNumber from 'bignumber.js';
 
 export interface IScheduledTransferPayment {
   id: string;
@@ -10,6 +11,7 @@ export interface IScheduledTransferPayment {
   starts: string;
   redirects: string | null;
   frequency: string;
+  usdPerSec: string;
   ends: string;
   pool: {
     owner: string;
@@ -94,13 +96,17 @@ const fetchScheduledTransferPools = async ({
         }
       `
     );
-
-    return (
+    const filtered =
       res.pools.map((pool) => ({
         ...pool,
         payments: pool.payments.filter((payment) => Number(payment.ends) * 1000 > Date.now()),
-      })) ?? []
-    );
+      })) ?? [];
+    filtered.forEach((o) => {
+      o.payments.forEach((i) => {
+        i.usdPerSec = BigNumber(i.usdAmount).div(i.frequency).toString();
+      });
+    });
+    return filtered;
   } catch (error: any) {
     throw new Error(error.message || (error?.reason ?? "Couldn't fetch scheduled transfers"));
   }
@@ -147,8 +153,11 @@ const fetchScheduledPayments = async ({
         }
       `
     );
-
-    return res.payments.filter((payment) => Number(payment.ends) * 1000 > Date.now()) ?? [];
+    const filtered = res.payments.filter((payment) => Number(payment.ends) * 1000 > Date.now()) ?? [];
+    filtered.forEach((o) => {
+      o.usdPerSec = BigNumber(o.usdAmount).div(o.frequency).toString();
+    });
+    return filtered;
   } catch (error: any) {
     throw new Error(error.message || (error?.reason ?? "Couldn't fetch scheduled payments"));
   }
