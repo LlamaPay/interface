@@ -6,7 +6,7 @@ import Tooltip from '~/components/Tooltip';
 import { networkDetails } from '~/lib/networkDetails';
 import type { IScheduledTransferPool } from '~/queries/useGetScheduledTransfers';
 import { useCreateScheduledTransferPayment } from '~/queries/useSchedulePayment';
-import { useContractWrite, useNetwork } from 'wagmi';
+import { erc20ABI, useContractRead, useContractWrite, useNetwork } from 'wagmi';
 import { getFormattedMaxPrice, getMaxPriceInUSD } from './utils';
 import BigNumber from 'bignumber.js';
 import { ScheduledTransferPayment } from './Payment';
@@ -48,6 +48,18 @@ interface IUpdateMaxPriceFormElements {
   };
 }
 
+interface IDepositFormElements {
+  toDeposit: {
+    value: string;
+  };
+}
+
+interface IWithdrawFormElements {
+  toWithdraw: {
+    value: string;
+  };
+}
+
 export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }) {
   const [{ data: networkData }] = useNetwork();
 
@@ -62,6 +74,10 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
   const minPriceDialog = useDialogState();
 
   const oracleDialog = useDialogState();
+
+  const depositDialog = useDialogState();
+
+  const withdrawDialog = useDialogState();
 
   const queryClient = useQueryClient();
 
@@ -112,6 +128,33 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
       contractInterface: scheduledPaymentsContractABI,
     },
     'changeOracle'
+  );
+
+  const [{ loading: depositing }, deposit] = useContractWrite(
+    {
+      addressOrName: pool.token.address,
+      contractInterface: erc20ABI,
+    },
+    'transfer'
+  );
+
+  const [{ loading: withdrawing }, withdraw] = useContractWrite(
+    {
+      addressOrName: pool.poolContract,
+      contractInterface: scheduledPaymentsContractABI,
+    },
+    'withdrawPayer'
+  );
+
+  const [{ data: balance }] = useContractRead(
+    {
+      addressOrName: pool.token.address,
+      contractInterface: erc20ABI,
+    },
+    'balanceOf',
+    {
+      args: [pool.poolContract],
+    }
   );
 
   const updateMinPrice = (e: React.FormEvent<HTMLFormElement>) => {
@@ -180,6 +223,66 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
     });
   };
 
+  const onDeposit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement & IDepositFormElements;
+    const toDeposit = form.toDeposit?.value;
+    if (!pool.poolContract || !pool.token.decimals || !toDeposit || !pool.token.address) return;
+    const formatted = new BigNumber(toDeposit).times(10 ** pool.token.decimals).toFixed(0);
+    deposit({ args: [pool.poolContract, formatted] }).then((res) => {
+      if (res.error) {
+        depositDialog.hide();
+        toast.error(res.error.message);
+      } else {
+        const toastid = toast.loading(`Depositing`);
+
+        depositDialog.hide();
+
+        txHash.current = res.data.hash;
+
+        txDialogState.toggle();
+
+        res.data?.wait().then((receipt) => {
+          toast.dismiss(toastid);
+
+          receipt.status === 1 ? toast.success('Deposit Success') : toast.error('Deposit Failed');
+        });
+
+        queryClient.invalidateQueries();
+      }
+    });
+  };
+
+  const onWithdraw = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement & IWithdrawFormElements;
+    const toWithdraw = form.toWithdraw?.value;
+    if (!pool.poolContract || !pool.token.decimals || !toWithdraw || !pool.token.address) return;
+    const formatted = new BigNumber(toWithdraw).times(10 ** pool.token.decimals).toFixed(0);
+    withdraw({ args: [pool.token.address, formatted] }).then((res) => {
+      if (res.error) {
+        depositDialog.hide();
+        toast.error(res.error.message);
+      } else {
+        const toastid = toast.loading(`Withdrawing`);
+
+        depositDialog.hide();
+
+        txHash.current = res.data.hash;
+
+        txDialogState.toggle();
+
+        res.data?.wait().then((receipt) => {
+          toast.dismiss(toastid);
+
+          receipt.status === 1 ? toast.success('Withdraw Success') : toast.error('Withdraw Failed');
+        });
+
+        queryClient.invalidateQueries();
+      }
+    });
+  };
+
   return (
     <>
       <div className="max-w-[calc(100vw-32px)] overflow-x-auto md:max-w-[calc(100vw-48px)] lg:max-w-[calc(100vw-256px)] [&:not(:first-of-type)]:mt-4">
@@ -204,13 +307,37 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
                 Token
               </th>
               <td className="table-description border border-solid border-llama-teal-2 text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-                {explorerUrl ? (
-                  <a href={`${explorerUrl}/address/${pool.token.address}`} target="_blank" rel="noopener noreferrer">
-                    {`${pool.token.name || pool.token.address}`}
-                  </a>
-                ) : (
-                  <>{`${pool.token.name || pool.token.address}`}</>
-                )}
+                <span className="flex flex-wrap items-center justify-between gap-4">
+                  <span className="flex space-x-1">
+                    {explorerUrl ? (
+                      <a
+                        href={`${explorerUrl}/address/${pool.token.address}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                      >
+                        {`${pool.token.name || pool.token.address}`}
+                      </a>
+                    ) : (
+                      <>{`${pool.token.name || pool.token.address}`}</>
+                    )}
+                    <a>{`(Balance: ${
+                      pool.token.decimals && pool.token.symbol
+                        ? `${Number(balance) / 10 ** pool.token.decimals} ${pool.token.symbol}`
+                        : balance
+                    })`}</a>
+                  </span>
+                  <span className="flex space-x-2">
+                    <button className="primary-button py-1 px-[6px] text-xs font-medium" onClick={depositDialog.toggle}>
+                      Deposit
+                    </button>
+                    <button
+                      className="primary-button py-1 px-[6px] text-xs font-medium"
+                      onClick={withdrawDialog.toggle}
+                    >
+                      Withdraw
+                    </button>
+                  </span>
+                </span>
               </td>
             </tr>
             <tr>
@@ -311,6 +438,30 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
 
             <SubmitButton className="mt-5">
               {updatingOracle ? <BeatLoader size={6} color="white" /> : 'Update'}
+            </SubmitButton>
+          </form>
+        </span>
+      </FormDialog>
+
+      <FormDialog dialog={depositDialog} title={'Deposit'}>
+        <span className="space-y-4 text-lp-gray-6 dark:text-white">
+          <form className="mx-auto flex flex-col gap-4" onSubmit={onDeposit}>
+            <InputAmount name="toDeposit" label="To Deposit" placeholder="0" isRequired />
+
+            <SubmitButton className="mt-5">
+              {depositing ? <BeatLoader size={6} color="white" /> : 'Deposit'}
+            </SubmitButton>
+          </form>
+        </span>
+      </FormDialog>
+
+      <FormDialog dialog={withdrawDialog} title={'Withdraw'}>
+        <span className="space-y-4 text-lp-gray-6 dark:text-white">
+          <form className="mx-auto flex flex-col gap-4" onSubmit={onWithdraw}>
+            <InputAmount name="toWithdraw" label="To Withdraw" placeholder="0" isRequired />
+
+            <SubmitButton className="mt-5">
+              {withdrawing ? <BeatLoader size={6} color="white" /> : 'Withdraw'}
             </SubmitButton>
           </form>
         </span>
