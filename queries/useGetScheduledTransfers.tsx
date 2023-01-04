@@ -14,6 +14,11 @@ export interface IScheduledTransferPayment {
   pool: {
     owner: string;
     poolContract: string;
+    token: {
+      name: string;
+      address: string;
+      symbol: string;
+    };
   };
   history: Array<{ to: string }>;
 }
@@ -129,6 +134,11 @@ const fetchScheduledPayments = async ({
             pool {
               owner
               poolContract
+              token {
+                name
+                address
+                symbol
+              }
             }
             history {
               to

@@ -37,6 +37,9 @@ export function ScheduledTransferPayment({
         <thead>
           <tr>
             <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
+              Token
+            </th>
+            <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
               {isIncoming ? 'Payer' : 'Payee'}
             </th>
             <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
@@ -65,6 +68,25 @@ export function ScheduledTransferPayment({
         <tbody className="border border-llama-teal-2 dark:border-lp-gray-7">
           {payments.map((payment) => (
             <tr key={payment.id}>
+              <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
+                {explorerUrl ? (
+                  <a
+                    href={`${explorerUrl}/address/${payment.pool.token.address}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    {payment.pool.token.name && payment.pool.token.symbol
+                      ? `${payment.pool.token.name} (${payment.pool.token.symbol})`
+                      : formatAddress(payment.pool.token.address)}
+                  </a>
+                ) : (
+                  `${
+                    payment.pool.token.name && payment.pool.token.symbol
+                      ? `${payment.pool.token.name} (${payment.pool.token.symbol})`
+                      : formatAddress(payment.pool.token.address)
+                  }`
+                )}
+              </td>
               <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
                 {explorerUrl ? (
                   <a
