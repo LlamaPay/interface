@@ -5,25 +5,22 @@ import type { IPayments } from '~/types';
 import { networkDetails } from '~/lib/networkDetails';
 import { zeroAdd } from '~/utils/constants';
 import { useAccount, useContractWrite } from 'wagmi';
+import BigNumber from 'bignumber.js';
 
 export default function PaymentRevokeButton({ data }: { data: IPayments }) {
   const { chainId } = useNetworkProvider();
   const [{ data: accountData }] = useAccount();
-  const contract = chainId
-    ? networkDetails[chainId].paymentsContract
-      ? networkDetails[chainId].paymentsContract!
-      : zeroAdd
-    : zeroAdd;
+  const contract = chainId && networkDetails[chainId].paymentsContract;
   const [{}, revoke] = useContractWrite(
     {
-      addressOrName: contract,
+      addressOrName: contract || zeroAdd,
       contractInterface: paymentsContractABI,
     },
     'revoke'
   );
 
   function handleRevoke() {
-    revoke({ args: [data.tokenAddress, data.payee, data.amount, data.release] }).then((data) => {
+    revoke({ args: [data.tokenAddress, data.payee, BigNumber(data.amount).toFixed(0), data.release] }).then((data) => {
       if (data.error) {
         toast.error('Failed to Revoke');
       } else {
