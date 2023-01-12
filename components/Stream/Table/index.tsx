@@ -93,7 +93,7 @@ export function StreamTable({ data }: { data: IStream[] }) {
               <>
                 {process.env.NEXT_PUBLIC_SAFE === 'true' ? (
                   <Tooltip
-                    content="Open stream in another"
+                    content="Open stream in another tab"
                     className={classNames(
                       'relative top-[1px] ml-auto flex items-center',
                       !data || data.streamType === 'incomingStream' ? 'mr-[-98px]' : ''
