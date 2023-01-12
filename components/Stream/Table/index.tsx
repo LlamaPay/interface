@@ -26,7 +26,7 @@ import { useTranslations } from 'next-intl';
 import Schedule from '../../Schedule/Schedule';
 import { useNetworkProvider } from '~/hooks';
 import Tooltip from '~/components/Tooltip';
-import { ClipboardCopyIcon } from '@heroicons/react/outline';
+import { ClipboardCopyIcon, ShareIcon } from '@heroicons/react/outline';
 import classNames from 'classnames';
 
 export function StreamTable({ data }: { data: IStream[] }) {
@@ -90,18 +90,40 @@ export function StreamTable({ data }: { data: IStream[] }) {
 
           return (
             network && (
-              <Tooltip
-                content="Copy link to stream"
-                onClick={() =>
-                  navigator.clipboard.writeText(`https://llamapay.io/salaries/withdraw/${network}/${info.getValue()}`)
-                }
-                className={classNames(
-                  'relative top-[1px] ml-auto flex items-center',
-                  !data || data.streamType === 'incomingStream' ? 'mr-[-98px]' : ''
+              <>
+                {process.env.NEXT_PUBLIC_SAFE === 'true' ? (
+                  <Tooltip
+                    content="Open stream in another"
+                    className={classNames(
+                      'relative top-[1px] ml-auto flex items-center',
+                      !data || data.streamType === 'incomingStream' ? 'mr-[-98px]' : ''
+                    )}
+                  >
+                    <a
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      href={`https://llamapay.io/salaries/withdraw/${network}/${info.getValue()}`}
+                    >
+                      <ShareIcon className="h-4 w-4 text-black dark:text-white" />
+                    </a>
+                  </Tooltip>
+                ) : (
+                  <Tooltip
+                    content="Copy link to stream"
+                    onClick={() =>
+                      navigator.clipboard.writeText(
+                        `https://llamapay.io/salaries/withdraw/${network}/${info.getValue()}`
+                      )
+                    }
+                    className={classNames(
+                      'relative top-[1px] ml-auto flex items-center',
+                      !data || data.streamType === 'incomingStream' ? 'mr-[-98px]' : ''
+                    )}
+                  >
+                    <ClipboardCopyIcon className="h-4 w-4 text-black dark:text-white" />
+                  </Tooltip>
                 )}
-              >
-                <ClipboardCopyIcon className="h-4 w-4 text-black dark:text-white" />
-              </Tooltip>
+              </>
             )
           );
         },
