@@ -16,6 +16,7 @@ import { useNetwork } from 'wagmi';
 import { networkDetails } from '~/lib/networkDetails';
 import { eventAgeFormatter } from '~/components/History/Table/CustomValues';
 import Tooltip from '~/components/Tooltip';
+import { chainDetails } from '~/utils/network';
 
 export function ScheduledTransfersHistory({
   history,
@@ -29,6 +30,7 @@ export function ScheduledTransfersHistory({
   const [{ data: networkData }] = useNetwork();
 
   const explorerUrl = networkData?.chain?.id ? networkDetails[networkData.chain.id]?.blockExplorerURL : null;
+  const explorerName = networkData?.chain?.id ? networkDetails[networkData.chain.id]?.blockExplorerName : null;
 
   const intl = useIntl();
 
@@ -99,8 +101,24 @@ export function ScheduledTransfersHistory({
           );
         },
       },
+      {
+        id: 'etherscan',
+        header: '',
+        cell: ({ cell }) => {
+          return (
+            <a
+              href={`${explorerUrl}/tx/${cell.row.original.txHash}`}
+              target="_blank"
+              rel="noreferrer noopener"
+              className="row-action-links text-right dark:text-white"
+            >
+              {`Show on ${explorerName}`}
+            </a>
+          );
+        },
+      },
     ],
-    [t, isPoolOwnersHistory, explorerUrl, intl]
+    [t, isPoolOwnersHistory, explorerUrl, intl, explorerName]
   );
 
   const [pagination, setPagination] = React.useState<PaginationState>({
