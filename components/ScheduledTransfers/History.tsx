@@ -39,7 +39,7 @@ export function ScheduledTransfersHistory({
       {
         id: 'eventType',
         header: t('type'),
-        cell: ({ cell }) => cell.row.original.eventType,
+        cell: ({ cell }) => <p className="dark: text-white">{cell.row.original.eventType}</p>,
       },
       {
         id: 'addressName',
@@ -52,7 +52,12 @@ export function ScheduledTransfersHistory({
           }
 
           return (
-            <a href={`${explorerUrl}/address/${address}`} target="_blank" rel="noreferrer noopener">
+            <a
+              className="dark: text-white"
+              href={`${explorerUrl}/address/${address}`}
+              target="_blank"
+              rel="noreferrer noopener"
+            >
               {formatAddress(address)}
             </a>
           );
@@ -69,9 +74,9 @@ export function ScheduledTransfersHistory({
           }
 
           return (
-            <>{`$${(Number(amount) / 1e8).toLocaleString(undefined, {
+            <p className="dark:text-white">{`$${(Number(amount) / 1e8).toLocaleString(undefined, {
               maximumFractionDigits: 2,
-            })}`}</>
+            })}`}</p>
           );
         },
       },
