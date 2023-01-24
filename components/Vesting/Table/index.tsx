@@ -15,6 +15,7 @@ import RugpullVestingButton from './CustomValues/RugpullVestingButton';
 import { useLocale } from '~/hooks';
 import { downloadVesting } from '~/utils/downloadCsv';
 import ReasonButton from './CustomValues/ReasonButton';
+import RenounceOwnershipButton from './CustomValues/RenounceOwnershipButton';
 
 export default function VestingTable({
   data,
@@ -102,6 +103,12 @@ export default function VestingTable({
         id: 'addReason',
         header: '',
         cell: ({ cell }) => cell.row.original && <ReasonButton data={cell.row.original} />,
+      },
+      {
+        id: 'renounce',
+        header: '',
+        cell: ({ cell }) =>
+          cell.row.original && <RenounceOwnershipButton data={cell.row.original}></RenounceOwnershipButton>,
       },
       {
         id: 'rug',
