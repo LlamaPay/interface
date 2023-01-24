@@ -1,9 +1,13 @@
+import { useDialogState } from 'ariakit';
 import toast from 'react-hot-toast';
 import { useAccount, useContractWrite } from 'wagmi';
+import { FormDialog } from '~/components/Dialog';
+import { SubmitButton } from '~/components/Form';
 import { vestingContractReadableABI } from '~/lib/abis/vestingContractReadable';
 import { IVesting } from '~/types';
 
 export default function RenounceOwnershipButton({ data }: { data: IVesting }) {
+  const RenounceDialog = useDialogState();
   const [{}, renounce] = useContractWrite(
     {
       addressOrName: data.contract,
@@ -28,16 +32,23 @@ export default function RenounceOwnershipButton({ data }: { data: IVesting }) {
           receipt.status === 1 ? toast.success('Successfully Renounced') : toast.error('Failed to Renounce');
         });
       }
+      RenounceDialog.hide();
     });
   }
   const [{ data: accountData }] = useAccount();
   return (
     <>
       {data.admin.toLowerCase() === accountData?.address.toLowerCase() && (
-        <button onClick={handleRenounce} className="row-action-links font-exo float-right dark:text-white">
+        <button onClick={() => RenounceDialog.show()} className="row-action-links font-exo float-right dark:text-white">
           Renounce
         </button>
       )}
+      <FormDialog className="h-min" dialog={RenounceDialog} title={'Clawback'}>
+        <span className="font-exo dark:text-white">{'Warning: You will no longer own the contract!'}</span>
+        <SubmitButton className="mt-5" onClick={handleRenounce}>
+          {'Renounce Ownership'}
+        </SubmitButton>
+      </FormDialog>
     </>
   );
 }
