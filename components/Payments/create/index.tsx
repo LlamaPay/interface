@@ -246,14 +246,14 @@ export default function CreatePayment({ contract }: { contract: string }) {
 
   return (
     <>
-      <div className="max-w-xl space-y-2">
+      <div className="space-y-2">
         <Link href="/payments">
           <a className="relative left-[-2px] flex items-center gap-2">
             <ArrowCircleLeftIcon className="h-6 w-6" />
             <span className="">Return</span>
           </a>
         </Link>
-        <form>
+        <form className="py-3 text-center">
           <input type="file" accept=".csv" onChange={(e) => handleFileChange(e)} />
           <button
             className="rounded-3xl border px-3 py-[6px] text-sm dark:border-[#252525] dark:bg-[#252525]"
