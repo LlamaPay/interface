@@ -39,7 +39,7 @@ export function ScheduledTransfersHistory({
       {
         id: 'eventType',
         header: t('type'),
-        cell: ({ cell }) => <p className="dark: text-white">{cell.row.original.eventType}</p>,
+        cell: ({ cell }) => <p className="dark:text-white">{cell.row.original.eventType}</p>,
       },
       {
         id: 'addressName',
@@ -53,7 +53,7 @@ export function ScheduledTransfersHistory({
 
           return (
             <a
-              className="dark: text-white"
+              className="dark:text-white"
               href={`${explorerUrl}/address/${address}`}
               target="_blank"
               rel="noreferrer noopener"
