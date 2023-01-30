@@ -117,9 +117,9 @@ export const networkDetails: INetworkDetails = {
     paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-mainnet',
   },
   10: {
-    rpcUrl: 'https://mainnet.optimism.io',
+    rpcUrl: 'https://rpc.ankr.com/optimism',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-optimism',
-    chainProviders: new ethers.providers.JsonRpcProvider('https://mainnet.optimism.io'),
+    chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/optimism'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_OPTIMISM,
     disperseAddress: CONTRACTS.DISPERSE_DEFAULT,
     botAddress: CONTRACTS.BOT_OPTIMISM,
