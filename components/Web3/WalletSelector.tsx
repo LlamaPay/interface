@@ -6,6 +6,7 @@ import { Dialog, DialogHeading, DisclosureState } from 'ariakit';
 import { XIcon } from '@heroicons/react/solid';
 import { useTranslations } from 'next-intl';
 import { ExternalLinkIcon } from '@heroicons/react/outline';
+import useGetRaveName from '~/queries/useGetRaveName';
 
 interface Props {
   dialog: DisclosureState;
@@ -13,6 +14,7 @@ interface Props {
 
 export const WalletSelector = ({ dialog }: Props) => {
   const [{ data: accountData }, disconnect] = useAccount({ fetchEns: true });
+  const { data: raveName } = useGetRaveName();
 
   const { url: chainExplorer, id } = useChainExplorer();
 
@@ -60,7 +62,11 @@ export const WalletSelector = ({ dialog }: Props) => {
             <p className="text-sm font-thin">{`${t('connectedWith')} ${accountData.connector?.name}`}</p>
             <p className="flex items-center gap-4 break-words">
               <span className="truncate">
-                {accountData.ens?.name ? `${accountData.ens?.name} (${formattedAddress})` : accountData.address}
+                {accountData.ens?.name
+                  ? `${accountData.ens?.name} (${formattedAddress})`
+                  : raveName
+                  ? `${raveName} (${formattedAddress})`
+                  : accountData.address}
               </span>
               <a
                 href={

@@ -6,7 +6,8 @@ import { StreamAndHistoryQuery } from '~/services/generated/graphql';
 import { networkDetails } from '~/lib/networkDetails';
 import { mainnetResolverABI } from '~/lib/abis/mainnetResolver';
 import { chainDetails } from '~/utils/network';
-import { MAINNET_ENS_RESOLVER } from '~/lib/contracts';
+import { MAINNET_ENS_RESOLVER, RAVE_RESOLVER } from '~/lib/contracts';
+import raveContract from '~/lib/abis/raveContract';
 
 export interface IEnsResolve {
   [key: string]: string | null;
@@ -22,6 +23,8 @@ async function resolveEns(data: StreamAndHistoryQuery | undefined, address: stri
       throw new Error('No Address');
     } else {
       const contract = new ethers.Contract(getAddress(MAINNET_ENS_RESOLVER), mainnetResolverABI, mainnetProvider);
+      const rave = new ethers.Contract(getAddress(RAVE_RESOLVER), raveContract, networkDetails[250].chainProviders);
+
       const streams = data?.user?.streams ?? [];
       const history = data?.user?.historicalEvents ?? [];
 
@@ -49,9 +52,18 @@ async function resolveEns(data: StreamAndHistoryQuery | undefined, address: stri
 
       const resolveCall = await contract.getNames(queryAddresses);
 
+      const raveCalls = [];
+      for (let i = 0; i < queryAddresses.length; i++) {
+        const resolved = await rave.getNames(queryAddresses[i]);
+        raveCalls.push(resolved[0] ?? '');
+      }
+
       const resolvedAddresses: IEnsResolve = {};
 
       for (let i = 0; i < resolveCall.length; i++) {
+        if (raveCalls[i] !== '') {
+          resolvedAddresses[queryAddresses[i]] = raveCalls[i];
+        }
         if (resolveCall[i] !== '') {
           resolvedAddresses[queryAddresses[i]] = resolveCall[i];
         }
