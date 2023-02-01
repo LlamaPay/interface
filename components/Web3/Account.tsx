@@ -1,4 +1,5 @@
 import { useAccount } from 'wagmi';
+import useGetRaveName from '~/queries/useGetRaveName';
 import { formatAddress } from '~/utils/address';
 
 interface Props {
@@ -7,6 +8,7 @@ interface Props {
 
 export const Account = ({ showAccountInfo }: Props) => {
   const [{ data }] = useAccount({ fetchEns: true });
+  const { data: raveName } = useGetRaveName();
 
   if (!data) return null;
 
@@ -14,7 +16,7 @@ export const Account = ({ showAccountInfo }: Props) => {
 
   return (
     <button className="nav-button-v2 hidden md:block" onClick={showAccountInfo}>
-      {data.ens?.name ?? formattedAddress}
+      {data.ens?.name ?? raveName ?? formattedAddress}
     </button>
   );
 };
