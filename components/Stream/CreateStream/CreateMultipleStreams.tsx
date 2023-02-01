@@ -13,6 +13,10 @@ import useStreamToken from '~/queries/useStreamToken';
 import { useTranslations } from 'next-intl';
 import useGnosisBatch from '~/queries/useGnosisBatch';
 import { ExclamationCircleIcon } from '@heroicons/react/outline';
+import { chainDetails } from '~/utils/network';
+import { getRaveAddress } from '~/queries/useGetRaveAddress';
+import { ethers } from 'ethers';
+import toast from 'react-hot-toast';
 
 type FormValues = {
   streams: {
@@ -32,6 +36,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
   const updateAddress = useAddressStore((state) => state.updateAddress);
 
   const tokenOptions = tokens.map((t) => t.tokenAddress);
+  const { network: mainnet } = chainDetails('1');
 
   const { mutate: batchCall, isLoading: batchLoading } = useBatchCalls();
   const { mutate: streamToken, isLoading: createStreamLoading } = useStreamToken();
@@ -65,7 +70,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
     control,
   });
 
-  const onSubmit = (data: FormValues) => {
+  const onSubmit = async (data: FormValues) => {
     if (data.streams.length === 1 && process.env.NEXT_PUBLIC_SAFE === 'false') {
       const item = data.streams[0];
       if (item.shortName && item.shortName !== '') {
@@ -78,15 +83,31 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
       if (tokenDetails === null) return;
 
       const amountPerSec = new BigNumber(item.amountToStream).times(1e20).div(secondsByDuration[duration]).toFixed(0);
+      const ens = await mainnet?.chainProviders.resolveName(item.addressToStream);
+      const rave = await getRaveAddress(item.addressToStream);
+      let address;
+      if (ens || rave) {
+        address = ens ?? rave;
+      } else {
+        if (!ethers.utils.isAddress(item.addressToStream)) {
+          toast.error(`Invalid address: ${item.addressToStream}`);
+          return;
+        } else {
+          address = ethers.utils.getAddress(item.addressToStream);
+        }
+      }
 
       streamToken({
         method: 'CREATE_STREAM',
         llamaContractAddress: tokenDetails.llamaContractAddress,
-        payeeAddress: item.addressToStream,
+        payeeAddress: address,
         amountPerSec,
       });
     } else {
-      const calls: ICall = data.streams.reduce((calls: ICall, item) => {
+      const calls: ICall = {};
+
+      for (let i = 0; i < data.streams.length; i++) {
+        const item = data.streams[i];
         if (item.shortName && item.shortName !== '') {
           updateAddress(item.addressToStream?.toLowerCase(), item.shortName);
         }
@@ -100,16 +121,25 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
         const amountPerSec = new BigNumber(item.amountToStream).times(1e20).div(secondsByDuration[duration]).toFixed(0);
         const llamaContractAddress = tokenDetails.llamaContractAddress;
 
-        const call = LlamaContractInterface.encodeFunctionData('createStream', [
-          getAddress(item.addressToStream),
-          amountPerSec,
-        ]);
-
-        const callData = calls[llamaContractAddress] ?? [];
-        callData.push(call);
-
-        return (calls = { ...calls, [llamaContractAddress]: callData });
-      }, {});
+        const ens = await mainnet?.chainProviders.resolveName(item.addressToStream);
+        const rave = await getRaveAddress(item.addressToStream);
+        let address;
+        if (ens || rave) {
+          address = ens ?? rave;
+        } else {
+          if (!ethers.utils.isAddress(item.addressToStream)) {
+            toast.error(`Invalid address: ${item.addressToStream}`);
+            return;
+          } else {
+            address = ethers.utils.getAddress(item.addressToStream);
+          }
+        }
+        const call = LlamaContractInterface.encodeFunctionData('createStream', [address, amountPerSec]);
+        if (!calls[llamaContractAddress]) {
+          calls[llamaContractAddress] = [];
+        }
+        calls[llamaContractAddress].push(call);
+      }
 
       if (process.env.NEXT_PUBLIC_SAFE === 'true') {
         gnosisBatch({ calls: calls });
@@ -134,7 +164,6 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                 placeholder={t1('recipientAddress')}
                 {...register(`streams.${index}.addressToStream` as const, {
                   required: true,
-                  pattern: /^0x[a-fA-F0-9]{40}$/,
                 })}
                 className="input-field"
                 autoComplete="off"

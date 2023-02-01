@@ -27,6 +27,7 @@ import Image from 'next/image';
 import { networkDetails } from '~/lib/networkDetails';
 import { useRouter } from 'next/router';
 import { FallbackContainer } from '~/components/Fallback';
+import { getRaveAddress } from '~/queries/useGetRaveAddress';
 
 interface ICall {
   [key: string]: string[];
@@ -83,12 +84,21 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
     const form = e.target as HTMLFormElement & { addressToFetchStreams: { value: string } };
 
     try {
-      const userAddress = await mainnet?.chainProviders
-        .resolveName(form.addressToFetchStreams.value)
-        .then((address) => address || form.addressToFetchStreams.value)
-        .catch(() => form.addressToFetchStreams.value);
-
-      setAddressToFetch(userAddress || form.addressToFetchStreams.value);
+      // const userAddress = await mainnet?.chainProviders
+      //   .resolveName(form.addressToFetchStreams.value)
+      //   .then((address) => address || form.addressToFetchStreams.value)
+      //   .catch(() => form.addressToFetchStreams.value);
+      const ens = await mainnet?.chainProviders.resolveName(form.addressToFetchStreams.value);
+      if (ens) {
+        setAddressToFetch(ens);
+      } else {
+        const rave = await getRaveAddress(form.addressToFetchStreams.value);
+        if (!rave) {
+          setAddressToFetch(form.addressToFetchStreams.value);
+        } else {
+          setAddressToFetch(rave);
+        }
+      }
     } catch (error) {
       setAddressToFetch(form.addressToFetchStreams.value);
     } finally {

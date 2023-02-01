@@ -54,8 +54,8 @@ async function resolveEns(data: StreamAndHistoryQuery | undefined, address: stri
 
       const raveCalls = [];
       for (let i = 0; i < queryAddresses.length; i++) {
-        const resolved = await rave.getName(queryAddresses[i], '0');
-        raveCalls.push(resolved);
+        const resolved = await rave.getNames(queryAddresses[i]);
+        raveCalls.push(resolved[0] ?? '');
       }
 
       const resolvedAddresses: IEnsResolve = {};
