@@ -84,10 +84,10 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
 
       const amountPerSec = new BigNumber(item.amountToStream).times(1e20).div(secondsByDuration[duration]).toFixed(0);
       const ens = await mainnet?.chainProviders.resolveName(item.addressToStream);
-      const rave = await getRaveAddress(item.addressToStream);
+      // const rave = await getRaveAddress(item.addressToStream);
       let address;
-      if (ens || rave) {
-        address = ens ?? rave;
+      if (ens) {
+        address = ens;
       } else {
         if (!ethers.utils.isAddress(item.addressToStream)) {
           toast.error(`Invalid address: ${item.addressToStream}`);
@@ -122,10 +122,10 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
         const llamaContractAddress = tokenDetails.llamaContractAddress;
 
         const ens = await mainnet?.chainProviders.resolveName(item.addressToStream);
-        const rave = await getRaveAddress(item.addressToStream);
+        // const rave = await getRaveAddress(item.addressToStream);
         let address;
-        if (ens || rave) {
-          address = ens ?? rave;
+        if (ens) {
+          address = ens;
         } else {
           if (!ethers.utils.isAddress(item.addressToStream)) {
             toast.error(`Invalid address: ${item.addressToStream}`);
