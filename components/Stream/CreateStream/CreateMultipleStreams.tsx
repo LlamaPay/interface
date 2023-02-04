@@ -6,17 +6,14 @@ import { useAddressStore } from '~/store/address';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import useBatchCalls from '~/queries/useBatchCalls';
 import { LlamaContractInterface } from '~/utils/contract';
-import { getAddress } from 'ethers/lib/utils';
 import BigNumber from 'bignumber.js';
 import { secondsByDuration } from '~/utils/constants';
 import useStreamToken from '~/queries/useStreamToken';
 import { useTranslations } from 'next-intl';
 import useGnosisBatch from '~/queries/useGnosisBatch';
 import { ExclamationCircleIcon } from '@heroicons/react/outline';
-import { chainDetails } from '~/utils/network';
-import { getRaveAddress } from '~/queries/useGetRaveAddress';
-import { ethers } from 'ethers';
 import toast from 'react-hot-toast';
+import { resolveEnsAndRave } from '~/utils/address';
 
 type FormValues = {
   streams: {
@@ -36,7 +33,6 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
   const updateAddress = useAddressStore((state) => state.updateAddress);
 
   const tokenOptions = tokens.map((t) => t.tokenAddress);
-  const { network: mainnet } = chainDetails('1');
 
   const { mutate: batchCall, isLoading: batchLoading } = useBatchCalls();
   const { mutate: streamToken, isLoading: createStreamLoading } = useStreamToken();
@@ -83,18 +79,10 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
       if (tokenDetails === null) return;
 
       const amountPerSec = new BigNumber(item.amountToStream).times(1e20).div(secondsByDuration[duration]).toFixed(0);
-      const ens = await mainnet?.chainProviders.resolveName(item.addressToStream);
-      const rave = await getRaveAddress(item.addressToStream);
-      let address;
-      if (ens || rave) {
-        address = ens ?? rave;
-      } else {
-        if (!ethers.utils.isAddress(item.addressToStream)) {
-          toast.error(`Invalid address: ${item.addressToStream}`);
-          return;
-        } else {
-          address = ethers.utils.getAddress(item.addressToStream);
-        }
+      const address = await resolveEnsAndRave(item.addressToStream);
+      if (!address) {
+        toast.error(`Invalid address: ${item.addressToStream}`);
+        return;
       }
 
       streamToken({
@@ -121,18 +109,10 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
         const amountPerSec = new BigNumber(item.amountToStream).times(1e20).div(secondsByDuration[duration]).toFixed(0);
         const llamaContractAddress = tokenDetails.llamaContractAddress;
 
-        const ens = await mainnet?.chainProviders.resolveName(item.addressToStream);
-        const rave = await getRaveAddress(item.addressToStream);
-        let address;
-        if (ens || rave) {
-          address = ens ?? rave;
-        } else {
-          if (!ethers.utils.isAddress(item.addressToStream)) {
-            toast.error(`Invalid address: ${item.addressToStream}`);
-            return;
-          } else {
-            address = ethers.utils.getAddress(item.addressToStream);
-          }
+        const address = await resolveEnsAndRave(item.addressToStream);
+        if (!address) {
+          toast.error(`Invalid address: ${item.addressToStream}`);
+          return;
         }
         const call = LlamaContractInterface.encodeFunctionData('createStream', [address, amountPerSec]);
         if (!calls[llamaContractAddress]) {

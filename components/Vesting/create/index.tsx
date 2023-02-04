@@ -18,6 +18,7 @@ import ChartWrapper from '../Charts/ChartWrapper';
 import type { IVestingElements } from '../types';
 import Calendar from 'react-calendar';
 import EOAWarning from './EOAWarning';
+import { resolveEnsAndRave } from '~/utils/address';
 
 export default function CreateVesting({ factory }: { factory: string }) {
   const [formData, setFormData] = React.useState({
@@ -90,6 +91,11 @@ export default function CreateVesting({ factory }: { factory: string }) {
     const vestingDuration = form.vestingDuration?.value;
     const cliffDuration = form.cliffDuration?.value;
 
+    const address = await resolveEnsAndRave(recipientAddress);
+    if (!address) {
+      toast.error(`Invalid address: ${recipientAddress}`);
+      return;
+    }
     const fmtVestingTime = new BigNumber(vestingTime).times(secondsByDuration[vestingDuration]).toFixed(0);
     const date = formData.includeCustomStart ? new Date(form.startDate.value) : new Date(Date.now());
 
@@ -107,7 +113,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
     const decimals = await tokenContract.decimals();
     const formattedAmt = new BigNumber(vestingAmount).times(10 ** decimals).toFixed(0);
 
-    const isEOA = (await provider.getCode(recipientAddress)) === '0x' ? true : false;
+    const isEOA = (await provider.getCode(address)) === '0x' ? true : false;
     if (!isEOA) {
       setRecipient(recipientAddress);
       eoaWarningDialog.show();
