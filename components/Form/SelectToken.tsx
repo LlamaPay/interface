@@ -11,7 +11,7 @@ import { BeatLoader } from 'react-spinners';
 import useTokenBalances from '~/queries/useTokenBalances';
 import Image from 'next/image';
 import defaultImage from '~/public/empty-token.webp';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { TokenBalance } from '~/components/Balance/BalanceAndSymbol';
 

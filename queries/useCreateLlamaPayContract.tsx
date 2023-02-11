@@ -1,7 +1,7 @@
 import { Signer } from 'ethers';
 import { getAddress } from 'ethers/lib/utils';
 import { useNetworkProvider } from '~/hooks';
-import { useMutation, useQueryClient } from 'react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { ITransactionError, ITransactionSuccess } from '~/types';
 import { networkDetails } from '~/lib/networkDetails';
 import { createFactoryWriteContract } from '~/utils/contract';

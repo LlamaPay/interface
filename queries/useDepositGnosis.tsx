@@ -1,6 +1,6 @@
 import SafeAppsSDK from '@gnosis.pm/safe-apps-sdk/dist/src/sdk';
 import { DisclosureState } from 'ariakit';
-import { useMutation } from 'react-query';
+import { useMutation } from '@tanstack/react-query';
 import { ERC20Interface, LlamaContractInterface } from '~/utils/contract';
 
 interface IUseDepositGnosis {

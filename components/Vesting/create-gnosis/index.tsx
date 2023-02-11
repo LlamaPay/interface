@@ -15,7 +15,7 @@ import { BeatLoader } from 'react-spinners';
 import { Switch } from '@headlessui/react';
 import type { IVestingGnosisFormValues } from '../types';
 import MultipleStreamChartWrapper from '../Charts/MultipleStreamChartWrapper';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import EOAWarning from '../create/EOAWarning';
 import { useDialogState } from 'ariakit';
 
