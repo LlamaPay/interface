@@ -1,4 +1,12 @@
-import { CashIcon, CogIcon, InboxInIcon, PauseIcon, PlayIcon, PlusIcon, XIcon } from '@heroicons/react/solid';
+import {
+  BanknotesIcon,
+  CogIcon,
+  InboxArrowDownIcon,
+  PauseIcon,
+  PlayIcon,
+  PlusIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/solid';
 import Tooltip from '~/components/Tooltip';
 import { useChainExplorer } from '~/hooks';
 import { useTranslations } from 'next-intl';
@@ -37,7 +45,7 @@ export function ActionName({ data }: { data: IHistory }) {
           <div className="rounded bg-red-100 p-1 text-red-600">
             <a href={link} target="_blank" rel="noreferrer noopener">
               <span className="sr-only">{t1('viewTransactionOnExplorer', { name: 'chain explorer' })}</span>
-              <XIcon className="h-4 w-4" />
+              <XMarkIcon className="h-4 w-4" />
             </a>
           </div>
         </Tooltip>
@@ -46,7 +54,7 @@ export function ActionName({ data }: { data: IHistory }) {
           <div className="rounded bg-green-100 p-1 text-green-600">
             <a href={link} target="_blank" rel="noreferrer noopener">
               <span className="sr-only">{t1('viewTransactionOnExplorer', { name: 'chain explorer' })}</span>
-              <CashIcon className="h-4 w-4" />
+              <BanknotesIcon className="h-4 w-4" />
             </a>
           </div>
         </Tooltip>
@@ -55,7 +63,7 @@ export function ActionName({ data }: { data: IHistory }) {
           <div className="rounded bg-green-100 p-1 text-green-600">
             <a href={link} target="_blank" rel="noreferrer noopener">
               <span className="sr-only">{t1('viewTransactionOnExplorer', { name: 'chain explorer' })}</span>
-              <InboxInIcon className="h-4 w-4" />
+              <InboxArrowDownIcon className="h-4 w-4" />
             </a>
           </div>
         </Tooltip>

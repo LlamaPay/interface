@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { ArrowLeftIcon } from '@heroicons/react/solid';
+import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 import { useCreateStreamForm, useTokenList } from '~/hooks';
 import { InputAmountWithDuration, InputText, SelectToken, SubmitButton } from '~/components/Form';
 import { BeatLoader } from 'react-spinners';
 import useTokenBalances, { ITokenBalance } from '~/queries/useTokenBalances';
 import AnimatedStream from '~/components/AnimatedStream';
 import { useTranslations } from 'next-intl';
-import { ExclamationCircleIcon } from '@heroicons/react/outline';
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 
 export default function CreateStreamField({
   setCreateStream,

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useDialogState } from 'ariakit';
-import { ArrowRightIcon } from '@heroicons/react/solid';
+import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import { FormDialog, TransactionDialog } from '~/components/Dialog';
 import type { IStream } from '~/types';
 import { useAddressStore } from '~/store/address';

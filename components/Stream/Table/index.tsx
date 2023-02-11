@@ -26,7 +26,7 @@ import { useTranslations } from 'next-intl';
 import Schedule from '../../Schedule/Schedule';
 import { useNetworkProvider } from '~/hooks';
 import Tooltip from '~/components/Tooltip';
-import { ClipboardCopyIcon, ShareIcon } from '@heroicons/react/outline';
+import { ClipboardDocumentIcon, ShareIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 
 export function StreamTable({ data }: { data: IStream[] }) {
@@ -120,7 +120,7 @@ export function StreamTable({ data }: { data: IStream[] }) {
                       !data || data.streamType === 'incomingStream' ? 'mr-[-98px]' : ''
                     )}
                   >
-                    <ClipboardCopyIcon className="h-4 w-4 text-black dark:text-white" />
+                    <ClipboardDocumentIcon className="h-4 w-4 text-black dark:text-white" />
                   </Tooltip>
                 )}
               </>
@@ -299,7 +299,7 @@ export function DefaultStreamTable({ data }: { data: IStream[] }) {
               }
               className="relative top-[1px] ml-auto flex items-center"
             >
-              <ClipboardCopyIcon className="h-4 w-4 text-black dark:text-white" />
+              <ClipboardDocumentIcon className="h-4 w-4 text-black dark:text-white" />
             </Tooltip>
           ),
         enableSorting: false,
@@ -309,8 +309,8 @@ export function DefaultStreamTable({ data }: { data: IStream[] }) {
         header: '',
         cell: (info) =>
           network && (
-            <Link href={`/salaries/withdraw/${network}/${info.getValue()}`}>
-              <a className="row-action-links">Withdraw</a>
+            <Link href={`/salaries/withdraw/${network}/${info.getValue()}`} className="row-action-links">
+              Withdraw
             </Link>
           ),
         enableSorting: false,

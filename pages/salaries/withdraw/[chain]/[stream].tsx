@@ -145,9 +145,9 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
               <Image
                 src={logoURI || defaultImage}
                 alt={network ? t0('logoAlt', { name: network }) : 'Chain'}
-                objectFit="contain"
-                width="16px"
-                height="15px"
+                className="object-contain"
+                width={16}
+                height={16}
               />
             </div>
           </Tooltip>
@@ -176,9 +176,9 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
                 <Image
                   src={tokenLogo || defaultImage}
                   alt={stream.token.name || 'Token'}
-                  objectFit="contain"
-                  width="16px"
-                  height="16px"
+                  className="object-contain"
+                  width={16}
+                  height={16}
                 />
               </div>
               <p>
@@ -246,9 +246,9 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
                       <Image
                         src={tokenLogo || defaultImage}
                         alt={stream.token.name || 'Token'}
-                        objectFit="contain"
-                        width="16px"
-                        height="16px"
+                        className="object-contain"
+                        width={16}
+                        height={16}
                       />
                       <span>{`${stream.token.symbol} to wallet`}</span>
                     </button>

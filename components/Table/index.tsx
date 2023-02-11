@@ -1,4 +1,4 @@
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 import { Table, flexRender } from '@tanstack/react-table';
 import { DisclosureState } from 'ariakit';
 import classNames from 'classnames';

@@ -17,7 +17,7 @@ import {
   TokenName,
   Withdrawable,
 } from '~/components/Stream/Table/CustomValues';
-import { CashIcon } from '@heroicons/react/solid';
+import { BanknotesIcon } from '@heroicons/react/24/solid';
 import useBatchCalls from '~/queries/useBatchCalls';
 import useGnosisBatch from '~/queries/useGnosisBatch';
 import { LlamaContractInterface } from '~/utils/contract';
@@ -156,9 +156,9 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
             <Image
               src={logoURI ?? defaultImage}
               alt={t('logoAlt', { name: network })}
-              objectFit="contain"
-              width="21px"
-              height="24px"
+              className="object-contain"
+              width={21}
+              height={24}
             />
           </div>
           <p className="truncate whitespace-nowrap">{network}</p>
@@ -206,7 +206,7 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
               className="secondary-button flex w-fit items-center justify-between gap-4 whitespace-nowrap py-2 px-8 text-sm font-bold disabled:cursor-not-allowed dark:border-lp-secondary dark:bg-lp-primary dark:text-white"
             >
               <span>{t0('sendAll')}</span>
-              <CashIcon className="h-4 w-4" />
+              <BanknotesIcon className="h-4 w-4" />
             </button>
           </div>
 

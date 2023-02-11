@@ -48,7 +48,7 @@ export default function Hero({ walletDialog }: { walletDialog: DisclosureState }
       </button>
 
       <div className="hero-graphic">
-        <Image src={heroGraphic} alt="" objectFit="contain" />
+        <Image src={heroGraphic} alt="" className="object-contain" />
       </div>
     </div>
   );

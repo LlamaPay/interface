@@ -102,12 +102,11 @@ const LinkItem = ({ isActive, href, name }: { isActive: boolean; href: string; n
         isActive && '!border-llama-green-500'
       )}
     >
-      <Link href={href} passHref>
-        <a
-          className={classNames('text-sm font-medium', isActive && 'font-bold text-llama-green-500 dark:text-lp-white')}
-        >
-          {name}
-        </a>
+      <Link
+        href={href}
+        className={classNames('text-sm font-medium', isActive && 'font-bold text-llama-green-500 dark:text-lp-white')}
+      >
+        {name}
       </Link>
     </li>
   );

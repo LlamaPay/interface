@@ -3,7 +3,7 @@ import { useNetworkProvider } from '~/hooks';
 import useStreamsAndHistory from '~/queries/useStreamsAndHistory';
 import useBatchCalls from '~/queries/useBatchCalls';
 import { useAccount } from 'wagmi';
-import { CashIcon } from '@heroicons/react/outline';
+import { BanknotesIcon } from '@heroicons/react/24/outline';
 import { LlamaContractInterface } from '~/utils/contract';
 import useGnosisBatch from '~/queries/useGnosisBatch';
 import { useTranslations } from 'next-intl';
@@ -56,7 +56,7 @@ export default function WithdrawAll() {
       className="flex w-full items-center justify-between gap-4 whitespace-nowrap dark:text-white dark:hover:text-[#cccccc]"
     >
       <span>{t('sendAll')}</span>
-      <CashIcon className="h-4 w-4" />
+      <BanknotesIcon className="h-4 w-4" />
     </button>
   );
 }
