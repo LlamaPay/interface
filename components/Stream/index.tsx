@@ -23,10 +23,9 @@ export function StreamSection() {
           </span>
 
           <div className="flex flex-wrap gap-[0.625rem]">
-            <Link href="/create">
-              <a className="primary-button py-2 px-4 text-sm font-bold">{t('create')}</a>
+            <Link href="/create" className="primary-button py-2 px-4 text-sm font-bold">
+              {t('create')}
             </Link>
-
             <StreamMenu />
           </div>
         </div>

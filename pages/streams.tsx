@@ -51,9 +51,9 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, resolvedAd
                 <Image
                   src={logoURI || defaultImage}
                   alt={t('logoAlt', { name: network })}
-                  objectFit="contain"
-                  width="21px"
-                  height="24px"
+                  className="object-contain"
+                  width={21}
+                  height={24}
                 />
               </div>
               <p className="truncate whitespace-nowrap">{network}</p>

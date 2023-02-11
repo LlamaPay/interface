@@ -9,7 +9,7 @@ import {
   SelectGroupLabel,
   SelectSeparator,
 } from 'ariakit/select';
-import { SelectorIcon } from '@heroicons/react/solid';
+import { ChevronUpDownIcon } from '@heroicons/react/24/solid';
 import { useNetwork } from 'wagmi';
 import { chainDetails } from '~/utils/network';
 import Image from 'next/image';
@@ -37,8 +37,8 @@ export const NetworksMenu = () => {
   if (!data || !chain || !switchNetwork) return null;
 
   const allChains = data.chains.sort((a, b) => {
-    const chain1 = activeStreams?.find((c) => c.id === a.id)?.streams ?? 0;
-    const chain2 = activeStreams?.find((c) => c.id === b.id)?.streams ?? 0;
+    const chain1: number = activeStreams?.find((c) => c.id === a.id)?.streams ?? 0;
+    const chain2: number = activeStreams?.find((c) => c.id === b.id)?.streams ?? 0;
 
     if (!chain1 && !chain2) {
       return 0;
@@ -61,14 +61,14 @@ export const NetworksMenu = () => {
             <Image
               src={network?.logoURI ?? defaultImage}
               alt={t('logoAlt', { name: network?.prefix })}
-              objectFit="contain"
-              width="20px"
-              height="20px"
+              className="object-contain"
+              width={20}
+              height={20}
               priority
             />
           </div>
           <span>{chain.name ?? t('unsupported')}</span>
-          <SelectorIcon className="relative right-[-4px] h-4 w-4 text-gray-400" aria-hidden="true" />
+          <ChevronUpDownIcon className="relative right-[-4px] h-4 w-4 text-gray-400" aria-hidden="true" />
         </>
       </Select>
       {select.mounted && (
@@ -93,9 +93,9 @@ export const NetworksMenu = () => {
                     <Image
                       src={network?.logoURI ?? defaultImage}
                       alt={t('logoAlt', { name: value.name })}
-                      objectFit="contain"
-                      width="20px"
-                      height="20px"
+                      className="object-contain"
+                      width={20}
+                      height={20}
                       priority
                     />
                   </div>
@@ -123,9 +123,9 @@ export const NetworksMenu = () => {
                     <Image
                       src={network?.logoURI ?? defaultImage}
                       alt={t('logoAlt', { name: value.name })}
-                      objectFit="contain"
-                      width="20px"
-                      height="20px"
+                      className="object-contain"
+                      width={20}
+                      height={20}
                       priority
                     />
                   </div>

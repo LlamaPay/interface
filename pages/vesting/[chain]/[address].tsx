@@ -41,9 +41,9 @@ const Streams: NextPage<StreamsProps> = ({ address, resolvedAddress, network, ch
               <Image
                 src={logoURI || defaultImage}
                 alt={network ? t('logoAlt', { name: network }) : 'Fallback Logo'}
-                objectFit="contain"
-                width="21px"
-                height="24px"
+                className="object-contain"
+                width={21}
+                height={24}
               />
             </div>
             <p className="truncate whitespace-nowrap">{network || query.chain}</p>

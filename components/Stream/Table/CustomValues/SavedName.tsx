@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { ArrowDownIcon, ArrowUpIcon, PencilIcon } from '@heroicons/react/solid';
+import { ArrowDownIcon, ArrowUpIcon, PencilIcon } from '@heroicons/react/24/solid';
 import { useDialogState } from 'ariakit';
 import { FormDialog } from '~/components/Dialog';
 import Tooltip from '~/components/Tooltip';
@@ -48,9 +48,12 @@ export function SavedName({ data }: { data: IStream }) {
 
   return (
     <div className="flex items-center gap-2 truncate">
-      <Link href={`/salaries/withdraw/${network}/${data.streamId}`} passHref>
+      <Link
+        href={`/salaries/withdraw/${network}/${data.streamId}`}
+        className="flex cursor-pointer items-center gap-2 truncate"
+      >
         {isIncoming ? (
-          <a className="flex cursor-pointer items-center gap-2 truncate">
+          <>
             <Tooltip content={t1('incomingStream')}>
               <div className="rounded bg-green-100 p-1 text-green-600">
                 <span className="sr-only">{t1('incomingStream')}</span>
@@ -58,9 +61,9 @@ export function SavedName({ data }: { data: IStream }) {
               </div>
             </Tooltip>
             <span className="dark:text-white">{name}</span>
-          </a>
+          </>
         ) : (
-          <a className="flex cursor-pointer items-center gap-2 truncate">
+          <>
             <Tooltip content={t1('outgoingStream')}>
               <div className="rounded bg-red-100 p-1 text-red-600">
                 <span className="sr-only">{t1('outgoingStream')}</span>
@@ -68,7 +71,7 @@ export function SavedName({ data }: { data: IStream }) {
               </div>
             </Tooltip>
             <span className="dark:text-white">{name}</span>
-          </a>
+          </>
         )}
       </Link>
       <button className="ml-auto rounded p-1 hover:bg-zinc-200 hover:dark:bg-stone-700" onClick={dialog.toggle}>

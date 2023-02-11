@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router';
 import { useTranslations } from 'next-intl';
-import { ShareIcon, TrashIcon } from '@heroicons/react/outline';
-import { DotsVerticalIcon } from '@heroicons/react/solid';
+import { ShareIcon, TrashIcon } from '@heroicons/react/24/outline';
+import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import { useDialogState } from 'ariakit';
 import { Menu, MenuButton, MenuItem, useMenuState } from 'ariakit/menu';
 import { useAccount, useEnsLookup } from 'wagmi';
@@ -46,7 +46,7 @@ export default function StreamMenu() {
         style={{ pointerEvents: 'initial' }}
       >
         <span className="sr-only">Open Streams Menu</span>
-        <DotsVerticalIcon className="h-4 w-4" />
+        <EllipsisVerticalIcon className="h-4 w-4" />
       </MenuButton>
 
       <Menu

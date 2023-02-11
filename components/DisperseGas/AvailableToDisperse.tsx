@@ -33,8 +33,8 @@ export default function AvailableToDisperse({ id }: { id: string }) {
             <Image
               src={network?.logoURI ?? defaultImage}
               alt={t0('logoAlt', { name: networkData?.chain?.name ?? 'Unsupported Token' })}
-              width="14px"
-              height="14px"
+              width={14}
+              height={14}
             />
           </div>
           <p>

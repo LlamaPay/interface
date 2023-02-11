@@ -11,7 +11,7 @@ import { secondsByDuration } from '~/utils/constants';
 import useStreamToken from '~/queries/useStreamToken';
 import { useTranslations } from 'next-intl';
 import useGnosisBatch from '~/queries/useGnosisBatch';
-import { ExclamationCircleIcon } from '@heroicons/react/outline';
+import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
 import { resolveEnsAndRave } from '~/utils/address';
 

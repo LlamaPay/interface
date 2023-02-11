@@ -3,9 +3,9 @@ import { Connector, useAccount, useConnect } from 'wagmi';
 import { useChainExplorer, useIsMounted } from '~/hooks';
 import { formatAddress } from '~/utils/address';
 import { Dialog, DialogHeading, DisclosureState } from 'ariakit';
-import { XIcon } from '@heroicons/react/solid';
+import { XMarkIcon } from '@heroicons/react/24/solid';
 import { useTranslations } from 'next-intl';
-import { ExternalLinkIcon } from '@heroicons/react/outline';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import useGetRaveName from '~/queries/useGetRaveName';
 
 interface Props {
@@ -55,7 +55,7 @@ export const WalletSelector = ({ dialog }: Props) => {
               onClick={dialog.toggle}
             >
               <span className="sr-only">{t('close')}</span>
-              <XIcon className="h-5 w-5" />
+              <XMarkIcon className="h-5 w-5" />
             </button>
           </DialogHeading>
           <div className="mt-3 flex flex-col gap-2">
@@ -78,7 +78,7 @@ export const WalletSelector = ({ dialog }: Props) => {
                 rel="noreferrer noopener"
               >
                 <span className="sr-only">View address on chain explorer</span>
-                <ExternalLinkIcon className="h-4 w-4" />
+                <ArrowTopRightOnSquareIcon className="h-4 w-4" />
               </a>
             </p>
             <button
@@ -101,7 +101,7 @@ export const WalletSelector = ({ dialog }: Props) => {
               onClick={dialog.toggle}
             >
               <span className="sr-only">{t('close')}</span>
-              <XIcon className="h-5 w-5" />
+              <XMarkIcon className="h-5 w-5" />
             </button>
           </DialogHeading>
           <div className="mt-3 flex flex-col gap-2">

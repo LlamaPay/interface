@@ -63,8 +63,8 @@ const Home: NextPage = () => {
                 ) : pools.length === 0 ? (
                   <p>
                     Create a{' '}
-                    <Link href="/token-salaries/create" passHref>
-                      <a className="underline">contract</a>
+                    <Link href="/token-salaries/create" className="underline">
+                      contract
                     </Link>{' '}
                     to schedule transfers
                   </p>

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { XIcon } from '@heroicons/react/solid';
+import { XMarkIcon } from '@heroicons/react/24/solid';
 import { DisclosureState } from 'ariakit';
 import { Dialog, DialogDismiss } from 'ariakit/dialog';
 import classNames from 'classnames';
@@ -22,7 +22,7 @@ export const TransactionDialog = ({ dialog, className, transactionHash }: FormDi
       <header className="font-exo relative">
         <DialogDismiss className="ml-auto flex items-start justify-end">
           <span className="sr-only">{t('close')}</span>
-          <XIcon className="h-6 w-6" />
+          <XMarkIcon className="h-6 w-6" />
         </DialogDismiss>
       </header>
       <div className="my-10 flex items-center justify-center">

@@ -2,7 +2,7 @@ import { DisclosureState } from 'ariakit';
 import { FormDialog } from '~/components/Dialog';
 import { UserHistoryFragment } from '~/services/generated/graphql';
 import { useChainExplorer } from '~/hooks';
-import { ExternalLinkIcon } from '@heroicons/react/outline';
+import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import { secondsByDuration } from '~/utils/constants';
 import { formatAmountInTable } from '~/utils/amount';
 import { useIntl, useTranslations } from 'next-intl';
@@ -135,7 +135,7 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
             className="form-submit-button mt-4 flex items-center justify-center gap-2"
           >
             <span>{t0('viewOnExplorer', { explorer: explorerName })}</span>
-            <ExternalLinkIcon className="h-4 w-4" />
+            <ArrowTopRightOnSquareIcon className="h-4 w-4" />
           </a>
         </span>
       </FormDialog>

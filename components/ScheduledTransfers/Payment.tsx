@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { PlusIcon } from '@heroicons/react/solid';
+import { PlusIcon } from '@heroicons/react/24/solid';
 import { DisclosureState, useDialogState } from 'ariakit';
 import { FormDialog, TransactionDialog } from '~/components/Dialog';
 import { InputText, SubmitButton } from '~/components/Form';

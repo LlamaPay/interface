@@ -125,7 +125,7 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
     return (
       <div className="flex items-center gap-2">
         <div className="flex h-6 w-6 flex-shrink-0 items-center rounded-full">
-          <Image src={data.logoURI} alt={t('logoAlt', { name: data.title })} width="24px" height="24px" />
+          <Image src={data.logoURI} alt={t('logoAlt', { name: data.title })} width={24} height={24} />
         </div>
         <span>{data.title}</span>
       </div>
