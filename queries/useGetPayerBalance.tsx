@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import type { IBalance, ITokenLists } from '~/types';
 import { useAccount } from 'wagmi';
 import BigNumber from 'bignumber.js';

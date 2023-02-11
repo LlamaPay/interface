@@ -8,7 +8,7 @@ import { networkDetails } from '~/lib/networkDetails';
 import { secondsByDuration } from '~/utils/constants';
 import { botContractABI } from '~/lib/abis/botContract';
 import toast from 'react-hot-toast';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { Switch } from '@headlessui/react';
 import { useApproveTokenForMaxAmt } from '~/queries/useTokenApproval';
 import BotDepositWarning from './BotDepositWarning';

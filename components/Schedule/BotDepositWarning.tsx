@@ -3,7 +3,7 @@ import { DisclosureState } from 'ariakit';
 import { FormDialog } from '~/components/Dialog';
 import { InputAmount, SubmitButton } from '~/components/Form';
 import toast from 'react-hot-toast';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useContractRead, useContractWrite } from 'wagmi';
 
 export default function BotDepositWarning({

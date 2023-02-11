@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image, { StaticImageData } from 'next/image';
-import { dehydrate, QueryClient } from 'react-query';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { useDialogState } from 'ariakit';
 import { useNetwork } from 'wagmi';
 import { useIntl, useTranslations } from 'next-intl';
@@ -284,7 +284,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery(
-    'StreamById',
+    ['StreamById'],
     useStreamByIdQuery.fetcher(
       {
         endpoint: network?.subgraphEndpoint ?? '',

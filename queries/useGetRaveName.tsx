@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
 import { ethers } from 'ethers';
 import { getAddress } from 'ethers/lib/utils';

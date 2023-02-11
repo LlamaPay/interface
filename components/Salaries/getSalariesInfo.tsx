@@ -1,4 +1,4 @@
-import { dehydrate, QueryClient } from 'react-query';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { chainDetails } from '~/utils/network';
 import { useStreamAndHistoryQuery } from '~/services/generated/graphql';
 import defaultImage from '~/public/empty-token.webp';
@@ -24,7 +24,7 @@ export default async function getSalariesInfo({ chain, address, locale }: ISalar
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery(
-    'StreamAndHistory',
+    ['StreamAndHistory'],
     useStreamAndHistoryQuery.fetcher(
       {
         endpoint: network?.subgraphEndpoint ?? '',

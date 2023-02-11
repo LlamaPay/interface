@@ -2,8 +2,8 @@ import '~/styles/globals.css';
 
 import type { AppProps } from 'next/app';
 import * as React from 'react';
-import { QueryClient, QueryClientProvider, Hydrate } from 'react-query';
-import { ReactQueryDevtools } from 'react-query/devtools';
+import { QueryClient, QueryClientProvider, Hydrate } from '@tanstack/react-query';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { WalletProvider } from '~/components/Web3';
 import { NextIntlProvider } from 'next-intl';
 import { ThemeProvider } from 'next-themes';

@@ -13,7 +13,7 @@ import { ScheduledTransferPayment } from './Payment';
 import { scheduledPaymentsContractABI } from '~/lib/abis/scheduledPaymentsContract';
 import { getAddress } from 'ethers/lib/utils';
 import toast from 'react-hot-toast';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { BeatLoader } from 'react-spinners';
 import { secondsByDuration } from '~/utils/constants';
 
