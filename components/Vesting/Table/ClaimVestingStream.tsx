@@ -26,7 +26,7 @@ export default function ClaimVesting({
   const transactionDialog = useDialogState();
   const confirmDialog = useDialogState();
 
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
 
   const [{ loading }, claim] = useContractWrite(
     {
@@ -43,7 +43,7 @@ export default function ClaimVesting({
 
   function handleClaim() {
     if (!hasCustomBeneficiary) {
-      setBeneficiaryInput(accountData?.address);
+      setBeneficiaryInput(address);
     }
     setInputAmount(new BigNumber(inputAmount).times(10 ** data.tokenDecimals).toFixed(0));
     claimDialog.hide();
@@ -52,7 +52,7 @@ export default function ClaimVesting({
 
   function handleClaimAll() {
     if (!hasCustomBeneficiary) {
-      setBeneficiaryInput(accountData?.address);
+      setBeneficiaryInput(address);
     }
     setInputAmount(new BigNumber(data.unclaimed).toFixed(0));
     claimDialog.hide();

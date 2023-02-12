@@ -1,97 +1,45 @@
-import { Chain, allChains } from 'wagmi';
+import * as wagmiChains from 'wagmi/chains';
 
-const defaultChains: Chain[] = allChains.filter(
-  (chain) =>
-    chain.name === 'Avalanche Fuji Testnet' ||
-    chain.name === 'Avalanche Mainnet' ||
-    chain.name === 'Polygon Mainnet' ||
-    chain.name === 'Mainnet' ||
-    chain.name === 'Optimism' ||
-    chain.name === 'Arbitrum One' ||
-    chain.name === 'Goerli'
-);
+const defaultChains: Array<wagmiChains.Chain> = [
+  wagmiChains.avalancheFuji,
+  wagmiChains.avalanche,
+  wagmiChains.polygon,
+  wagmiChains.mainnet,
+  wagmiChains.optimism,
+  wagmiChains.arbitrum,
+  wagmiChains.goerli,
+  wagmiChains.fantom,
+  wagmiChains.bsc,
+  wagmiChains.gnosis,
+];
 
-const formattedChains = defaultChains.map((chain) => {
-  if (chain.name === 'Mainnet') {
-    return { ...chain, name: 'Ethereum' };
-  }
-
-  if (chain.name === 'Avalanche Mainnet') {
-    return { ...chain, name: 'Avalanche' };
-  }
-
-  if (chain.name === 'Polygon Mainnet') {
-    return { ...chain, name: 'Polygon' };
-  }
-
-  if (chain.name === 'Avalanche Fuji Testnet') {
-    return { ...chain, name: 'Fuji' };
-  }
-
-  return chain;
-});
-
-export const chains: Chain[] = [
-  ...formattedChains,
-  {
-    id: 250,
-    name: 'Fantom',
-    nativeCurrency: { name: 'Fantom', symbol: 'FTM', decimals: 18 },
-    rpcUrls: ['https://rpc.ftm.tools'],
-    blockExplorers: [
-      {
-        name: 'FTMScan',
-        url: 'https://ftmscan.com',
-      },
-    ],
-  },
-  {
-    id: 56,
-    name: 'BSC',
-    nativeCurrency: { name: 'BNB', symbol: 'BNB', decimals: 18 },
-    rpcUrls: ['https://bsc-dataseed.binance.org'],
-    blockExplorers: [
-      {
-        name: 'BscScan',
-        url: 'https://www.bscscan.com/',
-      },
-    ],
-  },
-  {
-    id: 100,
-    name: 'Gnosis',
-    nativeCurrency: { name: 'xDAI', symbol: 'xDAI', decimals: 18 },
-    rpcUrls: ['https://xdai-rpc.gateway.pokt.network'],
-    blockExplorers: [
-      {
-        name: 'Blockscout',
-        url: 'https://blockscout.com/xdai/mainnet/',
-      },
-    ],
-  },
+export const chains: Array<wagmiChains.Chain> = [
+  ...defaultChains,
   {
     id: 82,
     name: 'Meter',
+    network: 'meter',
     nativeCurrency: { name: 'Meter', symbol: 'MTR', decimals: 18 },
-    rpcUrls: ['https://rpc.meter.io'],
-    blockExplorers: [
-      {
+    rpcUrls: { default: { http: ['https://rpc.meter.io'] }, public: { http: ['https://rpc.meter.io'] } },
+    blockExplorers: {
+      default: {
         name: 'Meter Blockchain Explorer',
         url: 'https://scan.meter.io/',
       },
-    ],
+    },
   },
   {
     id: 2222,
     name: 'Kava',
+    network: 'kava',
     nativeCurrency: { name: 'Kava', symbol: 'KAVA', decimals: 18 },
-    rpcUrls: ["https://evm.kava.io'"],
-    blockExplorers: [
-      {
+    rpcUrls: { default: { http: ['https://evm.kava.io'] }, public: { http: ['https://evm.kava.io'] } },
+    blockExplorers: {
+      default: {
         name: 'Kava Explorer',
         url: 'https://explorer.kava.io/',
       },
-    ],
+    },
   },
   // {
   //   id: 1088,

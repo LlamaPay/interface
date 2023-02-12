@@ -13,7 +13,7 @@ import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 import { formatAddress } from '~/utils/address';
 import { chainDetails } from '~/utils/network';
-import { useAccount, useNetwork } from 'wagmi';
+import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
 import defaultImage from '~/public/empty-token.webp';
 import { useTheme } from 'next-themes';
 import Link from 'next/link';
@@ -27,7 +27,9 @@ export default function HeaderMenu({
 }) {
   const { locales, updateLocale } = useLocale();
 
-  const [{ data: accountData }] = useAccount();
+  const { address: walletAddress } = useAccount();
+  const { chain, chains } = useNetwork();
+  const { switchNetwork } = useSwitchNetwork();
 
   const t1 = useTranslations('Common');
   const t2 = useTranslations('Header');
@@ -38,13 +40,9 @@ export default function HeaderMenu({
 
   const isDark = resolvedTheme === 'dark';
 
-  const address = accountData ? formatAddress(accountData.address) : null;
+  const address = walletAddress ? formatAddress(walletAddress) : null;
 
-  const [{ data: networkData }, switchNetwork] = useNetwork();
-
-  const chain = networkData.chain;
-
-  const mainnets = networkData.chains.filter((chain) => !chain.testnet);
+  const mainnets = chains.filter((chain) => !chain.testnet);
 
   const size = useWindowSize();
 
@@ -82,7 +80,7 @@ export default function HeaderMenu({
         <MenuItem label={t('connectWallet')} className="break-words p-2 md:hidden" onClick={walletDialog.toggle} />
       )}
 
-      {networkData && chain && switchNetwork && isMaxWidthSm && (
+      {walletAddress && chain && switchNetwork && isMaxWidthSm && (
         <Menu
           label={chain?.name ?? t('unsupported')}
           className="flex items-center justify-between p-2 font-normal text-lp-gray-2 outline-none active-item:text-black aria-disabled:opacity-40 sm:hidden"

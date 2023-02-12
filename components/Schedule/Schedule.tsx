@@ -25,7 +25,7 @@ export default function Schedule({
 }) {
   const dialog = useDialogState();
   const warningDialog = useDialogState();
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
   const botAddress = networkDetails[chainId].botAddress;
   const queryClient = useQueryClient();
   const [hasRedirect, setHasRedirect] = React.useState<boolean>(false);
@@ -172,7 +172,7 @@ export default function Schedule({
               </section>
             )}
 
-            {data.payeeAddress.toLowerCase() === accountData?.address.toLowerCase() && (
+            {address && data.payeeAddress.toLowerCase() === address.toLowerCase() && (
               <div className="flex space-x-1">
                 <span>Redirect Withdraw</span>
                 <Switch
@@ -208,7 +208,7 @@ export default function Schedule({
       <BotDepositWarning
         botAddress={botAddress}
         dialog={warningDialog}
-        userAddress={accountData?.address ?? ''}
+        userAddress={address || ''}
         nativeCurrency={nativeCurrency}
       />
     </>

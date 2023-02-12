@@ -32,7 +32,7 @@ const Balance = (props: { address?: string }) => {
 
   const { data: tokens, isLoading: tokensLoading } = useTokenBalances();
 
-  const [{ data: accountData }] = useAccount();
+  const { address, isConnected } = useAccount();
 
   const t0 = useTranslations('Common');
   const t1 = useTranslations('Balances');
@@ -77,7 +77,7 @@ const Balance = (props: { address?: string }) => {
         {showActions && (
           <button
             className="primary-button"
-            disabled={isLoading || tokensLoading || !accountData || !tokens}
+            disabled={isLoading || tokensLoading || !address || !tokens}
             onClick={() => {
               depositFieldDialog.toggle();
             }}
@@ -188,8 +188,8 @@ const Balance = (props: { address?: string }) => {
         </>
       )}
 
-      {tokens && accountData && (
-        <DepositField tokens={tokens} userAddress={accountData.address} dialog={depositFieldDialog} />
+      {tokens && isConnected && address && (
+        <DepositField tokens={tokens} userAddress={address} dialog={depositFieldDialog} />
       )}
     </section>
   );

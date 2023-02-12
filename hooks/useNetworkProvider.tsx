@@ -7,13 +7,13 @@ import { useNetwork } from 'wagmi';
 export type Provider = ethers.providers.BaseProvider;
 
 export const useNetworkProvider = () => {
-  const [{ data }] = useNetwork();
+  const { chain } = useNetwork();
 
   const { pathname, query } = useRouter();
 
-  let chainId = data?.chain?.id ?? null;
+  let chainId = chain?.id ?? null;
 
-  let name: string | null = data?.chain?.name ?? null;
+  let name: string | null = chain?.name ?? null;
 
   if (pathname === '/streams' && !Number.isNaN(Number(query.chainId))) {
     const chain = chains.find((c) => c.id === Number(query.chainId));
@@ -56,8 +56,8 @@ export const useNetworkProvider = () => {
     provider: chainDetails ? chainDetails.chainProviders : null,
     network: name?.toLowerCase() === 'mainnet' ? 'Ethereum' : name,
     chainId,
-    nativeCurrency: data.chain?.nativeCurrency,
-    unsupported: data.chain?.unsupported,
+    nativeCurrency: chain?.nativeCurrency,
+    unsupported: chain?.unsupported,
     tokenListId: networkDetails[chainId ?? 0]?.tokenListId,
   };
 };

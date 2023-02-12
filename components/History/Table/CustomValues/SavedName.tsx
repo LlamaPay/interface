@@ -9,9 +9,9 @@ import { useAccount } from 'wagmi';
 export function SavedName({ value, ens }: { value: string; eventType: string; ens: string | null }) {
   const t = useTranslations('Common');
 
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
 
-  const you = accountData && accountData.address.toLowerCase() === value.toLowerCase() ? t('you') : false;
+  const you = address && address.toLowerCase() === value.toLowerCase() ? t('you') : false;
 
   const name =
     useAddressStore((state) => state.addressBook.find((p) => p.id?.toLowerCase() === value?.toLowerCase()))

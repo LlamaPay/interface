@@ -22,7 +22,7 @@ interface ILayoutProps {
 export default function Layout({ children, className, ...props }: ILayoutProps) {
   const router = useRouter();
 
-  const [{ data }] = useAccount();
+  const { isConnected } = useAccount();
 
   const onboardDialog = useDialogState();
   const walletDialog = useDialogState();
@@ -40,7 +40,7 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
 
       <Header onboardDialog={onboardDialog} walletDialog={walletDialog} />
 
-      {router.pathname === '/' && !data ? (
+      {router.pathname === '/' && !isConnected ? (
         <>
           <Hero walletDialog={walletDialog} />
           <HowItWorks onboardDialog={onboardDialog} />
@@ -49,7 +49,7 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
         <div className="flex flex-1 py-9 px-2 md:px-6 lg:px-8 lg:pl-0">
           <Nav />
           <main className={classNames('mx-auto max-w-7xl flex-1', className)} {...props}>
-            {children}
+            {/* {children} */}
           </main>
         </div>
       )}

@@ -9,7 +9,7 @@ import BigNumber from 'bignumber.js';
 
 export default function PaymentRevokeButton({ data }: { data: IPayments }) {
   const { chainId } = useNetworkProvider();
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
   const contract = chainId && networkDetails[chainId].paymentsContract;
   const [{}, revoke] = useContractWrite(
     {
@@ -35,7 +35,7 @@ export default function PaymentRevokeButton({ data }: { data: IPayments }) {
 
   return (
     <>
-      {data.active && data.payer.toLowerCase() === accountData?.address.toLowerCase() && (
+      {data.active && address && data.payer.toLowerCase() === address.toLowerCase() && (
         <button onClick={handleRevoke} className="row-action-links font-exo float-left dark:text-white">
           Revoke
         </button>

@@ -8,7 +8,7 @@ import { networkDetails } from '~/lib/networkDetails';
 import { useAccount } from 'wagmi';
 
 const Create: NextPage = () => {
-  const [{ data: accountData }] = useAccount();
+  const { isConnected } = useAccount();
   const { chainId, unsupported } = useNetworkProvider();
   const t = useTranslations('CreateStream');
   const paymentsContract = chainId
@@ -25,7 +25,7 @@ const Create: NextPage = () => {
         <>
           <span className="font-exo text-2xl font-semibold text-lp-gray-4 dark:text-white">Set Up Vesting</span>
           <FallbackContainer>
-            <p>{!accountData ? t('connectWallet') : unsupported ? t('notSupported') : t('sus')}</p>
+            <p>{!isConnected ? t('connectWallet') : unsupported ? t('notSupported') : t('sus')}</p>
           </FallbackContainer>
         </>
       )}

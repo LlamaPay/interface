@@ -10,7 +10,7 @@ import DisperseFallback from './Fallback';
 import { useTranslations } from 'next-intl';
 
 function DisperseGasMoney({ dialog }: { dialog: DisclosureState }) {
-  const [{ data: accountData, loading }] = useAccount();
+  const { address, isConnecting } = useAccount();
   const { nativeCurrency } = useNetworkProvider();
   const transactionDialog = useDialogState();
   const [transactionHash, setTransactionHash] = React.useState<string>('');
@@ -20,8 +20,8 @@ function DisperseGasMoney({ dialog }: { dialog: DisclosureState }) {
   const t = useTranslations('Disperse');
 
   const { initialPayeeData, noStreams } = React.useMemo(() => {
-    if (data && accountData) {
-      const accountAddress = accountData?.address.toLowerCase();
+    if (data && address) {
+      const accountAddress = address.toLowerCase();
       const newTable: { [key: string]: string } = {};
       data.streams?.forEach((p: IStream) => {
         if (accountAddress === p.payerAddress.toLowerCase()) {
@@ -33,9 +33,9 @@ function DisperseGasMoney({ dialog }: { dialog: DisclosureState }) {
         noStreams: Object.keys(newTable).length === 0 && newTable.constructor === Object,
       };
     } else return { initialPayeeData: {}, noStreams: true };
-  }, [data, accountData]);
+  }, [data, address]);
 
-  const showFallback = loading || isLoading || error || noStreams;
+  const showFallback = isConnecting || isLoading || error || noStreams;
 
   return (
     <>

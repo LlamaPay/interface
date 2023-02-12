@@ -11,7 +11,8 @@ import { networkDetails } from '~/lib/networkDetails';
 import { useAccount, useContractWrite } from 'wagmi';
 
 export default function ReasonButton({ data }: { data: IVesting }) {
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
+
   const { chainId } = useNetworkProvider();
   const [{}, addReason] = useContractWrite(
     {
@@ -42,7 +43,8 @@ export default function ReasonButton({ data }: { data: IVesting }) {
   const dialog = useDisclosureState();
   return (
     <>
-      {data.admin.toLowerCase() === accountData?.address.toLowerCase() &&
+      {address &&
+        data.admin.toLowerCase() === address.toLowerCase() &&
         networkDetails[chainId ?? 0].vestingReason !== '0x0000000000000000000000000000000000000000' && (
           <>
             <button onClick={dialog.toggle} className="row-action-links">

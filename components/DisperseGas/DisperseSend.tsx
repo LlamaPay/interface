@@ -17,10 +17,10 @@ interface DisperseSendProps {
 }
 
 export default function DisperseSend({ dialog, data, setTransactionHash, transactionDialog }: DisperseSendProps) {
-  const [{ data: network }] = useNetwork();
+  const { chain } = useNetwork();
   const [{ loading }, disperseEther] = useContractWrite(
     {
-      addressOrName: networkDetails[Number(network.chain?.id)].disperseAddress,
+      addressOrName: networkDetails[Number(chain?.id)].disperseAddress,
       contractInterface: disperseContractABI,
     },
     'disperseEther'

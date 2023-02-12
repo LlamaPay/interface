@@ -35,10 +35,11 @@ export default function RenounceOwnershipButton({ data }: { data: IVesting }) {
       RenounceDialog.hide();
     });
   }
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
+
   return (
     <>
-      {data.admin.toLowerCase() === accountData?.address.toLowerCase() && (
+      {address && data.admin.toLowerCase() === address.toLowerCase() && (
         <button onClick={() => RenounceDialog.show()} className="row-action-links font-exo float-right dark:text-white">
           Renounce
         </button>

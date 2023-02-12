@@ -38,10 +38,10 @@ const fetchPayers = async (userAddress: string, tokens: IToken[] | null, provide
 
 // query that returns lastPayerUpdate, totalPaidPerSec when user address is passed
 function usePayers(tokens: IToken[] | null, tokensKey: string, replacementAddress?: string) {
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
   const { provider } = useNetworkProvider();
 
-  const userAddress = replacementAddress ?? accountData?.address.toLowerCase() ?? '';
+  const userAddress = replacementAddress ?? address?.toLowerCase() ?? '';
 
   return useQuery<IPayer[] | null>(['payers', userAddress, tokensKey], () =>
     fetchPayers(userAddress, tokens, provider)

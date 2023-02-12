@@ -62,9 +62,9 @@ interface IWithdrawFormElements {
 }
 
 export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }) {
-  const [{ data: networkData }] = useNetwork();
+  const { chain } = useNetwork();
 
-  const explorerUrl = networkData?.chain?.id ? networkDetails[networkData.chain.id]?.blockExplorerURL : null;
+  const explorerUrl = chain ? networkDetails[chain.id]?.blockExplorerURL : null;
 
   const txHash = React.useRef('');
 

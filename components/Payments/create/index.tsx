@@ -55,8 +55,8 @@ export default function CreatePayment({ contract }: { contract: string }) {
   });
 
   const { provider, chainId } = useNetworkProvider();
-  const [{ data: accountData }] = useAccount();
-  const [{ data: signer }] = useSigner();
+  const { address } = useAccount();
+  const { data: signer } = useSigner();
   const { mutate: checkApproval, data: approvalData } = useCheckMultipleTokenApproval();
   const { mutate: gnosisBatch } = useGnosisBatch();
   const { mutate: approveToken, isLoading: approving } = useApproveToken();
@@ -126,7 +126,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
           .toFixed(0);
       }
       const toCheck: ICheckMultipleTokenAllowance = {
-        userAddress: accountData?.address,
+        userAddress: address,
         tokens: {},
       };
       for (const token in tokenAndAmount) {
@@ -177,7 +177,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
       }
       if (process.env.NEXT_PUBLIC_SAFE === 'false') {
         const toCheck: ICheckMultipleTokenAllowance = {
-          userAddress: accountData?.address,
+          userAddress: address,
           tokens: {},
         };
         for (const token in tokenAndAmount) {

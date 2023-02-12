@@ -27,9 +27,9 @@ export function ScheduledTransferPayment({
 
   const txDialogState = useDialogState();
 
-  const [{ data: networkData }] = useNetwork();
+  const { chain } = useNetwork();
 
-  const explorerUrl = networkData?.chain?.id ? networkDetails[networkData.chain.id]?.blockExplorerURL : null;
+  const explorerUrl = chain ? networkDetails[chain.id]?.blockExplorerURL : null;
 
   return (
     <>

@@ -30,7 +30,7 @@ export default function VestingTable({
   claimDialog: DisclosureState;
   claimValues: React.MutableRefObject<IVesting | null>;
 }) {
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
   const { locale } = useLocale();
 
   let columns = React.useMemo<ColumnDef<IVesting>[]>(
@@ -45,7 +45,7 @@ export default function VestingTable({
       },
       {
         accessorFn: (row) =>
-          accountData?.address.toLowerCase() === row.recipient.toLowerCase() ? row.admin : row.recipient,
+          address && address.toLowerCase() === row.recipient.toLowerCase() ? row.admin : row.recipient,
         id: 'funderOrRecipient',
         header: 'Funder/Recipient',
         cell: (info) => (
@@ -133,7 +133,7 @@ export default function VestingTable({
           ),
       },
     ],
-    [accountData, chartValues, chartDialog, claimDialog, claimValues, locale]
+    [address, chartValues, chartDialog, claimDialog, claimValues, locale]
   );
 
   const [sorting, setSorting] = React.useState<SortingState>([]);

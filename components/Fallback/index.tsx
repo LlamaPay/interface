@@ -14,9 +14,9 @@ interface FallbackProps {
 }
 
 const Fallback = ({ isLoading, isError, noData, type, supressWalletConnection, showLoader }: FallbackProps) => {
-  const [{ data: basicAccountData }] = useAccount();
+  const { address, isConnected } = useAccount();
 
-  const accountData = supressWalletConnection === true || basicAccountData !== undefined;
+  const accountData = supressWalletConnection === true || !address || !isConnected;
 
   const { unsupported } = useNetworkProvider();
   const t0 = useTranslations('Common');

@@ -11,7 +11,7 @@ import { useTheme } from 'next-themes';
 import { useIsMounted } from '~/hooks';
 
 const Header = ({ onboardDialog, walletDialog }: { onboardDialog: DisclosureState; walletDialog: DisclosureState }) => {
-  const [{ data }] = useAccount();
+  const { isConnected } = useAccount();
 
   const t = useTranslations('Common');
 
@@ -29,7 +29,7 @@ const Header = ({ onboardDialog, walletDialog }: { onboardDialog: DisclosureStat
       </Link>
 
       <div className="flex flex-shrink-0 items-center justify-between gap-[0.625rem]">
-        {data ? (
+        {isConnected ? (
           <>
             <NetworksMenu />
             <Account showAccountInfo={walletDialog.toggle} />

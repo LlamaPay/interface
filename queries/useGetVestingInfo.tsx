@@ -214,11 +214,9 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
 export default function useGetVestingInfo() {
   const { provider, chainId } = useNetworkProvider();
 
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
 
-  return useQuery(['vestingInfo', accountData?.address, chainId], () =>
-    getVestingInfo(accountData?.address, provider, chainId)
-  );
+  return useQuery(['vestingInfo', address, chainId], () => getVestingInfo(address, provider, chainId));
 }
 
 interface IVestingInfoByQueryParams {

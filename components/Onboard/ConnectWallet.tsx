@@ -6,24 +6,18 @@ import { useTranslations } from 'next-intl';
 
 const ConnectWallet = () => {
   const isMounted = useIsMounted();
-  const [
-    {
-      data: { connectors },
-      loading: connecting,
-    },
-    connect,
-  ] = useConnect();
+  const { connect, connectors, isLoading } = useConnect();
 
-  const [{ data: accountData, loading: accountDataLoading }] = useAccount();
+  const { isConnected, isConnecting } = useAccount();
 
   const handleConnect = React.useCallback(
     async (connector: Connector) => {
-      await connect(connector);
+      await connect({ connector });
     },
     [connect]
   );
 
-  const hideConnectors = connecting || accountDataLoading;
+  const hideConnectors = isLoading || isConnecting;
 
   const t = useTranslations('OnboardWalletConnect');
 
@@ -46,7 +40,7 @@ const ConnectWallet = () => {
           </>
         )}
       </main>
-      {!accountData && <p className="my-7 w-full px-5 text-center text-xs text-lp-gray-6">{t('footer')}</p>}
+      {!isConnected && <p className="my-7 w-full px-5 text-center text-xs text-lp-gray-6">{t('footer')}</p>}
     </div>
   );
 };

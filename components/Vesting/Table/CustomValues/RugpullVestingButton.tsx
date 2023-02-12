@@ -36,10 +36,11 @@ export default function RugpullVestingButton({ data }: { data: IVesting }) {
       RugDialog.hide();
     });
   }
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
+
   return (
     <>
-      {data.admin.toLowerCase() === accountData?.address.toLowerCase() && (
+      {address && data.admin.toLowerCase() === address.toLowerCase() && (
         <button onClick={() => RugDialog.show()} className="row-action-links font-exo float-right dark:text-white">
           Rug
         </button>

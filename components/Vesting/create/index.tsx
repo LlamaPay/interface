@@ -44,12 +44,12 @@ export default function CreateVesting({ factory }: { factory: string }) {
   const eoaWarningDialog = useDialogState();
 
   const provider = useProvider();
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
 
   const checkApprovalOnChange = (vestedToken: string, vestedAmount: string) => {
-    if (accountData && provider && vestedToken !== '' && vestedAmount !== '') {
+    if (address && provider && vestedToken !== '' && vestedAmount !== '') {
       createContractAndCheckApproval({
-        userAddress: accountData.address,
+        userAddress: address,
         tokenAddress: vestedToken,
         provider,
         approvalFn: checkTokenApproval,
@@ -147,7 +147,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
             // llamacontractAddress is approveForAddress
             checkApproval({
               tokenDetails: { tokenContract, llamaContractAddress: factory, decimals },
-              userAddress: accountData?.address,
+              userAddress: address,
               approvedForAmount: vestingAmount,
               checkTokenApproval,
             });

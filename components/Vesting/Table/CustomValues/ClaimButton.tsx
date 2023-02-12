@@ -12,7 +12,7 @@ export default function ClaimButton({
   claimDialog: DisclosureState;
   claimValues: React.MutableRefObject<IVesting | null>;
 }) {
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
 
   const handleClaim = () => {
     claimValues.current = { ...data };
@@ -23,7 +23,8 @@ export default function ClaimButton({
     <>
       <div>
         {Date.now() / 1e3 >= Number(data.startTime) + Number(data.cliffLength) &&
-          accountData?.address.toLowerCase() === data.recipient.toLowerCase() && (
+          address &&
+          address.toLowerCase() === data.recipient.toLowerCase() && (
             <button onClick={handleClaim} className="row-action-links font-exo float-right dark:text-white">
               Claim Tokens
             </button>

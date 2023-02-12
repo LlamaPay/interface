@@ -21,7 +21,7 @@ export default function SendToPayees({
     [key: string]: string;
   };
 }) {
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
 
   const addresses = useAddressStore();
 
@@ -117,7 +117,7 @@ export default function SendToPayees({
             {t('splitEqually')}
           </button>
         </div>
-        {accountData?.address && <AvailableToDisperse id={accountData.address.toLowerCase()} />}
+        {address && <AvailableToDisperse id={address.toLowerCase()} />}
       </div>
       <div className="flex space-x-2">
         <button

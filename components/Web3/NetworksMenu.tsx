@@ -10,7 +10,7 @@ import {
   SelectSeparator,
 } from 'ariakit/select';
 import { ChevronUpDownIcon } from '@heroicons/react/24/solid';
-import { useNetwork } from 'wagmi';
+import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { chainDetails } from '~/utils/network';
 import Image from 'next/image';
 import defaultImage from '~/public/empty-token.webp';
@@ -18,14 +18,13 @@ import { useTranslations } from 'next-intl';
 import useGetStreamsOnAllNetworks from '~/queries/useGetStreamsOnAllNetworks';
 
 export const NetworksMenu = () => {
-  const [{ data }, switchNetwork] = useNetwork();
+  const { chain, chains } = useNetwork();
+  const { switchNetwork } = useSwitchNetwork();
 
   const { data: activeStreams } = useGetStreamsOnAllNetworks();
 
-  const chain = data.chain;
-
   const select = useSelectState({
-    defaultValue: data.chain?.id?.toString() ?? '0',
+    defaultValue: chain?.id?.toString() ?? '0',
     sameWidth: true,
     gutter: 8,
   });
@@ -34,9 +33,9 @@ export const NetworksMenu = () => {
 
   const t = useTranslations('Common');
 
-  if (!data || !chain || !switchNetwork) return null;
+  if (!chain || !switchNetwork) return null;
 
-  const allChains = data.chains.sort((a, b) => {
+  const allChains = chains.sort((a, b) => {
     const chain1: number = activeStreams?.find((c) => c.id === a.id)?.streams ?? 0;
     const chain2: number = activeStreams?.find((c) => c.id === b.id)?.streams ?? 0;
 

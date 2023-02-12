@@ -1,50 +1,54 @@
 import * as React from 'react';
-import { defaultProvider, infuraId } from '~/utils/constants';
 import { networkDetails } from '~/lib/networkDetails';
-import { chains } from '~/lib/chains';
-import { GnosisConnector } from '~/utils/GnosisConnector';
-import { Connector, Provider } from 'wagmi';
+import { chains as wagmiChains } from '~/lib/chains';
+import { configureChains, Connector, createClient, WagmiConfig } from 'wagmi';
+import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { InjectedConnector } from 'wagmi/connectors/injected';
 import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
+import { SafeConnector } from 'wagmi/connectors/safe';
 
-const connectors = () => {
-  return process.env.NEXT_PUBLIC_SAFE === 'true'
-    ? [
-        new GnosisConnector({
-          chains,
-        }),
-      ]
-    : [
-        new InjectedConnector({
-          chains,
-          options: { shimDisconnect: true },
-        }),
-        new WalletConnectConnector({
-          options: {
-            infuraId,
-            qrcode: true,
-          },
-        }),
-      ];
-};
+const { chains, provider } = configureChains(
+  [...wagmiChains],
+  [
+    jsonRpcProvider({
+      rpc: (chain) => {
+        if (chain.id === 1) {
+          return { http: networkDetails[1].rpcUrl };
+        } else if (chain.id === 5) {
+          return { http: networkDetails[5].rpcUrl };
+        } else return { http: chain.rpcUrls.default.http[0] };
+      },
+    }),
+  ]
+);
 
-// Set up providers
-type ProviderConfig = { chainId?: number; connector?: Connector };
+const connectors: Array<Connector> = [
+  new InjectedConnector({
+    chains,
+    options: { shimDisconnect: true },
+  }),
+  new WalletConnectConnector({
+    options: {
+      qrcode: true,
+    },
+  }),
+];
 
-const provider = ({ chainId }: ProviderConfig) => {
-  const chainDetails = chainId && networkDetails[chainId];
-  return chainDetails ? chainDetails.chainProviders : defaultProvider;
-};
+if (process.env.NEXT_PUBLIC_SAFE === 'true') {
+  connectors.push(
+    new SafeConnector({
+      chains,
+    })
+  );
+}
+const wagmiClient = createClient({
+  autoConnect: process.env.NEXT_PUBLIC_SAFE === 'true' ? false : true,
+  connectors,
+  provider,
+});
 
 type Props = {
   children?: React.ReactNode;
 };
 
-export const WalletProvider = ({ children }: Props) => {
-  const basicProvider = (
-    <Provider autoConnect connectors={connectors} provider={provider}>
-      {children}
-    </Provider>
-  );
-  return basicProvider;
-};
+export const WalletProvider = ({ children }: Props) => <WagmiConfig client={wagmiClient}>{children}</WagmiConfig>;
