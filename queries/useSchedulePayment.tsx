@@ -17,7 +17,7 @@ interface ICreateContract {
 
 interface ICreate extends ICreateContract {
   poolAddress?: string | null;
-  signer?: Signer;
+  signer?: Signer | null;
 }
 
 const create = async ({
@@ -51,7 +51,7 @@ const create = async ({
 };
 
 export function useCreateScheduledTransferPayment({ poolAddress }: { poolAddress?: string | null }) {
-  const [{ data: signer }] = useSigner();
+  const { data: signer } = useSigner();
 
   const queryClient = useQueryClient();
 

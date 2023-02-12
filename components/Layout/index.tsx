@@ -13,6 +13,7 @@ import HowItWorks from './HowItWorks';
 import GnosisSafeWarning from '~/components/GnosisSafeWarning';
 import { Nav } from './Nav';
 import classNames from 'classnames';
+import { useIsMounted } from '~/hooks';
 
 interface ILayoutProps {
   children: React.ReactNode;
@@ -21,11 +22,12 @@ interface ILayoutProps {
 
 export default function Layout({ children, className, ...props }: ILayoutProps) {
   const router = useRouter();
-
   const { isConnected } = useAccount();
-
   const onboardDialog = useDialogState();
   const walletDialog = useDialogState();
+  const isMounted = useIsMounted();
+
+  if (!isMounted) return null;
 
   return (
     <>
