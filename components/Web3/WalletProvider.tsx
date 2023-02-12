@@ -38,6 +38,7 @@ if (process.env.NEXT_PUBLIC_SAFE === 'true') {
   connectors.push(
     new SafeConnector({
       chains,
+      // options: { allowedDomains: [/gnosis-safe.io$/, /app.safe.global$/, /safe.llamapay.io$/] },
     })
   );
 }

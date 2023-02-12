@@ -12,8 +12,7 @@
   },
   "dependencies": {
     "@antefinance/ante-widget-react": "^0.1.2",
-    "@gnosis.pm/safe-apps-provider": "^0.11.0",
-    "@gnosis.pm/safe-apps-sdk": "^7.3.0",
+    "@gnosis.pm/safe-apps-sdk": "^7.8.0",
     "@headlessui/react": "^1.7.10",
     "@heroicons/react": "^2.0.15",
     "@next/font": "^13.1.6",
