@@ -8,32 +8,32 @@ import { IVesting } from '~/types';
 
 export default function RenounceOwnershipButton({ data }: { data: IVesting }) {
   const RenounceDialog = useDialogState();
-  const [{}, renounce] = useContractWrite(
-    {
-      addressOrName: data.contract,
-      contractInterface: vestingContractReadableABI,
+  const { writeAsync: renounce } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: data.contract as `0x${string}`,
+    abi: vestingContractReadableABI,
+    overrides: {
+      gasLimit: 180000 as any,
     },
-    'renounce_ownership',
-    {
-      overrides: {
-        gasLimit: 180000,
-      },
-    }
-  );
+    functionName: 'renounce_ownership',
+  });
 
   function handleRenounce() {
-    renounce().then((data) => {
-      if (data.error) {
-        toast.error('Failed to Renounce');
-      } else {
+    renounce?.()
+      .then((data) => {
         const toastid = toast.loading('Renouncing');
-        data.data.wait().then((receipt) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1 ? toast.success('Successfully Renounced') : toast.error('Failed to Renounce');
         });
-      }
-      RenounceDialog.hide();
-    });
+
+        RenounceDialog.hide();
+      })
+      .catch((err) => {
+        RenounceDialog.hide();
+
+        toast.error(err.reason || err.message || 'Transaction Failed');
+      });
   }
   const { address } = useAccount();
 

@@ -20,16 +20,13 @@ const CreateInterface = new Interface(['function createStream(address to, uint21
 const CancelInterface = new Interface(['function cancelStream(address to, uint216 amountPerSec)']);
 
 export const Cancel = ({ data }: CancelProps) => {
-  const [{}, cancel] = useContractWrite(
-    {
-      addressOrName: data.llamaContractAddress,
-      contractInterface: llamaContractABI,
-    },
-    'cancelStream',
-    {
-      args: [data.payeeAddress, data.amountPerSec],
-    }
-  );
+  const { writeAsync: cancel } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: data.llamaContractAddress as `0x${string}`,
+    abi: llamaContractABI,
+    functionName: 'cancelStream',
+    args: [data.payeeAddress, data.amountPerSec],
+  });
 
   const [transactionHash, setTransactionHash] = React.useState<string | null>(null);
 
@@ -64,21 +61,21 @@ export const Cancel = ({ data }: CancelProps) => {
         ];
         gnosisBatch({ calls: calls });
       } else {
-        cancel().then(({ data, error }) => {
-          if (error) {
-            toast.error(error.message);
-          }
-
-          if (data) {
-            setTransactionHash(data.hash);
-            const toastid = toast.loading('Cancelling Stream');
-            data?.wait().then((receipt) => {
-              toast.dismiss(toastid);
-              receipt.status === 1 ? toast.success('Stream Cancelled') : toast.error('Failed to Cancel Stream');
-              queryClient.invalidateQueries();
-            });
-          }
-        });
+        cancel()
+          .then((data) => {
+            if (data) {
+              setTransactionHash(data.hash);
+              const toastid = toast.loading('Cancelling Stream');
+              data?.wait().then((receipt) => {
+                toast.dismiss(toastid);
+                receipt.status === 1 ? toast.success('Stream Cancelled') : toast.error('Failed to Cancel Stream');
+                queryClient.invalidateQueries();
+              });
+            }
+          })
+          .catch((err) => {
+            toast.error(err.reason || err.message);
+          });
       }
     }
   };

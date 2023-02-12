@@ -11,26 +11,27 @@ export default function PaymentRevokeButton({ data }: { data: IPayments }) {
   const { chainId } = useNetworkProvider();
   const { address } = useAccount();
   const contract = chainId && networkDetails[chainId].paymentsContract;
-  const [{}, revoke] = useContractWrite(
-    {
-      addressOrName: contract || zeroAdd,
-      contractInterface: paymentsContractABI,
-    },
-    'revoke'
-  );
+  const { writeAsync: revoke } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: (contract || zeroAdd) as `0x${string}`,
+    abi: paymentsContractABI,
+    functionName: 'revoke',
+  });
 
   function handleRevoke() {
-    revoke({ args: [data.tokenAddress, data.payee, BigNumber(data.amount).toFixed(0), data.release] }).then((data) => {
-      if (data.error) {
-        toast.error('Failed to Revoke');
-      } else {
+    revoke({
+      recklesslySetUnpreparedArgs: [data.tokenAddress, data.payee, BigNumber(data.amount).toFixed(0), data.release],
+    })
+      .then((data) => {
         const toastid = toast.loading('Revoking');
-        data.data.wait().then((receipt) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1 ? toast.success('Successfully Revoked') : toast.error('Failed to Revoke');
         });
-      }
-    });
+      })
+      .catch(() => {
+        toast.error('Failed to Revoke');
+      });
   }
 
   return (

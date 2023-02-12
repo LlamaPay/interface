@@ -18,13 +18,12 @@ interface DisperseSendProps {
 
 export default function DisperseSend({ dialog, data, setTransactionHash, transactionDialog }: DisperseSendProps) {
   const { chain } = useNetwork();
-  const [{ loading }, disperseEther] = useContractWrite(
-    {
-      addressOrName: networkDetails[Number(chain?.id)].disperseAddress,
-      contractInterface: disperseContractABI,
-    },
-    'disperseEther'
-  );
+  const { isLoading, writeAsync: disperseEther } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: networkDetails[Number(chain?.id)].disperseAddress as `0x${string}`,
+    abi: disperseContractABI,
+    functionName: 'disperseEther',
+  });
 
   const queryClient = useQueryClient();
 
@@ -39,35 +38,35 @@ export default function DisperseSend({ dialog, data, setTransactionHash, transac
       ether = ether.plus(value);
     });
 
-    disperseEther({
-      args: [recipients, values],
-      overrides: {
-        value: ether.toString(),
+    disperseEther?.({
+      recklesslySetUnpreparedArgs: [recipients, values],
+      recklesslySetUnpreparedOverrides: {
+        value: Number(ether.toString()),
       },
-    }).then((data) => {
-      if (data.error) {
-        dialog.hide();
-        toast.error(data.error.message);
-      } else {
+    })
+      .then((data) => {
         const toastId = toast.loading('Dispersing Gas');
-        setTransactionHash(data.data?.hash ?? '');
+        setTransactionHash(data.hash ?? '');
         dialog.hide();
         transactionDialog.show();
 
-        data.data?.wait().then((receipt) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastId);
           receipt.status === 1 ? toast.success('Successfully Dispersed Gas') : toast.error('Failed to Disperse Gas');
           queryClient.invalidateQueries();
         });
-      }
-    });
+      })
+      .catch((err) => {
+        dialog.hide();
+        toast.error(err.message);
+      });
   }
 
   const t = useTranslations('Streams');
 
   return (
     <button onClick={sendGas} type="button" className="form-submit-button mt-5">
-      {loading ? <BeatLoader size={6} color="white" /> : t('send')}
+      {isLoading ? <BeatLoader size={6} color="white" /> : t('send')}
     </button>
   );
 }

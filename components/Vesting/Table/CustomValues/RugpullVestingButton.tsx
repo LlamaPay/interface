@@ -9,32 +9,32 @@ import { SubmitButton } from '~/components/Form';
 export default function RugpullVestingButton({ data }: { data: IVesting }) {
   const RugDialog = useDialogState();
 
-  const [{}, rug_pull] = useContractWrite(
-    {
-      addressOrName: data.contract,
-      contractInterface: vestingContractReadableABI,
+  const { writeAsync: rug_pull } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: data.contract as `0x${string}`,
+    abi: vestingContractReadableABI,
+    functionName: 'rug_pull',
+    overrides: {
+      gasLimit: 180000 as any,
     },
-    'rug_pull',
-    {
-      overrides: {
-        gasLimit: 180000,
-      },
-    }
-  );
+  });
 
   function handleRugpull() {
-    rug_pull().then((data) => {
-      if (data.error) {
-        toast.error('Failed to Rug');
-      } else {
+    rug_pull()
+      .then((data) => {
         const toastid = toast.loading('Rugging');
-        data.data.wait().then((receipt) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1 ? toast.success('Successfully Rugged') : toast.error('Failed to Rug');
         });
-      }
-      RugDialog.hide();
-    });
+
+        RugDialog.hide();
+      })
+      .catch((err) => {
+        RugDialog.hide();
+
+        toast.error(err.reason || err.message || 'Transaction Failed');
+      });
   }
   const { address } = useAccount();
 

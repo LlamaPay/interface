@@ -1,4 +1,4 @@
-import { BaseProvider } from '@ethersproject/providers';
+import type { Provider } from '~/utils/contract';
 import BigNumber from 'bignumber.js';
 import { ContractCallContext, Multicall } from 'ethereum-multicall';
 import { ethers } from 'ethers';
@@ -26,7 +26,7 @@ const vestingEscrowCalls = [
   { reference: 'disabled_at', methodName: 'disabled_at', methodParameters: [] },
 ];
 
-async function getVestingInfo(userAddress: string | undefined, provider: BaseProvider | null, chainId: number | null) {
+async function getVestingInfo(userAddress: string | undefined, provider: Provider | null, chainId: number | null) {
   try {
     if (!provider) throw new Error('No provider');
     if (!userAddress) throw new Error('No account');
@@ -162,7 +162,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
         vestingContractReasonResults = await runMulticall(vestingContractReasonContext);
       }
       const vestingContractInfoResults = await runMulticall(vestingContractInfoContext);
-      const tokenContractCallContext: ContractCallContext[] = Object.keys(vestingContractInfoResults).map((p: any) => ({
+      const tokenContractCallContext = Object.keys(vestingContractInfoResults).map((p: any) => ({
         reference: vestingContractInfoResults[p].callsReturnContext[3].returnValues[0],
         contractAddress: vestingContractInfoResults[p].callsReturnContext[3].returnValues[0],
         abi: erc20ABI,
@@ -222,7 +222,7 @@ export default function useGetVestingInfo() {
 interface IVestingInfoByQueryParams {
   address: string;
   chainId: number | null;
-  provider: BaseProvider | null;
+  provider: Provider | null;
 }
 
 export function useGetVestingInfoByQueryParams({ address, chainId, provider }: IVestingInfoByQueryParams) {

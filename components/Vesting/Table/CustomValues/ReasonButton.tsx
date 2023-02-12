@@ -14,31 +14,32 @@ export default function ReasonButton({ data }: { data: IVesting }) {
   const { address } = useAccount();
 
   const { chainId } = useNetworkProvider();
-  const [{}, addReason] = useContractWrite(
-    {
-      addressOrName: networkDetails[chainId ?? 0].vestingReason,
-      contractInterface: vestingReasonsABI,
-    },
-    'addReason'
-  );
+  const { writeAsync: addReason } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: networkDetails[chainId ?? 0].vestingReason as `0x${string}`,
+    abi: vestingReasonsABI,
+    functionName: 'addReason',
+  });
   const queryClient = useQueryClient();
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
-    addReason({ args: [data.contract, form.reason.value] }).then((data) => {
-      if (data.error) {
-        dialog.hide();
-        toast.error(data.error.message);
-      } else {
+    addReason({ recklesslySetUnpreparedArgs: [data.contract, form.reason.value] })
+      .then((data) => {
         const toastid = toast.loading('Adding Reason');
         dialog.hide();
-        data.data?.wait().then((receipt) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1 ? toast.success('Successfully Added Reason') : toast.error('Failed to Add Reason');
         });
-      }
-      queryClient.invalidateQueries();
-    });
+
+        queryClient.invalidateQueries();
+      })
+      .catch((err) => {
+        dialog.hide();
+
+        toast.error(err.reason || err.message || 'Transaction Failed');
+      });
   }
   const dialog = useDisclosureState();
   return (

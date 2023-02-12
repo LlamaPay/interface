@@ -5,7 +5,7 @@ import { FormDialog } from '~/components/Dialog';
 import { InputAmount, SubmitButton } from '~/components/Form';
 import toast from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
-import { useContractRead, useContractWrite, usePrepareContractWrite } from 'wagmi';
+import { useContractRead, useContractWrite } from 'wagmi';
 
 export default function BotDepositWarning({
   botAddress,
@@ -26,19 +26,19 @@ export default function BotDepositWarning({
     args: [userAddress],
   });
 
-  const { config } = usePrepareContractWrite({
+  const { writeAsync: deposit } = useContractWrite({
+    mode: 'recklesslyUnprepared',
     address: botAddress as `0x${string}`,
     abi: botContractABI,
     functionName: 'deposit',
   });
-  const { writeAsync: deposit } = useContractWrite(config);
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
     deposit?.({
       recklesslySetUnpreparedOverrides: {
-        value: (Number(form.amount.value) * 1e18).toFixed(0),
+        value: Number(form.amount.value) * 1e18,
       },
     })
       .then((data) => {

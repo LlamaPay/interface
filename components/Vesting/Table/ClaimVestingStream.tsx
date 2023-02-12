@@ -28,18 +28,15 @@ export default function ClaimVesting({
 
   const { address } = useAccount();
 
-  const [{ loading }, claim] = useContractWrite(
-    {
-      addressOrName: data.contract,
-      contractInterface: vestingContractReadableABI,
+  const { isLoading, writeAsync: claim } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: data.contract as `0x${string}`,
+    abi: vestingContractReadableABI,
+    overrides: {
+      gasLimit: 180000 as any,
     },
-    'claim',
-    {
-      overrides: {
-        gasLimit: 180000,
-      },
-    }
-  );
+    functionName: 'claim',
+  });
 
   function handleClaim() {
     if (!hasCustomBeneficiary) {
@@ -60,20 +57,20 @@ export default function ClaimVesting({
   }
 
   function handleConfirm() {
-    claim({ args: [beneficiaryInput, inputAmount] }).then((data) => {
-      if (data.error) {
-        toast.error('Failed to Claim Tokens');
-      } else {
+    claim({ recklesslySetUnpreparedArgs: [beneficiaryInput, inputAmount] })
+      .then((data) => {
         const toastid = toast.loading('Claiming Tokens');
-        setTransactionHash(data.data.hash);
+        setTransactionHash(data.hash);
         claimDialog.hide();
         transactionDialog.show();
-        data.data.wait().then((receipt) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1 ? toast.success('Successfully Claimed Tokens') : toast.error('Failed to Claim Tokens');
         });
-      }
-    });
+      })
+      .catch((err) => {
+        toast.error(err.reason || err.message || 'Transaction Failed');
+      });
   }
 
   return (
@@ -138,7 +135,7 @@ export default function ClaimVesting({
             </div>
           </section>
           <SubmitButton className="mt-5" onClick={handleConfirm}>
-            {loading ? <BeatLoader size={6} color="white" /> : 'Confirm Transaction'}
+            {isLoading ? <BeatLoader size={6} color="white" /> : 'Confirm Transaction'}
           </SubmitButton>
         </div>
       </FormDialog>

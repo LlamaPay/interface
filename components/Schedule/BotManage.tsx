@@ -46,110 +46,104 @@ export default function BotFunds({
     args: [accountAddress],
   });
 
-  const [{}, refund] = useContractWrite(
-    {
-      addressOrName: botAddress,
-      contractInterface: botContractABI,
-    },
-    'refund'
-  );
+  const { writeAsync: refund } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: botAddress as `0x${string}`,
+    abi: botContractABI,
+    functionName: 'refund',
+  });
 
-  const [{}, deposit] = useContractWrite(
-    {
-      addressOrName: botAddress,
-      contractInterface: botContractABI,
-    },
-    'deposit'
-  );
-  const [{}, cancelWithdraw] = useContractWrite(
-    {
-      addressOrName: botAddress,
-      contractInterface: botContractABI,
-    },
-    'cancelWithdraw'
-  );
+  const { writeAsync: deposit } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: botAddress as `0x${string}`,
+    functionName: 'deposit',
+  });
+  const { writeAsync: cancelWithdraw } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: botAddress as `0x${string}`,
+    abi: botContractABI,
+    functionName: 'cancelWithdraw',
+  });
 
-  const [{}, scheduleWithdraw] = useContractWrite(
-    {
-      addressOrName: botAddress,
-      contractInterface: botContractABI,
-    },
-    'scheduleWithdraw'
-  );
+  const { writeAsync: scheduleWithdraw } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: botAddress as `0x${string}`,
+    abi: botContractABI,
+    functionName: 'scheduleWithdraw',
+  });
 
-  const [{}, setRedirect] = useContractWrite(
-    {
-      addressOrName: botAddress,
-      contractInterface: botContractABI,
-    },
-    'setRedirect'
-  );
+  const { writeAsync: setRedirect } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: botAddress as `0x${string}`,
+    abi: botContractABI,
+    functionName: 'setRedirect',
+  });
 
-  const [{}, cancelRedirect] = useContractWrite(
-    {
-      addressOrName: botAddress,
-      contractInterface: botContractABI,
-    },
-    'cancelRedirect'
-  );
+  const { writeAsync: cancelRedirect } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: botAddress as `0x${string}`,
+    abi: botContractABI,
+    functionName: 'cancelRedirect',
+  });
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
     deposit({
-      overrides: {
-        value: (Number(form.amount.value) * 1e18).toFixed(0),
+      recklesslySetUnpreparedOverrides: {
+        value: Number(form.amount.value) * 1e18,
       },
-    }).then((data) => {
-      if (data.error) {
-        dialog.hide();
-        toast.error(data.error.message);
-      } else {
+    })
+      .then((data) => {
         const toastid = toast.loading(`Sending ${form.amount.value} ${nativeCurrency} to Bot`);
         dialog.hide();
-        data.data?.wait().then((receipt) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1 ? toast.success('Successfully Sent to Bot') : toast.error('Failed to Send to Bot');
         });
         queryClient.invalidateQueries();
-      }
-    });
+      })
+      .catch((err) => {
+        dialog.hide();
+        toast.error(err.reason || err.message);
+      });
   }
 
   function handleRefund() {
-    refund().then((data) => {
-      if (data.error) {
-        dialog.hide();
-        toast.error(data.error.message);
-      } else {
+    refund()
+      .then((data) => {
         const toastid = toast.loading(`Refunding ${Number(balance) / 1e18} ${nativeCurrency}`);
         dialog.hide();
-        data.data?.wait().then((receipt) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1 ? toast.success('Successfully Refunded') : toast.error('Failed to Refund');
         });
         queryClient.invalidateQueries();
-      }
-    });
+      })
+      .catch((err) => {
+        dialog.hide();
+        toast.error(err.reason || err.message);
+      });
   }
 
   function handleCancel(p: string) {
     if (!botInfo?.toInclude) return;
     const ele = botInfo.toInclude[p];
     cancelWithdraw({
-      args: [ele.token, ele.from, ele.to, ele.amountPerSec, ele.starts, ele.frequency],
-    }).then((data) => {
-      if (data.error) {
-        toast.error(data.error.message);
-      } else {
+      recklesslySetUnpreparedArgs: [ele.token, ele.from, ele.to, ele.amountPerSec, ele.starts, ele.frequency],
+    })
+      .then((data) => {
         const toastid = toast.loading(`Cancelling Withdrawal`);
-        data.data?.wait().then((receipt) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1 ? toast.success('Successfully Cancelled') : toast.error('Failed to Cancel');
         });
         queryClient.invalidateQueries();
-      }
-    });
+      })
+      .catch((err) => {
+        dialog.hide();
+        toast.error(err.reason || err.message);
+      });
   }
 
   function handleChange(value: string, type: keyof typeof formData) {
@@ -166,7 +160,7 @@ export default function BotFunds({
     const start = new Date(formData.startDate).getTime() / 1e3;
 
     scheduleWithdraw({
-      args: [
+      recklesslySetUnpreparedArgs: [
         zeroAdd,
         e === 'incoming' ? zeroAdd : accountAddress,
         e === 'outgoing' ? zeroAdd : accountAddress,
@@ -182,60 +176,59 @@ export default function BotFunds({
           ? secondsByDuration['month']
           : null,
       ],
-    }).then((d) => {
-      const data: any = d;
-      if (data.error) {
-        dialog.hide();
-        toast.error(data.error.reason ?? data.error.message);
-      } else {
+    })
+      .then((data) => {
         const toastId = toast.loading('Scheduling Events');
         dialog.hide();
-        data.data?.wait().then((receipt: any) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastId);
           receipt.status === 1
             ? toast.success('Successfully Scheduled Events')
             : toast.error('Failed to Schedule Events');
           queryClient.invalidateQueries();
         });
-      }
-    });
+      })
+      .catch((err) => {
+        dialog.hide();
+        toast.error(err.reason || err.message);
+      });
   }
 
   function onRedirect() {
     approveMax({ tokenAddress: selectedToken, spenderAddress: botAddress });
-    setRedirect({ args: redirectAddress }).then((data) => {
-      if (data.error) {
-        dialog.hide();
-        toast.error(data.error.message);
-      } else {
+    setRedirect({ recklesslySetUnpreparedArgs: [redirectAddress] })
+      .then((data) => {
         const toastid = toast.loading(`Setting Redirect to ${formatAddress(redirectAddress ?? '')}`);
         dialog.hide();
-        data.data?.wait().then((receipt) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1 ? toast.success('Successfully Set Redirect') : toast.error('Failed to Set Redirect');
         });
         queryClient.invalidateQueries();
-      }
-    });
+      })
+      .catch((err) => {
+        dialog.hide();
+        toast.error(err.reason || err.message);
+      });
   }
 
   function onCancelRedirect() {
-    cancelRedirect().then((data) => {
-      if (data.error) {
-        dialog.hide();
-        toast.error(data.error.message);
-      } else {
+    cancelRedirect()
+      .then((data) => {
         const toastid = toast.loading(`Cancelling Redirect`);
         dialog.hide();
-        data.data?.wait().then((receipt) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1
             ? toast.success('Successfully Cancelled Redirect')
             : toast.error('Failed to Cancel Redirect');
         });
         queryClient.invalidateQueries();
-      }
-    });
+      })
+      .catch((err) => {
+        dialog.hide();
+        toast.error(err.reason || err.message);
+      });
   }
 
   function onCurrentDate() {

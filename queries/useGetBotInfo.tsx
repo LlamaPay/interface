@@ -1,4 +1,3 @@
-import { BaseProvider } from '@ethersproject/providers';
 import { botContractABI } from '~/lib/abis/botContract';
 import { ethers } from 'ethers';
 import { useNetworkProvider } from '~/hooks';
@@ -7,8 +6,9 @@ import { zeroAdd } from '~/utils/constants';
 import { networkDetails } from '~/lib/networkDetails';
 import { erc20ABI, useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
+import type { Provider } from '~/utils/contract';
 
-async function getBotInfo(userAddress: string | null, provider: BaseProvider | null, chainId: number | null) {
+async function getBotInfo(userAddress: string | null, provider: Provider | null, chainId: number | null) {
   try {
     if (!provider) {
       throw new Error('No provider');

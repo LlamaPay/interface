@@ -12,16 +12,13 @@ interface PauseProps {
 }
 
 export function Pause({ data }: PauseProps) {
-  const [{}, pauseStream] = useContractWrite(
-    {
-      addressOrName: data.llamaContractAddress,
-      contractInterface: llamaContractABI,
-    },
-    'pauseStream',
-    {
-      args: [data.payeeAddress, data.amountPerSec],
-    }
-  );
+  const { writeAsync: pauseStream } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: data.llamaContractAddress as `0x${string}`,
+    abi: llamaContractABI,
+    functionName: 'pauseStream',
+    args: [data.payeeAddress, data.amountPerSec],
+  });
   const { mutate: gnosisBatch } = useGnosisBatch();
 
   const queryClient = useQueryClient();
@@ -34,14 +31,18 @@ export function Pause({ data }: PauseProps) {
       ];
       gnosisBatch({ calls: call });
     } else {
-      pauseStream().then((data) => {
-        const loading = data.error ? toast.error(data.error.message) : toast.loading('Pausing Stream');
-        data.data?.wait().then((receipt) => {
-          toast.dismiss(loading);
-          receipt.status === 1 ? toast.success('Stream Paused') : toast.error('Failed to Pause Stream');
-          queryClient.invalidateQueries();
+      pauseStream()
+        .then((data) => {
+          const loading = toast.loading('Pausing Stream');
+          data.wait().then((receipt) => {
+            toast.dismiss(loading);
+            receipt.status === 1 ? toast.success('Stream Paused') : toast.error('Failed to Pause Stream');
+            queryClient.invalidateQueries();
+          });
+        })
+        .catch((err) => {
+          toast.error(err.reason || err.message);
         });
-      });
     }
   }
 

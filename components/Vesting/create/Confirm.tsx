@@ -33,20 +33,19 @@ export default function Confirm({ vestingData, dialog, factory }: IConfirmProps)
 
   const queryClient = useQueryClient();
 
-  const [{ loading }, deploy_vesting_contract] = useContractWrite(
-    {
-      addressOrName: factory,
-      contractInterface: vestingFactoryReadableABI,
-    },
-    'deploy_vesting_contract'
-  );
+  const { writeAsync: deploy_vesting_contract, isLoading } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: factory as `0x${string}`,
+    abi: vestingFactoryReadableABI,
+    functionName: 'deploy_vesting_contract',
+  });
 
   const transactionDialog = useDialogState();
 
   function onConfirm() {
     if (!vestingData) return;
     deploy_vesting_contract({
-      args: [
+      recklesslySetUnpreparedArgs: [
         vestingData?.vestedToken,
         vestingData?.recipientAddress,
         vestingData?.vestingAmount,
@@ -54,15 +53,13 @@ export default function Confirm({ vestingData, dialog, factory }: IConfirmProps)
         vestingData?.startTime,
         vestingData?.cliffTime,
       ],
-    }).then((tx) => {
-      if (tx.error) {
-        toast.error(tx.error.message);
-      } else {
+    })
+      .then((tx) => {
         const toastid = toast.loading('Creating Contract');
-        setTransactionHash(tx.data.hash);
+        setTransactionHash(tx.hash);
         dialog.hide();
         transactionDialog.show();
-        tx.data.wait().then((receipt) => {
+        tx.wait().then((receipt) => {
           toast.dismiss(toastid);
           if (receipt.status === 1) {
             toast.success('Successfuly Created Contract');
@@ -71,8 +68,10 @@ export default function Confirm({ vestingData, dialog, factory }: IConfirmProps)
           }
           queryClient.invalidateQueries();
         });
-      }
-    });
+      })
+      .catch((err) => {
+        toast.error(err.reason || err.message || 'Transaction Failed');
+      });
   }
 
   return (
@@ -126,7 +125,7 @@ export default function Confirm({ vestingData, dialog, factory }: IConfirmProps)
             )} UTC) `}</p>
           </div>
           <SubmitButton className="mt-5" onClick={onConfirm}>
-            {loading ? <BeatLoader size={6} color="white" /> : 'Confirm Transaction'}
+            {isLoading ? <BeatLoader size={6} color="white" /> : 'Confirm Transaction'}
           </SubmitButton>
         </div>
       </FormDialog>{' '}
