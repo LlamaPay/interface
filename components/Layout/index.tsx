@@ -40,25 +40,21 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
 
       <Header onboardDialog={onboardDialog} walletDialog={walletDialog} />
 
-      {isMounted ? (
-        <>
-          {router.pathname === '/' && !isConnected ? (
-            <>
-              <Hero walletDialog={walletDialog} />
-              <HowItWorks onboardDialog={onboardDialog} />
-            </>
-          ) : (
-            <div className="flex flex-1 py-9 px-2 md:px-6 lg:px-8 lg:pl-0">
-              <Nav />
-              <main className={classNames('mx-auto max-w-7xl flex-1', className)} {...props}>
-                {children}
-              </main>
-            </div>
-          )}
-        </>
-      ) : (
-        <div className="flex-1 lg:min-h-[425px]"></div>
-      )}
+      <>
+        {!isMounted || (router.pathname === '/' && !isConnected) ? (
+          <>
+            <Hero walletDialog={walletDialog} />
+            <HowItWorks onboardDialog={onboardDialog} />
+          </>
+        ) : (
+          <div className="flex flex-1 py-9 px-2 md:px-6 lg:px-8 lg:pl-0">
+            <Nav />
+            <main className={classNames('mx-auto max-w-7xl flex-1', className)} {...props}>
+              {children}
+            </main>
+          </div>
+        )}
+      </>
 
       <OnboardDialog dialog={onboardDialog} />
 
