@@ -148,16 +148,12 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
     'withdrawPayer'
   );
 
-  const [{ data: balance }] = useContractRead(
-    {
-      addressOrName: pool.token.address,
-      contractInterface: erc20ABI,
-    },
-    'balanceOf',
-    {
-      args: [pool.poolContract],
-    }
-  );
+  const { data: balance } = useContractRead({
+    address: pool.token.address as `0x${string}`,
+    abi: erc20ABI,
+    functionName: 'balanceOf',
+    args: [pool.poolContract as `0x${string}`],
+  });
 
   const updateMinPrice = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

@@ -27,8 +27,6 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
   const walletDialog = useDialogState();
   const isMounted = useIsMounted();
 
-  if (!isMounted) return null;
-
   return (
     <>
       <Head>
@@ -42,18 +40,24 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
 
       <Header onboardDialog={onboardDialog} walletDialog={walletDialog} />
 
-      {router.pathname === '/' && !isConnected ? (
+      {isMounted ? (
         <>
-          <Hero walletDialog={walletDialog} />
-          <HowItWorks onboardDialog={onboardDialog} />
+          {router.pathname === '/' && !isConnected ? (
+            <>
+              <Hero walletDialog={walletDialog} />
+              <HowItWorks onboardDialog={onboardDialog} />
+            </>
+          ) : (
+            <div className="flex flex-1 py-9 px-2 md:px-6 lg:px-8 lg:pl-0">
+              <Nav />
+              <main className={classNames('mx-auto max-w-7xl flex-1', className)} {...props}>
+                {children}
+              </main>
+            </div>
+          )}
         </>
       ) : (
-        <div className="flex flex-1 py-9 px-2 md:px-6 lg:px-8 lg:pl-0">
-          <Nav />
-          <main className={classNames('mx-auto max-w-7xl flex-1', className)} {...props}>
-            {/* {children} */}
-          </main>
-        </div>
+        <div className="flex-1 lg:min-h-[425px]"></div>
       )}
 
       <OnboardDialog dialog={onboardDialog} />

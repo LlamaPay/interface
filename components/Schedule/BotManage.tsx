@@ -39,16 +39,12 @@ export default function BotFunds({
 
   const { mutate: approveMax } = useApproveTokenForMaxAmt();
 
-  const [{ data: balance }] = useContractRead(
-    {
-      addressOrName: botAddress,
-      contractInterface: botContractABI,
-    },
-    'balances',
-    {
-      args: accountAddress,
-    }
-  );
+  const { data: balance } = useContractRead({
+    address: botAddress as `0x${string}`,
+    abi: botContractABI,
+    functionName: 'balances',
+    args: [accountAddress],
+  });
 
   const [{}, refund] = useContractWrite(
     {

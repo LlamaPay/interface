@@ -28,34 +28,38 @@ const Header = ({ onboardDialog, walletDialog }: { onboardDialog: DisclosureStat
         <Logo />
       </Link>
 
-      <div className="flex flex-shrink-0 items-center justify-between gap-[0.625rem]">
-        {isConnected ? (
-          <>
-            <NetworksMenu />
-            <Account showAccountInfo={walletDialog.toggle} />
-          </>
-        ) : (
-          <button className="nav-button-v2 hidden md:block" onClick={walletDialog.toggle}>
-            {t('connectWallet')}
-          </button>
-        )}
+      {isMounted && (
+        <>
+          <div className="flex flex-shrink-0 items-center justify-between gap-[0.625rem]">
+            {isConnected ? (
+              <>
+                <NetworksMenu />
+                <Account showAccountInfo={walletDialog.toggle} />
+              </>
+            ) : (
+              <button className="nav-button-v2 hidden md:block" onClick={walletDialog.toggle}>
+                {t('connectWallet')}
+              </button>
+            )}
 
-        <button
-          className="nav-button-v2 w-10 cursor-pointer px-[11px]"
-          onClick={() => setTheme(isDark ? 'light' : 'dark')}
-        >
-          {isMounted && (
-            <>
-              <span className="sr-only">Switch Theme</span>
-              {!isDark ? <SunIcon className="h-4 w-4" /> : <MoonIcon className="h-4 w-4" />}
-            </>
-          )}
-        </button>
+            <button
+              className="nav-button-v2 w-10 cursor-pointer px-[11px]"
+              onClick={() => setTheme(isDark ? 'light' : 'dark')}
+            >
+              {isMounted && (
+                <>
+                  <span className="sr-only">Switch Theme</span>
+                  {!isDark ? <SunIcon className="h-4 w-4" /> : <MoonIcon className="h-4 w-4" />}
+                </>
+              )}
+            </button>
 
-        <Menu onboardDialog={onboardDialog} walletDialog={walletDialog} />
-      </div>
+            <Menu onboardDialog={onboardDialog} walletDialog={walletDialog} />
+          </div>
 
-      <WalletSelector dialog={walletDialog} />
+          <WalletSelector dialog={walletDialog} />
+        </>
+      )}
     </header>
   );
 };

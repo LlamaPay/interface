@@ -1,16 +1,16 @@
 import * as wagmiChains from 'wagmi/chains';
 
 const defaultChains: Array<wagmiChains.Chain> = [
-  wagmiChains.avalancheFuji,
-  wagmiChains.avalanche,
-  wagmiChains.polygon,
   wagmiChains.mainnet,
   wagmiChains.optimism,
   wagmiChains.arbitrum,
-  wagmiChains.goerli,
+  wagmiChains.polygon,
+  wagmiChains.avalanche,
   wagmiChains.fantom,
   wagmiChains.bsc,
   wagmiChains.gnosis,
+  wagmiChains.goerli,
+  wagmiChains.avalancheFuji,
 ];
 
 export const chains: Array<wagmiChains.Chain> = [
