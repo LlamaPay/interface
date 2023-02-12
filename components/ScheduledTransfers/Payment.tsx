@@ -236,7 +236,7 @@ const Redirects = ({
       })
       .catch((err) => {
         txDialogState.hide();
-        toast.error(err.reason || err.message);
+        toast.error(err.reason || err.message || 'Transaction Failed');
       });
   };
 
@@ -300,7 +300,7 @@ const CancelTransfer = ({
       })
       .catch((err) => {
         txDialogState.hide();
-        toast.error(err.reason || err.message);
+        toast.error(err.reason || err.message || 'Transaction Failed');
       });
   };
 

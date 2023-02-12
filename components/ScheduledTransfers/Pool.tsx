@@ -181,7 +181,7 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
         })
         .catch((err) => {
           minPriceDialog.hide();
-          toast.error(err.reason || err.message);
+          toast.error(err.reason || err.message || 'Transaction Failed');
         });
     }
   };
@@ -213,7 +213,7 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
       })
       .catch((err) => {
         oracleDialog.hide();
-        toast.error(err.reason || err.message);
+        toast.error(err.reason || err.message || 'Transaction Failed');
       });
   };
 
@@ -243,7 +243,7 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
       })
       .catch((err) => {
         depositDialog.hide();
-        toast.error(err.reason || err.message);
+        toast.error(err.reason || err.message || 'Transaction Failed');
       });
   };
 
@@ -273,7 +273,7 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
       })
       .catch((err) => {
         withdrawDialog.hide();
-        toast.error(err.reason || err.message);
+        toast.error(err.reason || err.message || 'Transaction Failed');
       });
   };
 

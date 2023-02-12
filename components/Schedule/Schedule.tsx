@@ -96,7 +96,7 @@ export default function Schedule({
         });
       })
       .catch((err) => {
-        toast.error(err.reason || err.message);
+        toast.error(err.reason || err.message || 'Transaction Failed');
       });
     if (!hasRedirect) {
       return;
@@ -112,7 +112,7 @@ export default function Schedule({
           });
         })
         .catch((err) => {
-          toast.error(err.reason || err.message);
+          toast.error(err.reason || err.message || 'Transaction Failed');
         });
     }
   }

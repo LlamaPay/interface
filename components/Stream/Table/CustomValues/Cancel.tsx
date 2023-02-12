@@ -74,7 +74,7 @@ export const Cancel = ({ data }: CancelProps) => {
             }
           })
           .catch((err) => {
-            toast.error(err.reason || err.message);
+            toast.error(err.reason || err.message || 'Transaction Failed');
           });
       }
     }
