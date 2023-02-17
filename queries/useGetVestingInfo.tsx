@@ -26,6 +26,11 @@ const vestingEscrowCalls = [
   { reference: 'disabled_at', methodName: 'disabled_at', methodParameters: [] },
 ];
 
+const subgraphs: { [key: number]: string } = {
+  1: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-vesting-mainnet',
+  5: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-vesting-goerli',
+};
+
 async function getVestingInfo(userAddress: string | undefined, provider: BaseProvider | null, chainId: number | null) {
   try {
     if (!provider) throw new Error('No provider');
@@ -49,7 +54,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
         return all;
       }, {} as any);
     };
-    if (chainId === 1) {
+    if (subgraphs[chainId]) {
       const GET_ADMIN = gql`
         {
           vestingEscrows(where: {admin: "${userAddress.toLowerCase()}"}) {
@@ -80,12 +85,8 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
           }
         }
         `;
-      const admins = (
-        await request('https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-vesting-mainnet', GET_ADMIN)
-      ).vestingEscrows;
-      const recipients = (
-        await request('https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-vesting-mainnet', GET_RECIPIENT)
-      ).vestingEscrows;
+      const admins = (await request(subgraphs[chainId], GET_ADMIN)).vestingEscrows;
+      const recipients = (await request(subgraphs[chainId], GET_RECIPIENT)).vestingEscrows;
       const escrows = admins.concat(recipients);
       const vestingContractInfoContext: ContractCallContext[] = Object.keys(escrows).map((p: any) => ({
         reference: escrows[p].id,
