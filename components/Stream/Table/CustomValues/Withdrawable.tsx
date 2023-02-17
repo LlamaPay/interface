@@ -3,7 +3,7 @@ import type { IStream } from '~/types';
 import { formatBalance } from '~/utils/amount';
 import useWithdrawable from '~/queries/useWithdrawable';
 import Tooltip from '~/components/Tooltip';
-import { ExclamationCircleIcon, ExclamationIcon } from '@heroicons/react/solid';
+import { ExclamationCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 import { useIntl, useTranslations } from 'next-intl';
 
 export const Withdrawable = ({ data }: { data: IStream }) => {
@@ -63,13 +63,13 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
           <>
             <span className="slashed-zero tabular-nums">{`${formatBalance(balanceState, intl)}`}</span>
             <Tooltip content={t('paused')}>
-              <ExclamationIcon className="h-5 w-5 text-yellow-600" />
+              <ExclamationTriangleIcon className="h-5 w-5 text-yellow-600" />
             </Tooltip>
           </>
         ) : (
           <>
             <span className="slashed-zero tabular-nums text-yellow-600">{t('paused')}</span>
-            <ExclamationIcon className="h-5 w-5 text-yellow-600" />
+            <ExclamationTriangleIcon className="h-5 w-5 text-yellow-600" />
           </>
         )}
       </p>

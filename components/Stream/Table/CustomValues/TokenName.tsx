@@ -23,8 +23,8 @@ export function TokenName({ data }: { data: IStream }) {
         <Image
           src={token?.logoURI ?? defaultImage}
           alt={t('logoAlt', { name: data.tokenName })}
-          width="18px"
-          height="18px"
+          width={18}
+          height={18}
         />
       </span>
       {chainExplorer ? (

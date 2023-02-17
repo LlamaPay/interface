@@ -1,4 +1,11 @@
-import { BookOpenIcon, LibraryIcon, MoonIcon, PlayIcon, SunIcon, TerminalIcon } from '@heroicons/react/outline';
+import {
+  BookOpenIcon,
+  BuildingLibraryIcon,
+  MoonIcon,
+  PlayIcon,
+  SunIcon,
+  CommandLineIcon,
+} from '@heroicons/react/24/outline';
 import { DisclosureState } from 'ariakit';
 import { Menu, MenuItem } from '~/components/NestedMenu';
 import { useIsMounted, useLocale, useWindowSize } from '~/hooks';
@@ -91,9 +98,9 @@ export default function HeaderMenu({
                       <Image
                         src={network?.logoURI ?? defaultImage}
                         alt={t('logoAlt', { name: value.name })}
-                        objectFit="contain"
-                        width="20px"
-                        height="20px"
+                        className="object-contain"
+                        width={20}
+                        height={20}
                         priority
                       />
                     </div>
@@ -180,7 +187,7 @@ export default function HeaderMenu({
               className="flex w-full items-center justify-between gap-4 font-normal"
             >
               <span>Gnosis Safe</span>
-              <LibraryIcon className="h-4 w-4" />
+              <BuildingLibraryIcon className="h-4 w-4" />
             </a>
           }
         />
@@ -196,7 +203,7 @@ export default function HeaderMenu({
               className="flex w-full items-center justify-between gap-4 font-normal"
             >
               <span>Ape SDK</span>
-              <TerminalIcon className="h-4 w-4" />
+              <CommandLineIcon className="h-4 w-4" />
             </a>
           }
         />

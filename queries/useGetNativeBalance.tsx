@@ -1,7 +1,7 @@
 import { BaseProvider } from '@ethersproject/providers';
 import { BigNumber } from 'ethers';
 import { useNetworkProvider } from '~/hooks';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 
 async function fetchBalance(id: string, provider: BaseProvider | null) {
   if (!provider) return null;

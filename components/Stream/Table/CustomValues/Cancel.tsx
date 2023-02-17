@@ -3,7 +3,7 @@ import { llamaContractABI } from '~/lib/abis/llamaContract';
 import { useDialogState } from 'ariakit';
 import { TransactionDialog } from '~/components/Dialog';
 import toast from 'react-hot-toast';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import type { IStream } from '~/types';
 import { useContractWrite } from 'wagmi';
 import { Interface } from 'ethers/lib/utils';

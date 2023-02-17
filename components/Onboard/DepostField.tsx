@@ -5,7 +5,7 @@ import useTokenBalances, { ITokenBalance } from '~/queries/useTokenBalances';
 import { BeatLoader } from 'react-spinners';
 import { useDepositForm, useTokenList } from '~/hooks';
 import AvailableAmount from '~/components/AvailableAmount';
-import { ArrowRightIcon } from '@heroicons/react/solid';
+import { ArrowRightIcon } from '@heroicons/react/24/solid';
 import { useTranslations } from 'next-intl';
 
 const DepositField = ({

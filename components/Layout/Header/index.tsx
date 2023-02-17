@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useAccount } from 'wagmi';
 import { DisclosureState } from 'ariakit';
 import { useTranslations } from 'next-intl';
-import { MoonIcon, SunIcon } from '@heroicons/react/outline';
+import { MoonIcon, SunIcon } from '@heroicons/react/24/outline';
 import Menu from './Menu';
 import { NetworksMenu, Account, WalletSelector } from '~/components/Web3';
 import { Logo } from '~/components/Icons';
@@ -23,11 +23,9 @@ const Header = ({ onboardDialog, walletDialog }: { onboardDialog: DisclosureStat
 
   return (
     <header className="flex items-center justify-between gap-10 border-b border-llama-teal-2 bg-llama-teal-1 bg-opacity-5 py-4 px-2 text-base dark:border-lp-gray-7 dark:bg-lp-gray-8 md:px-6 lg:px-8">
-      <Link href="/" passHref>
-        <a>
-          <span className="sr-only">Navigate to Home Page</span>
-          <Logo />
-        </a>
+      <Link href="/">
+        <span className="sr-only">Navigate to Home Page</span>
+        <Logo />
       </Link>
 
       <div className="flex flex-shrink-0 items-center justify-between gap-[0.625rem]">

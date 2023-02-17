@@ -3,7 +3,7 @@ import { Select, SelectArrow, SelectItem, SelectLabel, useSelectState } from 'ar
 import { Dialog, DialogDismiss, DialogHeading, useDialogState } from 'ariakit/dialog';
 import { Combobox, ComboboxItem, ComboboxList, useComboboxState } from 'ariakit/combobox';
 import classNames from 'classnames';
-import { XIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/solid';
+import { XMarkIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/solid';
 import { InputText } from './Input';
 import { SubmitButton } from './Button';
 import useCreateLlamaPayContract from '~/queries/useCreateLlamaPayContract';
@@ -11,7 +11,7 @@ import { BeatLoader } from 'react-spinners';
 import useTokenBalances from '~/queries/useTokenBalances';
 import Image from 'next/image';
 import defaultImage from '~/public/empty-token.webp';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import { TokenBalance } from '~/components/Balance/BalanceAndSymbol';
 
@@ -55,9 +55,9 @@ function Token({
       <div className="flex items-center space-x-2 overflow-x-hidden">
         <div className="flex h-7 w-7 flex-shrink-0 items-center rounded-full">
           {data ? (
-            <Image src={data.logoURI} alt={t('logoAlt', { name: data.name })} width="24px" height="24px" />
+            <Image src={data.logoURI} alt={t('logoAlt', { name: data.name })} width={24} height={24} />
           ) : (
-            <Image src={defaultImage} width="24px" height="24px" alt={t('logoAlt', { name: 'fallback token' })} />
+            <Image src={defaultImage} width={24} height={24} alt={t('logoAlt', { name: 'fallback token' })} />
           )}
         </div>
         {data ? (
@@ -126,7 +126,7 @@ export const SelectToken = React.forwardRef<HTMLButtonElement, ISelectTokenProps
               <DialogHeading className="px-4">{t1('selectToken')}</DialogHeading>
               <DialogDismiss className="absolute right-3 flex items-start justify-end">
                 <span className="sr-only">{t0('close')}</span>
-                <XIcon className="h-6 w-6" />
+                <XMarkIcon className="h-6 w-6" />
               </DialogDismiss>
             </header>
             <Combobox
@@ -221,7 +221,7 @@ const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<Rea
         </DialogHeading>
         <DialogDismiss className="absolute right-[-4px] top-0 flex items-start justify-end">
           <span className="sr-only">{t0('close')}</span>
-          <XIcon className="h-6 w-6" />
+          <XMarkIcon className="h-6 w-6" />
         </DialogDismiss>
       </header>
       <form className="m-4 mt-[10%]" onSubmit={handleSubmit}>

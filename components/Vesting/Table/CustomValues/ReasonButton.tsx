@@ -5,7 +5,7 @@ import { FormDialog } from '~/components/Dialog';
 import { InputText, SubmitButton } from '~/components/Form';
 import { useNetworkProvider } from '~/hooks';
 import toast from 'react-hot-toast';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import type { IVesting } from '~/types';
 import { networkDetails } from '~/lib/networkDetails';
 import { useAccount, useContractWrite } from 'wagmi';

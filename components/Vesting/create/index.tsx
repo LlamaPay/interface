@@ -9,7 +9,7 @@ import { secondsByDuration } from '~/utils/constants';
 import toast from 'react-hot-toast';
 import { useDialogState } from 'ariakit';
 import Link from 'next/link';
-import { ArrowCircleLeftIcon } from '@heroicons/react/outline';
+import { ArrowLeftCircleIcon } from '@heroicons/react/24/outline';
 import Confirm, { IVestingData } from './Confirm';
 import { createERC20Contract } from '~/utils/tokenUtils';
 import { getAddress } from 'ethers/lib/utils';
@@ -160,11 +160,9 @@ export default function CreateVesting({ factory }: { factory: string }) {
   return (
     <section className="relative w-full">
       <form className="mx-auto flex max-w-xl flex-col gap-4" onSubmit={onSubmit}>
-        <Link href="/vesting">
-          <a className="relative left-[-2px] flex items-center gap-2">
-            <ArrowCircleLeftIcon className="h-6 w-6" />
-            <span className="">Return</span>
-          </a>
+        <Link href="/vesting" className="relative left-[-2px] flex items-center gap-2">
+          <ArrowLeftCircleIcon className="h-6 w-6" />
+          <span className="">Return</span>
         </Link>
         <h1 className="font-exo my-2 text-2xl font-semibold text-lp-gray-4 dark:text-white">Set Up Vesting</h1>
         <InputText label={'Recipient Address'} name="recipientAddress" isRequired />

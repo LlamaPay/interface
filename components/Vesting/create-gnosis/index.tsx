@@ -2,7 +2,7 @@ import * as React from 'react';
 import { InputText, SubmitButton } from '~/components/Form';
 import Link from 'next/link';
 import useGnosisBatch from '~/queries/useGnosisBatch';
-import { ArrowCircleLeftIcon } from '@heroicons/react/outline';
+import { ArrowLeftCircleIcon } from '@heroicons/react/24/outline';
 import { useFieldArray, useForm } from 'react-hook-form';
 import BigNumber from 'bignumber.js';
 import { secondsByDuration } from '~/utils/constants';
@@ -15,7 +15,7 @@ import { BeatLoader } from 'react-spinners';
 import { Switch } from '@headlessui/react';
 import type { IVestingGnosisFormValues } from '../types';
 import MultipleStreamChartWrapper from '../Charts/MultipleStreamChartWrapper';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import EOAWarning from '../create/EOAWarning';
 import { useDialogState } from 'ariakit';
 
@@ -149,11 +149,9 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
   return (
     <>
       <div className="max-w-xl space-y-2">
-        <Link href="/vesting">
-          <a className="relative left-[-2px] flex items-center gap-2">
-            <ArrowCircleLeftIcon className="h-6 w-6" />
-            <span className="">Return</span>
-          </a>
+        <Link href="/vesting" className="relative left-[-2px] flex items-center gap-2">
+          <ArrowLeftCircleIcon className="h-6 w-6" />
+          <span className="">Return</span>
         </Link>
         <form>
           <input type="file" accept=".csv" onChange={(e) => handleFileChange(e)} />

@@ -53,7 +53,7 @@ const Footer = () => {
       </div>
 
       <div className="footer-graphic">
-        <Image src={footerGraphic} alt="" objectFit="contain" />
+        <Image src={footerGraphic} alt="" className="object-contain" />
       </div>
 
       <Widget />

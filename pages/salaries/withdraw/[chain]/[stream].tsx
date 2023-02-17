@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useRouter } from 'next/router';
 import Link from 'next/link';
 import Image, { StaticImageData } from 'next/image';
-import { dehydrate, QueryClient } from 'react-query';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { useDialogState } from 'ariakit';
 import { useNetwork } from 'wagmi';
 import { useIntl, useTranslations } from 'next-intl';
@@ -145,9 +145,9 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
               <Image
                 src={logoURI || defaultImage}
                 alt={network ? t0('logoAlt', { name: network }) : 'Chain'}
-                objectFit="contain"
-                width="16px"
-                height="15px"
+                className="object-contain"
+                width={16}
+                height={16}
               />
             </div>
           </Tooltip>
@@ -176,9 +176,9 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
                 <Image
                   src={tokenLogo || defaultImage}
                   alt={stream.token.name || 'Token'}
-                  objectFit="contain"
-                  width="16px"
-                  height="16px"
+                  className="object-contain"
+                  width={16}
+                  height={16}
                 />
               </div>
               <p>
@@ -246,9 +246,9 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
                       <Image
                         src={tokenLogo || defaultImage}
                         alt={stream.token.name || 'Token'}
-                        objectFit="contain"
-                        width="16px"
-                        height="16px"
+                        className="object-contain"
+                        width={16}
+                        height={16}
                       />
                       <span>{`${stream.token.symbol} to wallet`}</span>
                     </button>
@@ -284,7 +284,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery(
-    'StreamById',
+    ['StreamById'],
     useStreamByIdQuery.fetcher(
       {
         endpoint: network?.subgraphEndpoint ?? '',

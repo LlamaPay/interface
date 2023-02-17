@@ -2,7 +2,7 @@ import type { GetServerSideProps, NextPage } from 'next';
 import * as React from 'react';
 import { useRouter } from 'next/router';
 import Image, { StaticImageData } from 'next/image';
-import { dehydrate, QueryClient } from 'react-query';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
 import Layout from '~/components/Layout';
 import { BalanceIcon } from '~/components/Icons';
@@ -41,9 +41,9 @@ const Streams: NextPage<StreamsProps> = ({ address, resolvedAddress, network, ch
               <Image
                 src={logoURI || defaultImage}
                 alt={network ? t('logoAlt', { name: network }) : 'Fallback Logo'}
-                objectFit="contain"
-                width="21px"
-                height="24px"
+                className="object-contain"
+                width={21}
+                height={24}
               />
             </div>
             <p className="truncate whitespace-nowrap">{network || query.chain}</p>
@@ -91,7 +91,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery(
-    'StreamAndHistory',
+    ['StreamAndHistory'],
     useStreamAndHistoryQuery.fetcher(
       {
         endpoint: network?.subgraphEndpoint ?? '',

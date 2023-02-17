@@ -1,12 +1,12 @@
 import * as React from 'react';
-import { PlusIcon } from '@heroicons/react/solid';
+import { PlusIcon } from '@heroicons/react/24/solid';
 import { DisclosureState, useDialogState } from 'ariakit';
 import { FormDialog, TransactionDialog } from '~/components/Dialog';
 import { InputText, SubmitButton } from '~/components/Form';
 import { getAddress } from 'ethers/lib/utils';
 import { networkDetails } from '~/lib/networkDetails';
 import type { IScheduledTransferPayment } from '~/queries/useGetScheduledTransfers';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { BeatLoader } from 'react-spinners';
 import { formatAddress } from '~/utils/address';
 import { useContractWrite, useNetwork } from 'wagmi';

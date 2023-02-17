@@ -1,4 +1,4 @@
-import { ArrowCircleLeftIcon } from '@heroicons/react/solid';
+import { ArrowLeftCircleIcon } from '@heroicons/react/24/solid';
 import { getAddress, Interface, isAddress } from 'ethers/lib/utils';
 import { useNetworkProvider } from '~/hooks';
 import Link from 'next/link';
@@ -11,7 +11,7 @@ import { useAccount, useContractWrite, useSigner } from 'wagmi';
 import toast from 'react-hot-toast';
 import { SubmitButton } from '~/components/Form';
 import * as React from 'react';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import useGnosisBatch from '~/queries/useGnosisBatch';
 import { networkDetails } from '~/lib/networkDetails';
 import { ERC20Interface } from '~/utils/contract';
@@ -247,11 +247,9 @@ export default function CreatePayment({ contract }: { contract: string }) {
   return (
     <>
       <div className="space-y-2">
-        <Link href="/payments">
-          <a className="relative left-[-2px] flex items-center gap-2">
-            <ArrowCircleLeftIcon className="h-6 w-6" />
-            <span className="">Return</span>
-          </a>
+        <Link href="/payments" className="relative left-[-2px] flex items-center gap-2">
+          <ArrowLeftCircleIcon className="h-6 w-6" />
+          <span className="">Return</span>
         </Link>
         <form className="py-3 text-center">
           <input type="file" accept=".csv" onChange={(e) => handleFileChange(e)} />

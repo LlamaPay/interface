@@ -1,5 +1,5 @@
 import { useAccount } from 'wagmi';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useStreamAndHistoryQuery } from '~/services/generated/graphql';
 import { networkDetails } from '~/lib/networkDetails';
 import { chains } from '~/lib/chains';

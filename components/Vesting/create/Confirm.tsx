@@ -5,7 +5,7 @@ import { SubmitButton } from '~/components/Form';
 import { useIntl } from 'next-intl';
 import { useContractWrite } from 'wagmi';
 import { vestingFactoryReadableABI } from '~/lib/abis/vestingFactoryReadable';
-import { useQueryClient } from 'react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { TransactionDialog } from '~/components/Dialog';
 import { BeatLoader } from 'react-spinners';

@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import { ContractCallContext, Multicall } from 'ethereum-multicall';
 import { ethers } from 'ethers';
 import { useNetworkProvider } from '~/hooks';
-import { useQuery } from 'react-query';
+import { useQuery } from '@tanstack/react-query';
 import type { IVesting } from '~/types';
 import { networkDetails } from '~/lib/networkDetails';
 import { erc20ABI, useAccount } from 'wagmi';

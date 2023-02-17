@@ -1,4 +1,4 @@
-import { useQuery, UseQueryOptions } from 'react-query';
+import { useQuery, UseQueryOptions } from '@tanstack/react-query';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -80,6 +80,7 @@ export type HistoryEvent_Filter = {
   amount_lte?: InputMaybe<Scalars['BigInt']>;
   amount_not?: InputMaybe<Scalars['BigInt']>;
   amount_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  and?: InputMaybe<Array<InputMaybe<HistoryEvent_Filter>>>;
   createdBlock?: InputMaybe<Scalars['BigInt']>;
   createdBlock_gt?: InputMaybe<Scalars['BigInt']>;
   createdBlock_gte?: InputMaybe<Scalars['BigInt']>;
@@ -145,6 +146,7 @@ export type HistoryEvent_Filter = {
   oldStream_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   oldStream_starts_with?: InputMaybe<Scalars['String']>;
   oldStream_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  or?: InputMaybe<Array<InputMaybe<HistoryEvent_Filter>>>;
   stream?: InputMaybe<Scalars['String']>;
   stream_?: InputMaybe<Stream_Filter>;
   stream_contains?: InputMaybe<Scalars['String']>;
@@ -189,7 +191,11 @@ export type HistoryEvent_Filter = {
   token_starts_with_nocase?: InputMaybe<Scalars['String']>;
   txHash?: InputMaybe<Scalars['Bytes']>;
   txHash_contains?: InputMaybe<Scalars['Bytes']>;
+  txHash_gt?: InputMaybe<Scalars['Bytes']>;
+  txHash_gte?: InputMaybe<Scalars['Bytes']>;
   txHash_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  txHash_lt?: InputMaybe<Scalars['Bytes']>;
+  txHash_lte?: InputMaybe<Scalars['Bytes']>;
   txHash_not?: InputMaybe<Scalars['Bytes']>;
   txHash_not_contains?: InputMaybe<Scalars['Bytes']>;
   txHash_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
@@ -240,10 +246,15 @@ export type LlamaPayContract_Filter = {
   _change_block?: InputMaybe<BlockChangedFilter>;
   address?: InputMaybe<Scalars['Bytes']>;
   address_contains?: InputMaybe<Scalars['Bytes']>;
+  address_gt?: InputMaybe<Scalars['Bytes']>;
+  address_gte?: InputMaybe<Scalars['Bytes']>;
   address_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  address_lt?: InputMaybe<Scalars['Bytes']>;
+  address_lte?: InputMaybe<Scalars['Bytes']>;
   address_not?: InputMaybe<Scalars['Bytes']>;
   address_not_contains?: InputMaybe<Scalars['Bytes']>;
   address_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  and?: InputMaybe<Array<InputMaybe<LlamaPayContract_Filter>>>;
   createdBlock?: InputMaybe<Scalars['BigInt']>;
   createdBlock_gt?: InputMaybe<Scalars['BigInt']>;
   createdBlock_gte?: InputMaybe<Scalars['BigInt']>;
@@ -289,6 +300,7 @@ export type LlamaPayContract_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<LlamaPayContract_Filter>>>;
   streams_?: InputMaybe<Stream_Filter>;
   token?: InputMaybe<Scalars['String']>;
   token_?: InputMaybe<Token_Filter>;
@@ -347,10 +359,15 @@ export type LlamaPayFactory_Filter = {
   _change_block?: InputMaybe<BlockChangedFilter>;
   address?: InputMaybe<Scalars['Bytes']>;
   address_contains?: InputMaybe<Scalars['Bytes']>;
+  address_gt?: InputMaybe<Scalars['Bytes']>;
+  address_gte?: InputMaybe<Scalars['Bytes']>;
   address_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  address_lt?: InputMaybe<Scalars['Bytes']>;
+  address_lte?: InputMaybe<Scalars['Bytes']>;
   address_not?: InputMaybe<Scalars['Bytes']>;
   address_not_contains?: InputMaybe<Scalars['Bytes']>;
   address_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  and?: InputMaybe<Array<InputMaybe<LlamaPayFactory_Filter>>>;
   contracts_?: InputMaybe<LlamaPayContract_Filter>;
   count?: InputMaybe<Scalars['Int']>;
   count_gt?: InputMaybe<Scalars['Int']>;
@@ -384,6 +401,7 @@ export type LlamaPayFactory_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<LlamaPayFactory_Filter>>>;
 };
 
 export enum LlamaPayFactory_OrderBy {
@@ -585,6 +603,7 @@ export type Stream_Filter = {
   amountPerSec_lte?: InputMaybe<Scalars['BigInt']>;
   amountPerSec_not?: InputMaybe<Scalars['BigInt']>;
   amountPerSec_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  and?: InputMaybe<Array<InputMaybe<Stream_Filter>>>;
   contract?: InputMaybe<Scalars['String']>;
   contract_?: InputMaybe<LlamaPayContract_Filter>;
   contract_contains?: InputMaybe<Scalars['String']>;
@@ -639,6 +658,7 @@ export type Stream_Filter = {
   lastPaused_lte?: InputMaybe<Scalars['BigInt']>;
   lastPaused_not?: InputMaybe<Scalars['BigInt']>;
   lastPaused_not_in?: InputMaybe<Array<Scalars['BigInt']>>;
+  or?: InputMaybe<Array<InputMaybe<Stream_Filter>>>;
   paused?: InputMaybe<Scalars['Boolean']>;
   pausedAmount?: InputMaybe<Scalars['BigInt']>;
   pausedAmount_gt?: InputMaybe<Scalars['BigInt']>;
@@ -715,7 +735,11 @@ export type Stream_Filter = {
   reason_starts_with_nocase?: InputMaybe<Scalars['String']>;
   streamId?: InputMaybe<Scalars['Bytes']>;
   streamId_contains?: InputMaybe<Scalars['Bytes']>;
+  streamId_gt?: InputMaybe<Scalars['Bytes']>;
+  streamId_gte?: InputMaybe<Scalars['Bytes']>;
   streamId_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  streamId_lt?: InputMaybe<Scalars['Bytes']>;
+  streamId_lte?: InputMaybe<Scalars['Bytes']>;
   streamId_not?: InputMaybe<Scalars['Bytes']>;
   streamId_not_contains?: InputMaybe<Scalars['Bytes']>;
   streamId_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
@@ -916,10 +940,15 @@ export type Token_Filter = {
   _change_block?: InputMaybe<BlockChangedFilter>;
   address?: InputMaybe<Scalars['Bytes']>;
   address_contains?: InputMaybe<Scalars['Bytes']>;
+  address_gt?: InputMaybe<Scalars['Bytes']>;
+  address_gte?: InputMaybe<Scalars['Bytes']>;
   address_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  address_lt?: InputMaybe<Scalars['Bytes']>;
+  address_lte?: InputMaybe<Scalars['Bytes']>;
   address_not?: InputMaybe<Scalars['Bytes']>;
   address_not_contains?: InputMaybe<Scalars['Bytes']>;
   address_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  and?: InputMaybe<Array<InputMaybe<Token_Filter>>>;
   contract?: InputMaybe<Scalars['String']>;
   contract_?: InputMaybe<LlamaPayContract_Filter>;
   contract_contains?: InputMaybe<Scalars['String']>;
@@ -993,6 +1022,7 @@ export type Token_Filter = {
   name_not_starts_with_nocase?: InputMaybe<Scalars['String']>;
   name_starts_with?: InputMaybe<Scalars['String']>;
   name_starts_with_nocase?: InputMaybe<Scalars['String']>;
+  or?: InputMaybe<Array<InputMaybe<Token_Filter>>>;
   symbol?: InputMaybe<Scalars['String']>;
   symbol_contains?: InputMaybe<Scalars['String']>;
   symbol_contains_nocase?: InputMaybe<Scalars['String']>;
@@ -1059,10 +1089,15 @@ export type User_Filter = {
   _change_block?: InputMaybe<BlockChangedFilter>;
   address?: InputMaybe<Scalars['Bytes']>;
   address_contains?: InputMaybe<Scalars['Bytes']>;
+  address_gt?: InputMaybe<Scalars['Bytes']>;
+  address_gte?: InputMaybe<Scalars['Bytes']>;
   address_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  address_lt?: InputMaybe<Scalars['Bytes']>;
+  address_lte?: InputMaybe<Scalars['Bytes']>;
   address_not?: InputMaybe<Scalars['Bytes']>;
   address_not_contains?: InputMaybe<Scalars['Bytes']>;
   address_not_in?: InputMaybe<Array<Scalars['Bytes']>>;
+  and?: InputMaybe<Array<InputMaybe<User_Filter>>>;
   createdBlock?: InputMaybe<Scalars['BigInt']>;
   createdBlock_gt?: InputMaybe<Scalars['BigInt']>;
   createdBlock_gte?: InputMaybe<Scalars['BigInt']>;
@@ -1088,6 +1123,7 @@ export type User_Filter = {
   id_lte?: InputMaybe<Scalars['ID']>;
   id_not?: InputMaybe<Scalars['ID']>;
   id_not_in?: InputMaybe<Array<Scalars['ID']>>;
+  or?: InputMaybe<Array<InputMaybe<User_Filter>>>;
   streams_?: InputMaybe<Stream_Filter>;
 };
 
