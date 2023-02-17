@@ -16,6 +16,7 @@ import { useLocale } from '~/hooks';
 import { downloadVesting } from '~/utils/downloadCsv';
 import ReasonButton from './CustomValues/ReasonButton';
 import RenounceOwnershipButton from './CustomValues/RenounceOwnershipButton';
+import Vested from './CustomValues/Vested';
 
 export default function VestingTable({
   data,
@@ -63,6 +64,11 @@ export default function VestingTable({
               {info.getValue<number>()?.toLocaleString(locale, { minimumFractionDigits: 5, maximumFractionDigits: 5 })}
             </span>
           ),
+      },
+      {
+        id: 'total_vested',
+        header: 'Total Vested',
+        cell: (info) => info.cell.row.original && <Vested data={info.row.original} />,
       },
       {
         accessorFn: (row) => Number(row.totalClaimed) / 10 ** row.tokenDecimals,
