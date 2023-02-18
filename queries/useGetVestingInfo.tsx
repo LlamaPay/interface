@@ -11,6 +11,7 @@ import { gql, request } from 'graphql-request';
 import { vestingEscrowABI } from '~/lib/abis/vestingEscrow';
 import { vestingFactoryABI } from '~/lib/abis/vestingFactory';
 import { vestingReasonsABI } from '~/lib/abis/vestingReasons';
+import { getAddress } from 'ethers/lib/utils';
 
 const vestingEscrowCalls = [
   { reference: 'unclaimed', methodName: 'unclaimed', methodParameters: [] },
@@ -29,6 +30,12 @@ const vestingEscrowCalls = [
 const subgraphs: { [key: number]: string } = {
   1: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-vesting-mainnet',
   5: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-vesting-goerli',
+  42161: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-vesting-arbitrum',
+};
+
+const multicalls: { [key: number]: string } = {
+  2222: '0x30A62aA52Fa099C4B227869EB6aeaDEda054d121',
+  42161: '0xcA11bde05977b3631167028862bE2a173976CA11',
 };
 
 async function getVestingInfo(userAddress: string | undefined, provider: BaseProvider | null, chainId: number | null) {
@@ -40,8 +47,8 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
     const multicall =
       chainId === 2222
         ? new Multicall({
-            nodeUrl: networkDetails[2222].rpcUrl,
-            multicallCustomContractAddress: '0x30A62aA52Fa099C4B227869EB6aeaDEda054d121',
+            nodeUrl: networkDetails[chainId].rpcUrl,
+            multicallCustomContractAddress: multicalls[chainId],
           })
         : new Multicall({ ethersProvider: provider, tryAggregate: true });
     const runMulticall = async (calls: any[]) => {
@@ -95,16 +102,8 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
         calls: vestingEscrowCalls,
       }));
       const vestingContractInfoResults = await runMulticall(vestingContractInfoContext);
-      const vestingContractReasonContext: ContractCallContext[] = Object.keys(escrows).map((p: any) => ({
-        reference: escrows[p].id.toLowerCase(),
-        abi: vestingReasonsABI,
-        contractAddress: networkDetails[chainId].vestingReason,
-        calls: [{ reference: 'reason', methodName: 'reasons', methodParameters: [escrows[p].id] }],
-      }));
-      const vestingContractReasonResults = await runMulticall(vestingContractReasonContext);
       for (const i in escrows) {
         const vestingReturnContext = vestingContractInfoResults[escrows[i].id].callsReturnContext;
-        const reason = vestingContractReasonResults[escrows[i].id.toLowerCase()].callsReturnContext[0].returnValues[0];
         const result = {
           contract: escrows[i].id,
           unclaimed: new BigNumber(vestingReturnContext[0].returnValues[0].hex).toString(),
@@ -122,8 +121,19 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
           admin: escrows[i].admin,
           disabledAt: new BigNumber(vestingReturnContext[10].returnValues[0].hex).toString(),
           timestamp: Date.now() / 1e3,
-          reason: reason !== '' ? reason : null,
+          reason: null,
         };
+        if (networkDetails[chainId].vestingReason !== '0x0000000000000000000000000000000000000000') {
+          const contract = new ethers.Contract(
+            getAddress(networkDetails[chainId].vestingReason),
+            vestingReasonsABI,
+            provider
+          );
+          const reason = await contract.reasons(getAddress(escrows[i].id));
+          if (reason !== '') {
+            result.reason = reason;
+          }
+        }
         if (results.includes(result)) continue;
         results.push(result);
       }
