@@ -11,11 +11,8 @@ const Create: NextPage = () => {
   const [{ data: accountData }] = useAccount();
   const { chainId, unsupported } = useNetworkProvider();
   const t = useTranslations('CreateStream');
-  const paymentsContract = chainId
-    ? networkDetails[chainId].paymentsContract
-      ? networkDetails[chainId].paymentsContract
-      : null
-    : null;
+  const paymentsContract =
+    chainId && networkDetails[chainId].paymentsContract ? networkDetails[chainId].paymentsContract : null;
 
   return (
     <Layout>
@@ -23,7 +20,7 @@ const Create: NextPage = () => {
         <CreatePayment contract={paymentsContract} />
       ) : (
         <>
-          <span className="font-exo text-2xl font-semibold text-lp-gray-4 dark:text-white">Set Up Vesting</span>
+          <span className="font-exo text-2xl font-semibold text-lp-gray-4 dark:text-white">Set Up Payments</span>
           <FallbackContainer>
             <p>{!accountData ? t('connectWallet') : unsupported ? t('notSupported') : t('sus')}</p>
           </FallbackContainer>

@@ -33,7 +33,7 @@ export function Nav() {
       </Group>
 
       <Group name="Payments" isOpen={isPayments}>
-        <LinkItem name="Streams" href="/payments" isActive={isVesting && router.pathname !== '/payments/create'} />
+        <LinkItem name="Streams" href="/payments" isActive={isPayments && router.pathname !== '/payments/create'} />
         <Spacer />
         <LinkItem name="Create" href="/payments/create" isActive={router.pathname === '/payments/create'} />
       </Group>
