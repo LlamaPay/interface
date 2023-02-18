@@ -22,6 +22,8 @@ interface INetworkDetails {
     botSubgraph?: string;
     scheduledTransferFactory?: string;
     scheduledTransferSubgraph?: string;
+    subscriptionsFactory?: string;
+    subscriptionsSubgraph?: string;
   };
 }
 
@@ -223,6 +225,8 @@ export const networkDetails: INetworkDetails = {
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-goerli',
     scheduledTransferFactory: CONTRACTS.SCHEDULED_TRANSFERS_FACTORY_GOERLI,
     scheduledTransferSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/scheduledtransfers-subgraph',
+    subscriptionsFactory: CONTRACTS.SUBSCRIPTIONS_FACTORY_GOERLI,
+    subscriptionsSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamasubs-goerli',
   },
   1088: {
     rpcUrl: 'https://andromeda.metis.io/?owner=1088',
