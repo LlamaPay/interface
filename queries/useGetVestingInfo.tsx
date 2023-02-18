@@ -1,16 +1,16 @@
 import { BaseProvider } from '@ethersproject/providers';
 import BigNumber from 'bignumber.js';
 import { ContractCallContext, Multicall } from 'ethereum-multicall';
-import { ethers } from 'ethers';
+import { ContractInterface, ethers } from 'ethers';
 import { useNetworkProvider } from '~/hooks';
 import { useQuery } from '@tanstack/react-query';
 import type { IVesting } from '~/types';
 import { networkDetails } from '~/lib/networkDetails';
 import { erc20ABI, useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
-import { vestingEscrowABI } from '~/lib/abis/vestingEscrow';
 import { vestingFactoryABI } from '~/lib/abis/vestingFactory';
 import { vestingReasonsABI } from '~/lib/abis/vestingReasons';
+import vestingEscrowABI from '~/lib/abis/vestingEscrow';
 import { getAddress } from 'ethers/lib/utils';
 
 const vestingEscrowCalls = [
@@ -44,13 +44,12 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
     if (!userAddress) throw new Error('No account');
     if (!chainId) throw new Error('No Chain ID');
     const results: IVesting[] = [];
-    const multicall =
-      chainId === 2222
-        ? new Multicall({
-            nodeUrl: networkDetails[chainId].rpcUrl,
-            multicallCustomContractAddress: multicalls[chainId],
-          })
-        : new Multicall({ ethersProvider: provider, tryAggregate: true });
+    const multicall = multicalls[chainId]
+      ? new Multicall({
+          nodeUrl: networkDetails[chainId].rpcUrl,
+          multicallCustomContractAddress: multicalls[chainId],
+        })
+      : new Multicall({ ethersProvider: provider, tryAggregate: true });
     const runMulticall = async (calls: any[]) => {
       const pending = [];
       for (let i = 0; i < calls.length; i += 200) {
@@ -95,41 +94,43 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
       const admins = (await request(subgraphs[chainId], GET_ADMIN)).vestingEscrows;
       const recipients = (await request(subgraphs[chainId], GET_RECIPIENT)).vestingEscrows;
       const escrows = admins.concat(recipients);
-      const vestingContractInfoContext: ContractCallContext[] = Object.keys(escrows).map((p: any) => ({
-        reference: escrows[p].id,
-        contractAddress: escrows[p].id,
-        abi: vestingEscrowABI,
-        calls: vestingEscrowCalls,
-      }));
-      const vestingContractInfoResults = await runMulticall(vestingContractInfoContext);
+      // const vestingContractInfoContext: ContractCallContext[] = Object.keys(escrows).map((p: any) => ({
+      //   reference: escrows[p].id,
+      //   contractAddress: escrows[p].id,
+      //   abi: vestingEscrowABI,
+      //   calls: vestingEscrowCalls,
+      // }));
+      // const vestingContractInfoResults = await runMulticall(vestingContractInfoContext);
       for (const i in escrows) {
-        const vestingReturnContext = vestingContractInfoResults[escrows[i].id].callsReturnContext;
+        // const vestingReturnContext = vestingContractInfoResults[escrows[i].id].callsReturnContext;
+        const contract = new ethers.Contract(getAddress(escrows[i].id), vestingEscrowABI, provider);
         const result = {
           contract: escrows[i].id,
-          unclaimed: new BigNumber(vestingReturnContext[0].returnValues[0].hex).toString(),
-          locked: new BigNumber(vestingReturnContext[1].returnValues[0].hex).toString(),
+          unclaimed: await contract.unclaimed({ gasLimit: 1000000 }),
+          locked: await contract.locked({ gasLimit: 1000000 }),
           recipient: escrows[i].recipient,
           token: escrows[i].token.id,
           tokenName: escrows[i].token.name,
           tokenSymbol: escrows[i].token.symbol,
           tokenDecimals: escrows[i].token.decimals,
-          startTime: new BigNumber(vestingReturnContext[4].returnValues[0].hex).toString(),
-          endTime: new BigNumber(vestingReturnContext[5].returnValues[0].hex).toString(),
-          cliffLength: new BigNumber(vestingReturnContext[6].returnValues[0].hex).toString(),
-          totalLocked: new BigNumber(vestingReturnContext[7].returnValues[0].hex).toString(),
-          totalClaimed: new BigNumber(vestingReturnContext[8].returnValues[0].hex).toString(),
+          startTime: await contract.start_time({ gasLimit: 1000000 }),
+          endTime: await contract.end_time({ gasLimit: 1000000 }),
+          cliffLength: await contract.cliff_length({ gasLimit: 1000000 }),
+          totalLocked: await contract.total_locked({ gasLimit: 1000000 }),
+          totalClaimed: await contract.total_claimed({ gasLimit: 1000000 }),
           admin: escrows[i].admin,
-          disabledAt: new BigNumber(vestingReturnContext[10].returnValues[0].hex).toString(),
+          disabledAt: await contract.disabled_at({ gasLimit: 1000000 }),
           timestamp: Date.now() / 1e3,
           reason: null,
         };
+        console.log(result)
         if (networkDetails[chainId].vestingReason !== '0x0000000000000000000000000000000000000000') {
           const contract = new ethers.Contract(
             getAddress(networkDetails[chainId].vestingReason),
             vestingReasonsABI,
             provider
           );
-          const reason = await contract.reasons(getAddress(escrows[i].id));
+          const reason = await contract.reasons(getAddress(escrows[i].id), { gasLimit: 10000000 });
           if (reason !== '') {
             result.reason = reason;
           }
@@ -140,7 +141,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
     } else {
       const factoryAddress = networkDetails[chainId].vestingFactory;
       const factoryContract = new ethers.Contract(factoryAddress, vestingFactoryABI, provider);
-      const amtOfContracts = await factoryContract.escrows_length({ gasLimit: 1000000 });
+      const amtOfContracts = Number(await factoryContract.escrows_length({ gasLimit: 10000000 }));
       const vestingContractsContext: ContractCallContext[] = Array.from({ length: Number(amtOfContracts) }, (_, k) => ({
         reference: k.toString(),
         contractAddress: factoryAddress,
