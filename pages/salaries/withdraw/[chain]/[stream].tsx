@@ -303,7 +303,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
       streamId: id,
       network: c?.name ?? null,
       chainId: c?.id ?? null,
-      chainExplorer: c?.blockExplorers ? c.blockExplorers[0].url : null,
+      chainExplorer: c?.blockExplorers ? c.blockExplorers.default.url : null,
       subgraphEndpoint: network?.subgraphEndpoint ?? '',
       logoURI: network?.logoURI ?? defaultImage,
       dehydratedState: dehydrate(queryClient),
