@@ -6,9 +6,11 @@ import { BeatLoader } from 'react-spinners';
 import { DisclosureState, useDialogState } from 'ariakit';
 import { useAccount, useContractWrite } from 'wagmi';
 import BigNumber from 'bignumber.js';
+import { BigNumber as EthersBigNumber } from 'ethers';
 import toast from 'react-hot-toast';
 import { vestingContractReadableABI } from '~/lib/abis/vestingContractReadable';
 import type { IVesting } from '~/types';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function ClaimVesting({
   claimValues,
@@ -25,6 +27,8 @@ export default function ClaimVesting({
   const [transactionHash, setTransactionHash] = React.useState<string>('');
   const transactionDialog = useDialogState();
   const confirmDialog = useDialogState();
+
+  const queryClient = useQueryClient();
 
   const { address } = useAccount();
 
@@ -51,7 +55,8 @@ export default function ClaimVesting({
     if (!hasCustomBeneficiary) {
       setBeneficiaryInput(address);
     }
-    setInputAmount(new BigNumber(data.unclaimed).toFixed(0));
+
+    setInputAmount(EthersBigNumber.from(data.unclaimed).toString());
     claimDialog.hide();
     confirmDialog.show();
   }
@@ -66,6 +71,7 @@ export default function ClaimVesting({
         data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1 ? toast.success('Successfully Claimed Tokens') : toast.error('Failed to Claim Tokens');
+          queryClient.invalidateQueries();
         });
       })
       .catch((err) => {
@@ -118,7 +124,11 @@ export default function ClaimVesting({
               isRequired
             />
           )}
-          <SubmitButton className="mt-5" onClick={handleClaim}>
+          <SubmitButton
+            className="mt-5"
+            onClick={handleClaim}
+            disabled={inputAmount === '' || Number.isNaN(Number(inputAmount))}
+          >
             {'Claim Tokens'}
           </SubmitButton>
           <SubmitButton className="mt-5" onClick={handleClaimAll}>

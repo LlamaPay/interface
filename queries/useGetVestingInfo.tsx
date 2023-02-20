@@ -123,7 +123,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
           timestamp: Date.now() / 1e3,
           reason: null,
         };
-        console.log(result)
+
         if (networkDetails[chainId].vestingReason !== '0x0000000000000000000000000000000000000000') {
           const contract = new ethers.Contract(
             getAddress(networkDetails[chainId].vestingReason),
