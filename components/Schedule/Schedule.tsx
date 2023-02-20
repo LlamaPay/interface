@@ -25,7 +25,7 @@ export default function Schedule({
 }) {
   const dialog = useDialogState();
   const warningDialog = useDialogState();
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
   const botAddress = networkDetails[chainId].botAddress;
   const queryClient = useQueryClient();
   const [hasRedirect, setHasRedirect] = React.useState<boolean>(false);
@@ -33,21 +33,19 @@ export default function Schedule({
   const { mutate: approveMax } = useApproveTokenForMaxAmt();
   const [showCalendar, setShowCalendar] = React.useState<boolean>(false);
 
-  const [{}, scheduleWithdraw] = useContractWrite(
-    {
-      addressOrName: botAddress,
-      contractInterface: botContractABI,
-    },
-    'scheduleWithdraw'
-  );
+  const { writeAsync: scheduleWithdraw } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: botAddress as `0x${string}`,
+    abi: botContractABI,
+    functionName: 'scheduleWithdraw',
+  });
 
-  const [{}, setRedirect] = useContractWrite(
-    {
-      addressOrName: botAddress,
-      contractInterface: botContractABI,
-    },
-    'setRedirect'
-  );
+  const { writeAsync: setRedirect } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: botAddress as `0x${string}`,
+    abi: botContractABI,
+    functionName: 'setRedirect',
+  });
 
   const [formData, setFormData] = React.useState({
     startDate: new Date(Date.now()).toISOString().slice(0, 10),
@@ -70,7 +68,7 @@ export default function Schedule({
     dialog.hide();
     warningDialog.show();
     scheduleWithdraw({
-      args: [
+      recklesslySetUnpreparedArgs: [
         data.token.address,
         data.payerAddress,
         data.payeeAddress,
@@ -86,37 +84,36 @@ export default function Schedule({
           ? secondsByDuration['month']
           : null,
       ],
-    }).then((d) => {
-      const data: any = d;
-      if (data.error) {
-        toast.error(data.error.reason ?? data.error.message);
-      } else {
+    })
+      .then((data) => {
         const toastId = toast.loading('Scheduling Event');
-        data.data?.wait().then((receipt: any) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastId);
           receipt.status === 1
             ? toast.success('Successfully Scheduled Event')
             : toast.error('Failed to Schedule Event');
           queryClient.invalidateQueries();
         });
-      }
-    });
+      })
+      .catch((err) => {
+        toast.error(err.reason || err.message || 'Transaction Failed');
+      });
     if (!hasRedirect) {
       return;
     } else {
       approveMax({ tokenAddress: data.token.address, spenderAddress: botAddress });
-      setRedirect({ args: [redirectAddress] }).then((data) => {
-        if (data.error) {
-          toast.error(data.error.message);
-        } else {
+      setRedirect({ recklesslySetUnpreparedArgs: [redirectAddress] })
+        .then((data) => {
           const toastId = toast.loading('Setting Redirect');
-          data.data?.wait().then((receipt: any) => {
+          data.wait().then((receipt) => {
             toast.dismiss(toastId);
             receipt.status === 1 ? toast.success('Successfully Set Redirect') : toast.error('Failed to Set Redirect');
             queryClient.invalidateQueries();
           });
-        }
-      });
+        })
+        .catch((err) => {
+          toast.error(err.reason || err.message || 'Transaction Failed');
+        });
     }
   }
 
@@ -172,7 +169,7 @@ export default function Schedule({
               </section>
             )}
 
-            {data.payeeAddress.toLowerCase() === accountData?.address.toLowerCase() && (
+            {address && data.payeeAddress.toLowerCase() === address.toLowerCase() && (
               <div className="flex space-x-1">
                 <span>Redirect Withdraw</span>
                 <Switch
@@ -208,7 +205,7 @@ export default function Schedule({
       <BotDepositWarning
         botAddress={botAddress}
         dialog={warningDialog}
-        userAddress={accountData?.address ?? ''}
+        userAddress={address || ''}
         nativeCurrency={nativeCurrency}
       />
     </>

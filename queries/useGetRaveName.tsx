@@ -17,7 +17,7 @@ async function getRaveName(userAddress: string | undefined) {
 }
 
 export default function useGetRaveName() {
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
 
-  return useQuery(['raveName', accountData?.address], () => getRaveName(accountData?.address));
+  return useQuery(['raveName', address], () => getRaveName(address));
 }

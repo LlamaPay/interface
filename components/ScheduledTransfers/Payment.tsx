@@ -27,9 +27,9 @@ export function ScheduledTransferPayment({
 
   const txDialogState = useDialogState();
 
-  const [{ data: networkData }] = useNetwork();
+  const { chain } = useNetwork();
 
-  const explorerUrl = networkData?.chain?.id ? networkDetails[networkData.chain.id]?.blockExplorerURL : null;
+  const explorerUrl = chain ? networkDetails[chain.id]?.blockExplorerURL : null;
 
   return (
     <>
@@ -202,13 +202,12 @@ const Redirects = ({
 
   const queryClient = useQueryClient();
 
-  const [{ loading: updatingRedirect }, setRedirect] = useContractWrite(
-    {
-      addressOrName: poolContract,
-      contractInterface: scheduledPaymentsContractABI,
-    },
-    'setRedirect'
-  );
+  const { isLoading: updatingRedirect, writeAsync: setRedirect } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: poolContract as `0x${string}`,
+    abi: scheduledPaymentsContractABI,
+    functionName: 'setRedirect',
+  });
 
   const updateRedirect = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -217,28 +216,28 @@ const Redirects = ({
 
     const newRedirects = form.newRedirects?.value;
 
-    setRedirect({ args: [streamId, getAddress(newRedirects)] }).then((res) => {
-      if (res.error) {
-        redirectDialog.hide();
-        toast.error(res.error.message);
-      } else {
+    setRedirect({ recklesslySetUnpreparedArgs: [streamId, getAddress(newRedirects)] })
+      .then((res) => {
         const toastid = toast.loading(`Confirming Transaction`);
 
         redirectDialog.hide();
 
-        txHash.current = res.data.hash;
+        txHash.current = res.hash;
 
-        txDialogState.toggle();
+        txDialogState.hide();
 
-        res.data?.wait().then((receipt) => {
+        res.wait().then((receipt) => {
           toast.dismiss(toastid);
 
           receipt.status === 1 ? toast.success('Transaction Success') : toast.error('Transaction Failed');
         });
 
         queryClient.invalidateQueries();
-      }
-    });
+      })
+      .catch((err) => {
+        txDialogState.hide();
+        toast.error(err.reason || err.message || 'Transaction Failed');
+      });
   };
 
   return (
@@ -275,34 +274,34 @@ const CancelTransfer = ({
 }) => {
   const queryClient = useQueryClient();
 
-  const [{}, cancelTransfer] = useContractWrite(
-    {
-      addressOrName: poolContract,
-      contractInterface: scheduledPaymentsContractABI,
-    },
-    'cancelTransfer'
-  );
+  const { writeAsync: cancelTransfer } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: poolContract as `0x${string}`,
+    abi: scheduledPaymentsContractABI,
+    functionName: 'cancelTransfer',
+  });
 
   const cancel = () => {
-    cancelTransfer({ args: [streamId] }).then((res) => {
-      if (res.error) {
-        toast.error(res.error.message);
-      } else {
+    cancelTransfer({ recklesslySetUnpreparedArgs: [streamId] })
+      .then((res) => {
         const toastid = toast.loading(`Confirming Transaction`);
 
-        txHash.current = res.data.hash;
+        txHash.current = res.hash;
 
-        txDialogState.toggle();
+        txDialogState.hide();
 
-        res.data?.wait().then((receipt) => {
+        res.wait().then((receipt) => {
           toast.dismiss(toastid);
 
           receipt.status === 1 ? toast.success('Transaction Success') : toast.error('Transaction Failed');
         });
 
         queryClient.invalidateQueries();
-      }
-    });
+      })
+      .catch((err) => {
+        txDialogState.hide();
+        toast.error(err.reason || err.message || 'Transaction Failed');
+      });
   };
 
   return (

@@ -1,4 +1,3 @@
-import { BaseProvider } from '@ethersproject/providers';
 import { botContractABI } from '~/lib/abis/botContract';
 import { ethers } from 'ethers';
 import { useNetworkProvider } from '~/hooks';
@@ -7,8 +6,9 @@ import { zeroAdd } from '~/utils/constants';
 import { networkDetails } from '~/lib/networkDetails';
 import { erc20ABI, useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
+import type { Provider } from '~/utils/contract';
 
-async function getBotInfo(userAddress: string | undefined, provider: BaseProvider | null, chainId: number | null) {
+async function getBotInfo(userAddress: string | null, provider: Provider | null, chainId: number | null) {
   try {
     if (!provider) {
       throw new Error('No provider');
@@ -94,10 +94,10 @@ async function getBotInfo(userAddress: string | undefined, provider: BaseProvide
 
 export default function useGetBotInfo() {
   const { provider, chainId } = useNetworkProvider();
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
   return useQuery(
-    ['botInfo', accountData?.address.toLowerCase(), chainId],
-    () => getBotInfo(accountData?.address.toLowerCase(), provider, chainId),
+    ['botInfo', address && address.toLowerCase(), chainId],
+    () => getBotInfo(address ? address.toLowerCase() : null, provider, chainId),
     {
       refetchInterval: 180000,
     }

@@ -38,7 +38,7 @@ interface IWithdrawProps {
 }
 
 const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
-  const [{ data: accountData }] = useAccount();
+  const { isConnected } = useAccount();
   const { unsupported } = useNetworkProvider();
   const [addressToFetch, setAddressToFetch] = React.useState<string | null>(resolvedAddress);
   const [fetchingEns, setFetchingEns] = React.useState(false);
@@ -139,7 +139,7 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
     }
   };
 
-  const showFallback = !accountData || unsupported;
+  const showFallback = !isConnected || unsupported;
 
   const t = useTranslations('Common');
 
@@ -166,7 +166,7 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
 
         {showFallback ? (
           <FallbackContainer>
-            <p>{!accountData ? t0('connectWallet') : unsupported ? t0('networkNotSupported') : t0('sus')}</p>
+            <p>{!isConnected ? t0('connectWallet') : unsupported ? t0('networkNotSupported') : t0('sus')}</p>
           </FallbackContainer>
         ) : (
           <form onSubmit={fetchStreams}>
@@ -202,7 +202,7 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
 
             <button
               onClick={sendAllOnClick}
-              disabled={!accountData || unsupported || isError || !formattedData.streams}
+              disabled={!isConnected || unsupported || isError || !formattedData.streams}
               className="secondary-button flex w-fit items-center justify-between gap-4 whitespace-nowrap py-2 px-8 text-sm font-bold disabled:cursor-not-allowed dark:border-lp-secondary dark:bg-lp-primary dark:text-white"
             >
               <span>{t0('sendAll')}</span>

@@ -13,7 +13,7 @@ interface ICreateContract {
 
 interface IDepositToken extends ICreateContract {
   factoryAddress: string | null;
-  signer?: Signer;
+  signer?: Signer | null;
 }
 
 const create = async ({ factoryAddress, signer, tokenAddress }: IDepositToken) => {
@@ -38,7 +38,8 @@ const create = async ({ factoryAddress, signer, tokenAddress }: IDepositToken) =
 };
 
 export default function useCreateLlamaPayContract() {
-  const [{ data: signer }] = useSigner();
+  const { data: signer } = useSigner();
+
   const queryClient = useQueryClient();
 
   const { chainId } = useNetworkProvider();

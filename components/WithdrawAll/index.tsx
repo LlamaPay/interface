@@ -14,7 +14,8 @@ interface ICall {
 
 export default function WithdrawAll() {
   const { data } = useStreamsAndHistory();
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
+
   const { mutate: batchCall } = useBatchCalls();
   const { mutate: gnosisBatch } = useGnosisBatch();
   const { unsupported } = useNetworkProvider();
@@ -22,7 +23,7 @@ export default function WithdrawAll() {
   const handleClick = () => {
     const calls: ICall =
       data.streams?.reduce((acc: ICall, current) => {
-        if (accountData?.address.toLowerCase() === current.payerAddress.toLowerCase() && !current.paused) {
+        if (address && address.toLowerCase() === current.payerAddress.toLowerCase() && !current.paused) {
           const callData = acc[current.llamaContractAddress] ?? [];
 
           callData.push(
@@ -52,7 +53,7 @@ export default function WithdrawAll() {
   return (
     <button
       onClick={handleClick}
-      disabled={!accountData || unsupported}
+      disabled={!address || unsupported}
       className="flex w-full items-center justify-between gap-4 whitespace-nowrap dark:text-white dark:hover:text-[#cccccc]"
     >
       <span>{t('sendAll')}</span>

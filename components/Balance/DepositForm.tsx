@@ -23,7 +23,7 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
   const t0 = useTranslations('Common');
   const t1 = useTranslations('Forms');
 
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
 
   const [inputAmount, setAmount] = React.useState('');
 
@@ -40,7 +40,7 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
         tokenContract: data.tokenContract,
         llamaContractAddress: data.llamaContractAddress,
       },
-      userAddress: accountData?.address,
+      userAddress: address,
       approvedForAmount: inputAmount,
       checkTokenApproval,
     });
@@ -56,7 +56,7 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
           tokenContract: data.tokenContract,
           llamaContractAddress: data.llamaContractAddress,
         },
-        userAddress: accountData?.address,
+        userAddress: address,
         approvedForAmount: inputAmount,
         checkTokenApproval,
       });
@@ -106,7 +106,7 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
                   tokenContract: data.tokenContract,
                   llamaContractAddress: data.llamaContractAddress,
                 },
-                userAddress: accountData?.address,
+                userAddress: address,
                 approvedForAmount: amount,
                 checkTokenApproval,
               });

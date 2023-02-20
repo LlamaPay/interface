@@ -5,11 +5,12 @@ import { chains } from '~/lib/chains';
 import { useNetwork } from 'wagmi';
 
 export const useChainExplorer = () => {
-  const [{ data: network }] = useNetwork();
+  const { chain } = useNetwork();
+
   const { pathname, query } = useRouter();
 
   const { name, url, id } = React.useMemo(() => {
-    if (pathname === '/streams' && !Number.isNaN(query.chainId)) {
+    if (pathname === '/streams' && !Number.isNaN(Number(query.chainId))) {
       const details = networkDetails[Number(query.chainId)];
 
       return details
@@ -42,14 +43,14 @@ export const useChainExplorer = () => {
         : { name: null, url: null };
     }
 
-    const explorers = network?.chain?.blockExplorers;
+    const explorers = chain?.blockExplorers;
 
     return {
-      name: explorers ? explorers[0]?.name ?? null : null,
-      url: explorers ? explorers[0]?.url ?? null : null,
-      id: network ? network.chain?.id ?? null : null,
+      name: explorers ? explorers.default?.name ?? null : null,
+      url: explorers ? explorers.default?.url ?? null : null,
+      id: chain ? chain?.id ?? null : null,
     };
-  }, [network, pathname, query]);
+  }, [chain, pathname, query]);
 
   return { name, url, id };
 };

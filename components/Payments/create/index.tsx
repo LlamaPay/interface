@@ -55,8 +55,8 @@ export default function CreatePayment({ contract }: { contract: string }) {
   });
 
   const { provider, chainId } = useNetworkProvider();
-  const [{ data: accountData }] = useAccount();
-  const [{ data: signer }] = useSigner();
+  const { address } = useAccount();
+  const { data: signer } = useSigner();
   const { mutate: checkApproval, data: approvalData } = useCheckMultipleTokenApproval();
   const { mutate: gnosisBatch } = useGnosisBatch();
   const { mutate: approveToken, isLoading: approving } = useApproveToken();
@@ -90,13 +90,12 @@ export default function CreatePayment({ contract }: { contract: string }) {
     reader.readAsText(csvFile);
   }
 
-  const [{}, batch] = useContractWrite(
-    {
-      addressOrName: contract,
-      contractInterface: paymentsContractABI,
-    },
-    'batch'
-  );
+  const { writeAsync: batch } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: contract as `0x${string}`,
+    abi: paymentsContractABI,
+    functionName: 'batch',
+  });
 
   async function onChange(index: number, eventType: string, value: string) {
     if (process.env.NEXT_PUBLIC_SAFE === 'true') return;
@@ -126,7 +125,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
           .toFixed(0);
       }
       const toCheck: ICheckMultipleTokenAllowance = {
-        userAddress: accountData?.address,
+        userAddress: address,
         tokens: {},
       };
       for (const token in tokenAndAmount) {
@@ -177,7 +176,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
       }
       if (process.env.NEXT_PUBLIC_SAFE === 'false') {
         const toCheck: ICheckMultipleTokenAllowance = {
-          userAddress: accountData?.address,
+          userAddress: address,
           tokens: {},
         };
         for (const token in tokenAndAmount) {
@@ -209,19 +208,19 @@ export default function CreatePayment({ contract }: { contract: string }) {
           convertedCalls.forEach((c) => {
             calls.push(contractInterface.encodeFunctionData('create', [c.token, c.payee, c.amount, c.release]));
           });
-          batch({ args: [calls, true] }).then((data) => {
-            if (data.error) {
-              toast.error(data.error.message);
-            } else {
+          batch({ recklesslySetUnpreparedArgs: [calls, true] })
+            .then((data) => {
               const toastid = toast.loading('Creating');
-              data.data.wait().then((receipt) => {
+              data.wait().then((receipt) => {
                 toast.dismiss(toastid);
                 receipt.status === 1 ? toast.success('Successfully Created') : toast.error('Failed to Create');
               });
               checkApproval(toCheck);
               queryClient.invalidateQueries();
-            }
-          });
+            })
+            .catch((err) => {
+              toast.error(err.message);
+            });
         }
       } else {
         const call: { [key: string]: string[] } = {};

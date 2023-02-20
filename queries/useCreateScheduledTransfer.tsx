@@ -15,7 +15,7 @@ interface ICreateContract {
 
 interface ICreate extends ICreateContract {
   factoryAddress?: string | null;
-  signer?: Signer;
+  signer?: Signer | null;
 }
 
 const create = async ({ factoryAddress, signer, oracleAddress, tokenAddress, maxPrice }: ICreate) => {
@@ -45,7 +45,7 @@ const create = async ({ factoryAddress, signer, oracleAddress, tokenAddress, max
 };
 
 export default function useCreateScheduledTransferContract({ factoryAddress }: { factoryAddress?: string | null }) {
-  const [{ data: signer }] = useSigner();
+  const { data: signer } = useSigner();
 
   const queryClient = useQueryClient();
 

@@ -217,11 +217,11 @@ const fetchScheduledTransfersHistory = async ({
 };
 
 export function useGetScheduledTransferPools({ graphEndpoint }: { graphEndpoint?: string | null }) {
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
 
   return useQuery<Array<IScheduledTransferPool>>(
-    ['scheduledTransferPools', accountData?.address, graphEndpoint],
-    () => fetchScheduledTransferPools({ userAddress: accountData?.address, graphEndpoint }),
+    ['scheduledTransferPools', address, graphEndpoint],
+    () => fetchScheduledTransferPools({ userAddress: address, graphEndpoint }),
     {
       refetchInterval: 30_000,
     }
@@ -229,11 +229,11 @@ export function useGetScheduledTransferPools({ graphEndpoint }: { graphEndpoint?
 }
 
 export function useGetScheduledPayments({ graphEndpoint }: { graphEndpoint?: string | null }) {
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
 
   return useQuery<Array<IScheduledTransferPayment>>(
-    ['scheduledPayments', accountData?.address, graphEndpoint],
-    () => fetchScheduledPayments({ userAddress: accountData?.address, graphEndpoint }),
+    ['scheduledPayments', address, graphEndpoint],
+    () => fetchScheduledPayments({ userAddress: address, graphEndpoint }),
     {
       refetchInterval: 30_000,
     }
@@ -247,11 +247,11 @@ export function useGetScheduledTransfersHistory({
   graphEndpoint?: string | null;
   isPoolOwnersHistory?: boolean;
 }) {
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
 
   return useQuery<Array<IScheduledTransferHistory>>(
-    ['scheduledTransfersHistory', accountData?.address, graphEndpoint, isPoolOwnersHistory],
-    () => fetchScheduledTransfersHistory({ userAddress: accountData?.address, graphEndpoint, isPoolOwnersHistory }),
+    ['scheduledTransfersHistory', address, graphEndpoint, isPoolOwnersHistory],
+    () => fetchScheduledTransfersHistory({ userAddress: address, graphEndpoint, isPoolOwnersHistory }),
     {
       refetchInterval: 30_000,
     }

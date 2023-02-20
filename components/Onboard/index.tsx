@@ -15,9 +15,9 @@ interface IOnboardProps {
 }
 
 export default function OnboardDialog({ dialog, className }: IOnboardProps) {
-  const [{ loading: connecting }] = useConnect();
+  const { isLoading: connecting } = useConnect();
 
-  const [{ data: accountData, loading: accountDataLoading }] = useAccount();
+  const { address, isConnected, isConnecting } = useAccount();
 
   const [showCreateStream, setCreateStream] = React.useState(false);
 
@@ -26,9 +26,9 @@ export default function OnboardDialog({ dialog, className }: IOnboardProps) {
   const t2 = useTranslations('Onboard');
 
   const mainHeader = () => {
-    if (accountData) {
+    if (isConnected) {
       return showCreateStream ? t2('createANewStream') : t2('depositToken');
-    } else if (connecting || accountDataLoading) {
+    } else if (connecting || isConnecting) {
       return t1('initializing');
     } else {
       return t1('header');
@@ -36,7 +36,7 @@ export default function OnboardDialog({ dialog, className }: IOnboardProps) {
   };
 
   const SideContent = () => {
-    if (accountData) {
+    if (isConnected) {
       return (
         <>
           <Coins />
@@ -120,12 +120,12 @@ export default function OnboardDialog({ dialog, className }: IOnboardProps) {
           </button>
         </header>
 
-        {accountData ? (
+        {isConnected && address ? (
           <>
             {showCreateStream ? (
               <CreateStreamField setCreateStream={setCreateStream} />
             ) : (
-              <DepositField userAddress={accountData.address} setCreateStream={setCreateStream} />
+              <DepositField userAddress={address} setCreateStream={setCreateStream} />
             )}
           </>
         ) : (

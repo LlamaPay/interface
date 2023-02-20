@@ -1,4 +1,4 @@
-import { BaseProvider } from '@ethersproject/providers';
+import type { Provider } from '~/utils/contract';
 import BigNumber from 'bignumber.js';
 import { ContractCallContext, Multicall } from 'ethereum-multicall';
 import { ContractInterface, ethers } from 'ethers';
@@ -38,7 +38,7 @@ const multicalls: { [key: number]: string } = {
   42161: '0xcA11bde05977b3631167028862bE2a173976CA11',
 };
 
-async function getVestingInfo(userAddress: string | undefined, provider: BaseProvider | null, chainId: number | null) {
+async function getVestingInfo(userAddress: string | undefined, provider: Provider | null, chainId: number | null) {
   try {
     if (!provider) throw new Error('No provider');
     if (!userAddress) throw new Error('No account');
@@ -174,7 +174,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
         vestingContractReasonResults = await runMulticall(vestingContractReasonContext);
       }
       const vestingContractInfoResults = await runMulticall(vestingContractInfoContext);
-      const tokenContractCallContext: ContractCallContext[] = Object.keys(vestingContractInfoResults).map((p: any) => ({
+      const tokenContractCallContext = Object.keys(vestingContractInfoResults).map((p: any) => ({
         reference: vestingContractInfoResults[p].callsReturnContext[3].returnValues[0],
         contractAddress: vestingContractInfoResults[p].callsReturnContext[3].returnValues[0],
         abi: erc20ABI,
@@ -226,17 +226,15 @@ async function getVestingInfo(userAddress: string | undefined, provider: BasePro
 export default function useGetVestingInfo() {
   const { provider, chainId } = useNetworkProvider();
 
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
 
-  return useQuery(['vestingInfo', accountData?.address, chainId], () =>
-    getVestingInfo(accountData?.address, provider, chainId)
-  );
+  return useQuery(['vestingInfo', address, chainId], () => getVestingInfo(address, provider, chainId));
 }
 
 interface IVestingInfoByQueryParams {
   address: string;
   chainId: number | null;
-  provider: BaseProvider | null;
+  provider: Provider | null;
 }
 
 export function useGetVestingInfoByQueryParams({ address, chainId, provider }: IVestingInfoByQueryParams) {

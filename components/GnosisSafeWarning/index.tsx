@@ -7,24 +7,25 @@ import { useAccount } from 'wagmi';
 export default function GnosisSafeWarning() {
   const dialog = useDialogState();
   const { provider } = useNetworkProvider();
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
 
   React.useEffect(() => {
     async function checkCode() {
-      if (accountData?.address) {
-        const isContract = (await provider?.getCode(accountData?.address)) !== '0x';
+      if (address) {
+        const isContract = (await provider?.getCode(address)) !== '0x';
         if (isContract) {
           dialog.show();
         }
       }
     }
+
     if (process.env.NEXT_PUBLIC_SAFE === 'false') {
       checkCode();
       if (window.location !== window.parent.location) {
         dialog.show();
       }
     }
-  }, []);
+  }, [address]);
 
   return (
     <FormDialog title="Switch to Gnosis App" dialog={dialog}>

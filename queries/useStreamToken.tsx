@@ -14,7 +14,7 @@ interface IUseStreamToken {
 }
 
 interface IStreamToken extends IUseStreamToken {
-  signer?: Signer;
+  signer?: Signer | null;
 }
 
 const streamToken = async ({
@@ -44,7 +44,8 @@ const streamToken = async ({
 };
 
 export default function useStreamToken() {
-  const [{ data: signer }] = useSigner();
+  const { data: signer } = useSigner();
+
   const queryClient = useQueryClient();
 
   return useMutation<ITransactionSuccess, ITransactionError, IUseStreamToken>(

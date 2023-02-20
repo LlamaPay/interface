@@ -35,9 +35,9 @@ async function fetchStreams(address?: string) {
 }
 
 const useGetStreamsOnAllNetworks = () => {
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
 
-  return useQuery(['allNetworkStreams', accountData?.address], () => fetchStreams(accountData?.address));
+  return useQuery(['allNetworkStreams', address], () => fetchStreams(address));
 };
 
 export default useGetStreamsOnAllNetworks;

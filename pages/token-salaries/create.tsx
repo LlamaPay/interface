@@ -21,8 +21,8 @@ interface IFormElements {
 }
 
 const Home: NextPage = () => {
-  const [{ data: accountData }] = useAccount();
-  const [{ data: networkData }] = useNetwork();
+  const { isConnected } = useAccount();
+  const { chain } = useNetwork();
 
   const [tokenAddress, setTokenAddress] = React.useState('');
 
@@ -91,17 +91,14 @@ const Home: NextPage = () => {
           )}
         </small>
 
-        {!accountData ? (
+        {!isConnected ? (
           <SubmitButton type="button" className="mt-2" onClick={walletDialog.toggle}>
             Connect Wallet
           </SubmitButton>
         ) : (
           <SubmitButton
             disabled={
-              !factoryAddress ||
-              isLoading ||
-              tokenAddress.length !== 42 ||
-              (networkData?.chain?.testnet ? false : !tokenPrice)
+              !factoryAddress || isLoading || tokenAddress.length !== 42 || (chain?.testnet ? false : !tokenPrice)
             }
             className="mt-2"
           >

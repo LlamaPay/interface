@@ -12,7 +12,7 @@ interface IUseWithdrawPayerToken {
 }
 
 interface IWithdrawPayerToken extends IUseWithdrawPayerToken {
-  signer?: Signer;
+  signer?: Signer | null;
 }
 
 const withdrawPayer = async ({ signer, llamaContractAddress, amountToWithdraw, withdrawAll }: IWithdrawPayerToken) => {
@@ -33,7 +33,8 @@ const withdrawPayer = async ({ signer, llamaContractAddress, amountToWithdraw, w
 };
 
 export default function useWithdrawByPayer() {
-  const [{ data: signer }] = useSigner();
+  const { data: signer } = useSigner();
+
   const queryClient = useQueryClient();
 
   return useMutation<ITransactionSuccess, ITransactionError, IUseWithdrawPayerToken, unknown>(

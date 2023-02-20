@@ -23,11 +23,11 @@ interface IUseApproveMultipleTokens {
 }
 
 interface IApproveToken extends IUseApproveToken {
-  signer?: Signer;
+  signer?: Signer | null;
 }
 
 interface IApproveMultipleTokens extends IUseApproveMultipleTokens {
-  signer?: Signer;
+  signer?: Signer | null;
 }
 
 type UseTokenForMaxAmt = Omit<IUseApproveToken, 'amountToApprove'>;
@@ -94,7 +94,8 @@ export function useCheckMultipleTokenApproval() {
 }
 
 export function useApproveToken() {
-  const [{ data: signer }] = useSigner();
+  const { data: signer } = useSigner();
+
   const queryClient = useQueryClient();
 
   return useMutation<ITransactionSuccess, ITransactionError, IApproveToken>(
@@ -109,7 +110,8 @@ export function useApproveToken() {
 }
 
 export function useApproveTokenForMaxAmt() {
-  const [{ data: signer }] = useSigner();
+  const { data: signer } = useSigner();
+
   const queryClient = useQueryClient();
 
   return useMutation<ITransactionSuccess, ITransactionError, UseTokenForMaxAmt>(

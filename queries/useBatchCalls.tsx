@@ -11,7 +11,7 @@ interface IUseBatchCalls {
 }
 
 interface IBatchCalls extends IUseBatchCalls {
-  signer?: Signer;
+  signer?: Signer | null;
 }
 
 async function batchCalls({ signer, llamaContractAddress, calls }: IBatchCalls) {
@@ -28,7 +28,7 @@ async function batchCalls({ signer, llamaContractAddress, calls }: IBatchCalls) 
 }
 
 export default function useBatchCalls() {
-  const [{ data: signer }] = useSigner();
+  const { data: signer } = useSigner();
   const queryClient = useQueryClient();
   return useMutation<ITransactionSuccess, ITransactionError, IUseBatchCalls, unknown>(
     ({ llamaContractAddress, calls }: IUseBatchCalls) => batchCalls({ signer, llamaContractAddress, calls }),

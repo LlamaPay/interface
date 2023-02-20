@@ -20,16 +20,13 @@ interface PushProps {
 export const Push = ({ data, buttonName, className }: PushProps) => {
   const [transactionHash, setTransactionHash] = React.useState<string | null>(null);
 
-  const [{}, withdraw] = useContractWrite(
-    {
-      addressOrName: data.llamaContractAddress,
-      contractInterface: llamaContractABI,
-    },
-    'withdraw',
-    {
-      args: [data.payerAddress, data.payeeAddress, data.amountPerSec],
-    }
-  );
+  const { writeAsync: withdraw } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: data.llamaContractAddress as `0x${string}`,
+    abi: llamaContractABI,
+    functionName: 'withdraw',
+    args: [data.payerAddress, data.payeeAddress, data.amountPerSec],
+  });
   const { mutate: gnosisBatch } = useGnosisBatch();
   const queryClient = useQueryClient();
 
@@ -47,11 +44,11 @@ export const Push = ({ data, buttonName, className }: PushProps) => {
       ];
       gnosisBatch({ calls: call });
     } else {
-      withdraw().then(({ data, error }: ITransaction) => {
-        if (data) {
+      withdraw()
+        .then((data) => {
           setTransactionHash(data.hash ?? null);
 
-          transactionDialog.toggle();
+          transactionDialog.hide();
 
           const toastId = toast.loading(buttonName === 'Withdraw' ? 'Withdrawing Payment' : 'Sending Payment');
 
@@ -66,12 +63,12 @@ export const Push = ({ data, buttonName, className }: PushProps) => {
                 )
               : toast.error(buttonName === 'Withdraw' ? 'Failed to Withdraw Payment' : 'Failed to Send Payment');
           });
-        }
+        })
+        .catch((err) => {
+          transactionDialog.hide();
 
-        if (error) {
-          toast.error(error.message || 'Transaction Failed');
-        }
-      });
+          toast.error(err.reason || err.message || 'Transaction Failed');
+        });
     }
   };
 
