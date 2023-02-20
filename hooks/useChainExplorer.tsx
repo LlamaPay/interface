@@ -10,7 +10,7 @@ export const useChainExplorer = () => {
   const { pathname, query } = useRouter();
 
   const { name, url, id } = React.useMemo(() => {
-    if (pathname === '/streams' && !Number.isNaN(query.chainId)) {
+    if (pathname === '/streams' && !Number.isNaN(Number(query.chainId))) {
       const details = networkDetails[Number(query.chainId)];
 
       return details
@@ -46,8 +46,8 @@ export const useChainExplorer = () => {
     const explorers = chain?.blockExplorers;
 
     return {
-      name: explorers ? explorers[0]?.name ?? null : null,
-      url: explorers ? explorers[0]?.url ?? null : null,
+      name: explorers ? explorers.default?.name ?? null : null,
+      url: explorers ? explorers.default?.url ?? null : null,
       id: chain ? chain?.id ?? null : null,
     };
   }, [chain, pathname, query]);
