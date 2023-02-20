@@ -6,6 +6,7 @@ import { networkDetails } from '~/lib/networkDetails';
 import { zeroAdd } from '~/utils/constants';
 import { useAccount, useContractWrite } from 'wagmi';
 import BigNumber from 'bignumber.js';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function PaymentRevokeButton({ data }: { data: IPayments }) {
   const { chainId } = useNetworkProvider();
@@ -18,6 +19,8 @@ export default function PaymentRevokeButton({ data }: { data: IPayments }) {
     functionName: 'revoke',
   });
 
+  const queryClient = useQueryClient();
+
   function handleRevoke() {
     revoke({
       recklesslySetUnpreparedArgs: [data.tokenAddress, data.payee, BigNumber(data.amount).toFixed(0), data.release],
@@ -28,6 +31,7 @@ export default function PaymentRevokeButton({ data }: { data: IPayments }) {
           toast.dismiss(toastid);
           receipt.status === 1 ? toast.success('Successfully Revoked') : toast.error('Failed to Revoke');
         });
+        queryClient.invalidateQueries();
       })
       .catch(() => {
         toast.error('Failed to Revoke');

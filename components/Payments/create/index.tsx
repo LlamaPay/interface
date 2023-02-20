@@ -36,7 +36,7 @@ interface ICall {
 const contractInterface = new Interface(paymentsContractABI);
 
 export default function CreatePayment({ contract }: { contract: string }) {
-  const { register, control, handleSubmit, reset, getValues, setValue, watch } = useForm<IPaymentFormValues>({
+  const { register, control, handleSubmit, reset, getValues, setValue } = useForm<IPaymentFormValues>({
     defaultValues: {
       payments: [
         {
@@ -57,7 +57,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
   const { provider, chainId } = useNetworkProvider();
   const { address } = useAccount();
   const { data: signer } = useSigner();
-  const { mutate: checkApproval, data: approvalData } = useCheckMultipleTokenApproval();
+  const { mutate: checkApproval, data: approvalData, isLoading: checkingApproval } = useCheckMultipleTokenApproval();
   const { mutate: gnosisBatch } = useGnosisBatch();
   const { mutate: approveToken, isLoading: approving } = useApproveToken();
   const [csvFile, setCsvFile] = React.useState<File | null>(null);
@@ -142,6 +142,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
   async function onSubmit(data: IPaymentFormValues) {
     if (!provider) return;
     if (!chainId) return;
+    if (!networkDetails[chainId].paymentsContract) return;
     if (!signer) return;
     const decimals: { [key: string]: number } = {};
     const tokenAndAmount: { [key: string]: string } = {};
@@ -190,18 +191,20 @@ export default function CreatePayment({ contract }: { contract: string }) {
         if (!approvalData || !approvalData.allApproved) {
           Object.keys(toCheck.tokens).map((p) => {
             const token = toCheck.tokens[p];
-            approveToken(
-              {
-                amountToApprove: token.approvedForAmount!,
-                spenderAddress: token.approveForAddress!,
-                tokenAddress: p,
-              },
-              {
-                onSettled: () => {
-                  checkApproval(toCheck);
+            if (token.approveForAddress && token.approvedForAmount) {
+              approveToken(
+                {
+                  amountToApprove: token.approvedForAmount,
+                  spenderAddress: token.approveForAddress,
+                  tokenAddress: p,
                 },
-              }
-            );
+                {
+                  onSettled: () => {
+                    checkApproval(toCheck);
+                  },
+                }
+              );
+            }
           });
           checkApproval(toCheck);
         } else {
@@ -227,7 +230,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
         for (const token in tokenAndAmount) {
           call[token] = [
             ERC20Interface.encodeFunctionData('approve', [
-              getAddress(networkDetails[chainId].paymentsContract!),
+              getAddress(networkDetails[chainId].paymentsContract as string),
               tokenAndAmount[token],
             ]),
           ];
@@ -235,7 +238,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
         convertedCalls.forEach((c) => {
           calls.push(contractInterface.encodeFunctionData('create', [c.token, c.payee, c.amount, c.release]));
         });
-        call[networkDetails[chainId].paymentsContract!] = calls;
+        call[networkDetails[chainId].paymentsContract as string] = calls;
         gnosisBatch({ calls: call });
       }
     } catch (error) {
@@ -357,8 +360,12 @@ export default function CreatePayment({ contract }: { contract: string }) {
             </section>
           );
         })}
-        <SubmitButton className="mt-5">
-          {approving ? (
+        <SubmitButton className="mt-5" disabled={!chainId || !networkDetails[chainId].paymentsContract}>
+          {!chainId ? (
+            'Connect Wallet'
+          ) : !networkDetails[chainId].paymentsContract ? (
+            'Chain not supported'
+          ) : approving || checkingApproval ? (
             <BeatLoader size={6} color="white" />
           ) : process.env.NEXT_PUBLIC_SAFE === 'true' ? (
             'Create'

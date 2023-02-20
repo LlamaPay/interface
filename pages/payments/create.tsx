@@ -2,7 +2,7 @@ import { FallbackContainer } from '~/components/Fallback';
 import Layout from '~/components/Layout';
 import CreatePayment from '~/components/Payments/create';
 import { useNetworkProvider } from '~/hooks';
-import { NextPage } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
 import { useTranslations } from 'next-intl';
 import { networkDetails } from '~/lib/networkDetails';
 import { useAccount } from 'wagmi';
@@ -28,6 +28,15 @@ const Create: NextPage = () => {
       )}
     </Layout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+  // Pass data to the page via props
+  return {
+    props: {
+      messages: (await import(`translations/${locale}.json`)).default,
+    },
+  };
 };
 
 export default Create;
