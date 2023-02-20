@@ -1,5 +1,7 @@
+import { useQueryClient } from '@tanstack/react-query';
 import { useDialogState } from 'ariakit';
 import toast from 'react-hot-toast';
+import { BeatLoader } from 'react-spinners';
 import { useAccount, useContractWrite } from 'wagmi';
 import { FormDialog } from '~/components/Dialog';
 import { SubmitButton } from '~/components/Form';
@@ -8,7 +10,7 @@ import { IVesting } from '~/types';
 
 export default function RenounceOwnershipButton({ data }: { data: IVesting }) {
   const RenounceDialog = useDialogState();
-  const { writeAsync: renounce } = useContractWrite({
+  const { writeAsync: renounce, isLoading } = useContractWrite({
     mode: 'recklesslyUnprepared',
     address: data.contract as `0x${string}`,
     abi: vestingContractReadableABI,
@@ -18,6 +20,8 @@ export default function RenounceOwnershipButton({ data }: { data: IVesting }) {
     functionName: 'renounce_ownership',
   });
 
+  const queryClient = useQueryClient();
+
   function handleRenounce() {
     renounce?.()
       .then((data) => {
@@ -25,6 +29,7 @@ export default function RenounceOwnershipButton({ data }: { data: IVesting }) {
         data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1 ? toast.success('Successfully Renounced') : toast.error('Failed to Renounce');
+          queryClient.invalidateQueries();
         });
 
         RenounceDialog.hide();
@@ -47,7 +52,7 @@ export default function RenounceOwnershipButton({ data }: { data: IVesting }) {
       <FormDialog className="h-min" dialog={RenounceDialog} title={'Clawback'}>
         <span className="font-exo dark:text-white">{'Warning: You will no longer own the contract!'}</span>
         <SubmitButton className="mt-5" onClick={handleRenounce}>
-          {'Renounce Ownership'}
+          {isLoading ? <BeatLoader size={6} color="white" /> : 'Renounce Ownership'}
         </SubmitButton>
       </FormDialog>
     </>

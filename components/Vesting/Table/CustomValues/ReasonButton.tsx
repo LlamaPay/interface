@@ -9,12 +9,13 @@ import { useQueryClient } from '@tanstack/react-query';
 import type { IVesting } from '~/types';
 import { networkDetails } from '~/lib/networkDetails';
 import { useAccount, useContractWrite } from 'wagmi';
+import { BeatLoader } from 'react-spinners';
 
 export default function ReasonButton({ data }: { data: IVesting }) {
   const { address } = useAccount();
 
   const { chainId } = useNetworkProvider();
-  const { writeAsync: addReason } = useContractWrite({
+  const { writeAsync: addReason, isLoading } = useContractWrite({
     mode: 'recklesslyUnprepared',
     address: networkDetails[chainId ?? 0].vestingReason as `0x${string}`,
     abi: vestingReasonsABI,
@@ -31,9 +32,8 @@ export default function ReasonButton({ data }: { data: IVesting }) {
         data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1 ? toast.success('Successfully Added Reason') : toast.error('Failed to Add Reason');
+          queryClient.invalidateQueries();
         });
-
-        queryClient.invalidateQueries();
       })
       .catch((err) => {
         dialog.hide();
@@ -55,7 +55,9 @@ export default function ReasonButton({ data }: { data: IVesting }) {
               <span className="space-y-4 text-lp-gray-6 dark:text-white">
                 <form className="mx-auto flex flex-col gap-4" onSubmit={onSubmit}>
                   <InputText name="reason" isRequired placeholder="Reason" label="Reason" />
-                  <SubmitButton className="mt-5">Add Reason</SubmitButton>
+                  <SubmitButton className="mt-5">
+                    {isLoading ? <BeatLoader size={6} color="white" /> : 'Add Reason'}
+                  </SubmitButton>
                 </form>
               </span>
             </FormDialog>

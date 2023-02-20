@@ -5,11 +5,13 @@ import { useAccount, useContractWrite } from 'wagmi';
 import { FormDialog } from '~/components/Dialog';
 import { useDialogState } from 'ariakit';
 import { SubmitButton } from '~/components/Form';
+import { useQueryClient } from '@tanstack/react-query';
+import { BeatLoader } from 'react-spinners';
 
 export default function RugpullVestingButton({ data }: { data: IVesting }) {
   const RugDialog = useDialogState();
 
-  const { writeAsync: rug_pull } = useContractWrite({
+  const { writeAsync: rug_pull, isLoading } = useContractWrite({
     mode: 'recklesslyUnprepared',
     address: data.contract as `0x${string}`,
     abi: vestingContractReadableABI,
@@ -19,6 +21,8 @@ export default function RugpullVestingButton({ data }: { data: IVesting }) {
     },
   });
 
+  const queryClient = useQueryClient();
+
   function handleRugpull() {
     rug_pull()
       .then((data) => {
@@ -26,6 +30,7 @@ export default function RugpullVestingButton({ data }: { data: IVesting }) {
         data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1 ? toast.success('Successfully Rugged') : toast.error('Failed to Rug');
+          queryClient.invalidateQueries();
         });
 
         RugDialog.hide();
@@ -48,7 +53,7 @@ export default function RugpullVestingButton({ data }: { data: IVesting }) {
       <FormDialog className="h-min" dialog={RugDialog} title={'Clawback'}>
         <span className="font-exo dark:text-white">{'Warning: This will clawback vesting from the recipient!'}</span>
         <SubmitButton className="mt-5" onClick={handleRugpull}>
-          {'Rug'}
+          {isLoading ? <BeatLoader size={6} color="white" /> : 'Rug'}
         </SubmitButton>
       </FormDialog>
     </>
