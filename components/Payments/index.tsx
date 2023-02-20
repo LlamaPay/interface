@@ -9,11 +9,8 @@ import PaymentsTableActual from './Table';
 export default function PaymentsTable() {
   const { chainId } = useNetworkProvider();
   const { data, isLoading, error } = useGetPaymentsInfo();
-  const paymentsContract = chainId
-    ? networkDetails[chainId].paymentsContract
-      ? networkDetails[chainId].paymentsContract
-      : null
-    : null;
+  const paymentsContract =
+    chainId && networkDetails[chainId].paymentsContract ? networkDetails[chainId].paymentsContract : null;
   const unsupported = paymentsContract ? false : true;
 
   return (
