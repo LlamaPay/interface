@@ -107,6 +107,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
     }
     if (notEOAs.length > 0) {
       setNotEAArr(notEOAs);
+      eoaWarningDialog.show();
     }
     const calls: { [key: string]: string[] } = {};
     calls[tokenAddress] = [ERC20Interface.encodeFunctionData('approve', [factory, toApprove.toFixed(0)])];
@@ -367,7 +368,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
           {gnosisLoading ? <BeatLoader size="6px" color="white" /> : 'Create Contracts'}
         </SubmitButton>
       </form>
-      <EOAWarning address={notEOAArr} dialog={eoaWarningDialog} />
+      <EOAWarning address={notEOAArr} dialog={eoaWarningDialog} gnosis={true}/>
     </>
   );
 }
