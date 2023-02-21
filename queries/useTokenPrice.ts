@@ -18,9 +18,9 @@ const fetchTokenPrice = async (id: string, prefix: string | null) => {
 };
 
 export function useTokenPrice(id: string) {
-  const [{ data: network }] = useNetwork();
+  const { chain } = useNetwork();
 
-  const prefix = network.chain?.id ? networkDetails[Number(network.chain?.id)].prefix : null;
+  const prefix = chain ? networkDetails[Number(chain?.id)].prefix : null;
 
   return useQuery(['token', id, prefix], () => fetchTokenPrice(id, prefix), {
     refetchInterval: 30_000,

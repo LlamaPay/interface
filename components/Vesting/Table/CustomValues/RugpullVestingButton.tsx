@@ -5,41 +5,47 @@ import { useAccount, useContractWrite } from 'wagmi';
 import { FormDialog } from '~/components/Dialog';
 import { useDialogState } from 'ariakit';
 import { SubmitButton } from '~/components/Form';
+import { useQueryClient } from '@tanstack/react-query';
+import { BeatLoader } from '~/components/BeatLoader';
 
 export default function RugpullVestingButton({ data }: { data: IVesting }) {
   const RugDialog = useDialogState();
 
-  const [{}, rug_pull] = useContractWrite(
-    {
-      addressOrName: data.contract,
-      contractInterface: vestingContractReadableABI,
+  const { writeAsync: rug_pull, isLoading } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: data.contract as `0x${string}`,
+    abi: vestingContractReadableABI,
+    functionName: 'rug_pull',
+    overrides: {
+      gasLimit: 180000 as any,
     },
-    'rug_pull',
-    {
-      overrides: {
-        gasLimit: 180000,
-      },
-    }
-  );
+  });
+
+  const queryClient = useQueryClient();
 
   function handleRugpull() {
-    rug_pull().then((data) => {
-      if (data.error) {
-        toast.error('Failed to Rug');
-      } else {
+    rug_pull()
+      .then((data) => {
         const toastid = toast.loading('Rugging');
-        data.data.wait().then((receipt) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1 ? toast.success('Successfully Rugged') : toast.error('Failed to Rug');
+          queryClient.invalidateQueries();
         });
-      }
-      RugDialog.hide();
-    });
+
+        RugDialog.hide();
+      })
+      .catch((err) => {
+        RugDialog.hide();
+
+        toast.error(err.reason || err.message || 'Transaction Failed');
+      });
   }
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
+
   return (
     <>
-      {data.admin.toLowerCase() === accountData?.address.toLowerCase() && (
+      {address && data.admin.toLowerCase() === address.toLowerCase() && (
         <button onClick={() => RugDialog.show()} className="row-action-links font-exo float-right dark:text-white">
           Rug
         </button>
@@ -47,7 +53,7 @@ export default function RugpullVestingButton({ data }: { data: IVesting }) {
       <FormDialog className="h-min" dialog={RugDialog} title={'Clawback'}>
         <span className="font-exo dark:text-white">{'Warning: This will clawback vesting from the recipient!'}</span>
         <SubmitButton className="mt-5" onClick={handleRugpull}>
-          {'Rug'}
+          {isLoading ? <BeatLoader size="6px" color="white" /> : 'Rug'}
         </SubmitButton>
       </FormDialog>
     </>

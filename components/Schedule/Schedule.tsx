@@ -12,7 +12,6 @@ import { useQueryClient } from '@tanstack/react-query';
 import { Switch } from '@headlessui/react';
 import { useApproveTokenForMaxAmt } from '~/queries/useTokenApproval';
 import BotDepositWarning from './BotDepositWarning';
-import Calendar from 'react-calendar';
 
 export default function Schedule({
   data,
@@ -25,29 +24,26 @@ export default function Schedule({
 }) {
   const dialog = useDialogState();
   const warningDialog = useDialogState();
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
   const botAddress = networkDetails[chainId].botAddress;
   const queryClient = useQueryClient();
   const [hasRedirect, setHasRedirect] = React.useState<boolean>(false);
   const [redirectAddress, setRedirectAddress] = React.useState<string | null>(null);
   const { mutate: approveMax } = useApproveTokenForMaxAmt();
-  const [showCalendar, setShowCalendar] = React.useState<boolean>(false);
 
-  const [{}, scheduleWithdraw] = useContractWrite(
-    {
-      addressOrName: botAddress,
-      contractInterface: botContractABI,
-    },
-    'scheduleWithdraw'
-  );
+  const { writeAsync: scheduleWithdraw } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: botAddress as `0x${string}`,
+    abi: botContractABI,
+    functionName: 'scheduleWithdraw',
+  });
 
-  const [{}, setRedirect] = useContractWrite(
-    {
-      addressOrName: botAddress,
-      contractInterface: botContractABI,
-    },
-    'setRedirect'
-  );
+  const { writeAsync: setRedirect } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: botAddress as `0x${string}`,
+    abi: botContractABI,
+    functionName: 'setRedirect',
+  });
 
   const [formData, setFormData] = React.useState({
     startDate: new Date(Date.now()).toISOString().slice(0, 10),
@@ -58,19 +54,16 @@ export default function Schedule({
     setFormData((prev) => ({ ...prev, [type]: value }));
   }
 
-  function handleCalendarClick(e: any) {
-    setFormData((prev) => ({ ...prev, ['startDate']: new Date(e).toISOString().slice(0, 10) }));
-    setShowCalendar(false);
-  }
-
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+
     const start = (new Date(formData.startDate).getTime() / 1e3).toFixed(0);
     const freq = formData.frequency;
+
     dialog.hide();
     warningDialog.show();
     scheduleWithdraw({
-      args: [
+      recklesslySetUnpreparedArgs: [
         data.token.address,
         data.payerAddress,
         data.payeeAddress,
@@ -86,37 +79,36 @@ export default function Schedule({
           ? secondsByDuration['month']
           : null,
       ],
-    }).then((d) => {
-      const data: any = d;
-      if (data.error) {
-        toast.error(data.error.reason ?? data.error.message);
-      } else {
+    })
+      .then((data) => {
         const toastId = toast.loading('Scheduling Event');
-        data.data?.wait().then((receipt: any) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastId);
           receipt.status === 1
             ? toast.success('Successfully Scheduled Event')
             : toast.error('Failed to Schedule Event');
           queryClient.invalidateQueries();
         });
-      }
-    });
+      })
+      .catch((err) => {
+        toast.error(err.reason || err.message || 'Transaction Failed');
+      });
     if (!hasRedirect) {
       return;
     } else {
       approveMax({ tokenAddress: data.token.address, spenderAddress: botAddress });
-      setRedirect({ args: [redirectAddress] }).then((data) => {
-        if (data.error) {
-          toast.error(data.error.message);
-        } else {
+      setRedirect({ recklesslySetUnpreparedArgs: [redirectAddress] })
+        .then((data) => {
           const toastId = toast.loading('Setting Redirect');
-          data.data?.wait().then((receipt: any) => {
+          data.wait().then((receipt) => {
             toast.dismiss(toastId);
             receipt.status === 1 ? toast.success('Successfully Set Redirect') : toast.error('Failed to Set Redirect');
             queryClient.invalidateQueries();
           });
-        }
-      });
+        })
+        .catch((err) => {
+          toast.error(err.reason || err.message || 'Transaction Failed');
+        });
     }
   }
 
@@ -142,19 +134,15 @@ export default function Schedule({
               </select>
             </div>
 
-            <div>
-              <label className="input-label">Start Date</label>
+            <label>
+              <span className="input-label">Start Date</span>
               <div className="relative flex">
                 <input
-                  className="input-field"
+                  type="date"
+                  className="input-field pr-20"
                   onChange={(e) => handleChange(e.target.value, 'startDate')}
                   required
-                  autoComplete="off"
-                  autoCorrect="off"
-                  placeholder="YYYY-MM-DD"
-                  pattern="\d{4}-\d{2}-\d{2}"
                   value={formData.startDate}
-                  onClick={(e) => setShowCalendar(true)}
                 />
                 <button
                   type="button"
@@ -164,15 +152,9 @@ export default function Schedule({
                   {'Today'}
                 </button>
               </div>
-            </div>
+            </label>
 
-            {showCalendar && (
-              <section className="max-w-xs place-self-center border px-2 py-2">
-                <Calendar onChange={(e: any) => handleCalendarClick(e)} />
-              </section>
-            )}
-
-            {data.payeeAddress.toLowerCase() === accountData?.address.toLowerCase() && (
+            {address && data.payeeAddress.toLowerCase() === address.toLowerCase() && (
               <div className="flex space-x-1">
                 <span>Redirect Withdraw</span>
                 <Switch
@@ -208,7 +190,7 @@ export default function Schedule({
       <BotDepositWarning
         botAddress={botAddress}
         dialog={warningDialog}
-        userAddress={accountData?.address ?? ''}
+        userAddress={address || ''}
         nativeCurrency={nativeCurrency}
       />
     </>

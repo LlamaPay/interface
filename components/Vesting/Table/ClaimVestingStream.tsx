@@ -2,13 +2,15 @@ import * as React from 'react';
 import { Switch } from '@headlessui/react';
 import { FormDialog, TransactionDialog } from '~/components/Dialog';
 import { InputAmount, InputText, SubmitButton } from '~/components/Form';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import { DisclosureState, useDialogState } from 'ariakit';
 import { useAccount, useContractWrite } from 'wagmi';
 import BigNumber from 'bignumber.js';
+import { BigNumber as EthersBigNumber } from 'ethers';
 import toast from 'react-hot-toast';
 import { vestingContractReadableABI } from '~/lib/abis/vestingContractReadable';
 import type { IVesting } from '~/types';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function ClaimVesting({
   claimValues,
@@ -26,24 +28,23 @@ export default function ClaimVesting({
   const transactionDialog = useDialogState();
   const confirmDialog = useDialogState();
 
-  const [{ data: accountData }] = useAccount();
+  const queryClient = useQueryClient();
 
-  const [{ loading }, claim] = useContractWrite(
-    {
-      addressOrName: data.contract,
-      contractInterface: vestingContractReadableABI,
+  const { address } = useAccount();
+
+  const { isLoading, writeAsync: claim } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: data.contract as `0x${string}`,
+    abi: vestingContractReadableABI,
+    overrides: {
+      gasLimit: 180000 as any,
     },
-    'claim',
-    {
-      overrides: {
-        gasLimit: 180000,
-      },
-    }
-  );
+    functionName: 'claim',
+  });
 
   function handleClaim() {
     if (!hasCustomBeneficiary) {
-      setBeneficiaryInput(accountData?.address);
+      setBeneficiaryInput(address);
     }
     setInputAmount(new BigNumber(inputAmount).times(10 ** data.tokenDecimals).toFixed(0));
     claimDialog.hide();
@@ -52,28 +53,30 @@ export default function ClaimVesting({
 
   function handleClaimAll() {
     if (!hasCustomBeneficiary) {
-      setBeneficiaryInput(accountData?.address);
+      setBeneficiaryInput(address);
     }
-    setInputAmount(new BigNumber(data.unclaimed).toFixed(0));
+
+    setInputAmount(EthersBigNumber.from(data.unclaimed).toString());
     claimDialog.hide();
     confirmDialog.show();
   }
 
   function handleConfirm() {
-    claim({ args: [beneficiaryInput, inputAmount] }).then((data) => {
-      if (data.error) {
-        toast.error('Failed to Claim Tokens');
-      } else {
+    claim({ recklesslySetUnpreparedArgs: [beneficiaryInput, inputAmount] })
+      .then((data) => {
         const toastid = toast.loading('Claiming Tokens');
-        setTransactionHash(data.data.hash);
+        setTransactionHash(data.hash);
         claimDialog.hide();
         transactionDialog.show();
-        data.data.wait().then((receipt) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1 ? toast.success('Successfully Claimed Tokens') : toast.error('Failed to Claim Tokens');
+          queryClient.invalidateQueries();
         });
-      }
-    });
+      })
+      .catch((err) => {
+        toast.error(err.reason || err.message || 'Transaction Failed');
+      });
   }
 
   return (
@@ -121,7 +124,11 @@ export default function ClaimVesting({
               isRequired
             />
           )}
-          <SubmitButton className="mt-5" onClick={handleClaim}>
+          <SubmitButton
+            className="mt-5"
+            onClick={handleClaim}
+            disabled={inputAmount === '' || Number.isNaN(Number(inputAmount))}
+          >
             {'Claim Tokens'}
           </SubmitButton>
           <SubmitButton className="mt-5" onClick={handleClaimAll}>
@@ -138,7 +145,7 @@ export default function ClaimVesting({
             </div>
           </section>
           <SubmitButton className="mt-5" onClick={handleConfirm}>
-            {loading ? <BeatLoader size={6} color="white" /> : 'Confirm Transaction'}
+            {isLoading ? <BeatLoader size="6px" color="white" /> : 'Confirm Transaction'}
           </SubmitButton>
         </div>
       </FormDialog>

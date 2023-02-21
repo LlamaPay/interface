@@ -6,7 +6,7 @@ import { useApproveToken, useCheckTokenApproval } from '~/queries/useTokenApprov
 import type { IFormElements, IFormProps } from './types';
 import { checkApproval } from '~/components/Form/utils';
 import { SubmitButton } from '~/components/Form';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import { FormDialog, TransactionDialog } from '~/components/Dialog';
 import { useDialogState } from 'ariakit';
 import Image from 'next/image';
@@ -23,7 +23,7 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
   const t0 = useTranslations('Common');
   const t1 = useTranslations('Forms');
 
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
 
   const [inputAmount, setAmount] = React.useState('');
 
@@ -40,7 +40,7 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
         tokenContract: data.tokenContract,
         llamaContractAddress: data.llamaContractAddress,
       },
-      userAddress: accountData?.address,
+      userAddress: address,
       approvedForAmount: inputAmount,
       checkTokenApproval,
     });
@@ -56,7 +56,7 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
           tokenContract: data.tokenContract,
           llamaContractAddress: data.llamaContractAddress,
         },
-        userAddress: accountData?.address,
+        userAddress: address,
         approvedForAmount: inputAmount,
         checkTokenApproval,
       });
@@ -106,7 +106,7 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
                   tokenContract: data.tokenContract,
                   llamaContractAddress: data.llamaContractAddress,
                 },
-                userAddress: accountData?.address,
+                userAddress: address,
                 approvedForAmount: amount,
                 checkTokenApproval,
               });
@@ -177,11 +177,11 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
 
           {isApproved ? (
             <SubmitButton disabled={isLoading || gnosisLoading} className="mt-4">
-              {isLoading || gnosisLoading ? <BeatLoader size={6} color="white" /> : t0('deposit')}
+              {isLoading || gnosisLoading ? <BeatLoader size="6px" color="white" /> : t0('deposit')}
             </SubmitButton>
           ) : (
             <SubmitButton disabled={disableApprove} className="mt-4">
-              {disableApprove ? <BeatLoader size={6} color="white" /> : t1('approveOnWallet')}
+              {disableApprove ? <BeatLoader size="6px" color="white" /> : t1('approveOnWallet')}
             </SubmitButton>
           )}
         </form>

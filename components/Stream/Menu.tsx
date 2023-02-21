@@ -4,7 +4,7 @@ import { ShareIcon, TrashIcon } from '@heroicons/react/24/outline';
 import { EllipsisVerticalIcon } from '@heroicons/react/24/solid';
 import { useDialogState } from 'ariakit';
 import { Menu, MenuButton, MenuItem, useMenuState } from 'ariakit/menu';
-import { useAccount, useEnsLookup } from 'wagmi';
+import { useAccount, useEnsName } from 'wagmi';
 import DisperseGasMoney from '~/components/DisperseGas';
 import { FuelIcon, RobotIcon, WalletIcon } from '~/components/Icons';
 import WithdrawAll from '~/components/WithdrawAll';
@@ -17,13 +17,13 @@ export default function StreamMenu() {
   const menu = useMenuState({ gutter: 8 });
 
   const { nativeCurrency, unsupported, network, chainId } = useNetworkProvider();
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
 
-  const [{ data: ensName }] = useEnsLookup({
-    address: accountData?.address,
+  const { data: ensName } = useEnsName({
+    address: address,
   });
 
-  const shareableUrl = `/salaries/${network}/${ensName ?? accountData?.address}`;
+  const shareableUrl = `/salaries/${network}/${ensName ?? address}`;
 
   const disperseGasGialog = useDialogState();
   const botDialog = useDialogState();
@@ -42,7 +42,7 @@ export default function StreamMenu() {
       <MenuButton
         state={menu}
         className="secondary-button shadow-1 min-h-[36px] cursor-pointer px-2 aria-disabled:cursor-not-allowed aria-disabled:opacity-50 dark:bg-[#202020] dark:text-lp-secondary"
-        disabled={!accountData || unsupported}
+        disabled={!address || unsupported}
         style={{ pointerEvents: 'initial' }}
       >
         <span className="sr-only">Open Streams Menu</span>
@@ -53,7 +53,7 @@ export default function StreamMenu() {
         state={menu}
         className="shadow-2 z-10 min-w-[10rem] rounded-xl border border-[#EAEAEA] bg-white p-2 dark:border-[#252525] dark:bg-lp-gray-4"
       >
-        {chainId && accountData && botDeployedOn.includes(chainId) && (
+        {chainId && address && botDeployedOn.includes(chainId) && (
           <MenuItem className={itemClassname} onClick={botDialog.toggle}>
             <span>Manage Bot</span>
             <RobotIcon />
@@ -85,11 +85,11 @@ export default function StreamMenu() {
 
       <DisperseGasMoney dialog={disperseGasGialog} />
 
-      {chainId && accountData && botDeployedOn.includes(chainId) && (
+      {chainId && address && botDeployedOn.includes(chainId) && (
         <BotFunds
           dialog={botDialog}
           chainId={chainId}
-          accountAddress={accountData?.address}
+          accountAddress={address}
           nativeCurrency={nativeCurrency?.symbol}
         />
       )}

@@ -5,9 +5,9 @@ import Link from 'next/link';
 import Image, { StaticImageData } from 'next/image';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { useDialogState } from 'ariakit';
-import { useNetwork } from 'wagmi';
+import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { useIntl, useTranslations } from 'next-intl';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import Layout from '~/components/Layout';
 import { FallbackContainer } from '~/components/Fallback';
 import Tooltip from '~/components/Tooltip';
@@ -32,7 +32,8 @@ interface ClaimPageProps {
 }
 
 const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, logoURI, chainExplorer, chainId }) => {
-  const [{ data: networkData }, switchNetwork] = useNetwork();
+  const { chain } = useNetwork();
+  const { switchNetwork } = useSwitchNetwork();
 
   const { data: tokenList } = useTokenList();
 
@@ -104,7 +105,7 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
                 <a
                   href={
                     chainExplorer
-                      ? networkData.chain?.id === 82 || networkData.chain?.id === 1088
+                      ? chain?.id === 82 || chain?.id === 1088
                         ? `${chainExplorer}address/${stream?.payer?.id}`
                         : `${chainExplorer}/address/${stream?.payer?.id}`
                       : '/'
@@ -123,7 +124,7 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
                 <a
                   href={
                     chainExplorer
-                      ? networkData.chain?.id === 82 || networkData.chain?.id === 1088
+                      ? chain?.id === 82 || chain?.id === 1088
                         ? `${chainExplorer}address/${stream?.payee?.id}`
                         : `${chainExplorer}/address/${stream?.payee?.id}`
                       : '/'
@@ -160,7 +161,7 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
               <p>{t0('networkNotSupported')}</p>
             ) : isLoading ? (
               <span className="relative top-[2px]">
-                <BeatLoader size={6} />
+                <BeatLoader size="6px" />
               </span>
             ) : (
               <p>
@@ -214,11 +215,11 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
                 {/* 
                    Ask user to connect wallet before withdrawing
                 */}
-                {!networkData.chain ? (
+                {!chain ? (
                   <button className="form-submit-button mt-8" onClick={walletDailog.toggle}>
                     {t0('connectWallet')}
                   </button>
-                ) : chainId !== networkData.chain?.id ? (
+                ) : chainId !== chain?.id ? (
                   // Check if user is on same network with the chain on which salary is streaming
                   // else switch to the right network
                   <button
@@ -302,7 +303,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
       streamId: id,
       network: c?.name ?? null,
       chainId: c?.id ?? null,
-      chainExplorer: c?.blockExplorers ? c.blockExplorers[0].url : null,
+      chainExplorer: c?.blockExplorers ? c.blockExplorers.default.url : null,
       subgraphEndpoint: network?.subgraphEndpoint ?? '',
       logoURI: network?.logoURI ?? defaultImage,
       dehydratedState: dehydrate(queryClient),

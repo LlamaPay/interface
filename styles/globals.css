@@ -212,6 +212,40 @@
     fill: #003580;
   }
 
+  .beat-circle {
+    display: inline-block;
+    background-color: var(--circle-color);
+    width: var(--circle-size);
+    height: var(--circle-size);
+    margin: 0px 2px;
+    border-radius: 100%;
+    -webkit-animation: beat 0.7s 0s infinite linear;
+    animation: beat 0.7s 0s infinite linear;
+    -webkit-animation-fill-mode: both;
+    animation-fill-mode: both;
+  }
+
+  .beat-circle.center {
+    -webkit-animation: beat 0.7s 0.35s infinite linear !important;
+    animation: beat 0.7s 0.35s infinite linear !important;
+  }
+
+  @keyframes beat {
+    50% {
+      -webkit-transform: scale(0.75);
+      -ms-transform: scale(0.75);
+      transform: scale(0.75);
+      opacity: 0.2;
+    }
+
+    100% {
+      -webkit-transform: scale(1);
+      -ms-transform: scale(1);
+      transform: scale(1);
+      opacity: 1;
+    }
+  }
+
   @media (max-width: 22.5rem) {
     .balance-wrap {
       flex-direction: column !important;

@@ -4,7 +4,7 @@ import { useStreamAndHistoryQuery } from '~/services/generated/graphql';
 import { useAccount } from 'wagmi';
 
 const useStreamsAndHistory = () => {
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
   const { provider, network } = useNetworkProvider();
 
   // get subgraph endpoint
@@ -15,7 +15,7 @@ const useStreamsAndHistory = () => {
       endpoint,
     },
     {
-      id: accountData?.address.toLowerCase() ?? '',
+      id: address?.toLowerCase() ?? '',
       network: network || '',
     },
     {
@@ -23,7 +23,7 @@ const useStreamsAndHistory = () => {
     }
   );
 
-  const formattedData = useFormatStreamAndHistory({ data, address: accountData?.address, provider });
+  const formattedData = useFormatStreamAndHistory({ data, address: address, provider });
 
   return React.useMemo(() => ({ data: formattedData, isLoading, error }), [formattedData, isLoading, error]);
 };

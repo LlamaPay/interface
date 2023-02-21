@@ -2,7 +2,7 @@ import * as React from 'react';
 import AnimatedStream from '~/components/AnimatedStream';
 import { InputAmountWithMaxButton, SelectToken } from '~/components/Form';
 import useTokenBalances, { ITokenBalance } from '~/queries/useTokenBalances';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import { useDepositForm, useTokenList } from '~/hooks';
 import AvailableAmount from '~/components/AvailableAmount';
 import { ArrowRightIcon } from '@heroicons/react/24/solid';
@@ -96,14 +96,14 @@ export function DepositForm({
 
         {isApproved || process.env.NEXT_PUBLIC_SAFE === 'true' ? (
           <button className="form-submit-button" disabled={confirmingDeposit}>
-            {confirmingDeposit ? <BeatLoader size={6} color="white" /> : t0('deposit')}
+            {confirmingDeposit ? <BeatLoader size="6px" color="white" /> : t0('deposit')}
           </button>
         ) : (
           <button className="form-submit-button" disabled={disableApprove}>
             {checkingApproval ? (
-              <BeatLoader size={6} color="white" />
+              <BeatLoader size="6px" color="white" />
             ) : approvingToken ? (
-              <BeatLoader size={6} color="white" />
+              <BeatLoader size="6px" color="white" />
             ) : (
               t1('approveOnWallet')
             )}

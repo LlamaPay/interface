@@ -2,37 +2,19 @@ import * as React from 'react';
 import { Switch } from '@headlessui/react';
 import { DisclosureState } from 'ariakit';
 import { FormDialog } from '~/components/Dialog';
-import { InputText, SubmitButton } from '~/components/Form';
+import { SubmitButton } from '~/components/Form';
 import type { IHistory } from '~/types';
 import { formatAddress } from '~/utils/address';
 import { downloadCustomHistory } from '~/utils/downloadCsv';
-import Calendar from 'react-calendar';
 
-interface ICustomExportElements {
-  start: string;
-  end: string;
-  event: string;
+interface IFormElements {
+  startDate: { valueAsNumber: string };
+  endDate: { valueAsNumber: string };
+  event: { value: string };
 }
+
 export function CustomExportDialog({ data, dialog }: { data: IHistory[]; dialog: DisclosureState }) {
   const [hasAssignNames, setHasAssignNames] = React.useState<boolean>(false);
-  const [showStartCalendar, setShowStartCalendar] = React.useState<boolean>(false);
-  const [showEndCalendar, setShowEndCalendar] = React.useState<boolean>(false);
-  const [formData, setFormData] = React.useState<ICustomExportElements>({
-    start: new Date(Date.now()).toISOString().slice(0, 10),
-    end: new Date(Date.now()).toISOString().slice(0, 10),
-    event: 'All Events',
-  });
-
-  function downloadCSV(e: React.FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-
-    downloadCustomHistory(
-      data,
-      { start: formData.start, end: formData.end },
-      formData.event !== '' ? formData.event : null,
-      tableContents
-    );
-  }
 
   const addresses = React.useMemo(() => {
     if (!data) return {};
@@ -56,63 +38,31 @@ export function CustomExportDialog({ data, dialog }: { data: IHistory[]; dialog:
     setTableContents(newTableContents);
   }
 
-  function onChange(val: string, type: keyof typeof formData) {
-    setFormData((prev) => ({ ...prev, [type]: val }));
-  }
+  function downloadCSV(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
 
-  function onCalendarChange(
-    val: string,
-    type: keyof typeof formData,
-    calendar: React.Dispatch<React.SetStateAction<boolean>>
-  ) {
-    setFormData((prev) => ({ ...prev, [type]: val }));
-    calendar(false);
+    const form = e.target as HTMLFormElement & IFormElements;
+    const start = new Date(form.startDate.valueAsNumber).toISOString().slice(0, 10);
+    const end = new Date(form.endDate.valueAsNumber).toISOString().slice(0, 10);
+    const event = form.event.value;
+
+    downloadCustomHistory(data, { start: start, end: end }, event !== '' ? event : null, tableContents);
   }
 
   return (
     <FormDialog title="Export Custom CSV" className="h-fit" dialog={dialog}>
-      <form className="space-y-2" onSubmit={downloadCSV}>
-        <InputText
-          label={'Start Date (YYYY-MM-DD)'}
-          name="startDate"
-          isRequired
-          placeholder="YYYY-MM-DD"
-          pattern="\d{4}-\d{2}-\d{2}"
-          handleClick={(e) => setShowStartCalendar(true)}
-          handleChange={(e) => onChange(e.target.value, 'start')}
-          showValue={formData.start}
-        ></InputText>
-        {showStartCalendar && (
-          <section className="max-w-xs place-self-center border px-2 py-2">
-            <Calendar
-              onChange={(e: any) =>
-                onCalendarChange(new Date(e).toISOString().slice(0, 10), 'start', setShowStartCalendar)
-              }
-            />
-          </section>
-        )}
-        <InputText
-          label={'End Date (YYYY-MM-DD)'}
-          name="endDate"
-          isRequired
-          placeholder="YYYY-MM-DD"
-          pattern="\d{4}-\d{2}-\d{2}"
-          handleClick={(e) => setShowEndCalendar(true)}
-          handleChange={(e) => onChange(e.target.value, 'end')}
-          showValue={formData.end}
-        ></InputText>
-        {showEndCalendar && (
-          <section className="max-w-xs place-self-center border px-2 py-2">
-            <Calendar
-              onChange={(e: any) => onCalendarChange(new Date(e).toISOString().slice(0, 10), 'end', setShowEndCalendar)}
-            />
-          </section>
-        )}
-        <select
-          onChange={(e) => onChange(e.target.value, 'event')}
-          required
-          className="input-label w-full rounded dark:border-[#252525] dark:bg-[#202020]"
-        >
+      <form className="flex flex-col gap-4" onSubmit={downloadCSV}>
+        <label>
+          <span className="input-label">Start Date</span>
+          <input type="date" name="startDate" className="input-field" required />
+        </label>
+
+        <label>
+          <span className="input-label">End Date</span>
+          <input type="date" name="endDate" className="input-field" required />
+        </label>
+
+        <select name="event" required className="input-label w-full rounded dark:border-[#252525] dark:bg-[#202020]">
           <option value="AllEvents">{'All Events'}</option>
           <option value="Deposit">{'Deposit'}</option>
           <option value="Withdraw">{'Withdraw'}</option>
@@ -123,6 +73,7 @@ export function CustomExportDialog({ data, dialog }: { data: IHistory[]; dialog:
           <option value="StreamPaused">{'Pause'}</option>
           <option value="Gusto">{'Gusto'}</option>
         </select>
+
         <div className="flex gap-2">
           <span className="font-exo">{'Assign Names'}</span>
           <Switch
@@ -139,6 +90,7 @@ export function CustomExportDialog({ data, dialog }: { data: IHistory[]; dialog:
             />
           </Switch>
         </div>
+
         {hasAssignNames && (
           <table className="w-full">
             <thead>
@@ -169,6 +121,7 @@ export function CustomExportDialog({ data, dialog }: { data: IHistory[]; dialog:
             </tbody>
           </table>
         )}
+
         <SubmitButton className="mt-5">{'Download'}</SubmitButton>
       </form>
     </FormDialog>

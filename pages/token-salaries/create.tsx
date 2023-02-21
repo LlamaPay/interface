@@ -2,7 +2,7 @@ import type { GetServerSideProps, NextPage } from 'next';
 import * as React from 'react';
 import Layout from '~/components/Layout';
 import { InputAmount, InputText, SubmitButton } from '~/components/Form';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import useCreateScheduledTransferContract from '~/queries/useCreateScheduledTransfer';
 import { TransactionDialog } from '~/components/Dialog';
 import { useDialogState } from 'ariakit';
@@ -21,8 +21,8 @@ interface IFormElements {
 }
 
 const Home: NextPage = () => {
-  const [{ data: accountData }] = useAccount();
-  const [{ data: networkData }] = useNetwork();
+  const { isConnected } = useAccount();
+  const { chain } = useNetwork();
 
   const [tokenAddress, setTokenAddress] = React.useState('');
 
@@ -91,21 +91,18 @@ const Home: NextPage = () => {
           )}
         </small>
 
-        {!accountData ? (
+        {!isConnected ? (
           <SubmitButton type="button" className="mt-2" onClick={walletDialog.toggle}>
             Connect Wallet
           </SubmitButton>
         ) : (
           <SubmitButton
             disabled={
-              !factoryAddress ||
-              isLoading ||
-              tokenAddress.length !== 42 ||
-              (networkData?.chain?.testnet ? false : !tokenPrice)
+              !factoryAddress || isLoading || tokenAddress.length !== 42 || (chain?.testnet ? false : !tokenPrice)
             }
             className="mt-2"
           >
-            {!factoryAddress ? 'Chain not supported' : isLoading ? <BeatLoader size={6} color="white" /> : 'Create'}
+            {!factoryAddress ? 'Chain not supported' : isLoading ? <BeatLoader size="6px" color="white" /> : 'Create'}
           </SubmitButton>
         )}
       </form>

@@ -1,4 +1,4 @@
-import { useAccount } from 'wagmi';
+import { useAccount, useEnsName } from 'wagmi';
 import useGetRaveName from '~/queries/useGetRaveName';
 import { formatAddress } from '~/utils/address';
 
@@ -7,16 +7,15 @@ interface Props {
 }
 
 export const Account = ({ showAccountInfo }: Props) => {
-  const [{ data }] = useAccount({ fetchEns: true });
+  const { address } = useAccount();
+  const { data: ensName } = useEnsName();
   const { data: raveName } = useGetRaveName();
 
-  if (!data) return null;
-
-  const formattedAddress = formatAddress(data.address);
+  if (!address) return null;
 
   return (
     <button className="nav-button-v2 hidden md:block" onClick={showAccountInfo}>
-      {data.ens?.name ?? raveName ?? formattedAddress}
+      {ensName ?? raveName ?? formatAddress(address)}
     </button>
   );
 };

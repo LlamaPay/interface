@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { InputAmountWithDuration, InputText, SelectToken, SubmitButton } from '~/components/Form';
 import type { IStreamFormProps } from './types';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import { TransactionDialog } from '~/components/Dialog';
 import { useCreateStreamForm } from '~/hooks';
 
@@ -47,7 +47,7 @@ const CreateStreamOnly = ({ tokens, dialog }: IStreamFormProps) => {
         />
 
         <SubmitButton disabled={confirmingStream} className="mt-2">
-          {confirmingStream ? <BeatLoader size={6} color="white" /> : 'Create Stream'}
+          {confirmingStream ? <BeatLoader size="6px" color="white" /> : 'Create Stream'}
         </SubmitButton>
       </form>
       <TransactionDialog dialog={dialog} transactionHash={transactionDetails?.hash ?? ''} />

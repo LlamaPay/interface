@@ -65,9 +65,9 @@ async function getSubgraphDelay({ chainId }: useGetSubgraphDelayProps) {
 }
 
 export default function useGetSubgraphDelay() {
-  const [{ data }] = useNetwork();
+  const { chain } = useNetwork();
 
-  const chainId = data.chain?.id;
+  const chainId = chain?.id;
 
   return useQuery(['subgraphDelay', chainId], () => getSubgraphDelay({ chainId }), {
     refetchInterval: 30000,

@@ -1,9 +1,9 @@
-import { BaseProvider } from '@ethersproject/providers';
+import type { Provider } from '~/utils/contract';
 import { BigNumber } from 'ethers';
 import { useNetworkProvider } from '~/hooks';
 import { useQuery } from '@tanstack/react-query';
 
-async function fetchBalance(id: string, provider: BaseProvider | null) {
+async function fetchBalance(id: string, provider: Provider | null) {
   if (!provider) return null;
   try {
     const balance = await provider.getBalance(id);

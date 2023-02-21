@@ -14,7 +14,7 @@ import Fallback from '~/components/Fallback';
 import { BalanceIcon } from '~/components/Icons';
 import { useAccount } from 'wagmi';
 import useTokenBalances from '~/queries/useTokenBalances';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import { useTranslations } from 'next-intl';
 import classNames from 'classnames';
 
@@ -32,7 +32,7 @@ const Balance = (props: { address?: string }) => {
 
   const { data: tokens, isLoading: tokensLoading } = useTokenBalances();
 
-  const [{ data: accountData }] = useAccount();
+  const { address, isConnected } = useAccount();
 
   const t0 = useTranslations('Common');
   const t1 = useTranslations('Balances');
@@ -77,12 +77,12 @@ const Balance = (props: { address?: string }) => {
         {showActions && (
           <button
             className="primary-button"
-            disabled={isLoading || tokensLoading || !accountData || !tokens}
+            disabled={isLoading || tokensLoading || !address || !tokens}
             onClick={() => {
               depositFieldDialog.toggle();
             }}
           >
-            {isLoading || tokensLoading ? <BeatLoader size={6} color="white" /> : <>{t1('deposit')}</>}
+            {isLoading || tokensLoading ? <BeatLoader size="6px" color="white" /> : <>{t1('deposit')}</>}
           </button>
         )}
       </div>
@@ -188,8 +188,8 @@ const Balance = (props: { address?: string }) => {
         </>
       )}
 
-      {tokens && accountData && (
-        <DepositField tokens={tokens} userAddress={accountData.address} dialog={depositFieldDialog} />
+      {tokens && isConnected && address && (
+        <DepositField tokens={tokens} userAddress={address} dialog={depositFieldDialog} />
       )}
     </section>
   );

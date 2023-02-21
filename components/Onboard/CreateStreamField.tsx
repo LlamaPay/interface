@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ArrowLeftIcon } from '@heroicons/react/24/solid';
 import { useCreateStreamForm, useTokenList } from '~/hooks';
 import { InputAmountWithDuration, InputText, SelectToken, SubmitButton } from '~/components/Form';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import useTokenBalances, { ITokenBalance } from '~/queries/useTokenBalances';
 import AnimatedStream from '~/components/AnimatedStream';
 import { useTranslations } from 'next-intl';
@@ -98,7 +98,7 @@ const Form = ({
         </span>
 
         <SubmitButton disabled={confirmingStream}>
-          {confirmingStream ? <BeatLoader size={6} color="white" /> : t0('createStream')}
+          {confirmingStream ? <BeatLoader size="6px" color="white" /> : t0('createStream')}
         </SubmitButton>
       </form>
 

@@ -7,7 +7,9 @@ export default function Vested({ data }: { data: IVesting }) {
   const { locale } = useLocale();
   const setState = React.useCallback(() => {
     const now = Date.now() / 1e3;
-    if (now >= Number(data.disabledAt) && data.disabledAt === data.endTime) {
+    if (Number(data.startTime) >= now) {
+      setBalanceState(0);
+    } else if (now >= Number(data.disabledAt) && data.disabledAt === data.endTime) {
       setBalanceState(Number(data.totalLocked) / 10 ** Number(data.tokenDecimals));
     } else if (now >= Number(data.disabledAt)) {
       const amountPerSec =

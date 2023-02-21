@@ -81,8 +81,8 @@ async function getPaymentsInfo(userAddress: string | undefined, chainId: number 
 
 export default function useGetPaymentsInfo() {
   const { chainId } = useNetworkProvider();
-  const [{ data: accountData }] = useAccount();
-  return useQuery(['paymentsInfo', accountData?.address.toLowerCase(), chainId], () =>
-    getPaymentsInfo(accountData?.address.toLowerCase(), chainId)
+  const { address } = useAccount();
+  return useQuery(['paymentsInfo', address?.toLowerCase(), chainId], () =>
+    getPaymentsInfo(address?.toLowerCase(), chainId)
   );
 }

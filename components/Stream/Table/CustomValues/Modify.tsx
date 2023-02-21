@@ -8,7 +8,7 @@ import { InputAmountWithDuration, InputText, SubmitButton } from '~/components/F
 import BigNumber from 'bignumber.js';
 import { secondsByDuration } from '~/utils/constants';
 import useModifyStream from '~/queries/useModifyStream';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import { useIntl, useTranslations } from 'next-intl';
 import { LlamaContractInterface } from '~/utils/contract';
 import useGnosisBatch from '~/queries/useGnosisBatch';
@@ -131,7 +131,7 @@ export const Modify = ({ data }: ModifyProps) => {
               />
 
               <SubmitButton className="my-2">
-                {isLoading ? <BeatLoader size={6} color="white" /> : t0('update')}
+                {isLoading ? <BeatLoader size="6px" color="white" /> : t0('update')}
               </SubmitButton>
             </form>
           </section>

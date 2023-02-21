@@ -1,6 +1,6 @@
 import { InputAmountWithDuration, InputText, SelectToken, SubmitButton } from '~/components/Form';
 import { useTranslations } from 'next-intl';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 
 const Placeholder = () => {
   const t = useTranslations('Forms');
@@ -54,7 +54,7 @@ const Placeholder = () => {
           {t('addStream')}
         </button>
         <SubmitButton className="flex-1" disabled={true}>
-          <BeatLoader size={6} color="white" />
+          <BeatLoader size="6px" color="white" />
         </SubmitButton>
       </div>
     </form>

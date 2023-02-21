@@ -16,7 +16,6 @@ import { useNetwork } from 'wagmi';
 import { networkDetails } from '~/lib/networkDetails';
 import { eventAgeFormatter } from '~/components/History/Table/CustomValues';
 import Tooltip from '~/components/Tooltip';
-import { chainDetails } from '~/utils/network';
 
 export function ScheduledTransfersHistory({
   history,
@@ -27,10 +26,10 @@ export function ScheduledTransfersHistory({
 }) {
   const t = useTranslations('Table');
 
-  const [{ data: networkData }] = useNetwork();
+  const { chain } = useNetwork();
 
-  const explorerUrl = networkData?.chain?.id ? networkDetails[networkData.chain.id]?.blockExplorerURL : null;
-  const explorerName = networkData?.chain?.id ? networkDetails[networkData.chain.id]?.blockExplorerName : null;
+  const explorerUrl = chain ? networkDetails[chain.id]?.blockExplorerURL : null;
+  const explorerName = chain ? networkDetails[chain.id]?.blockExplorerName : null;
 
   const intl = useIntl();
 

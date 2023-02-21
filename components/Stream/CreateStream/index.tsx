@@ -9,13 +9,13 @@ import CreateMultipleStreams from './CreateMultipleStreams';
 import { useTranslations } from 'next-intl';
 
 export const CreateStream = () => {
-  const [{ loading: accountDataLoading }] = useAccount();
+  const { isConnecting } = useAccount();
 
   const { isLoading, isError } = useBalances();
 
   const { data: tokens, isLoading: tokenBalancesLoading, isError: tokenBalancesError } = useTokenBalances();
 
-  const loading = accountDataLoading || isLoading || tokenBalancesLoading;
+  const loading = isConnecting || isLoading || tokenBalancesLoading;
 
   const error = isError || tokenBalancesError || !tokens;
 

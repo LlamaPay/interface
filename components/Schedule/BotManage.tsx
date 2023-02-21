@@ -12,7 +12,6 @@ import useGetBotInfo from '~/queries/useGetBotInfo';
 import { formatAddress } from '~/utils/address';
 import { zeroAdd } from '~/utils/constants';
 import { useApproveTokenForMaxAmt } from '~/queries/useTokenApproval';
-import Calendar from 'react-calendar';
 
 export default function BotFunds({
   dialog,
@@ -33,144 +32,128 @@ export default function BotFunds({
   });
   const [redirectAddress, setRedirectAddress] = React.useState<string | null>(null);
   const [selectedToken, setSelectedToken] = React.useState<string>('');
-  const [showCalendar, setShowCalendar] = React.useState<boolean>(false);
 
   const { data: botInfo, isLoading } = useGetBotInfo();
 
   const { mutate: approveMax } = useApproveTokenForMaxAmt();
 
-  const [{ data: balance }] = useContractRead(
-    {
-      addressOrName: botAddress,
-      contractInterface: botContractABI,
-    },
-    'balances',
-    {
-      args: accountAddress,
-    }
-  );
+  const { data: balance } = useContractRead({
+    address: botAddress as `0x${string}`,
+    abi: botContractABI,
+    functionName: 'balances',
+    args: [accountAddress],
+  });
 
-  const [{}, refund] = useContractWrite(
-    {
-      addressOrName: botAddress,
-      contractInterface: botContractABI,
-    },
-    'refund'
-  );
+  const { writeAsync: refund } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: botAddress as `0x${string}`,
+    abi: botContractABI,
+    functionName: 'refund',
+  });
 
-  const [{}, deposit] = useContractWrite(
-    {
-      addressOrName: botAddress,
-      contractInterface: botContractABI,
-    },
-    'deposit'
-  );
-  const [{}, cancelWithdraw] = useContractWrite(
-    {
-      addressOrName: botAddress,
-      contractInterface: botContractABI,
-    },
-    'cancelWithdraw'
-  );
+  const { writeAsync: deposit } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: botAddress as `0x${string}`,
+    functionName: 'deposit',
+  });
+  const { writeAsync: cancelWithdraw } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: botAddress as `0x${string}`,
+    abi: botContractABI,
+    functionName: 'cancelWithdraw',
+  });
 
-  const [{}, scheduleWithdraw] = useContractWrite(
-    {
-      addressOrName: botAddress,
-      contractInterface: botContractABI,
-    },
-    'scheduleWithdraw'
-  );
+  const { writeAsync: scheduleWithdraw } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: botAddress as `0x${string}`,
+    abi: botContractABI,
+    functionName: 'scheduleWithdraw',
+  });
 
-  const [{}, setRedirect] = useContractWrite(
-    {
-      addressOrName: botAddress,
-      contractInterface: botContractABI,
-    },
-    'setRedirect'
-  );
+  const { writeAsync: setRedirect } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: botAddress as `0x${string}`,
+    abi: botContractABI,
+    functionName: 'setRedirect',
+  });
 
-  const [{}, cancelRedirect] = useContractWrite(
-    {
-      addressOrName: botAddress,
-      contractInterface: botContractABI,
-    },
-    'cancelRedirect'
-  );
+  const { writeAsync: cancelRedirect } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: botAddress as `0x${string}`,
+    abi: botContractABI,
+    functionName: 'cancelRedirect',
+  });
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
     deposit({
-      overrides: {
-        value: (Number(form.amount.value) * 1e18).toFixed(0),
+      recklesslySetUnpreparedOverrides: {
+        value: Number(form.amount.value) * 1e18,
       },
-    }).then((data) => {
-      if (data.error) {
-        dialog.hide();
-        toast.error(data.error.message);
-      } else {
+    })
+      .then((data) => {
         const toastid = toast.loading(`Sending ${form.amount.value} ${nativeCurrency} to Bot`);
         dialog.hide();
-        data.data?.wait().then((receipt) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1 ? toast.success('Successfully Sent to Bot') : toast.error('Failed to Send to Bot');
         });
         queryClient.invalidateQueries();
-      }
-    });
+      })
+      .catch((err) => {
+        dialog.hide();
+        toast.error(err.reason || err.message || 'Transaction Failed');
+      });
   }
 
   function handleRefund() {
-    refund().then((data) => {
-      if (data.error) {
-        dialog.hide();
-        toast.error(data.error.message);
-      } else {
+    refund()
+      .then((data) => {
         const toastid = toast.loading(`Refunding ${Number(balance) / 1e18} ${nativeCurrency}`);
         dialog.hide();
-        data.data?.wait().then((receipt) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1 ? toast.success('Successfully Refunded') : toast.error('Failed to Refund');
         });
         queryClient.invalidateQueries();
-      }
-    });
+      })
+      .catch((err) => {
+        dialog.hide();
+        toast.error(err.reason || err.message || 'Transaction Failed');
+      });
   }
 
   function handleCancel(p: string) {
     if (!botInfo?.toInclude) return;
     const ele = botInfo.toInclude[p];
     cancelWithdraw({
-      args: [ele.token, ele.from, ele.to, ele.amountPerSec, ele.starts, ele.frequency],
-    }).then((data) => {
-      if (data.error) {
-        toast.error(data.error.message);
-      } else {
+      recklesslySetUnpreparedArgs: [ele.token, ele.from, ele.to, ele.amountPerSec, ele.starts, ele.frequency],
+    })
+      .then((data) => {
         const toastid = toast.loading(`Cancelling Withdrawal`);
-        data.data?.wait().then((receipt) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1 ? toast.success('Successfully Cancelled') : toast.error('Failed to Cancel');
         });
         queryClient.invalidateQueries();
-      }
-    });
+      })
+      .catch((err) => {
+        dialog.hide();
+        toast.error(err.reason || err.message || 'Transaction Failed');
+      });
   }
 
   function handleChange(value: string, type: keyof typeof formData) {
     setFormData((prev) => ({ ...prev, [type]: value }));
   }
 
-  function handleCalendarClick(e: any) {
-    setFormData((prev) => ({ ...prev, ['startDate']: new Date(e).toISOString().slice(0, 10) }));
-    setShowCalendar(false);
-  }
-
-  function handleSchedule(e: string) {
+  function handleSchedule(e: 'incoming' | 'outgoing') {
     const freq = formData.frequency;
     const start = new Date(formData.startDate).getTime() / 1e3;
 
     scheduleWithdraw({
-      args: [
+      recklesslySetUnpreparedArgs: [
         zeroAdd,
         e === 'incoming' ? zeroAdd : accountAddress,
         e === 'outgoing' ? zeroAdd : accountAddress,
@@ -186,60 +169,59 @@ export default function BotFunds({
           ? secondsByDuration['month']
           : null,
       ],
-    }).then((d) => {
-      const data: any = d;
-      if (data.error) {
-        dialog.hide();
-        toast.error(data.error.reason ?? data.error.message);
-      } else {
+    })
+      .then((data) => {
         const toastId = toast.loading('Scheduling Events');
         dialog.hide();
-        data.data?.wait().then((receipt: any) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastId);
           receipt.status === 1
             ? toast.success('Successfully Scheduled Events')
             : toast.error('Failed to Schedule Events');
           queryClient.invalidateQueries();
         });
-      }
-    });
+      })
+      .catch((err) => {
+        dialog.hide();
+        toast.error(err.reason || err.message || 'Transaction Failed');
+      });
   }
 
   function onRedirect() {
     approveMax({ tokenAddress: selectedToken, spenderAddress: botAddress });
-    setRedirect({ args: redirectAddress }).then((data) => {
-      if (data.error) {
-        dialog.hide();
-        toast.error(data.error.message);
-      } else {
+    setRedirect({ recklesslySetUnpreparedArgs: [redirectAddress] })
+      .then((data) => {
         const toastid = toast.loading(`Setting Redirect to ${formatAddress(redirectAddress ?? '')}`);
         dialog.hide();
-        data.data?.wait().then((receipt) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1 ? toast.success('Successfully Set Redirect') : toast.error('Failed to Set Redirect');
         });
         queryClient.invalidateQueries();
-      }
-    });
+      })
+      .catch((err) => {
+        dialog.hide();
+        toast.error(err.reason || err.message || 'Transaction Failed');
+      });
   }
 
   function onCancelRedirect() {
-    cancelRedirect().then((data) => {
-      if (data.error) {
-        dialog.hide();
-        toast.error(data.error.message);
-      } else {
+    cancelRedirect()
+      .then((data) => {
         const toastid = toast.loading(`Cancelling Redirect`);
         dialog.hide();
-        data.data?.wait().then((receipt) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1
             ? toast.success('Successfully Cancelled Redirect')
             : toast.error('Failed to Cancel Redirect');
         });
         queryClient.invalidateQueries();
-      }
-    });
+      })
+      .catch((err) => {
+        dialog.hide();
+        toast.error(err.reason || err.message || 'Transaction Failed');
+      });
   }
 
   function onCurrentDate() {
@@ -248,15 +230,15 @@ export default function BotFunds({
 
   return (
     <>
-      <FormDialog dialog={dialog} title="Manage Bot" className="h-min min-w-fit	">
-        <span className="space-y-4 text-lp-gray-6 dark:text-white">
-          <div className="flex space-x-2">
+      <FormDialog dialog={dialog} title="Manage Bot" className="h-min	min-w-fit text-lp-gray-6 dark:text-white">
+        <section className="mb-4 flex flex-col gap-1">
+          <div className="flex gap-2">
             <span>{`Balance: ${(Number(balance) / 1e18).toFixed(5)} ${nativeCurrency}`}</span>
             <button className="row-action-links" onClick={handleRefund}>
               Refund
             </button>
           </div>
-          <section className="border px-2 py-2">
+          <div className="border px-2 py-2">
             <form onSubmit={onSubmit}>
               <div className="flex space-x-2">
                 <div className="w-full">
@@ -265,72 +247,70 @@ export default function BotFunds({
                 <SubmitButton className="bottom-0 h-min w-2/5 place-self-end">Deposit</SubmitButton>
               </div>
             </form>
-          </section>
-          <div>
-            <span>Schedule for All Streams:</span>
           </div>
-          <section className="border px-2 py-2">
-            <div className="flex space-x-1 pb-2">
-              <div className="w-full">
-                <label className="input-label">Start Date</label>
-                <div className="relative flex">
-                  <input
-                    className="input-field"
-                    onChange={(e) => handleChange(e.target.value, 'startDate')}
-                    required
-                    autoComplete="off"
-                    autoCorrect="off"
-                    placeholder="YYYY-MM-DD"
-                    pattern="\d{4}-\d{2}-\d{2}"
-                    value={formData.startDate}
-                    onClick={(e) => setShowCalendar(true)}
-                  />
-                  <button
-                    type="button"
-                    className="absolute bottom-[5px] top-[10px] right-[5px] rounded-lg border border-[#4E575F] px-2 text-xs font-bold text-[#4E575F] disabled:cursor-not-allowed"
-                    onClick={onCurrentDate}
-                  >
-                    {'Today'}
-                  </button>
-                </div>
+        </section>
+
+        <section className="my-4 flex flex-col gap-1">
+          <h1>Schedule for All Streams:</h1>
+          <div className="flex flex-col gap-4 border p-2">
+            <label>
+              <span className="input-label">Start Date</span>
+
+              <div className="relative flex">
+                <input
+                  className="input-field pr-20"
+                  onChange={(e) => handleChange(e.target.value, 'startDate')}
+                  required
+                  type="date"
+                  value={formData.startDate}
+                />
+                <button
+                  type="button"
+                  className="absolute bottom-[5px] top-[10px] right-[5px] rounded-lg border border-[#4E575F] px-2 text-xs font-bold text-[#4E575F] disabled:cursor-not-allowed"
+                  onClick={onCurrentDate}
+                >
+                  {'Today'}
+                </button>
               </div>
-              <div>
-                <label className="input-label">Frequency</label>
-                <select onChange={(e) => handleChange(e.target.value, 'frequency')} className="input-field w-1/2">
-                  <option value="daily">Every Day</option>
-                  <option value="weekly">Every 7 Days</option>
-                  <option value="biweekly">Every 14 Days</option>
-                  <option value="monthly">Every 30 Days</option>
-                </select>
-              </div>
-            </div>
-            {showCalendar && (
-              <section className="max-w-xs place-self-center border px-2 py-2">
-                <Calendar onChange={(e: any) => handleCalendarClick(e)} />
-              </section>
-            )}
-            <div>
+            </label>
+
+            <label className="flex flex-col">
+              <span className="input-label">Frequency</span>
+              <select onChange={(e) => handleChange(e.target.value, 'frequency')} className="input-field">
+                <option value="daily">Every Day</option>
+                <option value="weekly">Every 7 Days</option>
+                <option value="biweekly">Every 14 Days</option>
+                <option value="monthly">Every 30 Days</option>
+              </select>
+            </label>
+
+            <div className="flex flex-col items-center justify-between gap-1 md:flex-row">
               <button
-                onClick={(e) => handleSchedule('incoming')}
-                className="place-self-end rounded-3xl border bg-white px-3 py-[6px] text-sm dark:border-[#252525] dark:bg-[#252525]"
+                onClick={() => handleSchedule('incoming')}
+                className="rounded-lg border bg-white p-3 text-sm hover:bg-lp-primary dark:border-[#252525] dark:bg-[#252525]"
               >
-                Incoming
+                Schedule Incoming Streams
               </button>
+              <small>or</small>
               <button
-                onClick={(e) => handleSchedule('outgoing')}
-                className="place-self-end rounded-3xl border bg-white px-3 py-[6px] text-sm dark:border-[#252525] dark:bg-[#252525]"
+                onClick={() => handleSchedule('outgoing')}
+                className="rounded-lg border bg-white p-3 text-sm hover:bg-lp-primary dark:border-[#252525] dark:bg-[#252525]"
               >
-                Outgoing
+                Schedule Outgoing Streams
               </button>
             </div>
-          </section>
-          {isLoading && (
-            <div className="pt-1">
-              <span>Loading Redirect and Schedule Info...</span>
-            </div>
-          )}
-          {!isLoading && (
-            <div>
+          </div>
+        </section>
+
+        {isLoading && (
+          <div className="pt-1">
+            <span>Loading Redirect and Schedule Info...</span>
+          </div>
+        )}
+
+        {!isLoading && (
+          <>
+            <section className="my-4 flex flex-col gap-1">
               <div className="flex space-x-2">
                 <span className="text-md font-evo">
                   {botInfo?.redirect === zeroAdd || !botInfo?.redirect
@@ -343,7 +323,8 @@ export default function BotFunds({
                   </button>
                 )}
               </div>
-              <section className="border px-2 py-2">
+
+              <div className="border px-2 py-2">
                 <div className="flex space-x-2">
                   <div className="w-full">
                     <InputText
@@ -370,10 +351,12 @@ export default function BotFunds({
                     Redirect
                   </SubmitButton>
                 </div>
-              </section>
-              <div>
-                <span>Scheduled Streams:</span>
               </div>
+            </section>
+
+            <section className="my-4 flex flex-col gap-1">
+              <h1>Scheduled Streams:</h1>
+
               <div className="overflow-x-auto">
                 <table className="border">
                   <thead>
@@ -448,7 +431,7 @@ export default function BotFunds({
                           <td className="table-description">
                             <div className="text-center">
                               {botInfo.toInclude[p].owner.toLowerCase() === accountAddress.toLowerCase() && (
-                                <button className="row-action-links" onClick={(e) => handleCancel(p)}>
+                                <button className="row-action-links" onClick={() => handleCancel(p)}>
                                   Cancel
                                 </button>
                               )}
@@ -459,9 +442,9 @@ export default function BotFunds({
                   </tbody>
                 </table>
               </div>
-            </div>
-          )}
-        </span>
+            </section>
+          </>
+        )}
       </FormDialog>
     </>
   );

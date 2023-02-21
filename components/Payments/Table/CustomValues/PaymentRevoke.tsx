@@ -6,36 +6,41 @@ import { networkDetails } from '~/lib/networkDetails';
 import { zeroAdd } from '~/utils/constants';
 import { useAccount, useContractWrite } from 'wagmi';
 import BigNumber from 'bignumber.js';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function PaymentRevokeButton({ data }: { data: IPayments }) {
   const { chainId } = useNetworkProvider();
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
   const contract = chainId && networkDetails[chainId].paymentsContract;
-  const [{}, revoke] = useContractWrite(
-    {
-      addressOrName: contract || zeroAdd,
-      contractInterface: paymentsContractABI,
-    },
-    'revoke'
-  );
+  const { writeAsync: revoke } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: (contract || zeroAdd) as `0x${string}`,
+    abi: paymentsContractABI,
+    functionName: 'revoke',
+  });
+
+  const queryClient = useQueryClient();
 
   function handleRevoke() {
-    revoke({ args: [data.tokenAddress, data.payee, BigNumber(data.amount).toFixed(0), data.release] }).then((data) => {
-      if (data.error) {
-        toast.error('Failed to Revoke');
-      } else {
+    revoke({
+      recklesslySetUnpreparedArgs: [data.tokenAddress, data.payee, BigNumber(data.amount).toFixed(0), data.release],
+    })
+      .then((data) => {
         const toastid = toast.loading('Revoking');
-        data.data.wait().then((receipt) => {
+        data.wait().then((receipt) => {
           toast.dismiss(toastid);
           receipt.status === 1 ? toast.success('Successfully Revoked') : toast.error('Failed to Revoke');
         });
-      }
-    });
+        queryClient.invalidateQueries();
+      })
+      .catch(() => {
+        toast.error('Failed to Revoke');
+      });
   }
 
   return (
     <>
-      {data.active && data.payer.toLowerCase() === accountData?.address.toLowerCase() && (
+      {data.active && address && data.payer.toLowerCase() === address.toLowerCase() && (
         <button onClick={handleRevoke} className="row-action-links font-exo float-left dark:text-white">
           Revoke
         </button>

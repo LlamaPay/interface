@@ -14,7 +14,7 @@ import { scheduledPaymentsContractABI } from '~/lib/abis/scheduledPaymentsContra
 import { getAddress } from 'ethers/lib/utils';
 import toast from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import { secondsByDuration } from '~/utils/constants';
 
 interface INewPaymentFormElements {
@@ -62,9 +62,9 @@ interface IWithdrawFormElements {
 }
 
 export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }) {
-  const [{ data: networkData }] = useNetwork();
+  const { chain } = useNetwork();
 
-  const explorerUrl = networkData?.chain?.id ? networkDetails[networkData.chain.id]?.blockExplorerURL : null;
+  const explorerUrl = chain ? networkDetails[chain.id]?.blockExplorerURL : null;
 
   const txHash = React.useRef('');
 
@@ -116,48 +116,40 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
     );
   };
 
-  const [{ loading: updatingMinPrice }, setMinPrice] = useContractWrite(
-    {
-      addressOrName: pool.poolContract,
-      contractInterface: scheduledPaymentsContractABI,
-    },
-    'setMaxPrice'
-  );
+  const { isLoading: updatingMinPrice, writeAsync: setMinPrice } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: pool.poolContract as `0x${string}`,
+    abi: scheduledPaymentsContractABI,
+    functionName: 'setMaxPrice',
+  });
 
-  const [{ loading: updatingOracle }, changeOracle] = useContractWrite(
-    {
-      addressOrName: pool.poolContract,
-      contractInterface: scheduledPaymentsContractABI,
-    },
-    'changeOracle'
-  );
+  const { isLoading: updatingOracle, writeAsync: changeOracle } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: pool.poolContract as `0x${string}`,
+    abi: scheduledPaymentsContractABI,
+    functionName: 'changeOracle',
+  });
 
-  const [{ loading: depositing }, deposit] = useContractWrite(
-    {
-      addressOrName: pool.token.address,
-      contractInterface: erc20ABI,
-    },
-    'transfer'
-  );
+  const { isLoading: depositing, writeAsync: deposit } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: pool.token.address as `0x${string}`,
+    abi: erc20ABI,
+    functionName: 'transfer',
+  });
 
-  const [{ loading: withdrawing }, withdraw] = useContractWrite(
-    {
-      addressOrName: pool.poolContract,
-      contractInterface: scheduledPaymentsContractABI,
-    },
-    'withdrawPayer'
-  );
+  const { isLoading: withdrawing, writeAsync: withdraw } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: pool.poolContract as `0x${string}`,
+    abi: scheduledPaymentsContractABI,
+    functionName: 'withdrawPayer',
+  });
 
-  const [{ data: balance }] = useContractRead(
-    {
-      addressOrName: pool.token.address,
-      contractInterface: erc20ABI,
-    },
-    'balanceOf',
-    {
-      args: [pool.poolContract],
-    }
-  );
+  const { data: balance } = useContractRead({
+    address: pool.token.address as `0x${string}`,
+    abi: erc20ABI,
+    functionName: 'balanceOf',
+    args: [pool.poolContract as `0x${string}`],
+  });
 
   const updateMinPrice = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -169,28 +161,28 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
     if (pool.token.decimals && newMinPrice) {
       const formattedPrice = getFormattedMaxPrice(Number(newMinPrice), pool.token.decimals || 18);
 
-      setMinPrice({ args: [formattedPrice] }).then((res) => {
-        if (res.error) {
-          minPriceDialog.hide();
-          toast.error(res.error.message);
-        } else {
+      setMinPrice({ recklesslySetUnpreparedArgs: [formattedPrice] })
+        .then((res) => {
           const toastid = toast.loading(`Confirming Transaction`);
 
           minPriceDialog.hide();
 
-          txHash.current = res.data.hash;
+          txHash.current = res.hash;
 
           txDialogState.toggle();
 
-          res.data?.wait().then((receipt) => {
+          res.wait().then((receipt) => {
             toast.dismiss(toastid);
 
             receipt.status === 1 ? toast.success('Transaction Success') : toast.error('Transaction Failed');
           });
 
           queryClient.invalidateQueries();
-        }
-      });
+        })
+        .catch((err) => {
+          minPriceDialog.hide();
+          toast.error(err.reason || err.message || 'Transaction Failed');
+        });
     }
   };
 
@@ -201,28 +193,28 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
 
     const newOracleAddress = form.newOracleAddress?.value;
 
-    changeOracle({ args: [getAddress(newOracleAddress)] }).then((res) => {
-      if (res.error) {
-        oracleDialog.hide();
-        toast.error(res.error.message);
-      } else {
+    changeOracle({ recklesslySetUnpreparedArgs: [getAddress(newOracleAddress)] })
+      .then((res) => {
         const toastid = toast.loading(`Confirming Transaction`);
 
         oracleDialog.hide();
 
-        txHash.current = res.data.hash;
+        txHash.current = res.hash;
 
         txDialogState.toggle();
 
-        res.data?.wait().then((receipt) => {
+        res.wait().then((receipt) => {
           toast.dismiss(toastid);
 
           receipt.status === 1 ? toast.success('Transaction Success') : toast.error('Transaction Failed');
         });
 
         queryClient.invalidateQueries();
-      }
-    });
+      })
+      .catch((err) => {
+        oracleDialog.hide();
+        toast.error(err.reason || err.message || 'Transaction Failed');
+      });
   };
 
   const onDeposit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -231,28 +223,28 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
     const toDeposit = form.toDeposit?.value;
     if (!pool.poolContract || !pool.token.decimals || !toDeposit || !pool.token.address) return;
     const formatted = new BigNumber(toDeposit).times(10 ** pool.token.decimals).toFixed(0);
-    deposit({ args: [pool.poolContract, formatted] }).then((res) => {
-      if (res.error) {
-        depositDialog.hide();
-        toast.error(res.error.message);
-      } else {
+    deposit({ recklesslySetUnpreparedArgs: [pool.poolContract as `0x${string}`, formatted as any] })
+      .then((res) => {
         const toastid = toast.loading(`Depositing`);
 
         depositDialog.hide();
 
-        txHash.current = res.data.hash;
+        txHash.current = res.hash;
 
         txDialogState.toggle();
 
-        res.data?.wait().then((receipt) => {
+        res.wait().then((receipt) => {
           toast.dismiss(toastid);
 
           receipt.status === 1 ? toast.success('Deposit Success') : toast.error('Deposit Failed');
         });
 
         queryClient.invalidateQueries();
-      }
-    });
+      })
+      .catch((err) => {
+        depositDialog.hide();
+        toast.error(err.reason || err.message || 'Transaction Failed');
+      });
   };
 
   const onWithdraw = (e: React.FormEvent<HTMLFormElement>) => {
@@ -261,28 +253,28 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
     const toWithdraw = form.toWithdraw?.value;
     if (!pool.poolContract || !pool.token.decimals || !toWithdraw || !pool.token.address) return;
     const formatted = new BigNumber(toWithdraw).times(10 ** pool.token.decimals).toFixed(0);
-    withdraw({ args: [pool.token.address, formatted] }).then((res) => {
-      if (res.error) {
-        depositDialog.hide();
-        toast.error(res.error.message);
-      } else {
+    withdraw({ recklesslySetUnpreparedArgs: [pool.token.address, formatted] })
+      .then((res) => {
         const toastid = toast.loading(`Withdrawing`);
 
-        depositDialog.hide();
+        withdrawDialog.hide();
 
-        txHash.current = res.data.hash;
+        txHash.current = res.hash;
 
         txDialogState.toggle();
 
-        res.data?.wait().then((receipt) => {
+        res.wait().then((receipt) => {
           toast.dismiss(toastid);
 
           receipt.status === 1 ? toast.success('Withdraw Success') : toast.error('Withdraw Failed');
         });
 
         queryClient.invalidateQueries();
-      }
-    });
+      })
+      .catch((err) => {
+        withdrawDialog.hide();
+        toast.error(err.reason || err.message || 'Transaction Failed');
+      });
   };
 
   return (
@@ -428,7 +420,7 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
             <InputAmount name="newMinPrice" label="New Minimum Price (USD)" placeholder="1000" isRequired />
 
             <SubmitButton className="mt-5">
-              {updatingMinPrice ? <BeatLoader size={6} color="white" /> : 'Update'}
+              {updatingMinPrice ? <BeatLoader size="6px" color="white" /> : 'Update'}
             </SubmitButton>
           </form>
         </span>
@@ -440,7 +432,7 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
             <InputText name="newOracleAddress" label="New Address" placeholder="0x..." isRequired />
 
             <SubmitButton className="mt-5">
-              {updatingOracle ? <BeatLoader size={6} color="white" /> : 'Update'}
+              {updatingOracle ? <BeatLoader size="6px" color="white" /> : 'Update'}
             </SubmitButton>
           </form>
         </span>
@@ -452,7 +444,7 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
             <InputAmount name="toDeposit" label="To Deposit" placeholder="0" isRequired />
 
             <SubmitButton className="mt-5">
-              {depositing ? <BeatLoader size={6} color="white" /> : 'Deposit'}
+              {depositing ? <BeatLoader size="6px" color="white" /> : 'Deposit'}
             </SubmitButton>
           </form>
         </span>
@@ -464,7 +456,7 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
             <InputAmount name="toWithdraw" label="To Withdraw" placeholder="0" isRequired />
 
             <SubmitButton className="mt-5">
-              {withdrawing ? <BeatLoader size={6} color="white" /> : 'Withdraw'}
+              {withdrawing ? <BeatLoader size="6px" color="white" /> : 'Withdraw'}
             </SubmitButton>
           </form>
         </span>

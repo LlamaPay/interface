@@ -3,7 +3,7 @@ import BigNumber from 'bignumber.js';
 import useWithdrawByPayer from '~/queries/useWithdrawTokenByPayer';
 import type { IFormElements, IFormProps } from './types';
 import { InputAmount, SubmitButton } from '~/components/Form';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import { FormDialog, TransactionDialog } from '~/components/Dialog';
 import { useDialogState } from 'ariakit';
 import AvailableAmount from '~/components/AvailableAmount';
@@ -91,7 +91,7 @@ const WithdrawForm = ({ data, formDialog }: IFormProps) => {
             />
           </div>
           <SubmitButton disabled={isLoading}>
-            {isLoading && !withdrawAll.current ? <BeatLoader size={6} color="white" /> : t0('withdraw')}
+            {isLoading && !withdrawAll.current ? <BeatLoader size="6px" color="white" /> : t0('withdraw')}
           </SubmitButton>
         </form>
         <p className="my-3 text-center font-light text-lp-gray-1">{t0('or')}</p>
@@ -100,7 +100,7 @@ const WithdrawForm = ({ data, formDialog }: IFormProps) => {
           onClick={withdrawAllTokens}
           className="bg-lp-white text-lp-primary dark:border-transparent dark:bg-lp-gray-5 dark:text-lp-white"
         >
-          {isLoading && withdrawAll.current ? <BeatLoader size={6} color="gray" /> : t1('withdrawAll')}
+          {isLoading && withdrawAll.current ? <BeatLoader size="6px" color="gray" /> : t1('withdrawAll')}
         </SubmitButton>
       </FormDialog>
       {transaction && <TransactionDialog dialog={transactionDialog} transactionHash={transaction.hash || ''} />}

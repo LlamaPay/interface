@@ -10,17 +10,17 @@ import PaymentRevokeButton from './CustomValues/PaymentRevoke';
 import PaymentStatus, { paymentStatusAccessorFn } from './CustomValues/PaymentStatus';
 
 export default function PaymentsTableActual({ data }: { data: any }) {
-  const [{ data: accountData }] = useAccount();
+  const { address } = useAccount();
   const { locale } = useLocale();
   const columns = React.useMemo<ColumnDef<IPayments>[]>(
     () => [
       {
-        accessorFn: (row) => `${accountData?.address.toLowerCase() === row.payee.toLowerCase() ? 'From' : 'To'}`,
+        accessorFn: (row) => `${address && address.toLowerCase() === row.payee.toLowerCase() ? 'From' : 'To'}`,
         id: 'type',
         header: 'Type',
         cell: (i) => (
           <span className="font-exo text-center slashed-zero tabular-nums dark:text-white">
-            {i.row.original.payee.toLowerCase() === accountData?.address.toLowerCase() ? 'From' : 'To'}
+            {address && i.row.original.payee.toLowerCase() === address.toLowerCase() ? 'From' : 'To'}
           </span>
         ),
       },
@@ -31,7 +31,7 @@ export default function PaymentsTableActual({ data }: { data: any }) {
         cell: (i) => <ExplorerLink query={i.cell.row.original.tokenAddress} value={i.getValue() as React.ReactNode} />,
       },
       {
-        accessorFn: (row) => (accountData?.address.toLowerCase() === row.payee.toLowerCase() ? row.payer : row.payee),
+        accessorFn: (row) => (address && address.toLowerCase() === row.payee.toLowerCase() ? row.payer : row.payee),
         id: 'payerOrPayee',
         header: 'Payer/Payee',
         cell: (i) => <ExplorerLink query={i.getValue() as string} value={formatAddress(i.getValue() as string)} />,
@@ -70,7 +70,7 @@ export default function PaymentsTableActual({ data }: { data: any }) {
         cell: (i) => i.row.original && <PaymentRevokeButton data={i.row.original} />,
       },
     ],
-    [accountData?.address, locale]
+    [address, locale]
   );
 
   const [sorting, setSorting] = React.useState<SortingState>([]);
