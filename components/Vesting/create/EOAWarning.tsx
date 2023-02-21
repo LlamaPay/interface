@@ -2,6 +2,8 @@ import { DialogState, useDialogState } from 'ariakit';
 import { FormDialog } from '~/components/Dialog';
 import Confirm, { IVestingData } from './Confirm';
 import { SubmitButton } from '~/components/Form';
+import useGnosisBatch from '~/queries/useGnosisBatch';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function EOAWarning({
   address,
@@ -9,21 +11,27 @@ export default function EOAWarning({
   vestingData,
   factory,
   gnosis,
+  gnosisCalls,
 }: {
   address: (string | null)[];
   dialog: DialogState;
   vestingData?: IVestingData | null;
   factory?: string;
+  gnosisCalls?: { [key: string]: string[] } | undefined;
   gnosis: boolean;
 }) {
   const confirmDialog = useDialogState();
 
+  const { mutate: gnosisBatch } = useGnosisBatch();
+  const queryClient = useQueryClient();
+
   async function onSubmit() {
     if (!gnosis) {
       confirmDialog.show();
-    } else {
-      dialog.hide();
+    } else if (gnosis && gnosisCalls) {
+      gnosisBatch({ calls: gnosisCalls });
     }
+    queryClient.invalidateQueries();
   }
 
   return (
