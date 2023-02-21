@@ -1,5 +1,4 @@
 import { ethers, providers } from 'ethers';
-
 import * as CONTRACTS from './contracts';
 
 interface INetworkDetails {
