@@ -16,7 +16,6 @@ import { getAddress } from 'ethers/lib/utils';
 import { checkApproval, createContractAndCheckApproval } from '~/components/Form/utils';
 import ChartWrapper from '../Charts/ChartWrapper';
 import type { IVestingElements } from '../types';
-import Calendar from 'react-calendar';
 import EOAWarning from './EOAWarning';
 
 export default function CreateVesting({ factory }: { factory: string }) {
@@ -33,7 +32,6 @@ export default function CreateVesting({ factory }: { factory: string }) {
   });
 
   const [vestingData, setVestingData] = React.useState<IVestingData | null>(null);
-  const [showCalendar, setShowCalendar] = React.useState<boolean>(false);
   const [recipient, setRecipient] = React.useState<string | null>(null);
 
   const { mutate: checkTokenApproval, data: isApproved, isLoading: checkingApproval } = useCheckTokenApproval();
@@ -73,11 +71,6 @@ export default function CreateVesting({ factory }: { factory: string }) {
     checkApprovalOnChange(formData.vestedToken, e.target.value);
   };
 
-  const onCalendarChange = (val: string) => {
-    setFormData((prev) => ({ ...prev, ['startDate']: val }));
-    setShowCalendar(false);
-  };
-
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
 
@@ -91,7 +84,8 @@ export default function CreateVesting({ factory }: { factory: string }) {
     const cliffDuration = form.cliffDuration?.value;
 
     const fmtVestingTime = new BigNumber(vestingTime).times(secondsByDuration[vestingDuration]).toFixed(0);
-    const date = formData.includeCustomStart ? new Date(form.startDate.value) : new Date(Date.now());
+    const date =
+      formData.includeCustomStart && form.startDate?.value ? new Date(form.startDate.value) : new Date(Date.now());
 
     if (date.toString() === 'Invalid Date') {
       toast.error('Invalid Date');
@@ -188,21 +182,17 @@ export default function CreateVesting({ factory }: { factory: string }) {
         )}
         {formData.includeCustomStart && (
           <InputText
-            label={'Start Date (YYYY-MM-DD)'}
+            type="date"
+            label={'Start Date'}
             name="startDate"
             isRequired
-            placeholder="YYYY-MM-DD"
-            pattern="\d{4}-\d{2}-\d{2}"
-            handleChange={(e) => handleChange(e.target.value, 'startDate')}
-            handleClick={(e) => setShowCalendar(true)}
+            handleChange={(e) => {
+              handleChange(e.target.value, 'startDate');
+            }}
             showValue={formData.startDate}
           />
         )}
-        {showCalendar && (
-          <section className="max-w-xs place-self-center border px-2 py-2">
-            <Calendar onChange={(e: any) => onCalendarChange(new Date(e).toISOString().slice(0, 10))} />
-          </section>
-        )}
+
         <div className="flex gap-2">
           <span className="font-exo">{'Include Cliff'}</span>
           <Switch

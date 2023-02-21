@@ -89,6 +89,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
         return;
       }
       const startTime = new BigNumber(Number(date) / 1e3).toFixed(0);
+
       const fmtCliffTime = info.includeCliff
         ? new BigNumber(info.cliffTime).times(secondsByDuration[info.cliffDuration]).toFixed(0)
         : '0';
@@ -148,12 +149,13 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
 
   return (
     <>
-      <div className="max-w-xl space-y-2">
+      <div className="mx-auto mb-4 flex max-w-xl flex-col gap-4">
         <Link href="/vesting" className="relative left-[-2px] flex items-center gap-2">
           <ArrowLeftCircleIcon className="h-6 w-6" />
           <span className="">Return</span>
         </Link>
-        <form>
+
+        <form className="my-4">
           <input type="file" accept=".csv" onChange={(e) => handleFileChange(e)} />
           <button className="row-action-links" onClick={(e) => importCSV(e)}>
             Import
@@ -267,15 +269,9 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
                 <label>
                   <span className="input-label dark:text-white">{'Start Date'}</span>
                   <input
-                    placeholder="YYYY-MM-DD"
-                    {...register(`vestingContracts.${index}.startDate` as const, {
-                      pattern: /\d{4}-\d{2}-\d{2}/,
-                    })}
+                    type="date"
+                    {...register(`vestingContracts.${index}.startDate` as const)}
                     className="input-field dark:border-[#252525] dark:bg-[#202020] dark:text-white"
-                    autoComplete="off"
-                    autoCorrect="off"
-                    type="text"
-                    spellCheck="false"
                   />
                 </label>
               ) : (

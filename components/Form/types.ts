@@ -11,6 +11,7 @@ export interface InputElement {
   pattern?: string;
   handleClick?: (e: React.MouseEvent<HTMLInputElement>) => void;
   showValue?: string | number | readonly string[] | undefined;
+  type?: string;
 }
 
 export interface InputWithTokenElement extends InputElement {
