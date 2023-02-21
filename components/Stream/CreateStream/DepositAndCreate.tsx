@@ -12,7 +12,7 @@ import { useApproveToken, useCheckTokenApproval } from '~/queries/useTokenApprov
 import type { IFormElements, IStreamFormProps } from './types';
 import { secondsByDuration } from '~/utils/constants';
 import { checkApproval } from '~/components/Form/utils';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import { TransactionDialog } from '~/components/Dialog';
 import AvailableAmount from '~/components/AvailableAmount';
 import type { ITokenBalance } from '~/queries/useTokenBalances';
@@ -193,11 +193,11 @@ const DepositAndCreate = ({ tokens, userAddress, dialog }: IStreamFormProps) => 
 
         {isApproved ? (
           <SubmitButton disabled={confirmingStream} className="mt-4">
-            {confirmingStream ? <BeatLoader size={6} color="white" /> : 'Deposit and Create Stream'}
+            {confirmingStream ? <BeatLoader size="6px" color="white" /> : 'Deposit and Create Stream'}
           </SubmitButton>
         ) : (
           <SubmitButton disabled={disableApprove} className="mt-4">
-            {disableApprove ? <BeatLoader size={6} color="white" /> : 'Approve'}
+            {disableApprove ? <BeatLoader size="6px" color="white" /> : 'Approve'}
           </SubmitButton>
         )}
       </form>

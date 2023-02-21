@@ -7,7 +7,7 @@ import { XMarkIcon, ArrowLeftIcon, ArrowRightIcon } from '@heroicons/react/24/so
 import { InputText } from './Input';
 import { SubmitButton } from './Button';
 import useCreateLlamaPayContract from '~/queries/useCreateLlamaPayContract';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import useTokenBalances from '~/queries/useTokenBalances';
 import Image from 'next/image';
 import defaultImage from '~/public/empty-token.webp';
@@ -228,10 +228,10 @@ const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<Rea
         <InputText name="tokenAddress" isRequired={true} label={t1('tokenAddress')} placeholder="0x..." />
         <SubmitButton className="!mt-4 rounded" disabled={isLoading}>
           {isLoading ? (
-            <BeatLoader size={6} color="white" />
+            <BeatLoader size="6px" color="white" />
           ) : isConfirming ? (
             <span className="flex items-center justify-center space-x-2">
-              <BeatLoader size={6} color="white" />
+              <BeatLoader size="6px" color="white" />
             </span>
           ) : (
             t1('addToken')

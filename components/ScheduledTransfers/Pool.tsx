@@ -14,7 +14,7 @@ import { scheduledPaymentsContractABI } from '~/lib/abis/scheduledPaymentsContra
 import { getAddress } from 'ethers/lib/utils';
 import toast from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import { secondsByDuration } from '~/utils/constants';
 
 interface INewPaymentFormElements {
@@ -420,7 +420,7 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
             <InputAmount name="newMinPrice" label="New Minimum Price (USD)" placeholder="1000" isRequired />
 
             <SubmitButton className="mt-5">
-              {updatingMinPrice ? <BeatLoader size={6} color="white" /> : 'Update'}
+              {updatingMinPrice ? <BeatLoader size="6px" color="white" /> : 'Update'}
             </SubmitButton>
           </form>
         </span>
@@ -432,7 +432,7 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
             <InputText name="newOracleAddress" label="New Address" placeholder="0x..." isRequired />
 
             <SubmitButton className="mt-5">
-              {updatingOracle ? <BeatLoader size={6} color="white" /> : 'Update'}
+              {updatingOracle ? <BeatLoader size="6px" color="white" /> : 'Update'}
             </SubmitButton>
           </form>
         </span>
@@ -444,7 +444,7 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
             <InputAmount name="toDeposit" label="To Deposit" placeholder="0" isRequired />
 
             <SubmitButton className="mt-5">
-              {depositing ? <BeatLoader size={6} color="white" /> : 'Deposit'}
+              {depositing ? <BeatLoader size="6px" color="white" /> : 'Deposit'}
             </SubmitButton>
           </form>
         </span>
@@ -456,7 +456,7 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
             <InputAmount name="toWithdraw" label="To Withdraw" placeholder="0" isRequired />
 
             <SubmitButton className="mt-5">
-              {withdrawing ? <BeatLoader size={6} color="white" /> : 'Withdraw'}
+              {withdrawing ? <BeatLoader size="6px" color="white" /> : 'Withdraw'}
             </SubmitButton>
           </form>
         </span>

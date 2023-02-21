@@ -1,7 +1,7 @@
 import * as React from 'react';
 import type { ITokenBalance } from '~/queries/useTokenBalances';
 import { SelectToken, SubmitButton } from '~/components/Form';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import { useAddressStore } from '~/store/address';
 import { useForm, useFieldArray, Controller } from 'react-hook-form';
 import useBatchCalls from '~/queries/useBatchCalls';
@@ -285,7 +285,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
       <div className="mt-2 flex flex-col gap-3 sm:flex-row">
         <SubmitButton className="flex-1" disabled={createStreamLoading || batchLoading || gnosisLoading}>
           {createStreamLoading || batchLoading ? (
-            <BeatLoader size={6} color="white" />
+            <BeatLoader size="6px" color="white" />
           ) : (
             'Create Stream' + (fields.length <= 1 ? '' : 's')
           )}

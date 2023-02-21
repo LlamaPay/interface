@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Switch } from '@headlessui/react';
 import { FormDialog, TransactionDialog } from '~/components/Dialog';
 import { InputAmount, InputText, SubmitButton } from '~/components/Form';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import { DisclosureState, useDialogState } from 'ariakit';
 import { useAccount, useContractWrite } from 'wagmi';
 import BigNumber from 'bignumber.js';
@@ -145,7 +145,7 @@ export default function ClaimVesting({
             </div>
           </section>
           <SubmitButton className="mt-5" onClick={handleConfirm}>
-            {isLoading ? <BeatLoader size={6} color="white" /> : 'Confirm Transaction'}
+            {isLoading ? <BeatLoader size="6px" color="white" /> : 'Confirm Transaction'}
           </SubmitButton>
         </div>
       </FormDialog>

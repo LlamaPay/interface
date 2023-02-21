@@ -4,7 +4,7 @@ import { Switch } from '@headlessui/react';
 import { useApproveToken, useCheckTokenApproval } from '~/queries/useTokenApproval';
 import { useAccount, useProvider } from 'wagmi';
 import BigNumber from 'bignumber.js';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import { secondsByDuration } from '~/utils/constants';
 import toast from 'react-hot-toast';
 import { useDialogState } from 'ariakit';
@@ -239,7 +239,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
 
         <SubmitButton className="mt-5">
           {checkingApproval || approvingToken ? (
-            <BeatLoader size={6} color="white" />
+            <BeatLoader size="6px" color="white" />
           ) : isApproved ? (
             'Create Contract'
           ) : (

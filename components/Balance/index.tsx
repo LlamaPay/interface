@@ -14,7 +14,7 @@ import Fallback from '~/components/Fallback';
 import { BalanceIcon } from '~/components/Icons';
 import { useAccount } from 'wagmi';
 import useTokenBalances from '~/queries/useTokenBalances';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import { useTranslations } from 'next-intl';
 import classNames from 'classnames';
 
@@ -82,7 +82,7 @@ const Balance = (props: { address?: string }) => {
               depositFieldDialog.toggle();
             }}
           >
-            {isLoading || tokensLoading ? <BeatLoader size={6} color="white" /> : <>{t1('deposit')}</>}
+            {isLoading || tokensLoading ? <BeatLoader size="6px" color="white" /> : <>{t1('deposit')}</>}
           </button>
         )}
       </div>

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { InputAmountWithMaxButton, SelectToken } from '~/components/Form';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import { DisclosureState, useDialogState } from 'ariakit';
 import { FormDialog, TransactionDialog } from '~/components/Dialog';
 import { useDepositForm } from '~/hooks';
@@ -64,11 +64,11 @@ const DepositField = ({ tokens, userAddress, dialog }: IDepositFieldprops) => {
 
           {isApproved || process.env.NEXT_PUBLIC_SAFE === 'true' ? (
             <button disabled={confirmingDeposit} className="form-submit-button mt-5">
-              {confirmingDeposit ? <BeatLoader size={6} color="white" /> : t0('deposit')}
+              {confirmingDeposit ? <BeatLoader size="6px" color="white" /> : t0('deposit')}
             </button>
           ) : (
             <button disabled={disableApprove} className="form-submit-button mt-5">
-              {disableApprove ? <BeatLoader size={6} color="white" /> : t1('approveOnWallet')}
+              {disableApprove ? <BeatLoader size="6px" color="white" /> : t1('approveOnWallet')}
             </button>
           )}
         </form>

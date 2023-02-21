@@ -7,7 +7,7 @@ import { useTranslations } from 'next-intl';
 import { BalanceIcon, StreamIcon } from '~/components/Icons';
 import { InputText, SubmitButton } from '~/components/Form';
 import { useStreamAndHistoryQuery } from '~/services/generated/graphql';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import {
   AmtPerMonth,
   Push,
@@ -172,7 +172,7 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
           <form onSubmit={fetchStreams}>
             <InputText label={t0('addressToFetchStreams')} name="addressToFetchStreams" isRequired />
             <SubmitButton className="mt-5" disabled={isLoading}>
-              {fetchingEns || isLoading ? <BeatLoader size={6} color="white" /> : 'Fetch Streams'}
+              {fetchingEns || isLoading ? <BeatLoader size="6px" color="white" /> : 'Fetch Streams'}
             </SubmitButton>
           </form>
         )}

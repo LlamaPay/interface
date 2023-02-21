@@ -1,7 +1,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useDialogState } from 'ariakit';
 import toast from 'react-hot-toast';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import { useAccount, useContractWrite } from 'wagmi';
 import { FormDialog } from '~/components/Dialog';
 import { SubmitButton } from '~/components/Form';
@@ -52,7 +52,7 @@ export default function RenounceOwnershipButton({ data }: { data: IVesting }) {
       <FormDialog className="h-min" dialog={RenounceDialog} title={'Clawback'}>
         <span className="font-exo dark:text-white">{'Warning: You will no longer own the contract!'}</span>
         <SubmitButton className="mt-5" onClick={handleRenounce}>
-          {isLoading ? <BeatLoader size={6} color="white" /> : 'Renounce Ownership'}
+          {isLoading ? <BeatLoader size="6px" color="white" /> : 'Renounce Ownership'}
         </SubmitButton>
       </FormDialog>
     </>

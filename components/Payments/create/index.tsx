@@ -15,7 +15,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import useGnosisBatch from '~/queries/useGnosisBatch';
 import { networkDetails } from '~/lib/networkDetails';
 import { ERC20Interface } from '~/utils/contract';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 
 interface IPaymentFormValues {
   payments: {
@@ -366,7 +366,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
           ) : !networkDetails[chainId].paymentsContract ? (
             'Chain not supported'
           ) : approving || checkingApproval ? (
-            <BeatLoader size={6} color="white" />
+            <BeatLoader size="6px" color="white" />
           ) : process.env.NEXT_PUBLIC_SAFE === 'true' ? (
             'Create'
           ) : approvalData?.allApproved ? (

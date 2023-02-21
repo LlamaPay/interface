@@ -8,7 +8,7 @@ import { vestingFactoryReadableABI } from '~/lib/abis/vestingFactoryReadable';
 import { useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { TransactionDialog } from '~/components/Dialog';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 
 export interface IVestingData {
   recipientAddress: string;
@@ -125,7 +125,7 @@ export default function Confirm({ vestingData, dialog, factory }: IConfirmProps)
             )} UTC) `}</p>
           </div>
           <SubmitButton className="mt-5" onClick={onConfirm}>
-            {isLoading ? <BeatLoader size={6} color="white" /> : 'Confirm Transaction'}
+            {isLoading ? <BeatLoader size="6px" color="white" /> : 'Confirm Transaction'}
           </SubmitButton>
         </div>
       </FormDialog>{' '}

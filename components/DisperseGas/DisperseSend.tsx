@@ -3,7 +3,7 @@ import { disperseContractABI } from '~/lib/abis/disperseContract';
 import { DisclosureState } from 'ariakit';
 import BigNumber from 'bignumber.js';
 import toast from 'react-hot-toast';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import { networkDetails } from '~/lib/networkDetails';
 import { useContractWrite, useNetwork } from 'wagmi';
 import { useQueryClient } from '@tanstack/react-query';
@@ -66,7 +66,7 @@ export default function DisperseSend({ dialog, data, setTransactionHash, transac
 
   return (
     <button onClick={sendGas} type="button" className="form-submit-button mt-5">
-      {isLoading ? <BeatLoader size={6} color="white" /> : t('send')}
+      {isLoading ? <BeatLoader size="6px" color="white" /> : t('send')}
     </button>
   );
 }

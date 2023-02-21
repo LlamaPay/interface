@@ -7,7 +7,7 @@ import { getAddress } from 'ethers/lib/utils';
 import { networkDetails } from '~/lib/networkDetails';
 import type { IScheduledTransferPayment } from '~/queries/useGetScheduledTransfers';
 import { useQueryClient } from '@tanstack/react-query';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import { formatAddress } from '~/utils/address';
 import { useContractWrite, useNetwork } from 'wagmi';
 import { formatFrequency } from './utils';
@@ -252,7 +252,7 @@ const Redirects = ({
             <InputText name="newRedirects" label="New Redirect Address" placeholder="0x..." isRequired />
 
             <SubmitButton className="mt-5">
-              {updatingRedirect ? <BeatLoader size={6} color="white" /> : 'Update'}
+              {updatingRedirect ? <BeatLoader size="6px" color="white" /> : 'Update'}
             </SubmitButton>
           </form>
         </span>

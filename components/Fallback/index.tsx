@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useNetworkProvider } from '~/hooks';
 import { useTranslations } from 'next-intl';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import { useAccount } from 'wagmi';
 
 interface FallbackProps {
@@ -94,7 +94,7 @@ export function FallbackContainer({ children }: { children: React.ReactNode }) {
 
 export const FallbackContainerLoader = () => (
   <span className="relative top-[2px]">
-    <BeatLoader size={6} />
+    <BeatLoader size="6px" />
   </span>
 );
 

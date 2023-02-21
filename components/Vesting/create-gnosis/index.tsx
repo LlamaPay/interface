@@ -11,7 +11,7 @@ import { createERC20Contract } from '~/utils/tokenUtils';
 import { getAddress, Interface } from 'ethers/lib/utils';
 import { useProvider } from 'wagmi';
 import { ERC20Interface } from '~/utils/contract';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import { Switch } from '@headlessui/react';
 import type { IVestingGnosisFormValues } from '../types';
 import MultipleStreamChartWrapper from '../Charts/MultipleStreamChartWrapper';
@@ -364,7 +364,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
           );
         })}
         <SubmitButton disabled={gnosisLoading} className="mt-5">
-          {gnosisLoading ? <BeatLoader size={6} color="white" /> : 'Create Contracts'}
+          {gnosisLoading ? <BeatLoader size="6px" color="white" /> : 'Create Contracts'}
         </SubmitButton>
       </form>
       <EOAWarning address={notEOAArr} dialog={eoaWarningDialog} />

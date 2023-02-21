@@ -9,7 +9,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import type { IVesting } from '~/types';
 import { networkDetails } from '~/lib/networkDetails';
 import { useAccount, useContractWrite } from 'wagmi';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 
 export default function ReasonButton({ data }: { data: IVesting }) {
   const { address } = useAccount();
@@ -56,7 +56,7 @@ export default function ReasonButton({ data }: { data: IVesting }) {
                 <form className="mx-auto flex flex-col gap-4" onSubmit={onSubmit}>
                   <InputText name="reason" isRequired placeholder="Reason" label="Reason" />
                   <SubmitButton className="mt-5">
-                    {isLoading ? <BeatLoader size={6} color="white" /> : 'Add Reason'}
+                    {isLoading ? <BeatLoader size="6px" color="white" /> : 'Add Reason'}
                   </SubmitButton>
                 </form>
               </span>

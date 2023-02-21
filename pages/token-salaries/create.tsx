@@ -2,7 +2,7 @@ import type { GetServerSideProps, NextPage } from 'next';
 import * as React from 'react';
 import Layout from '~/components/Layout';
 import { InputAmount, InputText, SubmitButton } from '~/components/Form';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import useCreateScheduledTransferContract from '~/queries/useCreateScheduledTransfer';
 import { TransactionDialog } from '~/components/Dialog';
 import { useDialogState } from 'ariakit';
@@ -102,7 +102,7 @@ const Home: NextPage = () => {
             }
             className="mt-2"
           >
-            {!factoryAddress ? 'Chain not supported' : isLoading ? <BeatLoader size={6} color="white" /> : 'Create'}
+            {!factoryAddress ? 'Chain not supported' : isLoading ? <BeatLoader size="6px" color="white" /> : 'Create'}
           </SubmitButton>
         )}
       </form>

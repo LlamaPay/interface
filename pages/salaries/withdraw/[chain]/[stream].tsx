@@ -7,7 +7,7 @@ import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { useDialogState } from 'ariakit';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { useIntl, useTranslations } from 'next-intl';
-import { BeatLoader } from 'react-spinners';
+import { BeatLoader } from '~/components/BeatLoader';
 import Layout from '~/components/Layout';
 import { FallbackContainer } from '~/components/Fallback';
 import Tooltip from '~/components/Tooltip';
@@ -161,7 +161,7 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
               <p>{t0('networkNotSupported')}</p>
             ) : isLoading ? (
               <span className="relative top-[2px]">
-                <BeatLoader size={6} />
+                <BeatLoader size="6px" />
               </span>
             ) : (
               <p>

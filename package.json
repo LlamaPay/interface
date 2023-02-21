@@ -37,7 +37,6 @@
     "react-dom": "^18.2.0",
     "react-hook-form": "^7.43.1",
     "react-hot-toast": "^2.4.0",
-    "react-spinners": "^0.13.8",
     "sharp": "^0.30.3",
     "wagmi": "^0.11.6",
     "zustand": "^4.3.3"
