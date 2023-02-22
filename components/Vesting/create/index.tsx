@@ -59,6 +59,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
 
   const handleChange = (value: string | boolean, type: keyof typeof formData) => {
     setFormData((prev) => ({ ...prev, [type]: value }));
+    checkApprovalOnChange(formData.vestedToken, formData.vestedAmount);
   };
 
   const handleVestTokenChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -248,7 +249,13 @@ export default function CreateVesting({ factory }: { factory: string }) {
       </form>
 
       {vestingData && <Confirm dialog={confirmDialog} vestingData={vestingData} factory={factory} />}
-      <EOAWarning address={[recipient]} dialog={eoaWarningDialog} vestingData={vestingData} factory={factory} gnosis={false} />
+      <EOAWarning
+        address={[recipient]}
+        dialog={eoaWarningDialog}
+        vestingData={vestingData}
+        factory={factory}
+        gnosis={false}
+      />
     </section>
   );
 }
