@@ -60,7 +60,15 @@ export const CreateNonRefundableContract = () => {
 
     if (factoryAddress && periodDurationInSeconds && tokenAddress && amount) {
       writeAsync({
-        recklesslySetUnpreparedArgs: [[amount, periodDurationInSeconds, getAddress(tokenAddress)]],
+        recklesslySetUnpreparedArgs: [
+          [
+            {
+              costOfSub: amount,
+              duration: periodDurationInSeconds,
+              token: getAddress(tokenAddress),
+            },
+          ],
+        ],
       })
         .then((data) => {
           const toastId = toast.loading('Creating Contract');
