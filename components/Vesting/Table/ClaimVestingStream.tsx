@@ -140,7 +140,7 @@ export default function ClaimVesting({
         <div className="space-y-4">
           <section>
             <div className="font-exo my-1 rounded border p-2 dark:border-stone-700 dark:text-white">
-              <p>{`Sending: ${(Number(inputAmount) / 10 ** data.tokenDecimals).toFixed(5)} ${data.tokenSymbol}`}</p>
+              <p>{`Sending: ${(Number(inputAmount) / 10 ** data.tokenDecimals).toFixed(18)} ${data.tokenSymbol}`}</p>
               <p>{`To: ${beneficiaryInput}`}</p>
             </div>
           </section>
