@@ -37,7 +37,7 @@ export default function ClaimVesting({
     address: data.contract as `0x${string}`,
     abi: vestingContractReadableABI,
     overrides: {
-      gasLimit: 180000 as any,
+      gasLimit: 500000 as any,
     },
     functionName: 'claim',
   });
