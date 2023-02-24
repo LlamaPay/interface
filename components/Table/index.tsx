@@ -27,7 +27,7 @@ const Table = ({ instance, maxWidthColumn, hidePagination, downloadToCSV, custom
 
   return (
     <div className="w-full">
-      <div className="max-w-[calc(100vw-32px)] overflow-x-auto md:max-w-[calc(100vw-48px)] lg:max-w-[calc(100vw-256px)]">
+      <div className="max-w-[calc(100vw-16px)] overflow-x-auto md:max-w-[calc(100vw-48px)] lg:max-w-[calc(100vw-256px)]">
         <table>
           <thead>
             {instance.getHeaderGroups().map((headerGroup) => (

@@ -65,7 +65,7 @@ const Home: NextPage = () => {
                 ) : null}
               </FallbackContainer>
             ) : (
-              <div className="max-w-[calc(100vw-32px)] overflow-x-auto md:max-w-[calc(100vw-48px)] lg:max-w-[calc(100vw-256px)] [&:not(:first-of-type)]:mt-4">
+              <div className="max-w-[calc(100vw-16px)] overflow-x-auto md:max-w-[calc(100vw-48px)] lg:max-w-[calc(100vw-256px)] [&:not(:first-of-type)]:mt-4">
                 <ScheduledTransferPayment payments={payments} isIncoming />
               </div>
             )}
@@ -85,7 +85,7 @@ const Home: NextPage = () => {
                 ) : null}
               </FallbackContainer>
             ) : (
-              <div className="max-w-[calc(100vw-32px)] overflow-x-auto md:max-w-[calc(100vw-48px)] lg:max-w-[calc(100vw-256px)] [&:not(:first-of-type)]:mt-4">
+              <div className="max-w-[calc(100vw-16px)] overflow-x-auto md:max-w-[calc(100vw-48px)] lg:max-w-[calc(100vw-256px)] [&:not(:first-of-type)]:mt-4">
                 <ScheduledTransfersHistory history={history} />
               </div>
             )}
