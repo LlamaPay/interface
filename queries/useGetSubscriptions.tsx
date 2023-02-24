@@ -2,12 +2,27 @@ import { useQuery } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
 
+interface IToken {
+  address: string;
+  name: string;
+  symbol: string;
+  decimals: number;
+}
+
 interface ISub {
   costOfSub: string;
   disabled: boolean;
   duration: string;
-  token: { address: string; name: string; symbol: string; decimals: number };
+  token: IToken;
   id: string;
+}
+
+interface ITier {
+  id: string;
+  token: IToken;
+  costPerPeriod: string;
+  amountOfSubs: string;
+  disabledAt: string;
 }
 
 export interface IRefundable {
@@ -15,6 +30,7 @@ export interface IRefundable {
   id: string;
   periodDuation: string;
   whitelist: [];
+  tiers: Array<ITier>;
 }
 
 export interface INonRefundable {
@@ -71,16 +87,17 @@ const fetchSubscriptionContracts = async ({
               address
               whitelist
               tiers {
-                amountOfSubs
-                costPerPeriod
-                disabledAt
+                id
                 token {
                   address
                   decimals
+                  id
                   name
                   symbol
-                  id
                 }
+                costPerPeriod
+                amountOfSubs
+                disabledAt
               }
             }
           }

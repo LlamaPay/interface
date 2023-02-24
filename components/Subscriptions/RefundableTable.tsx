@@ -48,7 +48,44 @@ export function RefundableTable({ data }: { data: Array<IRefundable> }) {
                 <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
                   Tiers
                 </th>
-                <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white"></td>
+                <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
+                  <table className="w-full border-collapse">
+                    <thead>
+                      <tr>
+                        <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
+                          Cost per period
+                        </th>
+                        <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
+                          No.of Subscriptions
+                        </th>
+                      </tr>
+                    </thead>
+                    <tbody className="border border-llama-teal-2 dark:border-lp-gray-7">
+                      {contract.tiers.map((tier) => (
+                        <tr key={tier.id + contract.id + 'nonrefundablessub'}>
+                          <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
+                            <span>{tier.costPerPeriod}</span>{' '}
+                            {explorerUrl ? (
+                              <a
+                                href={`${explorerUrl}/address/${tier.token.address}`}
+                                target="_blank"
+                                rel="noreferrer noopener"
+                                className="underline"
+                              >
+                                {tier.token.symbol}
+                              </a>
+                            ) : (
+                              <span>{tier.token.symbol}</span>
+                            )}
+                          </td>
+                          <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
+                            {tier.amountOfSubs}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </td>
               </tr>
               <tr>
                 <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">

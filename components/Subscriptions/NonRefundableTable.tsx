@@ -8,6 +8,8 @@ export function NonRefundableTable({ data }: { data: Array<INonRefundable> }) {
 
   const explorerUrl = chain ? networkDetails[chain.id]?.blockExplorerURL : null;
 
+  console.log(data);
+
   return (
     <div className="flex flex-col gap-2">
       {data.map((contract) => (
@@ -39,14 +41,14 @@ export function NonRefundableTable({ data }: { data: Array<INonRefundable> }) {
 
               <tr>
                 <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
-                  Subs
+                  Subscriptions
                 </th>
                 <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
                   <table className="w-full border-collapse">
                     <thead>
                       <tr>
                         <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
-                          Cost
+                          Cost of subscription
                         </th>
                         <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
                           Duration

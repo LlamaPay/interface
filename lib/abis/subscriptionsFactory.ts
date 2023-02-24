@@ -14,6 +14,16 @@ export const subscriptionsFactoryABI = [
       { indexed: true, internalType: 'address', name: 'owner', type: 'address' },
       { indexed: false, internalType: 'uint256', name: 'currentPeriod', type: 'uint256' },
       { indexed: false, internalType: 'uint256', name: 'periodDuration', type: 'uint256' },
+      {
+        components: [
+          { internalType: 'uint224', name: 'costPerPeriod', type: 'uint224' },
+          { internalType: 'address', name: 'token', type: 'address' },
+        ],
+        indexed: false,
+        internalType: 'struct LlamaSubsFlatRateERC20.TierInfo[]',
+        name: 'tiers',
+        type: 'tuple[]',
+      },
     ],
     name: 'DeployFlatRateERC20',
     type: 'event',
@@ -23,6 +33,17 @@ export const subscriptionsFactoryABI = [
     inputs: [
       { indexed: false, internalType: 'address', name: 'deployedContract', type: 'address' },
       { indexed: true, internalType: 'address', name: 'owner', type: 'address' },
+      {
+        components: [
+          { internalType: 'uint208', name: 'costOfSub', type: 'uint208' },
+          { internalType: 'uint40', name: 'duration', type: 'uint40' },
+          { internalType: 'address', name: 'token', type: 'address' },
+        ],
+        indexed: false,
+        internalType: 'struct LlamaSubsFlatRateERC20NonRefundable.SubInfo[]',
+        name: 'subs',
+        type: 'tuple[]',
+      },
     ],
     name: 'DeployFlatRateERC20NonRefundable',
     type: 'event',
