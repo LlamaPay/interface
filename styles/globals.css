@@ -15,6 +15,14 @@
   #__next {
     @apply isolate flex min-h-full flex-col slashed-zero;
   }
+
+  :root {
+    --circle-color: black;
+  }
+
+  .dark:root {
+    --circle-color: white;
+  }
 }
 
 @layer components {

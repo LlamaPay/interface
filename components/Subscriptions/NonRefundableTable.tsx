@@ -53,6 +53,10 @@ export function NonRefundableTable({ data }: { data: Array<INonRefundable> }) {
                         <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
                           Duration
                         </th>
+                        <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
+                          Active Subscriptions
+                        </th>
+                        <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7"></th>
                       </tr>
                     </thead>
                     <tbody className="border border-llama-teal-2 dark:border-lp-gray-7">
@@ -75,6 +79,10 @@ export function NonRefundableTable({ data }: { data: Array<INonRefundable> }) {
                           </td>
                           <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
                             {formatFrequency(sub.duration)}
+                          </td>
+                          <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white"></td>
+                          <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
+                            Share
                           </td>
                         </tr>
                       ))}

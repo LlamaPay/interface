@@ -31,6 +31,7 @@ export interface IRefundable {
   periodDuation: string;
   whitelist: [];
   tiers: Array<ITier>;
+  activeTiers: Array<string>;
 }
 
 export interface INonRefundable {
@@ -38,6 +39,7 @@ export interface INonRefundable {
   id: string;
   subs: Array<ISub>;
   whitelist: [];
+  activeSubs: Array<string>;
 }
 
 interface ISubscriptioncontracts {
@@ -79,6 +81,7 @@ const fetchSubscriptionContracts = async ({
                   symbol
                 }
               }
+              activeSubs
               whitelist
             }
             refundables {
@@ -99,8 +102,8 @@ const fetchSubscriptionContracts = async ({
                 amountOfSubs
                 disabledAt
               }
+              activeTiers
             }
-          }
         }
       `
     );

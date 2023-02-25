@@ -3,6 +3,7 @@ import { useTranslations } from 'next-intl';
 import Link from 'next/link';
 import * as React from 'react';
 import { useAccount, useNetwork } from 'wagmi';
+import { BeatLoader } from '~/components/BeatLoader';
 import { FallbackContainer } from '~/components/Fallback';
 import Layout from '~/components/Layout';
 import { NonRefundableTable } from '~/components/Subscriptions/NonRefundableTable';
@@ -18,7 +19,7 @@ const Home: NextPage = () => {
 
   const graphEndpoint = chainId ? networkDetails[chainId].subscriptionsSubgraph : null;
 
-  const { data, isLoading } = useGetSubscriptionContracts({ graphEndpoint });
+  const { data, isLoading, isError } = useGetSubscriptionContracts({ graphEndpoint });
 
   const showFallback = !isConnected || !chain || chain?.unsupported;
 
@@ -40,7 +41,11 @@ const Home: NextPage = () => {
             <h1 className="font-exo section-header m-0">Refundable</h1>
             {isLoading ? (
               <FallbackContainer>
-                <></>
+                <BeatLoader size="6px" />
+              </FallbackContainer>
+            ) : isError ? (
+              <FallbackContainer>
+                <p>Something went wrong, couldn't fetch data</p>
               </FallbackContainer>
             ) : !data || data.refundables.length === 0 ? (
               <FallbackContainer>
@@ -61,7 +66,11 @@ const Home: NextPage = () => {
             <h1 className="font-exo section-header m-0">Non Refundable</h1>
             {isLoading ? (
               <FallbackContainer>
-                <></>
+                <BeatLoader size="6px" />
+              </FallbackContainer>
+            ) : isError ? (
+              <FallbackContainer>
+                <p>Something went wrong, couldn't fetch data</p>
               </FallbackContainer>
             ) : !data || data.nonrefundables.length === 0 ? (
               <FallbackContainer>
