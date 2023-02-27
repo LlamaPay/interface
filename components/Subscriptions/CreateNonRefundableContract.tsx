@@ -86,7 +86,7 @@ export const CreateNonRefundableContract = () => {
             setIsConfirming(false);
             form.reset();
 
-            router.push('/subscriptions');
+            router.push('/subscriptions/incoming');
           });
         })
         .catch((err) => {

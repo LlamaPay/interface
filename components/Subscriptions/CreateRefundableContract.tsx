@@ -75,7 +75,7 @@ export const CreateRefundableContract = () => {
             toast.dismiss(toastId);
             receipt.status === 1 ? toast.success('Transaction Success') : toast.error('Transaction Failed');
             queryClient.invalidateQueries();
-            router.push('/subscriptions');
+            router.push('/subscriptions/incoming');
           });
         })
         .catch((err) => {
