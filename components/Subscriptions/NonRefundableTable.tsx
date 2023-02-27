@@ -121,12 +121,12 @@ const Contract = ({ data }: { data: INonRefundable }) => {
               {formattedBalance && (
                 <span className="flex items-center justify-center gap-2">
                   <span>{`${formattedBalance} ${balance?.symbol}`}</span>{' '}
-                  <button
+                  {/* <button
                     className="rounded-lg border border-lp-primary py-1 px-2 disabled:cursor-not-allowed"
                     disabled={Number(formattedBalance) === 0}
                   >
                     Claim
-                  </button>
+                  </button> */}
                 </span>
               )}
             </td>
