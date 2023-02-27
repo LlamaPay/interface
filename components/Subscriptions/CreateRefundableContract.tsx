@@ -4,7 +4,7 @@ import { TransactionDialog } from '~/components/Dialog';
 import { useDialogState } from 'ariakit';
 import { useNetworkProvider } from '~/hooks';
 import { networkDetails } from '~/lib/networkDetails';
-import { useAccount, useContractWrite } from 'wagmi';
+import { useAccount, useContractWrite, useToken } from 'wagmi';
 import { WalletSelector } from '~/components/Web3';
 import { BeatLoader } from '~/components/BeatLoader';
 import { secondsByDuration } from '~/utils/constants';
@@ -24,6 +24,7 @@ interface IFormElements {
 }
 
 export const CreateRefundableContract = () => {
+  const [tokenAddress, setTokenAddress] = React.useState('');
   const [isConfirming, setIsConfirming] = React.useState(false);
   const { isConnected } = useAccount();
 
@@ -47,6 +48,11 @@ export const CreateRefundableContract = () => {
   const queryClient = useQueryClient();
   const router = useRouter();
 
+  const { data: tokenData, isLoading: fethcingTokensData } = useToken({
+    address: tokenAddress as `0x${string}`,
+    enabled: new RegExp('^0x[a-fA-F0-9]{40}$').test(tokenAddress) ? true : false,
+  });
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement & IFormElements;
@@ -62,9 +68,13 @@ export const CreateRefundableContract = () => {
 
     const amount = Number.isNaN(Number(form.amount.value)) ? null : Number(form.amount.value);
 
-    if (factoryAddress && startDate && periodDurationInSeconds && tokenAddress && amount) {
+    if (factoryAddress && startDate && periodDurationInSeconds && tokenAddress && amount && tokenData) {
       writeAsync({
-        recklesslySetUnpreparedArgs: [startDate, periodDurationInSeconds, [[amount, getAddress(tokenAddress)]]],
+        recklesslySetUnpreparedArgs: [
+          startDate,
+          periodDurationInSeconds,
+          [[new BigNumber(amount).times(10 ** tokenData.decimals).toFixed(0, 1), getAddress(tokenAddress)]],
+        ],
       })
         .then((data) => {
           setIsConfirming(true);
@@ -137,6 +147,7 @@ export const CreateRefundableContract = () => {
             spellCheck="false"
             name="tokenAddress"
             required
+            onChange={(e) => setTokenAddress(e.target.value)}
           />
         </label>
 
@@ -162,7 +173,10 @@ export const CreateRefundableContract = () => {
             Connect Wallet
           </SubmitButton>
         ) : (
-          <SubmitButton disabled={!factoryAddress || isLoading || isConfirming} className="mt-2 rounded">
+          <SubmitButton
+            disabled={!factoryAddress || isLoading || isConfirming || fethcingTokensData || !tokenData}
+            className="mt-2 rounded"
+          >
             {!factoryAddress ? (
               'Chain not supported'
             ) : isLoading || isConfirming ? (

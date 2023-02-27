@@ -40,8 +40,8 @@ const Contract = ({ data }: { data: INonRefundable }) => {
 
   const formattedBalance = balance?.value
     ? Number(balance.value).toLocaleString(locale, {
-        minimumFractionDigits: 5,
-        maximumFractionDigits: 5,
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4,
       })
     : null;
 

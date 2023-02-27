@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { SubmitButton } from '~/components/Form';
-import { useContractWrite } from 'wagmi';
+import { useContractWrite, useToken } from 'wagmi';
 import { BeatLoader } from '~/components/BeatLoader';
 import { getAddress } from 'ethers/lib/utils';
 import { toast } from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
 import { refundableSubscriptionABI } from '~/lib/abis/refundableSubscription';
+import BigNumber from 'bignumber.js';
 
 interface IFormElements {
   tokenAddress: { value: string };
@@ -23,6 +24,8 @@ export const CreateRefundableTier = ({
   onTxSuccess: () => void;
   chainId?: number;
 }) => {
+  const [tokenAddress, setTokenAddress] = React.useState('');
+
   const [isConfirming, setIsConfirming] = React.useState(false);
 
   const { isLoading, writeAsync } = useContractWrite({
@@ -35,6 +38,11 @@ export const CreateRefundableTier = ({
 
   const queryClient = useQueryClient();
 
+  const { data: tokenData, isLoading: fethcingTokensData } = useToken({
+    address: tokenAddress as `0x${string}`,
+    enabled: new RegExp('^0x[a-fA-F0-9]{40}$').test(tokenAddress) ? true : false,
+  });
+
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement & IFormElements;
@@ -43,9 +51,11 @@ export const CreateRefundableTier = ({
 
     const amount = Number.isNaN(Number(form.amount.value)) ? null : Number(form.amount.value);
 
-    if (tokenAddress && amount) {
+    if (tokenAddress && amount && tokenData) {
       writeAsync({
-        recklesslySetUnpreparedArgs: [[[amount, getAddress(tokenAddress)]]],
+        recklesslySetUnpreparedArgs: [
+          [[new BigNumber(amount).times(10 ** tokenData.decimals).toFixed(0, 1), getAddress(tokenAddress)]],
+        ],
       })
         .then((data) => {
           setIsConfirming(true);
@@ -79,6 +89,7 @@ export const CreateRefundableTier = ({
           spellCheck="false"
           name="tokenAddress"
           required
+          onChange={(e) => setTokenAddress(e.target.value)}
         />
       </label>
 
@@ -99,7 +110,7 @@ export const CreateRefundableTier = ({
         />
       </label>
 
-      <SubmitButton disabled={isLoading || isConfirming} className="mt-2 rounded">
+      <SubmitButton disabled={isLoading || isConfirming || fethcingTokensData || !tokenData} className="mt-2 rounded">
         {isLoading || isConfirming ? <BeatLoader size="6px" color="white" /> : 'Add Tier'}
       </SubmitButton>
     </form>

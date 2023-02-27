@@ -40,8 +40,8 @@ const Contract = ({ data }: { data: IRefundable }) => {
 
   const formattedBalance = balance?.value
     ? Number(balance.value).toLocaleString(locale, {
-        minimumFractionDigits: 5,
-        maximumFractionDigits: 5,
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4,
       })
     : null;
 
@@ -426,10 +426,17 @@ const Tier = ({
     }
   };
 
+  const { locale } = useLocale();
+
   return (
     <tr>
       <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-        <span>{data.costPerPeriod}</span>{' '}
+        <span>
+          {(+data.costPerPeriod / 10 ** data.token.decimals).toLocaleString(locale, {
+            maximumFractionDigits: 4,
+            minimumFractionDigits: 4,
+          })}
+        </span>{' '}
         {explorerUrl ? (
           <a
             href={`${explorerUrl}/address/${data.token.address}`}
