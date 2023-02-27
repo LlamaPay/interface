@@ -18,6 +18,7 @@ import { TransactionDialog } from '~/components/Dialog';
 import Layout from '~/components/Layout';
 import { formatFrequency } from '~/components/ScheduledTransfers/utils';
 import { WalletSelector } from '~/components/Web3';
+import { useLocale } from '~/hooks';
 import useDebounce from '~/hooks/useDebounce';
 import { nonRefundableSubscriptionABI } from '~/lib/abis/nonRefundableSubscription';
 import { refundableSubscriptionABI } from '~/lib/abis/refundableSubscription';
@@ -77,9 +78,7 @@ const Tier = ({
 
   const amountToSpend =
     dbPeriodDurationNumber && dbPeriodDurationNumber !== ''
-      ? new BigNumber(new BigNumber(dbPeriodDurationNumber).div(data.refundableContract.periodDuation))
-          .times(data.costPerPeriod)
-          .toFixed(0, 1)
+      ? new BigNumber(dbPeriodDurationNumber).times(data.costPerPeriod).toFixed(0, 1)
       : null;
 
   const {
@@ -180,6 +179,8 @@ const Tier = ({
     }
   };
 
+  const { locale } = useLocale();
+
   return (
     <div className="section-header ml-0 max-w-fit">
       <h1 className="font-exo text-center">Refundable Subscription</h1>
@@ -231,7 +232,12 @@ const Tier = ({
               Cost per period
             </th>
             <td className="table-description border border-solid border-llama-teal-2 text-center font-normal text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-              <span>{data.costPerPeriod}</span>{' '}
+              <span>
+                {(+data.costPerPeriod / 10 ** data.token.decimals).toLocaleString(locale, {
+                  maximumFractionDigits: 4,
+                  minimumFractionDigits: 4,
+                })}
+              </span>{' '}
               {explorerUrl ? (
                 <a
                   href={`${explorerUrl}/address/${data.token.address}`}
@@ -430,6 +436,8 @@ const Sub = ({ data, explorerUrl, chainId }: { data: ISubWithContractInfo; explo
     }
   };
 
+  const { locale } = useLocale();
+
   return (
     <div className="section-header ml-0 max-w-fit">
       <h1 className="font-exo text-center">Non Refundable Subscription</h1>
@@ -478,10 +486,15 @@ const Sub = ({ data, explorerUrl, chainId }: { data: ISubWithContractInfo; explo
 
           <tr>
             <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
-              Cost per period
+              Cost of Subscription
             </th>
             <td className="table-description border border-solid border-llama-teal-2 text-center font-normal text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-              <span>{data.costOfSub}</span>{' '}
+              <span>
+                {(+data.costOfSub / 10 ** data.token.decimals).toLocaleString(locale, {
+                  maximumFractionDigits: 4,
+                  minimumFractionDigits: 4,
+                })}
+              </span>{' '}
               {explorerUrl ? (
                 <a
                   href={`${explorerUrl}/address/${data.token.address}`}
