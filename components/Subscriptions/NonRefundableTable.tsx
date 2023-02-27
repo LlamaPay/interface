@@ -34,17 +34,6 @@ const Contract = ({ data }: { data: INonRefundable }) => {
 
   const explorerUrl = chain ? networkDetails[chain.id]?.blockExplorerURL : null;
 
-  const { data: balance } = useBalance({ address: data.address as `0x${string}`, chainId: chain?.id });
-
-  const { locale } = useLocale();
-
-  const formattedBalance = balance?.value
-    ? Number(balance.value).toLocaleString(locale, {
-        minimumFractionDigits: 4,
-        maximumFractionDigits: 4,
-      })
-    : null;
-
   const subDialog = useDialogState();
   const whitelistDialog = useDialogState();
   const txDialogState = useDialogState();
@@ -89,6 +78,14 @@ const Contract = ({ data }: { data: INonRefundable }) => {
     }
   };
 
+  const tokens: Array<{ address: string; decimals: number; name: string; symbol: string }> = [];
+
+  data.subs.forEach((sub) => {
+    if (!tokens.find((t) => t.address.toLowerCase() === sub.token.address.toLowerCase())) {
+      tokens.push(sub.token);
+    }
+  });
+
   return (
     <div className="max-w-[calc(100vw-16px)] overflow-x-auto border border-dashed p-1 md:max-w-[calc(100vw-48px)] lg:max-w-[calc(100vw-256px)]">
       <table className="w-full border-collapse">
@@ -118,17 +115,18 @@ const Contract = ({ data }: { data: INonRefundable }) => {
               Balance
             </th>
             <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-              {formattedBalance && (
-                <span className="flex items-center justify-center gap-2">
-                  <span>{`${formattedBalance} ${balance?.symbol}`}</span>{' '}
-                  {/* <button
-                    className="rounded-lg border border-lp-primary py-1 px-2 disabled:cursor-not-allowed"
-                    disabled={Number(formattedBalance) === 0}
-                  >
-                    Claim
-                  </button> */}
-                </span>
-              )}
+              <table className="w-full border-collapse">
+                <tbody className="border border-llama-teal-2 dark:border-lp-gray-7">
+                  {tokens.map((token) => (
+                    <Balance
+                      key={data.address + token.address + 'nonrefundabletokenbalance'}
+                      tokenAddress={token.address}
+                      contractAddress={data.address}
+                      chainId={chain?.id}
+                    />
+                  ))}
+                </tbody>
+              </table>
             </td>
           </tr>
 
@@ -462,5 +460,47 @@ const Whitelist = ({
         </td>
       </tr>
     </>
+  );
+};
+
+const Balance = ({
+  tokenAddress,
+  contractAddress,
+  chainId,
+}: {
+  tokenAddress: string;
+  contractAddress: string;
+  chainId?: number;
+}) => {
+  const { data: balance } = useBalance({
+    address: contractAddress as `0x${string}`,
+    token: tokenAddress as `0x${string}`,
+    chainId,
+  });
+
+  const { locale } = useLocale();
+
+  const formattedBalance = balance?.formatted
+    ? Number(balance.formatted).toLocaleString(locale, {
+        minimumFractionDigits: 4,
+        maximumFractionDigits: 4,
+      })
+    : null;
+
+  return (
+    <tr>
+      <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
+        {formattedBalance && `${formattedBalance} ${balance?.symbol}`}
+      </td>
+
+      <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
+        {/* <button
+          className="w-[4rem] rounded-lg border border-lp-primary py-1 px-2 disabled:cursor-not-allowed"
+          disabled={Number(formattedBalance) === 0}
+        >
+          Claim
+        </button> */}
+      </td>
+    </tr>
   );
 };
