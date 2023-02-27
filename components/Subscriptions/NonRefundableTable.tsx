@@ -284,6 +284,8 @@ const Sub = ({
 
   const queryClient = useQueryClient();
 
+  const { locale } = useLocale();
+
   const removeSub = () => {
     if (writeAsync) {
       writeAsync()
@@ -318,7 +320,12 @@ const Sub = ({
     <>
       <tr>
         <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-          <span>{data.costOfSub}</span>{' '}
+          <span>
+            {(+data.costOfSub / 10 ** data.token.decimals).toLocaleString(locale, {
+              maximumFractionDigits: 4,
+              minimumFractionDigits: 4,
+            })}
+          </span>{' '}
           {explorerUrl ? (
             <a
               href={`${explorerUrl}/address/${data.token.address}`}

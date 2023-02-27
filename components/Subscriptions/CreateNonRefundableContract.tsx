@@ -4,7 +4,7 @@ import { TransactionDialog } from '~/components/Dialog';
 import { useDialogState } from 'ariakit';
 import { useNetworkProvider } from '~/hooks';
 import { networkDetails } from '~/lib/networkDetails';
-import { useAccount, useContractWrite } from 'wagmi';
+import { useAccount, useContractWrite, useToken } from 'wagmi';
 import { WalletSelector } from '~/components/Web3';
 import { BeatLoader } from '~/components/BeatLoader';
 import { secondsByDuration } from '~/utils/constants';
@@ -13,6 +13,7 @@ import { getAddress } from 'ethers/lib/utils';
 import { toast } from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
+import BigNumber from 'bignumber.js';
 
 interface IFormElements {
   periodDurationNumber: { value: string };
@@ -24,6 +25,7 @@ interface IFormElements {
 export const CreateNonRefundableContract = () => {
   const { isConnected } = useAccount();
   const [isConfirming, setIsConfirming] = React.useState(false);
+  const [tokenAddress, setTokenAddress] = React.useState('');
 
   const txHash = React.useRef('');
 
@@ -42,6 +44,11 @@ export const CreateNonRefundableContract = () => {
     functionName: 'deployFlatRateERC20NonRefundable',
   });
 
+  const { data: tokenData, isLoading: fethcingTokensData } = useToken({
+    address: tokenAddress as `0x${string}`,
+    enabled: isConnected && factoryAddress && new RegExp('^0x[a-fA-F0-9]{40}$').test(tokenAddress) ? true : false,
+  });
+
   const queryClient = useQueryClient();
   const router = useRouter();
 
@@ -58,12 +65,12 @@ export const CreateNonRefundableContract = () => {
 
     const amount = Number.isNaN(Number(form.amount.value)) ? null : Number(form.amount.value);
 
-    if (factoryAddress && periodDurationInSeconds && tokenAddress && amount) {
+    if (factoryAddress && periodDurationInSeconds && tokenAddress && amount && tokenData) {
       writeAsync({
         recklesslySetUnpreparedArgs: [
           [
             {
-              costOfSub: amount,
+              costOfSub: new BigNumber(amount).times(10 ** tokenData.decimals).toFixed(0, 1),
               duration: periodDurationInSeconds,
               token: getAddress(tokenAddress),
             },
@@ -139,6 +146,7 @@ export const CreateNonRefundableContract = () => {
             spellCheck="false"
             name="tokenAddress"
             required
+            onChange={(e) => setTokenAddress(e.target.value)}
           />
         </label>
 
@@ -164,7 +172,10 @@ export const CreateNonRefundableContract = () => {
             Connect Wallet
           </SubmitButton>
         ) : (
-          <SubmitButton disabled={!factoryAddress || isLoading || isConfirming} className="mt-2 rounded">
+          <SubmitButton
+            disabled={!factoryAddress || isLoading || isConfirming || !tokenData || fethcingTokensData}
+            className="mt-2 rounded"
+          >
             {!factoryAddress ? (
               'Chain not supported'
             ) : isLoading || isConfirming ? (
