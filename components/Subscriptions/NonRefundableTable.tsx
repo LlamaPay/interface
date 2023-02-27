@@ -2,7 +2,7 @@ import { PlusIcon } from '@heroicons/react/24/outline';
 import { QuestionMarkCircleIcon } from '@heroicons/react/20/solid';
 import { useBalance, useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
 import { networkDetails } from '~/lib/networkDetails';
-import { INonRefundable, ISub } from '~/queries/useGetSubscriptions';
+import type { INonRefundable, ISub } from '~/queries/useGetSubscriptions';
 import { formatFrequency } from '../ScheduledTransfers/utils';
 import Tooltip from '../Tooltip';
 import { useLocale } from '~/hooks';
@@ -154,20 +154,18 @@ const Contract = ({ data }: { data: INonRefundable }) => {
                   </tr>
                 </thead>
                 <tbody className="border border-llama-teal-2 dark:border-lp-gray-7">
-                  {data.subs
-                    .filter((sub) => !sub.disabled)
-                    .map((sub) => (
-                      <Sub
-                        key={data.id + sub.id + 'nonrefundablessub'}
-                        data={sub}
-                        subId={sub.subId}
-                        explorerUrl={explorerUrl}
-                        contractAddress={data.address}
-                        chainId={chain?.id}
-                        txDialogState={txDialogState}
-                        txHash={txHash}
-                      />
-                    ))}
+                  {data.subs.map((sub) => (
+                    <Sub
+                      key={data.id + sub.id + 'nonrefundablessub'}
+                      data={sub}
+                      subId={sub.subId}
+                      explorerUrl={explorerUrl}
+                      contractAddress={data.address}
+                      chainId={chain?.id}
+                      txDialogState={txDialogState}
+                      txHash={txHash}
+                    />
+                  ))}
                 </tbody>
               </table>
               <button
@@ -279,6 +277,7 @@ const Sub = ({
     chainId,
     functionName: 'removeSubs',
     args: [[subId]],
+    enabled: !data.disabled,
   });
 
   const { isLoading, writeAsync } = useContractWrite(config);
@@ -338,19 +337,30 @@ const Sub = ({
         </td>
         <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white"></td>
         <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-          <Link href={`/subscribe/${data.id}`} className="flex items-center gap-1">
-            <span>Subscribe</span>
-            <ArrowTopRightOnSquareIcon className="h-4 w-4" />
-          </Link>
+          {chainId && (
+            <Link href={`/subscriptions/${chainId}/${data.id}`} target="_blank" className="flex items-center gap-1">
+              <span>Subscribe</span>
+              <ArrowTopRightOnSquareIcon className="h-4 w-4" />
+            </Link>
+          )}
         </td>
         <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-          <button
-            className=" min-w-[5rem] rounded-lg border border-red-500 py-1 px-2 disabled:cursor-not-allowed"
-            disabled={isLoading || isConfirming}
-            onClick={() => removeSub()}
-          >
-            {isLoading || isConfirming ? <BeatLoader size="4px" className="!h-5" /> : 'Remove'}
-          </button>
+          {data.disabled ? (
+            <button
+              className="min-w-[5rem] rounded-lg border border-lp-gray-2 bg-lp-gray-1 py-1 px-2 disabled:cursor-not-allowed dark:bg-lp-gray-5"
+              disabled
+            >
+              Disabled
+            </button>
+          ) : (
+            <button
+              className="min-w-[5rem] rounded-lg border border-red-500 py-1 px-2 disabled:cursor-not-allowed"
+              disabled={isLoading || isConfirming}
+              onClick={() => removeSub()}
+            >
+              {isLoading || isConfirming ? <BeatLoader size="4px" className="!h-5" /> : 'Remove'}
+            </button>
+          )}
         </td>
       </tr>
     </>
@@ -386,7 +396,7 @@ const Whitelist = ({
 
   const queryClient = useQueryClient();
 
-  const removeSub = () => {
+  const removeAddressFromWhitelist = () => {
     if (writeAsync) {
       writeAsync()
         .then((data) => {
@@ -436,9 +446,9 @@ const Whitelist = ({
 
         <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
           <button
-            className=" min-w-[5rem] rounded-lg border border-red-500 py-1 px-2 disabled:cursor-not-allowed"
+            className="min-w-[5rem] rounded-lg border border-red-500 py-1 px-2 disabled:cursor-not-allowed"
             disabled={isLoading || isConfirming}
-            onClick={() => removeSub()}
+            onClick={() => removeAddressFromWhitelist()}
           >
             {isLoading || isConfirming ? <BeatLoader size="4px" className="!h-5" /> : 'Remove'}
           </button>

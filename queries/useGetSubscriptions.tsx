@@ -18,6 +18,15 @@ export interface ISub {
   subId: string;
 }
 
+export interface ISubWithContractInfo extends ISub {
+  nonRefundableContract: {
+    address: string;
+    owner: {
+      address: string;
+    };
+  };
+}
+
 export interface ITier {
   id: string;
   token: IToken;
@@ -25,6 +34,16 @@ export interface ITier {
   amountOfSubs: string;
   disabledAt: string;
   tierId: string;
+}
+
+export interface ITierWithContractInfo extends ITier {
+  refundableContract: {
+    address: string;
+    periodDuation: string;
+    owner: {
+      address: string;
+    };
+  };
 }
 
 export interface IRefundable {
@@ -42,10 +61,15 @@ export interface INonRefundable {
   whitelist: [];
 }
 
-interface ISubscriptioncontracts {
+interface ISubscriptionContracts {
   refundables: Array<IRefundable>;
   nonrefundables: Array<INonRefundable>;
   nonRefundableSubs: Array<{ id: string }>;
+}
+
+export interface ISubscriptionContract {
+  tier: ITierWithContractInfo | null;
+  sub: ISubWithContractInfo | null;
 }
 
 const fetchSubscriptionContracts = async ({
@@ -54,13 +78,13 @@ const fetchSubscriptionContracts = async ({
 }: {
   userAddress?: string;
   graphEndpoint?: string | null;
-}) => {
+}): Promise<ISubscriptionContracts> => {
   try {
     if (!userAddress || !graphEndpoint) {
       return { refundables: [], nonrefundables: [], nonRefundableSubs: [] };
     }
 
-    const res: { owner: ISubscriptioncontracts; nonRefundableSubs: Array<{ id: string }> } = await request(
+    const res: { owner: ISubscriptionContracts; nonRefundableSubs: Array<{ id: string }> } = await request(
       graphEndpoint,
       gql`
         {
@@ -128,9 +152,93 @@ const fetchSubscriptionContracts = async ({
 export function useGetSubscriptionContracts({ graphEndpoint }: { graphEndpoint?: string | null }) {
   const { address } = useAccount();
 
-  return useQuery<ISubscriptioncontracts>(
+  return useQuery<ISubscriptionContracts>(
     ['subscriptionContracts', address, graphEndpoint],
     () => fetchSubscriptionContracts({ userAddress: address, graphEndpoint }),
+    {
+      refetchInterval: 30_000,
+    }
+  );
+}
+
+export async function fetchSubscriptionContract({
+  graphEndpoint,
+  contractId,
+}: {
+  graphEndpoint?: string | null;
+  contractId?: string | null;
+}): Promise<ISubscriptionContract> {
+  if (!graphEndpoint || !contractId) {
+    return { tier: null, sub: null };
+  }
+
+  try {
+    const res = await request(
+      graphEndpoint,
+      gql`
+        {
+          tier (id: "${contractId.toLowerCase()}") {
+            id
+            costPerPeriod
+            disabledAt
+            token {
+              symbol
+              name
+              decimals
+              address
+            }
+            tierId
+            refundableContract {
+              address
+              periodDuation
+              owner {
+                address
+              }
+            }
+          }
+
+          sub (id: "${contractId.toLowerCase()}") {
+            id
+            token {
+              address
+              decimals
+              name
+              symbol
+            }
+            subId
+            disabled
+            duration
+            costOfSub
+            nonRefundableContract {
+              address
+              owner {
+                address
+              }
+            }
+          }
+        }
+      `
+    );
+
+    return {
+      tier: res.tier || null,
+      sub: res.sub || null,
+    };
+  } catch (error: any) {
+    throw new Error(error.message || (error?.reason ?? "Couldn't fetch details of this contract"));
+  }
+}
+
+export function useGetSubscriptionContract({
+  graphEndpoint,
+  contractId,
+}: {
+  graphEndpoint?: string | null;
+  contractId?: string | null;
+}) {
+  return useQuery<ISubscriptionContract>(
+    ['subscriptionContracts', contractId, graphEndpoint],
+    () => fetchSubscriptionContract({ contractId, graphEndpoint }),
     {
       refetchInterval: 30_000,
     }

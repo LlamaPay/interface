@@ -17,16 +17,7 @@ interface IUseApproveToken {
   amountToApprove: string;
 }
 
-interface IUseApproveMultipleTokens {
-  tokenAndAmount: { [key: string]: string };
-  spender: string;
-}
-
 interface IApproveToken extends IUseApproveToken {
-  signer?: Signer | null;
-}
-
-interface IApproveMultipleTokens extends IUseApproveMultipleTokens {
   signer?: Signer | null;
 }
 

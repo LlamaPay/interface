@@ -66,7 +66,7 @@ export const checkHasApprovedEnoughMultiple = async (
 ): Promise<ICheckMultipleTokensResponse> => {
   try {
     if (!data.userAddress || !data.tokens) throw new Error('Invalid arguments');
-    let res: { [key: string]: boolean } = {};
+    const res: { [key: string]: boolean } = {};
     let allApproved = true;
     for (const token in data.tokens) {
       const currToken = data.tokens[token];

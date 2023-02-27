@@ -24,6 +24,7 @@ interface IFormElements {
 }
 
 export const CreateRefundableContract = () => {
+  const [isConfirming, setIsConfirming] = React.useState(false);
   const { isConnected } = useAccount();
 
   const txHash = React.useRef('');
@@ -66,6 +67,8 @@ export const CreateRefundableContract = () => {
         recklesslySetUnpreparedArgs: [startDate, periodDurationInSeconds, [[amount, getAddress(tokenAddress)]]],
       })
         .then((data) => {
+          setIsConfirming(true);
+
           txHash.current = data.hash;
 
           txDialogState.toggle();
@@ -73,12 +76,14 @@ export const CreateRefundableContract = () => {
           const toastId = toast.loading('Creating Contract');
           data.wait().then((receipt) => {
             toast.dismiss(toastId);
+            setIsConfirming(false);
             receipt.status === 1 ? toast.success('Transaction Success') : toast.error('Transaction Failed');
             queryClient.invalidateQueries();
             router.push('/subscriptions/incoming');
           });
         })
         .catch((err) => {
+          setIsConfirming(false);
           toast.error(err.reason || err.message || 'Transaction Failed');
         });
     }
@@ -157,10 +162,10 @@ export const CreateRefundableContract = () => {
             Connect Wallet
           </SubmitButton>
         ) : (
-          <SubmitButton disabled={!factoryAddress || isLoading} className="mt-2 rounded">
+          <SubmitButton disabled={!factoryAddress || isLoading || isConfirming} className="mt-2 rounded">
             {!factoryAddress ? (
               'Chain not supported'
-            ) : isLoading ? (
+            ) : isLoading || isConfirming ? (
               <BeatLoader size="6px" color="white" />
             ) : (
               'Create Contract'

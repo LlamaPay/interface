@@ -1,6 +1,6 @@
 import { useBalance, useContractRead, useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
 import { networkDetails } from '~/lib/networkDetails';
-import { IRefundable, ITier } from '~/queries/useGetSubscriptions';
+import type { IRefundable, ITier } from '~/queries/useGetSubscriptions';
 import { formatFrequency } from '../ScheduledTransfers/utils';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { QuestionMarkCircleIcon } from '@heroicons/react/20/solid';
@@ -288,7 +288,7 @@ const Whitelist = ({
 
   const queryClient = useQueryClient();
 
-  const removeSub = () => {
+  const removeAddressFromWhitelist = () => {
     if (writeAsync) {
       writeAsync()
         .then((data) => {
@@ -340,7 +340,7 @@ const Whitelist = ({
           <button
             className=" min-w-[5rem] rounded-lg border border-red-500 py-1 px-2 disabled:cursor-not-allowed"
             disabled={isLoading || isConfirming}
-            onClick={() => removeSub()}
+            onClick={() => removeAddressFromWhitelist()}
           >
             {isLoading || isConfirming ? <BeatLoader size="4px" className="!h-5" /> : 'Remove'}
           </button>
@@ -369,6 +369,8 @@ const Tier = ({
 }) => {
   const [isConfirming, setIsConfirming] = React.useState(false);
 
+  const isDisabled = data.disabledAt && data.disabledAt !== '0';
+
   const {
     data: tierIndex,
     isLoading: fetchingTierIndex,
@@ -387,7 +389,7 @@ const Tier = ({
     chainId,
     functionName: 'removeTiers',
     args: [[tierIndex]],
-    enabled: !fetchingTierIndex && !errorFetchingTierIndex && tierIndex ? true : false,
+    enabled: !isDisabled && !fetchingTierIndex && !errorFetchingTierIndex && tierIndex ? true : false,
   });
 
   const { isLoading, writeAsync } = useContractWrite(config);
@@ -445,19 +447,30 @@ const Tier = ({
         {data.amountOfSubs}
       </td>
       <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-        <Link href={`/subscribe/${data.id}`} className="flex items-center gap-1">
-          <span>Subscribe</span>
-          <ArrowTopRightOnSquareIcon className="h-4 w-4" />
-        </Link>
+        {chainId && (
+          <Link href={`/subscriptions/${chainId}/${data.id}`} target="_blank" className="flex items-center gap-1">
+            <span>Subscribe</span>
+            <ArrowTopRightOnSquareIcon className="h-4 w-4" />
+          </Link>
+        )}
       </td>
       <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-        <button
-          className=" min-w-[5rem] rounded-lg border border-red-500 py-1 px-2 disabled:cursor-not-allowed"
-          disabled={isLoading || isConfirming || fetchingTierIndex || errorFetchingTierIndex || !tierIndex}
-          onClick={() => removeTier()}
-        >
-          {isLoading || isConfirming ? <BeatLoader size="4px" className="!h-5" /> : 'Remove'}
-        </button>
+        {isDisabled ? (
+          <button
+            className="min-w-[5rem] rounded-lg border border-lp-gray-2 bg-lp-gray-1 py-1 px-2 disabled:cursor-not-allowed dark:bg-lp-gray-5"
+            disabled
+          >
+            Disabled
+          </button>
+        ) : (
+          <button
+            className="min-w-[5rem] rounded-lg border border-red-500 py-1 px-2 disabled:cursor-not-allowed"
+            disabled={isLoading || isConfirming}
+            onClick={() => removeTier()}
+          >
+            {isLoading || isConfirming ? <BeatLoader size="4px" className="!h-5" /> : 'Remove'}
+          </button>
+        )}
       </td>
     </tr>
   );
