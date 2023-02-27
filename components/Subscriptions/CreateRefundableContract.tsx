@@ -67,6 +67,10 @@ export const CreateRefundableContract = () => {
         recklesslySetUnpreparedArgs: [startDate, periodDurationInSeconds, [[amount, getAddress(tokenAddress)]]],
       })
         .then((data) => {
+          txHash.current = data.hash;
+
+          txDialogState.toggle();
+
           const toastId = toast.loading('Creating Contract');
           data.wait().then((receipt) => {
             toast.dismiss(toastId);

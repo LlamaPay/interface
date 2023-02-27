@@ -14,6 +14,7 @@ import { getAddress } from 'ethers/lib/utils';
 import { toast } from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
+import { nonRefundableSubscriptionABI } from '~/lib/abis/nonRefundableSubscription';
 
 interface IFormElements {
   periodDurationNumber: { value: string };
@@ -22,8 +23,15 @@ interface IFormElements {
   amount: { value: string };
 }
 
-export const CreateNonRefundableContract = () => {
+export const CreateNonRefundableContract = ({
+  onTxSuccess,
+  contractAddress,
+}: {
+  onTxSuccess?: () => void;
+  contractAddress?: string;
+}) => {
   const { isConnected } = useAccount();
+  const [isConfirming, setIsConfirming] = React.useState(false);
 
   const txHash = React.useRef('');
 
@@ -36,10 +44,10 @@ export const CreateNonRefundableContract = () => {
   const factoryAddress = chainId ? networkDetails[chainId].subscriptionsFactory : null;
 
   const { isLoading, writeAsync } = useContractWrite({
-    address: factoryAddress as `0x${string}`,
-    abi: subscriptionsFactoryABI,
+    address: (contractAddress || factoryAddress) as `0x${string}`,
+    abi: (contractAddress ? nonRefundableSubscriptionABI : subscriptionsFactoryABI) as any,
     mode: 'recklesslyUnprepared',
-    functionName: 'deployFlatRateERC20NonRefundable',
+    functionName: contractAddress ? 'addSubs' : 'deployFlatRateERC20NonRefundable',
   });
 
   const queryClient = useQueryClient();
@@ -71,16 +79,37 @@ export const CreateNonRefundableContract = () => {
         ],
       })
         .then((data) => {
-          const toastId = toast.loading('Creating Contract');
+          txHash.current = data.hash;
+
+          txDialogState.toggle();
+
+          setIsConfirming(true);
+
+          let toastId: string;
+
+          // hide toast if form is in a dialog
+          if (!onTxSuccess) {
+            toastId = toast.loading('Creating Contract');
+          }
+
           data.wait().then((receipt) => {
-            toast.dismiss(toastId);
+            if (toastId) {
+              toast.dismiss(toastId);
+            }
             receipt.status === 1 ? toast.success('Transaction Success') : toast.error('Transaction Failed');
             queryClient.invalidateQueries();
-            router.push('/subscriptions');
+            setIsConfirming(false);
+            form.reset();
+            if (onTxSuccess) {
+              onTxSuccess();
+            } else {
+              router.push('/subscriptions');
+            }
           });
         })
         .catch((err) => {
           toast.error(err.reason || err.message || 'Transaction Failed');
+          setIsConfirming(false);
         });
     }
   };
@@ -153,10 +182,10 @@ export const CreateNonRefundableContract = () => {
             Connect Wallet
           </SubmitButton>
         ) : (
-          <SubmitButton disabled={!factoryAddress || isLoading} className="mt-2 rounded">
+          <SubmitButton disabled={!factoryAddress || isLoading || isConfirming} className="mt-2 rounded">
             {!factoryAddress ? (
               'Chain not supported'
-            ) : isLoading ? (
+            ) : isLoading || isConfirming ? (
               <BeatLoader size="6px" color="white" />
             ) : (
               'Create Contract'

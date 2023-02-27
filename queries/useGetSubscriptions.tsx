@@ -9,12 +9,13 @@ interface IToken {
   decimals: number;
 }
 
-interface ISub {
+export interface ISub {
   costOfSub: string;
   disabled: boolean;
   duration: string;
   token: IToken;
   id: string;
+  subId: string;
 }
 
 interface ITier {
@@ -23,6 +24,7 @@ interface ITier {
   costPerPeriod: string;
   amountOfSubs: string;
   disabledAt: string;
+  tierid: string;
 }
 
 export interface IRefundable {
@@ -31,7 +33,6 @@ export interface IRefundable {
   periodDuation: string;
   whitelist: [];
   tiers: Array<ITier>;
-  activeTiers: Array<string>;
 }
 
 export interface INonRefundable {
@@ -39,12 +40,12 @@ export interface INonRefundable {
   id: string;
   subs: Array<ISub>;
   whitelist: [];
-  activeSubs: Array<string>;
 }
 
 interface ISubscriptioncontracts {
   refundables: Array<IRefundable>;
   nonrefundables: Array<INonRefundable>;
+  nonRefundableSubs: Array<{ id: string }>;
 }
 
 const fetchSubscriptionContracts = async ({
@@ -56,13 +57,18 @@ const fetchSubscriptionContracts = async ({
 }) => {
   try {
     if (!userAddress || !graphEndpoint) {
-      return { refundables: [], nonrefundables: [] };
+      return { refundables: [], nonrefundables: [], nonRefundableSubs: [] };
     }
 
-    const res: { owner: ISubscriptioncontracts } = await request(
+    const res: { owner: ISubscriptioncontracts; nonRefundableSubs: Array<{ id: string }> } = await request(
       graphEndpoint,
       gql`
         {
+          nonRefundableSubs(where: {expires_gte: "${Math.floor(
+            Date.now() / 1000
+          )}", nonRefundableContract_: {owner: "${userAddress.toLowerCase()}"}}) {
+            id
+          }
           owner(id: "${userAddress.toLowerCase()}") {
             id
             nonrefundables {
@@ -80,8 +86,8 @@ const fetchSubscriptionContracts = async ({
                   name
                   symbol
                 }
+                subId
               }
-              activeSubs
               whitelist
             }
             refundables {
@@ -98,12 +104,13 @@ const fetchSubscriptionContracts = async ({
                   name
                   symbol
                 }
-                costPerPeriod
                 amountOfSubs
+                costPerPeriod
                 disabledAt
+                tierId
               }
-              activeTiers
             }
+          }
         }
       `
     );
@@ -111,6 +118,7 @@ const fetchSubscriptionContracts = async ({
     return {
       refundables: res?.owner?.refundables ?? [],
       nonrefundables: res?.owner?.nonrefundables ?? [],
+      nonRefundableSubs: res?.nonRefundableSubs ?? [],
     };
   } catch (error: any) {
     throw new Error(error.message || (error?.reason ?? "Couldn't fetch subscription contracts"));
