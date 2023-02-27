@@ -18,13 +18,13 @@ export interface ISub {
   subId: string;
 }
 
-interface ITier {
+export interface ITier {
   id: string;
   token: IToken;
   costPerPeriod: string;
   amountOfSubs: string;
   disabledAt: string;
-  tierid: string;
+  tierId: string;
 }
 
 export interface IRefundable {

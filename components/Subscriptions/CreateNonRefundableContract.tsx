@@ -1,4 +1,3 @@
-import type { GetServerSideProps } from 'next';
 import * as React from 'react';
 import { SubmitButton } from '~/components/Form';
 import { TransactionDialog } from '~/components/Dialog';
@@ -14,7 +13,6 @@ import { getAddress } from 'ethers/lib/utils';
 import { toast } from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import { nonRefundableSubscriptionABI } from '~/lib/abis/nonRefundableSubscription';
 
 interface IFormElements {
   periodDurationNumber: { value: string };
@@ -23,13 +21,7 @@ interface IFormElements {
   amount: { value: string };
 }
 
-export const CreateNonRefundableContract = ({
-  onTxSuccess,
-  contractAddress,
-}: {
-  onTxSuccess?: () => void;
-  contractAddress?: string;
-}) => {
+export const CreateNonRefundableContract = () => {
   const { isConnected } = useAccount();
   const [isConfirming, setIsConfirming] = React.useState(false);
 
@@ -44,10 +36,10 @@ export const CreateNonRefundableContract = ({
   const factoryAddress = chainId ? networkDetails[chainId].subscriptionsFactory : null;
 
   const { isLoading, writeAsync } = useContractWrite({
-    address: (contractAddress || factoryAddress) as `0x${string}`,
-    abi: (contractAddress ? nonRefundableSubscriptionABI : subscriptionsFactoryABI) as any,
+    address: factoryAddress as `0x${string}`,
+    abi: subscriptionsFactoryABI,
     mode: 'recklesslyUnprepared',
-    functionName: contractAddress ? 'addSubs' : 'deployFlatRateERC20NonRefundable',
+    functionName: 'deployFlatRateERC20NonRefundable',
   });
 
   const queryClient = useQueryClient();
@@ -85,26 +77,16 @@ export const CreateNonRefundableContract = ({
 
           setIsConfirming(true);
 
-          let toastId: string;
-
-          // hide toast if form is in a dialog
-          if (!onTxSuccess) {
-            toastId = toast.loading('Creating Contract');
-          }
+          const toastId = toast.loading('Creating Contract');
 
           data.wait().then((receipt) => {
-            if (toastId) {
-              toast.dismiss(toastId);
-            }
+            toast.dismiss(toastId);
             receipt.status === 1 ? toast.success('Transaction Success') : toast.error('Transaction Failed');
             queryClient.invalidateQueries();
             setIsConfirming(false);
             form.reset();
-            if (onTxSuccess) {
-              onTxSuccess();
-            } else {
-              router.push('/subscriptions');
-            }
+
+            router.push('/subscriptions');
           });
         })
         .catch((err) => {
@@ -199,13 +181,4 @@ export const CreateNonRefundableContract = ({
       <WalletSelector dialog={walletDialog} />
     </>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
-  // Pass data to the page via props
-  return {
-    props: {
-      messages: (await import(`translations/${locale}.json`)).default,
-    },
-  };
 };

@@ -1,4 +1,3 @@
-import type { GetServerSideProps } from 'next';
 import * as React from 'react';
 import { SubmitButton } from '~/components/Form';
 import { TransactionDialog } from '~/components/Dialog';
@@ -175,13 +174,4 @@ export const CreateRefundableContract = () => {
       <WalletSelector dialog={walletDialog} />
     </>
   );
-};
-
-export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
-  // Pass data to the page via props
-  return {
-    props: {
-      messages: (await import(`translations/${locale}.json`)).default,
-    },
-  };
 };

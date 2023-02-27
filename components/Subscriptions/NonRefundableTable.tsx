@@ -10,13 +10,13 @@ import Link from 'next/link';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 import { FormDialog, TransactionDialog } from '../Dialog';
 import { DisclosureState, useDialogState } from 'ariakit';
-import { CreateNonRefundableContract } from './CreateNonRefundableContract';
 import { nonRefundableSubscriptionABI } from '~/lib/abis/nonRefundableSubscription';
 import { toast } from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
 import * as React from 'react';
 import { BeatLoader } from '../BeatLoader';
 import { SubmitButton } from '../Form';
+import { CreateNonRefundableSub } from './CreateNonRefundableSub';
 
 export function NonRefundableTable({ data }: { data: Array<INonRefundable> }) {
   return (
@@ -69,10 +69,6 @@ const Contract = ({ data }: { data: INonRefundable }) => {
     if (writeAsync) {
       writeAsync({ recklesslySetUnpreparedArgs: [addressToWhitelist] })
         .then((data) => {
-          txHash.current = data.hash;
-
-          txDialogState.setOpen(true);
-
           setIsConfirming(true);
 
           data.wait().then((receipt) => {
@@ -80,7 +76,7 @@ const Contract = ({ data }: { data: INonRefundable }) => {
             form.reset();
             queryClient.invalidateQueries();
             setIsConfirming(false);
-            txDialogState.setOpen(false);
+
             whitelistDialog.setOpen(false);
           });
         })
@@ -94,7 +90,7 @@ const Contract = ({ data }: { data: INonRefundable }) => {
   };
 
   return (
-    <div className="max-w-[calc(100vw-16px)] overflow-x-auto md:max-w-[calc(100vw-48px)] lg:max-w-[calc(100vw-256px)]">
+    <div className="max-w-[calc(100vw-16px)] overflow-x-auto border border-dashed p-1 md:max-w-[calc(100vw-48px)] lg:max-w-[calc(100vw-256px)]">
       <table className="w-full border-collapse">
         <tbody className="border border-llama-teal-2 dark:border-lp-gray-7">
           <tr>
@@ -225,7 +221,11 @@ const Contract = ({ data }: { data: INonRefundable }) => {
         </tbody>
       </table>
       <FormDialog title="Non Refundable Subscription" dialog={subDialog} className="h-fit">
-        <CreateNonRefundableContract onTxSuccess={() => subDialog.setOpen(false)} contractAddress={data.address} />
+        <CreateNonRefundableSub
+          onTxSuccess={() => subDialog.setOpen(false)}
+          contractAddress={data.address}
+          chainId={chain?.id}
+        />
       </FormDialog>
       <FormDialog title="Whitelist Address" dialog={whitelistDialog} className="h-fit">
         <form className="mx-auto my-8 flex flex-col gap-4" onSubmit={whitelistAddress}>
