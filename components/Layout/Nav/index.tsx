@@ -63,6 +63,12 @@ export function Nav() {
           isActive={router.pathname === '/subscriptions/incoming'}
         />
         <Spacer />
+        <LinkItem
+          name="Outgoing"
+          href="/subscriptions/outgoing"
+          isActive={router.pathname === '/subscriptions/outgoing'}
+        />
+        <Spacer />
         <LinkItem name="Create" href="/subscriptions/create" isActive={router.pathname === '/subscriptions/create'} />
       </Group>
 

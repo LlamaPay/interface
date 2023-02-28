@@ -18,13 +18,15 @@ export interface ISub {
   subId: string;
 }
 
-export interface ISubWithContractInfo extends ISub {
-  nonRefundableContract: {
+interface INonRefundableContract {
+  address: string;
+  owner: {
     address: string;
-    owner: {
-      address: string;
-    };
   };
+}
+
+export interface ISubWithContractInfo extends ISub {
+  nonRefundableContract: INonRefundableContract;
 }
 
 export interface ITier {
@@ -36,14 +38,16 @@ export interface ITier {
   tierId: string;
 }
 
-export interface ITierWithContractInfo extends ITier {
-  refundableContract: {
+interface IRefundableContract {
+  address: string;
+  periodDuation: string;
+  owner: {
     address: string;
-    periodDuation: string;
-    owner: {
-      address: string;
-    };
   };
+}
+
+export interface ITierWithContractInfo extends ITier {
+  refundableContract: IRefundableContract;
 }
 
 export interface IRefundable {
@@ -70,6 +74,24 @@ interface ISubscriptionContracts {
 export interface ISubscriptionContract {
   tier: ITierWithContractInfo | null;
   sub: ISubWithContractInfo | null;
+}
+
+export interface ISubberRefundable {
+  expires: string;
+  id: string;
+  refundableContract: IRefundableContract;
+  tier: ITier;
+}
+
+export interface ISubberNonRefundable {
+  expires: string;
+  id: string;
+  sub: ISubWithContractInfo;
+}
+
+export interface ISubberSubscriptionContract {
+  refundables: Array<ISubberRefundable>;
+  nonrefundables: Array<ISubberNonRefundable>;
 }
 
 const fetchSubscriptionContracts = async ({
@@ -237,8 +259,97 @@ export function useGetSubscriptionContract({
   contractId?: string | null;
 }) {
   return useQuery<ISubscriptionContract>(
-    ['subscriptionContracts', contractId, graphEndpoint],
+    ['subscriptionContract', contractId, graphEndpoint],
     () => fetchSubscriptionContract({ contractId, graphEndpoint }),
+    {
+      refetchInterval: 30_000,
+    }
+  );
+}
+
+async function fetchSubberSubscriptionContracts({
+  userAddress,
+  graphEndpoint,
+}: {
+  userAddress?: string | null;
+  graphEndpoint?: string | null;
+}) {
+  try {
+    if (!userAddress || !graphEndpoint) {
+      return { refundables: [], nonrefundables: [] };
+    }
+
+    const res = await request(
+      graphEndpoint,
+      gql`
+        {
+          subber(id: "${userAddress.toLowerCase()}") {
+            id
+            nonRefundableSubs {
+              expires
+              id
+              sub {
+                costOfSub
+                disabled
+                duration
+                subId
+                token {
+                  address
+                  decimals
+                  name
+                  symbol
+                }
+                nonRefundableContract {
+                  address
+                  owner {
+                    address
+                  }
+                }
+              }
+            }
+            refundableSubs {
+              expires
+              id
+              tier {
+                amountOfSubs
+                costPerPeriod
+                disabledAt
+                tierId
+                token {
+                  address
+                  decimals
+                  name
+                  symbol
+                }
+              }
+              refundableContract {
+                address
+                periodDuation
+                owner {
+                  address
+                }
+              }
+            }
+          }
+        }
+      `
+    );
+
+    return {
+      refundables: res?.subber?.refundableSubs ?? [],
+      nonrefundables: res?.subber?.nonRefundableSubs ?? [],
+    };
+  } catch (error: any) {
+    throw new Error(error.message || (error?.reason ?? "Couldn't fetch subscription contracts"));
+  }
+}
+
+export function useGetSubberSubscriptionContracts({ graphEndpoint }: { graphEndpoint?: string | null }) {
+  const { address } = useAccount();
+
+  return useQuery<ISubberSubscriptionContract>(
+    ['subberSubscriptionContracts', address, graphEndpoint],
+    () => fetchSubberSubscriptionContracts({ userAddress: address, graphEndpoint }),
     {
       refetchInterval: 30_000,
     }

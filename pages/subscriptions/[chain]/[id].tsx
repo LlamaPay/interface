@@ -2,6 +2,7 @@ import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
 import { useDialogState } from 'ariakit';
 import BigNumber from 'bignumber.js';
 import type { GetServerSideProps, NextPage } from 'next';
+import { useRouter } from 'next/router';
 import * as React from 'react';
 import { toast } from 'react-hot-toast';
 import {
@@ -146,6 +147,7 @@ const Tier = ({
 
   const txDialogState = useDialogState();
   const txHash = React.useRef('');
+  const router = useRouter();
 
   const subscribe = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -168,6 +170,10 @@ const Tier = ({
             receipt.status === 1 ? toast.success('Transaction Success') : toast.error('Transaction Failed');
             queryClient.invalidateQueries();
             setIsConfirming(false);
+
+            if (receipt.status == 1) {
+              router.push('/subscriptions/outgoing');
+            }
           });
         })
         .catch((err) => {
@@ -347,6 +353,8 @@ const Sub = ({ data, explorerUrl, chainId }: { data: ISubWithContractInfo; explo
   const txDialogState = useDialogState();
   const txHash = React.useRef('');
 
+  const router = useRouter();
+
   const {
     data: allowance,
     isLoading: fetchingAllowance,
@@ -425,6 +433,9 @@ const Sub = ({ data, explorerUrl, chainId }: { data: ISubWithContractInfo; explo
             receipt.status === 1 ? toast.success('Transaction Success') : toast.error('Transaction Failed');
             queryClient.invalidateQueries();
             setIsConfirming(false);
+            if (receipt.status == 1) {
+              router.push('/subscriptions/outgoing');
+            }
           });
         })
         .catch((err) => {
@@ -563,14 +574,19 @@ const Sub = ({ data, explorerUrl, chainId }: { data: ISubWithContractInfo; explo
 export const getServerSideProps: GetServerSideProps = async ({ query, locale }) => {
   const { network, chain } = chainDetails(query.chain);
 
-  if (typeof query.chain !== 'string' || typeof query.id !== 'string' || !chain?.id || !network?.subgraphEndpoint) {
+  if (
+    typeof query.chain !== 'string' ||
+    typeof query.id !== 'string' ||
+    !chain?.id ||
+    !network?.subscriptionsSubgraph
+  ) {
     return { notFound: true };
   }
 
   const queryClient = new QueryClient();
 
   await queryClient.prefetchQuery({
-    queryKey: ['subscriptionContracts', query.id, network.subgraphEndpoint],
+    queryKey: ['subscriptionContract', query.id, network.subscriptionsSubgraph],
     queryFn: () =>
       fetchSubscriptionContract({ graphEndpoint: network.subscriptionsSubgraph, contractId: query.id as string }),
   });
@@ -578,7 +594,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
   // Pass data to the page via props
   return {
     props: {
-      subgraphEndpoint: network?.subgraphEndpoint ?? '',
+      subgraphEndpoint: network?.subscriptionsSubgraph ?? '',
       id: query.id,
       chainId: chain.id,
       dehydratedState: dehydrate(queryClient),

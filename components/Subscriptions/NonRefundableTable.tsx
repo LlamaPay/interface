@@ -87,7 +87,7 @@ const Contract = ({ data }: { data: INonRefundable }) => {
   });
 
   return (
-    <div className="max-w-[calc(100vw-16px)] overflow-x-auto border border-dashed p-1 md:max-w-[calc(100vw-48px)] lg:max-w-[calc(100vw-256px)]">
+    <div className="max-w-[calc(100vw-16px)] overflow-x-auto border border-dashed border-llama-teal-2 p-1 dark:border-lp-gray-7 md:max-w-[calc(100vw-48px)] lg:max-w-[calc(100vw-256px)]">
       <table className="w-full border-collapse">
         <tbody className="border border-llama-teal-2 dark:border-lp-gray-7">
           <tr>
@@ -294,7 +294,7 @@ const Sub = ({
 
           setIsConfirming(true);
 
-          const toastId = toast.loading('Removing subscription');
+          const toastId = toast.loading('Confirming Transaction');
 
           data.wait().then((receipt) => {
             if (toastId) {
@@ -411,7 +411,7 @@ const Whitelist = ({
 
           setIsConfirming(true);
 
-          const toastId = toast.loading('Removing address');
+          const toastId = toast.loading('Confirming Transaction');
 
           data.wait().then((receipt) => {
             if (toastId) {
