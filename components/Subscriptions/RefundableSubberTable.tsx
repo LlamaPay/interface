@@ -56,8 +56,6 @@ const Contract = ({
     args: [data.tier.tierId],
   });
 
-  console.log(data.refundableContract.address, data.tier.tierId);
-
   const { isLoading, writeAsync } = useContractWrite(config);
 
   const queryClient = useQueryClient();

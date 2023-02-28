@@ -122,6 +122,7 @@ const Contract = ({ data }: { data: IRefundable }) => {
                       tokenAddress={token.address}
                       contractAddress={data.address}
                       chainId={chain?.id}
+                      explorerUrl={explorerUrl}
                     />
                   ))}
                 </tbody>
@@ -485,10 +486,12 @@ const Balance = ({
   tokenAddress,
   contractAddress,
   chainId,
+  explorerUrl,
 }: {
   tokenAddress: string;
   contractAddress: string;
   chainId?: number;
+  explorerUrl?: string | null;
 }) => {
   const { data: balance } = useBalance({
     address: contractAddress as `0x${string}`,
@@ -508,16 +511,30 @@ const Balance = ({
   return (
     <tr>
       <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-        {formattedBalance && `${formattedBalance} ${balance?.symbol}`}
+        {formattedBalance && (
+          <>
+            <span>{formattedBalance}</span>{' '}
+            {explorerUrl && balance ? (
+              <a
+                href={`${explorerUrl}/address/${tokenAddress}`}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="underline"
+              >
+                {balance.symbol}
+              </a>
+            ) : null}
+          </>
+        )}
       </td>
 
       <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-        {/* <button
+        <button
           className="w-[4rem] rounded-lg border border-lp-primary py-1 px-2 disabled:cursor-not-allowed"
           disabled={Number(formattedBalance) === 0}
         >
           Claim
-        </button> */}
+        </button>
       </td>
     </tr>
   );
