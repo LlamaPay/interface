@@ -4,9 +4,9 @@ import Image from 'next/image';
 import footerGraphic from '~/public/footerGraphic.svg';
 import * as React from 'react';
 
-// const Widget = dynamic(() => import('./AnteWIdget'), {
-//   ssr: false,
-// });
+const Widget = dynamic(() => import('./AnteWIdget'), {
+  ssr: false,
+});
 
 // TODO add translations
 const Footer = () => {
@@ -56,7 +56,7 @@ const Footer = () => {
         <Image src={footerGraphic} alt="" className="object-contain" />
       </div>
 
-      {/* <Widget /> */}
+      <Widget />
     </footer>
   );
 };
