@@ -41,6 +41,7 @@ const vestingFactoryInterface = new Interface(factoryAbi);
 export default function CreateGnosisVesting({ factory }: { factory: string }) {
   const { mutate: gnosisBatch, isLoading: gnosisLoading } = useGnosisBatch();
   const [tokenAddress, setTokenAddress] = React.useState<string>('');
+  const [calls, setCalls] = React.useState<{ [key: string]: string[] }>({});
   const [csvFile, setCsvFile] = React.useState<File | null>(null);
   const [notEOAArr, setNotEAArr] = React.useState<(string | null)[]>([]);
   const eoaWarningDialog = useDialogState();
@@ -105,14 +106,17 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
       createCalls.push(call);
       toApprove = toApprove.plus(fmtVestingAmount);
     }
+    const newCalls: { [key: string]: string[] } = {};
+    newCalls[tokenAddress] = [ERC20Interface.encodeFunctionData('approve', [factory, toApprove.toFixed(0)])];
+    newCalls[factory] = createCalls;
+    setCalls(newCalls);
     if (notEOAs.length > 0) {
       setNotEAArr(notEOAs);
+      eoaWarningDialog.show();
+    } else {
+      gnosisBatch({ calls: newCalls });
+      queryClient.invalidateQueries();
     }
-    const calls: { [key: string]: string[] } = {};
-    calls[tokenAddress] = [ERC20Interface.encodeFunctionData('approve', [factory, toApprove.toFixed(0)])];
-    calls[factory] = createCalls;
-    gnosisBatch({ calls: calls });
-    queryClient.invalidateQueries();
   }
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
@@ -367,7 +371,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
           {gnosisLoading ? <BeatLoader size="6px" color="white" /> : 'Create Contracts'}
         </SubmitButton>
       </form>
-      <EOAWarning address={notEOAArr} dialog={eoaWarningDialog} />
+      <EOAWarning address={notEOAArr} dialog={eoaWarningDialog} gnosis={true} gnosisCalls={calls} />
     </>
   );
 }

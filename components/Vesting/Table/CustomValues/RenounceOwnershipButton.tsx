@@ -15,7 +15,7 @@ export default function RenounceOwnershipButton({ data }: { data: IVesting }) {
     address: data.contract as `0x${string}`,
     abi: vestingContractReadableABI,
     overrides: {
-      gasLimit: 180000 as any,
+      gasLimit: 500000 as any,
     },
     functionName: 'renounce_ownership',
   });

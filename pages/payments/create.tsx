@@ -2,7 +2,7 @@ import { FallbackContainer } from '~/components/Fallback';
 import Layout from '~/components/Layout';
 import CreatePayment from '~/components/Payments/create';
 import { useNetworkProvider } from '~/hooks';
-import { GetServerSideProps, NextPage } from 'next';
+import { GetStaticPropsContext, NextPage } from 'next';
 import { useTranslations } from 'next-intl';
 import { networkDetails } from '~/lib/networkDetails';
 import { useAccount } from 'wagmi';
@@ -30,13 +30,13 @@ const Create: NextPage = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
-  // Pass data to the page via props
+export async function getStaticProps(context: GetStaticPropsContext) {
   return {
     props: {
-      messages: (await import(`translations/${locale}.json`)).default,
+      // You can get the messages from anywhere you like. The recommended
+      // pattern is to put them in JSON files separated by language.
+      messages: (await import(`translations/${context.locale}.json`)).default,
     },
   };
-};
-
+}
 export default Create;

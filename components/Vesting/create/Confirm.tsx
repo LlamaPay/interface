@@ -81,7 +81,7 @@ export default function Confirm({ vestingData, dialog, factory }: IConfirmProps)
           <div className="font-exo my-1 rounded border p-2 dark:border-stone-700 dark:text-white">
             <p>{`Recipient: ${vestingData?.recipientAddress}`}</p>
             <p>{`Token: ${vestingData?.vestedToken}`}</p>
-            <p>{`Amount: ${(Number(vestingData?.vestingAmount) / 10 ** vestingData?.tokenDecimals).toFixed(5)}`}</p>
+            <p>{`Amount: ${(Number(vestingData?.vestingAmount) / 10 ** vestingData?.tokenDecimals).toFixed(18)}`}</p>
             <p>{`Starts: ${intl.formatDateTime(new Date(Number(vestingData.startTime) * 1e3), {
               dateStyle: 'short',
               timeStyle: 'short',

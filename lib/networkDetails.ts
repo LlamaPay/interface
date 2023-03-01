@@ -116,6 +116,8 @@ export const networkDetails: INetworkDetails = {
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-mainnet',
     paymentsContract: CONTRACTS.PAYMENTS_MAINNET,
     paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-mainnet',
+    scheduledTransferFactory: CONTRACTS.SCHEDULED_TRANSFERS_FACTORY_MAINNET,
+    scheduledTransferSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/scheduled-transfers-mainnet',
   },
   10: {
     rpcUrl: 'https://rpc.ankr.com/optimism',
