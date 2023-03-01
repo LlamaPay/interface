@@ -81,12 +81,14 @@ export interface ISubberRefundable {
   id: string;
   refundableContract: IRefundableContract;
   tier: ITier;
+  tokenId: string;
 }
 
 export interface ISubberNonRefundable {
   expires: string;
   id: string;
   sub: ISubWithContractInfo;
+  tokenId: string;
 }
 
 export interface ISubberSubscriptionContract {
@@ -306,6 +308,7 @@ async function fetchSubberSubscriptionContracts({
                   }
                 }
               }
+              tokenId
             }
             refundableSubs {
               expires
@@ -329,6 +332,7 @@ async function fetchSubberSubscriptionContracts({
                   address
                 }
               }
+              tokenId
             }
           }
         }
