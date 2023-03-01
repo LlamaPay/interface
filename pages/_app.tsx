@@ -7,7 +7,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import { WalletProvider } from '~/components/Web3';
 import { NextIntlProvider } from 'next-intl';
 import { ThemeProvider } from 'next-themes';
-import { Inter, Exo_2 } from '@next/font/google';
+import { Inter, Exo_2 } from 'next/font/google';
 
 const inter = Inter({ subsets: ['latin'] });
 const exo2 = Exo_2({ weight: ['300', '400', '500', '600', '700'], subsets: ['latin'] });
