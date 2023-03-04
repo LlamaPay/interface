@@ -33,7 +33,6 @@ export interface ITier {
   id: string;
   token: IToken;
   costPerPeriod: string;
-  amountOfSubs: string;
   disabledAt: string;
   tierId: string;
 }
@@ -152,7 +151,6 @@ const fetchSubscriptionContracts = async ({
                   name
                   symbol
                 }
-                amountOfSubs
                 costPerPeriod
                 disabledAt
                 tierId
@@ -314,7 +312,6 @@ async function fetchSubberSubscriptionContracts({
               expires
               id
               tier {
-                amountOfSubs
                 costPerPeriod
                 disabledAt
                 tierId
