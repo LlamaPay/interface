@@ -55,6 +55,7 @@ export interface IRefundable {
   periodDuation: string;
   whitelist: [];
   tiers: Array<ITier>;
+  isNotOwner?: boolean;
 }
 
 export interface INonRefundable {
@@ -62,12 +63,12 @@ export interface INonRefundable {
   id: string;
   subs: Array<ISub>;
   whitelist: [];
+  isNotOwner?: boolean;
 }
 
 interface ISubscriptionContracts {
   refundables: Array<IRefundable>;
   nonrefundables: Array<INonRefundable>;
-  nonRefundableSubs: Array<{ id: string }>;
 }
 
 export interface ISubscriptionContract {
@@ -104,18 +105,17 @@ const fetchSubscriptionContracts = async ({
 }): Promise<ISubscriptionContracts> => {
   try {
     if (!userAddress || !graphEndpoint) {
-      return { refundables: [], nonrefundables: [], nonRefundableSubs: [] };
+      return { refundables: [], nonrefundables: [] };
     }
 
-    const res: { owner: ISubscriptionContracts; nonRefundableSubs: Array<{ id: string }> } = await request(
+    const res: {
+      owner: { refundables: Array<IRefundable>; nonrefundables: Array<INonRefundable> };
+      refundables: Array<IRefundable>;
+      nonrefundables: Array<INonRefundable>;
+    } = await request(
       graphEndpoint,
       gql`
         {
-          nonRefundableSubs(where: {expires_gte: "${Math.floor(
-            Date.now() / 1000
-          )}", nonRefundableContract_: {owner: "${userAddress.toLowerCase()}"}}) {
-            id
-          }
           owner(id: "${userAddress.toLowerCase()}") {
             id
             nonrefundables {
@@ -157,14 +157,57 @@ const fetchSubscriptionContracts = async ({
               }
             }
           }
+          nonRefundables(where: {whitelist_contains: ["${userAddress.toLowerCase()}"], owner_not: "${userAddress.toLowerCase()}"}) {
+            id
+            address
+            subs {
+              costOfSub
+              disabled
+              duration
+              id
+              token {
+                address
+                decimals
+                id
+                name
+                symbol
+              }
+              subId
+            }
+            whitelist
+          }
+          refundables(where: {whitelist_contains: ["${userAddress.toLowerCase()}"], owner_not: "${userAddress.toLowerCase()}"}) {
+            periodDuation
+            id
+            address
+            whitelist
+            tiers {
+              id
+              token {
+                address
+                decimals
+                id
+                name
+                symbol
+              }
+              costPerPeriod
+              disabledAt
+              tierId
+            }
+          }
         }
       `
     );
 
     return {
-      refundables: res?.owner?.refundables ?? [],
-      nonrefundables: res?.owner?.nonrefundables ?? [],
-      nonRefundableSubs: res?.nonRefundableSubs ?? [],
+      refundables: [
+        ...(res?.owner?.refundables ?? []),
+        ...(res?.refundables ?? []).map((x) => ({ ...x, isNotOwner: true })),
+      ],
+      nonrefundables: [
+        ...(res?.owner?.nonrefundables ?? []),
+        ...(res?.nonrefundables ?? []).map((x) => ({ ...x, isNotOwner: true })),
+      ],
     };
   } catch (error: any) {
     throw new Error(error.message || (error?.reason ?? "Couldn't fetch subscription contracts"));

@@ -112,7 +112,7 @@ const Contract = ({ data }: { data: INonRefundable }) => {
 
           <tr>
             <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
-              Balance
+              Claimable
             </th>
             <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
               <table className="w-full border-collapse">
@@ -160,13 +160,15 @@ const Contract = ({ data }: { data: INonRefundable }) => {
                       chainId={chain?.id}
                       txDialogState={txDialogState}
                       txHash={txHash}
+                      disabled={data.isNotOwner}
                     />
                   ))}
                 </tbody>
               </table>
               <button
-                className="mx-auto mt-2 flex flex-nowrap items-center gap-2 rounded-lg border border-lp-primary py-1 px-2"
+                className="mx-auto mt-2 flex flex-nowrap items-center gap-2 rounded-lg border border-lp-primary py-1 px-2 disabled:cursor-not-allowed disabled:border-lp-gray-2 disabled:bg-lp-gray-1 dark:disabled:bg-lp-gray-5"
                 onClick={() => subDialog.setOpen(true)}
+                disabled={data.isNotOwner}
               >
                 <PlusIcon className="h-4 w-4" />
                 <span>Create Subscription</span>
@@ -197,6 +199,7 @@ const Contract = ({ data }: { data: INonRefundable }) => {
                         explorerUrl={explorerUrl}
                         txDialogState={txDialogState}
                         txHash={txHash}
+                        disabled={data.isNotOwner}
                       />
                     ))}
                   </tbody>
@@ -204,8 +207,9 @@ const Contract = ({ data }: { data: INonRefundable }) => {
               )}
 
               <button
-                className="mx-auto mt-2 flex flex-nowrap items-center gap-2 rounded-lg border border-lp-primary py-1 px-2"
+                className="mx-auto mt-2 flex flex-nowrap items-center gap-2 rounded-lg border border-lp-primary py-1 px-2 disabled:cursor-not-allowed disabled:border-lp-gray-2 disabled:bg-lp-gray-1 dark:disabled:bg-lp-gray-5"
                 onClick={() => whitelistDialog.setOpen(true)}
+                disabled={data.isNotOwner}
               >
                 <PlusIcon className="h-4 w-4" />
                 <span>New Address</span>
@@ -256,6 +260,7 @@ const Sub = ({
   chainId,
   txDialogState,
   txHash,
+  disabled,
 }: {
   data: ISub;
   subId: string;
@@ -264,6 +269,7 @@ const Sub = ({
   chainId?: number;
   txDialogState: DisclosureState;
   txHash: React.MutableRefObject<string>;
+  disabled?: boolean;
 }) => {
   const [isConfirming, setIsConfirming] = React.useState(false);
 
@@ -273,7 +279,7 @@ const Sub = ({
     chainId,
     functionName: 'removeSubs',
     args: [[subId]],
-    enabled: !data.disabled,
+    enabled: !data.disabled && !disabled ? true : false,
   });
 
   const { isLoading, writeAsync } = useContractWrite(config);
@@ -357,8 +363,8 @@ const Sub = ({
             </button>
           ) : (
             <button
-              className="min-w-[5rem] rounded-lg border border-red-500 py-1 px-2 disabled:cursor-not-allowed"
-              disabled={isLoading || isConfirming}
+              className="min-w-[5rem] rounded-lg border border-red-500 py-1 px-2 disabled:cursor-not-allowed disabled:border-lp-gray-2 disabled:bg-lp-gray-1 dark:disabled:bg-lp-gray-5"
+              disabled={disabled || isLoading || isConfirming}
               onClick={() => removeSub()}
             >
               {isLoading || isConfirming ? <BeatLoader size="4px" className="!h-5" /> : 'Remove'}
@@ -377,6 +383,7 @@ const Whitelist = ({
   chainId,
   txDialogState,
   txHash,
+  disabled,
 }: {
   address: string;
   contractAddress: string;
@@ -384,6 +391,7 @@ const Whitelist = ({
   chainId?: number;
   txDialogState: DisclosureState;
   txHash: React.MutableRefObject<string>;
+  disabled?: boolean;
 }) => {
   const [isConfirming, setIsConfirming] = React.useState(false);
 
@@ -393,6 +401,7 @@ const Whitelist = ({
     chainId,
     functionName: 'removeWhitelist',
     args: [address],
+    enabled: !disabled,
   });
 
   const { isLoading, writeAsync } = useContractWrite(config);
@@ -449,8 +458,8 @@ const Whitelist = ({
 
         <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
           <button
-            className="min-w-[5rem] rounded-lg border border-red-500 py-1 px-2 disabled:cursor-not-allowed"
-            disabled={isLoading || isConfirming}
+            className="min-w-[5rem] rounded-lg border border-red-500 py-1 px-2 disabled:cursor-not-allowed disabled:border-lp-gray-2 disabled:bg-lp-gray-1 dark:disabled:bg-lp-gray-5"
+            disabled={disabled || isLoading || isConfirming}
             onClick={() => removeAddressFromWhitelist()}
           >
             {isLoading || isConfirming ? <BeatLoader size="4px" className="!h-5" /> : 'Remove'}
