@@ -149,9 +149,6 @@ const Contract = ({ data }: { data: IRefundable }) => {
                     <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
                       Cost per period
                     </th>
-                    <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
-                      Active Subscriptions
-                    </th>
                     <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7"></th>
                     <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7"></th>
                   </tr>
@@ -448,9 +445,6 @@ const Tier = ({
         ) : (
           <span>{data.token.symbol}</span>
         )}
-      </td>
-      <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-        {data.amountOfSubs}
       </td>
       <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
         {chainId && (
