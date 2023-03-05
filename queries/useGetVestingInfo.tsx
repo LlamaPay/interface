@@ -101,43 +101,45 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
       //   calls: vestingEscrowCalls,
       // }));
       // const vestingContractInfoResults = await runMulticall(vestingContractInfoContext);
-await Promise.all(Object.keys(escrows).map(async i => {
-        // const vestingReturnContext = vestingContractInfoResults[escrows[i].id].callsReturnContext;
-        const contract = new ethers.Contract(getAddress(escrows[i].id), vestingEscrowABI, provider);
-        const result = {
-          contract: escrows[i].id,
-          unclaimed: await contract.unclaimed({ gasLimit: 1000000 }),
-          locked: await contract.locked({ gasLimit: 1000000 }),
-          recipient: escrows[i].recipient,
-          token: escrows[i].token.id,
-          tokenName: escrows[i].token.name,
-          tokenSymbol: escrows[i].token.symbol,
-          tokenDecimals: escrows[i].token.decimals,
-          startTime: await contract.start_time({ gasLimit: 1000000 }),
-          endTime: await contract.end_time({ gasLimit: 1000000 }),
-          cliffLength: await contract.cliff_length({ gasLimit: 1000000 }),
-          totalLocked: await contract.total_locked({ gasLimit: 1000000 }),
-          totalClaimed: await contract.total_claimed({ gasLimit: 1000000 }),
-          admin: escrows[i].admin,
-          disabledAt: await contract.disabled_at({ gasLimit: 1000000 }),
-          timestamp: Date.now() / 1e3,
-          reason: null,
-        };
+      await Promise.all(
+        Object.keys(escrows).map(async (i) => {
+          // const vestingReturnContext = vestingContractInfoResults[escrows[i].id].callsReturnContext;
+          const contract = new ethers.Contract(getAddress(escrows[i].id), vestingEscrowABI, provider);
+          const result = {
+            contract: escrows[i].id,
+            unclaimed: await contract.unclaimed({ gasLimit: 1000000 }),
+            locked: await contract.locked({ gasLimit: 1000000 }),
+            recipient: escrows[i].recipient,
+            token: escrows[i].token.id,
+            tokenName: escrows[i].token.name,
+            tokenSymbol: escrows[i].token.symbol,
+            tokenDecimals: escrows[i].token.decimals,
+            startTime: await contract.start_time({ gasLimit: 1000000 }),
+            endTime: await contract.end_time({ gasLimit: 1000000 }),
+            cliffLength: await contract.cliff_length({ gasLimit: 1000000 }),
+            totalLocked: await contract.total_locked({ gasLimit: 1000000 }),
+            totalClaimed: await contract.total_claimed({ gasLimit: 1000000 }),
+            admin: escrows[i].admin,
+            disabledAt: await contract.disabled_at({ gasLimit: 1000000 }),
+            timestamp: Date.now() / 1e3,
+            reason: null,
+          };
 
-        if (networkDetails[chainId].vestingReason !== '0x0000000000000000000000000000000000000000') {
-          const contract = new ethers.Contract(
-            getAddress(networkDetails[chainId].vestingReason),
-            vestingReasonsABI,
-            provider
-          );
-          const reason = await contract.reasons(getAddress(escrows[i].id), { gasLimit: 10000000 });
-          if (reason !== '') {
-            result.reason = reason;
+          if (networkDetails[chainId].vestingReason !== '0x0000000000000000000000000000000000000000') {
+            const contract = new ethers.Contract(
+              getAddress(networkDetails[chainId].vestingReason),
+              vestingReasonsABI,
+              provider
+            );
+            const reason = await contract.reasons(getAddress(escrows[i].id), { gasLimit: 10000000 });
+            if (reason !== '') {
+              result.reason = reason;
+            }
           }
-        }
-        if (results.includes(result)) continue;
-        results.push(result);
-      })
+          if (results.includes(result)) return;
+          results.push(result);
+        })
+      );
     } else {
       const factoryAddress = networkDetails[chainId].vestingFactory;
       const factoryContract = new ethers.Contract(factoryAddress, vestingFactoryABI, provider);
