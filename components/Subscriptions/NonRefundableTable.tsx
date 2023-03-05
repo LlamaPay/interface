@@ -18,17 +18,17 @@ import { BeatLoader } from '../BeatLoader';
 import { SubmitButton } from '../Form';
 import { CreateNonRefundableSub } from './CreateNonRefundableSub';
 
-export function NonRefundableTable({ data }: { data: Array<INonRefundable> }) {
+export function NonRefundableTable({ data, userAddress }: { data: Array<INonRefundable>; userAddress: string }) {
   return (
     <div className="flex flex-col gap-4">
       {data.map((contract) => (
-        <Contract key={'non-refundable-subs' + contract.id} data={contract} />
+        <Contract key={'non-refundable-subs' + contract.id} data={contract} userAddress={userAddress} />
       ))}
     </div>
   );
 }
 
-const Contract = ({ data }: { data: INonRefundable }) => {
+const Contract = ({ data, userAddress }: { data: INonRefundable; userAddress: string }) => {
   const [isConfirming, setIsConfirming] = React.useState(false);
   const { chain } = useNetwork();
 
@@ -85,6 +85,8 @@ const Contract = ({ data }: { data: INonRefundable }) => {
       tokens.push(sub.token);
     }
   });
+
+  const isNotOwner = data.owner.address.toLowerCase() !== userAddress.toLowerCase();
 
   return (
     <div className="max-w-[calc(100vw-16px)] overflow-x-auto border border-dashed border-llama-teal-2 p-1 dark:border-lp-gray-7 md:max-w-[calc(100vw-48px)] lg:max-w-[calc(100vw-256px)]">
@@ -162,7 +164,7 @@ const Contract = ({ data }: { data: INonRefundable }) => {
                       chainId={chain?.id}
                       txDialogState={txDialogState}
                       txHash={txHash}
-                      disabled={data.isNotOwner}
+                      disabled={isNotOwner}
                     />
                   ))}
                 </tbody>
@@ -170,7 +172,7 @@ const Contract = ({ data }: { data: INonRefundable }) => {
               <button
                 className="mx-auto mt-2 flex flex-nowrap items-center gap-2 rounded-lg border border-lp-primary py-1 px-2 disabled:cursor-not-allowed disabled:border-lp-gray-2 disabled:bg-lp-gray-1 dark:disabled:bg-lp-gray-5"
                 onClick={() => subDialog.setOpen(true)}
-                disabled={data.isNotOwner}
+                disabled={isNotOwner}
               >
                 <PlusIcon className="h-4 w-4" />
                 <span>Create Subscription</span>
@@ -201,7 +203,7 @@ const Contract = ({ data }: { data: INonRefundable }) => {
                         explorerUrl={explorerUrl}
                         txDialogState={txDialogState}
                         txHash={txHash}
-                        disabled={data.isNotOwner}
+                        disabled={isNotOwner}
                       />
                     ))}
                   </tbody>
@@ -211,7 +213,7 @@ const Contract = ({ data }: { data: INonRefundable }) => {
               <button
                 className="mx-auto mt-2 flex flex-nowrap items-center gap-2 rounded-lg border border-lp-primary py-1 px-2 disabled:cursor-not-allowed disabled:border-lp-gray-2 disabled:bg-lp-gray-1 dark:disabled:bg-lp-gray-5"
                 onClick={() => whitelistDialog.setOpen(true)}
-                disabled={data.isNotOwner}
+                disabled={isNotOwner}
               >
                 <PlusIcon className="h-4 w-4" />
                 <span>New Address</span>

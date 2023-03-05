@@ -57,7 +57,9 @@ export interface IRefundable {
   periodDuation: string;
   whitelist: [];
   tiers: Array<ITier>;
-  isNotOwner?: boolean;
+  owner: {
+    address: string;
+  };
 }
 
 export interface INonRefundable {
@@ -65,12 +67,14 @@ export interface INonRefundable {
   id: string;
   subs: Array<ISub>;
   whitelist: [];
-  isNotOwner?: boolean;
+  owner: {
+    address: string;
+  };
 }
 
 interface ISubscriptionContracts {
   refundables: Array<IRefundable>;
-  nonrefundables: Array<INonRefundable>;
+  nonRefundables: Array<INonRefundable>;
 }
 
 export interface ISubscriptionContract {
@@ -107,65 +111,17 @@ const fetchSubscriptionContracts = async ({
 }): Promise<ISubscriptionContracts> => {
   try {
     if (!userAddress || !graphEndpoint) {
-      return { refundables: [], nonrefundables: [] };
+      return { refundables: [], nonRefundables: [] };
     }
 
     const res: {
-      owner: { refundables: Array<IRefundable>; nonrefundables: Array<INonRefundable> };
       refundables: Array<IRefundable>;
-      nonrefundables: Array<INonRefundable>;
+      nonRefundables: Array<INonRefundable>;
     } = await request(
       graphEndpoint,
       gql`
         {
-          owner(id: "${userAddress.toLowerCase()}") {
-            id
-            nonrefundables {
-              id
-              address
-              subs {
-                costOfSub
-                disabled
-                duration
-                id
-                token {
-                  address
-                  decimals
-                  id
-                  name
-                  symbol
-                }
-                subId
-                nonRefundableSubs(where: {expires_gt: "${Math.floor(Date.now() / 1000)}"}) {
-                  id
-                }
-              }
-              whitelist
-            }
-            refundables {
-              periodDuation
-              id
-              address
-              whitelist
-              tiers {
-                id
-                token {
-                  address
-                  decimals
-                  id
-                  name
-                  symbol
-                }
-                costPerPeriod
-                disabledAt
-                tierId
-                refundableSubs(where: {expires_gt: "${Math.floor(Date.now() / 1000)}"}) {
-                  id
-                }
-              }
-            }
-          }
-          nonRefundables(where: {whitelist_contains: ["${userAddress.toLowerCase()}"], owner_not: "${userAddress.toLowerCase()}"}) {
+          nonRefundables(where: {or: [{whitelist_contains: ["${userAddress.toLowerCase()}"]}, {owner: "${userAddress.toLowerCase()}"}]}) {
             id
             address
             subs {
@@ -186,12 +142,14 @@ const fetchSubscriptionContracts = async ({
               }
             }
             whitelist
+            owner {
+              address
+            }
           }
-          refundables(where: {whitelist_contains: ["${userAddress.toLowerCase()}"], owner_not: "${userAddress.toLowerCase()}"}) {
-            periodDuation
+          refundables(where: {or: [{whitelist_contains: ["${userAddress.toLowerCase()}"]}, {owner: "${userAddress.toLowerCase()}"}]}) {
             id
             address
-            whitelist
+            periodDuation
             tiers {
               id
               token {
@@ -204,6 +162,13 @@ const fetchSubscriptionContracts = async ({
               costPerPeriod
               disabledAt
               tierId
+              refundableSubs(where: {expires_gt: "${Math.floor(Date.now() / 1000)}"}) {
+                id
+              }
+            }
+            whitelist
+            owner {
+              address
             }
           }
         }
@@ -211,14 +176,8 @@ const fetchSubscriptionContracts = async ({
     );
 
     return {
-      refundables: [
-        ...(res?.owner?.refundables ?? []),
-        ...(res?.refundables ?? []).map((x) => ({ ...x, isNotOwner: true })),
-      ],
-      nonrefundables: [
-        ...(res?.owner?.nonrefundables ?? []),
-        ...(res?.nonrefundables ?? []).map((x) => ({ ...x, isNotOwner: true })),
-      ],
+      refundables: res?.refundables ?? [],
+      nonRefundables: res?.nonRefundables ?? [],
     };
   } catch (error: any) {
     throw new Error(error.message || (error?.reason ?? "Couldn't fetch subscription contracts"));

@@ -1,4 +1,4 @@
-import { useBalance, useContractRead, useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
+import { useAccount, useBalance, useContractRead, useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
 import { networkDetails } from '~/lib/networkDetails';
 import type { IRefundable, ITier } from '~/queries/useGetSubscriptions';
 import { formatFrequency } from '../ScheduledTransfers/utils';
@@ -18,18 +18,19 @@ import { CreateRefundableTier } from './CreateRefundableTier';
 import Link from 'next/link';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/solid';
 
-export function RefundableTable({ data }: { data: Array<IRefundable> }) {
+export function RefundableTable({ data, userAddress }: { data: Array<IRefundable>; userAddress: string }) {
   return (
     <div className="flex flex-col gap-4">
       {data.map((contract) => (
-        <Contract key={'refundable-subs' + contract.id} data={contract} />
+        <Contract key={'refundable-subs' + contract.id} data={contract} userAddress={userAddress} />
       ))}
     </div>
   );
 }
 
-const Contract = ({ data }: { data: IRefundable }) => {
+const Contract = ({ data, userAddress }: { data: IRefundable; userAddress: string }) => {
   const [isConfirming, setIsConfirming] = React.useState(false);
+
   const { chain } = useNetwork();
 
   const explorerUrl = chain ? networkDetails[chain.id]?.blockExplorerURL : null;
@@ -84,6 +85,8 @@ const Contract = ({ data }: { data: IRefundable }) => {
       tokens.push(tier.token);
     }
   });
+
+  const isNotOwner = data.owner.address.toLowerCase() !== userAddress.toLowerCase();
 
   return (
     <div className="max-w-[calc(100vw-16px)] overflow-x-auto border border-dashed border-llama-teal-2 p-1 dark:border-lp-gray-7 md:max-w-[calc(100vw-48px)] lg:max-w-[calc(100vw-256px)]">
@@ -167,7 +170,7 @@ const Contract = ({ data }: { data: IRefundable }) => {
                       txDialogState={txDialogState}
                       txHash={txHash}
                       tierId={tier.tierId}
-                      disabled={data.isNotOwner}
+                      disabled={isNotOwner}
                     />
                   ))}
                 </tbody>
@@ -176,7 +179,7 @@ const Contract = ({ data }: { data: IRefundable }) => {
               <button
                 className="mx-auto mt-2 flex flex-nowrap items-center gap-2 rounded-lg border border-lp-primary py-1 px-2 disabled:cursor-not-allowed disabled:border-lp-gray-2 disabled:bg-lp-gray-1 dark:disabled:bg-lp-gray-5"
                 onClick={() => tierDialog.setOpen(true)}
-                disabled={data.isNotOwner}
+                disabled={isNotOwner}
               >
                 <PlusIcon className="h-4 w-4" />
                 <span>Create Tier</span>
@@ -207,7 +210,7 @@ const Contract = ({ data }: { data: IRefundable }) => {
                         explorerUrl={explorerUrl}
                         txDialogState={txDialogState}
                         txHash={txHash}
-                        disabled={data.isNotOwner}
+                        disabled={isNotOwner}
                       />
                     ))}
                   </tbody>
@@ -217,7 +220,7 @@ const Contract = ({ data }: { data: IRefundable }) => {
               <button
                 className="mx-auto mt-2 flex flex-nowrap items-center gap-2 rounded-lg border border-lp-primary py-1 px-2 disabled:cursor-not-allowed disabled:border-lp-gray-2 disabled:bg-lp-gray-1 dark:disabled:bg-lp-gray-5"
                 onClick={() => whitelistDialog.setOpen(true)}
-                disabled={data.isNotOwner}
+                disabled={isNotOwner}
               >
                 <PlusIcon className="h-4 w-4" />
                 <span>New Address</span>

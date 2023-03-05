@@ -13,7 +13,7 @@ import { networkDetails } from '~/lib/networkDetails';
 import { useGetSubscriptionContracts } from '~/queries/useGetSubscriptions';
 
 const Home: NextPage = () => {
-  const { isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
   const { chain } = useNetwork();
   const { chainId } = useNetworkProvider();
 
@@ -29,7 +29,7 @@ const Home: NextPage = () => {
     <Layout className="flex flex-col gap-8">
       {showFallback ? (
         <FallbackContainer>
-          {!isConnected ? (
+          {!isConnected || !address ? (
             <p>{t0('connectWallet')}</p>
           ) : !graphEndpoint || chain?.unsupported ? (
             <p>{t0('networkNotSupported')}</p>
@@ -58,7 +58,7 @@ const Home: NextPage = () => {
                 </p>
               </FallbackContainer>
             ) : (
-              <RefundableTable data={data.refundables} />
+              <RefundableTable data={data.refundables} userAddress={address as string} />
             )}
           </div>
 
@@ -72,7 +72,7 @@ const Home: NextPage = () => {
               <FallbackContainer>
                 <p>Something went wrong, couldn't fetch data</p>
               </FallbackContainer>
-            ) : !data || data.nonrefundables.length === 0 ? (
+            ) : !data || data.nonRefundables.length === 0 ? (
               <FallbackContainer>
                 <p>
                   You dont have any non refundable subscription contracts, click{' '}
@@ -83,7 +83,7 @@ const Home: NextPage = () => {
                 </p>
               </FallbackContainer>
             ) : (
-              <NonRefundableTable data={data.nonrefundables} />
+              <NonRefundableTable data={data.nonRefundables} userAddress={address as string} />
             )}
           </div>
         </>
