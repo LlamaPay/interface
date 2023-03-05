@@ -63,7 +63,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
     if (subgraphs[chainId]) {
       const GET_ADMIN = gql`
         {
-          vestingEscrows(where: {admin: "${userAddress.toLowerCase()}"}) {
+          vestingEscrows(where: {admin: "${userAddress.toLowerCase()}"}, first:1000) {
             id
             admin
             recipient
