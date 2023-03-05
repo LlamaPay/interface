@@ -25,6 +25,22 @@ interface INetworkDetails {
   };
 }
 
+function createProvider(name: string, defaultRpc: string[], chainId: number) {
+  return new ethers.providers.FallbackProvider(
+    defaultRpc.map((url, i) => ({
+      provider: new ethers.providers.StaticJsonRpcProvider(
+        url,
+        {
+          name,
+          chainId,
+        }
+      ),
+      priority: i
+    })),
+    1
+  )
+}
+
 const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
 const alchemyId = 'PwvZx2hO2XpToWXSw9sgJJt1eBgjkRUr';
 const etherscanKey = 'DDH7EVWI1AQHBNPX5PYRSDM5SHCVBKX58Q';
@@ -101,7 +117,7 @@ export const networkDetails: INetworkDetails = {
   1: {
     rpcUrl: 'https://rpc.ankr.com/eth',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-mainnet',
-    chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/eth'),
+    chainProviders: createProvider("ethereum", ['https://rpc.ankr.com/eth', 'https://eth.llamarpc.com', 'https://cloudflare-eth.com', 'https://rpc.builder0x69.io'], 1),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_MAINNET,
     disperseAddress: CONTRACTS.DISPERSE_DEFAULT,
     botAddress: CONTRACTS.BOT_MAINNET,
