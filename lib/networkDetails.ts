@@ -117,7 +117,7 @@ export const networkDetails: INetworkDetails = {
   1: {
     rpcUrl: 'https://rpc.ankr.com/eth',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-mainnet',
-    chainProviders: createProvider("ethereum", ['https://rpc.ankr.com/eth', 'https://eth.llamarpc.com', 'https://cloudflare-eth.com', 'https://rpc.builder0x69.io'], 1),
+    chainProviders: createProvider("ethereum", ['https://rpc.ankr.com/eth', 'https://eth.llamarpc.com', 'https://cloudflare-eth.com'], 1),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_MAINNET,
     disperseAddress: CONTRACTS.DISPERSE_DEFAULT,
     botAddress: CONTRACTS.BOT_MAINNET,
