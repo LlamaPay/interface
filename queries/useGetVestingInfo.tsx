@@ -101,7 +101,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
       //   calls: vestingEscrowCalls,
       // }));
       // const vestingContractInfoResults = await runMulticall(vestingContractInfoContext);
-await Promise.all(escrows.map(async i => {
+await Promise.all(Object.keys(escrows).map(async i => {
         // const vestingReturnContext = vestingContractInfoResults[escrows[i].id].callsReturnContext;
         const contract = new ethers.Contract(getAddress(escrows[i].id), vestingEscrowABI, provider);
         const result = {
