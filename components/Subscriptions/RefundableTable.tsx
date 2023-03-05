@@ -1,7 +1,6 @@
 import { useBalance, useContractRead, useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
 import { networkDetails } from '~/lib/networkDetails';
 import type { IRefundable, ITier } from '~/queries/useGetSubscriptions';
-import { useGetRefundableActiveSubs } from '~/queries/useGetSubscriptions';
 import { formatFrequency } from '../ScheduledTransfers/utils';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { QuestionMarkCircleIcon } from '@heroicons/react/20/solid';
@@ -378,10 +377,6 @@ const Tier = ({
 }) => {
   const [isConfirming, setIsConfirming] = React.useState(false);
 
-  const graphEndpoint = chainId ? networkDetails[chainId].subscriptionsSubgraph : null;
-
-  const { data: activeSubs } = useGetRefundableActiveSubs({ graphEndpoint, tierId });
-
   const isDisabled = data.disabledAt && data.disabledAt !== '0';
 
   const {
@@ -464,7 +459,7 @@ const Tier = ({
         )}
       </td>
       <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-        {Number.isNaN(Number(activeSubs)) ? '' : activeSubs}
+        {Number.isNaN(Number(data.refundableSubs.length)) ? '' : data.refundableSubs.length}
       </td>
       <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
         {chainId && (

@@ -16,6 +16,7 @@ export interface ISub {
   token: IToken;
   id: string;
   subId: string;
+  nonRefundableSubs: Array<{ id: string }>;
 }
 
 interface INonRefundableContract {
@@ -35,6 +36,7 @@ export interface ITier {
   costPerPeriod: string;
   disabledAt: string;
   tierId: string;
+  refundableSubs: Array<{ id: string }>;
 }
 
 interface IRefundableContract {
@@ -134,6 +136,9 @@ const fetchSubscriptionContracts = async ({
                   symbol
                 }
                 subId
+                nonRefundableSubs(where: {expires_gt: "${Math.floor(Date.now() / 1000)}"}) {
+                  id
+                }
               }
               whitelist
             }
@@ -154,6 +159,9 @@ const fetchSubscriptionContracts = async ({
                 costPerPeriod
                 disabledAt
                 tierId
+                refundableSubs(where: {expires_gt: "${Math.floor(Date.now() / 1000)}"}) {
+                  id
+                }
               }
             }
           }
@@ -173,6 +181,9 @@ const fetchSubscriptionContracts = async ({
                 symbol
               }
               subId
+              nonRefundableSubs(where: {expires_gt: "${Math.floor(Date.now() / 1000)}"}) {
+                id
+              }
             }
             whitelist
           }
@@ -261,7 +272,6 @@ export async function fetchSubscriptionContract({
               }
             }
           }
-
           sub (id: "${contractId.toLowerCase()}") {
             id
             token {
@@ -394,50 +404,6 @@ export function useGetSubberSubscriptionContracts({ graphEndpoint }: { graphEndp
   return useQuery<ISubberSubscriptionContract>(
     ['subberSubscriptionContracts', address, graphEndpoint],
     () => fetchSubberSubscriptionContracts({ userAddress: address, graphEndpoint }),
-    {
-      refetchInterval: 30_000,
-    }
-  );
-}
-
-async function fetchRefundableActiveSubs({ tierId, graphEndpoint }: { tierId: string; graphEndpoint?: string | null }) {
-  if (!graphEndpoint) {
-    return null;
-  }
-
-  try {
-    const res = await request(
-      graphEndpoint,
-      gql`
-        {
-          tiers(
-            where: {
-              refundableSubs_: { expires_gt: "${Math.floor(Date.now() / 1000)}" }
-              id: "${tierId.toLowerCase()}"
-            }
-          ) {
-            id
-          }
-        }
-      `
-    );
-
-    return res?.tiers?.length ?? null;
-  } catch (error: any) {
-    throw new Error(error.message || (error?.reason ?? `Couldn't fetch active subs of ${tierId}`));
-  }
-}
-
-export function useGetRefundableActiveSubs({
-  graphEndpoint,
-  tierId,
-}: {
-  graphEndpoint?: string | null;
-  tierId: string;
-}) {
-  return useQuery<number | null>(
-    ['refundableActiveSubsInTier', tierId, graphEndpoint],
-    () => fetchRefundableActiveSubs({ tierId, graphEndpoint }),
     {
       refetchInterval: 30_000,
     }

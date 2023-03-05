@@ -142,9 +142,11 @@ const Contract = ({ data }: { data: INonRefundable }) => {
                       Cost of subscription
                     </th>
                     <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
+                      Total Subs
+                    </th>
+                    <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
                       Duration
                     </th>
-
                     <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7"></th>
                     <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7"></th>
                   </tr>
@@ -342,9 +344,11 @@ const Sub = ({
           )}
         </td>
         <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
+          {Number.isNaN(Number(data.nonRefundableSubs.length)) ? '' : data.nonRefundableSubs.length}
+        </td>
+        <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
           {formatFrequency(data.duration)}
         </td>
-
         <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
           {chainId && (
             <Link href={`/subscriptions/${chainId}/${data.id}`} target="_blank" className="flex items-center gap-1">
