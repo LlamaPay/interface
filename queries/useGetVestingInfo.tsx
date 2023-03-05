@@ -101,7 +101,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
       //   calls: vestingEscrowCalls,
       // }));
       // const vestingContractInfoResults = await runMulticall(vestingContractInfoContext);
-      for (const i in escrows) {
+await Promise.all(escrows.map(async i => {
         // const vestingReturnContext = vestingContractInfoResults[escrows[i].id].callsReturnContext;
         const contract = new ethers.Contract(getAddress(escrows[i].id), vestingEscrowABI, provider);
         const result = {
@@ -137,7 +137,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
         }
         if (results.includes(result)) continue;
         results.push(result);
-      }
+      })
     } else {
       const factoryAddress = networkDetails[chainId].vestingFactory;
       const factoryContract = new ethers.Contract(factoryAddress, vestingFactoryABI, provider);
