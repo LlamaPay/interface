@@ -328,7 +328,7 @@ async function fetchSubberSubscriptionContracts({
         {
           subber(id: "${userAddress.toLowerCase()}") {
             id
-            nonRefundableSubs {
+            nonRefundableSubs(where: {expires_gt: "${Math.floor(Date.now() / 1000)}"}) {
               expires
               id
               sub {
@@ -351,7 +351,7 @@ async function fetchSubberSubscriptionContracts({
               }
               tokenId
             }
-            refundableSubs {
+            refundableSubs(where: {expires_gt: "${Math.floor(Date.now() / 1000)}"}) {
               expires
               id
               tier {

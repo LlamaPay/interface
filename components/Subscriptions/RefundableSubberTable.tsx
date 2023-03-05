@@ -1,4 +1,4 @@
-import { useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
+import { useContractRead, useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
 import { networkDetails } from '~/lib/networkDetails';
 import type { ISubberRefundable } from '~/queries/useGetSubscriptions';
 import * as React from 'react';
@@ -48,12 +48,22 @@ const Contract = ({
 
   const [isConfirming, setIsConfirming] = React.useState(false);
 
+  const { data: currentPeriod, isLoading: fetchingCurrentPeriod } = useContractRead({
+    address: data.refundableContract.address as `0x${string}`,
+    abi: refundableSubscriptionABI,
+    chainId: chain?.id,
+    functionName: 'getUpdatedCurrentPeriod',
+  });
+
+  const unsubscribed = currentPeriod ? currentPeriod.toString() == data.expires : false;
+
   const { config } = usePrepareContractWrite({
     address: data.refundableContract.address as `0x${string}`,
     abi: refundableSubscriptionABI,
     chainId: chain?.id,
     functionName: 'unsubscribe',
     args: [data.tokenId],
+    enabled: !unsubscribed,
   });
 
   const { isLoading, writeAsync } = useContractWrite(config);
@@ -190,13 +200,23 @@ const Contract = ({
               className="table-description border border-solid border-llama-teal-2 text-center font-normal text-lp-gray-4 dark:border-lp-gray-7 dark:text-white"
               colSpan={2}
             >
-              <button
-                className="min-w-[10rem] rounded-lg border border-red-500 py-2 px-4 disabled:cursor-not-allowed"
-                onClick={() => unsubscribe()}
-                disabled={isConfirming || isLoading}
-              >
-                {isLoading || isConfirming ? <BeatLoader className="!h-5" /> : 'Unsubscribe'}
-              </button>
+              {!fetchingCurrentPeriod && unsubscribed ? (
+                <button
+                  className="min-w-[10rem] rounded-lg border py-2 px-4 disabled:cursor-not-allowed disabled:border-lp-gray-2 disabled:bg-lp-gray-1 dark:disabled:bg-lp-gray-5"
+                  onClick={() => unsubscribe()}
+                  disabled
+                >
+                  Unsubscribed
+                </button>
+              ) : (
+                <button
+                  className="min-w-[10rem] rounded-lg border border-red-500 py-2 px-4 disabled:cursor-not-allowed"
+                  onClick={() => unsubscribe()}
+                  disabled={isConfirming || isLoading || fetchingCurrentPeriod || unsubscribed}
+                >
+                  {isLoading || isConfirming ? <BeatLoader className="!h-5" /> : 'Unsubscribe'}
+                </button>
+              )}
             </td>
           </tr>
         </tbody>
