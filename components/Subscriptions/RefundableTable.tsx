@@ -1,6 +1,7 @@
 import { useBalance, useContractRead, useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
 import { networkDetails } from '~/lib/networkDetails';
 import type { IRefundable, ITier } from '~/queries/useGetSubscriptions';
+import { useGetRefundableActiveSubs } from '~/queries/useGetSubscriptions';
 import { formatFrequency } from '../ScheduledTransfers/utils';
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { QuestionMarkCircleIcon } from '@heroicons/react/20/solid';
@@ -148,6 +149,9 @@ const Contract = ({ data }: { data: IRefundable }) => {
                   <tr>
                     <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
                       Cost per period
+                    </th>
+                    <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
+                      Active Subs
                     </th>
                     <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7"></th>
                     <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7"></th>
@@ -374,6 +378,10 @@ const Tier = ({
 }) => {
   const [isConfirming, setIsConfirming] = React.useState(false);
 
+  const graphEndpoint = chainId ? networkDetails[chainId].subscriptionsSubgraph : null;
+
+  const { data: activeSubs } = useGetRefundableActiveSubs({ graphEndpoint, tierId });
+
   const isDisabled = data.disabledAt && data.disabledAt !== '0';
 
   const {
@@ -454,6 +462,9 @@ const Tier = ({
         ) : (
           <span>{data.token.symbol}</span>
         )}
+      </td>
+      <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
+        {Number.isNaN(Number(activeSubs)) ? '' : activeSubs}
       </td>
       <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
         {chainId && (

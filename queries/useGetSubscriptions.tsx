@@ -399,3 +399,47 @@ export function useGetSubberSubscriptionContracts({ graphEndpoint }: { graphEndp
     }
   );
 }
+
+async function fetchRefundableActiveSubs({ tierId, graphEndpoint }: { tierId: string; graphEndpoint?: string | null }) {
+  if (!graphEndpoint) {
+    return null;
+  }
+
+  try {
+    const res = await request(
+      graphEndpoint,
+      gql`
+        {
+          tiers(
+            where: {
+              refundableSubs_: { expires_gt: "${Math.floor(Date.now() / 1000)}" }
+              id: "${tierId.toLowerCase()}"
+            }
+          ) {
+            id
+          }
+        }
+      `
+    );
+
+    return res?.tiers?.length ?? null;
+  } catch (error: any) {
+    throw new Error(error.message || (error?.reason ?? `Couldn't fetch active subs of ${tierId}`));
+  }
+}
+
+export function useGetRefundableActiveSubs({
+  graphEndpoint,
+  tierId,
+}: {
+  graphEndpoint?: string | null;
+  tierId: string;
+}) {
+  return useQuery<number | null>(
+    ['refundableActiveSubsInTier', tierId, graphEndpoint],
+    () => fetchRefundableActiveSubs({ tierId, graphEndpoint }),
+    {
+      refetchInterval: 30_000,
+    }
+  );
+}
