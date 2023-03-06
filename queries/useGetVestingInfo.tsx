@@ -31,6 +31,7 @@ const escrowCallsSubgraph = [
   { reference: 'unclaimed', methodName: 'unclaimed', methodParameters: [] },
   { reference: 'locked', methodName: 'locked', methodParameters: [] },
   { reference: 'totalClaimed', methodName: 'total_claimed', methodParameters: [] },
+  { reference: 'disabled_at', methodName: 'disabled_at', methodParameters: [] },
 ];
 
 const subgraphs: { [key: number]: string } = {
@@ -161,7 +162,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
           totalLocked: escrows[i].totalLocked.toString(),
           totalClaimed: new BigNumber(returns[2].returnValues[0].hex).toString(),
           admin: escrows[i].admin.toString(),
-          disabledAt: escrows[i].disabledAt.toString(),
+          disabledAt: new BigNumber(returns[3].returnValues[0].hex).toString(),
           timestamp: Date.now() / 1e3,
           reason: reason !== '' ? reason : null,
         };
