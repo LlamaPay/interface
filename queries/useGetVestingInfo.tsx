@@ -150,7 +150,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
             endTime: end.toString(),
             cliffLength: escrows[i].cliff,
             totalLocked: escrows[i].totalLocked,
-            totalClaimed: escrows[i].totalClaimed,
+            totalClaimed: await contract.total_claimed({ gasLimit: 1000000 }),
             admin: escrows[i].admin,
             disabledAt: escrows[i].disabledAt,
             timestamp: now,
