@@ -55,7 +55,7 @@ const Contract = ({
     functionName: 'getUpdatedCurrentPeriod',
   });
 
-  const unsubscribed = currentPeriod ? currentPeriod.toString() == data.expires : false;
+  const disableUnsubscribe = currentPeriod ? currentPeriod.toString() == data.expires : false;
 
   const { config } = usePrepareContractWrite({
     address: data.refundableContract.address as `0x${string}`,
@@ -63,7 +63,7 @@ const Contract = ({
     chainId: chain?.id,
     functionName: 'unsubscribe',
     args: [data.tokenId],
-    enabled: !unsubscribed,
+    enabled: !disableUnsubscribe,
   });
 
   const { isLoading, writeAsync } = useContractWrite(config);
@@ -200,19 +200,19 @@ const Contract = ({
               className="table-description border border-solid border-llama-teal-2 text-center font-normal text-lp-gray-4 dark:border-lp-gray-7 dark:text-white"
               colSpan={2}
             >
-              {!fetchingCurrentPeriod && unsubscribed ? (
+              {!fetchingCurrentPeriod && disableUnsubscribe ? (
                 <button
                   className="min-w-[10rem] rounded-lg border py-2 px-4 disabled:cursor-not-allowed disabled:border-lp-gray-2 disabled:bg-lp-gray-1 dark:disabled:bg-lp-gray-5"
                   onClick={() => unsubscribe()}
                   disabled
                 >
-                  Unsubscribed
+                  Unsubscribe
                 </button>
               ) : (
                 <button
                   className="min-w-[10rem] rounded-lg border border-red-500 py-2 px-4 disabled:cursor-not-allowed"
                   onClick={() => unsubscribe()}
-                  disabled={isConfirming || isLoading || fetchingCurrentPeriod || unsubscribed}
+                  disabled={isConfirming || isLoading || fetchingCurrentPeriod || disableUnsubscribe}
                 >
                   {isLoading || isConfirming ? <BeatLoader className="!h-5" /> : 'Unsubscribe'}
                 </button>
