@@ -65,6 +65,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
         {
           vestingEscrows(where: {admin: "${userAddress.toLowerCase()}"}, first:1000) {
             id
+            factory
             admin
             recipient
             token {
@@ -73,6 +74,15 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
               name
               decimals
             }
+            escrow
+            amount
+            start
+            end
+            totalLocked
+            totalClaimed
+            disabledAt
+            duration
+            cliff
           }
         }
         `;
@@ -80,6 +90,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
         {
           vestingEscrows(where: {recipient: "${userAddress.toLowerCase()}"}) {
             id
+            factory
             admin
             recipient
             token {
@@ -88,6 +99,15 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
               name
               decimals
             }
+            escrow
+            amount
+            start
+            end
+            totalLocked
+            totalClaimed
+            disabledAt
+            duration
+            cliff
           }
         }
         `;
@@ -105,6 +125,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
         Object.keys(escrows).map(async (i) => {
           try {
             // const vestingReturnContext = vestingContractInfoResults[escrows[i].id].callsReturnContext;
+            console.log(escrows[i]);
             const contract = new ethers.Contract(getAddress(escrows[i].id), vestingEscrowABI, provider);
             const now = Date.now() / 1e3;
             const totalVestedAt =
