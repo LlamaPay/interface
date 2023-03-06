@@ -116,12 +116,7 @@ export const networkDetails: INetworkDetails = {
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-mainnet',
     chainProviders: createProvider(
       'ethereum',
-      [
-        'https://endpoints.omniatech.io/v1/eth/mainnet/public',
-        'https://rpc.ankr.com/eth',
-        'https://eth.llamarpc.com',
-        'https://cloudflare-eth.com',
-      ],
+      ['https://rpc.ankr.com/eth', 'https://eth.llamarpc.com', 'https://cloudflare-eth.com'],
       1
     ),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_MAINNET,
