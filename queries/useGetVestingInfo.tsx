@@ -43,7 +43,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
     if (!provider) throw new Error('No provider');
     if (!userAddress) throw new Error('No account');
     if (!chainId) throw new Error('No Chain ID');
-    const results: IVesting[] = [];
+    let results: IVesting[] = [];
     const multicall = multicalls[chainId]
       ? new Multicall({
           nodeUrl: networkDetails[chainId].rpcUrl,
@@ -119,61 +119,60 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
       //   calls: vestingEscrowCalls,
       // }));
       // const vestingContractInfoResults = await runMulticall(vestingContractInfoContext);
+      const unsortedResults: IVesting[] = [];
       await Promise.all(
         Object.keys(escrows).map(async (i) => {
-          try {
-            // const vestingReturnContext = vestingContractInfoResults[escrows[i].id].callsReturnContext;
-            const contract = new ethers.Contract(getAddress(escrows[i].id), vestingEscrowABI, provider);
-            const now = Date.now() / 1e3;
-            const end = Number(escrows[i].start) + Number(escrows[i].duration);
-            const totalVestedAt =
-              now < Number(escrows[i].start) + Number(escrows[i].cliff)
-                ? 0
-                : Math.min(
-                    (Number(escrows[i].totalLocked) * (now - Number(escrows[i].start))) /
-                      (end - Number(escrows[i].start)),
-                    Number(escrows[i].totalLocked)
-                  );
-            const unclaimed = Math.min(totalVestedAt - Number(escrows[i].totalClaimed)).toFixed(0);
-            const locked = (Number(escrows[i].totalLocked) - totalVestedAt).toFixed(0);
-            const result = {
-              contract: escrows[i].id,
-              unclaimed: unclaimed,
-              locked: locked,
-              recipient: escrows[i].recipient,
-              token: escrows[i].token.id,
-              tokenName: escrows[i].token.name,
-              tokenSymbol: escrows[i].token.symbol,
-              tokenDecimals: escrows[i].token.decimals,
-              startTime: escrows[i].start,
-              endTime: end.toString(),
-              cliffLength: escrows[i].cliff,
-              totalLocked: escrows[i].totalLocked,
-              totalClaimed: escrows[i].totalClaimed,
-              admin: escrows[i].admin,
-              disabledAt: escrows[i].disabledAt,
-              timestamp: now,
-              reason: null,
-            };
+          // const vestingReturnContext = vestingContractInfoResults[escrows[i].id].callsReturnContext;
+          const contract = new ethers.Contract(getAddress(escrows[i].id), vestingEscrowABI, provider);
+          const now = Date.now() / 1e3;
+          const end = Number(escrows[i].start) + Number(escrows[i].duration);
+          const totalVestedAt =
+            now < Number(escrows[i].start) + Number(escrows[i].cliff)
+              ? 0
+              : Math.min(
+                  (Number(escrows[i].totalLocked) * (now - Number(escrows[i].start))) /
+                    (end - Number(escrows[i].start)),
+                  Number(escrows[i].totalLocked)
+                );
+          const unclaimed = Math.min(totalVestedAt - Number(escrows[i].totalClaimed)).toFixed(0);
+          const locked = (Number(escrows[i].totalLocked) - totalVestedAt).toFixed(0);
+          const result = {
+            index: i,
+            contract: escrows[i].id,
+            unclaimed: unclaimed,
+            locked: locked,
+            recipient: escrows[i].recipient,
+            token: escrows[i].token.id,
+            tokenName: escrows[i].token.name,
+            tokenSymbol: escrows[i].token.symbol,
+            tokenDecimals: escrows[i].token.decimals,
+            startTime: escrows[i].start,
+            endTime: end.toString(),
+            cliffLength: escrows[i].cliff,
+            totalLocked: escrows[i].totalLocked,
+            totalClaimed: escrows[i].totalClaimed,
+            admin: escrows[i].admin,
+            disabledAt: escrows[i].disabledAt,
+            timestamp: now,
+            reason: null,
+          };
 
-            if (networkDetails[chainId].vestingReason !== '0x0000000000000000000000000000000000000000') {
-              const contract = new ethers.Contract(
-                getAddress(networkDetails[chainId].vestingReason),
-                vestingReasonsABI,
-                provider
-              );
-              const reason = await contract.reasons(getAddress(escrows[i].id), { gasLimit: 10000000 });
-              if (reason !== '') {
-                result.reason = reason;
-              }
+          if (networkDetails[chainId].vestingReason !== '0x0000000000000000000000000000000000000000') {
+            const contract = new ethers.Contract(
+              getAddress(networkDetails[chainId].vestingReason),
+              vestingReasonsABI,
+              provider
+            );
+            const reason = await contract.reasons(getAddress(escrows[i].id), { gasLimit: 10000000 });
+            if (reason !== '') {
+              result.reason = reason;
             }
-            if (results.includes(result)) return;
-            results.push(result);
-          } catch (e) {
-            console.log(`Stream ${i} skipped`);
           }
+          if (unsortedResults.includes(result)) return;
+          unsortedResults.push(result);
         })
       );
+      results = unsortedResults.sort((a: any, b: any) => a.index - b.index);
     } else {
       const factoryAddress = networkDetails[chainId].vestingFactory;
       const factoryContract = new ethers.Contract(factoryAddress, vestingFactoryABI, provider);
