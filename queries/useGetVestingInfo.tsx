@@ -106,23 +106,33 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
           try {
             // const vestingReturnContext = vestingContractInfoResults[escrows[i].id].callsReturnContext;
             const contract = new ethers.Contract(getAddress(escrows[i].id), vestingEscrowABI, provider);
+            const now = Date.now() / 1e3;
+            const totalVestedAt =
+              Date.now() / 1e3 < escrows[i].start + escrows[i].cliff
+                ? 0
+                : Math.min(
+                    (escrows[i].totalLocked * (now - escrows[i].start)) / (escrows[i].end - escrows[i].start),
+                    escrows[i].totalLocked
+                  );
+            const unclaimed = Math.min(totalVestedAt - escrows[i].totalClaimed).toFixed(0);
+            const locked = (escrows[i].totalLocked - totalVestedAt).toFixed(0);
             const result = {
               contract: escrows[i].id,
-              unclaimed: await contract.unclaimed({ gasLimit: 1000000 }),
-              locked: await contract.locked({ gasLimit: 1000000 }),
+              unclaimed: unclaimed,
+              locked: locked,
               recipient: escrows[i].recipient,
               token: escrows[i].token.id,
               tokenName: escrows[i].token.name,
               tokenSymbol: escrows[i].token.symbol,
               tokenDecimals: escrows[i].token.decimals,
-              startTime: await contract.start_time({ gasLimit: 1000000 }),
-              endTime: await contract.end_time({ gasLimit: 1000000 }),
-              cliffLength: await contract.cliff_length({ gasLimit: 1000000 }),
-              totalLocked: await contract.total_locked({ gasLimit: 1000000 }),
-              totalClaimed: await contract.total_claimed({ gasLimit: 1000000 }),
+              startTime: escrows[i].start,
+              endTime: escrows[i].end,
+              cliffLength: escrows[i].cliff,
+              totalLocked: escrows[i].totalLocked,
+              totalClaimed: escrows[i].totalClaimed,
               admin: escrows[i].admin,
-              disabledAt: await contract.disabled_at({ gasLimit: 1000000 }),
-              timestamp: Date.now() / 1e3,
+              disabledAt: escrows[i].disabledAt,
+              timestamp: now,
               reason: null,
             };
 
