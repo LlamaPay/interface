@@ -77,7 +77,6 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
             escrow
             amount
             start
-            end
             totalLocked
             totalClaimed
             disabledAt
@@ -102,7 +101,6 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
             escrow
             amount
             start
-            end
             totalLocked
             totalClaimed
             disabledAt
@@ -125,18 +123,19 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
         Object.keys(escrows).map(async (i) => {
           try {
             // const vestingReturnContext = vestingContractInfoResults[escrows[i].id].callsReturnContext;
-            console.log(escrows[i]);
             const contract = new ethers.Contract(getAddress(escrows[i].id), vestingEscrowABI, provider);
             const now = Date.now() / 1e3;
+            const end = Number(escrows[i].start) + Number(escrows[i].duration);
             const totalVestedAt =
-              Date.now() / 1e3 < escrows[i].start + escrows[i].cliff
+              now < Number(escrows[i].start) + Number(escrows[i].cliff)
                 ? 0
                 : Math.min(
-                    (escrows[i].totalLocked * (now - escrows[i].start)) / (escrows[i].end - escrows[i].start),
-                    escrows[i].totalLocked
+                    (Number(escrows[i].totalLocked) * (now - Number(escrows[i].start))) /
+                      (end - Number(escrows[i].start)),
+                    Number(escrows[i].totalLocked)
                   );
-            const unclaimed = Math.min(totalVestedAt - escrows[i].totalClaimed).toFixed(0);
-            const locked = (escrows[i].totalLocked - totalVestedAt).toFixed(0);
+            const unclaimed = Math.min(totalVestedAt - Number(escrows[i].totalClaimed)).toFixed(0);
+            const locked = (Number(escrows[i].totalLocked) - totalVestedAt).toFixed(0);
             const result = {
               contract: escrows[i].id,
               unclaimed: unclaimed,
@@ -147,7 +146,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
               tokenSymbol: escrows[i].token.symbol,
               tokenDecimals: escrows[i].token.decimals,
               startTime: escrows[i].start,
-              endTime: escrows[i].end,
+              endTime: end,
               cliffLength: escrows[i].cliff,
               totalLocked: escrows[i].totalLocked,
               totalClaimed: escrows[i].totalClaimed,
