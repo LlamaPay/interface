@@ -146,7 +146,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
               tokenSymbol: escrows[i].token.symbol,
               tokenDecimals: escrows[i].token.decimals,
               startTime: escrows[i].start,
-              endTime: end,
+              endTime: end.toString(),
               cliffLength: escrows[i].cliff,
               totalLocked: escrows[i].totalLocked,
               totalClaimed: escrows[i].totalClaimed,
