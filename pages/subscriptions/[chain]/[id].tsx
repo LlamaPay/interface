@@ -2,6 +2,7 @@ import { dehydrate, QueryClient, useQueryClient } from '@tanstack/react-query';
 import { useDialogState } from 'ariakit';
 import BigNumber from 'bignumber.js';
 import type { GetServerSideProps, NextPage } from 'next';
+import { useIntl } from 'next-intl';
 import { useRouter } from 'next/router';
 import * as React from 'react';
 import { toast } from 'react-hot-toast';
@@ -16,8 +17,10 @@ import {
 } from 'wagmi';
 import { BeatLoader } from '~/components/BeatLoader';
 import { TransactionDialog } from '~/components/Dialog';
+import { eventAgeFormatter } from '~/components/History/Table/CustomValues';
 import Layout from '~/components/Layout';
 import { formatFrequency } from '~/components/ScheduledTransfers/utils';
+import Tooltip from '~/components/Tooltip';
 import { WalletSelector } from '~/components/Web3';
 import { useLocale } from '~/hooks';
 import useDebounce from '~/hooks/useDebounce';
@@ -77,10 +80,26 @@ const Tier = ({
 
   const dbPeriodDurationNumber = useDebounce(periodDurationNumber, 300);
 
-  const amountToSpend =
-    dbPeriodDurationNumber && dbPeriodDurationNumber !== ''
-      ? new BigNumber(dbPeriodDurationNumber).times(data.costPerPeriod).toFixed(0, 1)
+  const { data: currentPeriod } = useContractRead({
+    address: data.refundableContract.address as `0x${string}`,
+    abi: refundableSubscriptionABI,
+    chainId: chain?.id,
+    functionName: 'getUpdatedCurrentPeriod',
+  });
+
+  const timeLeftInCurrentPeriod =
+    data && data.disabledAt === '0' && currentPeriod
+      ? Math.round((+currentPeriod.toString() * 1000 - Date.now()) / 1000) / +data.refundableContract.periodDuation
       : null;
+
+  const totalSubTime =
+    !timeLeftInCurrentPeriod || !dbPeriodDurationNumber || dbPeriodDurationNumber === ''
+      ? null
+      : dbPeriodDurationNumber === 1
+      ? timeLeftInCurrentPeriod
+      : timeLeftInCurrentPeriod + (dbPeriodDurationNumber - 1);
+
+  const amountToSpend = totalSubTime ? new BigNumber(totalSubTime).times(data.costPerPeriod).toFixed(0, 1) : null;
 
   const {
     data: allowance,
@@ -186,6 +205,7 @@ const Tier = ({
   };
 
   const { locale } = useLocale();
+  const intl = useIntl();
 
   return (
     <div className="section-header ml-0 max-w-fit">
@@ -258,6 +278,25 @@ const Tier = ({
               )}
             </td>
           </tr>
+
+          <tr>
+            <th className="whitespace-nowrap border border-llama-teal-2 py-[6px] px-4 text-center text-sm font-normal dark:border-lp-gray-7">
+              Current period ends in
+            </th>
+            <td className="table-description border border-solid border-llama-teal-2 text-center font-normal text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
+              {currentPeriod ? (
+                <Tooltip
+                  content={intl.formatDateTime(new Date(Number(currentPeriod.toString()) * 1e3), {
+                    hour12: false,
+                    dateStyle: 'short',
+                    timeStyle: 'short',
+                  })}
+                >
+                  {daysFromNow(currentPeriod.toString())}
+                </Tooltip>
+              ) : null}
+            </td>
+          </tr>
         </tbody>
       </table>
 
@@ -265,29 +304,20 @@ const Tier = ({
         <label>
           <span className="input-label dark:text-white">Subscription Period</span>
 
-          <div className="flex flex-col gap-1">
-            <input
-              placeholder="0.0"
-              className="input-field dark:border-[#252525] dark:bg-[#202020]"
-              autoComplete="off"
-              autoCorrect="off"
-              type="text"
-              spellCheck="false"
-              inputMode="decimal"
-              pattern="^[0-9]*[.,]?[0-9]*$"
-              name="periodDurationNumber"
-              value={periodDurationNumber}
-              onChange={(e) => setPeriodDurationNumber(e.target.value)}
-              required
-            />
-            <small className="min-h-[1.5rem] w-full rounded p-1 text-xs">
-              {Number.isNaN(Number(dbPeriodDurationNumber)) || Number(dbPeriodDurationNumber) === 0
-                ? ''
-                : formatFrequency(
-                    (Number(dbPeriodDurationNumber) * Number(data.refundableContract.periodDuation)).toString()
-                  )}
-            </small>
-          </div>
+          <input
+            placeholder="0.0"
+            className="input-field dark:border-[#252525] dark:bg-[#202020]"
+            autoComplete="off"
+            autoCorrect="off"
+            type="text"
+            spellCheck="false"
+            inputMode="decimal"
+            pattern="^[0-9]*[.,]?[0-9]*$"
+            name="periodDurationNumber"
+            value={periodDurationNumber}
+            onChange={(e) => setPeriodDurationNumber(e.target.value)}
+            required
+          />
         </label>
 
         {data.disabledAt && data.disabledAt !== '0' ? (
@@ -602,5 +632,27 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
     },
   };
 };
+
+export function daysFromNow(timestamp: string): string {
+  if (+timestamp < Date.now() / 1e3) return eventAgeFormatter(timestamp);
+
+  const timeLeft = Number(timestamp) - Date.now() / 1e3;
+  const days = Math.floor(timeLeft / 86400);
+  const hours = Math.floor((timeLeft - 86400 * days) / 3600);
+  const minutes = Math.floor((timeLeft - 86400 * days - 3600 * hours) / 60);
+  const seconds = Math.floor(timeLeft - 86400 * days - 3600 * hours - minutes * 60);
+
+  if (timeLeft < 60) {
+    return `${seconds.toString()} ${seconds === 1 ? 'sec' : 'secs'}`;
+  } else if (timeLeft >= 60 && timeLeft < 3600) {
+    return `${minutes.toString()} ${minutes === 1 ? 'min' : 'mins'}`;
+  } else if (timeLeft >= 3600 && timeLeft < 86400) {
+    return `${hours.toString()} ${hours === 1 ? 'hr' : 'hrs'}`;
+  } else if (timeLeft >= 86400) {
+    return `${days.toString()} ${days === 1 ? 'day' : 'days'} ${hours.toString()} ${hours === 1 ? 'hr' : 'hrs'}`;
+  } else {
+    return '';
+  }
+}
 
 export default Home;
