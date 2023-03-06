@@ -134,12 +134,15 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
                     (end - Number(escrows[i].start)),
                   Number(escrows[i].totalLocked)
                 );
-          const unclaimed = Math.min(totalVestedAt - Number(escrows[i].totalClaimed)).toFixed(0);
+          // const unclaimed = Math.min(totalVestedAt - Number(escrows[i].totalClaimed)).toFixed(0);
+
+          const totalClaimed = await contract.total_claimed({ gasLimit: 1000000 });
+          const unclaimed = Math.min(totalVestedAt - Number(totalClaimed));
           const locked = (Number(escrows[i].totalLocked) - totalVestedAt).toFixed(0);
           const result = {
             index: i,
             contract: escrows[i].id,
-            unclaimed: unclaimed,
+            unclaimed: unclaimed.toString(),
             locked: locked,
             recipient: escrows[i].recipient,
             token: escrows[i].token.id,
@@ -150,7 +153,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
             endTime: end.toString(),
             cliffLength: escrows[i].cliff,
             totalLocked: escrows[i].totalLocked,
-            totalClaimed: await contract.total_claimed({ gasLimit: 1000000 }),
+            totalClaimed: totalClaimed,
             admin: escrows[i].admin,
             disabledAt: escrows[i].disabledAt,
             timestamp: now,
