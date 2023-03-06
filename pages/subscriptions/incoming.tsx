@@ -8,9 +8,10 @@ import { FallbackContainer } from '~/components/Fallback';
 import Layout from '~/components/Layout';
 import { NonRefundableTable } from '~/components/Subscriptions/NonRefundableTable';
 import { RefundableTable } from '~/components/Subscriptions/RefundableTable';
+import { SubscriptionsHistoryTable } from '~/components/Subscriptions/SubscriptionsHistoryTable';
 import { useNetworkProvider } from '~/hooks';
 import { networkDetails } from '~/lib/networkDetails';
-import { useGetSubscriptionContracts } from '~/queries/useGetSubscriptions';
+import { useGetSubscriptionContracts, useGetSubscriptionContractsHistory } from '~/queries/useGetSubscriptions';
 
 const Home: NextPage = () => {
   const { address, isConnected } = useAccount();
@@ -20,6 +21,12 @@ const Home: NextPage = () => {
   const graphEndpoint = chainId ? networkDetails[chainId].subscriptionsSubgraph : null;
 
   const { data, isLoading, isError } = useGetSubscriptionContracts({ graphEndpoint });
+
+  const {
+    data: history,
+    isLoading: fetchingHistory,
+    isError: errorFetchingHistory,
+  } = useGetSubscriptionContractsHistory({ graphEndpoint });
 
   const showFallback = !isConnected || !chain || chain?.unsupported;
 
@@ -84,6 +91,25 @@ const Home: NextPage = () => {
               </FallbackContainer>
             ) : (
               <NonRefundableTable data={data.nonRefundables} userAddress={address as string} />
+            )}
+          </div>
+
+          <div className="flex flex-col gap-2">
+            <h1 className="font-exo section-header m-0">History</h1>
+            {fetchingHistory ? (
+              <FallbackContainer>
+                <BeatLoader size="6px" />
+              </FallbackContainer>
+            ) : errorFetchingHistory ? (
+              <FallbackContainer>
+                <p>Something went wrong, couldn't fetch data</p>
+              </FallbackContainer>
+            ) : !history || history.historyEvents.length === 0 ? (
+              <FallbackContainer>
+                <p>You dont have any history.</p>
+              </FallbackContainer>
+            ) : (
+              <SubscriptionsHistoryTable data={history.historyEvents} />
             )}
           </div>
         </>

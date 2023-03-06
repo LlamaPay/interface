@@ -102,6 +102,18 @@ export interface ISubberSubscriptionContract {
   nonrefundables: Array<ISubberNonRefundable>;
 }
 
+export interface ISubscriptionHistoryEvent {
+  eventType: string;
+  txHash: string;
+  nonRefundableContract: { address: string } | null;
+  refundableContract: { address: string } | null;
+  createdTimestamp: string;
+}
+
+export interface ISubscriptionContractsHistory {
+  historyEvents: Array<ISubscriptionHistoryEvent>;
+}
+
 const fetchSubscriptionContracts = async ({
   userAddress,
   graphEndpoint,
@@ -190,6 +202,69 @@ export function useGetSubscriptionContracts({ graphEndpoint }: { graphEndpoint?:
   return useQuery<ISubscriptionContracts>(
     ['subscriptionContracts', address, graphEndpoint],
     () => fetchSubscriptionContracts({ userAddress: address, graphEndpoint }),
+    {
+      refetchInterval: 30_000,
+    }
+  );
+}
+
+const fetchSubscriptionContractsHistory = async ({
+  userAddress,
+  graphEndpoint,
+  isSubber,
+}: {
+  userAddress?: string;
+  graphEndpoint?: string | null;
+  isSubber?: boolean;
+}): Promise<ISubscriptionContractsHistory> => {
+  try {
+    if (!userAddress || !graphEndpoint) {
+      return { historyEvents: [] };
+    }
+
+    const where = isSubber
+      ? `{subber: "${userAddress.toLowerCase()}"}`
+      : `{or: [{whitelist_contains: "${userAddress.toLowerCase()}"}, {owner: "${userAddress.toLowerCase()}"}]}`;
+
+    const res: ISubscriptionContractsHistory = await request(
+      graphEndpoint,
+      gql`
+        {
+          historyEvents(first: 1000, where: ${where}) {
+            eventType
+            txHash
+            nonRefundableContract {
+              address
+            }
+            refundableContract {
+              address
+            }
+            createdTimestamp
+          }
+        }
+      `
+    );
+
+    return {
+      historyEvents: res?.historyEvents ?? [],
+    };
+  } catch (error: any) {
+    throw new Error(error.message || (error?.reason ?? "Couldn't fetch subscription contracts history"));
+  }
+};
+
+export function useGetSubscriptionContractsHistory({
+  graphEndpoint,
+  isSubber,
+}: {
+  graphEndpoint?: string | null;
+  isSubber?: boolean;
+}) {
+  const { address } = useAccount();
+
+  return useQuery<ISubscriptionContractsHistory>(
+    ['subscriptionContractsHistory', address, graphEndpoint, isSubber],
+    () => fetchSubscriptionContractsHistory({ userAddress: address, graphEndpoint, isSubber }),
     {
       refetchInterval: 30_000,
     }
@@ -353,7 +428,7 @@ async function fetchSubberSubscriptionContracts({
       nonrefundables: res?.subber?.nonRefundableSubs ?? [],
     };
   } catch (error: any) {
-    throw new Error(error.message || (error?.reason ?? "Couldn't fetch subscription contracts"));
+    throw new Error(error.message || (error?.reason ?? "Couldn't fetch subber subscription contracts"));
   }
 }
 
