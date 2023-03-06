@@ -27,6 +27,12 @@ const vestingEscrowCalls = [
   { reference: 'disabled_at', methodName: 'disabled_at', methodParameters: [] },
 ];
 
+const escrowCallsSubgraph = [
+  { reference: 'unclaimed', methodName: 'unclaimed', methodParameters: [] },
+  { reference: 'locked', methodName: 'locked', methodParameters: [] },
+  { reference: 'totalClaimed', methodName: 'total_claimed', methodParameters: [] },
+];
+
 const subgraphs: { [key: number]: string } = {
   1: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-vesting-mainnet',
   5: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-vesting-goerli',
@@ -82,6 +88,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
             disabledAt
             duration
             cliff
+            end
           }
         }
         `;
@@ -106,75 +113,61 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
             disabledAt
             duration
             cliff
+            end
           }
         }
         `;
       const admins = (await request(subgraphs[chainId], GET_ADMIN)).vestingEscrows;
       const recipients = (await request(subgraphs[chainId], GET_RECIPIENT)).vestingEscrows;
       const escrows = admins.concat(recipients);
-      // const vestingContractInfoContext: ContractCallContext[] = Object.keys(escrows).map((p: any) => ({
-      //   reference: escrows[p].id,
-      //   contractAddress: escrows[p].id,
-      //   abi: vestingEscrowABI,
-      //   calls: vestingEscrowCalls,
-      // }));
-      // const vestingContractInfoResults = await runMulticall(vestingContractInfoContext);
+      const vestingContractInfoContext: ContractCallContext[] = Object.keys(escrows).map((p: any) => ({
+        reference: escrows[p].id,
+        contractAddress: escrows[p].id,
+        abi: vestingEscrowABI,
+        calls: escrowCallsSubgraph,
+      }));
+      const vestingContractInfoResults = await runMulticall(vestingContractInfoContext);
       const unsortedResults: IVesting[] = [];
-      await Promise.all(
-        Object.keys(escrows).map(async (i) => {
-          // const vestingReturnContext = vestingContractInfoResults[escrows[i].id].callsReturnContext;
-          const contract = new ethers.Contract(getAddress(escrows[i].id), vestingEscrowABI, provider);
-          const now = Date.now() / 1e3;
-          const end = Number(escrows[i].start) + Number(escrows[i].duration);
-          const totalVestedAt =
-            now < Number(escrows[i].start) + Number(escrows[i].cliff)
-              ? 0
-              : Math.min(
-                  (Number(escrows[i].totalLocked) * (now - Number(escrows[i].start))) /
-                    (end - Number(escrows[i].start)),
-                  Number(escrows[i].totalLocked)
-                );
-          // const unclaimed = Math.min(totalVestedAt - Number(escrows[i].totalClaimed)).toFixed(0);
 
-          const totalClaimed = await contract.total_claimed({ gasLimit: 1000000 });
-          const unclaimed = Math.min(totalVestedAt - Number(totalClaimed));
-          const locked = (Number(escrows[i].totalLocked) - totalVestedAt).toFixed(0);
-          const result = {
-            index: i,
-            contract: escrows[i].id,
-            unclaimed: unclaimed.toString(),
-            locked: locked,
-            recipient: escrows[i].recipient,
-            token: escrows[i].token.id,
-            tokenName: escrows[i].token.name,
-            tokenSymbol: escrows[i].token.symbol,
-            tokenDecimals: escrows[i].token.decimals,
-            startTime: escrows[i].start,
-            endTime: end.toString(),
-            cliffLength: escrows[i].cliff,
-            totalLocked: escrows[i].totalLocked,
-            totalClaimed: totalClaimed,
-            admin: escrows[i].admin,
-            disabledAt: escrows[i].disabledAt,
-            timestamp: now,
-            reason: null,
-          };
+      const vestingContractReasonContext: ContractCallContext[] = Object.keys(escrows).map((p: any) => ({
+        reference: escrows[p].id,
+        abi: vestingReasonsABI,
+        contractAddress: networkDetails[chainId].vestingReason,
+        calls: [
+          {
+            reference: 'reason',
+            methodName: 'reasons',
+            methodParameters: [escrows[p].id],
+          },
+        ],
+      }));
+      const vestingContractReasonResults = await runMulticall(vestingContractReasonContext);
 
-          if (networkDetails[chainId].vestingReason !== '0x0000000000000000000000000000000000000000') {
-            const contract = new ethers.Contract(
-              getAddress(networkDetails[chainId].vestingReason),
-              vestingReasonsABI,
-              provider
-            );
-            const reason = await contract.reasons(getAddress(escrows[i].id), { gasLimit: 10000000 });
-            if (reason !== '') {
-              result.reason = reason;
-            }
-          }
-          if (unsortedResults.includes(result)) return;
-          unsortedResults.push(result);
-        })
-      );
+      for (const i in escrows) {
+        const returns = vestingContractInfoResults[escrows[i].id].callsReturnContext;
+        const reason = vestingContractReasonResults[escrows[i].id].callsReturnContext[0].returnValues[0];
+        const result = {
+          contract: escrows[i].id.toString(),
+          unclaimed: new BigNumber(returns[0].returnValues[0].hex).toString(),
+          locked: new BigNumber(returns[1].returnValues[0].hex).toString(),
+          recipient: escrows[i].recipient.toString(),
+          token: escrows[i].token.id.toString(),
+          tokenName: escrows[i].token.name.toString(),
+          tokenSymbol: escrows[i].token.symbol.toString(),
+          tokenDecimals: escrows[i].token.decimals.toString(),
+          startTime: escrows[i].start.toString(),
+          endTime: escrows[i].end.toString(),
+          cliffLength: escrows[i].cliff.toString(),
+          totalLocked: escrows[i].totalLocked.toString(),
+          totalClaimed: new BigNumber(returns[2].returnValues[0].hex).toString(),
+          admin: escrows[i].admin.toString(),
+          disabledAt: escrows[i].disabledAt.toString(),
+          timestamp: Date.now() / 1e3,
+          reason: reason !== '' ? reason : null,
+        };
+        unsortedResults.push(result);
+      }
+
       results = unsortedResults.sort((a: any, b: any) => a.index - b.index);
     } else {
       const factoryAddress = networkDetails[chainId].vestingFactory;

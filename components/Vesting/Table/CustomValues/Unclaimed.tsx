@@ -16,9 +16,12 @@ export default function Unclaimed({ data }: { data: IVesting }) {
     } else {
       const amountPerSec =
         Number(data.totalLocked) / (Number(data.endTime) - Number(data.startTime)) / 10 ** data.tokenDecimals;
-      setBalanceState(
-        Number(data.unclaimed) / 10 ** data.tokenDecimals + (Date.now() / 1e3 - data.timestamp) * amountPerSec
-      );
+
+      const balance =
+        Number(data.unclaimed) / Number(10 ** data.tokenDecimals) +
+        amountPerSec * (Date.now() / 1e3 - Number(data.timestamp));
+      // console.log(balance);
+      setBalanceState(balance);
     }
   }, [data]);
 
