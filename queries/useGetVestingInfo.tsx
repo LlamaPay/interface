@@ -37,7 +37,6 @@ const escrowCallsSubgraph = [
 const subgraphs: { [key: number]: string } = {
   1: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-vesting-mainnet',
   5: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-vesting-goerli',
-  42161: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-vesting-arbitrum',
 };
 
 const multicalls: { [key: number]: string } = {
