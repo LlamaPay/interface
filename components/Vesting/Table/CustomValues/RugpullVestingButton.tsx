@@ -51,7 +51,7 @@ export default function RugpullVestingButton({ data }: { data: IVesting }) {
         </button>
       )}
       <FormDialog className="h-min" dialog={RugDialog} title={'Clawback'}>
-        <span className="font-exo dark:text-white">{'Warning: This will clawback vesting from the recipient!'}</span>
+        <span className="font-exo dark:text-white">{`Warning: This will clawback vesting from the recipient: ${data.recipient}!`}</span>
         <SubmitButton className="mt-5" onClick={handleRugpull}>
           {isLoading ? <BeatLoader size="6px" color="white" /> : 'Rug'}
         </SubmitButton>

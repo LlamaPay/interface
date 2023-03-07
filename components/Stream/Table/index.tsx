@@ -1,6 +1,13 @@
 import * as React from 'react';
 import Link from 'next/link';
-import { ColumnDef, getCoreRowModel, useReactTable, getSortedRowModel, SortingState } from '@tanstack/react-table';
+import {
+  ColumnDef,
+  getCoreRowModel,
+  useReactTable,
+  getSortedRowModel,
+  SortingState,
+  getFilteredRowModel,
+} from '@tanstack/react-table';
 import Table from '~/components/Table';
 import {
   TotalStreamed,
@@ -28,12 +35,12 @@ import { useNetworkProvider } from '~/hooks';
 import Tooltip from '~/components/Tooltip';
 import { ClipboardDocumentIcon, ShareIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
+import useDebounce from '~/hooks/useDebounce';
 
 export function StreamTable({ data }: { data: IStream[] }) {
   const addressStore = useAddressStore();
   const { nativeCurrency, chainId, network } = useNetworkProvider();
   const t = useTranslations('Table');
-  const [sorting, setSorting] = React.useState<SortingState>([]);
 
   let columns = React.useMemo<ColumnDef<IStream>[]>(
     () => [
@@ -56,20 +63,21 @@ export function StreamTable({ data }: { data: IStream[] }) {
         enableMultiSort: true,
       },
       {
-        accessorFn: (row) => amtPerMonthFormatter(row.amountPerSec),
+        accessorFn: (row) => String(amtPerMonthFormatter(row.amountPerSec)),
         id: 'amountPerSec',
         header: t('amountPerSec'),
         cell: (info) => <AmtPerMonth data={info.row.original.amountPerSec} />,
         enableMultiSort: true,
       },
       {
+        accessorFn: (row) => row.reason || 'N/A',
         id: 'reason',
         header: 'Reason',
-        cell: ({ cell }) => cell.row.original && <p className="text-center">{cell.row.original.reason ?? 'N/A'}</p>,
+        cell: (info) => <p className="text-center">{info.getValue<string>()}</p>,
         enableMultiSort: true,
       },
       {
-        accessorFn: totalStreamedFormatter,
+        accessorFn: (row) => String(totalStreamedFormatter(row)),
         id: 'totalStreamed',
         header: t('totalStreamed'),
         cell: ({ cell }) => cell.row.original && <TotalStreamed data={cell.row.original} />,
@@ -80,7 +88,6 @@ export function StreamTable({ data }: { data: IStream[] }) {
         header: t('userWithdrawable'),
         cell: ({ cell }) => cell.row.original && <Withdrawable data={cell.row.original} />,
       },
-
       {
         accessorKey: 'streamId',
         id: 'linkToStream',
@@ -129,7 +136,6 @@ export function StreamTable({ data }: { data: IStream[] }) {
         },
         enableSorting: false,
       },
-
       {
         id: 'send',
         header: '',
@@ -217,15 +223,21 @@ export function StreamTable({ data }: { data: IStream[] }) {
     columns = columns.filter((e) => e.id !== 'reason');
   }
 
+  const [tableFilter, setTableFilter] = React.useState('');
+  const globalFilter = useDebounce(tableFilter, 300);
+  const [sorting, setSorting] = React.useState<SortingState>([]);
+
   const instance = useReactTable({
     data,
     columns,
     state: {
       sorting,
+      globalFilter,
     },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
   });
 
   const downloadToCSV = React.useCallback(() => {
@@ -233,7 +245,21 @@ export function StreamTable({ data }: { data: IStream[] }) {
     downloadStreams(data, names);
   }, [data, addressStore]);
 
-  return <Table instance={instance} hidePagination={true} downloadToCSV={downloadToCSV} maxWidthColumn={7} />;
+  return (
+    <>
+      <input
+        name="search table"
+        placeholder="Search..."
+        className="mb-1 rounded border border-lp-gray-1 bg-lp-white px-3 py-1 slashed-zero placeholder:text-sm placeholder:text-lp-gray-2 dark:border-transparent dark:bg-lp-gray-5"
+        value={tableFilter}
+        onChange={(e) => setTableFilter(e.target.value)}
+        spellCheck="false"
+        autoComplete="off"
+        autoCorrect="off"
+      />
+      <Table instance={instance} hidePagination={true} downloadToCSV={downloadToCSV} maxWidthColumn={7} />
+    </>
+  );
 }
 
 export function DefaultStreamTable({ data }: { data: IStream[] }) {
@@ -262,20 +288,21 @@ export function DefaultStreamTable({ data }: { data: IStream[] }) {
         enableMultiSort: true,
       },
       {
-        accessorFn: (row) => amtPerMonthFormatter(row.amountPerSec),
+        accessorFn: (row) => String(amtPerMonthFormatter(row.amountPerSec)),
         id: 'amountPerSec',
         header: t('amountPerSec'),
         cell: (info) => <AmtPerMonth data={info.row.original.amountPerSec} />,
         enableMultiSort: true,
       },
       {
+        accessorFn: (row) => row.reason || 'N/A',
         id: 'reason',
         header: 'Reason',
-        cell: ({ cell }) => cell.row.original && <p className="text-center">{cell.row.original.reason ?? 'N/A'}</p>,
+        cell: (info) => <p className="text-center">{info.getValue<string>()}</p>,
         enableMultiSort: true,
       },
       {
-        accessorFn: totalStreamedFormatter,
+        accessorFn: (row) => String(totalStreamedFormatter(row)),
         id: 'totalStreamed',
         header: t('totalStreamed'),
         cell: ({ cell }) => cell.row.original && <TotalStreamed data={cell.row.original} />,
@@ -335,6 +362,8 @@ export function DefaultStreamTable({ data }: { data: IStream[] }) {
     columns = columns.filter((e) => e.id !== 'reason');
   }
 
+  const [tableFilter, setTableFilter] = React.useState('');
+  const globalFilter = useDebounce(tableFilter, 300);
   const [sorting, setSorting] = React.useState<SortingState>([]);
 
   const instance = useReactTable({
@@ -342,11 +371,27 @@ export function DefaultStreamTable({ data }: { data: IStream[] }) {
     columns,
     state: {
       sorting,
+      globalFilter,
     },
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
   });
 
-  return <Table instance={instance} hidePagination={true} maxWidthColumn={7} />;
+  return (
+    <>
+      <input
+        name="search table"
+        placeholder="Search..."
+        className="mb-1 rounded border border-lp-gray-1 bg-lp-white px-3 py-1 slashed-zero placeholder:text-sm placeholder:text-lp-gray-2 dark:border-transparent dark:bg-lp-gray-5"
+        value={tableFilter}
+        onChange={(e) => setTableFilter(e.target.value)}
+        spellCheck="false"
+        autoComplete="off"
+        autoCorrect="off"
+      />
+      <Table instance={instance} hidePagination={true} maxWidthColumn={7} />
+    </>
+  );
 }

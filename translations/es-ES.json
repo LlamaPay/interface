@@ -207,7 +207,7 @@
     "sus": "Algo ha salido mal",
     "networkNotSupported": "Red no compatible",
     "addressToFetchStreams": "Ingrese una dirección para conseguir las transmisiones",
-    "noData": "Este usuario no tiene transmisiones entrante",
+    "noData": "Este usuario no tiene transmisiones entr",
     "error": "No se encontraron transmisiones para este usuario",
     "sendAll": "Enviar todo"
   }

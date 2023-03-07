@@ -43,7 +43,7 @@ if (process.env.NEXT_PUBLIC_SAFE === 'true') {
   );
 }
 const wagmiClient = createClient({
-  autoConnect: process.env.NEXT_PUBLIC_SAFE === 'true' ? false : true,
+  autoConnect: process.env.NEXT_PUBLIC_SAFE === 'true' ? true : true,
   connectors,
   provider,
 });
