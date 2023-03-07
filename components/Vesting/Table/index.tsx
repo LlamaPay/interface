@@ -1,5 +1,12 @@
 import * as React from 'react';
-import { ColumnDef, getCoreRowModel, useReactTable, getSortedRowModel, SortingState } from '@tanstack/react-table';
+import {
+  ColumnDef,
+  getCoreRowModel,
+  useReactTable,
+  getSortedRowModel,
+  SortingState,
+  getFilteredRowModel,
+} from '@tanstack/react-table';
 import { DisclosureState } from 'ariakit';
 import Table from '~/components/Table';
 import type { IVesting } from '~/types';
@@ -17,6 +24,7 @@ import { downloadVesting } from '~/utils/downloadCsv';
 import ReasonButton from './CustomValues/ReasonButton';
 import RenounceOwnershipButton from './CustomValues/RenounceOwnershipButton';
 import Vested from './CustomValues/Vested';
+import useDebounce from '~/hooks/useDebounce';
 
 export default function VestingTable({
   data,
@@ -55,13 +63,16 @@ export default function VestingTable({
         enableSorting: false,
       },
       {
-        accessorFn: (row) => Number(row.totalLocked) / 10 ** row.tokenDecimals,
+        accessorFn: (row) => String(Number(row.totalLocked) / 10 ** row.tokenDecimals),
         id: 'total_locked',
         header: 'Total Vesting',
         cell: (info) =>
           info.cell.row.original && (
             <span className="font-exo text-center slashed-zero tabular-nums dark:text-white">
-              {info.getValue<number>()?.toLocaleString(locale, { minimumFractionDigits: 5, maximumFractionDigits: 5 })}
+              {Number(info.getValue<string>())?.toLocaleString(locale, {
+                minimumFractionDigits: 4,
+                maximumFractionDigits: 4,
+              })}
             </span>
           ),
       },
@@ -71,12 +82,15 @@ export default function VestingTable({
         cell: (info) => info.cell.row.original && <Vested data={info.row.original} />,
       },
       {
-        accessorFn: (row) => Number(row.totalClaimed) / 10 ** row.tokenDecimals,
+        accessorFn: (row) => String(Number(row.totalClaimed) / 10 ** row.tokenDecimals),
         id: 'claimed',
         header: 'Claimed',
         cell: (info) => (
           <span className="font-exo text-center slashed-zero tabular-nums dark:text-white">
-            {info.getValue<number>()?.toLocaleString(locale, { minimumFractionDigits: 5, maximumFractionDigits: 5 })}
+            {Number(info.getValue<string>())?.toLocaleString(locale, {
+              minimumFractionDigits: 4,
+              maximumFractionDigits: 4,
+            })}
           </span>
         ),
       },
@@ -86,13 +100,13 @@ export default function VestingTable({
         cell: ({ cell }) => cell.row.original && <Unclaimed data={cell.row.original} />,
       },
       {
+        accessorFn: (row) => row.reason || 'N/A',
         id: 'reason',
         header: 'Reason',
-        cell: ({ cell }) =>
-          cell.row.original && <p>{cell.row.original.reason !== null ? cell.row.original.reason : 'N/A'}</p>,
+        cell: (info) => <p>{info.getValue<string>()}</p>,
       },
       {
-        accessorFn: (row) => statusAccessorFn(row),
+        accessorFn: (row) => String(statusAccessorFn(row)),
         id: 'status',
         header: 'Status',
         cell: ({ cell }) => cell.row.original && <Status data={cell.row.original} />,
@@ -142,6 +156,8 @@ export default function VestingTable({
     [address, chartValues, chartDialog, claimDialog, claimValues, locale]
   );
 
+  const [tableFilter, setTableFilter] = React.useState('');
+  const globalFilter = useDebounce(tableFilter, 300);
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const hasReason = data.some((e) => e.reason !== null);
   if (!hasReason) {
@@ -152,8 +168,10 @@ export default function VestingTable({
     columns,
     state: {
       sorting,
+      globalFilter,
     },
     onSortingChange: setSorting,
+    getFilteredRowModel: getFilteredRowModel(),
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
     debugTable: true,
@@ -161,5 +179,19 @@ export default function VestingTable({
 
   const downloadToCSV = React.useCallback(() => downloadVesting(data), [data]);
 
-  return <Table instance={instance} hidePagination={true} maxWidthColumn={7} downloadToCSV={downloadToCSV} />;
+  return (
+    <>
+      <input
+        name="search table"
+        placeholder="Search..."
+        className="mb-1 rounded border border-lp-gray-1 bg-lp-white px-3 py-1 slashed-zero placeholder:text-sm placeholder:text-lp-gray-2 dark:border-transparent dark:bg-lp-gray-5"
+        value={tableFilter}
+        onChange={(e) => setTableFilter(e.target.value)}
+        spellCheck="false"
+        autoComplete="off"
+        autoCorrect="off"
+      />
+      <Table instance={instance} hidePagination={true} maxWidthColumn={7} downloadToCSV={downloadToCSV} />
+    </>
+  );
 }
