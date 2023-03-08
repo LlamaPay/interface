@@ -1,6 +1,6 @@
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { QuestionMarkCircleIcon } from '@heroicons/react/20/solid';
-import { useContractRead, useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
+import { useBalance, useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
 import { networkDetails } from '~/lib/networkDetails';
 import type { INonRefundable, ISub } from '~/queries/useGetSubscriptions';
 import { formatFrequency } from '../ScheduledTransfers/utils';
@@ -497,18 +497,16 @@ const ClaimableBalance = ({
     data: claimableBalance,
     isLoading: isFetchgingBalance,
     refetch: refetchClaimableBalance,
-  } = useContractRead({
+  } = useBalance({
     address: contractAddress as `0x${string}`,
-    abi: nonRefundableSubscriptionABI,
+    token: token.address as `0x${string}`,
     chainId,
-    functionName: 'claimables',
-    args: [token.address as `0x${string}`],
   });
 
   const { locale } = useLocale();
 
   const formattedBalance = claimableBalance
-    ? (Number(String(claimableBalance)) / 10 ** token.decimals).toLocaleString(locale, {
+    ? Number(claimableBalance.formatted).toLocaleString(locale, {
         minimumFractionDigits: 4,
         maximumFractionDigits: 4,
       })
