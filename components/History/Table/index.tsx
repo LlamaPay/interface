@@ -7,6 +7,7 @@ import {
   ColumnDef,
   SortingState,
   getSortedRowModel,
+  getFilteredRowModel,
 } from '@tanstack/react-table';
 import Table from '~/components/Table';
 import type { IHistory } from '~/types';
@@ -24,6 +25,7 @@ import {
 import { downloadHistory } from '~/utils/downloadCsv';
 import { useTranslations } from 'next-intl';
 import { useDialogState } from 'ariakit';
+import useDebounce from '~/hooks/useDebounce';
 
 export function HistoryTable({ data }: { data: IHistory[] }) {
   const t = useTranslations('Table');
@@ -36,6 +38,7 @@ export function HistoryTable({ data }: { data: IHistory[] }) {
         cell: ({ cell }) => cell.row.original && <ActionName data={cell.row.original} />,
       },
       {
+        accessorFn: (row) => row.eventType,
         id: 'type',
         header: t('type'),
         cell: ({ cell }) =>
@@ -44,6 +47,7 @@ export function HistoryTable({ data }: { data: IHistory[] }) {
           ),
       },
       {
+        accessorFn: (row) => row.addressRelated,
         id: 'addressName',
         header: t('addressName'),
         cell: ({ cell }) =>
@@ -56,7 +60,7 @@ export function HistoryTable({ data }: { data: IHistory[] }) {
           ),
       },
       {
-        accessorFn: historyAmountFormatter,
+        accessorFn: (row) => String(historyAmountFormatter(row)),
         id: 'amount',
         header: t('amount'),
         cell: ({ cell }) =>
@@ -77,6 +81,9 @@ export function HistoryTable({ data }: { data: IHistory[] }) {
     [t]
   );
 
+  const [tableFilter, setTableFilter] = React.useState('');
+  const globalFilter = useDebounce(tableFilter, 300);
+
   const [pagination, setPagination] = React.useState<PaginationState>({
     pageIndex: 0,
     pageSize: 10,
@@ -90,12 +97,14 @@ export function HistoryTable({ data }: { data: IHistory[] }) {
     state: {
       pagination,
       sorting,
+      globalFilter,
     },
     onPaginationChange: setPagination,
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getPaginationRowModel: getPaginationRowModel(),
     getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
   });
 
   const downloadToCSV = React.useCallback(() => downloadHistory(data), [data]);
@@ -103,6 +112,16 @@ export function HistoryTable({ data }: { data: IHistory[] }) {
 
   return (
     <>
+      <input
+        name="search table"
+        placeholder="Search..."
+        className="mb-1 rounded border border-lp-gray-1 bg-lp-white px-3 py-1 slashed-zero placeholder:text-sm placeholder:text-lp-gray-2 dark:border-transparent dark:bg-lp-gray-5"
+        value={tableFilter}
+        onChange={(e) => setTableFilter(e.target.value)}
+        spellCheck="false"
+        autoComplete="off"
+        autoCorrect="off"
+      />
       <Table instance={instance} downloadToCSV={downloadToCSV} customHistory={customHistoryDialog} />
       <CustomExportDialog data={data} dialog={customHistoryDialog} />
     </>
