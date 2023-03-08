@@ -230,7 +230,7 @@ const fetchSubscriptionContractsHistory = async ({
       graphEndpoint,
       gql`
         {
-          historyEvents(first: 1000, where: ${where}) {
+          historyEvents(first: 1000, where: ${where}, orderBy: createdTimestamp, orderDirection: desc) {
             eventType
             txHash
             nonRefundableContract {

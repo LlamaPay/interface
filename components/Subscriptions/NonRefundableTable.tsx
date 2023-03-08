@@ -1,6 +1,6 @@
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { QuestionMarkCircleIcon } from '@heroicons/react/20/solid';
-import { useBalance, useContractRead, useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
+import { useContractRead, useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
 import { networkDetails } from '~/lib/networkDetails';
 import type { INonRefundable, ISub } from '~/queries/useGetSubscriptions';
 import { formatFrequency } from '../ScheduledTransfers/utils';

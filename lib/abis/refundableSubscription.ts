@@ -37,6 +37,7 @@ export const refundableSubscriptionABI = [
     inputs: [
       { indexed: false, internalType: 'address', name: 'caller', type: 'address' },
       { indexed: false, internalType: 'address', name: 'to', type: 'address' },
+      { indexed: false, internalType: 'address', name: 'token', type: 'address' },
       { indexed: false, internalType: 'uint256', name: 'amount', type: 'uint256' },
     ],
     name: 'Claim',
