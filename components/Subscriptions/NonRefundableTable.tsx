@@ -1,6 +1,6 @@
 import { PlusIcon } from '@heroicons/react/24/outline';
 import { QuestionMarkCircleIcon } from '@heroicons/react/20/solid';
-import { useBalance, useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
+import { useBalance, useContractRead, useContractWrite, useNetwork, usePrepareContractWrite } from 'wagmi';
 import { networkDetails } from '~/lib/networkDetails';
 import type { INonRefundable, ISub } from '~/queries/useGetSubscriptions';
 import { formatFrequency } from '../ScheduledTransfers/utils';
@@ -15,8 +15,11 @@ import { toast } from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
 import * as React from 'react';
 import { BeatLoader } from '../BeatLoader';
-import { SubmitButton } from '../Form';
+import { InputAmount, SubmitButton } from '../Form';
 import { CreateNonRefundableSub } from './CreateNonRefundableSub';
+import BigNumber from 'bignumber.js';
+import AvailableAmount from '../AvailableAmount';
+import { useTranslations } from 'next-intl';
 
 export function NonRefundableTable({ data, userAddress }: { data: Array<INonRefundable>; userAddress: string }) {
   return (
@@ -120,11 +123,12 @@ const Contract = ({ data, userAddress }: { data: INonRefundable; userAddress: st
               <table className="w-full border-collapse">
                 <tbody className="border border-llama-teal-2 dark:border-lp-gray-7">
                   {tokens.map((token) => (
-                    <Balance
+                    <ClaimableBalance
                       key={data.address + token.address + 'nonrefundabletokenbalance'}
-                      tokenAddress={token.address}
+                      token={token}
                       contractAddress={data.address}
                       chainId={chain?.id}
+                      explorerUrl={explorerUrl}
                     />
                   ))}
                 </tbody>
@@ -476,43 +480,137 @@ const Whitelist = ({
   );
 };
 
-const Balance = ({
-  tokenAddress,
+const ClaimableBalance = ({
+  token,
   contractAddress,
   chainId,
+  explorerUrl,
 }: {
-  tokenAddress: string;
+  token: { address: string; symbol: string; decimals: number };
   contractAddress: string;
   chainId?: number;
+  explorerUrl?: string | null;
 }) => {
-  const { data: balance } = useBalance({
+  const [isConfirming, setIsConfirming] = React.useState(false);
+
+  const {
+    data: claimableBalance,
+    isLoading: isFetchgingBalance,
+    refetch: refetchClaimableBalance,
+  } = useContractRead({
     address: contractAddress as `0x${string}`,
-    token: tokenAddress as `0x${string}`,
+    abi: nonRefundableSubscriptionABI,
     chainId,
+    functionName: 'claimables',
+    args: [token.address as `0x${string}`],
   });
 
   const { locale } = useLocale();
 
-  const formattedBalance = balance?.formatted
-    ? Number(balance.formatted).toLocaleString(locale, {
+  const formattedBalance = claimableBalance
+    ? (Number(String(claimableBalance)) / 10 ** token.decimals).toLocaleString(locale, {
         minimumFractionDigits: 4,
         maximumFractionDigits: 4,
       })
     : null;
 
+  const claimDialog = useDialogState();
+
+  const { isLoading, writeAsync } = useContractWrite({
+    mode: 'recklesslyUnprepared',
+    address: contractAddress as `0x${string}`,
+    abi: nonRefundableSubscriptionABI,
+    chainId,
+    functionName: 'claim',
+  });
+
+  const queryClient = useQueryClient();
+
+  const claimToken = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const form = e.target as HTMLFormElement & { amount: { value: string } };
+
+    if (writeAsync) {
+      writeAsync({
+        recklesslySetUnpreparedArgs: [
+          new BigNumber(form.amount.value).times(10 ** token.decimals).toFixed(0, 1),
+          token.address,
+        ],
+      })
+        .then((data) => {
+          setIsConfirming(true);
+
+          data.wait().then((receipt) => {
+            refetchClaimableBalance();
+            receipt.status === 1 ? toast.success('Transaction Success') : toast.error('Transaction Failed');
+            form.reset();
+            queryClient.invalidateQueries();
+            setIsConfirming(false);
+            claimDialog.setOpen(false);
+          });
+        })
+        .catch((err) => {
+          toast.error(err.reason || err.message || 'Transaction Failed');
+          setIsConfirming(false);
+        });
+    } else {
+      toast.error('Failed to interact with contract');
+    }
+  };
+  const t0 = useTranslations('Common');
+  const t1 = useTranslations('Forms');
+
   return (
     <tr>
       <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-        {formattedBalance && `${formattedBalance} ${balance?.symbol}`}
+        {formattedBalance && (
+          <>
+            <span>{formattedBalance}</span>{' '}
+            {explorerUrl && claimableBalance ? (
+              <a
+                href={`${explorerUrl}/address/${token.address}`}
+                target="_blank"
+                rel="noreferrer noopener"
+                className="underline"
+              >
+                {token.symbol}
+              </a>
+            ) : null}
+          </>
+        )}
       </td>
 
       <td className="table-description border border-solid border-llama-teal-2 text-center text-lp-gray-4 dark:border-lp-gray-7 dark:text-white">
-        {/* <button
+        <button
           className="w-[4rem] rounded-lg border border-lp-primary py-1 px-2 disabled:cursor-not-allowed"
-          disabled={Number(formattedBalance) === 0}
+          disabled={!claimableBalance || isFetchgingBalance || Number(formattedBalance) === 0}
+          onClick={claimDialog.toggle}
         >
           Claim
-        </button> */}
+        </button>
+
+        <FormDialog dialog={claimDialog} title={`Claim ${token.symbol}`}>
+          <form className="mx-auto my-8 flex flex-col gap-4" onSubmit={claimToken}>
+            <div>
+              <InputAmount name="amount" label={`${t0('amount')} ${token.symbol}`} isRequired />
+              <AvailableAmount
+                title={t1('availableForWithdrawl')}
+                selectedToken={token as any}
+                amount={formattedBalance}
+              />
+            </div>
+
+            <SubmitButton
+              disabled={
+                !claimableBalance || isFetchgingBalance || Number(formattedBalance) === 0 || isLoading || isConfirming
+              }
+              className="mt-2 rounded"
+            >
+              {isLoading || isFetchgingBalance || isConfirming ? <BeatLoader size="6px" color="white" /> : 'Confirm'}
+            </SubmitButton>
+          </form>
+        </FormDialog>
       </td>
     </tr>
   );

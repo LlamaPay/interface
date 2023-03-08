@@ -194,8 +194,15 @@ export const refundableSubscriptionABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'claimable',
+    inputs: [{ internalType: 'address', name: '_token', type: 'address' }],
+    name: 'claimableNow',
+    outputs: [{ internalType: 'uint256', name: 'claimable', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
+    inputs: [{ internalType: 'address', name: '', type: 'address' }],
+    name: 'claimables',
     outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     stateMutability: 'view',
     type: 'function',
