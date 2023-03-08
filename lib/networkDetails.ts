@@ -16,7 +16,7 @@ interface INetworkDetails {
     logoURI: string;
     tokenListId?: string;
     vestingFactory: string;
-    vestingReason: string;
+    vestingReason?: string;
     paymentsContract?: string;
     paymentsGraphApi?: string;
     botSubgraph?: string;
@@ -55,7 +55,6 @@ export const networkDetails: INetworkDetails = {
     prefix: 'avax',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchex/info/logo.png',
     vestingFactory: CONTRACTS.VESTING_FACTORY_FUJI,
-    vestingReason: '0x0000000000000000000000000000000000000000',
   },
   43114: {
     rpcUrl: 'https://rpc.ankr.com/avalanche',
@@ -70,7 +69,6 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchex/info/logo.png',
     tokenListId: 'avalanche',
     vestingFactory: CONTRACTS.VESTING_FACTORY_AVALANCHE,
-    vestingReason: '0x0000000000000000000000000000000000000000',
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-avax',
     paymentsContract: CONTRACTS.PAYMENTS_AVALANCHE,
     paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-avalanche',
@@ -88,7 +86,6 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/polygon/info/logo.png',
     tokenListId: 'polygon-pos',
     vestingFactory: CONTRACTS.VESTING_FACTORY_POLYGON,
-    vestingReason: '0x0000000000000000000000000000000000000000',
     paymentsContract: CONTRACTS.PAYMENTS_POLYGON,
     paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-polygon',
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-polygon',
@@ -106,7 +103,6 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/fantom/info/logo.png',
     tokenListId: 'fantom',
     vestingFactory: CONTRACTS.VESTING_FACTORY_FANTOM,
-    vestingReason: '0x0000000000000000000000000000000000000000',
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-fantom',
     paymentsContract: CONTRACTS.PAYMENTS_FANTOM,
     paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-fantom',
@@ -148,7 +144,6 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/optimism/info/logo.png',
     tokenListId: 'optimistic-ethereum',
     vestingFactory: CONTRACTS.VESTING_FACTORY_OPTIMISM,
-    vestingReason: '0x0000000000000000000000000000000000000000',
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-optimism',
     paymentsContract: CONTRACTS.PAYMENTS_OPTIMISM,
     paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-optimism',
@@ -168,7 +163,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/arbitrum/info/logo.png',
     tokenListId: 'arbitrum-one',
     vestingFactory: CONTRACTS.VESTING_FACTORY_ARBITRUM,
-    vestingReason: '0x0000000000000000000000000000000000000000',
+
     paymentsContract: CONTRACTS.PAYMENTS_ARBITRUM,
     paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-arbitrum',
   },
@@ -185,7 +180,6 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png',
     tokenListId: 'binance-smart-chain',
     vestingFactory: CONTRACTS.VESTING_FACTORY_BSC,
-    vestingReason: '0x0000000000000000000000000000000000000000',
     paymentsContract: CONTRACTS.PAYMENTS_BSC,
     paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-bsc',
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-bsc',
@@ -203,7 +197,6 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/xdai/info/logo.png',
     tokenListId: 'xdai',
     vestingFactory: CONTRACTS.VESTING_FACTORY_XDAI,
-    vestingReason: '0x0000000000000000000000000000000000000000',
   },
   82: {
     rpcUrl: 'https://rpc.meter.io',
@@ -218,7 +211,6 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://assets.coingecko.com/coins/images/11848/large/mtrg-logo.png?1595062273',
     tokenListId: 'meter',
     vestingFactory: CONTRACTS.VESTING_FACTORY_METER,
-    vestingReason: '0x0000000000000000000000000000000000000000',
   },
   5: {
     rpcUrl: `https://goerli.infura.io/v3/${infuraId}`,
@@ -256,7 +248,6 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'metis-andromeda',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/metis/info/logo.png',
     vestingFactory: CONTRACTS.VESTING_FACTORY_METIS,
-    vestingReason: '0x0000000000000000000000000000000000000000',
   },
   2222: {
     rpcUrl: 'https://evm.kava.io',
@@ -271,6 +262,5 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'kava-evm',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/kava/info/logo.png',
     vestingFactory: CONTRACTS.VESTING_FACTORY_KAVA,
-    vestingReason: '0x0000000000000000000000000000000000000000',
   },
 };
