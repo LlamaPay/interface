@@ -210,5 +210,8 @@
     "noData": "Aucun flux n'est enregistré pour cet utilisateur",
     "error": "Impossible d'obtenir les flux de cet utilisateur",
     "sendAll": "Envoyer la totalité"
+  },
+  "Dashboard": {
+    "claimableSalary": "Salaire réclamable"
   }
 }

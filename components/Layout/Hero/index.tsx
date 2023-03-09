@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
 import Image from 'next/image';
-import { DisclosureState } from 'ariakit';
 import Tooltip from '~/components/Tooltip';
 import heroGraphic from '~/public/heroGraphic.svg';
 import Yearn from './Icons/Yearn';
@@ -13,8 +12,10 @@ import DefiLlama from './Icons/DefiLlama';
 import Spookyswap from './Icons/Spookyswap';
 import Curve from './Icons/Curve';
 import classNames from 'classnames';
+import { ArrowRightIcon } from '@heroicons/react/24/solid';
+import Link from 'next/link';
 
-export default function Hero({ walletDialog }: { walletDialog: DisclosureState }) {
+export default function Hero() {
   return (
     <div className="relative isolate flex flex-col flex-wrap gap-5 overflow-clip bg-lp-secondary p-10 text-lp-gray-5 dark:bg-lp-green-4 dark:text-lp-white sm:p-20 xl:p-24">
       <h1 className="font-exo relative z-10 text-5xl font-bold leading-[3.5rem]">
@@ -40,12 +41,13 @@ export default function Hero({ walletDialog }: { walletDialog: DisclosureState }
         </div>
       </div>
 
-      <button
-        className="primary-button z-10 w-full max-w-[26.25rem] whitespace-pre-line border-none bg-lp-white text-lg font-semibold text-lp-primary dark:bg-lp-secondary dark:text-lp-black"
-        onClick={walletDialog.toggle}
+      <Link
+        className="primary-button z-10 flex w-fit items-center gap-2 whitespace-pre-line border-none bg-lp-white text-lg font-semibold text-lp-primary dark:bg-lp-secondary dark:text-lp-black"
+        href="/dashboard"
       >
-        Connect your wallet to go to the app
-      </button>
+        <span>Dashboard</span>
+        <ArrowRightIcon className="h-5 w-5" />
+      </Link>
 
       <div className="hero-graphic">
         <Image src={heroGraphic} alt="" className="object-contain" priority />

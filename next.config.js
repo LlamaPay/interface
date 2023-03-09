@@ -16,11 +16,6 @@ const nextConfig = {
   async redirects() {
     return [
       {
-        source: '/salaries',
-        destination: '/',
-        permanent: true,
-      },
-      {
         source: '/salaries/create',
         destination: '/create',
         permanent: true,

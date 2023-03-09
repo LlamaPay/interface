@@ -1,7 +1,7 @@
 const plugin = require('tailwindcss/plugin');
 
 module.exports = {
-  content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}'],
+  content: ['./pages/**/*.{js,ts,jsx,tsx}', './components/**/*.{js,ts,jsx,tsx}', './containers/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'class',
   theme: {
     extend: {
@@ -27,10 +27,12 @@ module.exports = {
         'llama-teal-2': '#E4EDEB',
         'llama-gray-100': '#FAFDFC',
         'llama-gray-300': '#D1D5DB',
+        'llama-gray-400': '#6B7280',
         'llama-gray-500': '#9CA3AF',
         'llama-gray-600': '#4B5563',
         'llama-gray-700': '#374151',
         'llama-gray-900': '#111827',
+        'llama-green-400': '#23BF91',
         'llama-green-500': '#23C092',
       },
     },

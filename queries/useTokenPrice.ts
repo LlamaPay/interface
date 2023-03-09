@@ -1,20 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import { useNetwork } from 'wagmi';
 import { networkDetails } from '~/lib/networkDetails';
 
-const fetchTokenPrice = async (id: string, prefix: string | null) => {
+export const fetchTokenPrice = async (id: string, prefix?: string | null) => {
   if (!id || !prefix || id.length !== 42) return null;
 
-  const { data } = await axios.post(
-    'https://coins.llama.fi/prices',
-    JSON.stringify({
-      coins: [`${prefix}:${id}`],
-      timestamp: Date.now() / 1e3,
-    })
+  const { coins } = await fetch(`https://coins.llama.fi/prices/current/${prefix}:${id.toLowerCase()}`).then((r) =>
+    r.json()
   );
 
-  return data?.coins?.[`${prefix}:${id.toLowerCase()}`] ?? null;
+  return coins?.[`${prefix}:${id.toLowerCase()}`] ?? null;
 };
 
 export function useTokenPrice(id: string) {

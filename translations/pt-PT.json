@@ -210,5 +210,8 @@
     "noData": "Este utilizador não tem fluxos de entrada",
     "error": "Não foi possível ir buscar fluxos deste utilizador",
     "sendAll": "Enviar Tudo"
+  },
+  "Dashboard": {
+    "claimableSalary": "Salário Reivindicado"
   }
 }

@@ -210,5 +210,8 @@
     "noData": "Este usuario no tiene transmisiones entr",
     "error": "No se encontraron transmisiones para este usuario",
     "sendAll": "Enviar todo"
+  },
+  "Dashboard": {
+    "claimableSalary": "Salario reclamable"
   }
 }

@@ -5,6 +5,7 @@ import useWithdrawable from '~/queries/useWithdrawable';
 import Tooltip from '~/components/Tooltip';
 import { ExclamationCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 import { useIntl, useTranslations } from 'next-intl';
+import { BigNumber } from 'ethers';
 
 export const Withdrawable = ({ data }: { data: IStream }) => {
   const { data: callResult, isLoading } = useWithdrawable({
@@ -91,7 +92,7 @@ interface IWithdrawableAmtFormatter {
   lastUpdate?: number;
 }
 
-function withdrawableAmtFormatter({
+export function withdrawableAmtFormatter({
   amountPerSec,
   decimals,
   withdrawableAmount,

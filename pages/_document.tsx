@@ -9,7 +9,7 @@ export default function Document() {
         <link rel="icon" type="image/png" sizes="16x16" href="/favicons/favicon-16x16.png" />
         <link rel="manifest" href="/favicons/site.webmanifest" />
       </Head>
-      <body className="bg-lp-white text-lp-black dark:bg-lp-gray-8 dark:text-lp-white">
+      <body className="bg-llama-gray-100 text-lp-black dark:bg-lp-gray-8 dark:text-lp-white">
         <Main />
         <NextScript />
       </body>

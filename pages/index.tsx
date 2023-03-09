@@ -1,11 +1,20 @@
-import type { GetStaticPropsContext, NextPage } from 'next';
+import type { GetStaticPropsContext } from 'next';
 import * as React from 'react';
+import Head from 'next/head';
+import { useDialogState } from 'ariakit';
+import Header from '~/components/Layout/Header';
+import Hero from '~/components/Layout/Hero';
+import HowItWorks from '~/components/Layout/HowItWorks';
+import Footer from '~/components/Layout/Footer';
 import Layout from '~/components/Layout';
 import Balance from '~/components/Balance';
-import { HistorySection } from '~/components/History';
 import { StreamSection } from '~/components/Stream';
+import { HistorySection } from '~/components/History';
 
-const Home: NextPage = () => {
+function Home() {
+  const onboardDialog = useDialogState();
+  const walletDialog = useDialogState();
+
   return (
     <Layout className="flex flex-col gap-12">
       <Balance />
@@ -13,7 +22,27 @@ const Home: NextPage = () => {
       <HistorySection />
     </Layout>
   );
-};
+
+  return (
+    <>
+      <Head>
+        <title>LlamaPay</title>
+        <meta
+          name="description"
+          content="LlamaPay is a multi-chain protocol that allows you to automate transactions and stream them by the second. The recipients can withdraw these funds at any time. This eliminates the need for manual transactions."
+        />
+      </Head>
+
+      <Header onboardDialog={onboardDialog} walletDialog={walletDialog} />
+
+      <Hero />
+
+      <HowItWorks onboardDialog={onboardDialog} />
+
+      <Footer />
+    </>
+  );
+}
 
 export async function getStaticProps(context: GetStaticPropsContext) {
   return {

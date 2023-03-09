@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import { useNetworkProvider } from '~/hooks';
 
 interface ITokenList {
@@ -13,7 +12,9 @@ interface ITokenList {
 const fetchTokenList = async (id?: string) => {
   if (!id) return null;
 
-  const { data } = await axios.get(`https://defillama-datasets.s3.eu-central-1.amazonaws.com/tokenlist/${id}.json`);
+  const data = await fetch(`https://defillama-datasets.s3.eu-central-1.amazonaws.com/tokenlist/${id}.json`).then(
+    (res) => res.json()
+  );
 
   return data ?? {};
 };
@@ -22,6 +23,6 @@ export function useGetTokenList() {
   const { tokenListId } = useNetworkProvider();
 
   return useQuery<ITokenList>(['tokenlist', tokenListId], () => fetchTokenList(tokenListId), {
-    refetchInterval: 30000,
+    refetchInterval: 30_000,
   });
 }

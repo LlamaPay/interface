@@ -16,7 +16,7 @@ interface IGetWithdrawable {
   amountPerSec: string;
 }
 
-async function getWithdrawableData({ contract, payer, payee, amountPerSec }: IGetWithdrawable) {
+export async function getWithdrawableData({ contract, payer, payee, amountPerSec }: IGetWithdrawable) {
   try {
     const call = await contract.withdrawable(payer, payee, amountPerSec);
     return {

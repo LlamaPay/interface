@@ -210,5 +210,8 @@
     "noData": "This user has no incoming streams",
     "error": "Couldn't fetch streams for this user",
     "sendAll": "Send All"
+  },
+  "Dashboard": {
+    "claimableSalary": "Claimable Salary"
   }
 }
