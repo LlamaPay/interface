@@ -49,7 +49,7 @@ export function useMultipleTokenPrices({ tokens }: { tokens: Array<string> }) {
 
   return {
     isLoaded: res.filter((r) => r.status === 'loading').length === 0,
-    isLoading: (res?.filter((r) => r.status === 'success') ?? []).length >= 1 ? false : true,
+    isLoading: tokens.length === 0 || (res?.filter((r) => r.status === 'success') ?? []).length >= 1 ? false : true,
     data: resData || {},
   };
 }

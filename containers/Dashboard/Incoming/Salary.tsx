@@ -5,16 +5,18 @@ import { useGetSalaryInfo } from '~/queries/salary/useGetSalaryInfo';
 import { useMultipleTokenPrices } from '~/queries/useTokenPrice';
 import { formatBalance } from '~/utils/amount';
 import { Box } from '../common/Box';
-import { pieChartBreakDown } from '../common/PieChart';
+import { pieChartBreakDown } from '../common/pieChartBreakdown';
 
 export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
   const { data } = useGetSalaryInfo({ userAddress, chainId });
 
   const tokens =
     data?.reduce((acc, curr) => {
-      acc.add(curr.token.address.toLowerCase());
+      if (curr.payerAddress !== userAddress.toLowerCase()) {
+        acc.add(curr.token.address.toLowerCase());
+      }
       return acc;
-    }, new Set<string>()) ?? [];
+    }, new Set<string>()) ?? new Set();
 
   const { data: tokenPrices, isLoading: isFetchingTokenPrices } = useMultipleTokenPrices({
     tokens: Array.from(tokens),

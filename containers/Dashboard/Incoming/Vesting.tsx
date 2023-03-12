@@ -5,16 +5,18 @@ import { useMultipleTokenPrices } from '~/queries/useTokenPrice';
 import { useGetVestingInfoByQueryParams } from '~/queries/vesting/useGetVestingInfo';
 import { formatBalance } from '~/utils/amount';
 import { Box } from '../common/Box';
-import { pieChartBreakDown } from '../common/PieChart';
+import { pieChartBreakDown } from '../common/pieChartBreakdown';
 
 export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
   const { data } = useGetVestingInfoByQueryParams({ userAddress, chainId });
 
   const tokens =
     data?.reduce((acc, curr) => {
-      acc.add(curr.token.toLowerCase());
+      if (curr.admin !== userAddress.toLowerCase()) {
+        acc.add(curr.token.toLowerCase());
+      }
       return acc;
-    }, new Set<string>()) ?? [];
+    }, new Set<string>()) ?? new Set();
 
   const { data: tokenPrices, isLoading: isFetchingTokenPrices } = useMultipleTokenPrices({
     tokens: Array.from(tokens),
