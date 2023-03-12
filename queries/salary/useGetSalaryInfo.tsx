@@ -6,7 +6,6 @@ import { createContract } from '~/utils/contract';
 import type { Provider } from '~/utils/contract';
 import { getWithdrawableData } from '../useWithdrawable';
 import BigNumber from 'bignumber.js';
-import { fetchTokenPrice } from '../useTokenPrice';
 
 interface IStream {
   streamId: string;
@@ -32,6 +31,9 @@ interface IWithdrawable {
   withdrawableAmount: BigNumber;
   owed: BigNumber;
   lastUpdate: BigNumber;
+  payerAddress: string;
+  payeeAddress: string;
+  contract: string;
 }
 
 interface IWithdrawableAmount extends IWithdrawable {
@@ -44,24 +46,17 @@ interface IWithdrawableAmount extends IWithdrawable {
   };
 }
 
-interface IClaimableSalary {
-  withdrawables: Array<IWithdrawableAmount>;
-  tokenPrices: { [token: string]: number | null };
-}
-
 async function fetchClaimableSalary({
   userAddress,
   endpoint,
   provider,
-  prefix,
 }: {
   userAddress: string;
   endpoint?: string;
   provider?: Provider;
-  prefix?: string;
 }) {
   try {
-    if (!endpoint || !provider) return { withdrawables: [], tokenPrices: {} };
+    if (!endpoint || !provider) return [];
 
     const salaryStreams = await request(
       endpoint,
@@ -104,50 +99,36 @@ async function fetchClaimableSalary({
     );
 
     const withdrawableAmounts: Array<IWithdrawableAmount> = [];
-    const uniqueTokens = new Set<string>();
 
     salaryStreams?.user?.streams.forEach((stream: IStream, index: number) => {
       const wData = withdrawables[index];
 
       if (wData && wData.status === 'fulfilled') {
-        uniqueTokens.add(stream.token.address);
-
         withdrawableAmounts.push({
           amountPerSec: stream.amountPerSec,
           token: stream.token,
           withdrawableAmount: wData.value.withdrawableAmount,
           owed: wData.value.owed,
           lastUpdate: wData.value.lastUpdate,
+          payerAddress: stream.payer.id,
+          payeeAddress: stream.payee.id,
+          contract: stream.contract.address,
         });
       }
     });
 
-    const prices = await Promise.allSettled(Array.from(uniqueTokens).map((token) => fetchTokenPrice(token, prefix)));
-
-    const tokenPrices: { [token: string]: number | null } = {};
-
-    Array.from(uniqueTokens).forEach((token, index) => {
-      const data = prices[index];
-      tokenPrices[token] = null;
-
-      if (data.status === 'fulfilled' && data.value) {
-        tokenPrices[token] = data.value;
-      }
-    });
-
-    return { withdrawables: withdrawableAmounts, tokenPrices };
+    return withdrawableAmounts;
   } catch (error: any) {
     throw new Error(error.message || (error?.reason ?? "Couldn't fetch claimable salary"));
   }
 }
 
-export const useClaimableSalary = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
+export const useGetSalaryInfo = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
   // get subgraph endpoint
   const endpoint = networkDetails[chainId]?.subgraphEndpoint;
   const provider = networkDetails[chainId]?.chainProviders;
-  const prefix = networkDetails[chainId]?.prefix;
 
-  return useQuery<IClaimableSalary>(['claimableSalary', userAddress, chainId], () =>
-    fetchClaimableSalary({ userAddress, endpoint, provider, prefix })
+  return useQuery<Array<IWithdrawableAmount>>(['salaryInfo', userAddress, chainId], () =>
+    fetchClaimableSalary({ userAddress, endpoint, provider })
   );
 };

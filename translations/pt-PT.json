@@ -212,6 +212,7 @@
     "sendAll": "Enviar Tudo"
   },
   "Dashboard": {
-    "claimableSalary": "Salário Reivindicado"
+    "claimableSalary": "Salário Reivindicado",
+    "claimableVestedTokens": "Tokens Adquiridos Reivindicados"
   }
 }

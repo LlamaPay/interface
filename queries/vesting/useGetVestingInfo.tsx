@@ -1,7 +1,7 @@
 import type { Provider } from '~/utils/contract';
 import BigNumber from 'bignumber.js';
 import { ContractCallContext, Multicall } from 'ethereum-multicall';
-import { ContractInterface, ethers } from 'ethers';
+import { ethers } from 'ethers';
 import { useNetworkProvider } from '~/hooks';
 import { useQuery } from '@tanstack/react-query';
 import type { IVesting } from '~/types';
@@ -10,8 +10,7 @@ import { erc20ABI, useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
 import { vestingFactoryABI } from '~/lib/abis/vestingFactory';
 import { vestingReasonsABI } from '~/lib/abis/vestingReasons';
-import vestingEscrowABI from '~/lib/abis/vestingEscrow';
-import { getAddress } from 'ethers/lib/utils';
+import { vestingEscrowABI } from '~/lib/abis/vestingEscrow';
 
 const vestingEscrowCalls = [
   { reference: 'unclaimed', methodName: 'unclaimed', methodParameters: [] },
@@ -44,7 +43,15 @@ const multicalls: { [key: number]: string } = {
   42161: '0xcA11bde05977b3631167028862bE2a173976CA11',
 };
 
-async function getVestingInfo(userAddress: string | undefined, provider: Provider | null, chainId: number | null) {
+async function getVestingInfo({
+  userAddress,
+  provider,
+  chainId,
+}: {
+  userAddress?: string | undefined;
+  provider?: Provider | null;
+  chainId?: number | null;
+}) {
   try {
     if (!provider) throw new Error('No provider');
     if (!userAddress) throw new Error('No account');
@@ -259,17 +266,18 @@ export default function useGetVestingInfo() {
 
   const { address } = useAccount();
 
-  return useQuery(['vestingInfo', address, chainId], () => getVestingInfo(address, provider, chainId));
+  return useQuery(['vestingInfo', address, chainId], () => getVestingInfo({ userAddress: address, chainId, provider }));
 }
 
 interface IVestingInfoByQueryParams {
-  address: string;
-  chainId: number | null;
-  provider: Provider | null;
+  userAddress: string;
+  chainId?: number | null;
 }
 
-export function useGetVestingInfoByQueryParams({ address, chainId, provider }: IVestingInfoByQueryParams) {
-  return useQuery(['vestingInfo', address, chainId], () => getVestingInfo(address, provider, chainId), {
-    refetchInterval: 60000,
+export function useGetVestingInfoByQueryParams({ userAddress, chainId }: IVestingInfoByQueryParams) {
+  const provider = chainId ? networkDetails[chainId]?.chainProviders : null;
+
+  return useQuery(['vestingInfo', userAddress, chainId], () => getVestingInfo({ userAddress, chainId, provider }), {
+    refetchInterval: 60_000,
   });
 }

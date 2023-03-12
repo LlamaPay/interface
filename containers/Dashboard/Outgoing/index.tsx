@@ -4,7 +4,7 @@ import { useAccount } from 'wagmi';
 import Layout from '~/components/Layout';
 import { WalletSelector } from '~/components/Web3';
 import { useIsMounted } from '~/hooks';
-import { Box } from '../shared/Box';
+import { Box } from '../common/Box';
 
 export const IncomingDashboard = ({ userAddress, chainId }: { userAddress?: string; chainId?: number }) => {
   const isMounted = useIsMounted();

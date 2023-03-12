@@ -5,7 +5,6 @@ import useWithdrawable from '~/queries/useWithdrawable';
 import Tooltip from '~/components/Tooltip';
 import { ExclamationCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 import { useIntl, useTranslations } from 'next-intl';
-import { BigNumber } from 'ethers';
 
 export const Withdrawable = ({ data }: { data: IStream }) => {
   const { data: callResult, isLoading } = useWithdrawable({
@@ -25,7 +24,7 @@ export const Withdrawable = ({ data }: { data: IStream }) => {
   React.useEffect(() => {
     const id = setInterval(() => {
       setBalanceState(
-        withdrawableAmtFormatter({
+        salaryWithdrawableAmtFormatter({
           amountPerSec: data.amountPerSec,
           decimals: data.token.decimals,
           withdrawableAmount: callResult?.withdrawableAmount,
@@ -92,7 +91,7 @@ interface IWithdrawableAmtFormatter {
   lastUpdate?: number;
 }
 
-export function withdrawableAmtFormatter({
+export function salaryWithdrawableAmtFormatter({
   amountPerSec,
   decimals,
   withdrawableAmount,
@@ -107,21 +106,3 @@ export function withdrawableAmtFormatter({
     return withdrawableAmount / 10 ** decimals + ((Date.now() / 1e3 - lastUpdate) * Number(amountPerSec)) / 1e20;
   }
 }
-
-// export function useWithdrawableAmtFormatter(data: IStream) {
-//   const { data: callResult } = useWithdrawable({
-//     contract: data.llamaTokenContract,
-//     payer: data.payerAddress,
-//     payee: data.payeeAddress,
-//     amountPerSec: data.amountPerSec,
-//     streamId: data.streamId,
-//   });
-
-//   return withdrawableAmtFormatter({
-//     amountPerSec: data.amountPerSec,
-//     decimals: data.token.decimals,
-//     withdrawableAmount: callResult?.withdrawableAmount,
-//     owed: callResult?.owed,
-//     lastUpdate: callResult?.lastUpdate,
-//   });
-// }

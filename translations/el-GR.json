@@ -212,6 +212,7 @@
     "sendAll": "Αποστολή Όλων"
   },
   "Dashboard": {
-    "claimableSalary": "Απαιτούμενος μισθός"
+    "claimableSalary": "Απαιτούμενος μισθός",
+    "claimableVestedTokens": "Υποχρεωτικά Δικαιώματα με αξίωση"
   }
 }

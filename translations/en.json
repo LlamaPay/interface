@@ -212,6 +212,7 @@
     "sendAll": "Send All"
   },
   "Dashboard": {
-    "claimableSalary": "Claimable Salary"
+    "claimableSalary": "Claimable Salary",
+    "claimableVestedTokens": "Claimable Vested Tokens"
   }
 }

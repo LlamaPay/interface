@@ -4,8 +4,9 @@ import { useAccount, useNetwork } from 'wagmi';
 import Layout from '~/components/Layout';
 import { WalletSelector } from '~/components/Web3';
 import { useIsMounted } from '~/hooks';
-import { Box } from '../shared/Box';
+import { Box } from '../common/Box';
 import { Salary } from './Salary';
+import { Vesting } from './Vesting';
 
 export const IncomingDashboard = ({ userAddress, chainId }: { userAddress?: string; chainId?: number }) => {
   const isMounted = useIsMounted();
@@ -17,7 +18,7 @@ export const IncomingDashboard = ({ userAddress, chainId }: { userAddress?: stri
   if (!isMounted) {
     return (
       <Layout className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <Box className="col-span-full min-h-[520px]"></Box>
+        <Box className="col-span-full min-h-[564px]"></Box>
       </Layout>
     );
   }
@@ -28,7 +29,7 @@ export const IncomingDashboard = ({ userAddress, chainId }: { userAddress?: stri
   if (!finalAddress) {
     return (
       <Layout className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <Box className="col-span-full grid min-h-[520px] items-center">
+        <Box className="col-span-full grid min-h-[564px] items-center">
           <button
             className="mx-auto w-fit rounded-lg border py-2 px-4 dark:border-lp-gray-7"
             onClick={walletDialog.toggle}
@@ -44,7 +45,7 @@ export const IncomingDashboard = ({ userAddress, chainId }: { userAddress?: stri
   if (!finalChainId) {
     return (
       <Layout className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <Box className="col-span-full grid min-h-[520px] items-center">
+        <Box className="col-span-full grid min-h-[564px] items-center">
           <button
             className="mx-auto w-fit rounded-lg border py-2 px-4 dark:border-lp-gray-7"
             onClick={walletDialog.toggle}
@@ -60,7 +61,7 @@ export const IncomingDashboard = ({ userAddress, chainId }: { userAddress?: stri
   return (
     <Layout className="grid grid-cols-1 gap-6 md:grid-cols-2">
       <Salary userAddress={finalAddress} chainId={finalChainId} />
-      <Box></Box>
+      <Vesting userAddress={finalAddress} chainId={finalChainId} />
       <Box className="col-span-full"></Box>
     </Layout>
   );

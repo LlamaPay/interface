@@ -1,4 +1,4 @@
-const vestingEscrowABI: any = [
+export const vestingEscrowABI: any = [
   {
     name: 'Fund',
     inputs: [
@@ -204,5 +204,3 @@ const vestingEscrowABI: any = [
     gas: 2958,
   },
 ];
-
-export default vestingEscrowABI;

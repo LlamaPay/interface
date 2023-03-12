@@ -1,18 +1,18 @@
 import { useIntl, useTranslations } from 'next-intl';
 import { useEffect, useRef } from 'react';
-import { salaryWithdrawableAmtFormatter } from '~/components/Stream/Table/CustomValues';
-import { useGetSalaryInfo } from '~/queries/salary/useGetSalaryInfo';
+import { vestingWithdrawableAmtFormatter } from '~/components/Vesting/Table/CustomValues/Unclaimed';
 import { useMultipleTokenPrices } from '~/queries/useTokenPrice';
+import { useGetVestingInfoByQueryParams } from '~/queries/vesting/useGetVestingInfo';
 import { formatBalance } from '~/utils/amount';
 import { Box } from '../common/Box';
 import { pieChartBreakDown } from '../common/PieChart';
 
-export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
-  const { data } = useGetSalaryInfo({ userAddress, chainId });
+export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
+  const { data } = useGetVestingInfoByQueryParams({ userAddress, chainId });
 
   const tokens =
     data?.reduce((acc, curr) => {
-      acc.add(curr.token.address.toLowerCase());
+      acc.add(curr.token.toLowerCase());
       return acc;
     }, new Set<string>()) ?? [];
 
@@ -26,25 +26,30 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
   const t = useTranslations('Dashboard');
 
   useEffect(() => {
+    const withdrawables = data ?? [];
+
     const id = setInterval(() => {
       if (data && totalClaimableRef.current) {
         totalClaimableRef.current.textContent =
           '$' +
           formatBalance(
-            data.reduce((acc, curr) => {
-              if (curr.payerAddress === userAddress.toLowerCase()) {
+            withdrawables.reduce((acc, curr) => {
+              if (curr.admin === userAddress.toLowerCase()) {
                 return acc;
               } else {
                 acc +=
-                  (tokenPrices[curr.token.address]?.price ?? 1) *
+                  (tokenPrices[curr.token]?.price ?? 1) *
                   Number(
                     (
-                      salaryWithdrawableAmtFormatter({
-                        amountPerSec: curr.amountPerSec,
-                        decimals: curr.token.decimals,
-                        withdrawableAmount: curr.withdrawableAmount as any,
-                        owed: curr.owed as any,
-                        lastUpdate: curr.lastUpdate as any,
+                      vestingWithdrawableAmtFormatter({
+                        disabledAt: curr.disabledAt,
+                        tokenDecimals: curr.tokenDecimals,
+                        unclaimed: curr.unclaimed,
+                        totalLocked: curr.totalLocked,
+                        startTime: curr.startTime,
+                        endTime: curr.endTime,
+                        cliffLength: curr.cliffLength,
+                        timestamp: curr.timestamp,
                       }) || 0
                     ).toFixed(4)
                   );
@@ -60,18 +65,20 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
 
     // clear interval when component unmounts
     return () => clearInterval(id);
-  }, [data, userAddress, tokenPrices, intl]);
+  }, [data, tokenPrices, userAddress, intl]);
 
   return (
     <Box className="flex flex-col items-center justify-center">
       {data && !isFetchingTokenPrices && (
         <>
           <div className={`h-16 w-16 rounded-full`} style={{ background: pieChartBreakDown(tokenPrices) }}></div>
+
           <p
             className="font-exo -my-2 w-full overflow-hidden text-ellipsis whitespace-nowrap text-center text-[4rem] font-extrabold slashed-zero tabular-nums text-llama-green-400 dark:text-llama-green-500"
             ref={totalClaimableRef}
           ></p>
-          <p className="text-lg font-medium text-llama-gray-400">{t('claimableSalary')}</p>
+
+          <p className="text-lg font-medium text-llama-gray-400">{t('claimableVestedTokens')}</p>
         </>
       )}
     </Box>

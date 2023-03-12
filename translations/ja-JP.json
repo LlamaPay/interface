@@ -212,6 +212,7 @@
     "sendAll": "全てを送信"
   },
   "Dashboard": {
-    "claimableSalary": "請求可能な給与"
+    "claimableSalary": "請求可能な給与",
+    "claimableVestedTokens": "請求可能な既得トークン"
   }
 }
