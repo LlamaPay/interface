@@ -20,6 +20,21 @@ const nextConfig = {
         destination: '/create',
         permanent: true,
       },
+      {
+        source: '/incoming',
+        destination: '/incoming/dashboard',
+        permanent: true,
+      },
+      {
+        source: '/dashboard',
+        destination: '/incoming/dashboard',
+        permanent: true,
+      },
+      {
+        source: '/outgoing',
+        destination: '/outgoing/dashboard',
+        permanent: true,
+      },
     ];
   },
 };
