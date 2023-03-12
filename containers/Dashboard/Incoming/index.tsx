@@ -4,7 +4,7 @@ import { useAccount, useNetwork } from 'wagmi';
 import Layout from '~/components/Layout';
 import { WalletSelector } from '~/components/Web3';
 import { useIsMounted } from '~/hooks';
-import { Box } from '../common/Box';
+import { Box } from '../../common/Box';
 import { Salary } from './Salary';
 import { Vesting } from './Vesting';
 

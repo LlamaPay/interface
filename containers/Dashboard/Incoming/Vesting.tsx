@@ -4,8 +4,8 @@ import { vestingWithdrawableAmtFormatter } from '~/components/Vesting/Table/Cust
 import { useMultipleTokenPrices } from '~/queries/useTokenPrice';
 import { useGetVestingInfoByQueryParams } from '~/queries/vesting/useGetVestingInfo';
 import { formatBalance } from '~/utils/amount';
-import { Box } from '../common/Box';
-import { pieChartBreakDown } from '../common/pieChartBreakdown';
+import { Box } from '../../common/Box';
+import { pieChartBreakDown } from '../../common/pieChartBreakdown';
 
 export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
   const { data } = useGetVestingInfoByQueryParams({ userAddress, chainId });

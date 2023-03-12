@@ -4,8 +4,8 @@ import { salaryWithdrawableAmtFormatter } from '~/components/Stream/Table/Custom
 import { useGetSalaryInfo } from '~/queries/salary/useGetSalaryInfo';
 import { useMultipleTokenPrices } from '~/queries/useTokenPrice';
 import { formatBalance } from '~/utils/amount';
-import { Box } from '../common/Box';
-import { pieChartBreakDown } from '../common/pieChartBreakdown';
+import { Box } from '../../common/Box';
+import { pieChartBreakDown } from '../../common/pieChartBreakdown';
 
 export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
   const { data } = useGetSalaryInfo({ userAddress, chainId });
