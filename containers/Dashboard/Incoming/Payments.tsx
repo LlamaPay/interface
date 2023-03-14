@@ -2,6 +2,7 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Box } from '~/containers/common/Box';
 import { currentYear, daysInMonth, months, yearOptions } from '~/containers/common/date';
+import { PaymentsGraphic } from '~/containers/common/Graphics/Payments';
 import { useLocale } from '~/hooks';
 import { useGetPaymentsInfo } from '~/queries/payments/useGetPaymentsInfo';
 import { useMultipleTokenPrices } from '~/queries/useTokenPrice';
@@ -48,13 +49,32 @@ export const Payments = ({ userAddress, chainId }: { userAddress: string; chainI
 
   const { locale } = useLocale();
 
+  if (isLoading || isFetchingTokenPrices) {
+    return <Box className="animate-shimmer-2 isolate col-span-full flex min-h-[300px] flex-col gap-3"></Box>;
+  }
+
+  if (
+    isError ||
+    data?.filter((x) => x.payer !== userAddress.toLowerCase() && !x.revoked && x.release > Date.now() / 1000)
+      ?.length === 0
+  ) {
+    return (
+      <Box className="isolate col-span-full flex min-h-[300px] flex-col items-center justify-center">
+        <PaymentsGraphic />
+        <p className="text-base font-medium text-llama-gray-400 dark:text-llama-gray-300">
+          {isError ? t0('errorFetchingData') : t0('noPendingOneTimePayments')}
+        </p>
+      </Box>
+    );
+  }
+
   return (
     <Box className="isolate col-span-full flex min-h-[300px] flex-col gap-3">
       <div className="flex items-center justify-between gap-4">
         <p className="text-sm font-medium text-llama-gray-400 dark:text-llama-gray-300">{t0('scheduledPayments')}</p>
         <select
           name="year"
-          className="border-0 py-0 text-sm font-medium text-llama-gray-400 dark:text-llama-gray-300"
+          className="border-0 bg-[#FCFFFE] py-0 text-sm font-medium text-llama-gray-400 dark:bg-[#141414] dark:text-llama-gray-300"
           onChange={(e) => setYear(Number(e.target.value))}
           value={year}
         >

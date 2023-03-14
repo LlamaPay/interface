@@ -215,7 +215,12 @@
     "claimableSalary": "Απαιτούμενος μισθός",
     "claimableVestedTokens": "Υποχρεωτικά Δικαιώματα με αξίωση",
     "scheduledPayments": "Προγραμματισμένες πληρωμές",
-    "tokenSalaries": "Συμβολικοί μισθοί"
+    "tokenSalaries": "Συμβολικοί μισθοί",
+    "errorFetchingData": "Κάτι πήγε στραβά, δεν ήταν δυνατή η φόρτωση των δεδομένων",
+    "noActiveSalaryStreams": "Δεν έχετε ενεργές ροές μισθών",
+    "noActiveVestingStreams": "Δεν έχετε ενεργές ροές κατοχύρωσης",
+    "noPendingOneTimePayments": "Δεν έχετε εκκρεμείς εφάπαξ πληρωμές",
+    "noPendingTokenSalaries": "Δεν έχετε συμβολικούς μισθούς σε εκκρεμότητα"
   },
   "Months": {
     "january": "Ιανουάριος",

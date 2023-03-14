@@ -6,9 +6,10 @@ import { useGetVestingInfoByQueryParams } from '~/queries/vesting/useGetVestingI
 import { formatBalance } from '~/utils/amount';
 import { Box } from '~/containers/common/Box';
 import { pieChartBreakDown } from '~/containers/common/pieChartBreakdown';
+import { VestingGraphic } from '~/containers/common/Graphics/Vesting';
 
 export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
-  const { data } = useGetVestingInfoByQueryParams({ userAddress, chainId });
+  const { data, isLoading, isError } = useGetVestingInfoByQueryParams({ userAddress, chainId });
 
   const tokens =
     data?.reduce((acc, curr) => {
@@ -69,9 +70,24 @@ export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId
     return () => clearInterval(id);
   }, [data, tokenPrices, userAddress, intl]);
 
+  if (isLoading || isFetchingTokenPrices) {
+    return <Box className="animate-shimmer-2 flex flex-col items-center justify-center"></Box>;
+  }
+
+  if (isError || data?.filter((x) => x.admin !== userAddress.toLowerCase())?.length === 0) {
+    return (
+      <Box className="flex flex-col items-center justify-center">
+        <VestingGraphic />
+        <p className="text-base font-medium text-llama-gray-400 dark:text-llama-gray-300">
+          {isError ? t('errorFetchingData') : t('noActiveVestingStreams')}
+        </p>
+      </Box>
+    );
+  }
+
   return (
     <Box className="flex flex-col items-center justify-center">
-      {data && !isFetchingTokenPrices && (
+      {data && (
         <>
           <div className={`h-16 w-16 rounded-full`} style={{ background: pieChartBreakDown(tokenPrices) }}></div>
 

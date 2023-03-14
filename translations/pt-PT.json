@@ -215,7 +215,12 @@
     "claimableSalary": "Salário Reivindicado",
     "claimableVestedTokens": "Tokens Adquiridos Reivindicados",
     "scheduledPayments": "Pagamentos Agendados",
-    "tokenSalaries": "Salários Token"
+    "tokenSalaries": "Salários Token",
+    "errorFetchingData": "Algo deu errado, não foi possível carregar os dados",
+    "noActiveSalaryStreams": "Você não tem fluxos salariais ativos",
+    "noActiveVestingStreams": "Você não tem fluxos de aquisição ativos",
+    "noPendingOneTimePayments": "Você não tem pagamentos únicos pendentes",
+    "noPendingTokenSalaries": "Você não tem salários de token pendentes"
   },
   "Months": {
     "january": "Janeiro",

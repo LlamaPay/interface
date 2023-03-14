@@ -215,7 +215,12 @@
     "claimableSalary": "Salario reclamable",
     "claimableVestedTokens": "Tokens adquiridos reclamables",
     "scheduledPayments": "Pagos programados",
-    "tokenSalaries": "Salarios simbólicos"
+    "tokenSalaries": "Salarios simbólicos",
+    "errorFetchingData": "Algo salió mal, no se pudieron cargar los datos",
+    "noActiveSalaryStreams": "No tiene transmisión salariales activos",
+    "noActiveVestingStreams": "No tiene transmisión de adquisición de derechos activos",
+    "noPendingOneTimePayments": "No tienes pagos únicos pendientes",
+    "noPendingTokenSalaries": "No tienes sueldos token pendientes"
   },
   "Months": {
     "january": "Enero",

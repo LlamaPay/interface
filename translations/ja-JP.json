@@ -215,7 +215,12 @@
     "claimableSalary": "請求可能な給与",
     "claimableVestedTokens": "請求可能な既得トークン",
     "scheduledPayments": "予定された支払い",
-    "tokenSalaries": "トークン給与"
+    "tokenSalaries": "トークン給与",
+    "errorFetchingData": "エラーが発生したため、データを読み込めませんでした",
+    "noActiveSalaryStreams": "有効な給与の流れはありません",
+    "noActiveVestingStreams": "You have no active vesting streams",
+    "noPendingOneTimePayments": "保留中の一括払いはありません",
+    "noPendingTokenSalaries": "保留中のトークン給与はありません"
   },
   "Months": {
     "january": "一月",

@@ -215,7 +215,12 @@
     "claimableSalary": "Salaire réclamable",
     "claimableVestedTokens": "Jetons acquis réclamables",
     "scheduledPayments": "Paiements programmés",
-    "tokenSalaries": "Salaires de jeton"
+    "tokenSalaries": "Salaires de jeton",
+    "errorFetchingData": "Quelque chose s'est mal passé, impossible de charger les données",
+    "noActiveSalaryStreams": "Vous n'avez pas de nouveau de salaire actifs",
+    "noActiveVestingStreams": "Vous n'avez aucun flux d'acquisition actif",
+    "noPendingOneTimePayments": "Vous n'avez aucun paiement unique en attente",
+    "noPendingTokenSalaries": "Vous n'avez aucun salaire symbolique en attente"
   },
   "Months": {
     "january": "Janvier",

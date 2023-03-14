@@ -2,6 +2,7 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Box } from '~/containers/common/Box';
 import { currentYear, daysInMonth, months, yearOptions } from '~/containers/common/date';
+import { SalaryGraphic } from '~/containers/common/Graphics/Salary';
 import { useLocale } from '~/hooks';
 import { useGetScheduledPayments } from '~/queries/tokenSalary/useGetScheduledTransfers';
 
@@ -52,13 +53,28 @@ export const TokenSalary = ({ userAddress, chainId }: { userAddress: string; cha
 
   const { locale } = useLocale();
 
+  if (isLoading) {
+    return <Box className="animate-shimmer-2 isolate col-span-full flex min-h-[300px] flex-col gap-3"></Box>;
+  }
+
+  if (isError || data?.filter((x) => (Number(x.ends) - Number(x.lastPaid)) / Number(x.frequency) > 0)?.length === 0) {
+    return (
+      <Box className="isolate col-span-full flex min-h-[300px] flex-col items-center justify-center">
+        <SalaryGraphic />
+        <p className="text-base font-medium text-llama-gray-400 dark:text-llama-gray-300">
+          {isError ? t0('errorFetchingData') : t0('noPendingTokenSalaries')}
+        </p>
+      </Box>
+    );
+  }
+
   return (
     <Box className="isolate col-span-full flex min-h-[300px] flex-col gap-3">
       <div className="flex items-center justify-between gap-4">
         <p className="text-sm font-medium text-llama-gray-400 dark:text-llama-gray-300">{t0('tokenSalaries')}</p>
         <select
           name="year"
-          className="border-0 py-0 text-sm font-medium text-llama-gray-400 dark:text-llama-gray-300"
+          className="border-0 bg-[#FCFFFE] py-0 text-sm font-medium text-llama-gray-400 dark:bg-[#141414] dark:text-llama-gray-300"
           onChange={(e) => setYear(Number(e.target.value))}
           value={year}
         >
