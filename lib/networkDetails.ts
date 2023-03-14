@@ -147,9 +147,9 @@ export const networkDetails: INetworkDetails = {
     scheduledTransferSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/scheduledtransfers-optimism',
   },
   42161: {
-    rpcUrl: 'https://arbitrum.blockpi.network/v1/rpc/public',
+    rpcUrl: 'https://rpc.ankr.com/arbitrum',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-arbitrum',
-    chainProviders: new ethers.providers.JsonRpcProvider('https://arbitrum.blockpi.network/v1/rpc/public'),
+    chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/arbitrum'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_ARBITRUM,
     disperseAddress: CONTRACTS.DISPERSE_ARBITRUM,
     botAddress: CONTRACTS.BOT_ARBITRUM,
