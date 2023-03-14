@@ -213,6 +213,21 @@
   },
   "Dashboard": {
     "claimableSalary": "Απαιτούμενος μισθός",
-    "claimableVestedTokens": "Υποχρεωτικά Δικαιώματα με αξίωση"
+    "claimableVestedTokens": "Υποχρεωτικά Δικαιώματα με αξίωση",
+    "scheduledPayments": "Προγραμματισμένες πληρωμές"
+  },
+  "Months": {
+    "january": "Ιανουάριος",
+    "february": "Φεβρουάριος",
+    "march": "Μάρτιος",
+    "april": "Απρίλιος",
+    "may": "Ενδέχεται",
+    "june": "Ιούνιος",
+    "july": "Ιούλιος",
+    "august": "Αύγουστος",
+    "september": "Σεπτέμβριος",
+    "october": "Οκτώβριος",
+    "november": "Νοέμβριος",
+    "december": "Δεκέμβριος"
   }
 }

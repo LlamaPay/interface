@@ -4,8 +4,8 @@ import { salaryWithdrawableAmtFormatter } from '~/components/Stream/Table/Custom
 import { useGetSalaryInfo } from '~/queries/salary/useGetSalaryInfo';
 import { useMultipleTokenPrices } from '~/queries/useTokenPrice';
 import { formatBalance } from '~/utils/amount';
-import { Box } from '../../common/Box';
-import { pieChartBreakDown } from '../../common/pieChartBreakdown';
+import { Box } from '~/containers/common/Box';
+import { pieChartBreakDown } from '~/containers/common/pieChartBreakdown';
 
 export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
   const { data } = useGetSalaryInfo({ userAddress, chainId });
@@ -73,7 +73,7 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
             className="font-exo -my-2 w-full overflow-hidden text-ellipsis whitespace-nowrap text-center text-[4rem] font-extrabold slashed-zero tabular-nums text-llama-green-400 dark:text-llama-green-500"
             ref={totalClaimableRef}
           ></p>
-          <p className="text-lg font-medium text-llama-gray-400">{t('claimableSalary')}</p>
+          <p className="text-base font-medium text-llama-gray-400 dark:text-llama-gray-300">{t('claimableSalary')}</p>
         </>
       )}
     </Box>

@@ -16,6 +16,7 @@ import useGnosisBatch from '~/queries/useGnosisBatch';
 import { networkDetails } from '~/lib/networkDetails';
 import { ERC20Interface } from '~/utils/contract';
 import { BeatLoader } from '~/components/BeatLoader';
+import { useRouter } from 'next/router';
 
 interface IPaymentFormValues {
   payments: {
@@ -36,6 +37,8 @@ interface ICall {
 const contractInterface = new Interface(paymentsContractABI);
 
 export default function CreatePayment({ contract }: { contract: string }) {
+  const router = useRouter();
+
   const { register, control, handleSubmit, reset, getValues, setValue } = useForm<IPaymentFormValues>({
     defaultValues: {
       payments: [
@@ -217,6 +220,7 @@ export default function CreatePayment({ contract }: { contract: string }) {
               data.wait().then((receipt) => {
                 toast.dismiss(toastid);
                 receipt.status === 1 ? toast.success('Successfully Created') : toast.error('Failed to Create');
+                router.push('/payments');
               });
               checkApproval(toCheck);
               queryClient.invalidateQueries();

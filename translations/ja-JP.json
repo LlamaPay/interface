@@ -213,6 +213,21 @@
   },
   "Dashboard": {
     "claimableSalary": "請求可能な給与",
-    "claimableVestedTokens": "請求可能な既得トークン"
+    "claimableVestedTokens": "請求可能な既得トークン",
+    "scheduledPayments": "予定された支払い"
+  },
+  "Months": {
+    "january": "一月",
+    "february": "二月",
+    "march": "三月",
+    "april": "四月",
+    "may": "五月",
+    "june": "六月",
+    "july": "七月",
+    "august": "八月",
+    "september": "九月",
+    "october": "十月",
+    "november": "十一月",
+    "december": "十二月"
   }
 }

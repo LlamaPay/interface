@@ -213,6 +213,21 @@
   },
   "Dashboard": {
     "claimableSalary": "Salaire réclamable",
-    "claimableVestedTokens": "Jetons acquis réclamables"
+    "claimableVestedTokens": "Jetons acquis réclamables",
+    "scheduledPayments": "Paiements programmés"
+  },
+  "Months": {
+    "january": "Janvier",
+    "february": "Février",
+    "march": "Mars",
+    "april": "Avril",
+    "may": "Mai",
+    "june": "Juin",
+    "july": "Juillet",
+    "august": "Aout",
+    "september": "Septembre",
+    "october": "Octobre",
+    "november": "Novembre",
+    "december": "Décembre"
   }
 }

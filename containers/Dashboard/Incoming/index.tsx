@@ -4,7 +4,8 @@ import { useAccount, useNetwork } from 'wagmi';
 import Layout from '~/components/Layout';
 import { WalletSelector } from '~/components/Web3';
 import { useIsMounted } from '~/hooks';
-import { Box } from '../../common/Box';
+import { Box } from '~/containers/common/Box';
+import { Payments } from './Payments';
 import { Salary } from './Salary';
 import { Vesting } from './Vesting';
 
@@ -18,7 +19,7 @@ export const IncomingDashboard = ({ userAddress, chainId }: { userAddress?: stri
   if (!isMounted) {
     return (
       <Layout className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <Box className="col-span-full min-h-[564px]"></Box>
+        <Box className="col-span-full min-h-[604px]"></Box>
       </Layout>
     );
   }
@@ -29,7 +30,7 @@ export const IncomingDashboard = ({ userAddress, chainId }: { userAddress?: stri
   if (!finalAddress) {
     return (
       <Layout className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <Box className="col-span-full grid min-h-[564px] items-center">
+        <Box className="col-span-full grid min-h-[604px] items-center">
           <button
             className="mx-auto w-fit rounded-lg border py-2 px-4 dark:border-lp-gray-7"
             onClick={walletDialog.toggle}
@@ -45,7 +46,7 @@ export const IncomingDashboard = ({ userAddress, chainId }: { userAddress?: stri
   if (!finalChainId) {
     return (
       <Layout className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <Box className="col-span-full grid min-h-[564px] items-center">
+        <Box className="col-span-full grid min-h-[604px] items-center">
           <button
             className="mx-auto w-fit rounded-lg border py-2 px-4 dark:border-lp-gray-7"
             onClick={walletDialog.toggle}
@@ -62,7 +63,7 @@ export const IncomingDashboard = ({ userAddress, chainId }: { userAddress?: stri
     <Layout className="grid grid-cols-1 gap-6 md:grid-cols-2">
       <Salary userAddress={finalAddress} chainId={finalChainId} />
       <Vesting userAddress={finalAddress} chainId={finalChainId} />
-      <Box className="col-span-full"></Box>
+      <Payments userAddress={finalAddress} chainId={finalChainId} />
     </Layout>
   );
 };
