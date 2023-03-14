@@ -5,7 +5,7 @@ import { FormDialog, TransactionDialog } from '~/components/Dialog';
 import { InputText, SubmitButton } from '~/components/Form';
 import { getAddress } from 'ethers/lib/utils';
 import { networkDetails } from '~/lib/networkDetails';
-import type { IScheduledTransferPayment } from '~/queries/useGetScheduledTransfers';
+import type { IScheduledTransferPayment } from '~/queries/tokenSalary/useGetScheduledTransfers';
 import { useQueryClient } from '@tanstack/react-query';
 import { BeatLoader } from '~/components/BeatLoader';
 import { formatAddress } from '~/utils/address';

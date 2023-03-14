@@ -214,7 +214,8 @@
   "Dashboard": {
     "claimableSalary": "Salario reclamable",
     "claimableVestedTokens": "Tokens adquiridos reclamables",
-    "scheduledPayments": "Pagos programados"
+    "scheduledPayments": "Pagos programados",
+    "tokenSalaries": "Salarios simbólicos"
   },
   "Months": {
     "january": "Enero",

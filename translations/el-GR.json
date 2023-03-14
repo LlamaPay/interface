@@ -214,7 +214,8 @@
   "Dashboard": {
     "claimableSalary": "Απαιτούμενος μισθός",
     "claimableVestedTokens": "Υποχρεωτικά Δικαιώματα με αξίωση",
-    "scheduledPayments": "Προγραμματισμένες πληρωμές"
+    "scheduledPayments": "Προγραμματισμένες πληρωμές",
+    "tokenSalaries": "Συμβολικοί μισθοί"
   },
   "Months": {
     "january": "Ιανουάριος",

@@ -3,7 +3,10 @@ import * as React from 'react';
 import Layout from '~/components/Layout';
 import { useAccount, useNetwork } from 'wagmi';
 import { networkDetails } from '~/lib/networkDetails';
-import { useGetScheduledTransferPools, useGetScheduledTransfersHistory } from '~/queries/useGetScheduledTransfers';
+import {
+  useGetScheduledTransferPools,
+  useGetScheduledTransfersHistory,
+} from '~/queries/tokenSalary/useGetScheduledTransfers';
 import { FallbackContainer, FallbackContainerLoader } from '~/components/Fallback';
 import { useTranslations } from 'next-intl';
 import Link from 'next/link';

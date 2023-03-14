@@ -3,14 +3,17 @@ import * as React from 'react';
 import Layout from '~/components/Layout';
 import { useAccount, useNetwork } from 'wagmi';
 import { networkDetails } from '~/lib/networkDetails';
-import { useGetScheduledPayments, useGetScheduledTransfersHistory } from '~/queries/useGetScheduledTransfers';
+import {
+  useGetScheduledPayments,
+  useGetScheduledTransfersHistory,
+} from '~/queries/tokenSalary/useGetScheduledTransfers';
 import { FallbackContainer, FallbackContainerLoader } from '~/components/Fallback';
 import { useTranslations } from 'next-intl';
 import { ScheduledTransferPayment } from '~/components/ScheduledTransfers/Payment';
 import { ScheduledTransfersHistory } from '~/components/ScheduledTransfers/History';
 
 const Home: NextPage = () => {
-  const { isConnected } = useAccount();
+  const { address, isConnected } = useAccount();
   const { chain } = useNetwork();
 
   const graphEndpoint = chain?.id ? networkDetails[chain.id]?.scheduledTransferSubgraph : null;
@@ -19,7 +22,7 @@ const Home: NextPage = () => {
     data: payments,
     isLoading: fetchingPayments,
     isError: failedToFetchPayments,
-  } = useGetScheduledPayments({ graphEndpoint });
+  } = useGetScheduledPayments({ userAddress: address, chainId: chain?.id });
 
   const {
     data: history,

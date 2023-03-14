@@ -4,7 +4,7 @@ import { FormDialog, TransactionDialog } from '~/components/Dialog';
 import { InputAmount, InputText, SubmitButton } from '~/components/Form';
 import Tooltip from '~/components/Tooltip';
 import { networkDetails } from '~/lib/networkDetails';
-import type { IScheduledTransferPool } from '~/queries/useGetScheduledTransfers';
+import type { IScheduledTransferPool } from '~/queries/tokenSalary/useGetScheduledTransfers';
 import { useCreateScheduledTransferPayment } from '~/queries/useSchedulePayment';
 import { erc20ABI, useContractRead, useContractWrite, useNetwork } from 'wagmi';
 import { getFormattedMaxPrice, getMaxPriceInUSD } from './utils';

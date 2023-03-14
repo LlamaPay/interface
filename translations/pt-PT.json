@@ -214,7 +214,8 @@
   "Dashboard": {
     "claimableSalary": "Salário Reivindicado",
     "claimableVestedTokens": "Tokens Adquiridos Reivindicados",
-    "scheduledPayments": "Pagamentos Agendados"
+    "scheduledPayments": "Pagamentos Agendados",
+    "tokenSalaries": "Salários Token"
   },
   "Months": {
     "january": "Janeiro",

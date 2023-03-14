@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query';
 import { useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
 import BigNumber from 'bignumber.js';
+import { networkDetails } from '~/lib/networkDetails';
 
 export interface IScheduledTransferPayment {
   id: string;
@@ -22,7 +23,7 @@ export interface IScheduledTransferPayment {
       symbol: string;
     };
   };
-  history: Array<{ to: string }>;
+  history: Array<{ to: string; createdTimestamp: string; usdAmount: string }>;
 }
 
 export interface IScheduledTransferPool {
@@ -116,7 +117,7 @@ const fetchScheduledPayments = async ({
   userAddress,
   graphEndpoint,
 }: {
-  userAddress?: string;
+  userAddress?: string | null;
   graphEndpoint?: string | null;
 }) => {
   try {
@@ -148,6 +149,8 @@ const fetchScheduledPayments = async ({
             }
             history {
               to
+              createdTimestamp
+              usdAmount
             }
           }
         }
@@ -228,12 +231,19 @@ export function useGetScheduledTransferPools({ graphEndpoint }: { graphEndpoint?
   );
 }
 
-export function useGetScheduledPayments({ graphEndpoint }: { graphEndpoint?: string | null }) {
-  const { address } = useAccount();
+export function useGetScheduledPayments({
+  userAddress,
+  chainId,
+}: {
+  userAddress?: string | null;
+  chainId?: number | null;
+}) {
+  // get subgraph endpoint
+  const graphEndpoint = chainId ? networkDetails[chainId]?.scheduledTransferSubgraph : null;
 
   return useQuery<Array<IScheduledTransferPayment>>(
-    ['scheduledPayments', address, graphEndpoint],
-    () => fetchScheduledPayments({ userAddress: address, graphEndpoint }),
+    ['scheduledPayments', userAddress, graphEndpoint],
+    () => fetchScheduledPayments({ userAddress, graphEndpoint }),
     {
       refetchInterval: 30_000,
     }

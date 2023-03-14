@@ -214,7 +214,8 @@
   "Dashboard": {
     "claimableSalary": "請求可能な給与",
     "claimableVestedTokens": "請求可能な既得トークン",
-    "scheduledPayments": "予定された支払い"
+    "scheduledPayments": "予定された支払い",
+    "tokenSalaries": "トークン給与"
   },
   "Months": {
     "january": "一月",

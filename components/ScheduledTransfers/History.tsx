@@ -8,7 +8,7 @@ import {
   SortingState,
   useReactTable,
 } from '@tanstack/react-table';
-import type { IScheduledTransferHistory } from '~/queries/useGetScheduledTransfers';
+import type { IScheduledTransferHistory } from '~/queries/tokenSalary/useGetScheduledTransfers';
 import { useIntl, useTranslations } from 'next-intl';
 import Table from '~/components/Table';
 import { formatAddress } from '~/utils/address';

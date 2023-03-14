@@ -8,6 +8,7 @@ import { Box } from '~/containers/common/Box';
 import { Payments } from './Payments';
 import { Salary } from './Salary';
 import { Vesting } from './Vesting';
+import { TokenSalary } from './TokenSalary';
 
 export const IncomingDashboard = ({ userAddress, chainId }: { userAddress?: string; chainId?: number }) => {
   const isMounted = useIsMounted();
@@ -19,7 +20,7 @@ export const IncomingDashboard = ({ userAddress, chainId }: { userAddress?: stri
   if (!isMounted) {
     return (
       <Layout className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <Box className="col-span-full min-h-[604px]"></Box>
+        <Box className="col-span-full min-h-[928px]"></Box>
       </Layout>
     );
   }
@@ -30,7 +31,7 @@ export const IncomingDashboard = ({ userAddress, chainId }: { userAddress?: stri
   if (!finalAddress) {
     return (
       <Layout className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <Box className="col-span-full grid min-h-[604px] items-center">
+        <Box className="col-span-full grid min-h-[928px] items-center">
           <button
             className="mx-auto w-fit rounded-lg border py-2 px-4 dark:border-lp-gray-7"
             onClick={walletDialog.toggle}
@@ -46,7 +47,7 @@ export const IncomingDashboard = ({ userAddress, chainId }: { userAddress?: stri
   if (!finalChainId) {
     return (
       <Layout className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <Box className="col-span-full grid min-h-[604px] items-center">
+        <Box className="col-span-full grid min-h-[928px] items-center">
           <button
             className="mx-auto w-fit rounded-lg border py-2 px-4 dark:border-lp-gray-7"
             onClick={walletDialog.toggle}
@@ -64,6 +65,7 @@ export const IncomingDashboard = ({ userAddress, chainId }: { userAddress?: stri
       <Salary userAddress={finalAddress} chainId={finalChainId} />
       <Vesting userAddress={finalAddress} chainId={finalChainId} />
       <Payments userAddress={finalAddress} chainId={finalChainId} />
+      <TokenSalary userAddress={finalAddress} chainId={finalChainId} />
     </Layout>
   );
 };
