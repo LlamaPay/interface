@@ -1,5 +1,5 @@
 import { useIntl, useTranslations } from 'next-intl';
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { vestingWithdrawableAmtFormatter } from '~/components/Vesting/Table/CustomValues/Unclaimed';
 import { useMultipleTokenPrices } from '~/queries/useTokenPrice';
 import { useGetVestingInfoByQueryParams } from '~/queries/vesting/useGetVestingInfo';
@@ -7,8 +7,11 @@ import { formatBalance } from '~/utils/amount';
 import { Box } from '~/containers/common/Box';
 import { pieChartBreakDown } from '~/containers/common/pieChartBreakdown';
 import { VestingGraphic } from '~/containers/common/Graphics/Vesting';
+import { useLocale } from '~/hooks';
+import { networkDetails } from '~/lib/networkDetails';
 
 export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
+  const [displayAltView, setDisplayAltView] = useState(false);
   const { data, isLoading, isError } = useGetVestingInfoByQueryParams({ userAddress, chainId });
 
   const tokens =
@@ -27,6 +30,8 @@ export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId
   const intl = useIntl();
 
   const t = useTranslations('Dashboard');
+  const { locale } = useLocale();
+  const explorerLink = networkDetails[chainId]?.blockExplorerURL ?? null;
 
   useEffect(() => {
     const withdrawables = data ?? [];
@@ -74,7 +79,7 @@ export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId
     return <Box className="animate-shimmer-2 flex flex-col items-center justify-center"></Box>;
   }
 
-  if (isError || data?.filter((x) => x.admin !== userAddress.toLowerCase())?.length === 0) {
+  if (isError || !data || data.filter((x) => x.admin !== userAddress.toLowerCase())?.length === 0) {
     return (
       <Box className="flex flex-col items-center justify-center">
         <VestingGraphic />
@@ -85,9 +90,76 @@ export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId
     );
   }
 
+  const withdrawables = Object.entries(
+    data?.reduce((acc, curr) => {
+      if (curr.admin !== userAddress.toLowerCase() && curr.unclaimed && curr.unclaimed !== '0') {
+        acc[`${curr.admin}+${curr.contract}+${curr.token}+${curr.tokenSymbol}`] = (
+          Number(curr.unclaimed) /
+          10 ** curr.tokenDecimals
+        ).toLocaleString(locale, { maximumFractionDigits: 2 });
+      }
+
+      return acc;
+    }, {} as { [key: string]: string })
+  );
+
+  console.log(data);
+
   return (
-    <Box className="flex flex-col items-center justify-center" tabIndex={0}>
-      {data && (
+    <Box
+      className={
+        displayAltView
+          ? 'flex flex-col flex-wrap justify-center gap-9 p-9 lg:flex-row'
+          : 'flex flex-col items-center justify-center'
+      }
+      tabIndex={0}
+      onMouseEnter={() => {
+        setDisplayAltView(true);
+      }}
+      onMouseLeave={() => {
+        setDisplayAltView(false);
+      }}
+      onFocus={() => {
+        setDisplayAltView(true);
+      }}
+      onBlur={() => {
+        setDisplayAltView(false);
+      }}
+    >
+      {displayAltView ? (
+        <>
+          <div
+            className={`h-[200px] w-[200px] flex-shrink-0 rounded-full`}
+            style={{ background: pieChartBreakDown(tokenPrices) }}
+          ></div>
+
+          <div className="flex flex-1 flex-shrink-0 flex-col gap-4">
+            <h1 className="text-sm font-medium text-llama-gray-400 dark:text-llama-gray-300">
+              {t('claimableVestedTokens')}
+            </h1>
+
+            <ul className="w-full">
+              {withdrawables.map((withdrawable) => (
+                <li key={withdrawable[0]} className="flex flex-wrap items-center justify-between gap-1 text-xl">
+                  {explorerLink ? (
+                    <a
+                      target="_blank"
+                      rel="noreferrer noopener"
+                      href={`${explorerLink}/address/${withdrawable[0].split('+')[2]}`}
+                    >
+                      {withdrawable[0].split('+')[3]}
+                    </a>
+                  ) : (
+                    <span>{withdrawable[0].split('+')[3]}</span>
+                  )}
+
+                  <span>{withdrawable[1]}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </>
+      ) : (
         <>
           <div className={`h-16 w-16 rounded-full`} style={{ background: pieChartBreakDown(tokenPrices) }}></div>
 
@@ -96,9 +168,9 @@ export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId
             ref={totalClaimableRef}
           ></p>
 
-          <p className="text-base font-medium text-llama-gray-400 dark:text-llama-gray-300">
+          <h1 className="text-base font-medium text-llama-gray-400 dark:text-llama-gray-300">
             {t('claimableVestedTokens')}
-          </p>
+          </h1>
         </>
       )}
     </Box>

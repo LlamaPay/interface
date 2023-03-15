@@ -1,4 +1,4 @@
-const pieColors = ['#22C497', '#46E8CA', '#9D42D5', '#EEB626', '#22B1C4'];
+export const pieColors = ['#22C497', '#46E8CA', '#9D42D5', '#EEB626', '#22B1C4'];
 
 export const pieChartBreakDown = (tokenPrices = {}) =>
   'conic-gradient(' +

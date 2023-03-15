@@ -69,9 +69,9 @@ export const Payments = ({ userAddress, chainId }: { userAddress: string; chainI
   }
 
   return (
-    <Box className="isolate col-span-full flex min-h-[300px] flex-col gap-3" tabIndex={0}>
+    <Box className="isolate col-span-full flex min-h-[300px] flex-col gap-3">
       <div className="flex items-center justify-between gap-4">
-        <p className="text-sm font-medium text-llama-gray-400 dark:text-llama-gray-300">{t0('scheduledPayments')}</p>
+        <h1 className="text-sm font-medium text-llama-gray-400 dark:text-llama-gray-300">{t0('scheduledPayments')}</h1>
         <select
           name="year"
           className="border-0 bg-[#FCFFFE] py-0 text-sm font-medium text-llama-gray-400 dark:bg-[#141414] dark:text-llama-gray-300"
@@ -108,6 +108,7 @@ export const Payments = ({ userAddress, chainId }: { userAddress: string; chainI
                         <div
                           className="relative rounded-lg border border-black border-opacity-5 bg-[#FCFFFE] p-3 dark:border-white dark:bg-black"
                           style={{ top: `${((day % 2) + 1) * 15}%` }}
+                          tabIndex={0}
                         >
                           <p className="whitespace-nowrap text-sm font-medium text-[#A1A2AA]">{`${t1(month)} ${
                             day + 1
