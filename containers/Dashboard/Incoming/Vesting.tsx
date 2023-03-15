@@ -86,7 +86,7 @@ export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId
   }
 
   return (
-    <Box className="flex flex-col items-center justify-center">
+    <Box className="flex flex-col items-center justify-center" tabIndex={0}>
       {data && (
         <>
           <div className={`h-16 w-16 rounded-full`} style={{ background: pieChartBreakDown(tokenPrices) }}></div>

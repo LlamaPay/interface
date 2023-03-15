@@ -29,7 +29,7 @@ export const Payments = ({ userAddress, chainId }: { userAddress: string; chainI
   const tags: { [year: number]: { [month: number]: { [day: number]: number } } } = {};
 
   data?.forEach((item) => {
-    if (item.payer !== userAddress.toLowerCase() && !item.revoked) {
+    if (item.payer !== userAddress.toLowerCase() && Number(item.release) > Date.now() / 1000 && !item.revoked) {
       const release = new Date(item.release * 1000);
       const year = release.getFullYear();
       const month = release.getMonth();
@@ -69,7 +69,7 @@ export const Payments = ({ userAddress, chainId }: { userAddress: string; chainI
   }
 
   return (
-    <Box className="isolate col-span-full flex min-h-[300px] flex-col gap-3">
+    <Box className="isolate col-span-full flex min-h-[300px] flex-col gap-3" tabIndex={0}>
       <div className="flex items-center justify-between gap-4">
         <p className="text-sm font-medium text-llama-gray-400 dark:text-llama-gray-300">{t0('scheduledPayments')}</p>
         <select
@@ -85,42 +85,52 @@ export const Payments = ({ userAddress, chainId }: { userAddress: string; chainI
           ))}
         </select>
       </div>
-      <div className="flex flex-1 flex-nowrap gap-1 overflow-x-auto p-3">
-        {months.map(([id, month]) => (
-          <div key={`scheduled payment ${year} ${id} ${month}`} className="relative flex flex-1 flex-col gap-1">
-            <div className="flex flex-1 flex-nowrap gap-[1px]">
-              {new Array(daysInMonth(String(id), String(year))).fill(0).map((_x, day) => (
-                <div
-                  key={`scheduled payments by month ${id} ${month} ${day + 1} ${year}`}
-                  className="relative flex-1 border border-transparent"
-                >
-                  {tags?.[year]?.[id]?.[day + 1] && (
-                    <>
-                      <div
-                        className="relative rounded-lg border border-black border-opacity-5 bg-[#FCFFFE] p-3 dark:border-white dark:bg-black"
-                        style={{ top: `${((day % 2) + 1) * 15}%` }}
-                      >
-                        <p className="whitespace-nowrap text-sm font-medium text-[#A1A2AA]">{`${t1(month)} ${
-                          day + 1
-                        }, ${year}`}</p>
-                        <p className="text-sm font-medium text-black dark:text-white">
-                          {tags?.[year]?.[id]?.[day + 1]
-                            ? `$${(tags?.[year]?.[id]?.[day + 1]).toLocaleString(locale, {
-                                maximumFractionDigits: 2,
-                              })}`
-                            : ''}
-                        </p>
-                      </div>
-                      <div className="absolute top-0 bottom-0 left-2/4 right-2/4 -z-10 border border-black border-opacity-5 dark:border-white"></div>
-                    </>
-                  )}
-                </div>
-              ))}
+
+      {Object.values(tags?.[year] ?? {}).length === 0 ? (
+        <div className="flex flex-col items-center justify-center">
+          <PaymentsGraphic />
+          <p className="text-base font-medium text-llama-gray-400 dark:text-llama-gray-300">
+            {t0('noPendingOneTimePayments')}
+          </p>
+        </div>
+      ) : (
+        <div className="flex flex-1 flex-nowrap gap-1 overflow-x-auto p-3">
+          {months.map(([id, month]) => (
+            <div key={`scheduled payment ${year} ${id} ${month}`} className="relative flex flex-1 flex-col gap-1">
+              <div className="flex flex-1 flex-nowrap gap-[1px]">
+                {new Array(daysInMonth(String(id), String(year))).fill(0).map((_x, day) => (
+                  <div
+                    key={`scheduled payments by month ${id} ${month} ${day + 1} ${year}`}
+                    className="relative flex-1 border border-transparent"
+                  >
+                    {tags?.[year]?.[id]?.[day + 1] && (
+                      <>
+                        <div
+                          className="relative rounded-lg border border-black border-opacity-5 bg-[#FCFFFE] p-3 dark:border-white dark:bg-black"
+                          style={{ top: `${((day % 2) + 1) * 15}%` }}
+                        >
+                          <p className="whitespace-nowrap text-sm font-medium text-[#A1A2AA]">{`${t1(month)} ${
+                            day + 1
+                          }, ${year}`}</p>
+                          <p className="text-sm font-medium text-black dark:text-white">
+                            {tags?.[year]?.[id]?.[day + 1]
+                              ? `$${(tags?.[year]?.[id]?.[day + 1]).toLocaleString(locale, {
+                                  maximumFractionDigits: 2,
+                                })}`
+                              : ''}
+                          </p>
+                        </div>
+                        <div className="absolute top-0 bottom-0 left-2/4 right-2/4 -z-10 border border-black border-opacity-5 dark:border-white"></div>
+                      </>
+                    )}
+                  </div>
+                ))}
+              </div>
+              <p className="text-xs font-medium text-[#A1A2AA]">{t1(month)}</p>
             </div>
-            <p className="text-xs font-medium text-[#A1A2AA]">{t1(month)}</p>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </Box>
   );
 };

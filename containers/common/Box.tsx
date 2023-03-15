@@ -4,6 +4,7 @@ import * as React from 'react';
 interface IBoxProps {
   className?: string;
   children?: React.ReactNode;
+  tabIndex?: number;
 }
 
 export const Box = React.forwardRef<HTMLDivElement, IBoxProps>(function B({ className, children, ...props }, ref) {

@@ -6,7 +6,7 @@ export const currentYear = new Date().getUTCFullYear();
 
 export const yearOptions: Array<number> = [];
 
-for (let i = 2022; i <= currentYear + 1; i++) {
+for (let i = currentYear; i <= currentYear + 2; i++) {
   yearOptions.push(i);
 }
 
