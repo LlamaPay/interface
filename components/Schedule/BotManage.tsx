@@ -12,6 +12,7 @@ import useGetBotInfo from '~/queries/useGetBotInfo';
 import { formatAddress } from '~/utils/address';
 import { zeroAdd } from '~/utils/constants';
 import { useApproveTokenForMaxAmt } from '~/queries/useTokenApproval';
+import { ethers } from 'ethers';
 
 export default function BotFunds({
   dialog,
@@ -54,6 +55,7 @@ export default function BotFunds({
   const { writeAsync: deposit } = useContractWrite({
     mode: 'recklesslyUnprepared',
     address: botAddress as `0x${string}`,
+    abi: botContractABI,
     functionName: 'deposit',
   });
   const { writeAsync: cancelWithdraw } = useContractWrite({
@@ -87,9 +89,10 @@ export default function BotFunds({
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
+
     deposit({
       recklesslySetUnpreparedOverrides: {
-        value: Number(form.amount.value) * 1e18,
+        value: ethers.utils.parseEther(form.amount.value),
       },
     })
       .then((data) => {
