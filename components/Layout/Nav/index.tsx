@@ -6,52 +6,38 @@ import { useRouter } from 'next/router';
 export function Nav() {
   const router = useRouter();
 
-  const isSalaries =
-    router.pathname === '/' ||
-    router.pathname.includes('/salaries') ||
-    router.pathname === '/streams' ||
-    router.pathname === '/yearn';
-
-  const isVesting = router.pathname.includes('/vesting');
-
-  const isPayments = router.pathname.includes('/payments');
-
   return (
     <nav className="hidden min-w-[224px] flex-col gap-3 px-8 lg:flex">
-      <Group name="Salaries" isOpen={isSalaries || router.pathname === '/create' || router.pathname === '/withdraw'}>
-        <LinkItem name="Streams" href="/" isActive={isSalaries} />
+      <Group name="Incoming" isOpen={router.pathname.includes('/incoming')}>
+        <LinkItem name="Dashboard" href="/incoming/dashboard" isActive={router.pathname === '/incoming/dashboard'} />
         <Spacer />
-        <LinkItem name="Create" href="/create" isActive={router.pathname === '/create'} />
+        <LinkItem name="Salaries" href="/incoming/salaries" isActive={router.pathname === '/incoming/salaries'} />
         <Spacer />
-        <LinkItem name="Withdraw" href="/withdraw" isActive={router.pathname === '/withdraw'} />
-      </Group>
-
-      <Group name="Vesting" isOpen={isVesting}>
-        <LinkItem name="Streams" href="/vesting" isActive={isVesting && router.pathname !== '/vesting/create'} />
+        <LinkItem name="Vesting" href="/incoming/vesting" isActive={router.pathname === '/incoming/vesting'} />
         <Spacer />
-        <LinkItem name="Create" href="/vesting/create" isActive={router.pathname === '/vesting/create'} />
-      </Group>
-
-      <Group name="Payments" isOpen={isPayments}>
-        <LinkItem name="Streams" href="/payments" isActive={isPayments && router.pathname !== '/payments/create'} />
-        <Spacer />
-        <LinkItem name="Create" href="/payments/create" isActive={router.pathname === '/payments/create'} />
-      </Group>
-
-      <Group name="Token Salaries" isOpen={router.pathname.includes('/token-salaries')}>
-        <LinkItem
-          name="Incoming"
-          href="/token-salaries/incoming"
-          isActive={router.pathname === '/token-salaries/incoming'}
-        />
+        <LinkItem name="Payments" href="/incoming/payments" isActive={router.pathname === '/incoming/payments'} />
         <Spacer />
         <LinkItem
-          name="Outgoing"
-          href="/token-salaries/outgoing"
-          isActive={router.pathname === '/token-salaries/outgoing'}
+          name="Token Salaries"
+          href="/incoming/token-salaries"
+          isActive={router.pathname === '/incoming/token-salaries'}
         />
+      </Group>
+
+      <Group name="Outgoing" isOpen={router.pathname.includes('/outgoing')}>
+        <LinkItem name="Dashboard" href="/outgoing/dashboard" isActive={router.pathname === '/outgoing/dashboard'} />
         <Spacer />
-        <LinkItem name="Create" href="/token-salaries/create" isActive={router.pathname === '/token-salaries/create'} />
+        <LinkItem name="Salaries" href="/outgoing/salaries" isActive={router.pathname === '/outgoing/salaries'} />
+        <Spacer />
+        <LinkItem name="Vesting" href="/outgoing/vesting" isActive={router.pathname === '/outgoing/vesting'} />
+        <Spacer />
+        <LinkItem name="Payments" href="/outgoing/payments" isActive={router.pathname === '/outgoing/payments'} />
+        <Spacer />
+        <LinkItem
+          name="Token Salaries"
+          href="/incoming/token-salaries"
+          isActive={router.pathname === '/incoming/token-salaries'}
+        />
       </Group>
 
       <span className="my-3 h-[1px] bg-llama-teal-2 dark:bg-lp-gray-7" />
