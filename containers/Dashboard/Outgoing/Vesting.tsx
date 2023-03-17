@@ -139,7 +139,10 @@ export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId
 
             <ul className="w-full">
               {withdrawables.map((withdrawable) => (
-                <li key={withdrawable[0]} className="flex flex-wrap items-center justify-between gap-1 text-xl">
+                <li
+                  key={withdrawable[0]}
+                  className="flex flex-wrap items-center justify-between gap-2 text-xl md:flex-nowrap"
+                >
                   {explorerLink ? (
                     <a
                       target="_blank"

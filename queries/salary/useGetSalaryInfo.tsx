@@ -158,8 +158,6 @@ async function fetchSalaryInfo({
       `
     );
 
-    console.log({ salaryStreams });
-
     const withdrawables = await Promise.allSettled<IWithdrawable>(
       salaryStreams?.user?.streams.map((stream: IStream) =>
         getWithdrawableData({
