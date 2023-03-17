@@ -6,6 +6,8 @@ import { createContract } from '~/utils/contract';
 import type { Provider } from '~/utils/contract';
 import { getWithdrawableData } from '../useWithdrawable';
 import BigNumber from 'bignumber.js';
+import { formatStream } from '~/hooks/useFormatStreamAndHistory';
+import type { ISalaryStream } from '~/types';
 
 interface IStream {
   streamId: string;
@@ -24,7 +26,18 @@ interface IStream {
     decimals: number;
     symbol: string;
   };
+  historicalEvents: Array<{
+    eventType: string;
+    txHash: string;
+    createdTimestamp: string;
+  }>;
+  active: boolean;
+  reason: string | null;
+  paused: boolean;
+  pausedAmount: string | null;
+  lastPaused: string;
   amountPerSec: string;
+  createdTimestamp: string;
 }
 
 interface IWithdrawable {
@@ -46,7 +59,54 @@ interface IWithdrawableAmount extends IWithdrawable {
   };
 }
 
-async function fetchClaimableSalary({
+interface ISalaryInfo {
+  withdrawableAmounts: Array<IWithdrawableAmount>;
+  salaryStreams: Array<ISalaryStream>;
+}
+
+interface IHistoryResponse {
+  amount: string;
+  createdTimestamp: string;
+  eventType: string;
+  oldStream: {
+    amountPerSec: string;
+    createdTimestamp: string;
+    payee: { id: string };
+    payer: { id: string };
+    streamId: string;
+    token: {
+      address: string;
+      decimals: number;
+      name: string;
+      symbol: string;
+    };
+  } | null;
+  stream: {
+    amountPerSec: string;
+    createdTimestamp: string;
+    payee: { id: string };
+    payer: { id: string };
+    streamId: string;
+    token: {
+      address: string;
+      decimals: number;
+      name: string;
+      symbol: string;
+    };
+  } | null;
+  token: { symbol: string; decimals: number };
+  txHash: string;
+  users: Array<{ id: string }>;
+}
+
+export interface IHistory extends IHistoryResponse {
+  amountPerSec: string | null;
+  addressRelated: string;
+  addressRelatedEns: string | null;
+  addressType: string;
+}
+
+async function fetchSalaryInfo({
   userAddress,
   endpoint,
   provider,
@@ -56,7 +116,7 @@ async function fetchClaimableSalary({
   provider?: Provider;
 }) {
   try {
-    if (!endpoint || !provider) return [];
+    if (!endpoint || !provider) return { withdrawableAmounts: [], salaryStreams: [] };
 
     const salaryStreams = await request(
       endpoint,
@@ -80,12 +140,25 @@ async function fetchClaimableSalary({
                 decimals
                 symbol
               }
+              historicalEvents(orderBy: createdTimestamp, orderDirection: desc) {
+                eventType
+                txHash
+                createdTimestamp
+              }
+              active
+              reason
+              paused
+              pausedAmount
+              lastPaused
               amountPerSec
+              createdTimestamp
             }
           }
         }
       `
     );
+
+    console.log({ salaryStreams });
 
     const withdrawables = await Promise.allSettled<IWithdrawable>(
       salaryStreams?.user?.streams.map((stream: IStream) =>
@@ -117,9 +190,14 @@ async function fetchClaimableSalary({
       }
     });
 
-    return withdrawableAmounts;
+    return {
+      withdrawableAmounts,
+      salaryStreams: salaryStreams?.user?.streams.map((s: IStream) =>
+        formatStream({ stream: s, address: userAddress, provider, ensData: {} })
+      ),
+    };
   } catch (error: any) {
-    throw new Error(error.message || (error?.reason ?? "Couldn't fetch claimable salary"));
+    throw new Error(error.message || (error?.reason ?? "Couldn't fetch salary info"));
   }
 }
 
@@ -128,7 +206,113 @@ export const useGetSalaryInfo = ({ userAddress, chainId }: { userAddress: string
   const endpoint = networkDetails[chainId]?.subgraphEndpoint;
   const provider = networkDetails[chainId]?.chainProviders;
 
-  return useQuery<Array<IWithdrawableAmount>>(['salaryInfo', userAddress, chainId], () =>
-    fetchClaimableSalary({ userAddress, endpoint, provider })
+  return useQuery<ISalaryInfo>(['salaryInfo', userAddress, chainId], () =>
+    fetchSalaryInfo({ userAddress, endpoint, provider })
+  );
+};
+
+async function fetchSalaryHistoryInfo({
+  userAddress,
+  endpoint,
+  provider,
+}: {
+  userAddress: string;
+  endpoint?: string;
+  provider?: Provider;
+}) {
+  try {
+    if (!endpoint || !provider) return [];
+
+    const history = await request(
+      endpoint,
+      gql`
+        {
+          user(id: "${userAddress.toLowerCase()}") {
+            historicalEvents(orderBy: createdTimestamp, orderDirection: desc, first: 1000) {
+              txHash
+              eventType
+              users {
+                id
+              }
+              stream {
+                streamId
+                payer {
+                  id
+                }
+                payee {
+                  id
+                }
+                token {
+                  address
+                  name
+                  decimals
+                  symbol
+                }
+                amountPerSec
+                createdTimestamp
+              }
+              oldStream {
+                streamId
+                payer {
+                  id
+                }
+                payee {
+                  id
+                }
+                token {
+                  address
+                  symbol
+                }
+                amountPerSec
+                createdTimestamp
+              }
+              token {
+                symbol
+                decimals
+              }
+              amount
+              createdTimestamp
+            }
+          }
+        }
+      `
+    );
+
+    return (
+      history?.user?.historicalEvents?.map((h: IHistoryResponse) => {
+        const addressType: 'payer' | 'payee' =
+          h.stream?.payer?.id?.toLowerCase() === userAddress.toLowerCase() ? 'payer' : 'payee';
+
+        const addressRelated =
+          addressType === 'payer'
+            ? h.stream?.payee?.id ?? null
+            : h.stream?.payer?.id
+            ? h.stream?.payer?.id
+            : h.users[0]?.id ?? null;
+
+        // TODO fix ens names
+        const ensName = null;
+
+        return {
+          ...h,
+          amountPerSec: h.stream?.amountPerSec ?? null,
+          addressRelated,
+          addressRelatedEns: ensName,
+          addressType,
+        };
+      }) ?? []
+    );
+  } catch (error: any) {
+    throw new Error(error.message || (error?.reason ?? "Couldn't fetch salary history info"));
+  }
+}
+
+export const useGetSalaryHistoryInfo = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
+  // get subgraph endpoint
+  const endpoint = networkDetails[chainId]?.subgraphEndpoint;
+  const provider = networkDetails[chainId]?.chainProviders;
+
+  return useQuery<Array<IHistory>>(['salaryHistoryInfo', userAddress, chainId], () =>
+    fetchSalaryHistoryInfo({ userAddress, endpoint, provider })
   );
 };

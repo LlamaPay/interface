@@ -104,11 +104,11 @@
   }
 
   .table-row {
-    @apply bg-lp-white odd:bg-neutral-100 dark:bg-neutral-900 dark:odd:bg-neutral-800;
+    @apply border-b border-opacity-5 bg-lp-white dark:border-lp-gray-7 dark:bg-neutral-900;
   }
 
   .table-description {
-    @apply whitespace-nowrap border-l-[1px] border-dashed border-gray-200 px-4 py-[6px] text-sm text-lp-gray-4 first-of-type:border-l-0 last-of-type:w-full dark:border-gray-700;
+    @apply whitespace-nowrap px-4 py-2 text-sm text-lp-gray-4 first-of-type:border-l-0 last-of-type:w-full;
   }
 
   @keyframes shimmer {

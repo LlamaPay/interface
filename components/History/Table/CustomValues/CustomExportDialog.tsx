@@ -3,7 +3,7 @@ import { Switch } from '@headlessui/react';
 import { DisclosureState } from 'ariakit';
 import { FormDialog } from '~/components/Dialog';
 import { SubmitButton } from '~/components/Form';
-import type { IHistory } from '~/types';
+import type { IHistory } from '~/queries/salary/useGetSalaryInfo';
 import { formatAddress } from '~/utils/address';
 import { downloadCustomHistory } from '~/utils/downloadCsv';
 

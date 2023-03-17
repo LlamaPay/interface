@@ -224,7 +224,8 @@
     "noPendingOneTimePayments": "No tienes pagos únicos pendientes",
     "noPendingTokenSalaries": "No tienes sueldos token pendientes",
     "viewAllStreams": "Ver todas las transmisiones",
-    "viewAllVesting": "Mostrar todas las adquisiciones"
+    "viewAllVesting": "Mostrar todas las adquisiciones",
+    "allIncomeStreams": "Todos los transmisiones de ingresos"
   },
   "Months": {
     "january": "Enero",

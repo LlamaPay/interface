@@ -57,6 +57,28 @@ export interface IStream {
   reason: string | null | undefined;
 }
 
+export interface ISalaryStream {
+  llamaContractAddress: string;
+  amountPerSec: string;
+  createdTimestamp: string;
+  payerAddress: string;
+  payerEns: string | null;
+  payeeEns: string | null;
+  payeeAddress: string;
+  streamId: string;
+  streamType: 'outgoingStream' | 'incomingStream';
+  token: { address: string; name: string; decimals: number; symbol: string };
+  tokenName: string;
+  tokenSymbol: string;
+  tokenContract: Contract;
+  llamaTokenContract: Contract;
+  historicalEvents: { eventType: string; txHash: string; createdTimestamp: string }[];
+  paused: boolean;
+  pausedAmount: string;
+  lastPaused: string;
+  reason: string | null | undefined;
+}
+
 export interface IHistory extends UserHistoryFragment {
   addressRelated: string | null;
   addressRelatedEns: string | null;

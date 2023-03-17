@@ -10,7 +10,7 @@ import {
 import Tooltip from '~/components/Tooltip';
 import { useChainExplorer } from '~/hooks';
 import { useTranslations } from 'next-intl';
-import type { IHistory } from '~/types';
+import type { IHistory } from '~/queries/salary/useGetSalaryInfo';
 
 export function ActionName({ data }: { data: IHistory }) {
   const { url: chainExplorer, id } = useChainExplorer();

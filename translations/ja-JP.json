@@ -224,7 +224,8 @@
     "noPendingOneTimePayments": "保留中の一括払いはありません",
     "noPendingTokenSalaries": "保留中のトークン給与はありません",
     "viewAllStreams": "すべてのストリームを表示",
-    "viewAllVesting": "すべての権利確定を見る"
+    "viewAllVesting": "すべての権利確定を見る",
+    "allIncomeStreams": "すべての収入の伝達"
   },
   "Months": {
     "january": "一月",

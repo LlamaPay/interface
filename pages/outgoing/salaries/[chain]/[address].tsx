@@ -1,6 +1,6 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import * as React from 'react';
-import { IncomingSalaries } from '~/containers/Salaries/Incoming';
+import { OutgoingSalaries } from '~/containers/Salaries/Outgoing';
 import { chainDetails } from '~/utils/network';
 
 interface StreamsProps {
@@ -9,7 +9,7 @@ interface StreamsProps {
 }
 
 const Home: NextPage<StreamsProps> = (props) => {
-  return <IncomingSalaries {...props} />;
+  return <OutgoingSalaries {...props} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query, locale }) => {

@@ -1,6 +1,7 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import * as React from 'react';
 import { IncomingSalaries } from '~/containers/Salaries/Incoming';
+
 import { chainDetails } from '~/utils/network';
 
 interface StreamsProps {

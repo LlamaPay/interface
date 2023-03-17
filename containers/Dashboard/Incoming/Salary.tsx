@@ -16,7 +16,7 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
   const { data, isLoading, isError } = useGetSalaryInfo({ userAddress, chainId });
 
   const tokens =
-    data?.reduce((acc, curr) => {
+    data?.withdrawableAmounts?.reduce((acc, curr) => {
       if (curr.payerAddress !== userAddress.toLowerCase()) {
         acc.add(curr.token.address.toLowerCase());
       }
@@ -40,7 +40,7 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
         totalClaimableRef.current.textContent =
           '$' +
           formatBalance(
-            data.reduce((acc, curr) => {
+            data.withdrawableAmounts.reduce((acc, curr) => {
               if (curr.payerAddress !== userAddress.toLowerCase()) {
                 acc +=
                   (tokenPrices[curr.token.address]?.price ?? 1) *
@@ -72,7 +72,11 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
     return <Box className="animate-shimmer-2 flex flex-col items-center justify-center"></Box>;
   }
 
-  if (isError || !data || data.filter((x) => x.payerAddress !== userAddress.toLowerCase())?.length === 0) {
+  if (
+    isError ||
+    !data ||
+    data.withdrawableAmounts.filter((x) => x.payerAddress !== userAddress.toLowerCase())?.length === 0
+  ) {
     return (
       <Box className="flex flex-col items-center justify-center">
         <SalaryGraphic />
@@ -84,7 +88,7 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
   }
 
   const withdrawables = Object.entries(
-    data?.reduce((acc, curr) => {
+    data?.withdrawableAmounts?.reduce((acc, curr) => {
       if (curr.payerAddress !== userAddress.toLowerCase() && Number(curr.withdrawableAmount) > 0) {
         acc[`incoming+${curr.payerAddress}+${curr.contract}+${curr.token.address}+${curr.token.symbol}`] = (
           Number(curr.withdrawableAmount) /

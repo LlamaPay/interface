@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useLocale } from '~/hooks';
 import { useTranslations } from 'next-intl';
-import type { IHistory } from '~/types';
+import type { IHistory } from '~/queries/salary/useGetSalaryInfo';
 import { downloadInvoice } from '~/utils/downloadInvoice';
 import { useAccount } from 'wagmi';
 

@@ -1,9 +1,9 @@
 import { useIntl, useTranslations } from 'next-intl';
-import type { IHistory } from '~/types';
+import type { IHistory } from '~/queries/salary/useGetSalaryInfo';
 import { formatAmountInTable } from '~/utils/amount';
 import { secondsByDuration } from '~/utils/constants';
 
-export function Amount({ value, data }: { value: string; data: IHistory }) {
+export function Amount({ value, data }: { value: string | null; data: IHistory }) {
   const t = useTranslations('Common');
 
   const intl = useIntl();
@@ -39,9 +39,9 @@ export function Amount({ value, data }: { value: string; data: IHistory }) {
   );
 }
 
-export function historyAmountFormatter(data: IHistory): number {
+export function historyAmountFormatter(data: IHistory): number | null {
   if (data.eventType === 'Deposit' || data.eventType === 'Withdraw' || data.eventType === 'PayerWithdraw') {
-    return data.amount && Number(data.amount) / 10 ** Number(data.token.decimals);
+    return data.amount ? Number(data.amount) / 10 ** Number(data.token.decimals) : null;
   } else {
     return (Number(data.amountPerSec) / 1e20) * secondsByDuration['month'];
   }

@@ -224,7 +224,8 @@
     "noPendingOneTimePayments": "Δεν έχετε εκκρεμείς εφάπαξ πληρωμές",
     "noPendingTokenSalaries": "Δεν έχετε συμβολικούς μισθούς σε εκκρεμότητα",
     "viewAllStreams": "Προβολή όλων των ροών",
-    "viewAllVesting": "Εμφάνιση όλων των αποκτήσεων"
+    "viewAllVesting": "Εμφάνιση όλων των αποκτήσεων",
+    "allIncomeStreams": "Όλες οι ροές εισοδήματος"
   },
   "Months": {
     "january": "Ιανουάριος",

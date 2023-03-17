@@ -224,7 +224,8 @@
     "noPendingOneTimePayments": "You have no pending one-time payments",
     "noPendingTokenSalaries": "You have no pending token salaries",
     "viewAllStreams": "View All Streams",
-    "viewAllVesting": "View All Vesting"
+    "viewAllVesting": "View All Vesting",
+    "allIncomeStreams": "All Income Streams"
   },
   "Months": {
     "january": "January",

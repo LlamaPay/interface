@@ -1,5 +1,6 @@
-import type { IHistory, IStream, IVesting } from '~/types';
+import type { IStream, IVesting } from '~/types';
 import { secondsByDuration } from './constants';
+import type { IHistory } from '~/queries/salary/useGetSalaryInfo';
 
 export function download(filename: string, text: string) {
   const element = document.createElement('a');
@@ -58,8 +59,10 @@ export const downloadStreams = (
   download('streams.csv', rows.map((r) => r.join(',')).join('\n'));
 };
 
-export const downloadHistory = (data: IHistory[]) => {
-  const rows = [['Address Related', 'Transaction Hash', 'Event Type', 'Amount Per Month/Amount', 'Timestamp']];
+export const downloadHistory = (data: Array<IHistory>) => {
+  const rows: Array<Array<string | number>> = [
+    ['Address Related', 'Transaction Hash', 'Event Type', 'Amount Per Month/Amount', 'Timestamp'],
+  ];
 
   data.forEach((d) => {
     rows.push([
@@ -67,8 +70,12 @@ export const downloadHistory = (data: IHistory[]) => {
       d.txHash,
       d.eventType,
       d.eventType === 'Withdraw' || 'Deposit' || 'PayerWithdraw'
-        ? Number(d.amount) / 10 ** Number(d.token.decimals)
-        : (Number(d.amountPerSec) / 1e20) * secondsByDuration['month'],
+        ? d.amount
+          ? Number(d.amount) / 10 ** Number(d.token.decimals)
+          : ''
+        : d.amountPerSec
+        ? (Number(d.amountPerSec) / 1e20) * secondsByDuration['month']
+        : '',
       d.createdTimestamp,
     ]);
   });
@@ -120,7 +127,7 @@ export const downloadCustomHistory = (
 ) => {
   const startTimestamp = Number(new Date(dateRange.start)) / 1e3;
   const endTimestamp = Number(new Date(dateRange.end)) / 1e3;
-  let rows: [string[]] = [[]];
+  let rows: Array<Array<string | number>> = [[]];
   if (eventType === 'Gusto') {
     rows = [['First name', 'Last name', 'Streamed']];
     const earnedByEach: { [key: string]: number } = {};
@@ -161,8 +168,12 @@ export const downloadCustomHistory = (
         d.txHash,
         d.eventType,
         eventType === 'Withdraw' || 'Deposit'
-          ? Number(d.amount) / 10 ** Number(d.token.decimals)
-          : (Number(d.amountPerSec) / 1e20) * secondsByDuration['month'],
+          ? d.amount
+            ? Number(d.amount) / 10 ** Number(d.token.decimals)
+            : ''
+          : d.amountPerSec
+          ? (Number(d.amountPerSec) / 1e20) * secondsByDuration['month']
+          : '',
         d.createdTimestamp,
       ]);
     }

@@ -224,7 +224,8 @@
     "noPendingOneTimePayments": "Vous n'avez aucun paiement unique en attente",
     "noPendingTokenSalaries": "Vous n'avez aucun salaire symbolique en attente",
     "viewAllStreams": "Afficher tous les flux",
-    "viewAllVesting": "Afficher toutes les acquisitions"
+    "viewAllVesting": "Afficher toutes les acquisitions",
+    "allIncomeStreams": "Toutes les sources de revenus"
   },
   "Months": {
     "january": "Janvier",

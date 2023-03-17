@@ -10,7 +10,6 @@ import {
   getFilteredRowModel,
 } from '@tanstack/react-table';
 import Table from '~/components/Table';
-import type { IHistory } from '~/types';
 import {
   ActionName,
   HistoryActions,
@@ -26,8 +25,9 @@ import { downloadHistory } from '~/utils/downloadCsv';
 import { useTranslations } from 'next-intl';
 import { useDialogState } from 'ariakit';
 import useDebounce from '~/hooks/useDebounce';
+import type { IHistory } from '~/queries/salary/useGetSalaryInfo';
 
-export function HistoryTable({ data }: { data: IHistory[] }) {
+export function HistoryTable({ data }: { data: Array<IHistory> }) {
   const t = useTranslations('Table');
 
   const columns = React.useMemo<ColumnDef<IHistory>[]>(
@@ -115,7 +115,7 @@ export function HistoryTable({ data }: { data: IHistory[] }) {
       <input
         name="search table"
         placeholder="Search..."
-        className="mb-1 rounded border border-lp-gray-1 bg-lp-white px-3 py-1 slashed-zero placeholder:text-sm placeholder:text-lp-gray-2 dark:border-transparent dark:bg-lp-gray-5"
+        className="max-w-[300px] rounded border border-lp-gray-1 bg-lp-white px-3 py-1 slashed-zero placeholder:text-sm placeholder:text-lp-gray-2 dark:border-transparent dark:bg-lp-gray-5"
         value={tableFilter}
         onChange={(e) => setTableFilter(e.target.value)}
         spellCheck="false"
