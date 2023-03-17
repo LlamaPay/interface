@@ -35,6 +35,16 @@ const nextConfig = {
         destination: '/outgoing/dashboard',
         permanent: true,
       },
+      {
+        source: '/token-salaries/incoming',
+        destination: '/incoming/token-salaries',
+        permanent: true,
+      },
+      {
+        source: '/token-salaries/outgoing',
+        destination: '/outgoing/token-salaries',
+        permanent: true,
+      },
     ];
   },
 };

@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import { useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
 import BigNumber from 'bignumber.js';
 import { networkDetails } from '~/lib/networkDetails';
@@ -54,7 +53,7 @@ const fetchScheduledTransferPools = async ({
   userAddress,
   graphEndpoint,
 }: {
-  userAddress?: string;
+  userAddress?: string | null;
   graphEndpoint?: string | null;
 }) => {
   try {
@@ -171,7 +170,7 @@ const fetchScheduledTransfersHistory = async ({
   graphEndpoint,
   isPoolOwnersHistory,
 }: {
-  userAddress?: string;
+  userAddress?: string | null;
   graphEndpoint?: string | null;
   isPoolOwnersHistory?: boolean;
 }) => {
@@ -219,12 +218,18 @@ const fetchScheduledTransfersHistory = async ({
   }
 };
 
-export function useGetScheduledTransferPools({ graphEndpoint }: { graphEndpoint?: string | null }) {
-  const { address } = useAccount();
+export function useGetScheduledTransferPools({
+  userAddress,
+  chainId,
+}: {
+  userAddress?: string | null;
+  chainId?: number | null;
+}) {
+  const graphEndpoint = chainId ? networkDetails[chainId]?.scheduledTransferSubgraph : null;
 
   return useQuery<Array<IScheduledTransferPool>>(
-    ['scheduledTransferPools', address, graphEndpoint],
-    () => fetchScheduledTransferPools({ userAddress: address, graphEndpoint }),
+    ['scheduledTransferPools', userAddress, graphEndpoint],
+    () => fetchScheduledTransferPools({ userAddress, graphEndpoint }),
     {
       refetchInterval: 30_000,
     }
@@ -251,17 +256,19 @@ export function useGetScheduledPayments({
 }
 
 export function useGetScheduledTransfersHistory({
-  graphEndpoint,
+  userAddress,
+  chainId,
   isPoolOwnersHistory,
 }: {
-  graphEndpoint?: string | null;
+  userAddress?: string | null;
+  chainId?: number | null;
   isPoolOwnersHistory?: boolean;
 }) {
-  const { address } = useAccount();
+  const graphEndpoint = chainId ? networkDetails[chainId]?.scheduledTransferSubgraph : null;
 
   return useQuery<Array<IScheduledTransferHistory>>(
-    ['scheduledTransfersHistory', address, graphEndpoint, isPoolOwnersHistory],
-    () => fetchScheduledTransfersHistory({ userAddress: address, graphEndpoint, isPoolOwnersHistory }),
+    ['scheduledTransfersHistory', userAddress, graphEndpoint, isPoolOwnersHistory],
+    () => fetchScheduledTransfersHistory({ userAddress, graphEndpoint, isPoolOwnersHistory }),
     {
       refetchInterval: 30_000,
     }
