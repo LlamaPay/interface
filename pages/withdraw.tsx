@@ -16,7 +16,7 @@ import {
   streamAddressFormatter,
   TokenName,
   Withdrawable,
-} from '~/components/Stream/Table/CustomValues';
+} from '~/containers/Salaries/Common/StreamsTable/CustomValues';
 import { BanknotesIcon } from '@heroicons/react/24/solid';
 import useBatchCalls from '~/queries/useBatchCalls';
 import useGnosisBatch from '~/queries/useGnosisBatch';

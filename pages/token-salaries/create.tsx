@@ -48,7 +48,7 @@ const Home: NextPage = () => {
     const tokenAddress = form.tokenAddress?.value;
     const minPriceUSD = form.minPriceUSD?.value;
 
-    const formattedPrice = getFormattedMaxPrice(minPriceUSD, tokenPrice?.decimals);
+    const formattedPrice = getFormattedMaxPrice(minPriceUSD, tokenPrice!.decimals);
 
     mutateAsync(
       { oracleAddress, tokenAddress, maxPrice: formattedPrice },

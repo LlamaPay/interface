@@ -1,6 +1,6 @@
 import { useIntl, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
-import { salaryWithdrawableAmtFormatter } from '~/components/Stream/Table/CustomValues';
+import { salaryWithdrawableAmtFormatter } from '~/containers/Salaries/Common/StreamsTable/CustomValues';
 import { useGetSalaryInfo } from '~/queries/salary/useGetSalaryInfo';
 import { useMultipleTokenPrices } from '~/queries/useTokenPrice';
 import { formatBalance } from '~/utils/amount';

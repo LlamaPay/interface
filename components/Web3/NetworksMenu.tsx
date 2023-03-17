@@ -15,7 +15,6 @@ import { chainDetails } from '~/utils/network';
 import Image from 'next/image';
 import defaultImage from '~/public/empty-token.webp';
 import { useTranslations } from 'next-intl';
-import useGetStreamsOnAllNetworks from '~/queries/useGetStreamsOnAllNetworks';
 
 export const NetworksMenu = () => {
   const { chain, chains: allChains } = useNetwork();

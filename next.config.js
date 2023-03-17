@@ -45,6 +45,21 @@ const nextConfig = {
         destination: '/outgoing/token-salaries',
         permanent: true,
       },
+      {
+        source: '/vesting',
+        destination: '/incoming/vesting',
+        permanent: true,
+      },
+      {
+        source: '/payments',
+        destination: '/incoming/payments',
+        permanent: true,
+      },
+      {
+        source: '/salaries/:path*',
+        destination: '/incoming/dashboard/:path*',
+        permanent: true,
+      },
     ];
   },
 };

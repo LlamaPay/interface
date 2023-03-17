@@ -4,7 +4,6 @@ import Layout from '~/components/Layout';
 import { CreateStream } from '~/components/Stream';
 import { useAccount } from 'wagmi';
 import { useNetworkProvider } from '~/hooks';
-import useStreamsAndHistory from '~/queries/useStreamsAndHistory';
 import { StreamIcon } from '~/components/Icons';
 import { useTranslations } from 'next-intl';
 import { FallbackContainer } from '~/components/Fallback';
@@ -12,9 +11,6 @@ import { FallbackContainer } from '~/components/Fallback';
 const Create: NextPage = () => {
   const { isConnected } = useAccount();
   const { unsupported } = useNetworkProvider();
-
-  // keep query active in this page so when a stream is submitted this query is invalidated and user can see the data when they navigate to homepage
-  useStreamsAndHistory();
 
   const t = useTranslations('CreateStream');
 

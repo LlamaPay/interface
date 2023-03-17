@@ -1,15 +1,15 @@
 import type { GetServerSideProps, NextPage } from 'next';
 import * as React from 'react';
-import { IncomingSalaries } from '~/containers/Salaries/Incoming';
+import { IncomingDashboard } from '~/containers/Dashboard/Incoming';
 import { chainDetails } from '~/utils/network';
 
-interface StreamsProps {
+interface DashboardProps {
   userAddress: string;
   chainId: number;
 }
 
-const Home: NextPage<StreamsProps> = (props) => {
-  return <IncomingSalaries {...props} />;
+const Home: NextPage<DashboardProps> = (props) => {
+  return <IncomingDashboard {...props} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query, locale }) => {

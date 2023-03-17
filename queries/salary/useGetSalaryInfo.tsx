@@ -111,12 +111,12 @@ async function fetchSalaryInfo({
   endpoint,
   provider,
 }: {
-  userAddress: string;
-  endpoint?: string;
-  provider?: Provider;
+  userAddress?: string;
+  endpoint?: string | null;
+  provider?: Provider | null;
 }) {
   try {
-    if (!endpoint || !provider) return { withdrawableAmounts: [], salaryStreams: [] };
+    if (!endpoint || !provider || !userAddress) return { withdrawableAmounts: [], salaryStreams: [] };
 
     const salaryStreams = await request(
       endpoint,
@@ -201,10 +201,10 @@ async function fetchSalaryInfo({
   }
 }
 
-export const useGetSalaryInfo = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
+export const useGetSalaryInfo = ({ userAddress, chainId }: { userAddress?: string; chainId?: number }) => {
   // get subgraph endpoint
-  const endpoint = networkDetails[chainId]?.subgraphEndpoint;
-  const provider = networkDetails[chainId]?.chainProviders;
+  const endpoint = chainId ? networkDetails[chainId]?.subgraphEndpoint : null;
+  const provider = chainId ? networkDetails[chainId]?.chainProviders : null;
 
   return useQuery<ISalaryInfo>(['salaryInfo', userAddress, chainId], () =>
     fetchSalaryInfo({ userAddress, endpoint, provider })

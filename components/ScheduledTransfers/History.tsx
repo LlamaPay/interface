@@ -14,7 +14,7 @@ import Table from '~/components/Table';
 import { formatAddress } from '~/utils/address';
 import { useNetwork } from 'wagmi';
 import { networkDetails } from '~/lib/networkDetails';
-import { eventAgeFormatter } from '~/components/History/Table/CustomValues';
+import { eventAgeFormatter } from '~/containers/Salaries/Common/HistoryTable/CustomValues';
 import Tooltip from '~/components/Tooltip';
 
 export function ScheduledTransfersHistory({

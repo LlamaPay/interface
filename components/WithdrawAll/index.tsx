@@ -1,20 +1,23 @@
 import * as React from 'react';
 import { useNetworkProvider } from '~/hooks';
-import useStreamsAndHistory from '~/queries/useStreamsAndHistory';
 import useBatchCalls from '~/queries/useBatchCalls';
-import { useAccount } from 'wagmi';
+import { useAccount, useNetwork } from 'wagmi';
 import { BanknotesIcon } from '@heroicons/react/24/outline';
 import { LlamaContractInterface } from '~/utils/contract';
 import useGnosisBatch from '~/queries/useGnosisBatch';
 import { useTranslations } from 'next-intl';
+import { useGetSalaryInfo } from '~/queries/salary/useGetSalaryInfo';
 
 interface ICall {
   [key: string]: string[];
 }
 
 export default function WithdrawAll() {
-  const { data } = useStreamsAndHistory();
   const { address } = useAccount();
+
+  const { chain } = useNetwork();
+
+  const { data } = useGetSalaryInfo({ userAddress: address, chainId: chain?.id });
 
   const { mutate: batchCall } = useBatchCalls();
   const { mutate: gnosisBatch } = useGnosisBatch();
@@ -22,7 +25,7 @@ export default function WithdrawAll() {
 
   const handleClick = () => {
     const calls: ICall =
-      data.streams?.reduce((acc: ICall, current) => {
+      data?.salaryStreams?.reduce((acc: ICall, current) => {
         if (address && address.toLowerCase() === current.payerAddress.toLowerCase() && !current.paused) {
           const callData = acc[current.llamaContractAddress] ?? [];
 

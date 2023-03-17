@@ -20,7 +20,6 @@ import {
   Pause,
   Push,
   Modify,
-  StreamHistory,
   Cancel,
   amtPerMonthFormatter,
   streamAddressFormatter,
@@ -30,7 +29,7 @@ import type { IStream } from '~/types';
 import { downloadStreams } from '~/utils/downloadCsv';
 import { useAddressStore } from '~/store/address';
 import { useTranslations } from 'next-intl';
-import Schedule from '../../Schedule/Schedule';
+import Schedule from '../../../../components/Schedule/Schedule';
 import { useNetworkProvider } from '~/hooks';
 import Tooltip from '~/components/Tooltip';
 import { ClipboardDocumentIcon, ShareIcon } from '@heroicons/react/24/outline';
@@ -258,140 +257,6 @@ export function StreamTable({ data }: { data: IStream[] }) {
         autoCorrect="off"
       />
       <Table instance={instance} hidePagination={true} downloadToCSV={downloadToCSV} maxWidthColumn={7} />
-    </>
-  );
-}
-
-export function DefaultStreamTable({ data }: { data: IStream[] }) {
-  const t = useTranslations('Table');
-
-  const { network } = useNetworkProvider();
-
-  let columns = React.useMemo<ColumnDef<IStream>[]>(
-    () => [
-      {
-        id: 'userName',
-        header: t('userName'),
-        cell: ({ cell }) => cell.row.original && <SavedName data={cell.row.original} />,
-      },
-      {
-        accessorFn: (row) => streamAddressFormatter(row).valueToSort,
-        id: 'address',
-        header: t('address'),
-        cell: (info) => <StreamAddress data={streamAddressFormatter(info.cell.row.original)} />,
-        enableMultiSort: true,
-      },
-      {
-        accessorKey: 'tokenSymbol',
-        header: t('tokenSymbol'),
-        cell: ({ cell }) => cell.row.original && <TokenName data={cell.row.original} />,
-        enableMultiSort: true,
-      },
-      {
-        accessorFn: (row) => String(amtPerMonthFormatter(row.amountPerSec)),
-        id: 'amountPerSec',
-        header: t('amountPerSec'),
-        cell: (info) => <AmtPerMonth data={info.row.original.amountPerSec} />,
-        enableMultiSort: true,
-      },
-      {
-        accessorFn: (row) => row.reason || 'N/A',
-        id: 'reason',
-        header: 'Reason',
-        cell: (info) => <p className="text-center">{info.getValue<string>()}</p>,
-        enableMultiSort: true,
-      },
-      {
-        accessorFn: (row) => String(totalStreamedFormatter(row)),
-        id: 'totalStreamed',
-        header: t('totalStreamed'),
-        cell: ({ cell }) => cell.row.original && <TotalStreamed data={cell.row.original} />,
-        enableMultiSort: true,
-      },
-      {
-        id: 'userWithdrawable',
-        header: t('userWithdrawable'),
-        cell: ({ cell }) => cell.row.original && <Withdrawable data={cell.row.original} />,
-      },
-      {
-        accessorKey: 'streamId',
-        id: 'linkToStream',
-        header: '',
-        cell: (info) =>
-          network && (
-            <Tooltip
-              content="Copy link to stream"
-              onClick={() =>
-                navigator.clipboard.writeText(`https://llamapay.io/salaries/withdraw/${network}/${info.getValue()}`)
-              }
-              className="relative top-[1px] ml-auto flex items-center"
-            >
-              <ClipboardDocumentIcon className="h-4 w-4 text-black dark:text-white" />
-            </Tooltip>
-          ),
-        enableSorting: false,
-      },
-      {
-        accessorKey: 'streamId',
-        header: '',
-        cell: (info) =>
-          network && (
-            <Link href={`/salaries/withdraw/${network}/${info.getValue()}`} className="row-action-links">
-              Withdraw
-            </Link>
-          ),
-        enableSorting: false,
-      },
-      {
-        id: 'history',
-        header: '',
-        cell: ({ cell }) =>
-          cell.row.original && (
-            <span className="flex justify-end">
-              <StreamHistory data={cell.row.original} />
-            </span>
-          ),
-      },
-    ],
-    [t, network]
-  );
-
-  const hasReason = data.some((e) => e.reason !== null);
-
-  if (!hasReason) {
-    columns = columns.filter((e) => e.id !== 'reason');
-  }
-
-  const [tableFilter, setTableFilter] = React.useState('');
-  const globalFilter = useDebounce(tableFilter, 300);
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-
-  const instance = useReactTable({
-    data,
-    columns,
-    state: {
-      sorting,
-      globalFilter,
-    },
-    onSortingChange: setSorting,
-    getCoreRowModel: getCoreRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-  });
-
-  return (
-    <>
-      <input
-        name="search table"
-        placeholder="Search..."
-        className="mb-1 max-w-[300px] rounded border border-lp-gray-1 bg-lp-white px-3 py-1 slashed-zero placeholder:text-sm placeholder:text-lp-gray-2 dark:border-transparent dark:bg-lp-gray-5"
-        value={tableFilter}
-        onChange={(e) => setTableFilter(e.target.value)}
-        spellCheck="false"
-        autoComplete="off"
-        autoCorrect="off"
-      />
-      <Table instance={instance} hidePagination={true} maxWidthColumn={7} />
     </>
   );
 }

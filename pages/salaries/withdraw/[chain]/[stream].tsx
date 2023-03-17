@@ -11,7 +11,7 @@ import { BeatLoader } from '~/components/BeatLoader';
 import Layout from '~/components/Layout';
 import { FallbackContainer } from '~/components/Fallback';
 import Tooltip from '~/components/Tooltip';
-import { Push, TotalStreamed, Withdrawable } from '~/components/Stream/Table/CustomValues';
+import { Push, TotalStreamed, Withdrawable } from '~/containers/Salaries/Common/StreamsTable/CustomValues';
 import { WalletSelector } from '~/components/Web3';
 import { StreamIcon } from '~/components/Icons';
 import { useNetworkProvider, useTokenList } from '~/hooks';

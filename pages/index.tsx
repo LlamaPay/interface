@@ -6,22 +6,10 @@ import Header from '~/components/Layout/Header';
 import Hero from '~/components/Layout/Hero';
 import HowItWorks from '~/components/Layout/HowItWorks';
 import Footer from '~/components/Layout/Footer';
-import Layout from '~/components/Layout';
-import Balance from '~/components/Balance';
-import { StreamSection } from '~/components/Stream';
-import { HistorySection } from '~/components/History';
 
 function Home() {
   const onboardDialog = useDialogState();
   const walletDialog = useDialogState();
-
-  return (
-    <Layout className="flex flex-col gap-12">
-      <Balance />
-      <StreamSection />
-      <HistorySection />
-    </Layout>
-  );
 
   return (
     <>

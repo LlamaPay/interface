@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import { useTranslations } from 'next-intl';
-import { HistoryTable } from '~/components/History';
 import { Box } from '~/containers/common/Box';
 import { useGetSalaryHistoryInfo } from '~/queries/salary/useGetSalaryInfo';
+import { HistoryTable } from './HistoryTable';
 
 export function History({ userAddress, chainId }: { userAddress: string; chainId: number }) {
   const { data, isLoading, isError } = useGetSalaryHistoryInfo({ userAddress, chainId });

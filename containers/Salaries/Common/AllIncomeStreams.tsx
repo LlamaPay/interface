@@ -1,8 +1,8 @@
 import classNames from 'classnames';
 import { useTranslations } from 'next-intl';
-import { StreamTable } from '~/components/Stream';
 import { Box } from '~/containers/common/Box';
 import { useGetSalaryInfo } from '~/queries/salary/useGetSalaryInfo';
+import { StreamTable } from './StreamsTable';
 
 export function AllIncomeStreams({
   userAddress,
