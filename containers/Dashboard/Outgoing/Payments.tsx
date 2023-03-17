@@ -60,7 +60,7 @@ export const Payments = ({ userAddress, chainId }: { userAddress: string; chainI
   ) {
     return (
       <Box className="isolate col-span-full flex min-h-[300px] flex-col items-center justify-center">
-        <PaymentsGraphic />
+        {!isError && <PaymentsGraphic />}
         <p className="text-base font-medium text-llama-gray-400 dark:text-llama-gray-300">
           {isError ? t0('errorFetchingData') : t0('noPendingOneTimePayments')}
         </p>

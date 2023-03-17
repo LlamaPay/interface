@@ -80,7 +80,7 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
   ) {
     return (
       <Box className="flex flex-col items-center justify-center">
-        <SalaryGraphic />
+        {!isError && <SalaryGraphic />}
         <p className="text-base font-medium text-llama-gray-400 dark:text-llama-gray-300">
           {isError ? t('errorFetchingData') : t('noActiveSalaryStreams')}
         </p>

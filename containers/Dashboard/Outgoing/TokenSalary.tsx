@@ -4,33 +4,27 @@ import { Box } from '~/containers/common/Box';
 import { currentYear, daysInMonth, months, yearOptions } from '~/containers/common/date';
 import { SalaryGraphic } from '~/containers/common/Graphics/OutgoingSalary';
 import { useLocale } from '~/hooks';
-import { useGetScheduledPayments } from '~/queries/tokenSalary/useGetScheduledTransfers';
+import { useGetScheduledTransferPools } from '~/queries/tokenSalary/useGetScheduledTransfers';
+import type { IScheduledTransferPayment } from '~/queries/tokenSalary/useGetScheduledTransfers';
 
 export const TokenSalary = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
   const t0 = useTranslations('Dashboard');
   const t1 = useTranslations('Months');
   const [year, setYear] = useState(currentYear);
 
-  const { data, isLoading, isError } = useGetScheduledPayments({ userAddress, chainId });
+  const { data: pools, isLoading, isError } = useGetScheduledTransferPools({ userAddress, chainId });
 
   const tags: { [year: number]: { [month: number]: { [day: number]: number } } } = {};
 
-  data?.forEach((item) => {
-    // item.history.forEach((his) => {
-    //   const release = new Date(+his.createdTimestamp * 1000);
-    //   const year = release.getFullYear();
-    //   const month = release.getMonth();
-    //   const day = release.getDate();
+  const poolPayments =
+    pools?.reduce((acc, curr) => {
+      curr.payments.forEach((item) => {
+        acc = [...acc, item];
+      });
+      return acc;
+    }, [] as Array<IScheduledTransferPayment>) ?? [];
 
-    //   tags[year] = {
-    //     ...(tags[year] || {}),
-    //     [month]: {
-    //       ...(tags[year]?.[month] ?? {}),
-    //       [day]: (tags[year]?.[month]?.[day] ?? 0) + (+his.usdAmount || 0),
-    //     },
-    //   };
-    // });
-
+  poolPayments?.forEach((item) => {
     const remainingTxs = (Number(item.ends) - Number(item.lastPaid)) / Number(item.frequency);
 
     if (remainingTxs > 0) {
@@ -57,10 +51,13 @@ export const TokenSalary = ({ userAddress, chainId }: { userAddress: string; cha
     return <Box className="animate-shimmer-2 isolate col-span-full flex min-h-[300px] flex-col gap-3"></Box>;
   }
 
-  if (isError || data?.filter((x) => (Number(x.ends) - Number(x.lastPaid)) / Number(x.frequency) > 0)?.length === 0) {
+  if (
+    isError ||
+    poolPayments?.filter((x) => (Number(x.ends) - Number(x.lastPaid)) / Number(x.frequency) > 0)?.length === 0
+  ) {
     return (
       <Box className="isolate col-span-full flex min-h-[300px] flex-col items-center justify-center">
-        <SalaryGraphic />
+        {!isError && <SalaryGraphic />}
         <p className="text-base font-medium text-llama-gray-400 dark:text-llama-gray-300">
           {isError ? t0('errorFetchingData') : t0('noPendingTokenSalaries')}
         </p>

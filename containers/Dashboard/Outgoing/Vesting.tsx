@@ -81,7 +81,7 @@ export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId
   if (isError || !data || data.filter((x) => x.admin === userAddress.toLowerCase())?.length === 0) {
     return (
       <Box className="flex flex-col items-center justify-center">
-        <VestingGraphic />
+        {!isError && <VestingGraphic />}
         <p className="text-base font-medium text-llama-gray-400 dark:text-llama-gray-300">
           {isError ? t('errorFetchingData') : t('noActiveVestingStreams')}
         </p>
