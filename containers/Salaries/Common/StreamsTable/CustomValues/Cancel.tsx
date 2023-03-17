@@ -4,7 +4,7 @@ import { useDialogState } from 'ariakit';
 import { TransactionDialog } from '~/components/Dialog';
 import toast from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
-import type { IStream } from '~/types';
+import type { IFormattedSalaryStream } from '~/types';
 import { useContractWrite } from 'wagmi';
 import { Interface } from 'ethers/lib/utils';
 import useBatchCalls from '~/queries/useBatchCalls';
@@ -13,7 +13,7 @@ import { LlamaContractInterface } from '~/utils/contract';
 import useGnosisBatch from '~/queries/useGnosisBatch';
 
 interface CancelProps {
-  data: IStream;
+  data: IFormattedSalaryStream;
 }
 
 const CreateInterface = new Interface(['function createStream(address to, uint216 amountPerSec)']);

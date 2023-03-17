@@ -1,33 +1,52 @@
 import { getAddress } from 'ethers/lib/utils';
-import { useGraphEndpoint, useNetworkProvider } from '~/hooks';
-import * as React from 'react';
-import { useGetAllTokensQuery } from '~/services/generated/graphql';
-import type { IToken } from '~/types';
-import { createContract } from '~/utils/contract';
+import { Provider, createContract } from '~/utils/contract';
 import { createERC20Contract } from '~/utils/tokenUtils';
+import { gql, request } from 'graphql-request';
+import { networkDetails } from '~/lib/networkDetails';
+import { useQuery } from '@tanstack/react-query';
+import { Contract } from 'ethers';
 
-const useGetAllTokens = () => {
-  // get subgraph endpoint
-  const endpoint = useGraphEndpoint();
+interface IToken {
+  address: string;
+  contract: { id: string };
+  decimals: number;
+  name: string;
+  symbol: string;
+}
 
-  const { provider, network } = useNetworkProvider();
+interface IFormattedToken {
+  tokenAddress: string;
+  llamaContractAddress: string;
+  name: string;
+  symbol: string;
+  decimals: number;
+  tokenContract: Contract;
+  llamaTokenContract: Contract;
+}
 
-  const {
-    data = null,
-    isLoading,
-    error,
-  } = useGetAllTokensQuery(
-    { endpoint },
-    { network: network || '' },
-    {
-      refetchInterval: 30000,
-    }
-  );
+async function fetchAllTokens({ provider, endpoint }: { provider?: Provider | null; endpoint?: string | null }) {
+  try {
+    if (!provider || !endpoint) return [];
 
-  // format the data in memo, instead of react query's select as graphql trigger rerenders multiple times when using it
-  const tokens: IToken[] | null = React.useMemo(() => {
-    if (data?.tokens && provider) {
-      const result = data?.tokens.map((c) => ({
+    const data = await request<{ tokens: Array<IToken> }>(
+      endpoint,
+      gql`
+        {
+          tokens(first: 100) {
+            address
+            symbol
+            name
+            decimals
+            contract {
+              id
+            }
+          }
+        }
+      `
+    );
+
+    return data?.tokens
+      .map((c: IToken) => ({
         tokenAddress: getAddress(c.address),
         llamaContractAddress: getAddress(c.contract?.id),
         name: c.name,
@@ -35,12 +54,19 @@ const useGetAllTokens = () => {
         decimals: c.decimals,
         tokenContract: createERC20Contract({ tokenAddress: getAddress(c.address), provider }),
         llamaTokenContract: createContract(getAddress(c.contract?.id), provider),
-      }));
-      return result.filter((c) => c.tokenAddress.toLowerCase() !== '0x0000000000000000000000000000000000001010');
-    } else return null;
-  }, [data, provider]);
+      }))
+      .filter((c: IFormattedToken) => c.tokenAddress.toLowerCase() !== '0x0000000000000000000000000000000000001010');
+  } catch (error: any) {
+    throw new Error(error.message || (error?.reason ?? "Couldn't fetch tokens list"));
+  }
+}
 
-  return React.useMemo(() => ({ data: tokens, isLoading, error }), [tokens, isLoading, error]);
+export const useGetAllTokens = ({ chainId }: { chainId?: number | null }) => {
+  // get subgraph endpoint
+  const endpoint = chainId ? networkDetails[chainId]?.subgraphEndpoint : null;
+  const provider = chainId ? networkDetails[chainId]?.chainProviders : null;
+
+  return useQuery<Array<IFormattedToken>>(['salaryTokensList', chainId], () => fetchAllTokens({ endpoint, provider }), {
+    refetchInterval: 30000,
+  });
 };
-
-export default useGetAllTokens;

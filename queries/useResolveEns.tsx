@@ -2,12 +2,12 @@ import { ethers } from 'ethers';
 import { getAddress } from 'ethers/lib/utils';
 import { useNetworkProvider } from '~/hooks';
 import { useQuery } from '@tanstack/react-query';
-import { StreamAndHistoryQuery } from '~/services/generated/graphql';
 import { networkDetails } from '~/lib/networkDetails';
 import { mainnetResolverABI } from '~/lib/abis/mainnetResolver';
 import { chainDetails } from '~/utils/network';
 import { MAINNET_ENS_RESOLVER, RAVE_RESOLVER } from '~/lib/contracts';
 import raveContract from '~/lib/abis/raveContract';
+import type { ISalaryHistory, ISalaryStream } from './salary/useGetSalaryInfo';
 
 export interface IEnsResolve {
   [key: string]: string | null;
@@ -15,7 +15,8 @@ export interface IEnsResolve {
 
 const mainnetProvider = networkDetails[1].chainProviders;
 
-async function resolveEns(data: StreamAndHistoryQuery | undefined, address: string | undefined) {
+// TODO fix any type
+async function resolveEns(data: any, address: string | undefined) {
   try {
     if (!data) {
       throw new Error('No stream and history data');
@@ -30,7 +31,7 @@ async function resolveEns(data: StreamAndHistoryQuery | undefined, address: stri
 
       const queryAddresses: string[] = [];
 
-      streams.map((s) => {
+      streams.map((s: ISalaryStream) => {
         if (!queryAddresses.includes(s.payer.id.toLowerCase())) {
           queryAddresses.push(s.payer.id.toLowerCase());
         }
@@ -39,7 +40,7 @@ async function resolveEns(data: StreamAndHistoryQuery | undefined, address: stri
         }
       });
 
-      history.map((h) => {
+      history.map((h: ISalaryHistory) => {
         const addressRelated =
           h.stream?.payer?.id?.toLowerCase() === address.toLowerCase()
             ? h.stream?.payee?.id?.toLowerCase()
@@ -86,13 +87,7 @@ async function fetchEns(address: string) {
   return userAddress;
 }
 
-export default function useResolveEns({
-  data,
-  userAddress,
-}: {
-  data: StreamAndHistoryQuery | undefined;
-  userAddress: string | undefined;
-}) {
+export default function useResolveEns({ data, userAddress }: { data: any; userAddress: string | undefined }) {
   const { chainId } = useNetworkProvider();
 
   return useQuery<IEnsResolve | null>(['ensAddresses', userAddress, chainId, data ? true : false], () =>

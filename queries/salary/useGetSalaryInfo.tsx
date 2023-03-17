@@ -1,15 +1,15 @@
 import { useQuery } from '@tanstack/react-query';
 import { getAddress } from 'ethers/lib/utils';
-import request, { gql } from 'graphql-request';
+import { gql, request } from 'graphql-request';
 import { networkDetails } from '~/lib/networkDetails';
 import { createContract } from '~/utils/contract';
 import type { Provider } from '~/utils/contract';
 import { getWithdrawableData } from '../useWithdrawable';
 import BigNumber from 'bignumber.js';
 import { formatStream } from '~/hooks/useFormatStreamAndHistory';
-import type { ISalaryStream } from '~/types';
+import type { IFormattedSalaryStream } from '~/types';
 
-interface IStream {
+export interface ISalaryStream {
   streamId: string;
   contract: {
     address: string;
@@ -61,7 +61,7 @@ interface IWithdrawableAmount extends IWithdrawable {
 
 interface ISalaryInfo {
   withdrawableAmounts: Array<IWithdrawableAmount>;
-  salaryStreams: Array<ISalaryStream>;
+  salaryStreams: Array<IFormattedSalaryStream>;
 }
 
 interface IHistoryResponse {
@@ -99,7 +99,7 @@ interface IHistoryResponse {
   users: Array<{ id: string }>;
 }
 
-export interface IHistory extends IHistoryResponse {
+export interface ISalaryHistory extends IHistoryResponse {
   amountPerSec: string | null;
   addressRelated: string;
   addressRelatedEns: string | null;
@@ -118,7 +118,7 @@ async function fetchSalaryInfo({
   try {
     if (!endpoint || !provider || !userAddress) return { withdrawableAmounts: [], salaryStreams: [] };
 
-    const salaryStreams = await request(
+    const salaryStreams = await request<{ user: { streams: Array<ISalaryStream> } }>(
       endpoint,
       gql`
         {
@@ -158,8 +158,8 @@ async function fetchSalaryInfo({
       `
     );
 
-    const withdrawables = await Promise.allSettled<IWithdrawable>(
-      salaryStreams?.user?.streams.map((stream: IStream) =>
+    const withdrawables = await Promise.allSettled(
+      salaryStreams?.user?.streams?.map((stream: ISalaryStream) =>
         getWithdrawableData({
           contract: createContract(getAddress(stream.contract.address), provider),
           payer: stream.payer.id,
@@ -171,7 +171,7 @@ async function fetchSalaryInfo({
 
     const withdrawableAmounts: Array<IWithdrawableAmount> = [];
 
-    salaryStreams?.user?.streams.forEach((stream: IStream, index: number) => {
+    salaryStreams?.user?.streams?.forEach((stream: ISalaryStream, index: number) => {
       const wData = withdrawables[index];
 
       if (wData && wData.status === 'fulfilled') {
@@ -190,11 +190,12 @@ async function fetchSalaryInfo({
 
     return {
       withdrawableAmounts,
-      salaryStreams: salaryStreams?.user?.streams.map((s: IStream) =>
+      salaryStreams: salaryStreams?.user?.streams.map((s: ISalaryStream) =>
         formatStream({ stream: s, address: userAddress, provider, ensData: {} })
       ),
     };
   } catch (error: any) {
+    // console.log(error);
     throw new Error(error.message || (error?.reason ?? "Couldn't fetch salary info"));
   }
 }
@@ -219,9 +220,9 @@ async function fetchSalaryHistoryInfo({
   provider?: Provider;
 }) {
   try {
-    if (!endpoint || !provider) return [];
+    if (!endpoint || !provider) return [] as Array<ISalaryHistory>;
 
-    const history = await request(
+    const history = await request<{ user: { historicalEvents: Array<IHistoryResponse> } }>(
       endpoint,
       gql`
         {
@@ -276,30 +277,28 @@ async function fetchSalaryHistoryInfo({
       `
     );
 
-    return (
-      history?.user?.historicalEvents?.map((h: IHistoryResponse) => {
-        const addressType: 'payer' | 'payee' =
-          h.stream?.payer?.id?.toLowerCase() === userAddress.toLowerCase() ? 'payer' : 'payee';
+    return (history?.user?.historicalEvents?.map((h: IHistoryResponse) => {
+      const addressType: 'payer' | 'payee' =
+        h.stream?.payer?.id?.toLowerCase() === userAddress.toLowerCase() ? 'payer' : 'payee';
 
-        const addressRelated =
-          addressType === 'payer'
-            ? h.stream?.payee?.id ?? null
-            : h.stream?.payer?.id
-            ? h.stream?.payer?.id
-            : h.users[0]?.id ?? null;
+      const addressRelated =
+        addressType === 'payer'
+          ? h.stream?.payee?.id ?? null
+          : h.stream?.payer?.id
+          ? h.stream?.payer?.id
+          : h.users[0]?.id ?? null;
 
-        // TODO fix ens names
-        const ensName = null;
+      // TODO fix ens names
+      const ensName = null;
 
-        return {
-          ...h,
-          amountPerSec: h.stream?.amountPerSec ?? null,
-          addressRelated,
-          addressRelatedEns: ensName,
-          addressType,
-        };
-      }) ?? []
-    );
+      return {
+        ...h,
+        amountPerSec: h.stream?.amountPerSec ?? null,
+        addressRelated,
+        addressRelatedEns: ensName,
+        addressType,
+      };
+    }) ?? []) as Array<ISalaryHistory>;
   } catch (error: any) {
     throw new Error(error.message || (error?.reason ?? "Couldn't fetch salary history info"));
   }
@@ -310,7 +309,7 @@ export const useGetSalaryHistoryInfo = ({ userAddress, chainId }: { userAddress:
   const endpoint = networkDetails[chainId]?.subgraphEndpoint;
   const provider = networkDetails[chainId]?.chainProviders;
 
-  return useQuery<Array<IHistory>>(['salaryHistoryInfo', userAddress, chainId], () =>
+  return useQuery<Array<ISalaryHistory>>(['salaryHistoryInfo', userAddress, chainId], () =>
     fetchSalaryHistoryInfo({ userAddress, endpoint, provider })
   );
 };

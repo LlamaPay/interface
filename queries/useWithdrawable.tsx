@@ -24,9 +24,9 @@ export async function getWithdrawableData({ contract, payer, payee, amountPerSec
       lastUpdate: call.lastUpdate,
       owed: call.owed,
     };
-  } catch (error) {
+  } catch (error: any) {
     // console.log(error);
-    return null;
+    throw new Error(error.message || (error?.reason ?? "Couldn't fetch payments info"));
   }
 }
 

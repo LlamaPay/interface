@@ -1,5 +1,4 @@
 import { Contract } from 'ethers';
-import { UserHistoryFragment } from '~/services/generated/graphql';
 
 export interface IToken {
   tokenAddress: string;
@@ -35,7 +34,7 @@ export interface IPayer {
   lastPayerUpdate: string | null;
 }
 
-export interface IStream {
+export interface IFormattedSalaryStream {
   llamaContractAddress: string;
   amountPerSec: string;
   createdTimestamp: string;
@@ -52,43 +51,9 @@ export interface IStream {
   llamaTokenContract: Contract;
   historicalEvents: { eventType: string; txHash: string; createdTimestamp: string }[];
   paused: boolean;
-  pausedAmount: string;
+  pausedAmount: string | null;
   lastPaused: string;
-  reason: string | null | undefined;
-}
-
-export interface ISalaryStream {
-  llamaContractAddress: string;
-  amountPerSec: string;
-  createdTimestamp: string;
-  payerAddress: string;
-  payerEns: string | null;
-  payeeEns: string | null;
-  payeeAddress: string;
-  streamId: string;
-  streamType: 'outgoingStream' | 'incomingStream';
-  token: { address: string; name: string; decimals: number; symbol: string };
-  tokenName: string;
-  tokenSymbol: string;
-  tokenContract: Contract;
-  llamaTokenContract: Contract;
-  historicalEvents: { eventType: string; txHash: string; createdTimestamp: string }[];
-  paused: boolean;
-  pausedAmount: string;
-  lastPaused: string;
-  reason: string | null | undefined;
-}
-
-export interface IHistory extends UserHistoryFragment {
-  addressRelated: string | null;
-  addressRelatedEns: string | null;
-  addressType: 'payer' | 'payee';
-  amountPerSec: string;
-}
-
-export interface IStreamAndHistory {
-  streams: IStream[] | null;
-  history: IHistory[] | null;
+  reason?: string | null;
 }
 
 export interface ITokenList {

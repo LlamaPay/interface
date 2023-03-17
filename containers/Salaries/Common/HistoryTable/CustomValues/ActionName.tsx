@@ -10,9 +10,9 @@ import {
 import Tooltip from '~/components/Tooltip';
 import { useChainExplorer } from '~/hooks';
 import { useTranslations } from 'next-intl';
-import type { IHistory } from '~/queries/salary/useGetSalaryInfo';
+import type { ISalaryHistory } from '~/queries/salary/useGetSalaryInfo';
 
-export function ActionName({ data }: { data: IHistory }) {
+export function ActionName({ data }: { data: ISalaryHistory }) {
   const { url: chainExplorer, id } = useChainExplorer();
 
   const link = id === 82 || id === 1088 ? `${chainExplorer}tx/${data.txHash}` : `${chainExplorer}/tx/${data.txHash}`;

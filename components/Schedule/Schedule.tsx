@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useDialogState } from 'ariakit';
 import { FormDialog } from '~/components/Dialog';
 import { InputText, SubmitButton } from '~/components/Form';
-import type { IStream } from '~/types';
+import type { IFormattedSalaryStream } from '~/types';
 import { useAccount, useContractWrite } from 'wagmi';
 import { networkDetails } from '~/lib/networkDetails';
 import { secondsByDuration } from '~/utils/constants';
@@ -18,7 +18,7 @@ export default function Schedule({
   chainId,
   nativeCurrency,
 }: {
-  data: IStream;
+  data: IFormattedSalaryStream;
   chainId: number;
   nativeCurrency: string;
 }) {

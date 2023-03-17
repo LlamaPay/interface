@@ -1,11 +1,11 @@
 import * as React from 'react';
 import { useLocale } from '~/hooks';
 import { useTranslations } from 'next-intl';
-import type { IHistory } from '~/queries/salary/useGetSalaryInfo';
+import type { ISalaryHistory } from '~/queries/salary/useGetSalaryInfo';
 import { downloadInvoice } from '~/utils/downloadInvoice';
 import { useAccount } from 'wagmi';
 
-export function WithdrawInvoice({ data }: { data: IHistory }) {
+export function WithdrawInvoice({ data }: { data: ISalaryHistory }) {
   const { locale } = useLocale();
   const { address } = useAccount();
   const t0 = useTranslations('History');

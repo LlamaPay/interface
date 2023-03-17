@@ -4,7 +4,7 @@ import { useDialogState } from 'ariakit';
 import { TransactionDialog } from '~/components/Dialog';
 import toast from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
-import type { IStream, ITransaction } from '~/types';
+import type { IFormattedSalaryStream } from '~/types';
 import { useContractWrite } from 'wagmi';
 import { useTranslations } from 'next-intl';
 import { LlamaContractInterface } from '~/utils/contract';
@@ -13,7 +13,7 @@ import classNames from 'classnames';
 
 interface PushProps {
   buttonName: 'Send' | 'Withdraw';
-  data: IStream;
+  data: IFormattedSalaryStream;
   className?: string;
 }
 

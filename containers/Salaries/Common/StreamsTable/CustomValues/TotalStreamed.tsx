@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { useIntl } from 'next-intl';
-import type { IStream } from '~/types';
+import type { IFormattedSalaryStream } from '~/types';
 
-export const TotalStreamed = ({ data }: { data: IStream }) => {
+export const TotalStreamed = ({ data }: { data: IFormattedSalaryStream }) => {
   const [amount, setAmount] = React.useState<string | null>(null);
 
   const intl = useIntl();
@@ -19,7 +19,7 @@ export const TotalStreamed = ({ data }: { data: IStream }) => {
   return <p className="flex justify-start slashed-zero tabular-nums dark:text-white">{amount}</p>;
 };
 
-export function totalStreamedFormatter(data: IStream): number {
+export function totalStreamedFormatter(data: IFormattedSalaryStream): number {
   if (data.paused) {
     return ((Number(data.lastPaused) - Number(data.createdTimestamp)) * Number(data.amountPerSec)) / 1e20;
   } else {

@@ -1,8 +1,8 @@
 import jsPDF from 'jspdf';
 import autoTable from 'jspdf-autotable';
-import type { IHistory } from '~/queries/salary/useGetSalaryInfo';
+import type { ISalaryHistory } from '~/queries/salary/useGetSalaryInfo';
 
-export function downloadInvoice(data: IHistory, locale: string, reqAddress: string) {
+export function downloadInvoice(data: ISalaryHistory, locale: string, reqAddress: string) {
   const doc = new jsPDF('portrait', 'mm', 'a4');
   doc.setFontSize(24);
   doc.text('Invoice', 5, 10);

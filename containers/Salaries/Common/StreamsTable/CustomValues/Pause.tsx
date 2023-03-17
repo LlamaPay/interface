@@ -3,12 +3,12 @@ import { useTranslations } from 'next-intl';
 import useGnosisBatch from '~/queries/useGnosisBatch';
 import toast from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
-import type { IStream } from '~/types';
+import type { IFormattedSalaryStream } from '~/types';
 import { LlamaContractInterface } from '~/utils/contract';
 import { useContractWrite } from 'wagmi';
 
 interface PauseProps {
-  data: IStream;
+  data: IFormattedSalaryStream;
 }
 
 export function Pause({ data }: PauseProps) {

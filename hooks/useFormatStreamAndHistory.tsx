@@ -1,63 +1,10 @@
 import { getAddress } from 'ethers/lib/utils';
-import useResolveEns, { IEnsResolve } from '~/queries/useResolveEns';
-import * as React from 'react';
-import { StreamAndHistoryQuery } from '~/services/generated/graphql';
-import type { IStream, IStreamAndHistory } from '~/types';
+import { IEnsResolve } from '~/queries/useResolveEns';
+import type { IFormattedSalaryStream } from '~/types';
 import { createContract } from '~/utils/contract';
 import { createERC20Contract } from '~/utils/tokenUtils';
 import { Provider } from './useNetworkProvider';
-
-export function useFormatStreamAndHistory({
-  data,
-  address,
-  provider,
-}: {
-  data?: StreamAndHistoryQuery;
-  address?: string;
-  provider: Provider | null;
-}): IStreamAndHistory {
-  const { data: ensData } = useResolveEns({
-    data: data,
-    userAddress: address,
-  });
-
-  return React.useMemo(() => {
-    if (provider && data && address) {
-      const streams = data?.user?.streams ?? [];
-      const history = data?.user?.historicalEvents ?? [];
-
-      const formattedStreams = streams.map((s) => formatStream({ stream: s, address, provider, ensData }));
-
-      const formattedHistory = history.map((h) => {
-        const addressType: 'payer' | 'payee' =
-          h.stream?.payer?.id?.toLowerCase() === address.toLowerCase() ? 'payer' : 'payee';
-
-        const addressRelated =
-          addressType === 'payer'
-            ? h.stream?.payee?.id ?? null
-            : h.stream?.payer?.id
-            ? h.stream?.payer?.id
-            : h.users[0]?.id ?? null;
-
-        const ensName =
-          ensData && addressRelated && ensData[addressRelated] !== undefined ? ensData[addressRelated] : null;
-
-        return {
-          ...h,
-          amountPerSec: h.stream?.amountPerSec ?? null,
-          addressRelated,
-          addressRelatedEns: ensName,
-          addressType,
-        };
-      });
-
-      return {
-        streams: formattedStreams.length > 0 ? formattedStreams : null,
-        history: formattedHistory.length > 0 ? formattedHistory : null,
-      };
-    } else return { streams: null, history: null };
-  }, [data, provider, address, ensData]);
-}
+import type { ISalaryStream } from '~/queries/salary/useGetSalaryInfo';
 
 export const formatStream = ({
   stream,
@@ -65,11 +12,11 @@ export const formatStream = ({
   ensData,
   address,
 }: {
-  stream: any;
+  stream: ISalaryStream;
   provider: Provider;
   ensData?: IEnsResolve | null | undefined;
   address: string;
-}): IStream => {
+}): IFormattedSalaryStream => {
   const streamType: 'outgoingStream' | 'incomingStream' =
     stream.payer.id?.toLowerCase() === address.toLowerCase() ? 'outgoingStream' : 'incomingStream';
 

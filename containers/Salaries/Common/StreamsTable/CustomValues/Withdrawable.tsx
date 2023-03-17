@@ -1,12 +1,12 @@
 import * as React from 'react';
-import type { IStream } from '~/types';
+import type { IFormattedSalaryStream } from '~/types';
 import { formatBalance } from '~/utils/amount';
 import useWithdrawable from '~/queries/useWithdrawable';
 import Tooltip from '~/components/Tooltip';
 import { ExclamationCircleIcon, ExclamationTriangleIcon } from '@heroicons/react/24/solid';
 import { useIntl, useTranslations } from 'next-intl';
 
-export const Withdrawable = ({ data }: { data: IStream }) => {
+export const Withdrawable = ({ data }: { data: IFormattedSalaryStream }) => {
   const { data: callResult, isLoading } = useWithdrawable({
     contract: data.llamaTokenContract,
     payer: data.payerAddress,

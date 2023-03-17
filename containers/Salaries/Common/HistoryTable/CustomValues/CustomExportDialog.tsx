@@ -3,7 +3,7 @@ import { Switch } from '@headlessui/react';
 import { DisclosureState } from 'ariakit';
 import { FormDialog } from '~/components/Dialog';
 import { SubmitButton } from '~/components/Form';
-import type { IHistory } from '~/queries/salary/useGetSalaryInfo';
+import type { ISalaryHistory } from '~/queries/salary/useGetSalaryInfo';
 import { formatAddress } from '~/utils/address';
 import { downloadCustomHistory } from '~/utils/downloadCsv';
 
@@ -13,7 +13,7 @@ interface IFormElements {
   event: { value: string };
 }
 
-export function CustomExportDialog({ data, dialog }: { data: IHistory[]; dialog: DisclosureState }) {
+export function CustomExportDialog({ data, dialog }: { data: ISalaryHistory[]; dialog: DisclosureState }) {
   const [hasAssignNames, setHasAssignNames] = React.useState<boolean>(false);
 
   const addresses = React.useMemo(() => {

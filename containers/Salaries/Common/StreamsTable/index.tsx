@@ -1,5 +1,4 @@
 import * as React from 'react';
-import Link from 'next/link';
 import {
   ColumnDef,
   getCoreRowModel,
@@ -25,7 +24,7 @@ import {
   streamAddressFormatter,
   totalStreamedFormatter,
 } from './CustomValues';
-import type { IStream } from '~/types';
+import type { IFormattedSalaryStream } from '~/types';
 import { downloadStreams } from '~/utils/downloadCsv';
 import { useAddressStore } from '~/store/address';
 import { useTranslations } from 'next-intl';
@@ -36,12 +35,12 @@ import { ClipboardDocumentIcon, ShareIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import useDebounce from '~/hooks/useDebounce';
 
-export function StreamTable({ data }: { data: IStream[] }) {
+export function StreamTable({ data }: { data: Array<IFormattedSalaryStream> }) {
   const addressStore = useAddressStore();
   const { nativeCurrency, chainId, network } = useNetworkProvider();
   const t = useTranslations('Table');
 
-  let columns = React.useMemo<ColumnDef<IStream>[]>(
+  let columns = React.useMemo<ColumnDef<IFormattedSalaryStream>[]>(
     () => [
       {
         id: 'userName',

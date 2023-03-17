@@ -1,20 +1,31 @@
 import { DisclosureState } from 'ariakit';
 import { FormDialog } from '~/components/Dialog';
-import { UserHistoryFragment } from '~/services/generated/graphql';
 import { useChainExplorer } from '~/hooks';
 import { ArrowTopRightOnSquareIcon } from '@heroicons/react/24/outline';
 import { secondsByDuration } from '~/utils/constants';
 import { formatAmountInTable } from '~/utils/amount';
 import { useIntl, useTranslations } from 'next-intl';
+import type { ISalaryHistory } from '~/queries/salary/useGetSalaryInfo';
 
 interface MoreInfoProps {
-  data: UserHistoryFragment;
+  data: ISalaryHistory;
   dialog: DisclosureState;
 }
 
-function amountStreamed(createdTime: string, streamCreatedTime: string | undefined, amtPerSec: number) {
-  const result = ((Number(createdTime) - Number(streamCreatedTime)) * amtPerSec) / 1e20;
-  return result.toFixed(5);
+function amountStreamed({
+  createdTime,
+  streamCreatedTime,
+  amtPerSec,
+}: {
+  createdTime: string;
+  streamCreatedTime?: string | undefined;
+  amtPerSec?: string;
+}) {
+  return streamCreatedTime && amtPerSec
+    ? (((Number(createdTime) - Number(streamCreatedTime)) * Number(amtPerSec)) / 1e20).toLocaleString(undefined, {
+        maximumFractionDigits: 4,
+      })
+    : '';
 }
 
 export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
@@ -67,11 +78,11 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
                 <div className="flex space-x-1">
                   <p className="dark:text-white">{t1('totalStreamed')}:</p>
                   <p className="dark:text-white">
-                    {amountStreamed(
-                      data.createdTimestamp,
-                      data.oldStream?.createdTimestamp,
-                      data.oldStream?.amountPerSec
-                    )}
+                    {amountStreamed({
+                      createdTime: data.createdTimestamp,
+                      streamCreatedTime: data.oldStream?.createdTimestamp,
+                      amtPerSec: data.oldStream?.amountPerSec,
+                    })}
                   </p>
                 </div>
               </div>
@@ -110,7 +121,11 @@ export const MoreInfo = ({ data, dialog }: MoreInfoProps) => {
                 <div className="flex space-x-1">
                   <p className="dark:text-white">{t1('totalStreamed')}:</p>
                   <p className="dark:text-white">
-                    {amountStreamed(data.createdTimestamp, data.stream?.createdTimestamp, data.stream?.amountPerSec)}
+                    {amountStreamed({
+                      createdTime: data.createdTimestamp,
+                      streamCreatedTime: data.stream?.createdTimestamp,
+                      amtPerSec: data.stream?.amountPerSec,
+                    })}
                   </p>
                 </div>
               )}

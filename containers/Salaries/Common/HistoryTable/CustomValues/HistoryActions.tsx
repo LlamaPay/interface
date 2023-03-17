@@ -1,12 +1,12 @@
 import { useDialogState } from 'ariakit';
 import { useTranslations } from 'next-intl';
-import type { IHistory } from '~/queries/salary/useGetSalaryInfo';
+import type { ISalaryHistory } from '~/queries/salary/useGetSalaryInfo';
 import { MoreInfo } from './MoreInfo';
 import { WithdrawInvoice } from './WithdrawInvoice';
 import { useNetworkProvider } from '~/hooks';
 import { networkDetails } from '~/lib/networkDetails';
 
-export const HistoryActions = ({ data }: { data: IHistory }) => {
+export const HistoryActions = ({ data }: { data: ISalaryHistory }) => {
   const dialog = useDialogState();
   const { chainId } = useNetworkProvider();
   const t = useTranslations('History');

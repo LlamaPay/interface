@@ -2,18 +2,16 @@ import * as React from 'react';
 import { useChainExplorer, useTokenList } from '~/hooks';
 import Image from 'next/image';
 import defaultImage from '~/public/empty-token.webp';
-import type { IStream } from '~/types';
+import type { IFormattedSalaryStream } from '~/types';
 import { useTranslations } from 'next-intl';
 
-export function TokenName({ data }: { data: IStream }) {
+export function TokenName({ data }: { data: IFormattedSalaryStream }) {
   // function that returns chain explorer url based on the chain user is connected to
   const { url: chainExplorer, id } = useChainExplorer();
 
   const { data: tokens } = useTokenList();
 
-  const token = React.useMemo(() => {
-    return tokens ? tokens.find((t) => t.tokenAddress.toLowerCase() === data.token.address.toLowerCase()) : null;
-  }, [tokens, data]);
+  const token = tokens ? tokens.find((t) => t.tokenAddress.toLowerCase() === data.token.address.toLowerCase()) : null;
 
   const t = useTranslations('Common');
 

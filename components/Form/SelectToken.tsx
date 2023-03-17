@@ -34,13 +34,7 @@ function Token({
 }) {
   const { data: tokens } = useTokenBalances();
 
-  const data = React.useMemo(() => {
-    if (tokenBalanceOf === 'lpContract') {
-      return tokens ? tokens.find((t) => t.tokenAddress === value) : null;
-    }
-
-    return tokens ? tokens.find((t) => t.tokenAddress === value) : null;
-  }, [value, tokens, tokenBalanceOf]);
+  const data = tokens ? tokens.find((t) => t.tokenAddress === value) : null;
 
   const t = useTranslations('Common');
 
@@ -67,11 +61,13 @@ function Token({
         )}
       </div>
       <div className="ml-4 whitespace-nowrap slashed-zero text-gray-600 dark:text-gray-400">
-        {tokenBalanceOf === 'none' ? null : tokenBalanceOf === 'lpContract' ? (
+        {/* {tokenBalanceOf === 'none' ? null : tokenBalanceOf === 'lpContract' ? (
           <TokenBalance address={value} symbol={data?.symbol ?? ''} />
         ) : (
           <> {data?.balance && `${data.balance} ${data?.symbol}`}</>
-        )}
+        )} */}
+
+        {data?.balance && `${data.balance} ${data?.symbol}`}
       </div>{' '}
     </div>
   );

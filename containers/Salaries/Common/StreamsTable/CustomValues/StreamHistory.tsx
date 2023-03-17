@@ -4,10 +4,10 @@ import classNames from 'classnames';
 import { FormDialog } from '~/components/Dialog';
 import { useChainExplorer } from '~/hooks';
 import { useIntl, useTranslations } from 'next-intl';
-import type { IStream } from '~/types';
+import type { IFormattedSalaryStream } from '~/types';
 
 interface StreamHistoryProps {
-  data: IStream;
+  data: IFormattedSalaryStream;
   className?: string | boolean;
 }
 
@@ -108,7 +108,7 @@ export const StreamHistory = ({ data, className }: StreamHistoryProps) => {
   );
 };
 
-const StreamedYTD: React.FC<{ data: IStream; shouldRun: boolean }> = ({ data, shouldRun }) => {
+const StreamedYTD: React.FC<{ data: IFormattedSalaryStream; shouldRun: boolean }> = ({ data, shouldRun }) => {
   const [ytdAmount, setYtdAmount] = React.useState<string | null>(null);
   const intl = useIntl();
   const setYTD = React.useCallback(() => {

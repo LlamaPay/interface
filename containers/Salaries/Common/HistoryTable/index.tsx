@@ -25,12 +25,12 @@ import { downloadHistory } from '~/utils/downloadCsv';
 import { useTranslations } from 'next-intl';
 import { useDialogState } from 'ariakit';
 import useDebounce from '~/hooks/useDebounce';
-import type { IHistory } from '~/queries/salary/useGetSalaryInfo';
+import type { ISalaryHistory } from '~/queries/salary/useGetSalaryInfo';
 
-export function HistoryTable({ data }: { data: Array<IHistory> }) {
+export function HistoryTable({ data }: { data: Array<ISalaryHistory> }) {
   const t = useTranslations('Table');
 
-  const columns = React.useMemo<ColumnDef<IHistory>[]>(
+  const columns = React.useMemo<ColumnDef<ISalaryHistory>[]>(
     () => [
       {
         id: 'action',

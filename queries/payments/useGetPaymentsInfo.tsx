@@ -65,8 +65,8 @@ async function getPaymentsInfo({
         }
       `;
 
-    const froms = (await request(endpoint, queryFrom)).escrows;
-    const tos = (await request(endpoint, queryTo)).escrows;
+    const froms = ((await request(endpoint, queryFrom)) as any).escrows;
+    const tos = ((await request(endpoint, queryTo)) as any).escrows;
 
     const results: IPayments[] = [];
     const ids: string[] = [];
@@ -92,9 +92,9 @@ async function getPaymentsInfo({
     });
 
     return results;
-  } catch (error) {
+  } catch (error: any) {
     console.error(error);
-    return null;
+    throw new Error(error.message || (error?.reason ?? "Couldn't fetch payments info"));
   }
 }
 

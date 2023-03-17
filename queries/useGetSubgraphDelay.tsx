@@ -31,25 +31,26 @@ async function getSubgraphDelay({ chainId }: useGetSubgraphDelayProps) {
         body: JSON.stringify({ jsonrpc: '2.0', method: 'eth_getBlockByNumber', params: ['latest', false], id: 1 }),
       }).then((res) => res.json());
 
-      const lastBlockIndexed = await request(subgraphEndpoint, GET_LAST_INDEXED_BLOCK).then(
-        async (lastBlockIndexedResult) => {
-          const height = lastBlockIndexedResult._meta.block.number;
-          const block = await fetch(rpcUrl, {
-            method: 'POST',
-            body: JSON.stringify({
-              jsonrpc: '2.0',
-              method: 'eth_getBlockByNumber',
-              params: ['0x' + height.toString(16), false],
-              id: 1,
-            }),
-          }).then((res) => res.json());
+      const lastBlockIndexed = await request<{ _meta: { block: { number: number } } }>(
+        subgraphEndpoint,
+        GET_LAST_INDEXED_BLOCK
+      ).then(async (lastBlockIndexedResult) => {
+        const height = lastBlockIndexedResult._meta.block.number;
+        const block = await fetch(rpcUrl, {
+          method: 'POST',
+          body: JSON.stringify({
+            jsonrpc: '2.0',
+            method: 'eth_getBlockByNumber',
+            params: ['0x' + height.toString(16), false],
+            id: 1,
+          }),
+        }).then((res) => res.json());
 
-          return {
-            height,
-            time: Number(block.result.timestamp),
-          };
-        }
-      );
+        return {
+          height,
+          time: Number(block.result.timestamp),
+        };
+      });
 
       const timeDelay = Number(currentBlock.result.timestamp) - lastBlockIndexed.time;
 

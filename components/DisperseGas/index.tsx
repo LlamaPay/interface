@@ -4,10 +4,10 @@ import { FormDialog, TransactionDialog } from '~/components/Dialog';
 import { useAccount, useNetwork } from 'wagmi';
 import { useNetworkProvider } from '~/hooks';
 import SendToPayees from './SendToPayees';
-import type { IStream } from '~/types';
 import DisperseFallback from './Fallback';
 import { useTranslations } from 'next-intl';
 import { useGetSalaryInfo } from '~/queries/salary/useGetSalaryInfo';
+import type { IFormattedSalaryStream } from '~/types';
 
 function DisperseGasMoney({ dialog }: { dialog: DisclosureState }) {
   const { address, isConnecting } = useAccount();
@@ -24,7 +24,7 @@ function DisperseGasMoney({ dialog }: { dialog: DisclosureState }) {
     if (data && address) {
       const accountAddress = address.toLowerCase();
       const newTable: { [key: string]: string } = {};
-      data?.salaryStreams?.forEach((p: IStream) => {
+      data?.salaryStreams?.forEach((p: IFormattedSalaryStream) => {
         if (accountAddress === p.payerAddress.toLowerCase()) {
           newTable[p.payeeAddress.toLowerCase()] = '0';
         }

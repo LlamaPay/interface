@@ -2,11 +2,11 @@ import { llamaContractABI } from '~/lib/abis/llamaContract';
 import { useTranslations } from 'next-intl';
 import toast from 'react-hot-toast';
 import { useQueryClient } from '@tanstack/react-query';
-import type { IStream } from '~/types';
+import type { IFormattedSalaryStream } from '~/types';
 import { useContractWrite } from 'wagmi';
 
 interface ResumeProps {
-  data: IStream;
+  data: IFormattedSalaryStream;
 }
 
 export function Resume({ data }: ResumeProps) {

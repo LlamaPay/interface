@@ -1,6 +1,6 @@
 import * as React from 'react';
 import Tooltip from '~/components/Tooltip';
-import type { IStream } from '~/types';
+import type { IFormattedSalaryStream } from '~/types';
 import { formatAddress } from '~/utils/address';
 import { useChainExplorer } from '~/hooks';
 
@@ -31,7 +31,7 @@ export const StreamAddress = ({ data }: { data: IStreamAddressProps }) => {
   );
 };
 
-export function streamAddressFormatter(data: IStream): IStreamAddressProps {
+export function streamAddressFormatter(data: IFormattedSalaryStream): IStreamAddressProps {
   if (data.streamType === 'incomingStream') {
     return {
       valueToSort: data.payerEns || data.payerAddress,

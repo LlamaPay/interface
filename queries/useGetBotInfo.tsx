@@ -46,8 +46,8 @@ async function getBotInfo(userAddress: string | null, provider: Provider | null,
         }
       `;
 
-      const froms = (await request(networkDetails[chainId].botSubgraph!, get_from)).schedules;
-      const tos = (await request(networkDetails[chainId].botSubgraph!, get_to)).schedules;
+      const froms = ((await request(networkDetails[chainId].botSubgraph!, get_from)) as any).schedules;
+      const tos = ((await request(networkDetails[chainId].botSubgraph!, get_to)) as any).schedules;
 
       const schedules = froms.concat(tos);
 

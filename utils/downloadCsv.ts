@@ -1,6 +1,6 @@
-import type { IStream, IVesting } from '~/types';
+import type { IFormattedSalaryStream, IVesting } from '~/types';
 import { secondsByDuration } from './constants';
-import type { IHistory } from '~/queries/salary/useGetSalaryInfo';
+import type { ISalaryHistory } from '~/queries/salary/useGetSalaryInfo';
 
 export function download(filename: string, text: string) {
   const element = document.createElement('a');
@@ -16,7 +16,7 @@ export function download(filename: string, text: string) {
 }
 
 export const downloadStreams = (
-  data: IStream[],
+  data: Array<IFormattedSalaryStream>,
   names: {
     id: string;
     shortName: string;
@@ -59,7 +59,7 @@ export const downloadStreams = (
   download('streams.csv', rows.map((r) => r.join(',')).join('\n'));
 };
 
-export const downloadHistory = (data: Array<IHistory>) => {
+export const downloadHistory = (data: Array<ISalaryHistory>) => {
   const rows: Array<Array<string | number>> = [
     ['Address Related', 'Transaction Hash', 'Event Type', 'Amount Per Month/Amount', 'Timestamp'],
   ];
@@ -120,7 +120,7 @@ export const downloadVesting = (data: IVesting[]) => {
 };
 
 export const downloadCustomHistory = (
-  data: IHistory[],
+  data: Array<ISalaryHistory>,
   dateRange: { start: string; end: string },
   eventType: string | null,
   assignedNames: { [key: string]: string }
