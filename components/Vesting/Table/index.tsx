@@ -184,7 +184,7 @@ export default function VestingTable({
       <input
         name="search table"
         placeholder="Search..."
-        className="mb-1 rounded border border-lp-gray-1 bg-lp-white px-3 py-1 slashed-zero placeholder:text-sm placeholder:text-lp-gray-2 dark:border-transparent dark:bg-lp-gray-5"
+        className="max-w-[300px] rounded border border-lp-gray-1 bg-lp-white px-3 py-1 slashed-zero placeholder:text-sm placeholder:text-lp-gray-2 dark:border-transparent dark:bg-lp-gray-5"
         value={tableFilter}
         onChange={(e) => setTableFilter(e.target.value)}
         spellCheck="false"

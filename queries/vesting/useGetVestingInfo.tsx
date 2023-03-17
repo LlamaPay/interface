@@ -263,9 +263,8 @@ async function getVestingInfo({
       }
     }
     return unsortedResults;
-  } catch (error) {
-    console.error(error);
-    return null;
+  } catch (error: any) {
+    throw new Error(error.message || (error?.reason ?? "Couldn't fetch vesting info"));
   }
 }
 
