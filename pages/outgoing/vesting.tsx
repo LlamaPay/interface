@@ -3,7 +3,7 @@ import * as React from 'react';
 import { VestingStreams } from '~/containers/Vesting';
 
 const Home: NextPage = () => {
-  return <VestingStreams isIncoming={true} />;
+  return <VestingStreams />;
 };
 
 export async function getStaticProps(context: GetStaticPropsContext) {

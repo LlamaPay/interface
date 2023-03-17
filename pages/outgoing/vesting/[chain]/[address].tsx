@@ -10,7 +10,7 @@ interface StreamsProps {
 }
 
 const Home: NextPage<StreamsProps> = (props) => {
-  return <VestingStreams isIncoming={true} {...props} />;
+  return <VestingStreams {...props} />;
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query, locale }) => {

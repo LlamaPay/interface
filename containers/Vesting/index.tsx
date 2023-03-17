@@ -6,14 +6,20 @@ import { WalletSelector } from '~/components/Web3';
 import { useIsMounted } from '~/hooks';
 import { Box } from '~/containers/common/Box';
 import { AllIncomeStreams } from './AllIncomeStreams';
-import { useRouter } from 'next/router';
 
-export const VestingStreams = ({ userAddress, chainId }: { userAddress?: string; chainId?: number }) => {
+export const VestingStreams = ({
+  userAddress,
+  chainId,
+  isIncoming,
+}: {
+  userAddress?: string;
+  chainId?: number;
+  isIncoming?: boolean;
+}) => {
   const isMounted = useIsMounted();
   const { address } = useAccount();
   const { chain } = useNetwork();
   const walletDialog = useDialogState();
-  const router = useRouter();
 
   const t = useTranslations('Common');
 
@@ -62,11 +68,7 @@ export const VestingStreams = ({ userAddress, chainId }: { userAddress?: string;
 
   return (
     <Layout className="flex flex-col gap-9">
-      <AllIncomeStreams
-        userAddress={finalAddress}
-        chainId={finalChainId}
-        isIncoming={router.pathname.includes('/incoming') ? true : false}
-      />
+      <AllIncomeStreams userAddress={finalAddress} chainId={finalChainId} isIncoming={isIncoming ? true : false} />
     </Layout>
   );
 };
