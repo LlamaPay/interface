@@ -2,7 +2,7 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Box } from '~/containers/common/Box';
 import { currentYear, daysInMonth, months, yearOptions } from '~/containers/common/date';
-import { SalaryGraphic } from '~/containers/common/Graphics/Salary';
+import { SalaryGraphic } from '~/containers/common/Graphics/IncomingSalary';
 import { useLocale } from '~/hooks';
 import { useGetScheduledPayments } from '~/queries/tokenSalary/useGetScheduledTransfers';
 
@@ -79,7 +79,7 @@ export const TokenSalary = ({ userAddress, chainId }: { userAddress: string; cha
           value={year}
         >
           {yearOptions.map((year) => (
-            <option value={year} key={'token salaries year' + year}>
+            <option value={year} key={'incoming token salaries year' + year}>
               {year}
             </option>
           ))}
@@ -96,11 +96,11 @@ export const TokenSalary = ({ userAddress, chainId }: { userAddress: string; cha
       ) : (
         <div className="flex flex-1 flex-nowrap gap-1 overflow-x-auto p-3">
           {months.map(([id, month]) => (
-            <div key={`token salary ${year} ${id} ${month}`} className="relative flex flex-1 flex-col gap-1">
+            <div key={`incoming token salary ${year} ${id} ${month}`} className="relative flex flex-1 flex-col gap-1">
               <div className="flex flex-1 flex-nowrap gap-[1px]">
                 {new Array(daysInMonth(String(id), String(year))).fill(0).map((_x, day) => (
                   <div
-                    key={`token salaries by month ${id} ${month} ${day + 1} ${year}`}
+                    key={`incoming token salaries by month ${id} ${month} ${day + 1} ${year}`}
                     className="relative flex-1 border border-transparent"
                   >
                     {tags?.[year]?.[id]?.[day + 1] && (

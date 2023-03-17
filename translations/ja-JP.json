@@ -213,14 +213,18 @@
   },
   "Dashboard": {
     "claimableSalary": "請求可能な給与",
+    "salaryExpense": "給与支出",
     "claimableVestedTokens": "請求可能な既得トークン",
+    "vestedTokenExpense": "既得トークン費用",
     "scheduledPayments": "予定された支払い",
     "tokenSalaries": "トークン給与",
     "errorFetchingData": "エラーが発生したため、データを読み込めませんでした",
     "noActiveSalaryStreams": "有効な給与の流れはありません",
     "noActiveVestingStreams": "You have no active vesting streams",
     "noPendingOneTimePayments": "保留中の一括払いはありません",
-    "noPendingTokenSalaries": "保留中のトークン給与はありません"
+    "noPendingTokenSalaries": "保留中のトークン給与はありません",
+    "viewAllStreams": "すべてのストリームを表示",
+    "viewAllVesting": "すべての権利確定を見る"
   },
   "Months": {
     "january": "一月",

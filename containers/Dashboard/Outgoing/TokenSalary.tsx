@@ -2,67 +2,67 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Box } from '~/containers/common/Box';
 import { currentYear, daysInMonth, months, yearOptions } from '~/containers/common/date';
-import { PaymentsGraphic } from '~/containers/common/Graphics/IncomingPayments';
+import { SalaryGraphic } from '~/containers/common/Graphics/OutgoingSalary';
 import { useLocale } from '~/hooks';
-import { useGetPaymentsInfo } from '~/queries/payments/useGetPaymentsInfo';
-import { useMultipleTokenPrices } from '~/queries/useTokenPrice';
+import { useGetScheduledPayments } from '~/queries/tokenSalary/useGetScheduledTransfers';
 
-export const Payments = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
+export const TokenSalary = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
   const t0 = useTranslations('Dashboard');
   const t1 = useTranslations('Months');
   const [year, setYear] = useState(currentYear);
 
-  const { data, isLoading, isError } = useGetPaymentsInfo({ userAddress, chainId });
-
-  const tokens =
-    data?.reduce((acc, curr) => {
-      if (curr.payer !== userAddress.toLowerCase()) {
-        acc.add(curr.tokenAddress.toLowerCase());
-      }
-      return acc;
-    }, new Set<string>()) ?? new Set();
-
-  const { data: tokenPrices, isLoading: isFetchingTokenPrices } = useMultipleTokenPrices({
-    tokens: Array.from(tokens),
-  });
+  const { data, isLoading, isError } = useGetScheduledPayments({ userAddress, chainId });
 
   const tags: { [year: number]: { [month: number]: { [day: number]: number } } } = {};
 
   data?.forEach((item) => {
-    if (item.payer !== userAddress.toLowerCase() && Number(item.release) > Date.now() / 1000 && !item.revoked) {
-      const release = new Date(item.release * 1000);
-      const year = release.getFullYear();
-      const month = release.getMonth();
-      const day = release.getDate();
+    // item.history.forEach((his) => {
+    //   const release = new Date(+his.createdTimestamp * 1000);
+    //   const year = release.getFullYear();
+    //   const month = release.getMonth();
+    //   const day = release.getDate();
 
-      tags[year] = {
-        ...(tags[year] || {}),
-        [month]: {
-          ...(tags[year]?.[month] ?? {}),
-          [day]:
-            (tags[year]?.[month]?.[day] ?? 0) +
-            (item.amount / 10 ** item.tokenDecimals) * (tokenPrices?.[item.tokenAddress]?.price ?? 1),
-        },
-      };
+    //   tags[year] = {
+    //     ...(tags[year] || {}),
+    //     [month]: {
+    //       ...(tags[year]?.[month] ?? {}),
+    //       [day]: (tags[year]?.[month]?.[day] ?? 0) + (+his.usdAmount || 0),
+    //     },
+    //   };
+    // });
+
+    const remainingTxs = (Number(item.ends) - Number(item.lastPaid)) / Number(item.frequency);
+
+    if (remainingTxs > 0) {
+      for (let i = 1; i < remainingTxs && i < 160; i++) {
+        const release = new Date((Number(item.lastPaid) + Number(item.frequency) * i) * 1000);
+        const year = release.getFullYear();
+        const month = release.getMonth();
+        const day = release.getDate();
+
+        tags[year] = {
+          ...(tags[year] || {}),
+          [month]: {
+            ...(tags[year]?.[month] ?? {}),
+            [day]: (tags[year]?.[month]?.[day] ?? 0) + (+item.usdAmount || 0),
+          },
+        };
+      }
     }
   });
 
   const { locale } = useLocale();
 
-  if (isLoading || isFetchingTokenPrices) {
+  if (isLoading) {
     return <Box className="animate-shimmer-2 isolate col-span-full flex min-h-[300px] flex-col gap-3"></Box>;
   }
 
-  if (
-    isError ||
-    data?.filter((x) => x.payer !== userAddress.toLowerCase() && !x.revoked && x.release > Date.now() / 1000)
-      ?.length === 0
-  ) {
+  if (isError || data?.filter((x) => (Number(x.ends) - Number(x.lastPaid)) / Number(x.frequency) > 0)?.length === 0) {
     return (
       <Box className="isolate col-span-full flex min-h-[300px] flex-col items-center justify-center">
-        <PaymentsGraphic />
+        <SalaryGraphic />
         <p className="text-base font-medium text-llama-gray-400 dark:text-llama-gray-300">
-          {isError ? t0('errorFetchingData') : t0('noPendingOneTimePayments')}
+          {isError ? t0('errorFetchingData') : t0('noPendingTokenSalaries')}
         </p>
       </Box>
     );
@@ -71,7 +71,7 @@ export const Payments = ({ userAddress, chainId }: { userAddress: string; chainI
   return (
     <Box className="isolate col-span-full flex min-h-[300px] flex-col gap-3">
       <div className="flex items-center justify-between gap-4">
-        <h1 className="text-sm font-medium text-llama-gray-400 dark:text-llama-gray-300">{t0('scheduledPayments')}</h1>
+        <h1 className="text-sm font-medium text-llama-gray-400 dark:text-llama-gray-300">{t0('tokenSalaries')}</h1>
         <select
           name="year"
           className="border-0 bg-[#FCFFFE] py-0 text-sm font-medium text-llama-gray-400 dark:bg-[#141414] dark:text-llama-gray-300"
@@ -79,7 +79,7 @@ export const Payments = ({ userAddress, chainId }: { userAddress: string; chainI
           value={year}
         >
           {yearOptions.map((year) => (
-            <option value={year} key={'scheduled payments incoming year' + year}>
+            <option value={year} key={'outgoing token salaries year' + year}>
               {year}
             </option>
           ))}
@@ -88,22 +88,19 @@ export const Payments = ({ userAddress, chainId }: { userAddress: string; chainI
 
       {Object.values(tags?.[year] ?? {}).length === 0 ? (
         <div className="flex flex-col items-center justify-center">
-          <PaymentsGraphic />
+          <SalaryGraphic />
           <p className="text-base font-medium text-llama-gray-400 dark:text-llama-gray-300">
-            {t0('noPendingOneTimePayments')}
+            {t0('noPendingTokenSalaries')}
           </p>
         </div>
       ) : (
         <div className="flex flex-1 flex-nowrap gap-1 overflow-x-auto p-3">
           {months.map(([id, month]) => (
-            <div
-              key={`scheduled payment incoming ${year} ${id} ${month}`}
-              className="relative flex flex-1 flex-col gap-1"
-            >
+            <div key={`outgoing token salary ${year} ${id} ${month}`} className="relative flex flex-1 flex-col gap-1">
               <div className="flex flex-1 flex-nowrap gap-[1px]">
                 {new Array(daysInMonth(String(id), String(year))).fill(0).map((_x, day) => (
                   <div
-                    key={`scheduled payments incoming by month ${id} ${month} ${day + 1} ${year}`}
+                    key={`outgoing token salaries by month ${id} ${month} ${day + 1} ${year}`}
                     className="relative flex-1 border border-transparent"
                   >
                     {tags?.[year]?.[id]?.[day + 1] && (
@@ -118,7 +115,7 @@ export const Payments = ({ userAddress, chainId }: { userAddress: string; chainI
                           }, ${year}`}</p>
                           <p className="text-sm font-medium text-black dark:text-white">
                             {tags?.[year]?.[id]?.[day + 1]
-                              ? `$${(tags?.[year]?.[id]?.[day + 1]).toLocaleString(locale, {
+                              ? `$${(tags?.[year]?.[id]?.[day + 1] / 1e8).toLocaleString(locale, {
                                   maximumFractionDigits: 2,
                                 })}`
                               : ''}

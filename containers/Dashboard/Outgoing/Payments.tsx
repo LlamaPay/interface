@@ -2,7 +2,7 @@ import { useTranslations } from 'next-intl';
 import { useState } from 'react';
 import { Box } from '~/containers/common/Box';
 import { currentYear, daysInMonth, months, yearOptions } from '~/containers/common/date';
-import { PaymentsGraphic } from '~/containers/common/Graphics/IncomingPayments';
+import { PaymentsGraphic } from '~/containers/common/Graphics/OutgoingPayments';
 import { useLocale } from '~/hooks';
 import { useGetPaymentsInfo } from '~/queries/payments/useGetPaymentsInfo';
 import { useMultipleTokenPrices } from '~/queries/useTokenPrice';
@@ -16,7 +16,7 @@ export const Payments = ({ userAddress, chainId }: { userAddress: string; chainI
 
   const tokens =
     data?.reduce((acc, curr) => {
-      if (curr.payer !== userAddress.toLowerCase()) {
+      if (curr.payer === userAddress.toLowerCase()) {
         acc.add(curr.tokenAddress.toLowerCase());
       }
       return acc;
@@ -29,7 +29,7 @@ export const Payments = ({ userAddress, chainId }: { userAddress: string; chainI
   const tags: { [year: number]: { [month: number]: { [day: number]: number } } } = {};
 
   data?.forEach((item) => {
-    if (item.payer !== userAddress.toLowerCase() && Number(item.release) > Date.now() / 1000 && !item.revoked) {
+    if (item.payer === userAddress.toLowerCase() && Number(item.release) > Date.now() / 1000 && !item.revoked) {
       const release = new Date(item.release * 1000);
       const year = release.getFullYear();
       const month = release.getMonth();
@@ -55,7 +55,7 @@ export const Payments = ({ userAddress, chainId }: { userAddress: string; chainI
 
   if (
     isError ||
-    data?.filter((x) => x.payer !== userAddress.toLowerCase() && !x.revoked && x.release > Date.now() / 1000)
+    data?.filter((x) => x.payer === userAddress.toLowerCase() && !x.revoked && x.release > Date.now() / 1000)
       ?.length === 0
   ) {
     return (
@@ -79,7 +79,7 @@ export const Payments = ({ userAddress, chainId }: { userAddress: string; chainI
           value={year}
         >
           {yearOptions.map((year) => (
-            <option value={year} key={'scheduled payments incoming year' + year}>
+            <option value={year} key={'scheduled payments outgoing year' + year}>
               {year}
             </option>
           ))}
@@ -97,13 +97,13 @@ export const Payments = ({ userAddress, chainId }: { userAddress: string; chainI
         <div className="flex flex-1 flex-nowrap gap-1 overflow-x-auto p-3">
           {months.map(([id, month]) => (
             <div
-              key={`scheduled payment incoming ${year} ${id} ${month}`}
+              key={`scheduled payment outgoing ${year} ${id} ${month}`}
               className="relative flex flex-1 flex-col gap-1"
             >
               <div className="flex flex-1 flex-nowrap gap-[1px]">
                 {new Array(daysInMonth(String(id), String(year))).fill(0).map((_x, day) => (
                   <div
-                    key={`scheduled payments incoming by month ${id} ${month} ${day + 1} ${year}`}
+                    key={`scheduled payments outgoing by month ${id} ${month} ${day + 1} ${year}`}
                     className="relative flex-1 border border-transparent"
                   >
                     {tags?.[year]?.[id]?.[day + 1] && (

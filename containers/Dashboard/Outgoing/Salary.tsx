@@ -6,7 +6,7 @@ import { useMultipleTokenPrices } from '~/queries/useTokenPrice';
 import { formatBalance } from '~/utils/amount';
 import { Box } from '~/containers/common/Box';
 import { pieChartBreakDown } from '~/containers/common/pieChartBreakdown';
-import { SalaryGraphic } from '~/containers/common/Graphics/IncomingSalary';
+import { SalaryGraphic } from '~/containers/common/Graphics/OutgoingSalary';
 import { useLocale } from '~/hooks';
 import { networkDetails } from '~/lib/networkDetails';
 import Link from 'next/link';
@@ -17,7 +17,7 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
 
   const tokens =
     data?.reduce((acc, curr) => {
-      if (curr.payerAddress !== userAddress.toLowerCase()) {
+      if (curr.payerAddress === userAddress.toLowerCase()) {
         acc.add(curr.token.address.toLowerCase());
       }
       return acc;
@@ -41,7 +41,7 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
           '$' +
           formatBalance(
             data.reduce((acc, curr) => {
-              if (curr.payerAddress !== userAddress.toLowerCase()) {
+              if (curr.payerAddress === userAddress.toLowerCase()) {
                 acc +=
                   (tokenPrices[curr.token.address]?.price ?? 1) *
                   Number(
@@ -56,6 +56,7 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
                     ).toFixed(4)
                   );
               }
+
               return acc;
             }, 0),
             intl,
@@ -72,7 +73,7 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
     return <Box className="animate-shimmer-2 flex flex-col items-center justify-center"></Box>;
   }
 
-  if (isError || !data || data.filter((x) => x.payerAddress !== userAddress.toLowerCase())?.length === 0) {
+  if (isError || !data || data.filter((x) => x.payerAddress === userAddress.toLowerCase())?.length === 0) {
     return (
       <Box className="flex flex-col items-center justify-center">
         <SalaryGraphic />
@@ -85,8 +86,8 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
 
   const withdrawables = Object.entries(
     data?.reduce((acc, curr) => {
-      if (curr.payerAddress !== userAddress.toLowerCase() && Number(curr.withdrawableAmount) > 0) {
-        acc[`incoming+${curr.payerAddress}+${curr.contract}+${curr.token.address}+${curr.token.symbol}`] = (
+      if (curr.payerAddress === userAddress.toLowerCase() && Number(curr.withdrawableAmount) > 0) {
+        acc[`outgoing+${curr.payerAddress}+${curr.contract}+${curr.token.address}+${curr.token.symbol}`] = (
           Number(curr.withdrawableAmount) /
           10 ** curr.token.decimals
         ).toLocaleString(locale, { maximumFractionDigits: 2 });
@@ -127,7 +128,7 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
           ></div>
 
           <div className="flex flex-1 flex-shrink-0 flex-col gap-4">
-            <h1 className="text-sm font-medium text-llama-gray-400 dark:text-llama-gray-300">{t('claimableSalary')}</h1>
+            <h1 className="text-sm font-medium text-llama-gray-400 dark:text-llama-gray-300">{t('salaryExpense')}</h1>
 
             <ul className="w-full">
               {withdrawables.map((withdrawable) => (
@@ -149,7 +150,7 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
             </ul>
 
             <Link
-              href="/incoming/salary"
+              href="/outgoing/salary"
               className="rounded-lg border border-opacity-10 py-2 px-4 text-center text-sm font-semibold text-llama-gray-900 shadow-[0px_2px_5px_rgba(48,61,49,0.06)] backdrop-blur-[20px] dark:border-lp-gray-7 dark:text-white"
             >
               {t('viewAllStreams')}
@@ -163,7 +164,7 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
             className="font-exo -my-2 w-full overflow-hidden text-ellipsis whitespace-nowrap text-center text-[4rem] font-extrabold slashed-zero tabular-nums text-llama-green-400 dark:text-llama-green-500"
             ref={totalClaimableRef}
           ></p>
-          <h1 className="text-base font-medium text-llama-gray-400 dark:text-llama-gray-300">{t('claimableSalary')}</h1>
+          <h1 className="text-base font-medium text-llama-gray-400 dark:text-llama-gray-300">{t('salaryExpense')}</h1>
         </>
       )}
     </Box>

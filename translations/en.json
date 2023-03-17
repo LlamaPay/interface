@@ -213,14 +213,18 @@
   },
   "Dashboard": {
     "claimableSalary": "Claimable Salary",
+    "salaryExpense": "Salary Expense",
     "claimableVestedTokens": "Claimable Vested Tokens",
+    "vestedTokenExpense": "Vested Token Expense",
     "scheduledPayments": "Scheduled Payments",
     "tokenSalaries": "Token Salaries",
     "errorFetchingData": "Something went wrong, couldn't load data",
     "noActiveSalaryStreams": "You have no active salary streams",
     "noActiveVestingStreams": "You have no active vesting streams",
     "noPendingOneTimePayments": "You have no pending one-time payments",
-    "noPendingTokenSalaries": "You have no pending token salaries"
+    "noPendingTokenSalaries": "You have no pending token salaries",
+    "viewAllStreams": "View All Streams",
+    "viewAllVesting": "View All Vesting"
   },
   "Months": {
     "january": "January",

@@ -6,9 +6,10 @@ import { useGetVestingInfoByQueryParams } from '~/queries/vesting/useGetVestingI
 import { formatBalance } from '~/utils/amount';
 import { Box } from '~/containers/common/Box';
 import { pieChartBreakDown } from '~/containers/common/pieChartBreakdown';
-import { VestingGraphic } from '~/containers/common/Graphics/Vesting';
+import { VestingGraphic } from '~/containers/common/Graphics/IncomingVesting';
 import { useLocale } from '~/hooks';
 import { networkDetails } from '~/lib/networkDetails';
+import Link from 'next/link';
 
 export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
   const [displayAltView, setDisplayAltView] = useState(false);
@@ -42,9 +43,7 @@ export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId
           '$' +
           formatBalance(
             withdrawables.reduce((acc, curr) => {
-              if (curr.admin === userAddress.toLowerCase()) {
-                return acc;
-              } else {
+              if (curr.admin !== userAddress.toLowerCase()) {
                 acc +=
                   (tokenPrices[curr.token]?.price ?? 1) *
                   Number(
@@ -61,9 +60,9 @@ export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId
                       }) || 0
                     ).toFixed(4)
                   );
-
-                return acc;
               }
+
+              return acc;
             }, 0),
             intl,
             2
@@ -93,7 +92,7 @@ export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId
   const withdrawables = Object.entries(
     data?.reduce((acc, curr) => {
       if (curr.admin !== userAddress.toLowerCase() && curr.unclaimed && curr.unclaimed !== '0') {
-        acc[`${curr.admin}+${curr.contract}+${curr.token}+${curr.tokenSymbol}`] = (
+        acc[`incoming+${curr.admin}+${curr.contract}+${curr.token}+${curr.tokenSymbol}`] = (
           Number(curr.unclaimed) /
           10 ** curr.tokenDecimals
         ).toLocaleString(locale, { maximumFractionDigits: 2 });
@@ -102,8 +101,6 @@ export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId
       return acc;
     }, {} as { [key: string]: string })
   );
-
-  console.log(data);
 
   return (
     <Box
@@ -122,8 +119,10 @@ export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId
       onFocus={() => {
         setDisplayAltView(true);
       }}
-      onBlur={() => {
-        setDisplayAltView(false);
+      onBlur={(e) => {
+        if (!e.currentTarget.contains(e.relatedTarget)) {
+          setDisplayAltView(false);
+        }
       }}
     >
       {displayAltView ? (
@@ -145,18 +144,25 @@ export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId
                     <a
                       target="_blank"
                       rel="noreferrer noopener"
-                      href={`${explorerLink}/address/${withdrawable[0].split('+')[2]}`}
+                      href={`${explorerLink}/address/${withdrawable[0].split('+')[3]}`}
                     >
-                      {withdrawable[0].split('+')[3]}
+                      {withdrawable[0].split('+')[4]}
                     </a>
                   ) : (
-                    <span>{withdrawable[0].split('+')[3]}</span>
+                    <span>{withdrawable[0].split('+')[4]}</span>
                   )}
 
                   <span>{withdrawable[1]}</span>
                 </li>
               ))}
             </ul>
+
+            <Link
+              href="/incoming/vesting"
+              className="rounded-lg border border-opacity-10 py-2 px-4 text-center text-sm font-semibold text-llama-gray-900 shadow-[0px_2px_5px_rgba(48,61,49,0.06)] dark:border-lp-gray-7 dark:text-white"
+            >
+              {t('viewAllVesting')}
+            </Link>
           </div>
         </>
       ) : (

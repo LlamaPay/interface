@@ -213,14 +213,18 @@
   },
   "Dashboard": {
     "claimableSalary": "Salario reclamable",
+    "salaryExpense": "Gasto Salarial",
     "claimableVestedTokens": "Tokens adquiridos reclamables",
+    "vestedTokenExpense": "Gasto de token adquirido",
     "scheduledPayments": "Pagos programados",
     "tokenSalaries": "Salarios simbólicos",
     "errorFetchingData": "Algo salió mal, no se pudieron cargar los datos",
     "noActiveSalaryStreams": "No tiene transmisión salariales activos",
     "noActiveVestingStreams": "No tiene transmisión de adquisición de derechos activos",
     "noPendingOneTimePayments": "No tienes pagos únicos pendientes",
-    "noPendingTokenSalaries": "No tienes sueldos token pendientes"
+    "noPendingTokenSalaries": "No tienes sueldos token pendientes",
+    "viewAllStreams": "Ver todas las transmisiones",
+    "viewAllVesting": "Mostrar todas las adquisiciones"
   },
   "Months": {
     "january": "Enero",

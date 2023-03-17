@@ -213,14 +213,18 @@
   },
   "Dashboard": {
     "claimableSalary": "Απαιτούμενος μισθός",
+    "salaryExpense": "Έξοδα μισθού",
     "claimableVestedTokens": "Υποχρεωτικά Δικαιώματα με αξίωση",
+    "vestedTokenExpense": "Κατοχυρωμένες Δαπάνες",
     "scheduledPayments": "Προγραμματισμένες πληρωμές",
     "tokenSalaries": "Συμβολικοί μισθοί",
     "errorFetchingData": "Κάτι πήγε στραβά, δεν ήταν δυνατή η φόρτωση των δεδομένων",
     "noActiveSalaryStreams": "Δεν έχετε ενεργές ροές μισθών",
     "noActiveVestingStreams": "Δεν έχετε ενεργές ροές κατοχύρωσης",
     "noPendingOneTimePayments": "Δεν έχετε εκκρεμείς εφάπαξ πληρωμές",
-    "noPendingTokenSalaries": "Δεν έχετε συμβολικούς μισθούς σε εκκρεμότητα"
+    "noPendingTokenSalaries": "Δεν έχετε συμβολικούς μισθούς σε εκκρεμότητα",
+    "viewAllStreams": "Προβολή όλων των ροών",
+    "viewAllVesting": "Εμφάνιση όλων των αποκτήσεων"
   },
   "Months": {
     "january": "Ιανουάριος",

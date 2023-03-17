@@ -1,24 +1,24 @@
 import { useIntl, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
-import { salaryWithdrawableAmtFormatter } from '~/components/Stream/Table/CustomValues';
-import { useGetSalaryInfo } from '~/queries/salary/useGetSalaryInfo';
+import { vestingWithdrawableAmtFormatter } from '~/components/Vesting/Table/CustomValues/Unclaimed';
 import { useMultipleTokenPrices } from '~/queries/useTokenPrice';
+import { useGetVestingInfoByQueryParams } from '~/queries/vesting/useGetVestingInfo';
 import { formatBalance } from '~/utils/amount';
 import { Box } from '~/containers/common/Box';
 import { pieChartBreakDown } from '~/containers/common/pieChartBreakdown';
-import { SalaryGraphic } from '~/containers/common/Graphics/IncomingSalary';
+import { VestingGraphic } from '~/containers/common/Graphics/OutgoingVesting';
 import { useLocale } from '~/hooks';
 import { networkDetails } from '~/lib/networkDetails';
 import Link from 'next/link';
 
-export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
+export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
   const [displayAltView, setDisplayAltView] = useState(false);
-  const { data, isLoading, isError } = useGetSalaryInfo({ userAddress, chainId });
+  const { data, isLoading, isError } = useGetVestingInfoByQueryParams({ userAddress, chainId });
 
   const tokens =
     data?.reduce((acc, curr) => {
-      if (curr.payerAddress !== userAddress.toLowerCase()) {
-        acc.add(curr.token.address.toLowerCase());
+      if (curr.admin === userAddress.toLowerCase()) {
+        acc.add(curr.token.toLowerCase());
       }
       return acc;
     }, new Set<string>()) ?? new Set();
@@ -35,27 +35,33 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
   const explorerLink = networkDetails[chainId]?.blockExplorerURL ?? null;
 
   useEffect(() => {
+    const withdrawables = data ?? [];
+
     const id = setInterval(() => {
       if (data && totalClaimableRef.current) {
         totalClaimableRef.current.textContent =
           '$' +
           formatBalance(
-            data.reduce((acc, curr) => {
-              if (curr.payerAddress !== userAddress.toLowerCase()) {
+            withdrawables.reduce((acc, curr) => {
+              if (curr.admin === userAddress.toLowerCase()) {
                 acc +=
-                  (tokenPrices[curr.token.address]?.price ?? 1) *
+                  (tokenPrices[curr.token]?.price ?? 1) *
                   Number(
                     (
-                      salaryWithdrawableAmtFormatter({
-                        amountPerSec: curr.amountPerSec,
-                        decimals: curr.token.decimals,
-                        withdrawableAmount: curr.withdrawableAmount as any,
-                        owed: curr.owed as any,
-                        lastUpdate: curr.lastUpdate as any,
+                      vestingWithdrawableAmtFormatter({
+                        disabledAt: curr.disabledAt,
+                        tokenDecimals: curr.tokenDecimals,
+                        unclaimed: curr.unclaimed,
+                        totalLocked: curr.totalLocked,
+                        startTime: curr.startTime,
+                        endTime: curr.endTime,
+                        cliffLength: curr.cliffLength,
+                        timestamp: curr.timestamp,
                       }) || 0
                     ).toFixed(4)
                   );
               }
+
               return acc;
             }, 0),
             intl,
@@ -66,18 +72,18 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
 
     // clear interval when component unmounts
     return () => clearInterval(id);
-  }, [data, userAddress, tokenPrices, intl]);
+  }, [data, tokenPrices, userAddress, intl]);
 
   if (isLoading || isFetchingTokenPrices) {
     return <Box className="animate-shimmer-2 flex flex-col items-center justify-center"></Box>;
   }
 
-  if (isError || !data || data.filter((x) => x.payerAddress !== userAddress.toLowerCase())?.length === 0) {
+  if (isError || !data || data.filter((x) => x.admin === userAddress.toLowerCase())?.length === 0) {
     return (
       <Box className="flex flex-col items-center justify-center">
-        <SalaryGraphic />
+        <VestingGraphic />
         <p className="text-base font-medium text-llama-gray-400 dark:text-llama-gray-300">
-          {isError ? t('errorFetchingData') : t('noActiveSalaryStreams')}
+          {isError ? t('errorFetchingData') : t('noActiveVestingStreams')}
         </p>
       </Box>
     );
@@ -85,10 +91,10 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
 
   const withdrawables = Object.entries(
     data?.reduce((acc, curr) => {
-      if (curr.payerAddress !== userAddress.toLowerCase() && Number(curr.withdrawableAmount) > 0) {
-        acc[`incoming+${curr.payerAddress}+${curr.contract}+${curr.token.address}+${curr.token.symbol}`] = (
-          Number(curr.withdrawableAmount) /
-          10 ** curr.token.decimals
+      if (curr.admin === userAddress.toLowerCase() && curr.unclaimed && curr.unclaimed !== '0') {
+        acc[`outgoing+${curr.admin}+${curr.contract}+${curr.token}+${curr.tokenSymbol}`] = (
+          Number(curr.unclaimed) /
+          10 ** curr.tokenDecimals
         ).toLocaleString(locale, { maximumFractionDigits: 2 });
       }
 
@@ -127,7 +133,9 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
           ></div>
 
           <div className="flex flex-1 flex-shrink-0 flex-col gap-4">
-            <h1 className="text-sm font-medium text-llama-gray-400 dark:text-llama-gray-300">{t('claimableSalary')}</h1>
+            <h1 className="text-sm font-medium text-llama-gray-400 dark:text-llama-gray-300">
+              {t('vestedTokenExpense')}
+            </h1>
 
             <ul className="w-full">
               {withdrawables.map((withdrawable) => (
@@ -143,27 +151,32 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
                   ) : (
                     <span>{withdrawable[0].split('+')[4]}</span>
                   )}
+
                   <span>{withdrawable[1]}</span>
                 </li>
               ))}
             </ul>
 
             <Link
-              href="/incoming/salary"
-              className="rounded-lg border border-opacity-10 py-2 px-4 text-center text-sm font-semibold text-llama-gray-900 shadow-[0px_2px_5px_rgba(48,61,49,0.06)] backdrop-blur-[20px] dark:border-lp-gray-7 dark:text-white"
+              href="/outgoing/vesting"
+              className="rounded-lg border border-opacity-10 py-2 px-4 text-center text-sm font-semibold text-llama-gray-900 shadow-[0px_2px_5px_rgba(48,61,49,0.06)] dark:border-lp-gray-7 dark:text-white"
             >
-              {t('viewAllStreams')}
+              {t('viewAllVesting')}
             </Link>
           </div>
         </>
       ) : (
         <>
           <div className={`h-16 w-16 rounded-full`} style={{ background: pieChartBreakDown(tokenPrices) }}></div>
+
           <p
             className="font-exo -my-2 w-full overflow-hidden text-ellipsis whitespace-nowrap text-center text-[4rem] font-extrabold slashed-zero tabular-nums text-llama-green-400 dark:text-llama-green-500"
             ref={totalClaimableRef}
           ></p>
-          <h1 className="text-base font-medium text-llama-gray-400 dark:text-llama-gray-300">{t('claimableSalary')}</h1>
+
+          <h1 className="text-base font-medium text-llama-gray-400 dark:text-llama-gray-300">
+            {t('vestedTokenExpense')}
+          </h1>
         </>
       )}
     </Box>
