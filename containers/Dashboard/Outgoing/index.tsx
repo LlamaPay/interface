@@ -19,8 +19,8 @@ export const OutgoingDashboard = ({ userAddress, chainId }: { userAddress?: stri
 
   if (!isMounted) {
     return (
-      <Layout className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <Box className="col-span-full min-h-[928px]"></Box>
+      <Layout>
+        <Box className="grid min-h-[calc(100vh-147px)] items-center"></Box>
       </Layout>
     );
   }
@@ -30,8 +30,8 @@ export const OutgoingDashboard = ({ userAddress, chainId }: { userAddress?: stri
 
   if (!finalAddress) {
     return (
-      <Layout className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <Box className="col-span-full grid min-h-[928px] items-center">
+      <Layout>
+        <Box className="grid min-h-[calc(100vh-147px)] items-center">
           <button
             className="mx-auto w-fit rounded-lg border py-2 px-4 dark:border-lp-gray-7"
             onClick={walletDialog.toggle}
@@ -46,8 +46,8 @@ export const OutgoingDashboard = ({ userAddress, chainId }: { userAddress?: stri
 
   if (!finalChainId) {
     return (
-      <Layout className="grid grid-cols-1 gap-6 md:grid-cols-2">
-        <Box className="col-span-full grid min-h-[928px] items-center">
+      <Layout>
+        <Box className="grid min-h-[calc(100vh-147px)] items-center">
           <button
             className="mx-auto w-fit rounded-lg border py-2 px-4 dark:border-lp-gray-7"
             onClick={walletDialog.toggle}
