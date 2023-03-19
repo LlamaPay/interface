@@ -383,7 +383,7 @@ const Tier = ({
 }) => {
   const [isConfirming, setIsConfirming] = React.useState(false);
 
-  const isDisabled = data.disabledAt && data.disabledAt !== '0';
+  const isDisabled = data.disabled;
 
   const {
     data: tierIndex,

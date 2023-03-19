@@ -34,7 +34,7 @@ export interface ITier {
   id: string;
   token: IToken;
   costPerPeriod: string;
-  disabledAt: string;
+  disabled: boolean;
   tierId: string;
   refundableSubs: Array<{ id: string }>;
 }
@@ -172,7 +172,7 @@ const fetchSubscriptionContracts = async ({
                 symbol
               }
               costPerPeriod
-              disabledAt
+              disabled
               tierId
               refundableSubs(where: {expires_gt: "${Math.floor(Date.now() / 1000)}"}) {
                 id
@@ -290,7 +290,6 @@ export async function fetchSubscriptionContract({
           tier (id: "${contractId.toLowerCase()}") {
             id
             costPerPeriod
-            disabledAt
             token {
               symbol
               name
@@ -400,7 +399,7 @@ async function fetchSubberSubscriptionContracts({
               id
               tier {
                 costPerPeriod
-                disabledAt
+                
                 tierId
                 token {
                   address

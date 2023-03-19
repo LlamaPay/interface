@@ -1,4 +1,9 @@
 export const nonRefundableSubscriptionABI = [
+  {
+    inputs: [{ internalType: 'address', name: '_feeCollector', type: 'address' }],
+    stateMutability: 'nonpayable',
+    type: 'constructor',
+  },
   { inputs: [], name: 'INVALID_SUB', type: 'error' },
   { inputs: [], name: 'NOT_OWNER', type: 'error' },
   { inputs: [], name: 'NOT_OWNER_OR_WHITELISTED', type: 'error' },
@@ -184,6 +189,13 @@ export const nonRefundableSubscriptionABI = [
     name: 'extend',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'feeCollector',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
     type: 'function',
   },
   {

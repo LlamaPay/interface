@@ -12,11 +12,11 @@ export const subscriptionsFactoryABI = [
     inputs: [
       { indexed: false, internalType: 'address', name: 'deployedContract', type: 'address' },
       { indexed: true, internalType: 'address', name: 'owner', type: 'address' },
-      { indexed: false, internalType: 'uint256', name: 'currentPeriod', type: 'uint256' },
-      { indexed: false, internalType: 'uint256', name: 'periodDuration', type: 'uint256' },
+      { indexed: false, internalType: 'uint128', name: 'currentPeriod', type: 'uint128' },
+      { indexed: false, internalType: 'uint128', name: 'periodDuration', type: 'uint128' },
       {
         components: [
-          { internalType: 'uint224', name: 'costPerPeriod', type: 'uint224' },
+          { internalType: 'uint216', name: 'costPerPeriod', type: 'uint216' },
           { internalType: 'address', name: 'token', type: 'address' },
         ],
         indexed: false,
@@ -50,11 +50,11 @@ export const subscriptionsFactoryABI = [
   },
   {
     inputs: [
-      { internalType: 'uint256', name: '_currentPeriod', type: 'uint256' },
-      { internalType: 'uint256', name: '_periodDuration', type: 'uint256' },
+      { internalType: 'uint128', name: '_currentPeriod', type: 'uint128' },
+      { internalType: 'uint128', name: '_periodDuration', type: 'uint128' },
       {
         components: [
-          { internalType: 'uint224', name: 'costPerPeriod', type: 'uint224' },
+          { internalType: 'uint216', name: 'costPerPeriod', type: 'uint216' },
           { internalType: 'address', name: 'token', type: 'address' },
         ],
         internalType: 'struct LlamaSubsFlatRateERC20.TierInfo[]',

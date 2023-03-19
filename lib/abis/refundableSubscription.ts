@@ -1,17 +1,21 @@
 export const refundableSubscriptionABI = [
+  {
+    inputs: [{ internalType: 'address', name: '_feeCollector', type: 'address' }],
+    stateMutability: 'nonpayable',
+    type: 'constructor',
+  },
   { inputs: [], name: 'CURRENT_PERIOD_IN_FUTURE', type: 'error' },
   { inputs: [], name: 'INVALID_TIER', type: 'error' },
   { inputs: [], name: 'NOT_OWNER', type: 'error' },
   { inputs: [], name: 'NOT_OWNER_OR_WHITELISTED', type: 'error' },
-  { inputs: [], name: 'SUB_ALREADY_EXISTS', type: 'error' },
+  { inputs: [], name: 'PERIOD_TOO_HIGH', type: 'error' },
   { inputs: [], name: 'SUB_DOES_NOT_EXIST', type: 'error' },
-  { inputs: [], name: 'WRONG_TIER', type: 'error' },
   {
     anonymous: false,
     inputs: [
       { indexed: false, internalType: 'uint256', name: 'tierNumber', type: 'uint256' },
       { indexed: false, internalType: 'address', name: 'token', type: 'address' },
-      { indexed: false, internalType: 'uint224', name: 'costPerPeriod', type: 'uint224' },
+      { indexed: false, internalType: 'uint216', name: 'costPerPeriod', type: 'uint216' },
     ],
     name: 'AddTier',
     type: 'event',
@@ -63,10 +67,7 @@ export const refundableSubscriptionABI = [
   },
   {
     anonymous: false,
-    inputs: [
-      { indexed: false, internalType: 'uint256', name: 'tierNumber', type: 'uint256' },
-      { indexed: false, internalType: 'uint256', name: 'disabledAt', type: 'uint256' },
-    ],
+    inputs: [{ indexed: false, internalType: 'uint256', name: 'tierNumber', type: 'uint256' }],
     name: 'RemoveTier',
     type: 'event',
   },
@@ -134,17 +135,10 @@ export const refundableSubscriptionABI = [
     type: 'event',
   },
   {
-    inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    name: 'activeTiers',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
-    stateMutability: 'view',
-    type: 'function',
-  },
-  {
     inputs: [
       {
         components: [
-          { internalType: 'uint224', name: 'costPerPeriod', type: 'uint224' },
+          { internalType: 'uint216', name: 'costPerPeriod', type: 'uint216' },
           { internalType: 'address', name: 'token', type: 'address' },
         ],
         internalType: 'struct LlamaSubsFlatRateERC20.TierInfo[]',
@@ -188,6 +182,7 @@ export const refundableSubscriptionABI = [
     inputs: [
       { internalType: 'uint256', name: '_amount', type: 'uint256' },
       { internalType: 'address', name: 'token', type: 'address' },
+      { internalType: 'uint256[]', name: '_tiers', type: 'uint256[]' },
     ],
     name: 'claim',
     outputs: [],
@@ -195,7 +190,10 @@ export const refundableSubscriptionABI = [
     type: 'function',
   },
   {
-    inputs: [{ internalType: 'address', name: '_token', type: 'address' }],
+    inputs: [
+      { internalType: 'address', name: '_token', type: 'address' },
+      { internalType: 'uint256[]', name: '_tiers', type: 'uint256[]' },
+    ],
     name: 'claimableNow',
     outputs: [{ internalType: 'uint256', name: 'claimable', type: 'uint256' }],
     stateMutability: 'view',
@@ -211,7 +209,7 @@ export const refundableSubscriptionABI = [
   {
     inputs: [],
     name: 'currentPeriod',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    outputs: [{ internalType: 'uint128', name: '', type: 'uint128' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -226,10 +224,18 @@ export const refundableSubscriptionABI = [
     inputs: [
       { internalType: 'uint256', name: '_id', type: 'uint256' },
       { internalType: 'uint256', name: '_durations', type: 'uint256' },
+      { internalType: 'address', name: '_owner', type: 'address' },
     ],
     name: 'extend',
     outputs: [],
     stateMutability: 'nonpayable',
+    type: 'function',
+  },
+  {
+    inputs: [],
+    name: 'feeCollector',
+    outputs: [{ internalType: 'address', name: '', type: 'address' }],
+    stateMutability: 'view',
     type: 'function',
   },
   {
@@ -242,11 +248,11 @@ export const refundableSubscriptionABI = [
   {
     inputs: [
       { internalType: 'address', name: '_owner', type: 'address' },
-      { internalType: 'uint256', name: '_currentPeriod', type: 'uint256' },
-      { internalType: 'uint256', name: '_periodDuration', type: 'uint256' },
+      { internalType: 'uint128', name: '_currentPeriod', type: 'uint128' },
+      { internalType: 'uint128', name: '_periodDuration', type: 'uint128' },
       {
         components: [
-          { internalType: 'uint224', name: 'costPerPeriod', type: 'uint224' },
+          { internalType: 'uint216', name: 'costPerPeriod', type: 'uint216' },
           { internalType: 'address', name: 'token', type: 'address' },
         ],
         internalType: 'struct LlamaSubsFlatRateERC20.TierInfo[]',
@@ -270,9 +276,9 @@ export const refundableSubscriptionABI = [
     type: 'function',
   },
   {
-    inputs: [],
-    name: 'numOfTiers',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    inputs: [{ internalType: 'address', name: '', type: 'address' }],
+    name: 'nonces',
+    outputs: [{ internalType: 'uint24', name: '', type: 'uint24' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -286,7 +292,7 @@ export const refundableSubscriptionABI = [
   {
     inputs: [],
     name: 'periodDuration',
-    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    outputs: [{ internalType: 'uint128', name: '', type: 'uint128' }],
     stateMutability: 'view',
     type: 'function',
   },
@@ -369,12 +375,20 @@ export const refundableSubscriptionABI = [
     type: 'function',
   },
   {
+    inputs: [],
+    name: 'tierNumber',
+    outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function',
+  },
+  {
     inputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
     name: 'tiers',
     outputs: [
-      { internalType: 'uint224', name: 'costPerPeriod', type: 'uint224' },
+      { internalType: 'uint216', name: 'costPerPeriod', type: 'uint216' },
+      { internalType: 'uint40', name: 'lastUpdated', type: 'uint40' },
       { internalType: 'uint88', name: 'amountOfSubs', type: 'uint88' },
-      { internalType: 'uint40', name: 'disabledAt', type: 'uint40' },
+      { internalType: 'bool', name: 'disabled', type: 'bool' },
       { internalType: 'address', name: 'token', type: 'address' },
     ],
     stateMutability: 'view',

@@ -88,7 +88,7 @@ const Tier = ({
   });
 
   const timeLeftInCurrentPeriod =
-    data && data.disabledAt === '0' && currentPeriod
+    data && !data.disabled && currentPeriod
       ? Math.round((+currentPeriod.toString() * 1000 - Date.now()) / 1000) / +data.refundableContract.periodDuation
       : null;
 
@@ -320,7 +320,7 @@ const Tier = ({
           />
         </label>
 
-        {data.disabledAt && data.disabledAt !== '0' ? (
+        {data.disabled ? (
           <button
             className="mx-auto w-full cursor-not-allowed rounded border border-lp-gray-2 bg-lp-gray-1 bg-opacity-20 py-2 px-4 text-center text-sm dark:bg-lp-gray-5"
             type="button"
