@@ -532,8 +532,8 @@ const ClaimableBalance = ({
     if (writeAsync) {
       writeAsync({
         recklesslySetUnpreparedArgs: [
-          new BigNumber(form.amount.value).times(10 ** token.decimals).toFixed(0, 1),
           token.address,
+          new BigNumber(form.amount.value).times(10 ** token.decimals).toFixed(0, 1),
         ],
       })
         .then((data) => {
