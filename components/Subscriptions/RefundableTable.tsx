@@ -129,6 +129,7 @@ const Contract = ({ data, userAddress }: { data: IRefundable; userAddress: strin
                       contractAddress={data.address}
                       chainId={chain?.id}
                       explorerUrl={explorerUrl}
+                      tiers={data.tiers}
                     />
                   ))}
                 </tbody>
@@ -502,11 +503,13 @@ const ClaimableBalance = ({
   contractAddress,
   chainId,
   explorerUrl,
+  tiers,
 }: {
   token: { address: string; symbol: string; decimals: number };
   contractAddress: string;
   chainId?: number;
   explorerUrl?: string | null;
+  tiers: ITier[];
 }) => {
   const [isConfirming, setIsConfirming] = React.useState(false);
 
@@ -553,6 +556,9 @@ const ClaimableBalance = ({
         recklesslySetUnpreparedArgs: [
           new BigNumber(form.amount.value).times(10 ** token.decimals).toFixed(0, 1),
           token.address,
+          tiers.map((x: ITier) => {
+            return x.tierId;
+          }),
         ],
       })
         .then((data) => {
