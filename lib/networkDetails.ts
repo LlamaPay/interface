@@ -56,7 +56,6 @@ export const networkDetails: INetworkDetails = {
     prefix: 'avax',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchex/info/logo.png',
     vestingFactory: CONTRACTS.VESTING_FACTORY_FUJI,
-    vestingReason: '0x0000000000000000000000000000000000000000',
     subscriptionsFactory: CONTRACTS.SUBSCRIPTIONS_FACTORY_FUJI,
     subscriptionsSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamasubs-fuji',
   },
