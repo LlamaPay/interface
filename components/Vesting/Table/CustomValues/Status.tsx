@@ -29,7 +29,11 @@ function getDate(data: IVesting, intl: any) {
 
 export function getStatus(data: IVesting, locale: string) {
   if (Number(data.disabledAt) <= Date.now() / 1e3) {
-    return `Vesting Stopped by Admin`;
+    if (data.disabledAt === data.endTime) {
+      return `Vesting Ended`;
+    } else {
+      return `Vesting Stopped by Admin`;
+    }
   } else if (Date.now() / 1e3 < Number(data.startTime) + Number(data.cliffLength)) {
     const tilStart = ((Number(data.startTime) + Number(data.cliffLength) - Date.now() / 1e3) / 86400).toFixed(2);
     return `Vesting Starts in ${tilStart} Days`;

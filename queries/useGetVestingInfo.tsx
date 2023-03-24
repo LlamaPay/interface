@@ -1,7 +1,7 @@
 import type { Provider } from '~/utils/contract';
 import BigNumber from 'bignumber.js';
 import { ContractCallContext, Multicall } from 'ethereum-multicall';
-import { ContractInterface, ethers } from 'ethers';
+import { ethers } from 'ethers';
 import { useNetworkProvider } from '~/hooks';
 import { useQuery } from '@tanstack/react-query';
 import type { IVesting } from '~/types';
@@ -11,7 +11,6 @@ import { gql, request } from 'graphql-request';
 import { vestingFactoryABI } from '~/lib/abis/vestingFactory';
 import { vestingReasonsABI } from '~/lib/abis/vestingReasons';
 import vestingEscrowABI from '~/lib/abis/vestingEscrow';
-import { getAddress } from 'ethers/lib/utils';
 
 const vestingEscrowCalls = [
   { reference: 'unclaimed', methodName: 'unclaimed', methodParameters: [] },
@@ -27,7 +26,7 @@ const vestingEscrowCalls = [
   { reference: 'disabled_at', methodName: 'disabled_at', methodParameters: [] },
 ];
 
-const escrowCallsSubgraph = [
+const vestingEscrowCallsSubgraph = [
   { reference: 'unclaimed', methodName: 'unclaimed', methodParameters: [] },
   { reference: 'locked', methodName: 'locked', methodParameters: [] },
   { reference: 'totalClaimed', methodName: 'total_claimed', methodParameters: [] },
@@ -37,6 +36,7 @@ const escrowCallsSubgraph = [
 const subgraphs: { [key: number]: string } = {
   1: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-vesting-mainnet',
   5: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-vesting-goerli',
+  42161: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-vesting-arbitrum',
 };
 
 const multicalls: { [key: number]: string } = {
@@ -49,7 +49,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
     if (!provider) throw new Error('No provider');
     if (!userAddress) throw new Error('No account');
     if (!chainId) throw new Error('No Chain ID');
-    let results: IVesting[] = [];
+    const unsortedResults: IVesting[] = [];
     const multicall = multicalls[chainId]
       ? new Multicall({
           nodeUrl: networkDetails[chainId].rpcUrl,
@@ -68,84 +68,73 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
     };
     if (subgraphs[chainId]) {
       const GET_ADMIN = gql`
-        {
-          vestingEscrows(where: {admin: "${userAddress.toLowerCase()}"}, first:1000) {
+      {
+        vestingEscrows(where: {admin: "${userAddress.toLowerCase()}"}, first:1000) {
+          id
+          factory
+          admin
+          recipient
+          token {
             id
-            factory
-            admin
-            recipient
-            token {
-              id
-              symbol
-              name
-              decimals
-            }
-            escrow
-            amount
-            start
-            totalLocked
-            totalClaimed
-            disabledAt
-            duration
-            cliff
-            end
+            symbol
+            name
+            decimals
           }
+          escrow
+          amount
+          start
+          totalLocked
+          totalClaimed
+          disabledAt
+          duration
+          cliff
+          end
         }
-        `;
+      }
+      `;
       const GET_RECIPIENT = gql`
-        {
-          vestingEscrows(where: {recipient: "${userAddress.toLowerCase()}"}) {
+      {
+        vestingEscrows(where: {recipient: "${userAddress.toLowerCase()}"}) {
+          id
+          factory
+          admin
+          recipient
+          token {
             id
-            factory
-            admin
-            recipient
-            token {
-              id
-              symbol
-              name
-              decimals
-            }
-            escrow
-            amount
-            start
-            totalLocked
-            totalClaimed
-            disabledAt
-            duration
-            cliff
-            end
+            symbol
+            name
+            decimals
           }
+          escrow
+          amount
+          start
+          totalLocked
+          totalClaimed
+          disabledAt
+          duration
+          cliff
+          end
         }
-        `;
+      }
+      `;
       const admins = (await request(subgraphs[chainId], GET_ADMIN)).vestingEscrows;
       const recipients = (await request(subgraphs[chainId], GET_RECIPIENT)).vestingEscrows;
-      const escrows = admins.concat(recipients);
+      const concatted = admins.concat(recipients);
+      const escrows: any[] = [];
+      concatted.forEach((x: any) => {
+        if (!escrows.includes(x)) {
+          escrows.push(x);
+        }
+      });
       const vestingContractInfoContext: ContractCallContext[] = Object.keys(escrows).map((p: any) => ({
         reference: escrows[p].id,
         contractAddress: escrows[p].id,
         abi: vestingEscrowABI,
-        calls: escrowCallsSubgraph,
+        calls: vestingEscrowCallsSubgraph,
       }));
       const vestingContractInfoResults = await runMulticall(vestingContractInfoContext);
-      const unsortedResults: IVesting[] = [];
-
-      const vestingContractReasonContext: ContractCallContext[] = Object.keys(escrows).map((p: any) => ({
-        reference: escrows[p].id,
-        abi: vestingReasonsABI,
-        contractAddress: networkDetails[chainId].vestingReason,
-        calls: [
-          {
-            reference: 'reason',
-            methodName: 'reasons',
-            methodParameters: [escrows[p].id],
-          },
-        ],
-      }));
-      const vestingContractReasonResults = await runMulticall(vestingContractReasonContext);
-
       for (const i in escrows) {
         const returns = vestingContractInfoResults[escrows[i].id].callsReturnContext;
-        const reason = vestingContractReasonResults[escrows[i].id].callsReturnContext[0].returnValues[0];
         const result = {
           contract: escrows[i].id.toString(),
           unclaimed: new BigNumber(returns[0].returnValues[0].hex).toString(),
@@ -163,12 +152,30 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
           admin: escrows[i].admin.toString(),
           disabledAt: new BigNumber(returns[3].returnValues[0].hex).toString(),
           timestamp: Date.now() / 1e3,
-          reason: reason !== '' ? reason : null,
+          reason: null,
         };
         unsortedResults.push(result);
       }
-
-      results = unsortedResults.sort((a: any, b: any) => a.index - b.index);
+      if (networkDetails[chainId].vestingReason) {
+        const vestingContractReasonContext: ContractCallContext[] = Object.keys(escrows).map((p: any) => ({
+          reference: escrows[p].id,
+          abi: vestingReasonsABI,
+          contractAddress: networkDetails[chainId].vestingReason!,
+          calls: [
+            {
+              reference: 'reason',
+              methodName: 'reasons',
+              methodParameters: [escrows[p].id],
+            },
+          ],
+        }));
+        const vestingContractReasonResults = await runMulticall(vestingContractReasonContext);
+        for (const i in unsortedResults) {
+          const reason =
+            vestingContractReasonResults[unsortedResults[i].contract].callsReturnContext[0].returnValues[0];
+          unsortedResults[i].reason = reason !== '' ? reason : null;
+        }
+      }
     } else {
       const factoryAddress = networkDetails[chainId].vestingFactory;
       const factoryContract = new ethers.Contract(factoryAddress, vestingFactoryABI, provider);
@@ -186,24 +193,6 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
         abi: vestingEscrowABI,
         calls: vestingEscrowCalls,
       }));
-      let vestingContractReasonResults;
-      if (networkDetails[chainId].vestingReason !== '0x0000000000000000000000000000000000000000') {
-        const vestingContractReasonContext: ContractCallContext[] = Object.keys(vestingContractsResults).map(
-          (p: any) => ({
-            reference: vestingContractsResults[p].callsReturnContext[0].returnValues[0].toLowerCase(),
-            abi: vestingReasonsABI,
-            contractAddress: networkDetails[chainId].vestingReason,
-            calls: [
-              {
-                reference: 'reason',
-                methodName: 'reasons',
-                methodParameters: [vestingContractsResults[p].callsReturnContext[0].returnValues[0]],
-              },
-            ],
-          })
-        );
-        vestingContractReasonResults = await runMulticall(vestingContractReasonContext);
-      }
       const vestingContractInfoResults = await runMulticall(vestingContractInfoContext);
       const tokenContractCallContext = Object.keys(vestingContractInfoResults).map((p: any) => ({
         reference: vestingContractInfoResults[p].callsReturnContext[3].returnValues[0],
@@ -222,11 +211,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
         const admin = vestingReturnContext[9].returnValues[0].toLowerCase();
         if (userAddress.toLowerCase() !== recipient && userAddress.toLowerCase() !== admin) continue;
         const tokenReturnContext = tokenContractCallResults[vestingReturnContext[3].returnValues[0]].callsReturnContext;
-        const reason =
-          networkDetails[chainId].vestingReason === '0x0000000000000000000000000000000000000000'
-            ? ''
-            : vestingContractReasonResults[key.toLowerCase()].callsReturnContext[0].returnValues[0];
-        results.push({
+        unsortedResults.push({
           contract: key,
           unclaimed: new BigNumber(vestingReturnContext[0].returnValues[0].hex).toString(),
           locked: new BigNumber(vestingReturnContext[1].returnValues[0].hex).toString(),
@@ -243,11 +228,33 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
           admin: admin,
           disabledAt: new BigNumber(vestingReturnContext[10].returnValues[0].hex).toString(),
           timestamp: Date.now() / 1e3,
-          reason: reason !== '' ? reason : null,
+          reason: null,
         });
       }
+      if (networkDetails[chainId].vestingReason) {
+        const vestingContractReasonContext: ContractCallContext[] = Object.keys(vestingContractsResults).map(
+          (p: any) => ({
+            reference: vestingContractsResults[p].callsReturnContext[0].returnValues[0].toLowerCase(),
+            abi: vestingReasonsABI,
+            contractAddress: networkDetails[chainId].vestingReason!,
+            calls: [
+              {
+                reference: 'reason',
+                methodName: 'reasons',
+                methodParameters: [vestingContractsResults[p].callsReturnContext[0].returnValues[0]],
+              },
+            ],
+          })
+        );
+        const vestingContractReasonResults = await runMulticall(vestingContractReasonContext);
+        for (const i in unsortedResults) {
+          const reason =
+            vestingContractReasonResults[unsortedResults[i].contract].callsReturnContext[0].returnValues[0];
+          unsortedResults[i].reason = reason !== '' ? reason : null;
+        }
+      }
     }
-    return results;
+    return unsortedResults;
   } catch (error) {
     console.error(error);
     return null;
