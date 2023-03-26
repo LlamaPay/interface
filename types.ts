@@ -54,6 +54,7 @@ export interface IFormattedSalaryStream {
   pausedAmount: string | null;
   lastPaused: string;
   reason?: string | null;
+  chainId: number;
 }
 
 export interface ITokenList {
@@ -105,6 +106,7 @@ export interface IVesting {
   disabledAt: string;
   timestamp: number;
   reason: string | null;
+  chainId: number;
 }
 
 export interface IPayments {

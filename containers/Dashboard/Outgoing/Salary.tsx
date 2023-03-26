@@ -105,7 +105,7 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
     <Box
       className={
         displayAltView
-          ? 'flex flex-col flex-wrap justify-center gap-9 p-9 lg:flex-row'
+          ? 'flex flex-col flex-wrap items-center justify-center gap-9 p-9 lg:flex-row'
           : 'flex flex-col items-center justify-center'
       }
       tabIndex={0}

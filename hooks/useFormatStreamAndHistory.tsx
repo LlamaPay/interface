@@ -11,11 +11,13 @@ export const formatStream = ({
   provider,
   ensData,
   address,
+  chainId,
 }: {
   stream: ISalaryStream;
   provider: Provider;
   ensData?: IEnsResolve | null | undefined;
   address: string;
+  chainId: number;
 }): IFormattedSalaryStream => {
   const streamType: 'outgoingStream' | 'incomingStream' =
     stream.payer.id?.toLowerCase() === address.toLowerCase() ? 'outgoingStream' : 'incomingStream';
@@ -45,5 +47,6 @@ export const formatStream = ({
     pausedAmount: stream.pausedAmount,
     lastPaused: stream.lastPaused,
     reason: stream.reason || null,
+    chainId,
   };
 };

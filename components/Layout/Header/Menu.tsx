@@ -112,7 +112,7 @@ export default function HeaderMenu({
         </Menu>
       )}
 
-      <MenuItem
+      {/* <MenuItem
         label={
           <>
             <span className="cursor-pointer">{t1('getStarted')}</span>
@@ -120,7 +120,7 @@ export default function HeaderMenu({
           </>
         }
         onClick={onboardDialog.toggle}
-      />
+      /> */}
 
       {isMaxWidthLg && (
         <>

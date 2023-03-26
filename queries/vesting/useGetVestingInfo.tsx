@@ -161,6 +161,7 @@ async function getVestingInfo({
           disabledAt: new BigNumber(returns[3].returnValues[0].hex).toString(),
           timestamp: Date.now() / 1e3,
           reason: null,
+          chainId,
         };
         unsortedResults.push(result);
       }
@@ -237,6 +238,7 @@ async function getVestingInfo({
           disabledAt: new BigNumber(vestingReturnContext[10].returnValues[0].hex).toString(),
           timestamp: Date.now() / 1e3,
           reason: null,
+          chainId,
         });
       }
       if (networkDetails[chainId].vestingReason) {
@@ -264,7 +266,9 @@ async function getVestingInfo({
     }
     return unsortedResults;
   } catch (error: any) {
-    throw new Error(error.message || (error?.reason ?? "Couldn't fetch vesting info"));
+    console.log(`Couldn't fetch vesting info on chain ${chainId}`);
+    console.log(error);
+    throw new Error(error.message || (error?.reason ?? `Couldn't fetch vesting info on chain ${chainId}`));
   }
 }
 
@@ -288,3 +292,33 @@ export function useGetVestingInfoByQueryParams({ userAddress, chainId }: IVestin
     refetchInterval: 60_000,
   });
 }
+
+async function fetchVestingInfoOnAllChains({ userAddress }: { userAddress?: string }) {
+  const chains = Object.entries(networkDetails).map(([chainId, data]) => ({
+    provider: data.chainProviders,
+    chainId: Number(chainId),
+  }));
+
+  try {
+    const data = await Promise.allSettled(
+      chains.map(({ chainId, provider }) => getVestingInfo({ userAddress, provider, chainId }))
+    );
+
+    return data.reduce((acc, curr) => {
+      if (curr.status === 'fulfilled') {
+        acc = [...acc, ...(curr.value || [])];
+      }
+      return acc;
+    }, [] as Array<IVesting>);
+  } catch (error: any) {
+    console.log("Couldn't fetch vesting info");
+    console.log(error);
+    throw new Error(error.message || (error?.reason ?? "Couldn't fetch vesting info"));
+  }
+}
+
+export const useGetVestingInfoOnAllChains = ({ userAddress }: { userAddress?: string }) => {
+  return useQuery(['vestingInfo', userAddress], () => fetchVestingInfoOnAllChains({ userAddress }), {
+    refetchInterval: 60_000,
+  });
+};

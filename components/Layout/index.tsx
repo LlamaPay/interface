@@ -3,9 +3,8 @@ import Head from 'next/head';
 import { useDialogState } from 'ariakit';
 import Header from './Header';
 import Footer from './Footer';
-import OnboardDialog from '~/components/Onboard';
 import CustomToast from '~/components/CustomToast';
-import StaleSubgraphWarning from '~/components/StaleSubgraphWarning';
+// import StaleSubgraphWarning from '~/components/StaleSubgraphWarning';
 import GnosisSafeWarning from '~/components/GnosisSafeWarning';
 import { Nav } from './Nav';
 import classNames from 'classnames';
@@ -28,7 +27,8 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
           content="LlamaPay is a multi-chain protocol that allows you to automate transactions and stream them by the second. The recipients can withdraw these funds at any time. This eliminates the need for manual transactions."
         />
       </Head>
-      <StaleSubgraphWarning />
+
+      {/* <StaleSubgraphWarning /> */}
 
       <Header onboardDialog={onboardDialog} walletDialog={walletDialog} />
 
@@ -38,8 +38,6 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
           {children}
         </main>
       </div>
-
-      <OnboardDialog dialog={onboardDialog} />
 
       <Footer />
 

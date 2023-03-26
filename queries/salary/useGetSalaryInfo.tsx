@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import { getAddress } from 'ethers/lib/utils';
-import { gql, request } from 'graphql-request';
+import { GraphQLClient, gql, request } from 'graphql-request';
 import { networkDetails } from '~/lib/networkDetails';
 import { createContract } from '~/utils/contract';
 import type { Provider } from '~/utils/contract';
@@ -57,6 +57,7 @@ interface IWithdrawableAmount extends IWithdrawable {
     decimals: number;
     symbol: string;
   };
+  chainId: number;
 }
 
 interface ISalaryInfo {
@@ -110,16 +111,27 @@ async function fetchSalaryInfo({
   userAddress,
   endpoint,
   provider,
+  chainId,
 }: {
   userAddress?: string;
   endpoint?: string | null;
   provider?: Provider | null;
+  chainId?: number;
 }) {
-  try {
-    if (!endpoint || !provider || !userAddress) return { withdrawableAmounts: [], salaryStreams: [] };
+  const controller = new AbortController();
 
-    const salaryStreams = await request<{ user: { streams: Array<ISalaryStream> } }>(
-      endpoint,
+  const timeoutID = setTimeout(() => {
+    controller.abort();
+    console.log(`Fetching salaries info on chain ${chainId} is timed out`);
+  }, 5_000);
+
+  try {
+    if (!endpoint || !provider || !userAddress || !chainId)
+      return { withdrawableAmounts: [], salaryStreams: [], chainId };
+
+    const client = new GraphQLClient(endpoint, { signal: controller.signal as any });
+
+    const salaryStreams = await client.request<{ user: { streams: Array<ISalaryStream> } }>(
       gql`
         {
           user(id: "${userAddress.toLowerCase()}") {
@@ -184,19 +196,26 @@ async function fetchSalaryInfo({
           payerAddress: stream.payer.id,
           payeeAddress: stream.payee.id,
           contract: stream.contract.address,
+          chainId,
         });
+      } else {
+        console.log(`Couldn't fetch withdrawable amounts of stream ${stream.streamId} on chain ${chainId}`);
       }
     });
 
     return {
       withdrawableAmounts,
       salaryStreams: salaryStreams?.user?.streams.map((s: ISalaryStream) =>
-        formatStream({ stream: s, address: userAddress, provider, ensData: {} })
+        formatStream({ stream: s, address: userAddress, provider, ensData: {}, chainId })
       ),
+      chainId,
     };
   } catch (error: any) {
-    // console.log(error);
-    throw new Error(error.message || (error?.reason ?? "Couldn't fetch salary info"));
+    console.log(`Couldn't fetch salary info on chain ${chainId}`);
+    console.log(error);
+    throw new Error(error.message || (error?.reason ?? `Couldn't fetch salary info on ${chainId}`));
+  } finally {
+    clearTimeout(timeoutID);
   }
 }
 
@@ -206,8 +225,41 @@ export const useGetSalaryInfo = ({ userAddress, chainId }: { userAddress?: strin
   const provider = chainId ? networkDetails[chainId]?.chainProviders : null;
 
   return useQuery<ISalaryInfo>(['salaryInfo', userAddress, chainId], () =>
-    fetchSalaryInfo({ userAddress, endpoint, provider })
+    fetchSalaryInfo({ userAddress, endpoint, provider, chainId })
   );
+};
+
+async function fetchSalaryInfoOnAllChains({ userAddress }: { userAddress?: string }) {
+  const chains = Object.entries(networkDetails).map(([chainId, data]) => ({
+    endpoint: data.subgraphEndpoint,
+    provider: data.chainProviders,
+    chainId: Number(chainId),
+  }));
+
+  try {
+    const data = await Promise.allSettled(
+      chains.map(({ chainId, endpoint, provider }) => fetchSalaryInfo({ userAddress, endpoint, provider, chainId }))
+    );
+
+    return data.reduce(
+      (acc, curr) => {
+        if (curr.status === 'fulfilled') {
+          acc.withdrawableAmounts = [...acc.withdrawableAmounts, ...(curr.value.withdrawableAmounts || [])];
+          acc.salaryStreams = [...acc.salaryStreams, ...(curr.value.salaryStreams || [])];
+        }
+        return acc;
+      },
+      { withdrawableAmounts: [] as Array<IWithdrawableAmount>, salaryStreams: [] as Array<IFormattedSalaryStream> }
+    );
+  } catch (error: any) {
+    console.log("Couldn't fetch salary info");
+    console.log(error);
+    throw new Error(error.message || (error?.reason ?? "Couldn't fetch salary info"));
+  }
+}
+
+export const useGetSalaryInfoOnAllChains = ({ userAddress }: { userAddress?: string }) => {
+  return useQuery<ISalaryInfo>(['salaryInfo', userAddress], () => fetchSalaryInfoOnAllChains({ userAddress }));
 };
 
 async function fetchSalaryHistoryInfo({

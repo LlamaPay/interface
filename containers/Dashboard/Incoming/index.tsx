@@ -62,8 +62,8 @@ export const IncomingDashboard = ({ userAddress, chainId }: { userAddress?: stri
 
   return (
     <Layout className="grid grid-cols-1 gap-6 md:grid-cols-2">
-      <Salary userAddress={finalAddress} chainId={finalChainId} />
-      <Vesting userAddress={finalAddress} chainId={finalChainId} />
+      <Salary userAddress={finalAddress} />
+      <Vesting userAddress={finalAddress} />
       <Payments userAddress={finalAddress} chainId={finalChainId} />
       <TokenSalary userAddress={finalAddress} chainId={finalChainId} />
     </Layout>

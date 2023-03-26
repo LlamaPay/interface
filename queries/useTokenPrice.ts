@@ -53,3 +53,25 @@ export function useMultipleTokenPrices({ tokens }: { tokens: Array<string> }) {
     data: resData || {},
   };
 }
+
+export function useGetTokenPricesOnAllChains({ tokens }: { tokens: Array<string> }) {
+  const res = useQueries({
+    queries: tokens.map((token) => {
+      const prefix = networkDetails[Number(token.split('+')[0])].prefix;
+      const address = token.split('+')[1];
+      return {
+        queryKey: ['token', address, prefix],
+        queryFn: () => fetchTokenPrice(address, prefix),
+        refetchInterval: 30_000,
+      };
+    }),
+  });
+
+  const resData = Object.fromEntries(tokens.map((token, index) => [token, res[index].data]));
+
+  return {
+    isLoaded: res.filter((r) => r.status === 'loading').length === 0,
+    isLoading: tokens.length === 0 || (res?.filter((r) => r.status === 'success') ?? []).length >= 1 ? false : true,
+    data: resData || {},
+  };
+}
