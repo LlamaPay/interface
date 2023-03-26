@@ -6,7 +6,7 @@ import { SalaryGraphic } from '~/containers/common/Graphics/IncomingSalary';
 import { useLocale } from '~/hooks';
 import { useGetScheduledPaymentsOnAllChains } from '~/queries/tokenSalary/useGetScheduledTransfers';
 
-export const TokenSalary = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
+export const TokenSalary = ({ userAddress }: { userAddress: string }) => {
   const t0 = useTranslations('Dashboard');
   const t1 = useTranslations('Months');
   const [year, setYear] = useState(currentYear);

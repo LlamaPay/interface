@@ -5,7 +5,6 @@ import { IncomingDashboard } from '~/containers/Dashboard/Incoming';
 
 interface DashboardProps {
   userAddress: string;
-  chainId: number;
 }
 
 const Streams: NextPage<DashboardProps> = (props) => {
@@ -13,13 +12,11 @@ const Streams: NextPage<DashboardProps> = (props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query, locale }) => {
-  const { chain } = chainDetails(query.chainId || query.chain);
-
   const { network: mainnet } = chainDetails('1');
 
   const defaultAddress = typeof query.address === 'string' ? query.address : '';
 
-  if (!chain || defaultAddress === '') {
+  if (defaultAddress === '') {
     return { notFound: true };
   }
 
@@ -32,7 +29,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
   return {
     props: {
       userAddress: userAddress?.toLowerCase() ?? query.address,
-      chainId: chain.id,
       messages: (await import(`translations/${locale}.json`)).default,
     },
   };
