@@ -5,7 +5,6 @@ import { chainDetails } from '~/utils/network';
 
 interface StreamsProps {
   userAddress: string;
-  chainId: number;
 }
 
 const Home: NextPage<StreamsProps> = (props) => {
@@ -13,13 +12,11 @@ const Home: NextPage<StreamsProps> = (props) => {
 };
 
 export const getServerSideProps: GetServerSideProps = async ({ query, locale }) => {
-  const { chain } = chainDetails(query.chain);
-
   const { network: mainnet } = chainDetails('1');
 
   const defaultAddress = typeof query.address === 'string' ? query.address : '';
 
-  if (!chain || defaultAddress === '') {
+  if (defaultAddress === '') {
     return { notFound: true };
   }
 
@@ -32,7 +29,6 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
   return {
     props: {
       userAddress: userAddress?.toLowerCase() ?? query.address,
-      chainId: chain.id,
       messages: (await import(`translations/${locale}.json`)).default,
     },
   };

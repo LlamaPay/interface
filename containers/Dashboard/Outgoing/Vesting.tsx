@@ -1,8 +1,8 @@
 import { useIntl, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { vestingWithdrawableAmtFormatter } from '~/components/Vesting/Table/CustomValues/Unclaimed';
-import { useMultipleTokenPrices } from '~/queries/useTokenPrice';
-import { useGetVestingInfoByQueryParams } from '~/queries/vesting/useGetVestingInfo';
+import { useGetTokenPricesOnAllChains } from '~/queries/useTokenPrice';
+import { useGetVestingInfoOnAllChains } from '~/queries/vesting/useGetVestingInfo';
 import { formatBalance } from '~/utils/amount';
 import { Box } from '~/containers/common/Box';
 import { pieChartBreakDown } from '~/containers/common/pieChartBreakdown';
@@ -11,19 +11,19 @@ import { useLocale } from '~/hooks';
 import { networkDetails } from '~/lib/networkDetails';
 import Link from 'next/link';
 
-export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
+export const Vesting = ({ userAddress }: { userAddress: string }) => {
   const [displayAltView, setDisplayAltView] = useState(false);
-  const { data, isLoading, isError } = useGetVestingInfoByQueryParams({ userAddress, chainId });
+  const { data, isLoading, isError } = useGetVestingInfoOnAllChains({ userAddress });
 
   const tokens =
     data?.reduce((acc, curr) => {
       if (curr.admin === userAddress.toLowerCase()) {
-        acc.add(curr.token.toLowerCase());
+        acc.add(`${curr.chainId}+${curr.token.toLowerCase()}`);
       }
       return acc;
     }, new Set<string>()) ?? new Set();
 
-  const { data: tokenPrices, isLoading: isFetchingTokenPrices } = useMultipleTokenPrices({
+  const { data: tokenPrices, isLoading: isFetchingTokenPrices } = useGetTokenPricesOnAllChains({
     tokens: Array.from(tokens),
   });
 
@@ -32,7 +32,6 @@ export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId
 
   const t = useTranslations('Dashboard');
   const { locale } = useLocale();
-  const explorerLink = networkDetails[chainId]?.blockExplorerURL ?? null;
 
   useEffect(() => {
     const withdrawables = data ?? [];
@@ -92,7 +91,7 @@ export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId
   const withdrawables = Object.entries(
     data?.reduce((acc, curr) => {
       if (curr.admin === userAddress.toLowerCase() && curr.unclaimed && curr.unclaimed !== '0') {
-        acc[`outgoing+${curr.admin}+${curr.contract}+${curr.token}+${curr.tokenSymbol}`] = (
+        acc[`outgoing+${curr.admin}+${curr.contract}+${curr.token}+${curr.tokenSymbol}+${curr.chainId}`] = (
           Number(curr.unclaimed) /
           10 ** curr.tokenDecimals
         ).toLocaleString(locale, { maximumFractionDigits: 2 });
@@ -143,11 +142,13 @@ export const Vesting = ({ userAddress, chainId }: { userAddress: string; chainId
                   key={withdrawable[0]}
                   className="flex flex-wrap items-center justify-between gap-2 text-xl md:flex-nowrap"
                 >
-                  {explorerLink ? (
+                  {networkDetails[Number(withdrawable[0].split('+')[5])]?.blockExplorerURL ? (
                     <a
                       target="_blank"
                       rel="noreferrer noopener"
-                      href={`${explorerLink}/address/${withdrawable[0].split('+')[3]}`}
+                      href={`${networkDetails[Number(withdrawable[0].split('+')[5])].blockExplorerURL}/address/${
+                        withdrawable[0].split('+')[3]
+                      }`}
                     >
                       {withdrawable[0].split('+')[4]}
                     </a>

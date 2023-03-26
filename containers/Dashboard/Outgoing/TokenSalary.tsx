@@ -4,15 +4,15 @@ import { Box } from '~/containers/common/Box';
 import { currentYear, daysInMonth, months, yearOptions } from '~/containers/common/date';
 import { SalaryGraphic } from '~/containers/common/Graphics/OutgoingSalary';
 import { useLocale } from '~/hooks';
-import { useGetScheduledTransferPools } from '~/queries/tokenSalary/useGetScheduledTransfers';
+import { useGetScheduledTransferPoolsOnAllChains } from '~/queries/tokenSalary/useGetScheduledTransfers';
 import type { IScheduledTransferPayment } from '~/queries/tokenSalary/useGetScheduledTransfers';
 
-export const TokenSalary = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
+export const TokenSalary = ({ userAddress }: { userAddress: string }) => {
   const t0 = useTranslations('Dashboard');
   const t1 = useTranslations('Months');
   const [year, setYear] = useState(currentYear);
 
-  const { data: pools, isLoading, isError } = useGetScheduledTransferPools({ userAddress, chainId });
+  const { data: pools, isLoading, isError } = useGetScheduledTransferPoolsOnAllChains({ userAddress });
 
   const tags: { [year: number]: { [month: number]: { [day: number]: number } } } = {};
 

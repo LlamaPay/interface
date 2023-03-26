@@ -1,8 +1,8 @@
 import { useIntl, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { salaryWithdrawableAmtFormatter } from '~/containers/Salaries/Common/StreamsTable/CustomValues';
-import { useGetSalaryInfo } from '~/queries/salary/useGetSalaryInfo';
-import { useMultipleTokenPrices } from '~/queries/useTokenPrice';
+import { useGetSalaryInfoOnAllChains } from '~/queries/salary/useGetSalaryInfo';
+import { useGetTokenPricesOnAllChains } from '~/queries/useTokenPrice';
 import { formatBalance } from '~/utils/amount';
 import { Box } from '~/containers/common/Box';
 import { pieChartBreakDown } from '~/containers/common/pieChartBreakdown';
@@ -11,19 +11,19 @@ import { useLocale } from '~/hooks';
 import { networkDetails } from '~/lib/networkDetails';
 import Link from 'next/link';
 
-export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
+export const Salary = ({ userAddress }: { userAddress: string }) => {
   const [displayAltView, setDisplayAltView] = useState(false);
-  const { data, isLoading, isError } = useGetSalaryInfo({ userAddress, chainId });
+  const { data, isLoading, isError } = useGetSalaryInfoOnAllChains({ userAddress });
 
   const tokens =
     data?.withdrawableAmounts?.reduce((acc, curr) => {
       if (curr.payerAddress === userAddress.toLowerCase()) {
-        acc.add(curr.token.address.toLowerCase());
+        acc.add(`${curr.chainId}+${curr.token.address.toLowerCase()}`);
       }
       return acc;
     }, new Set<string>()) ?? new Set();
 
-  const { data: tokenPrices, isLoading: isFetchingTokenPrices } = useMultipleTokenPrices({
+  const { data: tokenPrices, isLoading: isFetchingTokenPrices } = useGetTokenPricesOnAllChains({
     tokens: Array.from(tokens),
   });
 
@@ -32,7 +32,6 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
 
   const t = useTranslations('Dashboard');
   const { locale } = useLocale();
-  const explorerLink = networkDetails[chainId]?.blockExplorerURL ?? null;
 
   useEffect(() => {
     const id = setInterval(() => {
@@ -91,10 +90,11 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
   const withdrawables = Object.entries(
     data?.withdrawableAmounts?.reduce((acc, curr) => {
       if (curr.payerAddress === userAddress.toLowerCase() && Number(curr.withdrawableAmount) > 0) {
-        acc[`outgoing+${curr.payerAddress}+${curr.contract}+${curr.token.address}+${curr.token.symbol}`] = (
-          Number(curr.withdrawableAmount) /
-          10 ** curr.token.decimals
-        ).toLocaleString(locale, { maximumFractionDigits: 2 });
+        acc[
+          `outgoing+${curr.payerAddress}+${curr.contract}+${curr.token.address}+${curr.token.symbol}+${curr.chainId}`
+        ] = (Number(curr.withdrawableAmount) / 10 ** curr.token.decimals).toLocaleString(locale, {
+          maximumFractionDigits: 2,
+        });
       }
 
       return acc;
@@ -140,11 +140,13 @@ export const Salary = ({ userAddress, chainId }: { userAddress: string; chainId:
                   key={withdrawable[0]}
                   className="flex flex-wrap items-center justify-between gap-2 text-xl md:flex-nowrap"
                 >
-                  {explorerLink ? (
+                  {networkDetails[Number(withdrawable[0].split('+')[5])]?.blockExplorerURL ? (
                     <a
                       target="_blank"
                       rel="noreferrer noopener"
-                      href={`${explorerLink}/address/${withdrawable[0].split('+')[3]}`}
+                      href={`${networkDetails[Number(withdrawable[0].split('+')[5])].blockExplorerURL}/address/${
+                        withdrawable[0].split('+')[3]
+                      }`}
                     >
                       {withdrawable[0].split('+')[4]}
                     </a>

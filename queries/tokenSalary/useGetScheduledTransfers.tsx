@@ -53,12 +53,14 @@ export interface IScheduledTransferHistory {
 const fetchScheduledTransferPools = async ({
   userAddress,
   graphEndpoint,
+  chainId,
 }: {
   userAddress?: string | null;
   graphEndpoint?: string | null;
+  chainId?: number | null;
 }) => {
   try {
-    if (!userAddress || !graphEndpoint) {
+    if (!userAddress || !graphEndpoint || !chainId) {
       return [];
     }
 
@@ -100,13 +102,12 @@ const fetchScheduledTransferPools = async ({
     const filtered =
       res.pools.map((pool) => ({
         ...pool,
-        payments: pool.payments.filter((payment) => Number(payment.ends) * 1000 > Date.now()),
+        payments: pool.payments
+          .filter((payment) => Number(payment.ends) * 1000 > Date.now())
+          .map((x) => ({ ...x, usdPerSec: BigNumber(x.usdAmount).div(x.frequency).toString() })),
+        chainId,
       })) ?? [];
-    filtered.forEach((o) => {
-      o.payments.forEach((i) => {
-        i.usdPerSec = BigNumber(i.usdAmount).div(i.frequency).toString();
-      });
-    });
+
     return filtered;
   } catch (error: any) {
     throw new Error(error.message || (error?.reason ?? "Couldn't fetch scheduled transfers"));
@@ -235,7 +236,43 @@ export function useGetScheduledTransferPools({
 
   return useQuery<Array<IScheduledTransferPool>>(
     ['scheduledTransferPools', userAddress, graphEndpoint],
-    () => fetchScheduledTransferPools({ userAddress, graphEndpoint }),
+    () => fetchScheduledTransferPools({ userAddress, graphEndpoint, chainId }),
+    {
+      refetchInterval: 30_000,
+    }
+  );
+}
+
+async function fetchScheduledTransferPoolsOnAllChains({ userAddress }: { userAddress?: string | null }) {
+  const chains = Object.entries(networkDetails).map(([chainId, data]) => ({
+    endpoint: data.scheduledTransferSubgraph,
+    chainId: Number(chainId),
+  }));
+
+  try {
+    const data = await Promise.allSettled(
+      chains.map(({ chainId, endpoint }) =>
+        fetchScheduledTransferPools({ userAddress, graphEndpoint: endpoint, chainId })
+      )
+    );
+
+    return data.reduce((acc, curr) => {
+      if (curr.status === 'fulfilled') {
+        acc = [...acc, ...(curr.value || [])];
+      }
+      return acc;
+    }, [] as Array<IScheduledTransferPool>);
+  } catch (error: any) {
+    console.log("Couldn't fetch scheduled transfer pools on all chains");
+    console.log(error);
+    throw new Error(error.message || (error?.reason ?? "Couldn't fetch scheduled transfer pools on all chains"));
+  }
+}
+
+export function useGetScheduledTransferPoolsOnAllChains({ userAddress }: { userAddress?: string | null }) {
+  return useQuery<Array<IScheduledTransferPool>>(
+    ['scheduledTransferPoolsOnAllChains', userAddress],
+    () => fetchScheduledTransferPoolsOnAllChains({ userAddress }),
     {
       refetchInterval: 30_000,
     }
