@@ -1,7 +1,7 @@
 import { useIntl, useTranslations } from 'next-intl';
 import { useEffect, useRef, useState } from 'react';
 import { vestingWithdrawableAmtFormatter } from '~/components/Vesting/Table/CustomValues/Unclaimed';
-import { useMultipleTokenPrices } from '~/queries/useTokenPrice';
+import { useGetTokenPricesOnAllChains } from '~/queries/useTokenPrice';
 import { useGetVestingInfoOnAllChains } from '~/queries/vesting/useGetVestingInfo';
 import { formatBalance } from '~/utils/amount';
 import { Box } from '~/containers/common/Box';
@@ -18,12 +18,12 @@ export const Vesting = ({ userAddress }: { userAddress: string }) => {
   const tokens =
     data?.reduce((acc, curr) => {
       if (curr.admin !== userAddress.toLowerCase()) {
-        acc.add(curr.token.toLowerCase());
+        acc.add(`${curr.chainId}+${curr.token.toLowerCase()}`);
       }
       return acc;
     }, new Set<string>()) ?? new Set();
 
-  const { data: tokenPrices, isLoading: isFetchingTokenPrices } = useMultipleTokenPrices({
+  const { data: tokenPrices, isLoading: isFetchingTokenPrices } = useGetTokenPricesOnAllChains({
     tokens: Array.from(tokens),
   });
 

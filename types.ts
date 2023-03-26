@@ -121,4 +121,5 @@ export interface IPayments {
   release: number;
   active: boolean;
   revoked: boolean;
+  chainId: number;
 }

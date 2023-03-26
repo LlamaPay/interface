@@ -311,14 +311,14 @@ async function fetchVestingInfoOnAllChains({ userAddress }: { userAddress?: stri
       return acc;
     }, [] as Array<IVesting>);
   } catch (error: any) {
-    console.log("Couldn't fetch vesting info");
+    console.log("Couldn't fetch vesting info on all chains");
     console.log(error);
-    throw new Error(error.message || (error?.reason ?? "Couldn't fetch vesting info"));
+    throw new Error(error.message || (error?.reason ?? "Couldn't fetch vesting info on all chains"));
   }
 }
 
 export const useGetVestingInfoOnAllChains = ({ userAddress }: { userAddress?: string }) => {
-  return useQuery(['vestingInfo', userAddress], () => fetchVestingInfoOnAllChains({ userAddress }), {
+  return useQuery(['vestingInfoOnAllChains', userAddress], () => fetchVestingInfoOnAllChains({ userAddress }), {
     refetchInterval: 60_000,
   });
 };

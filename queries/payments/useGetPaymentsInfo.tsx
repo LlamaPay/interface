@@ -13,16 +13,20 @@ async function getPaymentsInfo({
   endpoint?: string | null;
 }) {
   try {
-    if (!userAddress) {
-      throw new Error('No Account');
-    }
+    // if (!userAddress) {
+    //   throw new Error('No Account');
+    // }
 
-    if (!chainId) {
-      throw new Error('No Chain ID');
-    }
+    // if (!chainId) {
+    //   throw new Error('No Chain ID');
+    // }
 
-    if (!endpoint) {
-      throw new Error('No Payments contract or api');
+    // if (!endpoint) {
+    //   throw new Error('No Payments contract or api');
+    // }
+
+    if (!userAddress || !chainId || !endpoint) {
+      return [];
     }
 
     const queryFrom = gql`
@@ -86,6 +90,7 @@ async function getPaymentsInfo({
           release: Number(escrow.release),
           active: escrow.active,
           revoked: escrow.revoked,
+          chainId,
         });
         ids.push(escrow.id);
       }
@@ -103,4 +108,32 @@ export const useGetPaymentsInfo = ({ userAddress, chainId }: { userAddress: stri
   const endpoint = networkDetails[chainId]?.paymentsGraphApi;
 
   return useQuery(['paymentsInfo', userAddress, chainId], () => getPaymentsInfo({ userAddress, chainId, endpoint }));
+};
+
+async function fetchPaymentsInfoOnAllChains({ userAddress }: { userAddress?: string }) {
+  const chains = Object.entries(networkDetails).map(([chainId, data]) => ({
+    endpoint: data.paymentsGraphApi,
+    chainId: Number(chainId),
+  }));
+
+  try {
+    const data = await Promise.allSettled(
+      chains.map(({ chainId, endpoint }) => getPaymentsInfo({ userAddress, endpoint, chainId }))
+    );
+
+    return data.reduce((acc, curr) => {
+      if (curr.status === 'fulfilled') {
+        acc = [...acc, ...(curr.value || [])];
+      }
+      return acc;
+    }, [] as Array<IPayments>);
+  } catch (error: any) {
+    console.log("Couldn't fetch vesting info on all chains");
+    console.log(error);
+    throw new Error(error.message || (error?.reason ?? "Couldn't fetch vesting info on all chains"));
+  }
+}
+
+export const useGetPaymentsInfoOnAllChains = ({ userAddress }: { userAddress: string }) => {
+  return useQuery(['paymentsInfoOnAllChains', userAddress], () => fetchPaymentsInfoOnAllChains({ userAddress }));
 };

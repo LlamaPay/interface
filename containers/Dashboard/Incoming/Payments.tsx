@@ -4,25 +4,25 @@ import { Box } from '~/containers/common/Box';
 import { currentYear, daysInMonth, months, yearOptions } from '~/containers/common/date';
 import { PaymentsGraphic } from '~/containers/common/Graphics/IncomingPayments';
 import { useLocale } from '~/hooks';
-import { useGetPaymentsInfo } from '~/queries/payments/useGetPaymentsInfo';
-import { useMultipleTokenPrices } from '~/queries/useTokenPrice';
+import { useGetPaymentsInfoOnAllChains } from '~/queries/payments/useGetPaymentsInfo';
+import { useGetTokenPricesOnAllChains } from '~/queries/useTokenPrice';
 
-export const Payments = ({ userAddress, chainId }: { userAddress: string; chainId: number }) => {
+export const Payments = ({ userAddress }: { userAddress: string }) => {
   const t0 = useTranslations('Dashboard');
   const t1 = useTranslations('Months');
   const [year, setYear] = useState(currentYear);
 
-  const { data, isLoading, isError } = useGetPaymentsInfo({ userAddress, chainId });
+  const { data, isLoading, isError } = useGetPaymentsInfoOnAllChains({ userAddress });
 
   const tokens =
     data?.reduce((acc, curr) => {
       if (curr.payer !== userAddress.toLowerCase()) {
-        acc.add(curr.tokenAddress.toLowerCase());
+        acc.add(`${curr.chainId}+${curr.tokenAddress.toLowerCase()}`);
       }
       return acc;
     }, new Set<string>()) ?? new Set();
 
-  const { data: tokenPrices, isLoading: isFetchingTokenPrices } = useMultipleTokenPrices({
+  const { data: tokenPrices, isLoading: isFetchingTokenPrices } = useGetTokenPricesOnAllChains({
     tokens: Array.from(tokens),
   });
 

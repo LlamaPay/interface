@@ -23,6 +23,7 @@ export interface IScheduledTransferPayment {
     };
   };
   history: Array<{ to: string; createdTimestamp: string; usdAmount: string }>;
+  chainId: number;
 }
 
 export interface IScheduledTransferPool {
@@ -115,12 +116,14 @@ const fetchScheduledTransferPools = async ({
 const fetchScheduledPayments = async ({
   userAddress,
   graphEndpoint,
+  chainId,
 }: {
   userAddress?: string | null;
   graphEndpoint?: string | null;
+  chainId?: number | null;
 }) => {
   try {
-    if (!userAddress || !graphEndpoint) {
+    if (!userAddress || !graphEndpoint || !chainId) {
       return [];
     }
 
@@ -155,10 +158,13 @@ const fetchScheduledPayments = async ({
         }
       `
     );
-    const filtered = res.payments.filter((payment) => Number(payment.ends) * 1000 > Date.now()) ?? [];
-    filtered.forEach((o) => {
-      o.usdPerSec = BigNumber(o.usdAmount).div(o.frequency).toString();
-    });
+
+    const filtered = (res.payments.filter((payment) => Number(payment.ends) * 1000 > Date.now()) ?? []).map((item) => ({
+      ...item,
+      usdPerSec: BigNumber(item.usdAmount).div(item.frequency).toString(),
+      chainId,
+    }));
+
     return filtered;
   } catch (error: any) {
     throw new Error(error.message || (error?.reason ?? "Couldn't fetch scheduled payments"));
@@ -248,7 +254,41 @@ export function useGetScheduledPayments({
 
   return useQuery<Array<IScheduledTransferPayment>>(
     ['scheduledPayments', userAddress, graphEndpoint],
-    () => fetchScheduledPayments({ userAddress, graphEndpoint }),
+    () => fetchScheduledPayments({ userAddress, graphEndpoint, chainId }),
+    {
+      refetchInterval: 30_000,
+    }
+  );
+}
+
+async function fetchScheduledPaymentsOnAllChains({ userAddress }: { userAddress?: string | null }) {
+  const chains = Object.entries(networkDetails).map(([chainId, data]) => ({
+    endpoint: data.scheduledTransferSubgraph,
+    chainId: Number(chainId),
+  }));
+
+  try {
+    const data = await Promise.allSettled(
+      chains.map(({ chainId, endpoint }) => fetchScheduledPayments({ userAddress, graphEndpoint: endpoint, chainId }))
+    );
+
+    return data.reduce((acc, curr) => {
+      if (curr.status === 'fulfilled') {
+        acc = [...acc, ...(curr.value || [])];
+      }
+      return acc;
+    }, [] as Array<IScheduledTransferPayment>);
+  } catch (error: any) {
+    console.log("Couldn't fetch scheduled payments on all chains");
+    console.log(error);
+    throw new Error(error.message || (error?.reason ?? "Couldn't fetch scheduled payments on all chains"));
+  }
+}
+
+export function useGetScheduledPaymentsOnAllChains({ userAddress }: { userAddress?: string | null }) {
+  return useQuery<Array<IScheduledTransferPayment>>(
+    ['scheduledPaymentsOnAllChains', userAddress],
+    () => fetchScheduledPaymentsOnAllChains({ userAddress }),
     {
       refetchInterval: 30_000,
     }

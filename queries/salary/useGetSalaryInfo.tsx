@@ -252,14 +252,16 @@ async function fetchSalaryInfoOnAllChains({ userAddress }: { userAddress?: strin
       { withdrawableAmounts: [] as Array<IWithdrawableAmount>, salaryStreams: [] as Array<IFormattedSalaryStream> }
     );
   } catch (error: any) {
-    console.log("Couldn't fetch salary info");
+    console.log("Couldn't fetch salary info  on all chains");
     console.log(error);
-    throw new Error(error.message || (error?.reason ?? "Couldn't fetch salary info"));
+    throw new Error(error.message || (error?.reason ?? "Couldn't fetch salary info on all chains"));
   }
 }
 
 export const useGetSalaryInfoOnAllChains = ({ userAddress }: { userAddress?: string }) => {
-  return useQuery<ISalaryInfo>(['salaryInfo', userAddress], () => fetchSalaryInfoOnAllChains({ userAddress }));
+  return useQuery<ISalaryInfo>(['salaryInfoOnAllChains', userAddress], () =>
+    fetchSalaryInfoOnAllChains({ userAddress })
+  );
 };
 
 async function fetchSalaryHistoryInfo({
