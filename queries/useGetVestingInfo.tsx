@@ -277,6 +277,6 @@ interface IVestingInfoByQueryParams {
 
 export function useGetVestingInfoByQueryParams({ address, chainId, provider }: IVestingInfoByQueryParams) {
   return useQuery(['vestingInfo', address, chainId], () => getVestingInfo(address, provider, chainId), {
-    refetchInterval: 60000,
+    refetchInterval: false,
   });
 }
