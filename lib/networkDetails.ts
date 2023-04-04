@@ -110,7 +110,7 @@ export const networkDetails: INetworkDetails = {
   1: {
     rpcUrl: 'https://endpoints.omniatech.io/v1/eth/mainnet/public',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-mainnet',
-    chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/eth'),
+    chainProviders: new ethers.providers.JsonRpcProvider('https://endpoints.omniatech.io/v1/eth/mainnet/public'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_MAINNET,
     disperseAddress: CONTRACTS.DISPERSE_DEFAULT,
     botAddress: CONTRACTS.BOT_MAINNET,
