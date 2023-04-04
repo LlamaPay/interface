@@ -12,6 +12,7 @@ import { BeatLoader } from '~/components/BeatLoader';
 import { useIntl, useTranslations } from 'next-intl';
 import { LlamaContractInterface } from '~/utils/contract';
 import useGnosisBatch from '~/queries/useGnosisBatch';
+import { useBalances } from '~/hooks';
 
 interface ModifyProps {
   data: IStream;
@@ -31,6 +32,15 @@ export const Modify = ({ data }: ModifyProps) => {
   const { mutate: modifyStream, isLoading, data: transaction } = useModifyStream();
   const { mutate: gnosisBatch } = useGnosisBatch();
   const transactionDialog = useDialogState();
+  const { balances } = useBalances();
+  const token = balances?.filter((x: any) => x.address.toLowerCase() === data.token.address.toLowerCase())[0];
+  const debt = token
+    ? 0 >
+      Number(token.amount) -
+        (Date.now() / 1e3 - Number(token.lastPayerUpdate)) * (Number(token.totalPaidPerSec) / 10 ** 20)
+      ? true
+      : false
+    : false;
 
   const savedAddressName =
     useAddressStore((state) => state.addressBook.find((p) => p.id.toLowerCase() === data.payeeAddress?.toLowerCase()))
@@ -115,6 +125,9 @@ export const Modify = ({ data }: ModifyProps) => {
               </p>
             </div>
           </section>
+          {debt && (
+            <span>{`You won't be able to modify streams while in debt, please either repay your debt or cancel it by canceling the streams`}</span>
+          )}
           <section>
             <h2 className="my-1 font-medium text-lp-gray-4 dark:text-white">{t2('updateStream')}</h2>
             <form

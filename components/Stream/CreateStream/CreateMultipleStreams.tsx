@@ -37,7 +37,7 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
   const tokenOptions = tokens.map((t) => t.tokenAddress);
   const { balances } = useBalances();
   const tokensInDebt = balances?.filter(
-    (x: any) => 0 > x.amount - (Date.now() / 1e3 - x.lastPayerUpdate) * (x.totalPaidPerSec / 10 ** x.tokenDecimals)
+    (x: any) => 0 > x.amount - (Date.now() / 1e3 - x.lastPayerUpdate) * (x.totalPaidPerSec / 10 ** 20)
   );
   const { mutate: batchCall, isLoading: batchLoading } = useBatchCalls();
   const { mutate: streamToken, isLoading: createStreamLoading } = useStreamToken();
