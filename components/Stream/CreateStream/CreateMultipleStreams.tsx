@@ -14,6 +14,8 @@ import useGnosisBatch from '~/queries/useGnosisBatch';
 import { ExclamationCircleIcon } from '@heroicons/react/24/outline';
 import toast from 'react-hot-toast';
 import { resolveEnsAndRave } from '~/utils/address';
+import { ExclamationTriangleIcon } from '@heroicons/react/24/solid';
+import { useBalances } from '~/hooks';
 
 type FormValues = {
   streams: {
@@ -33,14 +35,16 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
   const updateAddress = useAddressStore((state) => state.updateAddress);
 
   const tokenOptions = tokens.map((t) => t.tokenAddress);
-
+  const { balances } = useBalances();
+  const tokensInDebt = balances?.filter(
+    (x: any) => 0 > x.amount - (Date.now() / 1e3 - x.lastPayerUpdate) * (x.totalPaidPerSec / 10 ** x.tokenDecimals)
+  );
   const { mutate: batchCall, isLoading: batchLoading } = useBatchCalls();
   const { mutate: streamToken, isLoading: createStreamLoading } = useStreamToken();
   const { mutate: gnosisBatch, isLoading: gnosisLoading } = useGnosisBatch();
 
   const t0 = useTranslations('Common');
   const t1 = useTranslations('Forms');
-
   const {
     register,
     control,
@@ -133,6 +137,25 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
 
   return (
     <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
+      {tokensInDebt && tokensInDebt.length > 0 && (
+        <>
+          <span className="flex gap-1">
+            <ExclamationTriangleIcon className="h-6 w-6 text-red-600" />
+            <text className="text-md">{`No new streams can be created for:`}</text>
+            {tokensInDebt.map((x, i) => {
+              return (
+                <text key={i} className="text-md">
+                  {x.name}
+                </text>
+              );
+            })}
+          </span>
+          <text className="text-sm">
+            You won't be able to create or modify streams for these tokens while in debt, please either repay your debt
+            or cancel it by canceling the streams.
+          </text>
+        </>
+      )}
       {fields.map((field, index) => {
         return (
           <section className="flex flex-col gap-4" key={field.id}>
@@ -197,7 +220,6 @@ const CreateMultipleStreams = ({ tokens }: { tokens: ITokenBalance[] }) => {
                 )}
               />
             </span>
-
             <div>
               <div>
                 <label htmlFor={`stream-amount-${index}`} className="input-label">
