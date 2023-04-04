@@ -5,6 +5,7 @@ import BigNumber from 'bignumber.js';
 import { useNetworkProvider, useTokenList } from '~/hooks';
 import { Provider } from '~/utils/contract';
 import { Contract } from 'ethers';
+import { Multicall } from 'ethereum-multicall';
 
 interface IFetchBalance {
   userAddress: string;
@@ -27,12 +28,30 @@ const fetchBalance = async ({ userAddress, tokens, provider }: IFetchBalance) =>
   if (!userAddress || userAddress === '' || !tokens || !provider) return null;
 
   try {
-    const res = await Promise.all(tokens.map((token) => token.tokenContract.balanceOf(userAddress)));
+    const multicall = new Multicall({ ethersProvider: provider, tryAggregate: true });
+    const res2 = await multicall.call(
+      tokens.map((token) => ({
+        reference: token.tokenContract.address,
+        contractAddress: token.tokenContract.address,
+        abi: [
+          {
+            inputs: [{ internalType: 'address', name: '', type: 'address' }],
+            name: 'balanceOf',
+            outputs: [{ internalType: 'uint256', name: '', type: 'uint256' }],
+            stateMutability: 'view',
+            type: 'function',
+          },
+        ],
+        calls: [{ reference: 'balanceOf', methodName: 'balanceOf', methodParameters: [userAddress] }],
+      }))
+    );
 
     const balances =
-      res
-        ?.map((balance, index) => {
-          const bal = new BigNumber(balance.toString()).dividedBy(10 ** tokens[index].decimals);
+      tokens
+        ?.map((token, index) => {
+          const bal = new BigNumber(
+            res2.results[token.tokenContract.address].callsReturnContext[0].returnValues[0].hex
+          ).dividedBy(10 ** tokens[index].decimals);
           return {
             name: tokens[index].isVerified ? tokens[index].name : tokens[index].tokenAddress,
             tokenAddress: tokens[index].tokenAddress,

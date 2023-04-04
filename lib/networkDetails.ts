@@ -25,19 +25,6 @@ interface INetworkDetails {
   };
 }
 
-function createProvider(name: string, defaultRpc: string[], chainId: number) {
-  return new ethers.providers.FallbackProvider(
-    defaultRpc.map((url, i) => ({
-      provider: new ethers.providers.StaticJsonRpcProvider(url, {
-        name,
-        chainId,
-      }),
-      priority: i,
-    })),
-    1
-  );
-}
-
 const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
 const alchemyId = 'PwvZx2hO2XpToWXSw9sgJJt1eBgjkRUr';
 const etherscanKey = 'DDH7EVWI1AQHBNPX5PYRSDM5SHCVBKX58Q';
@@ -46,7 +33,7 @@ export const networkDetails: INetworkDetails = {
   43113: {
     rpcUrl: 'https://api.avax-test.network/ext/bc/C/rpc',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-fuji',
-    chainProviders: new ethers.providers.JsonRpcProvider(`https://api.avax-test.network/ext/bc/C/rpc`),
+    chainProviders: new ethers.providers.StaticJsonRpcProvider(`https://api.avax-test.network/ext/bc/C/rpc`),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_FUJI,
     disperseAddress: '0x267F83942214d11fDce5E8AA98351AFF6392946A',
     botAddress: '',
@@ -59,7 +46,7 @@ export const networkDetails: INetworkDetails = {
   43114: {
     rpcUrl: 'https://rpc.ankr.com/avalanche',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-avalanche-mainnet',
-    chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/avalanche'),
+    chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.ankr.com/avalanche'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_AVALANCHE,
     disperseAddress: CONTRACTS.DISPERSE_AVALANCHE,
     botAddress: CONTRACTS.BOT_AVALANCHE,
@@ -76,7 +63,7 @@ export const networkDetails: INetworkDetails = {
   137: {
     rpcUrl: 'https://polygon-rpc.com/',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-polygon',
-    chainProviders: new ethers.providers.JsonRpcProvider('https://polygon-rpc.com/'),
+    chainProviders: new ethers.providers.StaticJsonRpcProvider('https://polygon-rpc.com/'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_POLYGON,
     disperseAddress: CONTRACTS.DISPERSE_DEFAULT,
     botAddress: CONTRACTS.BOT_POLYGON,
@@ -93,7 +80,7 @@ export const networkDetails: INetworkDetails = {
   250: {
     rpcUrl: 'https://rpc.ftm.tools/',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-fantom',
-    chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ftm.tools/'),
+    chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.ftm.tools/'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_FANTOM,
     disperseAddress: CONTRACTS.DISPERSE_DEFAULT,
     botAddress: CONTRACTS.BOT_FANTOM,
@@ -110,7 +97,7 @@ export const networkDetails: INetworkDetails = {
   1: {
     rpcUrl: 'https://endpoints.omniatech.io/v1/eth/mainnet/public',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-mainnet',
-    chainProviders: new ethers.providers.JsonRpcProvider('https://endpoints.omniatech.io/v1/eth/mainnet/public'),
+    chainProviders: new ethers.providers.StaticJsonRpcProvider('https://endpoints.omniatech.io/v1/eth/mainnet/public'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_MAINNET,
     disperseAddress: CONTRACTS.DISPERSE_DEFAULT,
     botAddress: CONTRACTS.BOT_MAINNET,
@@ -130,7 +117,7 @@ export const networkDetails: INetworkDetails = {
   10: {
     rpcUrl: 'https://rpc.ankr.com/optimism',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-optimism',
-    chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/optimism'),
+    chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.ankr.com/optimism'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_OPTIMISM,
     disperseAddress: CONTRACTS.DISPERSE_DEFAULT,
     botAddress: CONTRACTS.BOT_OPTIMISM,
@@ -149,7 +136,7 @@ export const networkDetails: INetworkDetails = {
   42161: {
     rpcUrl: 'https://arb1.arbitrum.io/rpc',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-arbitrum',
-    chainProviders: new ethers.providers.JsonRpcProvider('https://arb1.arbitrum.io/rpc'),
+    chainProviders: new ethers.providers.StaticJsonRpcProvider('https://arb1.arbitrum.io/rpc'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_ARBITRUM,
     disperseAddress: CONTRACTS.DISPERSE_ARBITRUM,
     botAddress: CONTRACTS.BOT_ARBITRUM,
@@ -166,7 +153,7 @@ export const networkDetails: INetworkDetails = {
   56: {
     rpcUrl: 'https://rpc.ankr.com/bsc',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bsc',
-    chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.ankr.com/bsc'),
+    chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.ankr.com/bsc'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_BSC,
     disperseAddress: CONTRACTS.DISPERSE_DEFAULT,
     botAddress: CONTRACTS.BOT_BSC,
@@ -183,7 +170,7 @@ export const networkDetails: INetworkDetails = {
   100: {
     rpcUrl: 'https://xdai-rpc.gateway.pokt.network',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-xdai',
-    chainProviders: new ethers.providers.JsonRpcProvider('https://xdai-rpc.gateway.pokt.network'),
+    chainProviders: new ethers.providers.StaticJsonRpcProvider('https://xdai-rpc.gateway.pokt.network'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_XDAI,
     disperseAddress: CONTRACTS.DISPERSE_DEFAULT,
     botAddress: '',
@@ -197,7 +184,7 @@ export const networkDetails: INetworkDetails = {
   82: {
     rpcUrl: 'https://rpc.meter.io',
     subgraphEndpoint: 'https://graph-meter.voltswap.finance/subgraphs/name/nemusonaneko/llamapay-subgraph',
-    chainProviders: new ethers.providers.JsonRpcProvider('https://rpc.meter.io'),
+    chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.meter.io'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_METER,
     disperseAddress: CONTRACTS.DISPERSE_METER,
     botAddress: '',
@@ -234,7 +221,7 @@ export const networkDetails: INetworkDetails = {
   1088: {
     rpcUrl: 'https://andromeda.metis.io/?owner=1088',
     subgraphEndpoint: 'https://andromeda-graph.metis.io/subgraphs/name/maia-dao/llama-pay',
-    chainProviders: new ethers.providers.JsonRpcProvider('https://andromeda.metis.io/?owner=1088'),
+    chainProviders: new ethers.providers.StaticJsonRpcProvider('https://andromeda.metis.io/?owner=1088'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_METIS,
     disperseAddress: CONTRACTS.DISPERSE_METIS,
     botAddress: '',
@@ -248,7 +235,7 @@ export const networkDetails: INetworkDetails = {
   2222: {
     rpcUrl: 'https://evm.kava.io',
     subgraphEndpoint: 'https://the-graph.kava.io/subgraphs/name/nemusonaneko/llamapay-subgraph/',
-    chainProviders: new ethers.providers.JsonRpcProvider('https://evm.kava.io'),
+    chainProviders: new ethers.providers.StaticJsonRpcProvider('https://evm.kava.io'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_KAVA,
     disperseAddress: CONTRACTS.DISPERSE_KAVA,
     botAddress: '',
