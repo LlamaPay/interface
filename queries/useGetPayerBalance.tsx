@@ -6,6 +6,8 @@ import { createERC20Contract } from '~/utils/tokenUtils';
 import { getAddress } from 'ethers/lib/utils';
 import { useNetworkProvider } from '~/hooks';
 import { Provider } from '~/utils/contract';
+import { Multicall } from 'ethereum-multicall';
+import { llamaContractABI } from '~/lib/abis/llamaContract';
 
 const fetchBalance = async (
   id: string,
@@ -13,32 +15,42 @@ const fetchBalance = async (
   provider: Provider | null
 ): Promise<IBalance[] | null> => {
   if (!id || id === '' || !tokens || tokens.length < 1 || !provider) return null;
+
   try {
-    const res = await Promise.allSettled(tokens.map((c) => c.llamaTokenContract.balances(id)));
+    const multicall = new Multicall({ ethersProvider: provider, tryAggregate: true });
 
-    const data = res.flatMap((d, index) => {
-      const amount = (d.status === 'fulfilled' && new BigNumber(d.value.toString()).dividedBy(10 ** 20)) ?? null;
+    const res2 = await multicall.call(
+      tokens.map((token) => ({
+        reference: token.llamaTokenContract.address,
+        contractAddress: token.llamaTokenContract.address,
+        abi: llamaContractABI,
+        calls: [{ reference: 'balances', methodName: 'balances', methodParameters: [id] }],
+      }))
+    );
 
-      // filter zero balance tokens
-      if (!amount || !(Number(amount) > 0)) return [];
+    const data = tokens
+      .map((token) => {
+        const amount =
+          res2.results[getAddress(token.llamaTokenContract.address)]?.callsReturnContext?.[0]?.returnValues[0]?.hex;
 
-      return {
-        name: tokens[index]?.name,
-        address: tokens[index]?.tokenAddress,
-        symbol: tokens[index]?.symbol,
-        logoURI: tokens[index]?.logoURI,
-        amount: amount ? amount.toFixed(5) : '',
-        contractAddress: tokens[index]?.llamaContractAddress,
-        tokenDecimals: tokens[index].decimals,
-        tokenContract: createERC20Contract({ tokenAddress: getAddress(tokens[index]?.tokenAddress), provider }),
-        totalPaidPerSec: null,
-        lastPayerUpdate: null,
-      };
-    });
+        return {
+          name: token.name,
+          address: token.tokenAddress,
+          symbol: token.symbol,
+          logoURI: token.logoURI,
+          amount: amount ? new BigNumber(amount).dividedBy(10 ** 20).toFixed(5) : '0',
+          contractAddress: token.llamaContractAddress,
+          tokenDecimals: token.decimals,
+          tokenContract: createERC20Contract({ tokenAddress: getAddress(token.tokenAddress), provider }),
+          totalPaidPerSec: null,
+          lastPayerUpdate: null,
+        };
+      })
+      .filter((item) => Number(item.amount) > 0);
 
     return data;
   } catch (error) {
-    // console.log(error);
+    console.log(error);
     return null;
   }
 };

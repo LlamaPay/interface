@@ -21,7 +21,7 @@ export const NetworksMenu = () => {
   const { chain, chains } = useNetwork();
   const { switchNetwork } = useSwitchNetwork();
 
-  const { data: activeStreams } = useGetStreamsOnAllNetworks();
+  // const { data: activeStreams } = useGetStreamsOnAllNetworks();
 
   const select = useSelectState({
     defaultValue: chain?.id?.toString() ?? '0',
@@ -35,19 +35,19 @@ export const NetworksMenu = () => {
 
   if (!chain || !switchNetwork) return null;
 
-  const allChains = chains.sort((a, b) => {
-    const chain1: number = activeStreams?.find((c) => c.id === a.id)?.streams ?? 0;
-    const chain2: number = activeStreams?.find((c) => c.id === b.id)?.streams ?? 0;
+  // const allChains = chains.sort((a, b) => {
+  //   const chain1: number = activeStreams?.find((c) => c.id === a.id)?.streams ?? 0;
+  //   const chain2: number = activeStreams?.find((c) => c.id === b.id)?.streams ?? 0;
 
-    if (!chain1 && !chain2) {
-      return 0;
-    }
+  //   if (!chain1 && !chain2) {
+  //     return 0;
+  //   }
 
-    return chain2 - chain1;
-  });
+  //   return chain2 - chain1;
+  // });
 
-  const mainnets = allChains.filter((chain) => !chain.testnet);
-  const testnets = allChains.filter((chain) => chain.testnet);
+  const mainnets = chains.filter((chain) => !chain.testnet);
+  const testnets = chains.filter((chain) => chain.testnet);
 
   return (
     <>
@@ -99,7 +99,7 @@ export const NetworksMenu = () => {
                     />
                   </div>
                   <span>{value.name}</span>
-                  <span className="ml-auto pl-4">{activeStreams?.find((s) => s.id === value.id)?.streams}</span>
+                  {/* <span className="ml-auto pl-4">{activeStreams?.find((s) => s.id === value.id)?.streams}</span> */}
                 </SelectItem>
               );
             })}
@@ -129,7 +129,7 @@ export const NetworksMenu = () => {
                     />
                   </div>
                   <span>{value.name}</span>
-                  <span className="ml-auto pl-4">{activeStreams?.find((s) => s.id === value.id)?.streams}</span>
+                  {/* <span className="ml-auto pl-4">{activeStreams?.find((s) => s.id === value.id)?.streams}</span> */}
                 </SelectItem>
               );
             })}

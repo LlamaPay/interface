@@ -76,7 +76,7 @@ export default function Salaries({ subgraphEndpoint, address, resolvedAddress, n
 
       {network ? (
         <>
-          <Balance address={address} />
+          <Balance address={resolvedAddress} />
 
           <AltStreamSection isLoading={isLoading} isError={isError} data={streamsAndHistory} />
 
