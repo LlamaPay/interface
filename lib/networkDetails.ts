@@ -95,9 +95,9 @@ export const networkDetails: INetworkDetails = {
     paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-fantom',
   },
   1: {
-    rpcUrl: 'https://endpoints.omniatech.io/v1/eth/mainnet/public',
+    rpcUrl: 'https://rpc.ankr.com/eth',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-mainnet',
-    chainProviders: new ethers.providers.StaticJsonRpcProvider('https://endpoints.omniatech.io/v1/eth/mainnet/public'),
+    chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.ankr.com/eth'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_MAINNET,
     disperseAddress: CONTRACTS.DISPERSE_DEFAULT,
     botAddress: CONTRACTS.BOT_MAINNET,
