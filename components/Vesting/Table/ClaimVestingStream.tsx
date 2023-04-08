@@ -56,7 +56,7 @@ export default function ClaimVesting({
       setBeneficiaryInput(address);
     }
 
-    setInputAmount(EthersBigNumber.from(Math.floor(Number(data.unclaimed))).toString());
+    setInputAmount(EthersBigNumber.from(data.unclaimed).toString());
     claimDialog.hide();
     confirmDialog.show();
   }
