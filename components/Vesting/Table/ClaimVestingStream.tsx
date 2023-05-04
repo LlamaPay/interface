@@ -11,6 +11,7 @@ import toast from 'react-hot-toast';
 import { vestingContractReadableABI } from '~/lib/abis/vestingContractReadable';
 import type { IVesting } from '~/types';
 import { useQueryClient } from '@tanstack/react-query';
+import { useChainId } from 'wagmi';
 
 export default function ClaimVesting({
   claimValues,
@@ -31,13 +32,14 @@ export default function ClaimVesting({
   const queryClient = useQueryClient();
 
   const { address } = useAccount();
+  const chainId = useChainId();
 
   const { isLoading, writeAsync: claim } = useContractWrite({
     mode: 'recklesslyUnprepared',
     address: data.contract as `0x${string}`,
     abi: vestingContractReadableABI,
     overrides: {
-      gasLimit: 2500000 as any,
+      gasLimit: (chainId === 42161 ? 2500000 : 200e3) as any,
     },
     functionName: 'claim',
   });
