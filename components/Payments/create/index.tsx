@@ -261,6 +261,16 @@ export default function CreatePayment({ contract }: { contract: string }) {
           >
             Import
           </button>
+          <a href="https://docs.llamapay.io/llamapay/importing-csv-for-payments">
+            <button className="rounded-3xl border px-3 py-[6px] text-sm dark:border-[#252525] dark:bg-[#252525]">
+              Guide
+            </button>
+          </a>
+          <a href="/csvs/payments.csv">
+            <button className="rounded-3xl border px-3 py-[6px] text-sm dark:border-[#252525] dark:bg-[#252525]">
+              Example
+            </button>
+          </a>
         </form>
       </div>
       <form className="mx-auto flex max-w-xl flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
