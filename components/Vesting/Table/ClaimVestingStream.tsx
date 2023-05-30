@@ -34,7 +34,7 @@ export default function ClaimVesting({
   const { address } = useAccount();
   const chainId = useChainId();
 
-  const { isLoading, writeAsync: claim } = useContractWrite({
+  const { writeAsync: claim } = useContractWrite({
     mode: 'recklesslyUnprepared',
     address: data.contract as `0x${string}`,
     abi: vestingContractReadableABI,
@@ -147,7 +147,7 @@ export default function ClaimVesting({
             </div>
           </section>
           <SubmitButton className="mt-5" onClick={handleConfirm}>
-            {isLoading ? <BeatLoader size="6px" color="white" /> : 'Confirm Transaction'}
+            Confirm Transaction
           </SubmitButton>
         </div>
       </FormDialog>
