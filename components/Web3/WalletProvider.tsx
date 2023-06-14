@@ -30,6 +30,9 @@ const connectors: Array<Connector> = [
   new WalletConnectConnector({
     options: {
       qrcode: true,
+      rpc: {
+        137: 'https://polygon.llamarpc.com',
+      },
     },
   }),
 ];
