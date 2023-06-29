@@ -28,6 +28,7 @@ const connectors: Array<Connector> = [
     options: { shimDisconnect: true },
   }),
   new WalletConnectConnector({
+    chains,
     options: {
       projectId: 'cbb6f8d4ec08615468331294be6486a7',
     },
