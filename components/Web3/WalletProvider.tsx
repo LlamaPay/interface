@@ -30,21 +30,6 @@ const connectors: Array<Connector> = [
   new WalletConnectConnector({
     options: {
       projectId: 'cbb6f8d4ec08615468331294be6486a7',
-      qrcode: true,
-      rpc: {
-        1: 'https://eth.llamarpc.com',
-        5: 'https://ethereum-goerli.publicnode.com',
-        10: 'https://mainnet.optimism.io',
-        56: 'https://bsc.publicnode.com',
-        82: 'https://rpc.meter.io',
-        100: 'https://rpc.gnosischain.com',
-        137: 'https://polygon.llamarpc.com',
-        250: 'https://rpc3.fantom.network',
-        1088: 'https://andromeda.metis.io/?owner=1088',
-        42161: 'https://arbitrum-one.publicnode.com',
-        43113: 'https://avalanche-fuji-c-chain.publicnode.com',
-        43114: 'https://api.avax.network/ext/bc/C/rpc',
-      },
     },
   }),
 ];

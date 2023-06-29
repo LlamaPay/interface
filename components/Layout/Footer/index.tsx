@@ -4,10 +4,6 @@ import Image from 'next/image';
 import footerGraphic from '~/public/footerGraphic.svg';
 import * as React from 'react';
 
-const Widget = dynamic(() => import('./AnteWIdget'), {
-  ssr: false,
-});
-
 // TODO add translations
 const Footer = () => {
   return (
@@ -15,7 +11,7 @@ const Footer = () => {
       <div className="z-10 flex flex-col gap-4 2xl:gap-8">
         <NeutralLogo />
         <p className="flex w-fit flex-wrap gap-[2px] rounded text-sm text-lp-secondary backdrop-blur-xl lg:text-base xl:flex-col">
-          <span>© LlamaPay 2022.</span> <span>All rights reserved.</span>
+          <span>© LlamaPay 2023.</span> <span>All rights reserved.</span>
         </p>
       </div>
 
@@ -55,8 +51,6 @@ const Footer = () => {
       <div className="footer-graphic">
         <Image src={footerGraphic} alt="" className="object-contain" />
       </div>
-
-      <Widget />
     </footer>
   );
 };
