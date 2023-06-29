@@ -29,6 +29,7 @@ const connectors: Array<Connector> = [
   }),
   new WalletConnectConnector({
     options: {
+      projectId: 'cbb6f8d4ec08615468331294be6486a7',
       qrcode: true,
       rpc: {
         1: 'https://eth.llamarpc.com',
