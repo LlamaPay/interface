@@ -47,7 +47,7 @@ export default function RugpullVestingButton({ data }: { data: IVesting }) {
     <>
       {address && data.admin.toLowerCase() === address.toLowerCase() && (
         <button onClick={() => RugDialog.show()} className="row-action-links font-exo float-right dark:text-white">
-          Rug
+          Revoke
         </button>
       )}
       <FormDialog className="h-min" dialog={RugDialog} title={'Clawback'}>

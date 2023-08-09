@@ -46,7 +46,7 @@ export default function RenounceOwnershipButton({ data }: { data: IVesting }) {
     <>
       {address && data.admin.toLowerCase() === address.toLowerCase() && (
         <button onClick={() => RenounceDialog.show()} className="row-action-links font-exo float-right dark:text-white">
-          Renounce
+          Renounce Owneship
         </button>
       )}
       <FormDialog className="h-min" dialog={RenounceDialog} title={'Renounce Ownership'}>
