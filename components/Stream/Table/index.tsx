@@ -109,7 +109,7 @@ export function StreamTable({ data }: { data: IStream[] }) {
                     <a
                       target="_blank"
                       rel="noreferrer noopener"
-                      href={`https://llamapay.io/salaries/withdraw/${network}/${info.getValue()}`}
+                      href={`https://llamapay.io/salaries/withdraw/${chainId}/${info.getValue()}`}
                     >
                       <ShareIcon className="h-4 w-4 text-black dark:text-white" />
                     </a>
@@ -119,7 +119,7 @@ export function StreamTable({ data }: { data: IStream[] }) {
                     content="Copy link to stream"
                     onClick={() =>
                       navigator.clipboard.writeText(
-                        `https://llamapay.io/salaries/withdraw/${network}/${info.getValue()}`
+                        `https://llamapay.io/salaries/withdraw/${chainId}/${info.getValue()}`
                       )
                     }
                     className={classNames(
@@ -265,7 +265,7 @@ export function StreamTable({ data }: { data: IStream[] }) {
 export function DefaultStreamTable({ data }: { data: IStream[] }) {
   const t = useTranslations('Table');
 
-  const { network } = useNetworkProvider();
+  const { chainId: network } = useNetworkProvider();
 
   let columns = React.useMemo<ColumnDef<IStream>[]>(
     () => [

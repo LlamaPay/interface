@@ -16,7 +16,7 @@ export function SavedName({ data }: { data: IStream }) {
 
   const address = isIncoming ? data.payerAddress : data.payeeAddress;
 
-  const { network } = useNetworkProvider();
+  const { network, chainId } = useNetworkProvider();
 
   const dialog = useDialogState();
 
@@ -49,7 +49,7 @@ export function SavedName({ data }: { data: IStream }) {
   return (
     <div className="flex items-center gap-2 truncate">
       <Link
-        href={`/salaries/withdraw/${network}/${data.streamId}`}
+        href={`/salaries/withdraw/${chainId}/${data.streamId}`}
         className="flex cursor-pointer items-center gap-2 truncate"
       >
         {isIncoming ? (
