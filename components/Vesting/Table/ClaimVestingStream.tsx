@@ -38,9 +38,6 @@ export default function ClaimVesting({
     mode: 'recklesslyUnprepared',
     address: data.contract as `0x${string}`,
     abi: vestingContractReadableABI,
-    overrides: {
-      gasLimit: (chainId === 42161 ? 2500000 : 200e3) as any,
-    },
     functionName: 'claim',
   });
 

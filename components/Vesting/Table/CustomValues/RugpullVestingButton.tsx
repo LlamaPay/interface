@@ -16,9 +16,6 @@ export default function RugpullVestingButton({ data }: { data: IVesting }) {
     address: data.contract as `0x${string}`,
     abi: vestingContractReadableABI,
     functionName: 'rug_pull',
-    overrides: {
-      gasLimit: 500000 as any,
-    },
   });
 
   const queryClient = useQueryClient();
