@@ -4,7 +4,6 @@ import { chains as wagmiChains } from '~/lib/chains';
 import { configureChains, Connector, createClient, WagmiConfig } from 'wagmi';
 import { jsonRpcProvider } from 'wagmi/providers/jsonRpc';
 import { InjectedConnector } from 'wagmi/connectors/injected';
-import { WalletConnectConnector } from 'wagmi/connectors/walletConnect';
 import { SafeConnector } from 'wagmi/connectors/safe';
 
 const { chains, provider } = configureChains(
@@ -26,12 +25,6 @@ const connectors: Array<Connector> = [
   new InjectedConnector({
     chains,
     options: { shimDisconnect: true },
-  }),
-  new WalletConnectConnector({
-    chains,
-    options: {
-      projectId: 'cbb6f8d4ec08615468331294be6486a7',
-    },
   }),
 ];
 
