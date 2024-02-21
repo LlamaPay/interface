@@ -111,7 +111,7 @@ export default function VestingChart({
           ]),
         },
         data: [...Array(Number(vestedDays))].map((_, index) => [
-          new Date(new Date().setDate(startTime.getDate() + index)),
+          new Date(new Date(startTime).setDate(startTime.getDate() + index)),
           (amount / vestingPeriod) * index,
         ]),
       });
