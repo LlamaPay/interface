@@ -10,9 +10,6 @@ const Footer = () => {
     <footer className="relative mt-20 flex flex-col flex-wrap gap-12 bg-lp-gray-5 p-10 text-lp-white sm:p-20 lg:min-h-[26.25rem] xl:min-h-[30rem] xl:flex-row xl:justify-between xl:p-24">
       <div className="z-10 flex flex-col gap-4 2xl:gap-8">
         <NeutralLogo />
-        <p className="flex w-fit flex-wrap gap-[2px] rounded text-sm text-lp-secondary backdrop-blur-xl lg:text-base xl:flex-col">
-          <span>© LlamaPay 2023.</span> <span>All rights reserved.</span>
-        </p>
       </div>
 
       <div className="z-10 flex flex-wrap gap-12 rounded sm:gap-24 md:flex-row xl:mr-[21.25rem] xl:text-lg 2xl:mr-[25rem]">
