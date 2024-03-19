@@ -68,7 +68,7 @@ const DepositAndCreate = ({ tokens, userAddress, dialog }: IStreamFormProps) => 
       checkApproval({
         tokenDetails: data,
         userAddress,
-        approvedForAmount: inputAmount,
+        approvedForAmount: e.target.value,
         checkTokenApproval,
       });
     }
@@ -84,7 +84,7 @@ const DepositAndCreate = ({ tokens, userAddress, dialog }: IStreamFormProps) => 
         checkApproval({
           tokenDetails: data,
           userAddress,
-          approvedForAmount: inputAmount,
+          approvedForAmount: selectedToken.balance,
           checkTokenApproval,
         });
       }

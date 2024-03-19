@@ -39,6 +39,7 @@ const maxAmount = new BigNumber(2).pow(256).minus(1).toFixed(0);
 const checkApproval = async (data: ICheckTokenAllowance) => {
   try {
     const { res, err } = await checkHasApprovedEnough(data);
+
     if (err) {
       return false;
     } else return res;

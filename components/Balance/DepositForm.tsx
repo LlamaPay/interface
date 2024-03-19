@@ -41,7 +41,7 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
         llamaContractAddress: data.llamaContractAddress,
       },
       userAddress: address,
-      approvedForAmount: inputAmount,
+      approvedForAmount: e.target.value,
       checkTokenApproval,
     });
   }
@@ -57,7 +57,7 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
           llamaContractAddress: data.llamaContractAddress,
         },
         userAddress: address,
-        approvedForAmount: inputAmount,
+        approvedForAmount: data.selectedToken.balance,
         checkTokenApproval,
       });
     }

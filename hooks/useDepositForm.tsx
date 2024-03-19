@@ -76,7 +76,7 @@ export function useDepositForm({
       checkApproval({
         tokenDetails: data,
         userAddress,
-        approvedForAmount: inputAmount,
+        approvedForAmount: e.target.value,
         checkTokenApproval,
       });
     }

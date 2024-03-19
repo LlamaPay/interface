@@ -54,6 +54,7 @@ export const checkHasApprovedEnough = async ({
       throw new Error('Invalid arguments');
     }
     const res = (await token.allowance(userAddress, approveForAddress)).gte(approvedForAmount);
+
     return { res, err: null };
   } catch (err) {
     // console.log(err);

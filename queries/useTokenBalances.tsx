@@ -52,6 +52,7 @@ const fetchBalance = async ({ userAddress, tokens, provider }: IFetchBalance) =>
           const bal = new BigNumber(
             res2.results[token.tokenContract.address].callsReturnContext[0].returnValues[0].hex
           ).dividedBy(10 ** tokens[index].decimals);
+
           return {
             name: tokens[index].isVerified ? tokens[index].name : tokens[index].tokenAddress,
             tokenAddress: tokens[index].tokenAddress,
@@ -60,7 +61,7 @@ const fetchBalance = async ({ userAddress, tokens, provider }: IFetchBalance) =>
             llamaContractAddress: tokens[index].llamaContractAddress,
             symbol: tokens[index].symbol,
             logoURI: tokens[index].logoURI,
-            balance: bal ? Math.floor((Number(bal) * 100000) / 100000).toFixed(5) : null,
+            balance: bal ? formatNum(bal.toString()) : null,
           };
         })
         ?.sort((a, b) => {
@@ -100,3 +101,21 @@ function useTokenBalances() {
 }
 
 export default useTokenBalances;
+
+export const formatNum = (value: string) => {
+  const [num, decimals] = value.split('.');
+  let final = num;
+  if (decimals) {
+    final += '.';
+    let cur = 0;
+    decimals.split('').forEach((point, index) => {
+      if (cur < 2) {
+        final += point;
+        if (point !== '0') {
+          cur += index > 0 && cur === 0 ? 2 : 1;
+        }
+      }
+    });
+  }
+  return final;
+};
