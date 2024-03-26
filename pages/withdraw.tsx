@@ -63,13 +63,9 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
   // get subgraph endpoint
   const endpoint = useGraphEndpoint();
 
-  if(endpoint === undefined){
-    return <>Chain not supported</>
-  }
-
   const { data, isLoading, isError } = useStreamAndHistoryQuery(
     {
-      endpoint,
+      endpoint: endpoint??'',
     },
     {
       id: addressToFetch?.toLowerCase() ?? '',
@@ -79,6 +75,10 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
       refetchInterval: 30000,
     }
   );
+
+  if(endpoint === undefined){
+    return <>Chain not supported</>
+  }
 
   const fetchStreams = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
