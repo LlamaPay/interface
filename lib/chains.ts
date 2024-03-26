@@ -470,4 +470,17 @@ export const chains: Array<wagmiChains.Chain> = [
       },
     },
   },
+  {
+    id: 1101,
+    name: 'Polygon zkEVM',
+    network: 'polygon_zkevm',
+    nativeCurrency: { "name": "ETH", "symbol": "ETH", "decimals": 18 },
+    rpcUrls: { default: { http: ['https://rpc.ankr.com/polygon_zkevm'] }, public: { http: ['https://rpc.ankr.com/polygon_zkevm'] } },
+    blockExplorers: {
+      default: {
+        name: 'polygonscan',
+        url: 'https://zkevm.polygonscan.com/',
+      },
+    },
+  },
 ];

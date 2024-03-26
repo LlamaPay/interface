@@ -556,4 +556,14 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/DefiLlama/icons/v2/assets/chains/rsz_telos.jpg',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
+  1101: {
+    rpcUrl: 'https://rpc.ankr.com/polygon_zkevm',
+    chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.ankr.com/polygon_zkevm'),
+    blockExplorerURL: 'https://zkevm.polygonscan.com/',
+    blockExplorerName: 'polygonscan',
+    prefix: 'polygon_zkevm',
+    tokenListId: 'polygon_zkevm',
+    logoURI: 'https://raw.githubusercontent.com/DefiLlama/icons/v2/assets/chains/rsz_polygon zkevm.jpg',
+    vestingFactory: CONTRACTS.VESTING_FACTORY,
+  },
 };

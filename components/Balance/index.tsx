@@ -2,7 +2,7 @@ import * as React from 'react';
 import DepositForm from './DepositForm';
 import WithdrawForm from './WithdrawForm';
 import DepositField from './DepositField';
-import { useBalances, useChainExplorer } from '~/hooks';
+import { useBalances, useChainExplorer, useGraphEndpoint } from '~/hooks';
 import type { IBalance } from '~/types';
 import type { IFormData, TokenAction } from './types';
 import { useDialogState } from 'ariakit';
@@ -20,6 +20,7 @@ import classNames from 'classnames';
 
 const Balance = (props: { address?: string }) => {
   const { balances, noBalances, isLoading, isError } = useBalances(props.address);
+  const graphEndpoint = useGraphEndpoint()
 
   // function that returns chain explorer url based on the chain user is connected to
   const { url: chainExplorer, id } = useChainExplorer();
@@ -65,6 +66,10 @@ const Balance = (props: { address?: string }) => {
   const showActions = props.address === undefined;
 
   const t = useTranslations('Common');
+
+  if(graphEndpoint === undefined){
+    return <>This section is not supported for this chain, either switch chain or go to the vesting section</>
+  }
 
   return (
     <section className={classNames('-mt-2', showFallback ? 'w-full' : 'w-fit')}>
