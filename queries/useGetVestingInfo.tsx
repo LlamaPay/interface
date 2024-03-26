@@ -55,7 +55,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
           nodeUrl: networkDetails[chainId].rpcUrl,
           multicallCustomContractAddress: multicalls[chainId],
         })
-      : new Multicall({ ethersProvider: provider, tryAggregate: true });
+      : new Multicall({ ethersProvider: provider, tryAggregate: true, multicallCustomContractAddress: '0xcA11bde05977b3631167028862bE2a173976CA11' });
     const runMulticall = async (calls: any[]) => {
       const pending = [];
       for (let i = 0; i < calls.length; i += 200) {
