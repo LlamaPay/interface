@@ -49,6 +49,9 @@ export default function Schedule({
     startDate: new Date(Date.now()).toISOString().slice(0, 10),
     frequency: 'daily',
   });
+  if(botAddress === undefined){
+    return <>Chain not supported</>
+  }
 
   function handleChange(value: string, type: keyof typeof formData) {
     setFormData((prev) => ({ ...prev, [type]: value }));
@@ -96,7 +99,7 @@ export default function Schedule({
     if (!hasRedirect) {
       return;
     } else {
-      approveMax({ tokenAddress: data.token.address, spenderAddress: botAddress });
+      approveMax({ tokenAddress: data.token.address, spenderAddress: botAddress! });
       setRedirect({ recklesslySetUnpreparedArgs: [redirectAddress] })
         .then((data) => {
           const toastId = toast.loading('Setting Redirect');

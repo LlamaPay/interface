@@ -56,8 +56,16 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
 
   const { logoURI } = chainId ? networkDetails[chainId] : { logoURI: null };
 
+  const t0 = useTranslations('Withdraw');
+  const t1 = useTranslations('Streams');
+  const t2 = useTranslations('Common');
+
   // get subgraph endpoint
   const endpoint = useGraphEndpoint();
+
+  if(endpoint === undefined){
+    return <>Chain not supported</>
+  }
 
   const { data, isLoading, isError } = useStreamAndHistoryQuery(
     {
@@ -71,10 +79,6 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
       refetchInterval: 30000,
     }
   );
-
-  const t0 = useTranslations('Withdraw');
-  const t1 = useTranslations('Streams');
-  const t2 = useTranslations('Common');
 
   const fetchStreams = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

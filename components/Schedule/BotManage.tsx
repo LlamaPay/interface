@@ -85,6 +85,9 @@ export default function BotFunds({
     abi: botContractABI,
     functionName: 'cancelRedirect',
   });
+  if(botAddress === undefined){
+    return <>Chain not supported</>
+  }
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -191,7 +194,7 @@ export default function BotFunds({
   }
 
   function onRedirect() {
-    approveMax({ tokenAddress: selectedToken, spenderAddress: botAddress });
+    approveMax({ tokenAddress: selectedToken, spenderAddress: botAddress! });
     setRedirect({ recklesslySetUnpreparedArgs: [redirectAddress] })
       .then((data) => {
         const toastid = toast.loading(`Setting Redirect to ${formatAddress(redirectAddress ?? '')}`);
