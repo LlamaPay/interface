@@ -76,10 +76,6 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
     }
   );
 
-  if(endpoint === undefined){
-    return <>Chain not supported</>
-  }
-
   const fetchStreams = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -146,6 +142,10 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
   const showFallback = !isConnected || unsupported;
 
   const t = useTranslations('Common');
+
+  if(endpoint === undefined){
+    return <Layout>Chain not supported</Layout>
+  }
 
   return (
     <Layout>
