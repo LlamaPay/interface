@@ -8,7 +8,7 @@ const useStreamsAndHistory = () => {
   const { provider, network } = useNetworkProvider();
 
   // get subgraph endpoint
-  const endpoint = useGraphEndpoint();
+  const endpoint = useGraphEndpoint()!;
 
   const { data, isLoading, error } = useStreamAndHistoryQuery(
     {

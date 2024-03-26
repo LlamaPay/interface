@@ -8,7 +8,7 @@ import { createERC20Contract } from '~/utils/tokenUtils';
 
 const useGetAllTokens = () => {
   // get subgraph endpoint
-  const endpoint = useGraphEndpoint();
+  const endpoint = useGraphEndpoint()!;
 
   const { provider, network } = useNetworkProvider();
 

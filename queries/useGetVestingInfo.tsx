@@ -117,8 +117,8 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
         }
       }
       `;
-      const admins = (await request(subgraphs[chainId], GET_ADMIN)).vestingEscrows;
-      const recipients = (await request(subgraphs[chainId], GET_RECIPIENT)).vestingEscrows;
+      const admins = (await request(subgraphs[chainId], GET_ADMIN) as any).vestingEscrows;
+      const recipients = (await request(subgraphs[chainId], GET_RECIPIENT) as any).vestingEscrows;
       const concatted = admins.concat(recipients);
       const escrows: any[] = [];
       concatted.forEach((x: any) => {

@@ -44,7 +44,7 @@ export default function useCreateLlamaPayContract() {
 
   const { chainId } = useNetworkProvider();
 
-  const factoryAddress = chainId ? networkDetails[chainId].llamapayFactoryAddress : null;
+  const factoryAddress = chainId ? networkDetails[chainId].llamapayFactoryAddress! : null;
 
   return useMutation<ITransactionSuccess, ITransactionError, ICreateContract, unknown>(
     ({ tokenAddress }: ICreateContract) => create({ factoryAddress, signer, tokenAddress }),

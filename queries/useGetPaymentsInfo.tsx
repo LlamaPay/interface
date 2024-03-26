@@ -49,8 +49,8 @@ async function getPaymentsInfo(userAddress: string | undefined, chainId: number 
           }
         }
       `;
-    const froms = (await request(networkDetails[chainId].paymentsGraphApi!, queryFrom)).escrows;
-    const tos = (await request(networkDetails[chainId].paymentsGraphApi!, queryTo)).escrows;
+    const froms = (await request(networkDetails[chainId].paymentsGraphApi!, queryFrom) as any).escrows;
+    const tos = (await request(networkDetails[chainId].paymentsGraphApi!, queryTo) as any).escrows;
     const results: IPayments[] = [];
     const ids: string[] = [];
     const escrows = froms.concat(tos);
