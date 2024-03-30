@@ -101,6 +101,7 @@ export interface ITransaction {
 }
 
 export interface IVesting {
+  factory: string;
   contract: string;
   unclaimed: string;
   locked: string;

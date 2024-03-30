@@ -251,7 +251,7 @@ const Redirects = ({
           <form className="mx-auto flex flex-col gap-4" onSubmit={updateRedirect}>
             <InputText name="newRedirects" label="New Redirect Address" placeholder="0x..." isRequired />
 
-            <SubmitButton className="mt-5">
+            <SubmitButton className="mt-5" disabled={updatingRedirect}>
               {updatingRedirect ? <BeatLoader size="6px" color="white" /> : 'Update'}
             </SubmitButton>
           </form>

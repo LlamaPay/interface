@@ -36,14 +36,30 @@ export function getStatus(data: IVesting, locale: string) {
     }
   } else if (Date.now() / 1e3 < Number(data.startTime) + Number(data.cliffLength)) {
     const tilStart = ((Number(data.startTime) + Number(data.cliffLength) - Date.now() / 1e3) / 86400).toFixed(2);
+
+    if (Number(data.startTime) < Date.now() / 1e3) {
+      return `Claimable in ${tilStart} Days`;
+    }
+
     return `Vesting Starts in ${tilStart} Days`;
   } else if (data.totalClaimed === data.totalLocked) {
     return `Vesting Ended`;
   } else {
+    if (Number(data.startTime) - Number(data.startTime) < secondsByDuration['month']) {
+      const amtPerDay: string = (
+        (Number(data.totalLocked) /
+          10 ** Number(data.tokenDecimals) /
+          (Number(data.endTime) - Number(data.startTime))) *
+        secondsByDuration['day']
+      ).toLocaleString(locale, { minimumFractionDigits: 5, maximumFractionDigits: 5 });
+
+      return `Vesting ${amtPerDay}/day`;
+    }
     const amtPerMonth: string = (
       (Number(data.totalLocked) / 10 ** Number(data.tokenDecimals) / (Number(data.endTime) - Number(data.startTime))) *
       secondsByDuration['month']
     ).toLocaleString(locale, { minimumFractionDigits: 5, maximumFractionDigits: 5 });
+
     return `Vesting ${amtPerMonth}/month`;
   }
 }

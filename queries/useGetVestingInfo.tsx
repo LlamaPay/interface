@@ -10,7 +10,7 @@ import { erc20ABI, useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
 import { vestingFactoryABI } from '~/lib/abis/vestingFactory';
 import { vestingReasonsABI } from '~/lib/abis/vestingReasons';
-import vestingEscrowABI from '~/lib/abis/vestingEscrow';
+import { vestingEscrowABI } from '~/lib/abis/vestingEscrow';
 
 const vestingEscrowCalls = [
   { reference: 'unclaimed', methodName: 'unclaimed', methodParameters: [] },
@@ -41,7 +41,6 @@ const subgraphs: { [key: number]: string } = {
 
 const multicalls: { [key: number]: string } = {
   2222: '0x30A62aA52Fa099C4B227869EB6aeaDEda054d121',
-  42161: '0xcA11bde05977b3631167028862bE2a173976CA11',
 };
 
 async function getVestingInfo(userAddress: string | undefined, provider: Provider | null, chainId: number | null) {
@@ -55,7 +54,11 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
           nodeUrl: networkDetails[chainId].rpcUrl,
           multicallCustomContractAddress: multicalls[chainId],
         })
-      : new Multicall({ ethersProvider: provider, tryAggregate: true, multicallCustomContractAddress: '0xcA11bde05977b3631167028862bE2a173976CA11' });
+      : new Multicall({
+          ethersProvider: provider,
+          tryAggregate: true,
+          multicallCustomContractAddress: '0xcA11bde05977b3631167028862bE2a173976CA11',
+        });
     const runMulticall = async (calls: any[]) => {
       const pending = [];
       for (let i = 0; i < calls.length; i += 200) {
@@ -117,8 +120,8 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
         }
       }
       `;
-      const admins = (await request(subgraphs[chainId], GET_ADMIN) as any).vestingEscrows;
-      const recipients = (await request(subgraphs[chainId], GET_RECIPIENT) as any).vestingEscrows;
+      const admins = ((await request(subgraphs[chainId], GET_ADMIN)) as any).vestingEscrows;
+      const recipients = ((await request(subgraphs[chainId], GET_RECIPIENT)) as any).vestingEscrows;
       const concatted = admins.concat(recipients);
       const escrows: any[] = [];
       concatted.forEach((x: any) => {
@@ -136,6 +139,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
       for (const i in escrows) {
         const returns = vestingContractInfoResults[escrows[i].id].callsReturnContext;
         const result = {
+          factory: escrows[i].factory ?? networkDetails[chainId].vestingFactory,
           contract: escrows[i].id.toString(),
           unclaimed: new BigNumber(returns[0].returnValues[0].hex).toString(),
           locked: new BigNumber(returns[1].returnValues[0].hex).toString(),
@@ -212,6 +216,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
         if (userAddress.toLowerCase() !== recipient && userAddress.toLowerCase() !== admin) continue;
         const tokenReturnContext = tokenContractCallResults[vestingReturnContext[3].returnValues[0]].callsReturnContext;
         unsortedResults.push({
+          factory: factoryAddress,
           contract: key,
           unclaimed: new BigNumber(vestingReturnContext[0].returnValues[0].hex).toString(),
           locked: new BigNumber(vestingReturnContext[1].returnValues[0].hex).toString(),

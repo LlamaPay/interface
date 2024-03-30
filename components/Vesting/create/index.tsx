@@ -237,7 +237,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
 
         <ChartWrapper {...formData} />
 
-        <SubmitButton className="mt-5">
+        <SubmitButton className="mt-5" disabled={checkingApproval || approvingToken}>
           {checkingApproval || approvingToken ? (
             <BeatLoader size="6px" color="white" />
           ) : isApproved ? (

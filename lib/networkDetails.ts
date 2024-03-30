@@ -202,7 +202,7 @@ export const networkDetails: INetworkDetails = {
       alchemy: alchemyId,
       etherscan: etherscanKey,
       infura: infuraId,
-    }), 
+    }),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_GOERLI,
     disperseAddress: CONTRACTS.DISPERSE_GOERLI,
     botAddress: CONTRACTS.BOT_GOERLI,

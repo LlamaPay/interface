@@ -124,7 +124,7 @@ export default function Confirm({ vestingData, dialog, factory }: IConfirmProps)
               }
             )} UTC) `}</p>
           </div>
-          <SubmitButton className="mt-5" onClick={onConfirm}>
+          <SubmitButton className="mt-5" onClick={onConfirm} disabled={isLoading}>
             {isLoading ? <BeatLoader size="6px" color="white" /> : 'Confirm Transaction'}
           </SubmitButton>
         </div>

@@ -47,8 +47,8 @@ export default function RenounceOwnershipButton({ data }: { data: IVesting }) {
         </button>
       )}
       <FormDialog className="h-min" dialog={RenounceDialog} title={'Renounce Ownership'}>
-        <span className="font-exo dark:text-white">{'Warning: You will no longer own the contract!'}</span>
-        <SubmitButton className="mt-5" onClick={handleRenounce}>
+        <span className="font-exo text-center dark:text-white">{'Warning: You will no longer own the contract!'}</span>
+        <SubmitButton className="mt-5" onClick={handleRenounce} disabled={isLoading}>
           {isLoading ? <BeatLoader size="6px" color="white" /> : 'Renounce Ownership'}
         </SubmitButton>
       </FormDialog>

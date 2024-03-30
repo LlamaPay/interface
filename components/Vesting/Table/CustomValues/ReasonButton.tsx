@@ -55,7 +55,7 @@ export default function ReasonButton({ data }: { data: IVesting }) {
               <span className="space-y-4 text-lp-gray-6 dark:text-white">
                 <form className="mx-auto flex flex-col gap-4" onSubmit={onSubmit}>
                   <InputText name="reason" isRequired placeholder="Reason" label="Reason" />
-                  <SubmitButton className="mt-5">
+                  <SubmitButton className="mt-5" disabled={isLoading}>
                     {isLoading ? <BeatLoader size="6px" color="white" /> : 'Add Reason'}
                   </SubmitButton>
                 </form>

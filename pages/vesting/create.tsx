@@ -7,6 +7,7 @@ import type { GetStaticPropsContext, NextPage } from 'next';
 import { useTranslations } from 'next-intl';
 import { networkDetails } from '~/lib/networkDetails';
 import { useAccount } from 'wagmi';
+import { VESTING_FACTORY_V2 } from '~/lib/contracts';
 
 const Create: NextPage = () => {
   const { isConnected } = useAccount();
@@ -15,7 +16,8 @@ const Create: NextPage = () => {
 
   const t = useTranslations('CreateStream');
 
-  const factory = chainId ? networkDetails[chainId]?.vestingFactory : null;
+  // const factory = chainId ? networkDetails[chainId]?.vestingFactory : null;
+  const factory = VESTING_FACTORY_V2;
 
   return (
     <Layout>

@@ -53,6 +53,7 @@ export const checkHasApprovedEnough = async ({
     if (!userAddress || !token || !approveForAddress || !approvedForAmount) {
       throw new Error('Invalid arguments');
     }
+
     const res = (await token.allowance(userAddress, approveForAddress)).gte(approvedForAmount);
 
     return { res, err: null };
@@ -67,7 +68,7 @@ export const checkHasApprovedEnoughMultiple = async (
 ): Promise<ICheckMultipleTokensResponse> => {
   try {
     if (!data.userAddress || !data.tokens) throw new Error('Invalid arguments');
-    let res: { [key: string]: boolean } = {};
+    const res: { [key: string]: boolean } = {};
     let allApproved = true;
     for (const token in data.tokens) {
       const currToken = data.tokens[token];
