@@ -3,6 +3,7 @@ import { useNetworkProvider } from '~/hooks';
 import { useTranslations } from 'next-intl';
 import { BeatLoader } from '~/components/BeatLoader';
 import { useAccount } from 'wagmi';
+import { useTheme } from 'next-themes';
 
 interface FallbackProps {
   isLoading?: boolean;
@@ -92,10 +93,14 @@ export function FallbackContainer({ children }: { children: React.ReactNode }) {
   );
 }
 
-export const FallbackContainerLoader = () => (
-  <span className="relative top-[2px]">
-    <BeatLoader size="6px" />
-  </span>
-);
+export const FallbackContainerLoader = () => {
+  const { resolvedTheme } = useTheme();
+
+  return (
+    <span className="relative top-[2px] text-black dark:text-white">
+      <BeatLoader size="6px" color={resolvedTheme === 'dark' ? 'white' : 'black'} />
+    </span>
+  );
+};
 
 export default Fallback;
