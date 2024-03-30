@@ -18,12 +18,12 @@ export function Nav() {
 
   return (
     <nav className="hidden min-w-[224px] flex-col gap-3 px-8 lg:flex">
-      <Group name="Salaries" isOpen={isSalaries || router.pathname === '/create' || router.pathname === '/withdraw'}>
-        <LinkItem name="Streams" href="/" isActive={isSalaries} />
+      <Group name="Salaries" isOpen={isSalaries}>
+        <LinkItem name="Streams" href="/salaries" isActive={isSalaries} />
         <Spacer />
-        <LinkItem name="Create" href="/create" isActive={router.pathname === '/create'} />
+        <LinkItem name="Create" href="/salaries/create" isActive={router.pathname === '/salaries/create'} />
         <Spacer />
-        <LinkItem name="Withdraw" href="/withdraw" isActive={router.pathname === '/withdraw'} />
+        <LinkItem name="Withdraw" href="/salaries/withdraw" isActive={router.pathname === '/salaries/withdraw'} />
       </Group>
 
       <Group name="Vesting" isOpen={isVesting}>
