@@ -108,7 +108,7 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
                       ? chain?.id === 82 || chain?.id === 1088
                         ? `${chainExplorer}address/${stream?.payer?.id}`
                         : `${chainExplorer}/address/${stream?.payer?.id}`
-                      : '/'
+                      : '/salaries'
                   }
                   className="relative break-all"
                   target="_blank"
@@ -127,7 +127,7 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
                       ? chain?.id === 82 || chain?.id === 1088
                         ? `${chainExplorer}address/${stream?.payee?.id}`
                         : `${chainExplorer}/address/${stream?.payee?.id}`
-                      : '/'
+                      : '/salaries'
                   }
                   className="relative break-all"
                   target="_blank"
@@ -274,7 +274,7 @@ export const getServerSideProps: GetServerSideProps = async ({ query, locale }) 
   if (!chain || !stream || !id) {
     return {
       redirect: {
-        destination: '/',
+        destination: '/salaries',
         permanent: false,
       },
     };

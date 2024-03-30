@@ -65,7 +65,7 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
 
   const { data, isLoading, isError } = useStreamAndHistoryQuery(
     {
-      endpoint: endpoint??'',
+      endpoint: endpoint ?? '',
     },
     {
       id: addressToFetch?.toLowerCase() ?? '',
@@ -102,7 +102,7 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
     } catch (error) {
       setAddressToFetch(form.addressToFetchStreams.value);
     } finally {
-      router.push(`/withdraw?address=${form.addressToFetchStreams.value}`, undefined, { shallow: true });
+      router.push(`/salaries/withdraw?address=${form.addressToFetchStreams.value}`, undefined, { shallow: true });
       setFetchingEns(false);
       form.reset();
     }
@@ -143,8 +143,8 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
 
   const t = useTranslations('Common');
 
-  if(endpoint === undefined){
-    return <Layout>Chain not supported</Layout>
+  if (endpoint === undefined) {
+    return <Layout>Chain not supported</Layout>;
   }
 
   return (
