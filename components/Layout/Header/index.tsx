@@ -23,7 +23,7 @@ const Header = ({ onboardDialog, walletDialog }: { onboardDialog: DisclosureStat
 
   return (
     <header className="flex items-center justify-between gap-10 border-b border-llama-teal-2 bg-llama-teal-1 bg-opacity-5 py-4 px-2 text-base dark:border-lp-gray-7 dark:bg-lp-gray-8 md:px-6 lg:px-8">
-      <Link href="/">
+      <Link href="/salaries">
         <span className="sr-only">Navigate to Home Page</span>
         <Logo />
       </Link>

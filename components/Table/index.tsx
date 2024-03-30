@@ -1,12 +1,12 @@
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
-import { Table, flexRender } from '@tanstack/react-table';
+import { Table as TanstackTable, flexRender } from '@tanstack/react-table';
 import { DisclosureState } from 'ariakit';
 import classNames from 'classnames';
 import { useTranslations } from 'next-intl';
 import SortIcon from './SortIcon';
 
 interface ITableProps {
-  instance: Table<any>;
+  instance: TanstackTable<any>;
   maxWidthColumn?: number;
   hidePagination?: boolean;
   downloadToCSV?: () => void;

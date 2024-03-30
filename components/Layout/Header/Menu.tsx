@@ -125,9 +125,9 @@ export default function HeaderMenu({
       {isMaxWidthLg && (
         <>
           <Menu label="Salaries">
-            <MenuItem label={<Link href="/">Streams</Link>} />
-            <MenuItem label={<Link href="/create">Create</Link>} />
-            <MenuItem label={<Link href="/withdraw">Withdraw</Link>} />
+            <MenuItem label={<Link href="/salaries">Streams</Link>} />
+            <MenuItem label={<Link href="/salaries/create">Create</Link>} />
+            <MenuItem label={<Link href="/salaries/withdraw">Withdraw</Link>} />
           </Menu>
 
           <Menu label="Vesting">

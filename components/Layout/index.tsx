@@ -2,7 +2,6 @@ import * as React from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useDialogState } from 'ariakit';
-import { useAccount } from 'wagmi';
 import Header from './Header';
 import Hero from './Hero';
 import Footer from './Footer';
@@ -16,13 +15,12 @@ import classNames from 'classnames';
 import { useIsMounted } from '~/hooks';
 
 interface ILayoutProps {
-  children: React.ReactNode;
+  children?: React.ReactNode;
   className?: string;
 }
 
 export default function Layout({ children, className, ...props }: ILayoutProps) {
   const router = useRouter();
-  const { isConnected } = useAccount();
   const onboardDialog = useDialogState();
   const walletDialog = useDialogState();
   const isMounted = useIsMounted();
@@ -41,16 +39,16 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
       <Header onboardDialog={onboardDialog} walletDialog={walletDialog} />
 
       <>
-        {!isMounted || (router.pathname === '/' && !isConnected) ? (
+        {router.pathname === '/' ? (
           <>
-            <Hero walletDialog={walletDialog} />
+            <Hero />
             <HowItWorks onboardDialog={onboardDialog} />
           </>
         ) : (
           <div className="flex flex-1 py-9 px-2 md:px-6 lg:px-8 lg:pl-0">
             <Nav />
             <main className={classNames('mx-auto max-w-7xl flex-1', className)} {...props}>
-              {children}
+              {isMounted ? children : null}
             </main>
           </div>
         )}

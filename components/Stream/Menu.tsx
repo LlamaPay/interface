@@ -64,7 +64,7 @@ export default function StreamMenu() {
           <span>{`${t('disperse')} ${nativeCurrency?.symbol ? nativeCurrency?.symbol : 'Funds'}`}</span>
           <FuelIcon />
         </MenuItem>
-        <MenuItem className={itemClassname} onClick={() => router.push('/withdraw')}>
+        <MenuItem className={itemClassname} onClick={() => router.push('/salaries/withdraw')}>
           <span>{t('withdrawAnotherWallet')}</span>
           <WalletIcon />
         </MenuItem>
