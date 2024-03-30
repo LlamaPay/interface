@@ -20,7 +20,7 @@ import classNames from 'classnames';
 
 const Balance = (props: { address?: string }) => {
   const { balances, noBalances, isLoading, isError } = useBalances(props.address);
-  const graphEndpoint = useGraphEndpoint()
+  const graphEndpoint = useGraphEndpoint();
 
   // function that returns chain explorer url based on the chain user is connected to
   const { url: chainExplorer, id } = useChainExplorer();
@@ -67,8 +67,12 @@ const Balance = (props: { address?: string }) => {
 
   const t = useTranslations('Common');
 
-  if(graphEndpoint === undefined){
-    return <>This section is not supported for this chain, either switch chain or go to the vesting section</>
+  if (graphEndpoint === undefined) {
+    return (
+      <p className="text-center">
+        This section is not supported for this chain, either switch chain or go to the vesting section
+      </p>
+    );
   }
 
   return (
