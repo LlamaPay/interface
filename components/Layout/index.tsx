@@ -47,7 +47,16 @@ export default function Layout({ children, className, ...props }: ILayoutProps) 
         ) : (
           <div className="flex flex-1 py-9 px-2 md:px-6 lg:px-8 lg:pl-0">
             <Nav />
-            <main className={classNames('mx-auto max-w-7xl flex-1', className)} {...props}>
+            <main
+              className={classNames(
+                'mx-auto flex-1',
+                router.pathname.includes('/create') || router.pathname.includes('/withdraw')
+                  ? 'max-w-7xl lg:-ml-[72px]'
+                  : '',
+                className
+              )}
+              {...props}
+            >
               {isMounted ? children : null}
             </main>
           </div>
