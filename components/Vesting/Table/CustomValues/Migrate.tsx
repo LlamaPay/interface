@@ -19,8 +19,9 @@ import BigNumber from 'bignumber.js';
 import { vestingFactoryReadableABI } from '~/lib/abis/vestingFactoryReadable';
 import { useState } from 'react';
 
-// TODO use networkDetails[chainId]?.vestingFactory_v2
 export default function MigrateButton({ data }: { data: IVesting }) {
+  const { address } = useAccount();
+
   const totalVested = getTotalVested(data);
   const toVest = new BigNumber(data.totalLocked).minus(totalVested);
   const vestingAmount = toVest.dividedBy(10 ** data.tokenDecimals).toString();
@@ -32,6 +33,7 @@ export default function MigrateButton({ data }: { data: IVesting }) {
 
   const queryClient = useQueryClient();
 
+  // cancel existing stream
   const {
     writeAsync: rug_pull,
     isLoading: isCancellingStream,
@@ -57,6 +59,7 @@ export default function MigrateButton({ data }: { data: IVesting }) {
       });
   }
 
+  // approve token spend to create new stream
   const {
     mutate: checkTokenApproval,
     data: isTokenApproved1,
@@ -77,7 +80,6 @@ export default function MigrateButton({ data }: { data: IVesting }) {
   const checkingApproval = fetchingTokenApproval || fetchingTokenApproval1;
   const { mutate: approveTokenSpend, isLoading: approvingToken, error: errorApproving } = useApproveToken();
   const { chainId } = useNetworkProvider();
-
   function approveToken() {
     if (chainId) {
       approveTokenSpend(
@@ -106,6 +108,7 @@ export default function MigrateButton({ data }: { data: IVesting }) {
     }
   }
 
+  // create new stream
   const [transactionHash, setTransactionHash] = useState<string>('');
   const transactionDialog = useDialogState();
   const { writeAsync: deploy_vesting_contract, isLoading: creatingContract } = useContractWrite({
@@ -115,16 +118,36 @@ export default function MigrateButton({ data }: { data: IVesting }) {
     functionName: 'deploy_vesting_contract',
   });
   function createStream() {
-    console.log(data);
-    return;
+    const now = Date.now() / 1e3;
+
+    let vestingDuration, startTime, cliffTime;
+
+    if (now < +data.startTime) {
+      vestingDuration = +data.endTime - +data.startTime;
+      startTime = +data.startTime;
+      cliffTime = +data.cliffLength;
+    } else {
+      const endCliff = +data.startTime + +data.cliffLength;
+      if (now > endCliff) {
+        cliffTime = 0;
+        vestingDuration = +data.endTime - now;
+        startTime = now;
+      } else {
+        // keep everything the same
+        cliffTime = +data.cliffLength;
+        vestingDuration = +data.endTime - +data.startTime;
+        startTime = +data.startTime;
+      }
+    }
+
     deploy_vesting_contract({
       recklesslySetUnpreparedArgs: [
         data.token,
         data.recipient,
         toVest.toFixed(),
-        // data?.vestingDuration,
-        // data?.startTime,
-        // data?.cliffTime,
+        vestingDuration.toString(),
+        startTime.toString(),
+        cliffTime.toString(),
       ],
     })
       .then((tx) => {
@@ -146,7 +169,6 @@ export default function MigrateButton({ data }: { data: IVesting }) {
         toast.error(err.reason || err.message || 'Transaction Failed');
       });
   }
-  const { address } = useAccount();
 
   return (
     <>
@@ -181,7 +203,9 @@ export default function MigrateButton({ data }: { data: IVesting }) {
             <SubmitButton
               className="mt-5 disabled:opacity-60"
               onClick={createStream}
-              disabled={creatingContract || approvingToken || !isRugPulled || !isApproved}
+              disabled={
+                creatingContract || approvingToken || !isRugPulled || !isApproved || +data.endTime <= Date.now() / 1e3
+              }
             >
               {creatingContract || approvingToken ? <BeatLoader size="6px" color="white" /> : 'Create New Stream'}
             </SubmitButton>

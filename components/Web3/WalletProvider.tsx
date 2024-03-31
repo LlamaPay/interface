@@ -27,12 +27,12 @@ const connectors: Array<Connector> = [
     chains,
     options: { shimDisconnect: true },
   }),
-  // new WalletConnectConnector({
-  //   chains,
-  //   options: {
-  //     projectId: 'cbb6f8d4ec08615468331294be6486a7',
-  //   },
-  // }),
+  new WalletConnectConnector({
+    chains,
+    options: {
+      projectId: 'cbb6f8d4ec08615468331294be6486a7',
+    },
+  }),
 ];
 
 if (process.env.NEXT_PUBLIC_SAFE === 'true') {

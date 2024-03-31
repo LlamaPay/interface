@@ -303,8 +303,6 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
       }),
     ]);
 
-    console.log({ oldStreams, newStreams });
-
     return [
       ...(oldStreams.status === 'fulfilled' ? oldStreams.value ?? [] : []),
       ...(newStreams.status === 'fulfilled' ? newStreams.value ?? [] : []),
