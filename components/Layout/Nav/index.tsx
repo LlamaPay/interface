@@ -6,34 +6,28 @@ import { useRouter } from 'next/router';
 export function Nav() {
   const router = useRouter();
 
-  const isSalaries =
-    router.pathname === '/' ||
-    router.pathname.includes('/salaries') ||
-    router.pathname === '/streams' ||
-    router.pathname === '/yearn';
-
-  const isVesting = router.pathname.includes('/vesting');
-
-  const isPayments = router.pathname.includes('/payments');
-
   return (
     <nav className="hidden min-w-[224px] flex-col gap-3 px-8 lg:flex">
-      <Group name="Salaries" isOpen={isSalaries}>
-        <LinkItem name="Streams" href="/salaries" isActive={isSalaries} />
+      <Group name="Salaries" isOpen={router.pathname.includes('/salaries')}>
+        <LinkItem
+          name="Streams"
+          href="/salaries"
+          isActive={router.pathname === '/salaries' || router.pathname === '/streams' || router.pathname === '/yearn'}
+        />
         <Spacer />
         <LinkItem name="Create" href="/salaries/create" isActive={router.pathname === '/salaries/create'} />
         <Spacer />
         <LinkItem name="Withdraw" href="/salaries/withdraw" isActive={router.pathname === '/salaries/withdraw'} />
       </Group>
 
-      <Group name="Vesting" isOpen={isVesting}>
-        <LinkItem name="Streams" href="/vesting" isActive={isVesting && router.pathname !== '/vesting/create'} />
+      <Group name="Vesting" isOpen={router.pathname.includes('/vesting')}>
+        <LinkItem name="Streams" href="/vesting" isActive={router.pathname === '/vesting'} />
         <Spacer />
         <LinkItem name="Create" href="/vesting/create" isActive={router.pathname === '/vesting/create'} />
       </Group>
 
-      <Group name="Payments" isOpen={isPayments}>
-        <LinkItem name="Streams" href="/payments" isActive={isPayments && router.pathname !== '/payments/create'} />
+      <Group name="Payments" isOpen={router.pathname.includes('/payments')}>
+        <LinkItem name="Streams" href="/payments" isActive={router.pathname === '/paymens'} />
         <Spacer />
         <LinkItem name="Create" href="/payments/create" isActive={router.pathname === '/payments/create'} />
       </Group>
