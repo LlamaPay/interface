@@ -6,11 +6,7 @@ import { useRouter } from 'next/router';
 export function Nav() {
   const router = useRouter();
 
-  const isSalaries =
-    router.pathname === '/' ||
-    router.pathname.includes('/salaries') ||
-    router.pathname === '/streams' ||
-    router.pathname === '/yearn';
+  const isSalaries = router.pathname === '/salaries' || router.pathname === '/streams' || router.pathname === '/yearn';
 
   const isVesting = router.pathname.includes('/vesting');
 
