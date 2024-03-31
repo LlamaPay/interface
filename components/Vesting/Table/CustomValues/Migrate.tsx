@@ -19,6 +19,7 @@ import BigNumber from 'bignumber.js';
 import { vestingFactoryReadableABI } from '~/lib/abis/vestingFactoryReadable';
 import { useState } from 'react';
 
+// TODO use networkDetails[chainId]?.vestingFactory_v2
 export default function MigrateButton({ data }: { data: IVesting }) {
   const totalVested = getTotalVested(data);
   const toVest = new BigNumber(data.totalLocked).minus(totalVested);

@@ -16,6 +16,7 @@ interface INetworkDetails {
     logoURI: string;
     tokenListId?: string;
     vestingFactory: string;
+    vestingFactory_v2?: string;
     vestingReason?: string;
     paymentsContract?: string;
     paymentsGraphApi?: string;
@@ -146,7 +147,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/arbitrum/info/logo.png',
     tokenListId: 'arbitrum-one',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
-
+    vestingFactory_v2: CONTRACTS.VESTING_FACTORY_V2,
     paymentsContract: CONTRACTS.PAYMENTS_ARBITRUM,
     paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-arbitrum',
   },
