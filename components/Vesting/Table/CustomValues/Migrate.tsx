@@ -145,9 +145,9 @@ export default function MigrateButton({ data }: { data: IVesting }) {
         data.token,
         data.recipient,
         toVest.toFixed(),
-        vestingDuration.toString(),
-        startTime.toString(),
-        cliffTime.toString(),
+        vestingDuration.toFixed(0),
+        startTime.toFixed(0),
+        cliffTime.toFixed(0),
       ],
     })
       .then((tx) => {
