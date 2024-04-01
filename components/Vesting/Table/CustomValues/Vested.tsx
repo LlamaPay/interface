@@ -3,25 +3,26 @@ import { IVesting } from '~/types';
 import * as React from 'react';
 
 export default function Vested({ data }: { data: IVesting }) {
-  const [balanceState, setBalanceState] = React.useState<number | null>(null);
   const { locale } = useLocale();
-  const setState = React.useCallback(() => {
-    setBalanceState(getTotalVested(data) / 10 ** data.tokenDecimals);
-  }, [data]);
-  React.useEffect(() => {
-    const interval = setInterval(setState, 1);
-    return () => clearInterval(interval);
-  }, [setState]);
+  const ref = React.useRef<HTMLSpanElement>(null);
 
-  return (
-    <span className="font-exo text-center slashed-zero tabular-nums dark:text-white">{`${balanceState?.toLocaleString(
-      locale,
-      {
-        minimumFractionDigits: 5,
-        maximumFractionDigits: 5,
-      }
-    )}`}</span>
-  );
+  React.useEffect(() => {
+    const vested = getTotalVested(data) / 10 ** data.tokenDecimals;
+    let interval: any;
+    if (vested) {
+      interval = setInterval(() => {
+        if (ref.current) {
+          ref.current.innerText = (getTotalVested(data) / 10 ** data.tokenDecimals ?? '').toLocaleString(locale, {
+            minimumFractionDigits: 5,
+            maximumFractionDigits: 5,
+          });
+        }
+      }, 1);
+    }
+    return () => clearInterval(interval);
+  }, [data, locale]);
+
+  return <span className="font-exo text-center slashed-zero tabular-nums dark:text-white" ref={ref}></span>;
 }
 
 export const getTotalVested = (data: IVesting) => {

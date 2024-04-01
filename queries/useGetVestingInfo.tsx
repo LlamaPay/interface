@@ -11,6 +11,7 @@ import { gql, request } from 'graphql-request';
 import { vestingFactoryABI } from '~/lib/abis/vestingFactory';
 import { vestingReasonsABI } from '~/lib/abis/vestingReasons';
 import { vestingEscrowABI } from '~/lib/abis/vestingEscrow';
+import { vestingV2EscrowABI } from '~/lib/abis/vestingV2Escrow';
 
 const vestingEscrowCalls = [
   { reference: 'unclaimed', methodName: 'unclaimed', methodParameters: [] },
@@ -23,6 +24,20 @@ const vestingEscrowCalls = [
   { reference: 'totalLocked', methodName: 'total_locked', methodParameters: [] },
   { reference: 'totalClaimed', methodName: 'total_claimed', methodParameters: [] },
   { reference: 'admin', methodName: 'admin', methodParameters: [] },
+  { reference: 'disabled_at', methodName: 'disabled_at', methodParameters: [] },
+];
+
+const vestingEscrowCalls_V2 = [
+  { reference: 'unclaimed', methodName: 'unclaimed', methodParameters: [] },
+  { reference: 'locked', methodName: 'locked', methodParameters: [] },
+  { reference: 'recipient', methodName: 'recipient', methodParameters: [] },
+  { reference: 'token', methodName: 'token', methodParameters: [] },
+  { reference: 'startTime', methodName: 'start_time', methodParameters: [] },
+  { reference: 'endTime', methodName: 'end_time', methodParameters: [] },
+  { reference: 'cliffLength', methodName: 'cliff_length', methodParameters: [] },
+  { reference: 'totalLocked', methodName: 'total_locked', methodParameters: [] },
+  { reference: 'totalClaimed', methodName: 'total_claimed', methodParameters: [] },
+  { reference: 'owner', methodName: 'owner', methodParameters: [] },
   { reference: 'disabled_at', methodName: 'disabled_at', methodParameters: [] },
 ];
 
@@ -49,12 +64,14 @@ async function getVestingInfoByContract({
   chainId,
   runMulticall,
   factoryAddress,
+  isV2,
 }: {
   userAddress: string;
   provider: Provider;
   chainId: number;
   runMulticall: (calls: any[]) => Promise<any>;
   factoryAddress?: string | null;
+  isV2: boolean;
 }) {
   const unsortedResults: IVesting[] = [];
 
@@ -72,8 +89,8 @@ async function getVestingInfoByContract({
     const vestingContractInfoContext: ContractCallContext[] = Object.keys(vestingContractsResults).map((p: any) => ({
       reference: vestingContractsResults[p].callsReturnContext[0].returnValues[0],
       contractAddress: vestingContractsResults[p].callsReturnContext[0].returnValues[0],
-      abi: vestingEscrowABI,
-      calls: vestingEscrowCalls,
+      abi: isV2 ? vestingV2EscrowABI : vestingEscrowABI,
+      calls: isV2 ? vestingEscrowCalls_V2 : vestingEscrowCalls,
     }));
     const vestingContractInfoResults = await runMulticall(vestingContractInfoContext);
     const tokenContractCallContext = Object.keys(vestingContractInfoResults).map((p: any) => ({
@@ -293,6 +310,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
         chainId,
         runMulticall,
         factoryAddress: networkDetails[chainId].vestingFactory,
+        isV2: false,
       }),
       getVestingInfoByContract({
         provider,
@@ -300,6 +318,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
         chainId,
         runMulticall,
         factoryAddress: networkDetails[chainId].vestingFactory_v2,
+        isV2: true,
       }),
     ]);
 
