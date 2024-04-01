@@ -109,38 +109,44 @@ export const StreamHistory = ({ data, className }: StreamHistoryProps) => {
 };
 
 const StreamedYTD: React.FC<{ data: IStream; shouldRun: boolean }> = ({ data, shouldRun }) => {
-  const [ytdAmount, setYtdAmount] = React.useState<string | null>(null);
+  const ref = React.useRef<HTMLSpanElement>(null);
+
   const intl = useIntl();
-  const setYTD = React.useCallback(() => {
-    //console.log('this is caleld');
-    const curYear = new Date().getFullYear();
-    if (data === undefined) {
-      setYtdAmount(null);
-    } else {
-      const year = Number(new Date(`01-01-${curYear}`)) / 1e3;
-      const start = Number(data.createdTimestamp);
-      if (year > start) {
-        const totalAmount =
-          (((Date.now() - year) / 1000) * Number(data.amountPerSec) - Number(data.pausedAmount)) / 1e20;
-        setYtdAmount(intl.formatNumber(totalAmount, { maximumFractionDigits: 5, minimumFractionDigits: 5 }));
-      } else {
-        const totalAmount =
-          (((Date.now() - Number(data.createdTimestamp) * 1000) / 1000) * Number(data.amountPerSec) -
-            Number(data.pausedAmount)) /
-          1e20;
-        setYtdAmount(intl.formatNumber(totalAmount, { maximumFractionDigits: 5, minimumFractionDigits: 5 }));
-      }
-    }
-  }, [data, intl]);
 
   React.useEffect(() => {
     let id: ReturnType<typeof setInterval> | undefined = undefined;
-    if (shouldRun) id = setInterval(setYTD, 1);
+    if (shouldRun)
+      id = setInterval(() => {
+        const ytdAmount = getYTDAmount(data);
+        if (ytdAmount && ref.current) {
+          ref.current.innerText = `Streamed YTD: ${intl.formatNumber(ytdAmount, {
+            maximumFractionDigits: 5,
+            minimumFractionDigits: 5,
+          })} ${data.tokenSymbol}`;
+        }
+      }, 1);
     else clearInterval(id);
     return () => clearInterval(id);
-  }, [setYTD, shouldRun]);
+  }, [data, shouldRun, intl]);
 
-  return (
-    <span className="font-exo text-sm slashed-zero tabular-nums dark:text-white">{`Streamed YTD: ${ytdAmount} ${data.tokenSymbol}`}</span>
-  );
+  return <span className="font-exo text-sm slashed-zero tabular-nums dark:text-white" ref={ref}></span>;
+};
+
+const getYTDAmount = (data: IStream) => {
+  const curYear = new Date().getFullYear();
+  if (!data) {
+    return null;
+  } else {
+    const year = Number(new Date(`01-01-${curYear}`)) / 1e3;
+    const start = Number(data.createdTimestamp);
+    if (year > start) {
+      return (((Date.now() - year) / 1000) * Number(data.amountPerSec) - Number(data.pausedAmount)) / 1e20;
+    } else {
+      return (
+        (((Date.now() - Number(data.createdTimestamp) * 1000) / 1000) * Number(data.amountPerSec) -
+          Number(data.pausedAmount)) /
+        1e20
+      );
+    }
+  }
 };

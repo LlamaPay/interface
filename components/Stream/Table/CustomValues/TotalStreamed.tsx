@@ -3,20 +3,24 @@ import { useIntl } from 'next-intl';
 import type { IStream } from '~/types';
 
 export const TotalStreamed = ({ data }: { data: IStream }) => {
-  const [amount, setAmount] = React.useState<string | null>(null);
+  const ref = React.useRef<HTMLParagraphElement>(null);
 
   const intl = useIntl();
 
   React.useEffect(() => {
     const id = setInterval(() => {
-      setAmount(intl.formatNumber(totalStreamedFormatter(data), { maximumFractionDigits: 5 }));
+      if (ref.current) {
+        if (ref.current) {
+          ref.current.innerText = intl.formatNumber(totalStreamedFormatter(data), { maximumFractionDigits: 5 });
+        }
+      }
     }, 1);
 
     // clear interval when component unmounts
     return () => clearInterval(id);
   }, [data, intl]);
 
-  return <p className="flex justify-start slashed-zero tabular-nums dark:text-white">{amount}</p>;
+  return <p className="flex justify-start slashed-zero tabular-nums dark:text-white" ref={ref}></p>;
 };
 
 export function totalStreamedFormatter(data: IStream): number {
