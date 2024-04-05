@@ -168,9 +168,9 @@ export const networkDetails: INetworkDetails = {
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-bsc',
   },
   100: {
-    rpcUrl: 'https://xdai-rpc.gateway.pokt.network',
+    rpcUrl: 'https://rpc.ankr.com/gnosis',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-xdai',
-    chainProviders: new ethers.providers.StaticJsonRpcProvider('https://xdai-rpc.gateway.pokt.network'),
+    chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.ankr.com/gnosis'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_XDAI,
     disperseAddress: CONTRACTS.DISPERSE_DEFAULT,
     botAddress: '',
