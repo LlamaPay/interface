@@ -16,6 +16,7 @@ interface INetworkDetails {
     logoURI: string;
     tokenListId?: string;
     vestingFactory: string;
+    vestingFactory_v2?: string;
     vestingReason?: string;
     paymentsContract?: string;
     paymentsGraphApi?: string;
@@ -107,6 +108,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
     tokenListId: 'ethereum',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
+    vestingFactory_v2: CONTRACTS.VESTING_FACTORY_V2,
     vestingReason: '0xA83965c2EBCD3d809f59030D2f7d3c6C646deD3D',
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-mainnet',
     paymentsContract: CONTRACTS.PAYMENTS_MAINNET,
@@ -202,7 +204,7 @@ export const networkDetails: INetworkDetails = {
       alchemy: alchemyId,
       etherscan: etherscanKey,
       infura: infuraId,
-    }), 
+    }),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_GOERLI,
     disperseAddress: CONTRACTS.DISPERSE_GOERLI,
     botAddress: CONTRACTS.BOT_GOERLI,
