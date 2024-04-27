@@ -108,7 +108,6 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
     tokenListId: 'ethereum',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
-    vestingFactory_v2: CONTRACTS.VESTING_FACTORY_V2,
     vestingReason: '0xA83965c2EBCD3d809f59030D2f7d3c6C646deD3D',
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-mainnet',
     paymentsContract: CONTRACTS.PAYMENTS_MAINNET,
@@ -148,7 +147,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/arbitrum/info/logo.png',
     tokenListId: 'arbitrum-one',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
-
+    vestingFactory_v2: CONTRACTS.VESTING_FACTORY_V2,
     paymentsContract: CONTRACTS.PAYMENTS_ARBITRUM,
     paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-arbitrum',
   },
