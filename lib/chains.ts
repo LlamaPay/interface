@@ -9,7 +9,6 @@ const defaultChains: Array<wagmiChains.Chain> = [
   wagmiChains.fantom,
   wagmiChains.bsc,
   wagmiChains.gnosis,
-  wagmiChains.goerli,
   wagmiChains.avalancheFuji,
 ];
 
@@ -55,19 +54,6 @@ export const chains: Array<wagmiChains.Chain> = [
     },
   },
   {
-    id: 2222,
-    name: 'Kava',
-    network: 'kava',
-    nativeCurrency: { name: 'Kava', symbol: 'KAVA', decimals: 18 },
-    rpcUrls: { default: { http: ['https://evm.kava.io'] }, public: { http: ['https://evm.kava.io'] } },
-    blockExplorers: {
-      default: {
-        name: 'Kava Explorer',
-        url: 'https://explorer.kava.io/',
-      },
-    },
-  },
-  {
     id: 369,
     name: 'PulseChain',
     network: 'pulsechain',
@@ -81,6 +67,19 @@ export const chains: Array<wagmiChains.Chain> = [
     },
   },
   /*
+  {
+    id: 2222,
+    name: 'Kava',
+    network: 'kava',
+    nativeCurrency: { name: 'Kava', symbol: 'KAVA', decimals: 18 },
+    rpcUrls: { default: { http: ['https://evm.kava.io'] }, public: { http: ['https://evm.kava.io'] } },
+    blockExplorers: {
+      default: {
+        name: 'Kava Explorer',
+        url: 'https://explorer.kava.io/',
+      },
+    },
+  },
   {
     id: 1088,
     name: 'Metis',
