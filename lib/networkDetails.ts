@@ -202,7 +202,6 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://assets.coingecko.com/coins/images/11848/large/mtrg-logo.png?1595062273',
     tokenListId: 'meter',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
-    vestingFactory_v2: '0xe51272844929e4684dD8b3228e1bEB8400368AEd',
   },
   5: {
     rpcUrl: `https://goerli.infura.io/v3/${infuraId}`,
@@ -439,7 +438,6 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'moonbeam',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/moonbeam/info/logo.png',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
-    vestingFactory_v2: '0xB93427b83573C8F27a08A909045c3e809610411a',
   },
   1285: {
     rpcUrl: 'https://rpc.api.moonriver.moonbeam.network',
