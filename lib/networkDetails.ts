@@ -57,6 +57,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchex/info/logo.png',
     tokenListId: 'avalanche',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
+    vestingFactory_v2: '0x62E13BE78af77C86D38a027ae432F67d9EcD4c10',
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-avax',
     paymentsContract: CONTRACTS.PAYMENTS_AVALANCHE,
     paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-avalanche',
@@ -74,6 +75,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/polygon/info/logo.png',
     tokenListId: 'polygon-pos',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
+    vestingFactory_v2: '0x62E13BE78af77C86D38a027ae432F67d9EcD4c10',
     paymentsContract: CONTRACTS.PAYMENTS_POLYGON,
     paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-polygon',
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-polygon',
@@ -91,6 +93,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/fantom/info/logo.png',
     tokenListId: 'fantom',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
+    vestingFactory_v2: '0x62E13BE78af77C86D38a027ae432F67d9EcD4c10',
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-fantom',
     paymentsContract: CONTRACTS.PAYMENTS_FANTOM,
     paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-fantom',
@@ -108,6 +111,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/info/logo.png',
     tokenListId: 'ethereum',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
+    vestingFactory_v2: '0xcf61782465Ff973638143d6492B51A85986aB347',
     vestingReason: '0xA83965c2EBCD3d809f59030D2f7d3c6C646deD3D',
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-mainnet',
     paymentsContract: CONTRACTS.PAYMENTS_MAINNET,
@@ -128,6 +132,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/optimism/info/logo.png',
     tokenListId: 'optimistic-ethereum',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
+    vestingFactory_v2: '0x62E13BE78af77C86D38a027ae432F67d9EcD4c10',
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-optimism',
     paymentsContract: CONTRACTS.PAYMENTS_OPTIMISM,
     paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-optimism',
@@ -147,7 +152,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/arbitrum/info/logo.png',
     tokenListId: 'arbitrum-one',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
-    vestingFactory_v2: CONTRACTS.VESTING_FACTORY_V2,
+    vestingFactory_v2: '0x62E13BE78af77C86D38a027ae432F67d9EcD4c10',
     paymentsContract: CONTRACTS.PAYMENTS_ARBITRUM,
     paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-arbitrum',
   },
@@ -164,6 +169,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/binance/info/logo.png',
     tokenListId: 'binance-smart-chain',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
+    vestingFactory_v2: '0x62E13BE78af77C86D38a027ae432F67d9EcD4c10',
     paymentsContract: CONTRACTS.PAYMENTS_BSC,
     paymentsGraphApi: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/token-escrow-bsc',
     botSubgraph: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bot-subgraph-bsc',
@@ -181,6 +187,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/xdai/info/logo.png',
     tokenListId: 'xdai',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
+    vestingFactory_v2: '0x62E13BE78af77C86D38a027ae432F67d9EcD4c10',
   },
   82: {
     rpcUrl: 'https://rpc.meter.io',
@@ -195,6 +202,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://assets.coingecko.com/coins/images/11848/large/mtrg-logo.png?1595062273',
     tokenListId: 'meter',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
+    vestingFactory_v2: '0xe51272844929e4684dD8b3228e1bEB8400368AEd',
   },
   5: {
     rpcUrl: `https://goerli.infura.io/v3/${infuraId}`,
@@ -286,6 +294,7 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'base',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/base/info/logo.png',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
+    vestingFactory_v2: '0x62E13BE78af77C86D38a027ae432F67d9EcD4c10',
   },
   1313161554: {
     rpcUrl: 'https://aurora.drpc.org',
@@ -306,6 +315,7 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'blast',
     logoURI: 'https://raw.githubusercontent.com/DefiLlama/icons/v2/assets/chains/rsz_blast.jpg',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
+    vestingFactory_v2: '0x62E13BE78af77C86D38a027ae432F67d9EcD4c10',
   },
   7700: {
     rpcUrl: 'https://canto.slingshot.finance',
@@ -336,6 +346,7 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'cronos',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/cronos/info/logo.png',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
+    vestingFactory_v2: '0x62E13BE78af77C86D38a027ae432F67d9EcD4c10',
   },
   2000: {
     rpcUrl: 'https://rpc.dogechain.dog',
@@ -366,6 +377,7 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'fraxtal',
     logoURI: 'https://raw.githubusercontent.com/DefiLlama/icons/v2/assets/chains/rsz_fraxtal.jpg',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
+    vestingFactory_v2: '0x62E13BE78af77C86D38a027ae432F67d9EcD4c10',
   },
   1666600000: {
     rpcUrl: 'https://rpc.ankr.com/harmony',
@@ -416,6 +428,7 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'mantle',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/mantle/info/logo.png',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
+    vestingFactory_v2: '0x62E13BE78af77C86D38a027ae432F67d9EcD4c10',
   },
   1284: {
     rpcUrl: 'https://rpc.api.moonbeam.network',
@@ -426,6 +439,7 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'moonbeam',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/moonbeam/info/logo.png',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
+    vestingFactory_v2: '0xB93427b83573C8F27a08A909045c3e809610411a',
   },
   1285: {
     rpcUrl: 'https://rpc.api.moonriver.moonbeam.network',
@@ -466,6 +480,7 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'pulsechain',
     logoURI: 'https://raw.githubusercontent.com/DefiLlama/icons/v2/assets/chains/rsz_pulsechain.jpg',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
+    vestingFactory_v2: '0xcf61782465Ff973638143d6492B51A85986aB347',
   },
   534352: {
     rpcUrl: 'https://rpc.scroll.io',
@@ -486,6 +501,7 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'zora',
     logoURI: 'https://raw.githubusercontent.com/DefiLlama/icons/v2/assets/chains/rsz_zora.webp',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
+    vestingFactory_v2: '0x62E13BE78af77C86D38a027ae432F67d9EcD4c10',
   },
   61: {
     rpcUrl: 'https://etc.etcdesktop.com',
@@ -526,6 +542,7 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'klaytn',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/klaytn/info/logo.png',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
+    vestingFactory_v2: '0x62E13BE78af77C86D38a027ae432F67d9EcD4c10',
   },
   34443: {
     rpcUrl: 'https://mainnet.mode.network',
@@ -536,6 +553,7 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'mode',
     logoURI: 'https://raw.githubusercontent.com/DefiLlama/icons/v2/assets/chains/rsz_mode.jpg',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
+    vestingFactory_v2: '0x62E13BE78af77C86D38a027ae432F67d9EcD4c10',
   },
   3109: {
     rpcUrl: 'https://alpha-rpc-node-http.svmscan.io',
@@ -546,6 +564,7 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'satoshivm',
     logoURI: 'https://raw.githubusercontent.com/DefiLlama/icons/v2/assets/chains/rsz_satoshivm.jpg',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
+    vestingFactory_v2: '0x62E13BE78af77C86D38a027ae432F67d9EcD4c10',
   },
   40: {
     rpcUrl: 'https://mainnet.telos.net/evm',
