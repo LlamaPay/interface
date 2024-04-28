@@ -41,19 +41,6 @@ export const chains: Array<wagmiChains.Chain> = [
     },
   },
   {
-    id: 82,
-    name: 'Meter',
-    network: 'meter',
-    nativeCurrency: { name: 'Meter', symbol: 'MTR', decimals: 18 },
-    rpcUrls: { default: { http: ['https://rpc.meter.io'] }, public: { http: ['https://rpc.meter.io'] } },
-    blockExplorers: {
-      default: {
-        name: 'Meter Blockchain Explorer',
-        url: 'https://scan.meter.io/',
-      },
-    },
-  },
-  {
     id: 369,
     name: 'PulseChain',
     network: 'pulsechain',
@@ -67,6 +54,19 @@ export const chains: Array<wagmiChains.Chain> = [
     },
   },
   /*
+  {
+    id: 82,
+    name: 'Meter',
+    network: 'meter',
+    nativeCurrency: { name: 'Meter', symbol: 'MTR', decimals: 18 },
+    rpcUrls: { default: { http: ['https://rpc.meter.io'] }, public: { http: ['https://rpc.meter.io'] } },
+    blockExplorers: {
+      default: {
+        name: 'Meter Blockchain Explorer',
+        url: 'https://scan.meter.io/',
+      },
+    },
+  },
   {
     id: 2222,
     name: 'Kava',
