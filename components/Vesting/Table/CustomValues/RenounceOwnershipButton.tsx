@@ -5,16 +5,25 @@ import { BeatLoader } from '~/components/BeatLoader';
 import { useAccount, useContractWrite } from 'wagmi';
 import { FormDialog } from '~/components/Dialog';
 import { SubmitButton } from '~/components/Form';
-import { vestingContractReadableABI } from '~/lib/abis/vestingContractReadable';
+import { vestingContractReadableABI, vestingContractV2ReadableABI } from '~/lib/abis/vestingContractReadable';
 import { IVesting } from '~/types';
+import { useNetworkProvider } from '~/hooks';
+import { networkDetails } from '~/lib/networkDetails';
 
 export default function RenounceOwnershipButton({ data }: { data: IVesting }) {
+  const { chainId } = useNetworkProvider();
+  const isV2 =
+    chainId &&
+    networkDetails[chainId]?.vestingFactory_v2 &&
+    data.factory === networkDetails[chainId].vestingFactory_v2.toLowerCase()
+      ? true
+      : false;
   const RenounceDialog = useDialogState();
   const { writeAsync: renounce, isLoading } = useContractWrite({
     mode: 'recklesslyUnprepared',
     address: data.contract as `0x${string}`,
-    abi: vestingContractReadableABI,
-    functionName: 'renounce_ownership',
+    abi: isV2 ? vestingContractV2ReadableABI : vestingContractReadableABI,
+    functionName: isV2 ? 'disown' : 'renounce_ownership',
   });
 
   const queryClient = useQueryClient();

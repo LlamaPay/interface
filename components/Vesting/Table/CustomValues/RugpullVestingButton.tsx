@@ -1,4 +1,4 @@
-import { vestingContractReadableABI } from '~/lib/abis/vestingContractReadable';
+import { vestingContractReadableABI, vestingContractV2ReadableABI } from '~/lib/abis/vestingContractReadable';
 import toast from 'react-hot-toast';
 import type { IVesting } from '~/types';
 import { useAccount, useContractWrite } from 'wagmi';
@@ -7,15 +7,24 @@ import { useDialogState } from 'ariakit';
 import { SubmitButton } from '~/components/Form';
 import { useQueryClient } from '@tanstack/react-query';
 import { BeatLoader } from '~/components/BeatLoader';
+import { useNetworkProvider } from '~/hooks';
+import { networkDetails } from '~/lib/networkDetails';
 
 export default function RugpullVestingButton({ data }: { data: IVesting }) {
+  const { chainId } = useNetworkProvider();
+  const isV2 =
+    chainId &&
+    networkDetails[chainId]?.vestingFactory_v2 &&
+    data.factory === networkDetails[chainId].vestingFactory_v2.toLowerCase()
+      ? true
+      : false;
   const RugDialog = useDialogState();
 
   const { writeAsync: rug_pull, isLoading } = useContractWrite({
     mode: 'recklesslyUnprepared',
     address: data.contract as `0x${string}`,
-    abi: vestingContractReadableABI,
-    functionName: 'rug_pull',
+    abi: isV2 ? vestingContractV2ReadableABI : vestingContractReadableABI,
+    functionName: isV2 ? 'revoke' : 'rug_pull',
   });
 
   const queryClient = useQueryClient();
