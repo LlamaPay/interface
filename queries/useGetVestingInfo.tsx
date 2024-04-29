@@ -50,6 +50,9 @@ const vestingEscrowCallsSubgraph = [
 
 const subgraphs: { [key: number]: string } = {
   1: 'https://api.studio.thegraph.com/query/73158/vesting-ethereum/version/latest',
+  10: 'https://api.studio.thegraph.com/query/73158/vesting-optimism/version/latest',
+  42161: 'https://api.studio.thegraph.com/query/73158/vesting-arbitrum/version/latest',
+  250: 'https://api.studio.thegraph.com/query/73158/vesting-fantom/version/latest'
 };
 
 const multicalls: { [key: number]: string } = {
