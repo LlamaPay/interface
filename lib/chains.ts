@@ -9,7 +9,6 @@ const defaultChains: Array<wagmiChains.Chain> = [
   wagmiChains.fantom,
   wagmiChains.bsc,
   wagmiChains.gnosis,
-  wagmiChains.goerli,
   wagmiChains.avalancheFuji,
 ];
 
@@ -41,6 +40,20 @@ export const chains: Array<wagmiChains.Chain> = [
       },
     },
   },
+  {
+    id: 369,
+    name: 'PulseChain',
+    network: 'pulsechain',
+    nativeCurrency: { "name": "Pulse", "symbol": "PLS", "decimals": 18 },
+    rpcUrls: { default: { http: ['https://rpc.pulsechain.com'] }, public: { http: ['https://rpc.pulsechain.com'] } },
+    blockExplorers: {
+      default: {
+        name: 'blockscout',
+        url: 'https://scan.pulsechain.com',
+      },
+    },
+  },
+  /*
   {
     id: 82,
     name: 'Meter',
@@ -224,19 +237,6 @@ export const chains: Array<wagmiChains.Chain> = [
     },
   },
   {
-    id: 2222,
-    name: 'Kava',
-    network: 'kava',
-    nativeCurrency: { "name": "Kava", "symbol": "KAVA", "decimals": 18 },
-    rpcUrls: { default: { http: ['https://evm.kava.io'] }, public: { http: ['https://evm.kava.io'] } },
-    blockExplorers: {
-      default: {
-        name: 'Kava EVM Explorer',
-        url: 'https://kavascan.com',
-      },
-    },
-  },
-  {
     id: 321,
     name: 'KCC',
     network: 'kcc',
@@ -337,19 +337,6 @@ export const chains: Array<wagmiChains.Chain> = [
       default: {
         name: 'opbnbscan',
         url: 'https://mainnet.opbnbscan.com',
-      },
-    },
-  },
-  {
-    id: 369,
-    name: 'PulseChain',
-    network: 'pulsechain',
-    nativeCurrency: { "name": "Pulse", "symbol": "PLS", "decimals": 18 },
-    rpcUrls: { default: { http: ['https://rpc.pulsechain.com'] }, public: { http: ['https://rpc.pulsechain.com'] } },
-    blockExplorers: {
-      default: {
-        name: 'blockscout',
-        url: 'https://scan.pulsechain.com',
       },
     },
   },
@@ -483,4 +470,5 @@ export const chains: Array<wagmiChains.Chain> = [
       },
     },
   },
+  */
 ];

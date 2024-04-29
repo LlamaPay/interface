@@ -49,9 +49,7 @@ const vestingEscrowCallsSubgraph = [
 ];
 
 const subgraphs: { [key: number]: string } = {
-  1: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-vesting-mainnet',
-  5: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-vesting-goerli',
-  // 42161: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-vesting-arbitrum',
+  1: 'https://api.studio.thegraph.com/query/73158/vesting-ethereum/version/latest',
 };
 
 const multicalls: { [key: number]: string } = {
@@ -194,7 +192,9 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
       {
         vestingEscrows(where: {admin: "${userAddress.toLowerCase()}"}, first:1000) {
           id
-          factory
+          factory {
+            id
+          }
           admin
           recipient
           token {
@@ -219,7 +219,9 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
       {
         vestingEscrows(where: {recipient: "${userAddress.toLowerCase()}"}) {
           id
-          factory
+          factory {
+            id
+          }
           admin
           recipient
           token {
@@ -259,7 +261,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
       for (const i in escrows) {
         const returns = vestingContractInfoResults[escrows[i].id].callsReturnContext;
         const result = {
-          factory: escrows[i].factory ?? networkDetails[chainId].vestingFactory,
+          factory: escrows[i].factory.id ?? networkDetails[chainId].vestingFactory,
           contract: escrows[i].id.toString(),
           unclaimed: new BigNumber(returns[0].returnValues[0].hex).toString(),
           locked: new BigNumber(returns[1].returnValues[0].hex).toString(),
@@ -300,9 +302,9 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
           unsortedResults[i].reason = reason !== '' ? reason : null;
         }
       }
-
       return unsortedResults;
     }
+
     const [oldStreams, newStreams] = await Promise.allSettled([
       getVestingInfoByContract({
         provider,
