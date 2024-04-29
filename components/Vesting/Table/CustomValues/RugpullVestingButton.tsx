@@ -15,7 +15,7 @@ export default function RugpullVestingButton({ data }: { data: IVesting }) {
   const isV2 =
     chainId &&
     networkDetails[chainId]?.vestingFactory_v2 &&
-    data.factory === networkDetails[chainId].vestingFactory_v2.toLowerCase()
+    data.factory === networkDetails[chainId].vestingFactory_v2?.toLowerCase()
       ? true
       : false;
   const RugDialog = useDialogState();
