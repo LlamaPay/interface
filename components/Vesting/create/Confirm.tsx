@@ -18,6 +18,7 @@ export interface IVestingData {
   vestingDuration: string;
   cliffTime: string;
   startTime: string;
+  openClaim: boolean;
 }
 
 interface IConfirmProps {
@@ -52,6 +53,7 @@ export default function Confirm({ vestingData, dialog, factory }: IConfirmProps)
         vestingData?.vestingDuration,
         vestingData?.startTime,
         vestingData?.cliffTime,
+        vestingData?.openClaim,
       ],
     })
       .then((tx) => {

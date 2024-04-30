@@ -29,6 +29,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
     cliffTime: '',
     cliffDuration: 'month',
     startDate: '',
+    openClaim: true,
   });
 
   const [vestingData, setVestingData] = React.useState<IVestingData | null>(null);
@@ -83,6 +84,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
     const vestingAmount = form.vestingAmount?.value;
     const vestingDuration = form.vestingDuration?.value;
     const cliffDuration = form.cliffDuration?.value;
+    const openClaim = formData.openClaim;
 
     const fmtVestingTime = new BigNumber(vestingTime).times(secondsByDuration[vestingDuration]).toFixed(0);
     const date =
@@ -115,6 +117,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
         vestingDuration: fmtVestingTime,
         cliffTime: fmtCliffTime,
         startTime,
+        openClaim,
       });
       confirmDialog.show();
       setFormData({
@@ -127,6 +130,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
         cliffTime: '',
         cliffDuration: 'year',
         startDate: '',
+        openClaim: true,
       });
     } else {
       approveToken(
@@ -201,6 +205,22 @@ export default function CreateVesting({ factory }: { factory: string }) {
         )}
 
         <div className="flex gap-2">
+          <span className="font-exo">{'Open Claim'}</span>
+          <Switch
+            checked={formData.openClaim}
+            onChange={(value: boolean) => {
+              handleChange(value, 'openClaim');
+            }}
+            className={`${
+              formData.openClaim ? 'bg-lp-primary' : 'bg-gray-200 dark:bg-[#252525]'
+            } relative inline-flex h-6 w-11 items-center rounded-full`}
+          >
+            <span
+              className={`${
+                formData.openClaim ? 'translate-x-6' : 'translate-x-1'
+              } inline-block h-4 w-4 transform rounded-full bg-white`}
+            />
+          </Switch>
           <span className="font-exo">{'Include Cliff'}</span>
           <Switch
             checked={formData.includeCliff}
