@@ -7,7 +7,7 @@ import { FormDialog, TransactionDialog } from '~/components/Dialog';
 import { SubmitButton } from '~/components/Form';
 import { vestingContractReadableABI } from '~/lib/abis/vestingContractReadable';
 import { IVesting } from '~/types';
-import { VESTING_FACTORY, VESTING_FACTORY_V2 } from '~/lib/contracts';
+import { VESTING_FACTORY } from '~/lib/contracts';
 import { useApproveToken, useCheckTokenApproval, useGetTokenApproval } from '~/queries/useTokenApproval';
 import { checkApproval } from '~/components/Form/utils';
 import { networkDetails } from '~/lib/networkDetails';
@@ -20,6 +20,13 @@ import { vestingFactoryReadableABI } from '~/lib/abis/vestingFactoryReadable';
 import { useState } from 'react';
 
 export default function MigrateButton({ data }: { data: IVesting }) {
+  const { chainId } = useNetworkProvider();
+  const VESTING_FACTORY_V2 = chainId ? networkDetails[chainId]?.vestingFactory_v2 : null;
+  if (!VESTING_FACTORY_V2) return null;
+  return <MButton data={data} factoryV2={VESTING_FACTORY_V2} />;
+}
+
+function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
   const { address } = useAccount();
 
   const totalVested = getTotalVested(data);
@@ -73,7 +80,7 @@ export default function MigrateButton({ data }: { data: IVesting }) {
   } = useGetTokenApproval({
     token: tokenContract,
     userAddress: data.admin,
-    approveForAddress: VESTING_FACTORY_V2,
+    approveForAddress: factoryV2,
     approvedForAmount: toVest.toFixed(),
   });
   const isApproved = isTokenApproved || isTokenApproved1;
@@ -87,7 +94,7 @@ export default function MigrateButton({ data }: { data: IVesting }) {
           tokenAddress: getAddress(data.token),
           amountToApprove: toVest.toFixed(),
           // TODO update it to networkDetails[chainId].vestingFactory
-          spenderAddress: VESTING_FACTORY_V2,
+          spenderAddress: factoryV2,
         },
         {
           onSettled: () => {
@@ -95,7 +102,7 @@ export default function MigrateButton({ data }: { data: IVesting }) {
             checkApproval({
               tokenDetails: {
                 tokenContract,
-                llamaContractAddress: VESTING_FACTORY_V2,
+                llamaContractAddress: factoryV2,
                 decimals: data.tokenDecimals,
               },
               userAddress: address,
@@ -113,7 +120,7 @@ export default function MigrateButton({ data }: { data: IVesting }) {
   const transactionDialog = useDialogState();
   const { writeAsync: deploy_vesting_contract, isLoading: creatingContract } = useContractWrite({
     mode: 'recklesslyUnprepared',
-    address: VESTING_FACTORY_V2 as `0x${string}`,
+    address: factoryV2 as `0x${string}`,
     abi: vestingFactoryReadableABI,
     functionName: 'deploy_vesting_contract',
   });
