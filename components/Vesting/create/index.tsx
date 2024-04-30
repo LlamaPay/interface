@@ -104,7 +104,6 @@ export default function CreateVesting({ factory }: { factory: string }) {
 
     const isEOA = (await provider.getCode(recipientAddress)) === '0x' ? true : false;
     if (!isEOA) {
-      setRecipient(recipientAddress);
       eoaWarningDialog.show();
     }
     if (isApproved) {
@@ -159,7 +158,15 @@ export default function CreateVesting({ factory }: { factory: string }) {
           <span className="">Return</span>
         </Link>
         <h1 className="font-exo my-2 text-2xl font-semibold text-lp-gray-4 dark:text-white">Set Up Vesting</h1>
-        <InputText label={'Recipient Address'} name="recipientAddress" isRequired />
+        <InputText
+          label={'Recipient Address'}
+          name="recipientAddress"
+          handleChange={(e) => setRecipient(e.target.value)}
+          isRequired
+        />
+        {address && recipient && recipient.toLowerCase() === address.toLowerCase() ? (
+          <p className="-mt-4 text-sm text-red-500">Recipient cant be the same as funder</p>
+        ) : null}
         <InputText label={'Vested Token Address'} name="vestedToken" handleChange={handleVestTokenChange} isRequired />
         <InputAmount label={'Vesting Amount'} name="vestingAmount" handleChange={handleVestAmountChange} isRequired />
         <InputAmountWithDuration
