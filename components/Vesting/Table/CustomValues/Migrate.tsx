@@ -177,6 +177,8 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
       });
   }
 
+  if (Number(data.disabledAt) <= Date.now() / 1e3) return null;
+
   return (
     <>
       {address &&

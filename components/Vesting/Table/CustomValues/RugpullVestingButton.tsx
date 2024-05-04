@@ -49,6 +49,8 @@ export default function RugpullVestingButton({ data }: { data: IVesting }) {
   }
   const { address } = useAccount();
 
+  if (Number(data.disabledAt) <= Date.now() / 1e3) return null;
+
   return (
     <>
       {address && data.admin.toLowerCase() === address.toLowerCase() && (
