@@ -26,10 +26,19 @@ export default function MigrateButton({ data }: { data: IVesting }) {
   return <MButton data={data} factoryV2={VESTING_FACTORY_V2} />;
 }
 
+function getActualVested(data: IVesting){
+  const now = Date.now() / 1e3;
+  const cliffEnd = Number(data.startTime) + Number(data.cliffLength)
+  if(now < cliffEnd){
+    return 0
+  }
+  return getTotalVested(data)
+}
+
 function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
   const { address } = useAccount();
 
-  const totalVested = getTotalVested(data);
+  const totalVested = getActualVested(data);
   const toVest = new BigNumber(data.totalLocked).minus(totalVested);
   const vestingAmount = toVest.dividedBy(10 ** data.tokenDecimals).toString();
   const provider = useProvider();
@@ -140,6 +149,12 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
         vestingDuration = +data.endTime - now;
         startTime = now;
       } else {
+        const DAY = 3600*24
+        if(Number(data.cliffLength) > 0 && endCliff < (now + 4*DAY)){
+          const error = "The end of the cliff is to close to now, please migrate manually to avoid race conditions"
+          alert(error)
+          throw new Error(error)
+        }
         // keep everything the same
         cliffTime = +data.cliffLength;
         vestingDuration = +data.endTime - +data.startTime;

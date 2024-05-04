@@ -10,9 +10,7 @@ export const TotalStreamed = ({ data }: { data: IStream }) => {
   React.useEffect(() => {
     const id = setInterval(() => {
       if (ref.current) {
-        if (ref.current) {
-          ref.current.innerText = intl.formatNumber(totalStreamedFormatter(data), { maximumFractionDigits: 5 });
-        }
+        ref.current.innerText = intl.formatNumber(totalStreamedFormatter(data), { maximumFractionDigits: 5 });
       }
     }, 1);
 
