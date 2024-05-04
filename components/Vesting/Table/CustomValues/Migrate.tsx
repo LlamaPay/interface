@@ -18,6 +18,7 @@ import { getTotalVested } from './Vested';
 import BigNumber from 'bignumber.js';
 import { vestingFactoryReadableABI } from '~/lib/abis/vestingFactoryReadable';
 import { useState } from 'react';
+const DAY = 3600*24
 
 export default function MigrateButton({ data }: { data: IVesting }) {
   const { chainId } = useNetworkProvider();
@@ -44,6 +45,8 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
   const provider = useProvider();
   const tokenContract = createERC20Contract({ tokenAddress: getAddress(data.token), provider });
   const isRugPulled = Number(data.disabledAt) < Date.now() / 1e3;
+
+  const timeTillCliffEnd = data.cliffLength === "0"?null:(Number(data.startTime)+Number(data.cliffLength))-(Date.now() / 1e3)
 
   const migrateDialog = useDialogState();
 
@@ -149,7 +152,6 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
         vestingDuration = +data.endTime - now;
         startTime = now;
       } else {
-        const DAY = 3600*24
         if(Number(data.cliffLength) > 0 && endCliff < (now + 4*DAY)){
           const error = "The end of the cliff is to close to now, please migrate manually to avoid race conditions"
           alert(error)
@@ -258,6 +260,7 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
             'Failed to check approval'
           }`}</p>
         ) : null}
+        {(timeTillCliffEnd !== null && timeTillCliffEnd < 7*DAY)? <p><br />You must make sure that these 3 txs are executed within {(timeTillCliffEnd/DAY).toFixed(2)} days</p>:null}
       </FormDialog>
       <TransactionDialog dialog={transactionDialog} transactionHash={transactionHash} />
     </>
