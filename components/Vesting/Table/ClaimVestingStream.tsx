@@ -6,12 +6,10 @@ import { BeatLoader } from '~/components/BeatLoader';
 import { DisclosureState, useDialogState } from 'ariakit';
 import { useAccount, useContractWrite } from 'wagmi';
 import BigNumber from 'bignumber.js';
-import { BigNumber as EthersBigNumber } from 'ethers';
 import toast from 'react-hot-toast';
 import { vestingContractReadableABI } from '~/lib/abis/vestingContractReadable';
 import type { IVesting } from '~/types';
 import { useQueryClient } from '@tanstack/react-query';
-import { useChainId } from 'wagmi';
 
 export default function ClaimVesting({
   claimValues,
@@ -32,9 +30,8 @@ export default function ClaimVesting({
   const queryClient = useQueryClient();
 
   const { address } = useAccount();
-  const chainId = useChainId();
 
-  const { writeAsync: claim } = useContractWrite({
+  const { writeAsync: claim, isLoading } = useContractWrite({
     mode: 'recklesslyUnprepared',
     address: data.contract as `0x${string}`,
     abi: vestingContractReadableABI,
@@ -143,8 +140,8 @@ export default function ClaimVesting({
               <p>{`To: ${beneficiaryInput}`}</p>
             </div>
           </section>
-          <SubmitButton className="mt-5" onClick={handleConfirm}>
-            Confirm Transaction
+          <SubmitButton className="mt-5" disabled={isLoading} onClick={handleConfirm}>
+            {isLoading ? <BeatLoader size="6px" color="white" /> : 'Confirm Transaction'}
           </SubmitButton>
         </div>
       </FormDialog>
