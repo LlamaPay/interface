@@ -15,7 +15,7 @@ export default function RugpullVestingButton({ data }: { data: IVesting }) {
   const isV2 =
     chainId &&
     networkDetails[chainId]?.vestingFactory_v2 &&
-    data.factory === networkDetails[chainId].vestingFactory_v2?.toLowerCase()
+    data.factory.toLowerCase() === networkDetails[chainId].vestingFactory_v2?.toLowerCase()
       ? true
       : false;
   const RugDialog = useDialogState();
@@ -49,6 +49,8 @@ export default function RugpullVestingButton({ data }: { data: IVesting }) {
   }
   const { address } = useAccount();
 
+  if (Number(data.disabledAt) <= Date.now() / 1e3) return null;
+
   return (
     <>
       {address && data.admin.toLowerCase() === address.toLowerCase() && (
@@ -58,7 +60,7 @@ export default function RugpullVestingButton({ data }: { data: IVesting }) {
       )}
       <FormDialog className="h-min" dialog={RugDialog} title={'Clawback'}>
         <span className="font-exo dark:text-white">{`Warning: This will clawback vesting from the recipient: ${data.recipient}!`}</span>
-        <SubmitButton className="mt-5" onClick={handleRugpull}>
+        <SubmitButton className="mt-5" onClick={handleRugpull} disabled={isLoading}>
           {isLoading ? <BeatLoader size="6px" color="white" /> : 'Rug'}
         </SubmitButton>
       </FormDialog>

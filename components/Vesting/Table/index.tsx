@@ -25,6 +25,7 @@ import ReasonButton from './CustomValues/ReasonButton';
 import RenounceOwnershipButton from './CustomValues/RenounceOwnershipButton';
 import Vested from './CustomValues/Vested';
 import useDebounce from '~/hooks/useDebounce';
+import MigrateButton from './CustomValues/Migrate';
 
 export default function VestingTable({
   data,
@@ -118,6 +119,11 @@ export default function VestingTable({
           cell.row.original && (
             <ClaimButton data={cell.row.original} claimDialog={claimDialog} claimValues={claimValues} />
           ),
+      },
+      {
+        id: 'migrate',
+        header: '',
+        cell: ({ cell }) => (cell.row.original ? <MigrateButton data={cell.row.original} /> : null),
       },
       {
         id: 'addReason',

@@ -18,6 +18,7 @@ export interface IVestingData {
   vestingDuration: string;
   cliffTime: string;
   startTime: string;
+  openClaim: boolean;
 }
 
 interface IConfirmProps {
@@ -52,6 +53,7 @@ export default function Confirm({ vestingData, dialog, factory }: IConfirmProps)
         vestingData?.vestingDuration,
         vestingData?.startTime,
         vestingData?.cliffTime,
+        vestingData?.openClaim,
       ],
     })
       .then((tx) => {
@@ -124,7 +126,7 @@ export default function Confirm({ vestingData, dialog, factory }: IConfirmProps)
               }
             )} UTC) `}</p>
           </div>
-          <SubmitButton className="mt-5" onClick={onConfirm}>
+          <SubmitButton className="mt-5" onClick={onConfirm} disabled={isLoading}>
             {isLoading ? <BeatLoader size="6px" color="white" /> : 'Confirm Transaction'}
           </SubmitButton>
         </div>

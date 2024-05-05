@@ -48,15 +48,19 @@ async function createTokenContractAndCheckApproval({
   approvalFn,
   approveForAddress,
 }: ICreateAndCheckApproval) {
-  const tokenContract = createERC20Contract({ tokenAddress: getAddress(tokenAddress), provider });
-  const decimals = await tokenContract.decimals();
+  try {
+    const tokenContract = createERC20Contract({ tokenAddress: getAddress(tokenAddress), provider });
+    const decimals = await tokenContract.decimals();
 
-  checkTokenApproval({
-    tokenDetails: { tokenContract, llamaContractAddress: approveForAddress, decimals },
-    userAddress,
-    approvedForAmount,
-    checkTokenApproval: approvalFn,
-  });
+    checkTokenApproval({
+      tokenDetails: { tokenContract, llamaContractAddress: approveForAddress, decimals },
+      userAddress,
+      approvedForAmount,
+      checkTokenApproval: approvalFn,
+    });
+  } catch (error) {
+    console.log(error);
+  }
 }
 
 export const checkApproval = debounce(checkTokenApproval, 200);

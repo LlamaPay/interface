@@ -29,6 +29,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
     cliffTime: '',
     cliffDuration: 'month',
     startDate: '',
+    openClaim: true,
   });
 
   const [vestingData, setVestingData] = React.useState<IVestingData | null>(null);
@@ -83,6 +84,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
     const vestingAmount = form.vestingAmount?.value;
     const vestingDuration = form.vestingDuration?.value;
     const cliffDuration = form.cliffDuration?.value;
+    const openClaim = formData.openClaim;
 
     const fmtVestingTime = new BigNumber(vestingTime).times(secondsByDuration[vestingDuration]).toFixed(0);
     const date =
@@ -104,7 +106,6 @@ export default function CreateVesting({ factory }: { factory: string }) {
 
     const isEOA = (await provider.getCode(recipientAddress)) === '0x' ? true : false;
     if (!isEOA) {
-      setRecipient(recipientAddress);
       eoaWarningDialog.show();
     }
     if (isApproved) {
@@ -116,6 +117,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
         vestingDuration: fmtVestingTime,
         cliffTime: fmtCliffTime,
         startTime,
+        openClaim,
       });
       confirmDialog.show();
       setFormData({
@@ -128,6 +130,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
         cliffTime: '',
         cliffDuration: 'year',
         startDate: '',
+        openClaim: true,
       });
     } else {
       approveToken(
@@ -159,7 +162,15 @@ export default function CreateVesting({ factory }: { factory: string }) {
           <span className="">Return</span>
         </Link>
         <h1 className="font-exo my-2 text-2xl font-semibold text-lp-gray-4 dark:text-white">Set Up Vesting</h1>
-        <InputText label={'Recipient Address'} name="recipientAddress" isRequired />
+        <InputText
+          label={'Recipient Address'}
+          name="recipientAddress"
+          handleChange={(e) => setRecipient(e.target.value)}
+          isRequired
+        />
+        {address && recipient && recipient.toLowerCase() === address.toLowerCase() ? (
+          <p className="-mt-4 text-sm text-red-500">Recipient cant be the same as funder</p>
+        ) : null}
         <InputText label={'Vested Token Address'} name="vestedToken" handleChange={handleVestTokenChange} isRequired />
         <InputAmount label={'Vesting Amount'} name="vestingAmount" handleChange={handleVestAmountChange} isRequired />
         <InputAmountWithDuration
@@ -194,6 +205,22 @@ export default function CreateVesting({ factory }: { factory: string }) {
         )}
 
         <div className="flex gap-2">
+          <span className="font-exo">{'Open Claim'}</span>
+          <Switch
+            checked={formData.openClaim}
+            onChange={(value: boolean) => {
+              handleChange(value, 'openClaim');
+            }}
+            className={`${
+              formData.openClaim ? 'bg-lp-primary' : 'bg-gray-200 dark:bg-[#252525]'
+            } relative inline-flex h-6 w-11 items-center rounded-full`}
+          >
+            <span
+              className={`${
+                formData.openClaim ? 'translate-x-6' : 'translate-x-1'
+              } inline-block h-4 w-4 transform rounded-full bg-white`}
+            />
+          </Switch>
           <span className="font-exo">{'Include Cliff'}</span>
           <Switch
             checked={formData.includeCliff}
@@ -237,7 +264,7 @@ export default function CreateVesting({ factory }: { factory: string }) {
 
         <ChartWrapper {...formData} />
 
-        <SubmitButton className="mt-5">
+        <SubmitButton className="mt-5" disabled={checkingApproval || approvingToken}>
           {checkingApproval || approvingToken ? (
             <BeatLoader size="6px" color="white" />
           ) : isApproved ? (

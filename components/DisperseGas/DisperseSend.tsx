@@ -65,7 +65,7 @@ export default function DisperseSend({ dialog, data, setTransactionHash, transac
   const t = useTranslations('Streams');
 
   return (
-    <button onClick={sendGas} type="button" className="form-submit-button mt-5">
+    <button onClick={sendGas} type="button" className="form-submit-button mt-5" disabled={isLoading}>
       {isLoading ? <BeatLoader size="6px" color="white" /> : t('send')}
     </button>
   );

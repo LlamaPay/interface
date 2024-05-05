@@ -370,7 +370,10 @@ export default function CreatePayment({ contract }: { contract: string }) {
             </section>
           );
         })}
-        <SubmitButton className="mt-5" disabled={!chainId || !networkDetails[chainId].paymentsContract}>
+        <SubmitButton
+          className="mt-5"
+          disabled={!chainId || !networkDetails[chainId].paymentsContract || approving || checkingApproval}
+        >
           {!chainId ? (
             'Connect Wallet'
           ) : !networkDetails[chainId].paymentsContract ? (

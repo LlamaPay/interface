@@ -143,7 +143,7 @@ export const Modify = ({ data }: ModifyProps) => {
                 isRequired
               />
 
-              <SubmitButton className="my-2">
+              <SubmitButton className="my-2" disabled={isLoading}>
                 {isLoading ? <BeatLoader size="6px" color="white" /> : t0('update')}
               </SubmitButton>
             </form>

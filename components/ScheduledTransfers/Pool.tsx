@@ -419,7 +419,7 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
           <form className="mx-auto flex flex-col gap-4" onSubmit={updateMinPrice}>
             <InputAmount name="newMinPrice" label="New Minimum Price (USD)" placeholder="1000" isRequired />
 
-            <SubmitButton className="mt-5">
+            <SubmitButton className="mt-5" disabled={updatingMinPrice}>
               {updatingMinPrice ? <BeatLoader size="6px" color="white" /> : 'Update'}
             </SubmitButton>
           </form>
@@ -431,7 +431,7 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
           <form className="mx-auto flex flex-col gap-4" onSubmit={updateOracle}>
             <InputText name="newOracleAddress" label="New Address" placeholder="0x..." isRequired />
 
-            <SubmitButton className="mt-5">
+            <SubmitButton className="mt-5" disabled={updatingOracle}>
               {updatingOracle ? <BeatLoader size="6px" color="white" /> : 'Update'}
             </SubmitButton>
           </form>
@@ -443,7 +443,7 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
           <form className="mx-auto flex flex-col gap-4" onSubmit={onDeposit}>
             <InputAmount name="toDeposit" label="To Deposit" placeholder="0" isRequired />
 
-            <SubmitButton className="mt-5">
+            <SubmitButton className="mt-5" disabled={depositing}>
               {depositing ? <BeatLoader size="6px" color="white" /> : 'Deposit'}
             </SubmitButton>
           </form>
@@ -455,7 +455,7 @@ export function ScheduledTransferPool({ pool }: { pool: IScheduledTransferPool }
           <form className="mx-auto flex flex-col gap-4" onSubmit={onWithdraw}>
             <InputAmount name="toWithdraw" label="To Withdraw" placeholder="0" isRequired />
 
-            <SubmitButton className="mt-5">
+            <SubmitButton className="mt-5" disabled={withdrawing}>
               {withdrawing ? <BeatLoader size="6px" color="white" /> : 'Withdraw'}
             </SubmitButton>
           </form>

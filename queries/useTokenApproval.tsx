@@ -1,7 +1,7 @@
 import BigNumber from 'bignumber.js';
 import { Contract, Signer } from 'ethers';
 import { getAddress } from 'ethers/lib/utils';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import type { ITransactionError, ITransactionSuccess } from '~/types';
 import {
   checkHasApprovedEnough,
@@ -39,7 +39,6 @@ const maxAmount = new BigNumber(2).pow(256).minus(1).toFixed(0);
 const checkApproval = async (data: ICheckTokenAllowance) => {
   try {
     const { res, err } = await checkHasApprovedEnough(data);
-
     if (err) {
       return false;
     } else return res;
@@ -88,6 +87,13 @@ const approveTokenForMaxAmt = async ({ tokenAddress, signer, spenderAddress }: A
 
 export function useCheckTokenApproval() {
   return useMutation((data: ICheckTokenAllowance) => checkApproval(data));
+}
+
+export function useGetTokenApproval(data: ICheckTokenAllowance) {
+  return useQuery(
+    ['token-approval', data.approveForAddress, data.approvedForAmount, data.userAddress, data.token?.address],
+    () => checkApproval(data)
+  );
 }
 
 export function useCheckMultipleTokenApproval() {

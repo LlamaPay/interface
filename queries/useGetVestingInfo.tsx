@@ -10,7 +10,7 @@ import { erc20ABI, useAccount } from 'wagmi';
 import { gql, request } from 'graphql-request';
 import { vestingFactoryABI } from '~/lib/abis/vestingFactory';
 import { vestingReasonsABI } from '~/lib/abis/vestingReasons';
-import vestingEscrowABI from '~/lib/abis/vestingEscrow';
+import { vestingEscrowABI } from '~/lib/abis/vestingEscrow';
 import { vestingV2EscrowABI } from '~/lib/abis/vestingV2Escrow';
 
 const vestingEscrowCalls = [
@@ -57,7 +57,6 @@ const subgraphs: { [key: number]: string } = {
 
 const multicalls: { [key: number]: string } = {
   2222: '0x30A62aA52Fa099C4B227869EB6aeaDEda054d121',
-  42161: '0xcA11bde05977b3631167028862bE2a173976CA11',
 };
 
 async function getVestingInfoByContract({
@@ -190,6 +189,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
       }, {} as any);
     };
     if (subgraphs[chainId]) {
+    try{
       const unsortedResults: IVesting[] = [];
 
       const GET_ADMIN = gql`
@@ -307,6 +307,9 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
         }
       }
       return unsortedResults;
+    } catch(e){
+      console.log(`Subgraph "${subgraphs[chainId]}" is broken, switching to multicall queries`, e)
+    }
     }
 
     const [oldStreams, newStreams] = await Promise.allSettled([

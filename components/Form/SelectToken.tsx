@@ -226,7 +226,7 @@ const NewTokenForm = ({ setNewTokenForm }: { setNewTokenForm: React.Dispatch<Rea
       </header>
       <form className="m-4 mt-[10%]" onSubmit={handleSubmit}>
         <InputText name="tokenAddress" isRequired={true} label={t1('tokenAddress')} placeholder="0x..." />
-        <SubmitButton className="!mt-4 rounded" disabled={isLoading}>
+        <SubmitButton className="!mt-4 rounded" disabled={isLoading || isConfirming}>
           {isLoading ? (
             <BeatLoader size="6px" color="white" />
           ) : isConfirming ? (
