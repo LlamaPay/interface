@@ -189,6 +189,7 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
       }, {} as any);
     };
     if (subgraphs[chainId]) {
+    try{
       const unsortedResults: IVesting[] = [];
 
       const GET_ADMIN = gql`
@@ -306,6 +307,9 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
         }
       }
       return unsortedResults;
+    } catch(e){
+      console.log(`Subgraph "${subgraphs[chainId]}" is broken, switching to multicall queries`, e)
+    }
     }
 
     const [oldStreams, newStreams] = await Promise.allSettled([
