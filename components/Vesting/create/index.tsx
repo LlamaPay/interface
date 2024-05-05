@@ -120,18 +120,6 @@ export default function CreateVesting({ factory }: { factory: string }) {
         openClaim,
       });
       confirmDialog.show();
-      setFormData({
-        vestedToken: '',
-        vestedAmount: '',
-        vestingTime: '',
-        vestingDuration: 'year',
-        includeCliff: false,
-        includeCustomStart: false,
-        cliffTime: '',
-        cliffDuration: 'year',
-        startDate: '',
-        openClaim: true,
-      });
     } else {
       approveToken(
         {
