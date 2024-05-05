@@ -50,7 +50,6 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
     data.cliffLength === '0' ? null : Number(data.startTime) + Number(data.cliffLength) - Date.now() / 1e3;
 
   const migrateDialog = useDialogState();
-  if (Number(data.disabledAt) <= Date.now() / 1e3 && !migrateDialog.open) return null;
 
   const queryClient = useQueryClient();
 
@@ -191,6 +190,7 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
         toast.error(err.reason || err.message || 'Transaction Failed');
       });
   }
+  if (Number(data.disabledAt) <= Date.now() / 1e3 && !migrateDialog.open) return null;
 
   return (
     <>
