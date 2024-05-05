@@ -18,7 +18,7 @@ import { getTotalVested } from './Vested';
 import BigNumber from 'bignumber.js';
 import { vestingFactoryReadableABI } from '~/lib/abis/vestingFactoryReadable';
 import { useState } from 'react';
-const DAY = 3600*24
+const DAY = 3600 * 24;
 
 export default function MigrateButton({ data }: { data: IVesting }) {
   const { chainId } = useNetworkProvider();
@@ -27,13 +27,13 @@ export default function MigrateButton({ data }: { data: IVesting }) {
   return <MButton data={data} factoryV2={VESTING_FACTORY_V2} />;
 }
 
-function getActualVested(data: IVesting){
+function getActualVested(data: IVesting) {
   const now = Date.now() / 1e3;
-  const cliffEnd = Number(data.startTime) + Number(data.cliffLength)
-  if(now < cliffEnd){
-    return 0
+  const cliffEnd = Number(data.startTime) + Number(data.cliffLength);
+  if (now < cliffEnd) {
+    return 0;
   }
-  return getTotalVested(data)
+  return getTotalVested(data);
 }
 
 function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
@@ -46,7 +46,8 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
   const tokenContract = createERC20Contract({ tokenAddress: getAddress(data.token), provider });
   const isRugPulled = Number(data.disabledAt) < Date.now() / 1e3;
 
-  const timeTillCliffEnd = data.cliffLength === "0"?null:(Number(data.startTime)+Number(data.cliffLength))-(Date.now() / 1e3)
+  const timeTillCliffEnd =
+    data.cliffLength === '0' ? null : Number(data.startTime) + Number(data.cliffLength) - Date.now() / 1e3;
 
   const migrateDialog = useDialogState();
 
@@ -105,7 +106,6 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
         {
           tokenAddress: getAddress(data.token),
           amountToApprove: toVest.toFixed(),
-          // TODO update it to networkDetails[chainId].vestingFactory
           spenderAddress: factoryV2,
         },
         {
@@ -138,8 +138,8 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
   });
   function createStream() {
     let vestingDuration, startTime, cliffTime;
-    if(data.disabledAt == data.endTime){
-      throw new Error("stream has not been revoked")
+    if (data.disabledAt == data.endTime) {
+      throw new Error('stream has not been revoked');
     }
 
     if (+data.disabledAt < +data.startTime) {
@@ -168,7 +168,7 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
         vestingDuration.toFixed(0),
         startTime.toFixed(0),
         cliffTime.toFixed(0),
-        false
+        false,
       ],
     })
       .then((tx) => {
@@ -257,7 +257,12 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
             'Failed to check approval'
           }`}</p>
         ) : null}
-        {(timeTillCliffEnd !== null && timeTillCliffEnd < 7*DAY)? <p><br />You must make sure that these 3 txs are executed within {(timeTillCliffEnd/DAY).toFixed(2)} days</p>:null}
+        {timeTillCliffEnd !== null && timeTillCliffEnd < 7 * DAY ? (
+          <p>
+            <br />
+            You must make sure that these 3 txs are executed within {(timeTillCliffEnd / DAY).toFixed(2)} days
+          </p>
+        ) : null}
       </FormDialog>
       <TransactionDialog dialog={transactionDialog} transactionHash={transactionHash} />
     </>
