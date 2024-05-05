@@ -19,6 +19,7 @@ export interface IVestingGnosisFormValues {
     cliffTime: string;
     cliffDuration: 'month' | 'year' | 'week';
     startDate: string;
+    openClaim: boolean;
   }[];
 }
 
