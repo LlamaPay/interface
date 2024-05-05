@@ -96,6 +96,17 @@ export function useGetTokenApproval(data: ICheckTokenAllowance) {
   );
 }
 
+const getApprovalAmount = async (data:ICheckTokenAllowance) => {
+  return (await data.token?.allowance(data.userAddress, data.approveForAddress)) as any
+}
+
+export function useGetTokenApprovalRaw(data: Omit<ICheckTokenAllowance, "approvedForAmount">) {
+  return useQuery(
+    ['token-approval-raw', data.approveForAddress, data.userAddress, data.token?.address],
+    () => getApprovalAmount(data)
+  );
+}
+
 export function useCheckMultipleTokenApproval() {
   return useMutation((data: ICheckMultipleTokenAllowance) => checkMultipleApproval(data));
 }

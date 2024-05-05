@@ -8,7 +8,7 @@ import { SubmitButton } from '~/components/Form';
 import { vestingContractReadableABI } from '~/lib/abis/vestingContractReadable';
 import { IVesting } from '~/types';
 import { VESTING_FACTORY } from '~/lib/contracts';
-import { useApproveToken, useCheckTokenApproval, useGetTokenApproval } from '~/queries/useTokenApproval';
+import { useApproveToken, useCheckTokenApproval, useGetTokenApproval, useGetTokenApprovalRaw } from '~/queries/useTokenApproval';
 import { checkApproval } from '~/components/Form/utils';
 import { networkDetails } from '~/lib/networkDetails';
 import { useNetworkProvider } from '~/hooks';
@@ -50,6 +50,7 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
     data.cliffLength === '0' ? null : Number(data.startTime) + Number(data.cliffLength) - Date.now() / 1e3;
 
   const migrateDialog = useDialogState();
+  if (Number(data.disabledAt) <= Date.now() / 1e3 && !migrateDialog.open) return null;
 
   const queryClient = useQueryClient();
 
@@ -87,16 +88,16 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
     error: errorCheckingApproval,
   } = useCheckTokenApproval();
   const {
-    data: isTokenApproved,
+    data: tokenApprovalAmount,
     isLoading: fetchingTokenApproval,
     error: errorFetchingTokenApproval,
-  } = useGetTokenApproval({
+  } = useGetTokenApprovalRaw({
     token: tokenContract,
     userAddress: data.admin,
     approveForAddress: factoryV2,
-    approvedForAmount: toVest.toFixed(),
   });
-  const isApproved = isTokenApproved || isTokenApproved1;
+
+  const isApproved = new BigNumber(tokenApprovalAmount).gte(toVest) || isTokenApproved1;
   const checkingApproval = fetchingTokenApproval || fetchingTokenApproval1;
   const { mutate: approveTokenSpend, isLoading: approvingToken, error: errorApproving } = useApproveToken();
   const { chainId } = useNetworkProvider();
@@ -190,8 +191,6 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
         toast.error(err.reason || err.message || 'Transaction Failed');
       });
   }
-
-  if (Number(data.disabledAt) <= Date.now() / 1e3 && !migrateDialog.open) return null;
 
   return (
     <>

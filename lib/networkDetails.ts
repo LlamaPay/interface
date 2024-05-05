@@ -142,7 +142,10 @@ export const networkDetails: INetworkDetails = {
   42161: {
     rpcUrl: 'https://rpc.ankr.com/arbitrum',
     subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-arbitrum',
-    chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.ankr.com/arbitrum'),
+    chainProviders: new ethers.providers.FallbackProvider([
+      new ethers.providers.StaticJsonRpcProvider('https://rpc.ankr.com/arbitrum'),
+      new ethers.providers.StaticJsonRpcProvider('https://arb1.arbitrum.io/rpc'),
+    ]),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_ARBITRUM,
     disperseAddress: CONTRACTS.DISPERSE_ARBITRUM,
     botAddress: CONTRACTS.BOT_ARBITRUM,

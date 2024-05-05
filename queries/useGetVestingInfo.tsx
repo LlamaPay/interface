@@ -162,9 +162,10 @@ async function getVestingInfoByContract({
   }
 }
 
-async function getVestingInfo(userAddress: string | undefined, provider: Provider | null, chainId: number | null) {
+async function getVestingInfo(userAddress: string | undefined, chainId: number | null) {
   try {
-    if (!provider) throw new Error('No provider');
+    if (!chainId) throw new Error('No chain');
+    const provider = networkDetails[chainId].chainProviders
     if (!userAddress) throw new Error('No account');
     if (!chainId) throw new Error('No Chain ID');
 
@@ -342,11 +343,11 @@ async function getVestingInfo(userAddress: string | undefined, provider: Provide
 }
 
 export default function useGetVestingInfo() {
-  const { provider, chainId } = useNetworkProvider();
+  const { chainId } = useNetworkProvider();
 
   const { address } = useAccount();
 
-  return useQuery(['vestingInfo', address, chainId], () => getVestingInfo(address, provider, chainId));
+  return useQuery(['vestingInfo', address, chainId], () => getVestingInfo(address, chainId));
 }
 
 interface IVestingInfoByQueryParams {
@@ -356,7 +357,7 @@ interface IVestingInfoByQueryParams {
 }
 
 export function useGetVestingInfoByQueryParams({ address, chainId, provider }: IVestingInfoByQueryParams) {
-  return useQuery(['vestingInfo', address, chainId], () => getVestingInfo(address, provider, chainId), {
+  return useQuery(['vestingInfo', address, chainId], () => getVestingInfo(address, chainId), {
     refetchInterval: 3600000,
   });
 }
