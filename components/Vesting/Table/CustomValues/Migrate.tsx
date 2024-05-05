@@ -137,24 +137,22 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
     functionName: 'deploy_vesting_contract',
   });
   function createStream() {
-    const now = Date.now() / 1e3;
-
     let vestingDuration, startTime, cliffTime;
+    if(data.disabledAt == data.endTime){
+      throw new Error("stream has not been revoked")
+    }
 
-    if (now < +data.startTime) {
+    if (+data.disabledAt < +data.startTime) {
       vestingDuration = +data.endTime - +data.startTime;
       startTime = +data.startTime;
       cliffTime = +data.cliffLength;
     } else {
       const endCliff = +data.startTime + +data.cliffLength;
-      if (now > endCliff) {
+      if (+data.disabledAt >= endCliff) {
         cliffTime = 0;
-        vestingDuration = +data.endTime - now;
-        startTime = now;
+        vestingDuration = +data.endTime - +data.disabledAt;
+        startTime = +data.disabledAt;
       } else {
-        if(Number(data.cliffLength) > 0 && endCliff < (now + 4*DAY)){
-          alert("The end of the cliff is very close, please check carefully when making the tx to ensure that user is not getting paid twice")
-        }
         // keep everything the same
         cliffTime = +data.cliffLength;
         vestingDuration = +data.endTime - +data.startTime;
@@ -232,7 +230,7 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
                 creatingContract || approvingToken || !isRugPulled || !isApproved || +data.endTime <= Date.now() / 1e3
               }
             >
-              {creatingContract || approvingToken ? <BeatLoader size="6px" color="white" /> : 'Create New Stream'}
+              {creatingContract ? <BeatLoader size="6px" color="white" /> : 'Create New Stream'}
             </SubmitButton>
           </li>
         </ol>
