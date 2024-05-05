@@ -153,9 +153,7 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
         startTime = now;
       } else {
         if(Number(data.cliffLength) > 0 && endCliff < (now + 4*DAY)){
-          const error = "The end of the cliff is to close to now, please migrate manually to avoid race conditions"
-          alert(error)
-          throw new Error(error)
+          alert("The end of the cliff is very close, please check carefully when making the tx to ensure that user is not getting paid twice")
         }
         // keep everything the same
         cliffTime = +data.cliffLength;
@@ -172,6 +170,7 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
         vestingDuration.toFixed(0),
         startTime.toFixed(0),
         cliffTime.toFixed(0),
+        false
       ],
     })
       .then((tx) => {
@@ -194,7 +193,7 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
       });
   }
 
-  if (Number(data.disabledAt) <= Date.now() / 1e3) return null;
+  if (Number(data.disabledAt) <= Date.now() / 1e3 && !migrateDialog.open) return null;
 
   return (
     <>
