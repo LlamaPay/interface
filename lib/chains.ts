@@ -3,7 +3,19 @@ import * as wagmiChains from 'wagmi/chains';
 const defaultChains: Array<wagmiChains.Chain> = [
   wagmiChains.mainnet,
   wagmiChains.optimism,
-  wagmiChains.arbitrum,
+  {
+    id: 42161,
+    name: 'Arbitrum',
+    network: 'arbitrum',
+    nativeCurrency: { "name": "Ether", "symbol": "ETH", "decimals": 18 },
+    rpcUrls: { default: { http: ['https://rpc.ankr.com/arbitrum'] }, public: { http: ['https://rpc.ankr.com/arbitrum'] } },
+    blockExplorers: {
+      default: {
+        name: 'ArbiScan',
+        url: 'https://arbiscan.io',
+      },
+    },
+  },
   wagmiChains.polygon,
   wagmiChains.avalanche,
   wagmiChains.fantom,
