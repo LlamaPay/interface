@@ -31,6 +31,7 @@ const factoryAbi = [
       { name: 'vesting_duration', type: 'uint256' },
       { name: 'vesting_start', type: 'uint256' },
       { name: 'cliff_length', type: 'uint256' },
+      { name: 'open_claim', type: 'bool' },
     ],
     outputs: [{ name: '', type: 'address' }],
   },
@@ -61,6 +62,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
           cliffTime: '',
           cliffDuration: 'year',
           startDate: '',
+          openClaim: true,
         },
       ],
     },
@@ -102,6 +104,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
         fmtVestingTime,
         startTime,
         fmtCliffTime,
+        info.openClaim,
       ]);
       createCalls.push(call);
       toApprove = toApprove.plus(fmtVestingAmount);
@@ -144,6 +147,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
           cliffTime: columns[3],
           cliffDuration: 'month',
           startDate: columns[4],
+          openClaim: true,
         });
       }
       remove(0);
@@ -167,15 +171,19 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
           >
             Import
           </button>
-          <a href="https://docs.llamapay.io/llamapay/gnosis-safe/importing-csv-for-vesting">
-            <button className="rounded-3xl border px-3 py-[6px] text-sm dark:border-[#252525] dark:bg-[#252525]">
-              Guide
-            </button>
+          <a
+            href="https://docs.llamapay.io/llamapay/gnosis-safe/importing-csv-for-vesting"
+            target="_blank"
+            rel="noreferrer noopener"
+            className="rounded-3xl border px-3 py-[6px] text-sm dark:border-[#252525] dark:bg-[#252525]"
+          >
+            Guide
           </a>
-          <a href="/csvs/vesting.csv">
-            <button className="rounded-3xl border px-3 py-[6px] text-sm dark:border-[#252525] dark:bg-[#252525]">
-              Example
-            </button>
+          <a
+            href="/csvs/vesting.csv"
+            className="rounded-3xl border px-3 py-[6px] text-sm dark:border-[#252525] dark:bg-[#252525]"
+          >
+            Example
           </a>
         </form>
       </div>
@@ -296,6 +304,26 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
               )}
 
               <div className="flex items-center gap-2">
+                <span className="font-exo">{'Open Claim'}</span>
+                <Switch
+                  {...register(`vestingContracts.${index}.openClaim` as const)}
+                  className={`${
+                    getValues(`vestingContracts.${index}.openClaim`) ? 'bg-lp-primary' : 'bg-gray-200 dark:bg-[#252525]'
+                  } relative inline-flex h-6 w-11 items-center rounded-full`}
+                  checked={getValues(`vestingContracts.${index}.openClaim`)}
+                  onChange={(e: boolean) => {
+                    update(index, {
+                      ...getValues(`vestingContracts.${index}`),
+                      openClaim: e,
+                    });
+                  }}
+                >
+                  <span
+                    className={`${
+                      getValues(`vestingContracts.${index}.openClaim`) ? 'translate-x-6' : 'translate-x-1'
+                    } inline-block h-4 w-4 transform rounded-full bg-white`}
+                  />
+                </Switch>
                 <span className="font-exo">{'Include Cliff'}</span>
                 <Switch
                   {...register(`vestingContracts.${index}.includeCliff` as const)}
@@ -361,6 +389,7 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
                       cliffTime: '',
                       cliffDuration: 'year',
                       startDate: '',
+                      openClaim: true,
                     })
                   }
                 >
