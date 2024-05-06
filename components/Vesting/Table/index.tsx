@@ -123,7 +123,7 @@ export default function VestingTable({
       {
         id: 'migrate',
         header: '',
-        cell: ({ cell }) => (cell.row.original ? <MigrateButton data={cell.row.original} /> : null),
+        cell: ({ cell }) => (cell.row.original ? <MigrateButton data={cell.row.original} allStreams={data} /> : null),
       },
       {
         id: 'addReason',
@@ -159,7 +159,7 @@ export default function VestingTable({
           ),
       },
     ],
-    [address, chartValues, chartDialog, claimDialog, claimValues, locale]
+    [address, chartValues, chartDialog, claimDialog, claimValues, locale, data]
   );
 
   const [tableFilter, setTableFilter] = React.useState('');

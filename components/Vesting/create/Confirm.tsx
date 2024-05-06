@@ -9,6 +9,7 @@ import { useQueryClient } from '@tanstack/react-query';
 import toast from 'react-hot-toast';
 import { TransactionDialog } from '~/components/Dialog';
 import { BeatLoader } from '~/components/BeatLoader';
+import { useRouter } from 'next/router';
 
 export interface IVestingData {
   recipientAddress: string;
@@ -29,7 +30,7 @@ interface IConfirmProps {
 
 export default function Confirm({ vestingData, dialog, factory }: IConfirmProps) {
   const intl = useIntl();
-
+  const router = useRouter();
   const [transactionHash, setTransactionHash] = React.useState<string>('');
 
   const queryClient = useQueryClient();
@@ -65,6 +66,7 @@ export default function Confirm({ vestingData, dialog, factory }: IConfirmProps)
           toast.dismiss(toastid);
           if (receipt.status === 1) {
             toast.success('Successfuly Created Contract');
+            router.push('/vesting');
           } else {
             toast.error('Failed to Create Contract');
           }

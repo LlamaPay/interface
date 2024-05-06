@@ -8,7 +8,7 @@ import { SubmitButton } from '~/components/Form';
 import { vestingContractReadableABI } from '~/lib/abis/vestingContractReadable';
 import { IVesting } from '~/types';
 import { VESTING_FACTORY } from '~/lib/contracts';
-import { useApproveToken, useCheckTokenApproval, useGetTokenApproval, useGetTokenApprovalRaw } from '~/queries/useTokenApproval';
+import { useApproveToken, useCheckTokenApproval, useGetTokenApprovalRaw } from '~/queries/useTokenApproval';
 import { checkApproval } from '~/components/Form/utils';
 import { networkDetails } from '~/lib/networkDetails';
 import { useNetworkProvider } from '~/hooks';
@@ -20,10 +20,21 @@ import { vestingFactoryReadableABI } from '~/lib/abis/vestingFactoryReadable';
 import { useState } from 'react';
 const DAY = 3600 * 24;
 
-export default function MigrateButton({ data }: { data: IVesting }) {
+export default function MigrateButton({ data, allStreams }: { data: IVesting; allStreams: Array<IVesting> }) {
   const { chainId } = useNetworkProvider();
   const VESTING_FACTORY_V2 = chainId ? networkDetails[chainId]?.vestingFactory_v2 : null;
-  if (!VESTING_FACTORY_V2) return null;
+  const migratedStream = allStreams.find(
+    (stream) =>
+      data.contract !== stream.contract &&
+      stream.admin === data.admin &&
+      stream.recipient === data.recipient &&
+      stream.token === data.token &&
+      stream.endTime === data.endTime &&
+      (data.disabledAt === stream.startTime || data.startTime === stream.startTime)
+  );
+
+  if (!VESTING_FACTORY_V2 || migratedStream) return null;
+
   return <MButton data={data} factoryV2={VESTING_FACTORY_V2} />;
 }
 
@@ -190,7 +201,6 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
         toast.error(err.reason || err.message || 'Transaction Failed');
       });
   }
-  if (Number(data.disabledAt) <= Date.now() / 1e3 && !migrateDialog.open) return null;
 
   return (
     <>
