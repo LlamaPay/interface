@@ -319,10 +319,7 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
   });
 
   const log: any = { approve: [], create: [] };
-  const createStream = () => {
-    if (!tokenApprovalAmount || data.find((stream) => stream.disabledAt == stream.endTime)) return;
-
-    const calls: { [key: string]: string[] } = {};
+  if (tokenApprovalAmount) {
     // token approve calls based on current allowance
     for (const tokenToVest in toVestByTokens) {
       const isApproved = new BigNumber(tokenApprovalAmount[tokenToVest].toString()).gte(toVestByTokens[tokenToVest]);
@@ -332,13 +329,10 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
           tokenApprovalAmount[tokenToVest].toString()
         );
         log.approve.push([data[0].admin, amountToApprove.toFixed(), tokenApprovalAmount[tokenToVest].toString()]);
-        calls[tokenToVest] = [
-          new Interface(erc20ABI).encodeFunctionData('approve', [data[0].admin, amountToApprove.toFixed()]),
-        ];
       }
     }
     // calls to migrate streams to v2
-    calls[factoryV2] = data.map((oldStream) => {
+    data.forEach((oldStream) => {
       let vestingDuration, startTime, cliffTime;
 
       if (+oldStream.disabledAt < +oldStream.startTime) {
@@ -370,6 +364,51 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
         cliffTime.toFixed(0),
         false,
       ]);
+    });
+  }
+  const createStream = () => {
+    if (!tokenApprovalAmount || data.find((stream) => stream.disabledAt == stream.endTime)) return;
+
+    const calls: { [key: string]: string[] } = {};
+    // token approve calls based on current allowance
+    for (const tokenToVest in toVestByTokens) {
+      const isApproved = new BigNumber(tokenApprovalAmount[tokenToVest].toString()).gte(toVestByTokens[tokenToVest]);
+
+      if (!isApproved) {
+        const amountToApprove = new BigNumber(toVestByTokens[tokenToVest]).minus(
+          tokenApprovalAmount[tokenToVest].toString()
+        );
+
+        calls[tokenToVest] = [
+          new Interface(erc20ABI).encodeFunctionData('approve', [data[0].admin, amountToApprove.toFixed()]),
+        ];
+      }
+    }
+    // calls to migrate streams to v2
+    calls[factoryV2] = data.map((oldStream) => {
+      let vestingDuration, startTime, cliffTime;
+
+      if (+oldStream.disabledAt < +oldStream.startTime) {
+        vestingDuration = +oldStream.endTime - +oldStream.startTime;
+        startTime = +oldStream.startTime;
+        cliffTime = +oldStream.cliffLength;
+      } else {
+        const endCliff = +oldStream.startTime + +oldStream.cliffLength;
+        if (+oldStream.disabledAt >= endCliff) {
+          cliffTime = 0;
+          vestingDuration = +oldStream.endTime - +oldStream.disabledAt;
+          startTime = +oldStream.disabledAt;
+        } else {
+          // keep everything the same
+          cliffTime = +oldStream.cliffLength;
+          vestingDuration = +oldStream.endTime - +oldStream.startTime;
+          startTime = +oldStream.startTime;
+        }
+      }
+
+      const totalVested = getActualVested(oldStream);
+      const toVest = new BigNumber(oldStream.totalLocked).minus(totalVested);
+
       return new Interface(vestingFactoryReadableABI).encodeFunctionData('deploy_vesting_contract', [
         oldStream.token,
         oldStream.recipient,
