@@ -71,7 +71,7 @@ export default function VestingSection() {
         >
           Create Contract
         </Link>
-        {vestingFactory && streamsToMigrate.length > 0 ? (
+        {process.env.NEXT_PUBLIC_SAFE === 'true' && vestingFactory && streamsToMigrate.length > 0 ? (
           <MigrateAll data={streamsToMigrate} factoryV2={vestingFactory} />
         ) : null}
       </div>
