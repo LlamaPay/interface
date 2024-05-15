@@ -2,13 +2,18 @@ import { useQueryClient } from '@tanstack/react-query';
 import { useDialogState } from 'ariakit';
 import toast from 'react-hot-toast';
 import { BeatLoader } from '~/components/BeatLoader';
-import { useAccount, useContractWrite, useProvider } from 'wagmi';
+import { erc20ABI, useAccount, useContractWrite, useProvider } from 'wagmi';
 import { FormDialog, TransactionDialog } from '~/components/Dialog';
 import { SubmitButton } from '~/components/Form';
 import { vestingContractReadableABI } from '~/lib/abis/vestingContractReadable';
 import { IVesting } from '~/types';
 import { VESTING_FACTORY } from '~/lib/contracts';
-import { useApproveToken, useCheckTokenApproval, useGetTokenApprovalRaw } from '~/queries/useTokenApproval';
+import {
+  useApproveToken,
+  useCheckTokenApproval,
+  useGetTokenApprovalRaw,
+  useGetTokenApprovals,
+} from '~/queries/useTokenApproval';
 import { checkApproval } from '~/components/Form/utils';
 import { networkDetails } from '~/lib/networkDetails';
 import { useNetworkProvider } from '~/hooks';
@@ -18,6 +23,9 @@ import { getTotalVested } from './Vested';
 import BigNumber from 'bignumber.js';
 import { vestingFactoryReadableABI } from '~/lib/abis/vestingFactoryReadable';
 import { useState } from 'react';
+import useGnosisBatch from '~/queries/useGnosisBatch';
+import { Interface } from 'ethers/lib/utils';
+
 const DAY = 3600 * 24;
 
 export default function MigrateButton({ data, allStreams }: { data: IVesting; allStreams: Array<IVesting> }) {
@@ -277,3 +285,140 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
     </>
   );
 }
+
+export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factoryV2: string }) => {
+  const { mutate: rugPullBatch, isLoading: isRugpulling, error: errorRugpulling } = useGnosisBatch();
+  const { mutate: migrateBatch, isLoading: isMigrating, error: errorMigrating } = useGnosisBatch();
+
+  const migrateDialog = useDialogState();
+
+  const streamsToRugpull = data.filter((stream) => !(Number(stream.disabledAt) < Date.now() / 1e3));
+
+  const rugPull = () => {
+    const calls: { [key: string]: string[] } = {};
+    streamsToRugpull.forEach((stream) => {
+      calls[stream.contract] = [new Interface(vestingContractReadableABI).encodeFunctionData('rug_pull')];
+    });
+    rugPullBatch({ calls });
+  };
+
+  const toVestByTokens = data.reduce((acc, curr) => {
+    const totalVested = getActualVested(curr);
+    const toVest = new BigNumber(curr.totalLocked).minus(totalVested);
+    acc[curr.token] = (acc[curr.token] ?? new BigNumber(0)).plus(toVest);
+    return acc;
+  }, {} as Record<string, BigNumber>);
+
+  const {
+    data: tokenApprovalAmount,
+    isLoading: fetchingTokenApproval,
+    error: errorFetchingTokenApproval,
+  } = useGetTokenApprovals({
+    tokens: Object.keys(toVestByTokens),
+    userAddress: data[0].admin,
+    approveForAddress: factoryV2,
+  });
+
+  const createStream = () => {
+    if (!tokenApprovalAmount || data.find((stream) => stream.disabledAt == stream.endTime)) return;
+
+    const calls: { [key: string]: string[] } = {};
+    // token approve calls based on current allowance
+    for (const tokenToVest in toVestByTokens) {
+      const isApproved = new BigNumber(tokenApprovalAmount[tokenToVest].toString()).gte(toVestByTokens[tokenToVest]);
+
+      if (!isApproved) {
+        const amountToApprove = new BigNumber(toVestByTokens[tokenToVest]).minus(
+          tokenApprovalAmount[tokenToVest].toString()
+        );
+
+        calls[tokenToVest] = [
+          new Interface(erc20ABI).encodeFunctionData('approve', [factoryV2, amountToApprove.toFixed()]),
+        ];
+      }
+    }
+    // calls to migrate streams to v2
+    calls[factoryV2] = data.map((oldStream) => {
+      let vestingDuration, startTime, cliffTime;
+
+      if (+oldStream.disabledAt < +oldStream.startTime) {
+        vestingDuration = +oldStream.endTime - +oldStream.startTime;
+        startTime = +oldStream.startTime;
+        cliffTime = +oldStream.cliffLength;
+      } else {
+        const endCliff = +oldStream.startTime + +oldStream.cliffLength;
+        if (+oldStream.disabledAt >= endCliff) {
+          cliffTime = 0;
+          vestingDuration = +oldStream.endTime - +oldStream.disabledAt;
+          startTime = +oldStream.disabledAt;
+        } else {
+          // keep everything the same
+          cliffTime = +oldStream.cliffLength;
+          vestingDuration = +oldStream.endTime - +oldStream.startTime;
+          startTime = +oldStream.startTime;
+        }
+      }
+
+      const totalVested = getActualVested(oldStream);
+      const toVest = new BigNumber(oldStream.totalLocked).minus(totalVested);
+
+      return new Interface(vestingFactoryReadableABI).encodeFunctionData('deploy_vesting_contract', [
+        oldStream.token,
+        oldStream.recipient,
+        toVest.toFixed(),
+        vestingDuration.toFixed(0),
+        startTime.toFixed(0),
+        cliffTime.toFixed(0),
+        false,
+      ]);
+    });
+
+    migrateBatch({ calls });
+  };
+
+  return (
+    <>
+      <button className="secondary-button text-md py-2 px-5 text-center font-bold" onClick={migrateDialog.toggle}>
+        Migrate All
+      </button>
+      <FormDialog className="h-min" dialog={migrateDialog} title={'Migrate Streams'}>
+        <ol>
+          <li>
+            <SubmitButton
+              className="mt-5 disabled:opacity-60"
+              onClick={rugPull}
+              disabled={isRugpulling || streamsToRugpull.length === 0}
+            >
+              {isRugpulling ? <BeatLoader size="6px" color="white" /> : 'Stop current v1 streams'}
+            </SubmitButton>
+          </li>
+          <li>
+            <SubmitButton
+              className="mt-5 disabled:opacity-60"
+              onClick={createStream}
+              disabled={fetchingTokenApproval || isMigrating || streamsToRugpull.length !== 0}
+            >
+              {isMigrating ? <BeatLoader size="6px" color="white" /> : 'Migrate to v2 streams'}
+            </SubmitButton>
+          </li>
+        </ol>
+        {errorRugpulling ? (
+          <p className="my-2 break-all text-center text-sm text-red-500">
+            {`[CANCEL-STREAM]: ${(errorRugpulling as any).message ?? 'Failed to cancel'}`}
+          </p>
+        ) : null}
+        {errorMigrating ? (
+          <p className="my-2 break-all text-center text-sm text-red-500">
+            {`[MIGRATE-STREAM]: ${(errorMigrating as any).message ?? 'Failed to migrate'}`}
+          </p>
+        ) : null}
+        {errorFetchingTokenApproval ? (
+          <p className="my-2 break-all text-center text-sm text-red-500">{`[CHECK_TOKEN_APPROVAL]: ${
+            (errorFetchingTokenApproval instanceof Error ? errorFetchingTokenApproval.message : null) ??
+            'Failed to check approval'
+          }`}</p>
+        ) : null}
+      </FormDialog>
+    </>
+  );
+};
