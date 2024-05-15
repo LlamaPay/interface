@@ -287,7 +287,8 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
 }
 
 export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factoryV2: string }) => {
-  const { mutate: gnosisBatch, isLoading: isMutatingGnosisBatchCalls, error } = useGnosisBatch();
+  const { mutate: rugPullBatch, isLoading: isRugpulling, error: errorRugpulling } = useGnosisBatch();
+  const { mutate: migrateBatch, isLoading: isMigrating, error: errorMigrating } = useGnosisBatch();
 
   const migrateDialog = useDialogState();
 
@@ -298,7 +299,7 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
     streamsToRugpull.forEach((stream) => {
       calls[stream.contract] = [new Interface(vestingContractReadableABI).encodeFunctionData('rug_pull')];
     });
-    gnosisBatch({ calls });
+    rugPullBatch({ calls });
   };
 
   const toVestByTokens = data.reduce((acc, curr) => {
@@ -422,7 +423,7 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
       ]);
     });
 
-    gnosisBatch({ calls });
+    migrateBatch({ calls });
   };
 
   return (
@@ -436,34 +437,29 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
             <SubmitButton
               className="mt-5 disabled:opacity-60"
               onClick={rugPull}
-              disabled={isMutatingGnosisBatchCalls || streamsToRugpull.length === 0}
+              disabled={isRugpulling || streamsToRugpull.length === 0}
             >
-              {isMutatingGnosisBatchCalls && streamsToRugpull.length !== 0 ? (
-                <BeatLoader size="6px" color="white" />
-              ) : (
-                'Stop current v1 streams'
-              )}
+              {isRugpulling ? <BeatLoader size="6px" color="white" /> : 'Stop current v1 streams'}
             </SubmitButton>
           </li>
           <li>
             <SubmitButton
               className="mt-5 disabled:opacity-60"
               onClick={createStream}
-              disabled={fetchingTokenApproval || isMutatingGnosisBatchCalls || streamsToRugpull.length !== 0}
+              disabled={fetchingTokenApproval || isMigrating || streamsToRugpull.length !== 0}
             >
-              {isMutatingGnosisBatchCalls && streamsToRugpull.length === 0 ? (
-                <BeatLoader size="6px" color="white" />
-              ) : (
-                'Migrate to v2 streams'
-              )}
+              {isMigrating ? <BeatLoader size="6px" color="white" /> : 'Migrate to v2 streams'}
             </SubmitButton>
           </li>
         </ol>
-        {error ? (
+        {errorRugpulling ? (
           <p className="my-2 break-all text-center text-sm text-red-500">
-            {streamsToRugpull.length !== 0
-              ? `[CANCEL-STREAM]: ${(error as any).message ?? 'Failed to cancel'}`
-              : `[MIGRATE-STREAM]: ${(error as any).message ?? 'Failed to migrate'}`}
+            {`[CANCEL-STREAM]: ${(errorRugpulling as any).message ?? 'Failed to cancel'}`}
+          </p>
+        ) : null}
+        {errorMigrating ? (
+          <p className="my-2 break-all text-center text-sm text-red-500">
+            {`[MIGRATE-STREAM]: ${(errorMigrating as any).message ?? 'Failed to migrate'}`}
           </p>
         ) : null}
         {errorFetchingTokenApproval ? (
