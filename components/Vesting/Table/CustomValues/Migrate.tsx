@@ -330,7 +330,7 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
           tokenApprovalAmount[tokenToVest].toString()
         );
 
-        calls.approve.push([data[0].admin, amountToApprove.toFixed(), tokenApprovalAmount[tokenToVest].toString()]);
+        calls.approve.push([data[0].admin, amountToApprove.toFixed()]);
       }
     }
     // calls to migrate streams to v2
