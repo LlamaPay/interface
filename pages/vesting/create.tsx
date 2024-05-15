@@ -15,7 +15,7 @@ const Create: NextPage = () => {
 
   const t = useTranslations('CreateStream');
 
-  const factory = chainId ? networkDetails[chainId]?.vestingFactory_v2 : null;
+  const factory = chainId ? networkDetails[chainId]?.vestingFactory : null;
 
   return (
     <Layout>

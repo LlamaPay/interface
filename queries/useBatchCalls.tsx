@@ -1,4 +1,4 @@
-import { Signer } from 'ethers';
+import { ContractInterface, Signer } from 'ethers';
 import toast from 'react-hot-toast';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { ITransactionError, ITransactionSuccess } from '~/types';
@@ -8,18 +8,19 @@ import { useSigner } from 'wagmi';
 interface IUseBatchCalls {
   llamaContractAddress: string;
   calls: string[];
+  abi?: ContractInterface;
 }
 
 interface IBatchCalls extends IUseBatchCalls {
   signer?: Signer | null;
 }
 
-async function batchCalls({ signer, llamaContractAddress, calls }: IBatchCalls) {
+async function batchCalls({ signer, llamaContractAddress, calls, abi }: IBatchCalls) {
   try {
     if (!signer) {
       throw new Error("Couldn't get signer");
     } else {
-      const contract = createWriteContract(llamaContractAddress, signer);
+      const contract = createWriteContract(llamaContractAddress, signer, abi);
       return await contract.batch(calls, true);
     }
   } catch (error: any) {
@@ -31,7 +32,7 @@ export default function useBatchCalls() {
   const { data: signer } = useSigner();
   const queryClient = useQueryClient();
   return useMutation<ITransactionSuccess, ITransactionError, IUseBatchCalls, unknown>(
-    ({ llamaContractAddress, calls }: IUseBatchCalls) => batchCalls({ signer, llamaContractAddress, calls }),
+    ({ llamaContractAddress, calls, abi }: IUseBatchCalls) => batchCalls({ signer, llamaContractAddress, calls, abi }),
     {
       onError: (error) => {
         toast.error(error.message || 'Transactions Failed');

@@ -1,6 +1,6 @@
 import { llamaContractABI } from '~/lib/abis/llamaContract';
 import { factoryABI } from '~/lib/abis/llamaFactory';
-import { ethers, Signer } from 'ethers';
+import { ContractInterface, ethers, Signer } from 'ethers';
 import { getAddress, Interface } from 'ethers/lib/utils';
 import { erc20ABI } from 'wagmi';
 
@@ -9,8 +9,8 @@ export type Provider = ethers.providers.BaseProvider;
 export const createContract = (cId: string, provider: Provider) =>
   new ethers.Contract(getAddress(cId), llamaContractABI, provider);
 
-export const createWriteContract = (id: string, signer: Signer) =>
-  new ethers.Contract(getAddress(id), llamaContractABI, signer);
+export const createWriteContract = (id: string, signer: Signer, abi?: ContractInterface) =>
+  new ethers.Contract(getAddress(id), abi ?? llamaContractABI, signer);
 
 export const createFactoryWriteContract = (factoryAddress: string, signer: Signer) =>
   new ethers.Contract(getAddress(factoryAddress), factoryABI, signer);

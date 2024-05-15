@@ -31,7 +31,6 @@ const factoryAbi = [
       { name: 'vesting_duration', type: 'uint256' },
       { name: 'vesting_start', type: 'uint256' },
       { name: 'cliff_length', type: 'uint256' },
-      { name: 'open_claim', type: 'bool' },
     ],
     outputs: [{ name: '', type: 'address' }],
   },
@@ -104,7 +103,6 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
         fmtVestingTime,
         startTime,
         fmtCliffTime,
-        info.openClaim,
       ]);
       createCalls.push(call);
       toApprove = toApprove.plus(fmtVestingAmount);

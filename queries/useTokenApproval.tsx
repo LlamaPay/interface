@@ -6,10 +6,12 @@ import type { ITransactionError, ITransactionSuccess } from '~/types';
 import {
   checkHasApprovedEnough,
   checkHasApprovedEnoughMultiple,
+  createERC20Contract,
   ICheckMultipleTokenAllowance,
   ICheckTokenAllowance,
 } from '~/utils/tokenUtils';
-import { erc20ABI, useSigner } from 'wagmi';
+import { erc20ABI, useProvider, useSigner } from 'wagmi';
+import { Provider } from '~/utils/contract';
 
 interface IUseApproveToken {
   tokenAddress: string;
@@ -96,14 +98,51 @@ export function useGetTokenApproval(data: ICheckTokenAllowance) {
   );
 }
 
-const getApprovalAmount = async (data:ICheckTokenAllowance) => {
-  return (await data.token?.allowance(data.userAddress, data.approveForAddress)) as any
+const getApprovalAmount = async (data: ICheckTokenAllowance) => {
+  return (await data.token?.allowance(data.userAddress, data.approveForAddress)) as any;
+};
+
+export function useGetTokenApprovalRaw(data: Omit<ICheckTokenAllowance, 'approvedForAmount'>) {
+  return useQuery(['token-approval-raw', data.approveForAddress, data.userAddress, data.token?.address], () =>
+    getApprovalAmount(data)
+  );
 }
 
-export function useGetTokenApprovalRaw(data: Omit<ICheckTokenAllowance, "approvedForAmount">) {
-  return useQuery(
-    ['token-approval-raw', data.approveForAddress, data.userAddress, data.token?.address],
-    () => getApprovalAmount(data)
+const getTokensApprovalAmount = async ({
+  approveForAddress,
+  userAddress,
+  tokens,
+  provider,
+}: {
+  approveForAddress: string;
+  userAddress: string;
+  tokens: Array<string>;
+  provider: Provider;
+}) => {
+  const res = await Promise.all(
+    tokens.map((token) =>
+      createERC20Contract({ tokenAddress: getAddress(token), provider }).allowance(userAddress, approveForAddress)
+    )
+  );
+  const data: Record<string, BigNumber> = {};
+  tokens.forEach((token, i) => {
+    data[token] = res[i];
+  });
+  return data;
+};
+
+export function useGetTokenApprovals({
+  approveForAddress,
+  userAddress,
+  tokens,
+}: {
+  approveForAddress: string;
+  userAddress: string;
+  tokens: Array<string>;
+}) {
+  const provider = useProvider();
+  return useQuery(['token-approvals', approveForAddress, userAddress, ...tokens], () =>
+    getTokensApprovalAmount({ approveForAddress, userAddress, tokens, provider })
   );
 }
 
