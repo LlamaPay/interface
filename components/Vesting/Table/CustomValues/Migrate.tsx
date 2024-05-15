@@ -398,7 +398,7 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
     const totalVested = getActualVested(oldStream);
     const toVest = new BigNumber(oldStream.totalLocked).minus(totalVested);
 
-    return new Interface(vestingFactoryReadableABI).encodeFunctionData('deploy_vesting_contract', [
+    return [
       oldStream.token,
       oldStream.recipient,
       toVest.toFixed(),
@@ -406,7 +406,7 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
       startTime.toFixed(0),
       cliffTime.toFixed(0),
       false,
-    ]);
+    ];
   });
   return (
     <>
