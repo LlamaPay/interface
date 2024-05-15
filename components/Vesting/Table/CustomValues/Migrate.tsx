@@ -318,7 +318,7 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
     approveForAddress: factoryV2,
   });
 
-  const log: any = { approve: [], create: [] };
+  const calls: any = { approve: [], create: [] };
   if (tokenApprovalAmount) {
     // token approve calls based on current allowance
     for (const tokenToVest in toVestByTokens) {
@@ -329,7 +329,7 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
           tokenApprovalAmount[tokenToVest].toString()
         );
 
-        log.approve.push([data[0].admin, amountToApprove.toFixed(), tokenApprovalAmount[tokenToVest].toString()]);
+        calls.approve.push([data[0].admin, amountToApprove.toFixed(), tokenApprovalAmount[tokenToVest].toString()]);
       }
     }
     // calls to migrate streams to v2
@@ -356,7 +356,7 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
 
       const totalVested = getActualVested(oldStream);
       const toVest = new BigNumber(oldStream.totalLocked).minus(totalVested);
-      log.create.push([
+      calls.create.push([
         oldStream.token,
         oldStream.recipient,
         toVest.toFixed(),
@@ -367,7 +367,7 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
       ]);
     });
   }
-  console.log({ log, tokenApprovalAmount, data });
+  console.log({ data, toVestByTokens, tokenApprovalAmount, calls });
   const createStream = () => {
     if (!tokenApprovalAmount || data.find((stream) => stream.disabledAt == stream.endTime)) return;
 
@@ -472,7 +472,6 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
             'Failed to check approval'
           }`}</p>
         ) : null}
-        <p className="break-all">{JSON.stringify(log)}</p>
       </FormDialog>
     </>
   );
