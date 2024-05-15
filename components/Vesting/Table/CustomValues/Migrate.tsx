@@ -330,7 +330,7 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
           tokenApprovalAmount[tokenToVest].toString()
         );
 
-        calls.approve.push([data[0].admin, amountToApprove.toFixed()]);
+        calls.approve.push([factoryV2, amountToApprove.toFixed()]);
       }
     }
     // calls to migrate streams to v2
@@ -383,7 +383,7 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
         );
 
         calls[tokenToVest] = [
-          new Interface(erc20ABI).encodeFunctionData('approve', [data[0].admin, amountToApprove.toFixed()]),
+          new Interface(erc20ABI).encodeFunctionData('approve', [factoryV2, amountToApprove.toFixed()]),
         ];
       }
     }
