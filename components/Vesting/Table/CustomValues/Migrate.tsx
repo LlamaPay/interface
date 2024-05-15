@@ -328,7 +328,9 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
         const amountToApprove = new BigNumber(toVestByTokens[tokenToVest]).minus(
           tokenApprovalAmount[tokenToVest].toString()
         );
-        log.approve.push([data[0].admin, amountToApprove.toFixed(), tokenApprovalAmount[tokenToVest].toString()]);
+        if (amountToApprove.toString() !== '0') {
+          log.approve.push([data[0].admin, amountToApprove.toFixed(), tokenApprovalAmount[tokenToVest].toString()]);
+        }
       }
     }
     // calls to migrate streams to v2
@@ -378,10 +380,11 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
         const amountToApprove = new BigNumber(toVestByTokens[tokenToVest]).minus(
           tokenApprovalAmount[tokenToVest].toString()
         );
-
-        calls[tokenToVest] = [
-          new Interface(erc20ABI).encodeFunctionData('approve', [data[0].admin, amountToApprove.toFixed()]),
-        ];
+        if (amountToApprove.toString() !== '0') {
+          calls[tokenToVest] = [
+            new Interface(erc20ABI).encodeFunctionData('approve', [data[0].admin, amountToApprove.toFixed()]),
+          ];
+        }
       }
     }
     // calls to migrate streams to v2
