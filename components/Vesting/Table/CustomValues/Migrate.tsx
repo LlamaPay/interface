@@ -236,7 +236,7 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
               onClick={approveToken}
               disabled={checkingApproval || approvingToken || !isRugPulled || isApproved}
             >
-              {approvingToken ? <BeatLoader size="6px" color="white" /> : 'Approve Token'}
+              {checkingApproval || approvingToken ? <BeatLoader size="6px" color="white" /> : 'Approve Token'}
             </SubmitButton>
           </li>
           <li>
