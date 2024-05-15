@@ -287,7 +287,9 @@ function MButton({ data, factoryV2 }: { data: IVesting; factoryV2: string }) {
 }
 
 export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factoryV2: string }) => {
-  const { mutate: gnosisBatch, isLoading: isMutatingGnosisBatchCalls, error } = useGnosisBatch();
+  const { mutate: rugPullBatch, isLoading: isRugPulling, error: errorRugPulling } = useGnosisBatch();
+  const { mutate: approveBatch, isLoading: isApproving, error: errorApproving } = useGnosisBatch();
+  const { mutate: createBatch, isLoading: isCreating, error: errorCreating } = useGnosisBatch();
 
   const migrateDialog = useDialogState();
 
@@ -298,7 +300,7 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
     streamsToRugpull.forEach((stream) => {
       calls[stream.contract] = [new Interface(vestingContractReadableABI).encodeFunctionData('rug_pull')];
     });
-    gnosisBatch({ calls });
+    rugPullBatch({ calls });
   };
 
   const toVestByTokens = data.reduce((acc, curr) => {
@@ -318,7 +320,7 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
     approveForAddress: factoryV2,
   });
 
-  const createStream = () => {
+  const approveToken = () => {
     if (!tokenApprovalAmount || data.find((stream) => stream.disabledAt == stream.endTime)) return;
 
     const calls: { [key: string]: string[] } = {};
@@ -335,6 +337,14 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
         ];
       }
     }
+
+    approveBatch({ calls });
+  };
+  const createStream = () => {
+    if (!tokenApprovalAmount || data.find((stream) => stream.disabledAt == stream.endTime)) return;
+
+    const calls: { [key: string]: string[] } = {};
+
     // calls to migrate streams to v2
     calls[factoryV2] = data.map((oldStream) => {
       let vestingDuration, startTime, cliffTime;
@@ -371,7 +381,7 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
       ]);
     });
 
-    gnosisBatch({ calls });
+    createBatch({ calls });
   };
 
   return (
@@ -385,34 +395,43 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
             <SubmitButton
               className="mt-5 disabled:opacity-60"
               onClick={rugPull}
-              disabled={isMutatingGnosisBatchCalls || streamsToRugpull.length === 0}
+              disabled={isRugPulling || streamsToRugpull.length === 0}
             >
-              {isMutatingGnosisBatchCalls && streamsToRugpull.length !== 0 ? (
-                <BeatLoader size="6px" color="white" />
-              ) : (
-                'Stop current v1 streams'
-              )}
+              {isRugPulling ? <BeatLoader size="6px" color="white" /> : 'Stop current v1 streams'}
+            </SubmitButton>
+          </li>
+          <li>
+            <SubmitButton
+              className="mt-5 disabled:opacity-60"
+              onClick={approveToken}
+              disabled={fetchingTokenApproval || isApproving || streamsToRugpull.length !== 0}
+            >
+              {isApproving ? <BeatLoader size="6px" color="white" /> : 'Approve token spend'}
             </SubmitButton>
           </li>
           <li>
             <SubmitButton
               className="mt-5 disabled:opacity-60"
               onClick={createStream}
-              disabled={fetchingTokenApproval || isMutatingGnosisBatchCalls || streamsToRugpull.length !== 0}
+              disabled={fetchingTokenApproval || isCreating || streamsToRugpull.length !== 0}
             >
-              {isMutatingGnosisBatchCalls && streamsToRugpull.length === 0 ? (
-                <BeatLoader size="6px" color="white" />
-              ) : (
-                'Migrate to v2 streams'
-              )}
+              {isCreating ? <BeatLoader size="6px" color="white" /> : 'Migrate to v2 streams'}
             </SubmitButton>
           </li>
         </ol>
-        {error ? (
+        {errorRugPulling ? (
           <p className="my-2 break-all text-center text-sm text-red-500">
-            {streamsToRugpull.length !== 0
-              ? `[CANCEL-STREAM]: ${(error as any).message ?? 'Failed to cancel'}`
-              : `[MIGRATE-STREAM]: ${(error as any).message ?? 'Failed to migrate'}`}
+            {`[CANCEL-STREAM]: ${(errorRugPulling as any).message ?? 'Failed to cancel'}`}
+          </p>
+        ) : null}
+        {errorApproving ? (
+          <p className="my-2 break-all text-center text-sm text-red-500">
+            {`[TOKEN-APPROVAL]: ${(errorApproving as any).message ?? 'Failed to approve'}`}
+          </p>
+        ) : null}
+        {errorCreating ? (
+          <p className="my-2 break-all text-center text-sm text-red-500">
+            {`[MIGRATE-STREAM]: ${(errorCreating as any).message ?? 'Failed to migrate'}`}
           </p>
         ) : null}
         {errorFetchingTokenApproval ? (
