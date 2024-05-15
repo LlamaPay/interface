@@ -319,56 +319,6 @@ export const MigrateAll = ({ data, factoryV2 }: { data: Array<IVesting>; factory
     approveForAddress: factoryV2,
   });
 
-  const calls: any = { approve: [], create: [] };
-  if (tokenApprovalAmount) {
-    // token approve calls based on current allowance
-    for (const tokenToVest in toVestByTokens) {
-      const isApproved = new BigNumber(tokenApprovalAmount[tokenToVest].toString()).gte(toVestByTokens[tokenToVest]);
-
-      if (!isApproved) {
-        const amountToApprove = new BigNumber(toVestByTokens[tokenToVest]).minus(
-          tokenApprovalAmount[tokenToVest].toString()
-        );
-
-        calls.approve.push([factoryV2, amountToApprove.toFixed()]);
-      }
-    }
-    // calls to migrate streams to v2
-    data.forEach((oldStream) => {
-      let vestingDuration, startTime, cliffTime;
-
-      if (+oldStream.disabledAt < +oldStream.startTime) {
-        vestingDuration = +oldStream.endTime - +oldStream.startTime;
-        startTime = +oldStream.startTime;
-        cliffTime = +oldStream.cliffLength;
-      } else {
-        const endCliff = +oldStream.startTime + +oldStream.cliffLength;
-        if (+oldStream.disabledAt >= endCliff) {
-          cliffTime = 0;
-          vestingDuration = +oldStream.endTime - +oldStream.disabledAt;
-          startTime = +oldStream.disabledAt;
-        } else {
-          // keep everything the same
-          cliffTime = +oldStream.cliffLength;
-          vestingDuration = +oldStream.endTime - +oldStream.startTime;
-          startTime = +oldStream.startTime;
-        }
-      }
-
-      const totalVested = getActualVested(oldStream);
-      const toVest = new BigNumber(oldStream.totalLocked).minus(totalVested);
-      calls.create.push([
-        oldStream.token,
-        oldStream.recipient,
-        toVest.toFixed(),
-        vestingDuration.toFixed(0),
-        startTime.toFixed(0),
-        cliffTime.toFixed(0),
-        false,
-      ]);
-    });
-  }
-  console.log({ data, toVestByTokens, tokenApprovalAmount, calls });
   const createStream = () => {
     if (!tokenApprovalAmount || data.find((stream) => stream.disabledAt == stream.endTime)) return;
 
