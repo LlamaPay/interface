@@ -76,14 +76,16 @@ export default function CreatePayment({ contract }: { contract: string }) {
       if (!e.target || !e.target.result) return;
       reset();
       const rows = e.target.result?.toString().split('\n');
-      for (let i = 1; i < rows.length; i++) {
+      for (let i = 0; i < rows.length; i++) {
         const columns = rows[i].split(',');
-        append({
-          token: columns[0],
-          payee: columns[1],
-          amount: columns[2],
-          release: columns[3],
-        });
+        if(rows[i]!=='' && columns[0].startsWith("0x")){
+          append({
+            token: columns[0],
+            payee: columns[1],
+            amount: columns[2],
+            release: columns[3],
+          });
+        }
       }
       remove(0);
     };

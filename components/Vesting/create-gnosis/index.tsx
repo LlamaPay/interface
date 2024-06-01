@@ -135,20 +135,22 @@ export default function CreateGnosisVesting({ factory }: { factory: string }) {
       if (!e.target || !e.target.result) return;
       reset();
       const rows = e.target.result?.toString().split('\n');
-      for (let i = 1; i < rows.length; i++) {
+      for (let i = 0; i < rows.length; i++) {
         const columns = rows[i].split(',');
-        append({
-          recipientAddress: columns[0],
-          vestedAmount: columns[1],
-          vestingTime: columns[2],
-          vestingDuration: 'month',
-          includeCliff: Number(columns[3]) > 0 ? true : false,
-          includeCustomStart: columns[4] != '' ? true : false,
-          cliffTime: columns[3],
-          cliffDuration: 'month',
-          startDate: columns[4],
-          openClaim: true,
-        });
+        if(rows[i]!=='' && columns[0].startsWith("0x")){
+          append({
+            recipientAddress: columns[0],
+            vestedAmount: columns[1],
+            vestingTime: columns[2],
+            vestingDuration: 'month',
+            includeCliff: Number(columns[3]) > 0 ? true : false,
+            includeCustomStart: columns[4] != '' ? true : false,
+            cliffTime: columns[3],
+            cliffDuration: 'month',
+            startDate: columns[4],
+            openClaim: true,
+          });
+        }
       }
       remove(0);
     };
