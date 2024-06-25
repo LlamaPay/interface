@@ -26,9 +26,24 @@ interface INetworkDetails {
   };
 }
 
+/*
+function scramble(str) {
+  return str.split("").reduce(function(a, b) {
+    return a + String.fromCharCode(b.charCodeAt(0)-8)
+  }, "");
+}
+*/
+
+function unscramble(str:string) {
+  return str.split("").reduce(function(a, b) {
+    return a + String.fromCharCode(b.charCodeAt(0)+8)
+  }, "");
+}
+
 const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
 const alchemyId = 'PwvZx2hO2XpToWXSw9sgJJt1eBgjkRUr';
 const etherscanKey = 'DDH7EVWI1AQHBNPX5PYRSDM5SHCVBKX58Q';
+const apiKey = unscramble('.[^+0](,0[+1,*\\YZY\\[(*+Z,][/**,]')
 
 export const networkDetails: INetworkDetails = {
   43113: {
@@ -46,7 +61,7 @@ export const networkDetails: INetworkDetails = {
   },
   43114: {
     rpcUrl: 'https://rpc.ankr.com/avalanche',
-    subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-avalanche-mainnet',
+    subgraphEndpoint: `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/6ULAzMy7FSRdHngU9S725hr51tq9zqB5Q6LbRYHMSSuy`,
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.ankr.com/avalanche'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_AVALANCHE,
     disperseAddress: CONTRACTS.DISPERSE_AVALANCHE,
@@ -64,7 +79,7 @@ export const networkDetails: INetworkDetails = {
   },
   137: {
     rpcUrl: 'https://polygon-rpc.com/',
-    subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-polygon',
+    subgraphEndpoint: `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/egF47mBwB7ytP3aQafhRNHAdtAFHUaZUGy5Me7bq2ew`,
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://polygon-rpc.com/'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_POLYGON,
     disperseAddress: CONTRACTS.DISPERSE_DEFAULT,
@@ -82,7 +97,7 @@ export const networkDetails: INetworkDetails = {
   },
   250: {
     rpcUrl: 'https://rpc.ftm.tools/',
-    subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-fantom',
+    subgraphEndpoint: `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/5zwyXgo58VdUvfAZP2Bz1EVsLHCdzfAMWGaRu2Y4U1J3`,
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.ftm.tools/'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_FANTOM,
     disperseAddress: CONTRACTS.DISPERSE_DEFAULT,
@@ -100,7 +115,7 @@ export const networkDetails: INetworkDetails = {
   },
   1: {
     rpcUrl: 'https://rpc.ankr.com/eth',
-    subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-mainnet',
+    subgraphEndpoint: `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/7kukBafWmGSWQi7sHouGsvkgbMUMCQHu2czTBP4bKpiS`, //llamapay-mainnet',
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.ankr.com/eth'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_MAINNET,
     disperseAddress: CONTRACTS.DISPERSE_DEFAULT,
@@ -121,7 +136,7 @@ export const networkDetails: INetworkDetails = {
   },
   10: {
     rpcUrl: 'https://rpc.ankr.com/optimism',
-    subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-optimism',
+    subgraphEndpoint: `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/4e3YbwrXML1gFuRSmtqvt89N4APWjyfvkBA8pDDuYZAD`, //llamapay-optimism',
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.ankr.com/optimism'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_OPTIMISM,
     disperseAddress: CONTRACTS.DISPERSE_DEFAULT,
@@ -141,7 +156,7 @@ export const networkDetails: INetworkDetails = {
   },
   42161: {
     rpcUrl: 'https://rpc.ankr.com/arbitrum',
-    subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-arbitrum',
+    subgraphEndpoint: `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/6ULAzMy7FSRdHngU9S725hr51tq9zqB5Q6LbRYHMSSuy`, //llamapay-arbitrum',
     chainProviders: new ethers.providers.FallbackProvider([
       new ethers.providers.StaticJsonRpcProvider('https://rpc.ankr.com/arbitrum'),
       new ethers.providers.StaticJsonRpcProvider('https://arb1.arbitrum.io/rpc'),
@@ -161,7 +176,7 @@ export const networkDetails: INetworkDetails = {
   },
   56: {
     rpcUrl: 'https://rpc.ankr.com/bsc',
-    subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-bsc',
+    subgraphEndpoint: `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/egF47mBwB7ytP3aQafhRNHAdtAFHUaZUGy5Me7bq2ew`, //llamapay-bsc',
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.ankr.com/bsc'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_BSC,
     disperseAddress: CONTRACTS.DISPERSE_DEFAULT,
@@ -179,7 +194,7 @@ export const networkDetails: INetworkDetails = {
   },
   100: {
     rpcUrl: 'https://rpc.ankr.com/gnosis',
-    subgraphEndpoint: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-xdai',
+    subgraphEndpoint: `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/CGYMJE88Ek6Kju2cp16AxmqiSGAqmvxJAiAkEFJkwgVs`, //llamapay-xdai',
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.ankr.com/gnosis'),
     llamapayFactoryAddress: CONTRACTS.SALARIES_FACTORY_XDAI,
     disperseAddress: CONTRACTS.DISPERSE_DEFAULT,
