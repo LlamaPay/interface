@@ -1,5 +1,5 @@
 overwrite: true
-schema: 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-avalanche-mainnet'
+schema: 'https://gateway-arbitrum.network.thegraph.com/api/fd8f3150400f26c3de0ade97fae64f0b/subgraphs/id/7kukBafWmGSWQi7sHouGsvkgbMUMCQHu2czTBP4bKpiS'
 documents: './services/graphql/**/*.graphql'
 generates:
   ./services/generated/graphql.tsx:
