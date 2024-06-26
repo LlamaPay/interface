@@ -22,8 +22,6 @@ export const defaultProvider = providers.getDefaultProvider(4, {
   infura: infuraId,
 });
 
-export const defaultSubgraphEndpoint = 'https://api.thegraph.com/subgraphs/name/nemusonaneko/llamapay-avax-mainnet';
-
 export const secondsByDuration: ISecondsByDuration = {
   hour: 60 * 60,
   day: 24 * 60 * 60,
