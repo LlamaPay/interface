@@ -75,7 +75,7 @@ export const networkDetails: INetworkDetails = {
     vestingFactory_v2: '0x62E13BE78af77C86D38a027ae432F67d9EcD4c10',
     botSubgraph: `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/A49QjCZ2GbzRfCMQKJQF3SQYZ8MpFacpHuw5Q53PBKz9`,
     paymentsContract: CONTRACTS.PAYMENTS_AVALANCHE,
-    paymentsGraphApi: 'https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/CrJxHvquW6sNuCj1mNXrDZ8hWHWnfu7X9snazWtTqQtF',
+    paymentsGraphApi: `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/CrJxHvquW6sNuCj1mNXrDZ8hWHWnfu7X9snazWtTqQtF`,
   },
   137: {
     rpcUrl: 'https://polygon-rpc.com/',
