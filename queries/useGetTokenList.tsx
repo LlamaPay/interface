@@ -13,7 +13,7 @@ interface ITokenList {
 const fetchTokenList = async (id?: string) => {
   if (!id) return null;
 
-  const { data } = await axios.get(`https://defillama-datasets.s3.eu-central-1.amazonaws.com/tokenlist/${id}.json`);
+  const { data } = await axios.get(`https://defillama-datasets.llama.fi/tokenlist/${id}.json`);
 
   return data ?? {};
 };
