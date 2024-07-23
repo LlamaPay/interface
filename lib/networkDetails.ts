@@ -306,6 +306,8 @@ export const networkDetails: INetworkDetails = {
   },
   8453: {
     rpcUrl: 'https://mainnet.base.org',
+    subgraphEndpoint: `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/9LPDj38RmbDzyPaPWKSkxHPm9Bzv6oRCHJ2oMxr4LPaz`,
+    llamapayFactoryAddress: "0x09c39B8311e4B7c678cBDAD76556877ecD3aEa07",
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://mainnet.base.org'),
     blockExplorerURL: 'https://basescan.org',
     blockExplorerName: 'basescan',
