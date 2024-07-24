@@ -13,9 +13,12 @@ interface ITokenList {
 const fetchTokenList = async (id?: string) => {
   if (!id) return null;
 
-  const { data } = await axios.get(`https://defillama-datasets.llama.fi/tokenlist/${id}.json`);
-
-  return data ?? {};
+  try{
+    const { data } = await axios.get(`https://defillama-datasets.llama.fi/tokenlist/${id}.json`);
+    return data ?? {}
+  } catch(e){
+    return {}
+  }
 };
 
 export function useGetTokenList() {
