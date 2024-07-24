@@ -65,6 +65,58 @@ export const chains: Array<wagmiChains.Chain> = [
       },
     },
   },
+  {
+    id: 534352,
+    name: 'Scroll',
+    network: 'scroll',
+    nativeCurrency: { "name": "Ether", "symbol": "ETH", "decimals": 18 },
+    rpcUrls: { default: { http: ['https://rpc.scroll.io'] }, public: { http: ['https://rpc.scroll.io'] } },
+    blockExplorers: {
+      default: {
+        name: 'Scrollscan',
+        url: 'https://scrollscan.com',
+      },
+    },
+  },
+  {
+    id: 59144,
+    name: 'Linea',
+    network: 'linea',
+    nativeCurrency: { "name": "Linea Ether", "symbol": "ETH", "decimals": 18 },
+    rpcUrls: { default: { http: ['https://rpc.linea.build'] }, public: { http: ['https://rpc.linea.build'] } },
+    blockExplorers: {
+      default: {
+        name: 'Etherscan',
+        url: 'https://lineascan.build',
+      },
+    },
+  },
+  {
+    id: 34443,
+    name: 'Mode',
+    network: 'mode',
+    nativeCurrency: { "name": "Ether", "symbol": "ETH", "decimals": 18 },
+    rpcUrls: { default: { http: ['https://mainnet.mode.network'] }, public: { http: ['https://mainnet.mode.network'] } },
+    blockExplorers: {
+      default: {
+        name: 'modescout',
+        url: 'https://explorer.mode.network',
+      },
+    },
+  },
+  {
+    id: 1101,
+    name: 'Polygon zkEVM',
+    network: 'polygon_zkevm',
+    nativeCurrency: { "name": "ETH", "symbol": "ETH", "decimals": 18 },
+    rpcUrls: { default: { http: ['https://rpc.ankr.com/polygon_zkevm'] }, public: { http: ['https://rpc.ankr.com/polygon_zkevm'] } },
+    blockExplorers: {
+      default: {
+        name: 'polygonscan',
+        url: 'https://zkevm.polygonscan.com/',
+      },
+    },
+  },
   /*
   {
     id: 82,
@@ -262,19 +314,6 @@ export const chains: Array<wagmiChains.Chain> = [
     },
   },
   {
-    id: 59144,
-    name: 'Linea',
-    network: 'linea',
-    nativeCurrency: { "name": "Linea Ether", "symbol": "ETH", "decimals": 18 },
-    rpcUrls: { default: { http: ['https://rpc.linea.build'] }, public: { http: ['https://rpc.linea.build'] } },
-    blockExplorers: {
-      default: {
-        name: 'Etherscan',
-        url: 'https://lineascan.build',
-      },
-    },
-  },
-  {
     id: 169,
     name: 'Manta Pacific',
     network: 'manta',
@@ -353,19 +392,6 @@ export const chains: Array<wagmiChains.Chain> = [
     },
   },
   {
-    id: 534352,
-    name: 'Scroll',
-    network: 'scroll',
-    nativeCurrency: { "name": "Ether", "symbol": "ETH", "decimals": 18 },
-    rpcUrls: { default: { http: ['https://rpc.scroll.io'] }, public: { http: ['https://rpc.scroll.io'] } },
-    blockExplorers: {
-      default: {
-        name: 'Scrollscan',
-        url: 'https://scrollscan.com',
-      },
-    },
-  },
-  {
     id: 7777777,
     name: 'Zora',
     network: 'zora',
@@ -431,19 +457,6 @@ export const chains: Array<wagmiChains.Chain> = [
     },
   },
   {
-    id: 34443,
-    name: 'Mode',
-    network: 'mode',
-    nativeCurrency: { "name": "Ether", "symbol": "ETH", "decimals": 18 },
-    rpcUrls: { default: { http: ['https://mainnet.mode.network'] }, public: { http: ['https://mainnet.mode.network'] } },
-    blockExplorers: {
-      default: {
-        name: 'modescout',
-        url: 'https://explorer.mode.network',
-      },
-    },
-  },
-  {
     id: 3109,
     name: 'SatoshiVM',
     network: 'satoshivm',
@@ -466,19 +479,6 @@ export const chains: Array<wagmiChains.Chain> = [
       default: {
         name: 'teloscan',
         url: 'https://teloscan.io',
-      },
-    },
-  },
-  {
-    id: 1101,
-    name: 'Polygon zkEVM',
-    network: 'polygon_zkevm',
-    nativeCurrency: { "name": "ETH", "symbol": "ETH", "decimals": 18 },
-    rpcUrls: { default: { http: ['https://rpc.ankr.com/polygon_zkevm'] }, public: { http: ['https://rpc.ankr.com/polygon_zkevm'] } },
-    blockExplorers: {
-      default: {
-        name: 'polygonscan',
-        url: 'https://zkevm.polygonscan.com/',
       },
     },
   },

@@ -15,7 +15,7 @@ interface INetworkDetails {
     prefix: string;
     logoURI: string;
     tokenListId?: string;
-    vestingFactory: string;
+    vestingFactory?: string;
     vestingFactory_v2?: string;
     vestingReason?: string;
     paymentsContract?: string;
@@ -40,10 +40,9 @@ function unscramble(str:string) {
   }, "");
 }
 
-const infuraId = 'c580a3487b1241a09f9e27b02c004f5b';
-const alchemyId = 'PwvZx2hO2XpToWXSw9sgJJt1eBgjkRUr';
-const etherscanKey = 'DDH7EVWI1AQHBNPX5PYRSDM5SHCVBKX58Q';
 const apiKey = unscramble('.[^+0](,0[+1,*\\YZY\\[(*+Z,][/**,]')
+
+const NEW_LLAMAPAY_SALARIES_FACTORY_ADDRESS = "0x09c39B8311e4B7c678cBDAD76556877ecD3aEa07"
 
 export const networkDetails: INetworkDetails = {
   43113: {
@@ -57,7 +56,6 @@ export const networkDetails: INetworkDetails = {
     blockExplorerName: 'Snowtrace',
     prefix: 'avax',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/avalanchex/info/logo.png',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   43114: {
     rpcUrl: 'https://rpc.ankr.com/avalanche',
@@ -219,7 +217,6 @@ export const networkDetails: INetworkDetails = {
     prefix: 'meter',
     logoURI: 'https://assets.coingecko.com/coins/images/11848/large/mtrg-logo.png?1595062273',
     tokenListId: 'meter',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   /*
   5: {
@@ -258,7 +255,6 @@ export const networkDetails: INetworkDetails = {
     prefix: 'metis',
     tokenListId: 'metis-andromeda',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/metis/info/logo.png',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   2222: {
     rpcUrl: 'https://evm.kava.io',
@@ -272,7 +268,6 @@ export const networkDetails: INetworkDetails = {
     prefix: 'kava',
     tokenListId: 'kava-evm',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/kava/info/logo.png',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   42170: {
     rpcUrl: 'https://nova.arbitrum.io/rpc',
@@ -282,7 +277,6 @@ export const networkDetails: INetworkDetails = {
     prefix: 'arbitrum_nova',
     tokenListId: 'arbitrum_nova',
     logoURI: 'https://raw.githubusercontent.com/DefiLlama/icons/v2/assets/chains/rsz_arbitrum-nova.jpg',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   592: {
     rpcUrl: 'https://evm.astar.network',
@@ -292,7 +286,6 @@ export const networkDetails: INetworkDetails = {
     prefix: 'astar',
     tokenListId: 'astar',
     logoURI: 'https://raw.githubusercontent.com/DefiLlama/icons/v2/assets/chains/rsz_astar.jpg',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   3776: {
     rpcUrl: 'https://rpc.startale.com/astar-zkevm',
@@ -302,12 +295,11 @@ export const networkDetails: INetworkDetails = {
     prefix: 'astar_zkevm',
     tokenListId: 'astar_zkevm',
     logoURI: 'https://raw.githubusercontent.com/DefiLlama/icons/v2/assets/chains/rsz_astar-zkevm.jpg',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   8453: {
     rpcUrl: 'https://mainnet.base.org',
     subgraphEndpoint: `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/9LPDj38RmbDzyPaPWKSkxHPm9Bzv6oRCHJ2oMxr4LPaz`,
-    llamapayFactoryAddress: "0x09c39B8311e4B7c678cBDAD76556877ecD3aEa07",
+    llamapayFactoryAddress: NEW_LLAMAPAY_SALARIES_FACTORY_ADDRESS,
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://mainnet.base.org'),
     blockExplorerURL: 'https://basescan.org',
     blockExplorerName: 'basescan',
@@ -325,11 +317,12 @@ export const networkDetails: INetworkDetails = {
     prefix: 'aurora',
     tokenListId: 'aurora',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/aurora/info/logo.png',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   81457: {
     rpcUrl: 'https://rpc.blast.io',
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.blast.io'),
+    subgraphEndpoint: `https://api.studio.thegraph.com/query/73158/llamapay-salaries-blast/version/latest`,
+    llamapayFactoryAddress: NEW_LLAMAPAY_SALARIES_FACTORY_ADDRESS,
     blockExplorerURL: 'https://blastscan.io',
     blockExplorerName: 'Blastscan',
     prefix: 'blast',
@@ -346,7 +339,6 @@ export const networkDetails: INetworkDetails = {
     prefix: 'canto',
     tokenListId: 'canto',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/nativecanto/info/logo.png',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   42220: {
     rpcUrl: 'https://forno.celo.org',
@@ -356,7 +348,6 @@ export const networkDetails: INetworkDetails = {
     prefix: 'celo',
     tokenListId: 'celo',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/celo/info/logo.png',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   25: {
     rpcUrl: 'https://evm.cronos.org',
@@ -377,7 +368,6 @@ export const networkDetails: INetworkDetails = {
     prefix: 'dogechain',
     tokenListId: 'dogechain',
     logoURI: 'https://raw.githubusercontent.com/DefiLlama/icons/v2/assets/chains/rsz_dogechain.jpg',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   9001: {
     rpcUrl: 'https://evmos.lava.build',
@@ -387,7 +377,6 @@ export const networkDetails: INetworkDetails = {
     prefix: 'evmos',
     tokenListId: 'evmos',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/evmos/info/logo.png',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   252: {
     rpcUrl: 'https://rpc.frax.com',
@@ -408,7 +397,6 @@ export const networkDetails: INetworkDetails = {
     prefix: 'harmony',
     tokenListId: 'harmony',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/harmony/info/logo.png',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   321: {
     rpcUrl: 'https://rpc-mainnet.kcc.network',
@@ -418,17 +406,17 @@ export const networkDetails: INetworkDetails = {
     prefix: 'kcc',
     tokenListId: 'kcc',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/kcc/info/logo.png',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   59144: {
     rpcUrl: 'https://rpc.linea.build',
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.linea.build'),
+    subgraphEndpoint: `https://api.studio.thegraph.com/query/73158/llamapay-salaries-linea/version/latest`,
+    llamapayFactoryAddress: NEW_LLAMAPAY_SALARIES_FACTORY_ADDRESS,
     blockExplorerURL: 'https://lineascan.build',
     blockExplorerName: 'Etherscan',
     prefix: 'linea',
     tokenListId: 'linea',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/linea/info/logo.png',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   169: {
     rpcUrl: 'https://pacific-rpc.manta.network/http',
@@ -438,7 +426,6 @@ export const networkDetails: INetworkDetails = {
     prefix: 'manta',
     tokenListId: 'manta',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/manta/info/logo.png',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   5000: {
     rpcUrl: 'https://rpc.mantle.xyz',
@@ -459,7 +446,6 @@ export const networkDetails: INetworkDetails = {
     prefix: 'moonbeam',
     tokenListId: 'moonbeam',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/moonbeam/info/logo.png',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   1285: {
     rpcUrl: 'https://rpc.api.moonriver.moonbeam.network',
@@ -469,7 +455,6 @@ export const networkDetails: INetworkDetails = {
     prefix: 'moonriver',
     tokenListId: 'moonriver',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/moonriver/info/logo.png',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   4200: {
     rpcUrl: 'https://rpc.merlinchain.io',
@@ -479,7 +464,6 @@ export const networkDetails: INetworkDetails = {
     prefix: 'merlin',
     tokenListId: 'merlin',
     logoURI: 'https://raw.githubusercontent.com/DefiLlama/icons/v2/assets/chains/rsz_merlin.jpg',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   204: {
     rpcUrl: 'https://opbnb-mainnet-rpc.bnbchain.org',
@@ -489,7 +473,6 @@ export const networkDetails: INetworkDetails = {
     prefix: 'opbnb',
     tokenListId: 'opbnb',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/opbnb/info/logo.png',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   369: {
     rpcUrl: 'https://rpc.pulsechain.com',
@@ -504,13 +487,14 @@ export const networkDetails: INetworkDetails = {
   },
   534352: {
     rpcUrl: 'https://rpc.scroll.io',
+    subgraphEndpoint: `https://api.studio.thegraph.com/query/73158/llamapay-salaries-scroll/version/latest`,
+    llamapayFactoryAddress: NEW_LLAMAPAY_SALARIES_FACTORY_ADDRESS,
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.scroll.io'),
     blockExplorerURL: 'https://scrollscan.com',
     blockExplorerName: 'Scrollscan',
     prefix: 'scroll',
     tokenListId: 'scroll',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/scroll/info/logo.png',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   7777777: {
     rpcUrl: 'https://rpc.zora.energy',
@@ -531,7 +515,6 @@ export const networkDetails: INetworkDetails = {
     prefix: 'ethclassic',
     tokenListId: 'ethclassic',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/classic/info/logo.png',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   122: {
     rpcUrl: 'https://rpc.fuse.io',
@@ -541,7 +524,6 @@ export const networkDetails: INetworkDetails = {
     prefix: 'fuse',
     tokenListId: 'fuse',
     logoURI: 'https://raw.githubusercontent.com/DefiLlama/icons/v2/assets/chains/rsz_fuse.jpg',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   32659: {
     rpcUrl: 'https://mainnet.fusionnetwork.io',
@@ -551,7 +533,6 @@ export const networkDetails: INetworkDetails = {
     prefix: 'fusion',
     tokenListId: 'fusion',
     logoURI: 'https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/fusion/info/logo.png',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   8217: {
     rpcUrl: 'https://public-en-cypress.klaytn.net',
@@ -567,6 +548,8 @@ export const networkDetails: INetworkDetails = {
   34443: {
     rpcUrl: 'https://mainnet.mode.network',
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://mainnet.mode.network'),
+    subgraphEndpoint: `https://api.studio.thegraph.com/query/73158/llamapay-salaries-mode/version/latest`,
+    llamapayFactoryAddress: NEW_LLAMAPAY_SALARIES_FACTORY_ADDRESS,
     blockExplorerURL: 'https://explorer.mode.network',
     blockExplorerName: 'modescout',
     prefix: 'mode',
@@ -594,16 +577,16 @@ export const networkDetails: INetworkDetails = {
     prefix: 'telos',
     tokenListId: 'telos',
     logoURI: 'https://raw.githubusercontent.com/DefiLlama/icons/v2/assets/chains/rsz_telos.jpg',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
   1101: {
     rpcUrl: 'https://rpc.ankr.com/polygon_zkevm',
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.ankr.com/polygon_zkevm'),
+    subgraphEndpoint: `https://api.studio.thegraph.com/query/73158/llamapay-salaries-polygonzkevm/version/latest`,
+    llamapayFactoryAddress: NEW_LLAMAPAY_SALARIES_FACTORY_ADDRESS,
     blockExplorerURL: 'https://zkevm.polygonscan.com/',
     blockExplorerName: 'polygonscan',
     prefix: 'polygon_zkevm',
     tokenListId: 'polygon_zkevm',
     logoURI: 'https://raw.githubusercontent.com/DefiLlama/icons/v2/assets/chains/rsz_polygon zkevm.jpg',
-    vestingFactory: CONTRACTS.VESTING_FACTORY,
   },
 };
