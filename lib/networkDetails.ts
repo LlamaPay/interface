@@ -298,7 +298,7 @@ export const networkDetails: INetworkDetails = {
   },
   8453: {
     rpcUrl: 'https://mainnet.base.org',
-    subgraphEndpoint: `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/9LPDj38RmbDzyPaPWKSkxHPm9Bzv6oRCHJ2oMxr4LPaz`,
+    subgraphEndpoint: `https://api.studio.thegraph.com/query/73158/llamapay-salaries-base/version/latest`,
     llamapayFactoryAddress: NEW_LLAMAPAY_SALARIES_FACTORY_ADDRESS,
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://mainnet.base.org'),
     blockExplorerURL: 'https://basescan.org',
