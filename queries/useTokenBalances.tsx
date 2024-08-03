@@ -68,12 +68,12 @@ const fetchBalance = async ({ userAddress, tokens, provider }: IFetchBalance) =>
           if (!a.balance || Number.isNaN(a.balance)) return -1;
           if (!b.balance || Number.isNaN(a.balance)) return 1;
           return Number(b.balance) - Number(a.balance);
-        }) ?? null;
+        }) ?? [];
 
     return balances;
   } catch (error) {
-    // console.log(error);
-    return null;
+    console.log("fetchBalance() ERROR", error);
+    return [];
   }
 };
 

@@ -42,7 +42,7 @@ export function useTokenList() {
           name: verifiedToken?.name ?? token.name,
         };
       });
-    } else return null;
+    } else return [];
   }, [chainId, tokens, tokenListLoading, tokenList]);
 
   return { data, isLoading: isLoading || tokenListLoading, error };
