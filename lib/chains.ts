@@ -117,6 +117,19 @@ export const chains: Array<wagmiChains.Chain> = [
       },
     },
   },
+  {
+    id: 252,
+    name: 'Fraxtal',
+    network: 'fraxtal',
+    nativeCurrency: { "name": "Frax Ether", "symbol": "frxETH", "decimals": 18 },
+    rpcUrls: { default: { http: ['https://rpc.frax.com'] }, public: { http: ['https://rpc.frax.com'] } },
+    blockExplorers: {
+      default: {
+        name: 'fraxscan',
+        url: 'https://fraxscan.com',
+      },
+    },
+  },
   /*
   {
     id: 82,
@@ -271,19 +284,6 @@ export const chains: Array<wagmiChains.Chain> = [
       default: {
         name: 'Evmos Explorer (Escan)',
         url: 'https://escan.live',
-      },
-    },
-  },
-  {
-    id: 252,
-    name: 'Fraxtal',
-    network: 'fraxtal',
-    nativeCurrency: { "name": "Frax Ether", "symbol": "frxETH", "decimals": 18 },
-    rpcUrls: { default: { http: ['https://rpc.frax.com'] }, public: { http: ['https://rpc.frax.com'] } },
-    blockExplorers: {
-      default: {
-        name: 'fraxscan',
-        url: 'https://fraxscan.com',
       },
     },
   },

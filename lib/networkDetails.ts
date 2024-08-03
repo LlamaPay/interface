@@ -381,6 +381,8 @@ export const networkDetails: INetworkDetails = {
   252: {
     rpcUrl: 'https://rpc.frax.com',
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.frax.com'),
+    subgraphEndpoint: `https://api.goldsky.com/api/public/project_clze000kutrlu01w16vdvdcrz/subgraphs/fraxtal-pay/1.0.0/gn`,
+    llamapayFactoryAddress: NEW_LLAMAPAY_SALARIES_FACTORY_ADDRESS,
     blockExplorerURL: 'https://fraxscan.com',
     blockExplorerName: 'fraxscan',
     prefix: 'fraxtal',
