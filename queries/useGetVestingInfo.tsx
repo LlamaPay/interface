@@ -12,6 +12,7 @@ import { vestingFactoryABI } from '~/lib/abis/vestingFactory';
 import { vestingReasonsABI } from '~/lib/abis/vestingReasons';
 import { vestingEscrowABI } from '~/lib/abis/vestingEscrow';
 import { vestingV2EscrowABI } from '~/lib/abis/vestingV2Escrow';
+import { getMulticall } from './getMulticall';
 
 const vestingEscrowCalls = [
   { reference: 'unclaimed', methodName: 'unclaimed', methodParameters: [] },
@@ -53,10 +54,6 @@ const subgraphs: { [key: number]: string } = {
   10: 'https://api.studio.thegraph.com/query/73158/vesting-optimism/version/latest',
   42161: 'https://api.studio.thegraph.com/query/73158/vesting-arbitrum/version/latest',
   250: 'https://api.studio.thegraph.com/query/73158/vesting-fantom/version/latest'
-};
-
-const multicalls: { [key: number]: string } = {
-  2222: '0x30A62aA52Fa099C4B227869EB6aeaDEda054d121',
 };
 
 async function getVestingInfoByContract({
@@ -169,16 +166,7 @@ async function getVestingInfo(userAddress: string | undefined, chainId: number |
     if (!userAddress) throw new Error('No account');
     if (!chainId) throw new Error('No Chain ID');
 
-    const multicall = multicalls[chainId]
-      ? new Multicall({
-          nodeUrl: networkDetails[chainId].rpcUrl,
-          multicallCustomContractAddress: multicalls[chainId],
-        })
-      : new Multicall({
-          ethersProvider: provider,
-          tryAggregate: true,
-          multicallCustomContractAddress: '0xcA11bde05977b3631167028862bE2a173976CA11',
-        });
+    const multicall = getMulticall(provider, chainId)
     const runMulticall = async (calls: any[]) => {
       const pending = [];
       for (let i = 0; i < calls.length; i += 200) {

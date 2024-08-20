@@ -8,6 +8,7 @@ import { useNetworkProvider } from '~/hooks';
 import { Provider } from '~/utils/contract';
 import { Multicall } from 'ethereum-multicall';
 import { llamaContractABI } from '~/lib/abis/llamaContract';
+import { getMulticall } from './getMulticall';
 
 const fetchBalance = async (
   id: string,
@@ -17,7 +18,7 @@ const fetchBalance = async (
   if (!id || id === '' || !tokens || tokens.length < 1 || !provider) return null;
 
   try {
-    const multicall = new Multicall({ ethersProvider: provider, tryAggregate: true });
+    const multicall = getMulticall(provider)
 
     const res2 = await multicall.call(
       tokens.map((token) => ({

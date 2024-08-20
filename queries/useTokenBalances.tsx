@@ -6,6 +6,7 @@ import { useNetworkProvider, useTokenList } from '~/hooks';
 import { Provider } from '~/utils/contract';
 import { Contract } from 'ethers';
 import { Multicall } from 'ethereum-multicall';
+import { getMulticall } from './getMulticall';
 
 interface IFetchBalance {
   userAddress: string;
@@ -28,7 +29,7 @@ const fetchBalance = async ({ userAddress, tokens, provider }: IFetchBalance) =>
   if (!userAddress || userAddress === '' || !tokens || !provider) return null;
 
   try {
-    const multicall = new Multicall({ ethersProvider: provider, tryAggregate: true });
+    const multicall = getMulticall(provider)
     const res2 = await multicall.call(
       tokens.map((token) => ({
         reference: token.tokenContract.address,

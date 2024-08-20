@@ -8,11 +8,12 @@ import { createERC20Contract } from '~/utils/tokenUtils';
 import { getAddress } from 'ethers/lib/utils';
 import { Multicall } from 'ethereum-multicall';
 import { llamaContractABI } from '~/lib/abis/llamaContract';
+import { getMulticall } from './getMulticall';
 
 const fetchPayers = async (userAddress: string, tokens: IToken[] | null, provider: Provider | null) => {
   if (!userAddress || userAddress === '' || !tokens || tokens.length < 1 || !provider) return null;
   try {
-    const multicall = new Multicall({ ethersProvider: provider, tryAggregate: true });
+    const multicall = getMulticall(provider)
 
     const res2 = await multicall.call(
       tokens.map((token) => ({
