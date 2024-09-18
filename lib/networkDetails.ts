@@ -298,7 +298,7 @@ export const networkDetails: INetworkDetails = {
   },
   8453: {
     rpcUrl: 'https://mainnet.base.org',
-    subgraphEndpoint: `https://api.studio.thegraph.com/query/73158/llamapay-salaries-base/version/latest`,
+    subgraphEndpoint: `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/9LPDj38RmbDzyPaPWKSkxHPm9Bzv6oRCHJ2oMxr4LPaz`,
     llamapayFactoryAddress: NEW_LLAMAPAY_SALARIES_FACTORY_ADDRESS,
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://mainnet.base.org'),
     blockExplorerURL: 'https://basescan.org',
@@ -321,7 +321,7 @@ export const networkDetails: INetworkDetails = {
   81457: {
     rpcUrl: 'https://rpc.blast.io',
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.blast.io'),
-    subgraphEndpoint: `https://api.studio.thegraph.com/query/73158/llamapay-salaries-blast/version/latest`,
+    subgraphEndpoint: `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/By6DNXZrFn1KPXzRuH9UtMDFCv5MRo97c56rhDZW9PYS`,
     llamapayFactoryAddress: NEW_LLAMAPAY_SALARIES_FACTORY_ADDRESS,
     blockExplorerURL: 'https://blastscan.io',
     blockExplorerName: 'Blastscan',
@@ -412,7 +412,7 @@ export const networkDetails: INetworkDetails = {
   59144: {
     rpcUrl: 'https://rpc.linea.build',
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.linea.build'),
-    subgraphEndpoint: `https://api.studio.thegraph.com/query/73158/llamapay-salaries-linea/version/latest`,
+    subgraphEndpoint: `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/By6DNXZrFn1KPXzRuH9UtMDFCv5MRo97c56rhDZW9PYS`,
     llamapayFactoryAddress: NEW_LLAMAPAY_SALARIES_FACTORY_ADDRESS,
     blockExplorerURL: 'https://lineascan.build',
     blockExplorerName: 'Etherscan',
@@ -489,7 +489,7 @@ export const networkDetails: INetworkDetails = {
   },
   534352: {
     rpcUrl: 'https://rpc.scroll.io',
-    subgraphEndpoint: `https://api.studio.thegraph.com/query/73158/llamapay-salaries-scroll/version/latest`,
+    subgraphEndpoint: `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/8cXMpknAm6FRBrZHssLYGVy2q2qFPiVXujMD7YvJZ1SZ`,
     llamapayFactoryAddress: NEW_LLAMAPAY_SALARIES_FACTORY_ADDRESS,
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.scroll.io'),
     blockExplorerURL: 'https://scrollscan.com',
@@ -550,7 +550,7 @@ export const networkDetails: INetworkDetails = {
   34443: {
     rpcUrl: 'https://mainnet.mode.network',
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://mainnet.mode.network'),
-    subgraphEndpoint: `https://api.studio.thegraph.com/query/73158/llamapay-salaries-mode/version/latest`,
+    //subgraphEndpoint: `https://api.studio.thegraph.com/query/73158/llamapay-salaries-mode/version/latest`, // nobody is using it
     llamapayFactoryAddress: NEW_LLAMAPAY_SALARIES_FACTORY_ADDRESS,
     blockExplorerURL: 'https://explorer.mode.network',
     blockExplorerName: 'modescout',
@@ -583,7 +583,7 @@ export const networkDetails: INetworkDetails = {
   1101: {
     rpcUrl: 'https://rpc.ankr.com/polygon_zkevm',
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.ankr.com/polygon_zkevm'),
-    subgraphEndpoint: `https://api.studio.thegraph.com/query/73158/llamapay-salaries-polygonzkevm/version/latest`,
+    subgraphEndpoint: `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/3ehrSQYHWsy6b1ebN54fUUV5Kup2UqUXVup9tKRsTXGz`,
     llamapayFactoryAddress: NEW_LLAMAPAY_SALARIES_FACTORY_ADDRESS,
     blockExplorerURL: 'https://zkevm.polygonscan.com/',
     blockExplorerName: 'polygonscan',
