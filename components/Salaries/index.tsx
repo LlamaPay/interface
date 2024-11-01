@@ -30,7 +30,9 @@ export default function Salaries({ subgraphEndpoint, address, resolvedAddress, n
       network: network,
     },
     {
+      staleTime: network ? 30000 : undefined,
       refetchInterval: network ? 30000 : false,
+      retry: 1,
     }
   );
 

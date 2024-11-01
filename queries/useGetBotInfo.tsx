@@ -46,8 +46,8 @@ async function getBotInfo(userAddress: string | null, provider: Provider | null,
         }
       `;
 
-      const froms = (await request(networkDetails[chainId].botSubgraph!, get_from) as any).schedules;
-      const tos = (await request(networkDetails[chainId].botSubgraph!, get_to) as any).schedules;
+      const froms = ((await request(networkDetails[chainId].botSubgraph!, get_from)) as any).schedules;
+      const tos = ((await request(networkDetails[chainId].botSubgraph!, get_to)) as any).schedules;
 
       const schedules = froms.concat(tos);
 
@@ -99,6 +99,7 @@ export default function useGetBotInfo() {
     ['botInfo', address && address.toLowerCase(), chainId],
     () => getBotInfo(address ? address.toLowerCase() : null, provider, chainId),
     {
+      staleTime: 180000,
       refetchInterval: 180000,
     }
   );

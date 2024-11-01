@@ -35,7 +35,7 @@ async function getSubgraphDelay({ chainId }: useGetSubgraphDelayProps) {
       });
 
       const lastBlockIndexed = await request(subgraphEndpoint!, GET_LAST_INDEXED_BLOCK).then(
-        async (lastBlockIndexedResult:any) => {
+        async (lastBlockIndexedResult: any) => {
           const height = lastBlockIndexedResult._meta.block.number;
           const block = await axios.post(rpcUrl, {
             jsonrpc: '2.0',
@@ -70,6 +70,7 @@ export default function useGetSubgraphDelay() {
   const chainId = chain?.id;
 
   return useQuery(['subgraphDelay', chainId], () => getSubgraphDelay({ chainId }), {
+    staleTime: 30000,
     refetchInterval: 30000,
   });
 }

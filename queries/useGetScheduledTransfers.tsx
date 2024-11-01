@@ -223,6 +223,7 @@ export function useGetScheduledTransferPools({ graphEndpoint }: { graphEndpoint?
     ['scheduledTransferPools', address, graphEndpoint],
     () => fetchScheduledTransferPools({ userAddress: address, graphEndpoint }),
     {
+      staleTime: 30_000,
       refetchInterval: 30_000,
     }
   );
@@ -235,6 +236,7 @@ export function useGetScheduledPayments({ graphEndpoint }: { graphEndpoint?: str
     ['scheduledPayments', address, graphEndpoint],
     () => fetchScheduledPayments({ userAddress: address, graphEndpoint }),
     {
+      staleTime: 30_000,
       refetchInterval: 30_000,
     }
   );
@@ -253,6 +255,7 @@ export function useGetScheduledTransfersHistory({
     ['scheduledTransfersHistory', address, graphEndpoint, isPoolOwnersHistory],
     () => fetchScheduledTransfersHistory({ userAddress: address, graphEndpoint, isPoolOwnersHistory }),
     {
+      staleTime: 30_000,
       refetchInterval: 30_000,
     }
   );

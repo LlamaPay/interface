@@ -18,7 +18,7 @@ const fetchBalance = async (
   if (!id || id === '' || !tokens || tokens.length < 1 || !provider) return null;
 
   try {
-    const multicall = getMulticall(provider)
+    const multicall = getMulticall(provider);
 
     const res2 = await multicall.call(
       tokens.map((token) => ({
@@ -66,6 +66,7 @@ function useGetPayerBalance(contracts: ITokenLists[] | null, tokensKey: string, 
     ['payerBalance', payerAddress, tokensKey],
     () => fetchBalance(payerAddress, contracts, provider),
     {
+      staleTime: 30000,
       refetchInterval: 30000,
     }
   );

@@ -29,7 +29,7 @@ const fetchBalance = async ({ userAddress, tokens, provider }: IFetchBalance) =>
   if (!userAddress || userAddress === '' || !tokens || !provider) return null;
 
   try {
-    const multicall = getMulticall(provider)
+    const multicall = getMulticall(provider);
     const res2 = await multicall.call(
       tokens.map((token) => ({
         reference: token.tokenContract.address,
@@ -73,7 +73,7 @@ const fetchBalance = async ({ userAddress, tokens, provider }: IFetchBalance) =>
 
     return balances;
   } catch (error) {
-    console.log("fetchBalance() ERROR", error);
+    console.log('fetchBalance() ERROR', error);
     return [];
   }
 };
@@ -94,6 +94,7 @@ function useTokenBalances() {
     ['allTokenBalances', listKey],
     () => fetchBalance({ userAddress, tokens, provider }),
     {
+      staleTime: 30000,
       refetchInterval: 30000,
     }
   );

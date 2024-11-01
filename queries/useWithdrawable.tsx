@@ -32,6 +32,7 @@ async function getWithdrawableData({ contract, payer, payee, amountPerSec }: IGe
 
 function useWithdrawable({ contract, payer, payee, amountPerSec, streamId }: IUseWithdrawableProps) {
   return useQuery(['withdrawable', streamId], () => getWithdrawableData({ contract, payer, payee, amountPerSec }), {
+    staleTime: 30_000,
     refetchInterval: 30_000,
   });
 }

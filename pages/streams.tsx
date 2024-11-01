@@ -31,7 +31,9 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, resolvedAd
       network: network,
     },
     {
+      staleTime: 30000,
       refetchInterval: 30000,
+      retry: 1,
     }
   );
 

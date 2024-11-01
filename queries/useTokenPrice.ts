@@ -23,6 +23,7 @@ export function useTokenPrice(id: string) {
   const prefix = chain ? networkDetails[Number(chain?.id)].prefix : null;
 
   return useQuery(['token', id, prefix], () => fetchTokenPrice(id, prefix), {
+    staleTime: 30_000,
     refetchInterval: 30_000,
   });
 }

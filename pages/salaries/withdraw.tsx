@@ -72,7 +72,9 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
       network: network || '',
     },
     {
+      staleTime: 30000,
       refetchInterval: 30000,
+      retry: 1,
     }
   );
 

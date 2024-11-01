@@ -13,11 +13,11 @@ interface ITokenList {
 const fetchTokenList = async (id?: string) => {
   if (!id) return null;
 
-  try{
+  try {
     const { data } = await axios.get(`https://defillama-datasets.llama.fi/tokenlist/${id}.json`);
-    return data ?? {}
-  } catch(e){
-    return {}
+    return data ?? {};
+  } catch (e) {
+    return {};
   }
 };
 
@@ -25,6 +25,7 @@ export function useGetTokenList() {
   const { tokenListId } = useNetworkProvider();
 
   return useQuery<ITokenList>(['tokenlist', tokenListId], () => fetchTokenList(tokenListId), {
+    staleTime: 30000,
     refetchInterval: 30000,
   });
 }
