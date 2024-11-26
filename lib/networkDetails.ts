@@ -560,6 +560,7 @@ export const networkDetails: INetworkDetails = {
     vestingFactory: CONTRACTS.VESTING_FACTORY,
     vestingFactory_v2: '0x62E13BE78af77C86D38a027ae432F67d9EcD4c10',
   },
+  /*
   3109: {
     rpcUrl: 'https://alpha-rpc-node-http.svmscan.io',
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://alpha-rpc-node-http.svmscan.io'),
@@ -570,7 +571,7 @@ export const networkDetails: INetworkDetails = {
     logoURI: 'https://raw.githubusercontent.com/DefiLlama/icons/v2/assets/chains/rsz_satoshivm.jpg',
     vestingFactory: CONTRACTS.VESTING_FACTORY,
     vestingFactory_v2: '0x62E13BE78af77C86D38a027ae432F67d9EcD4c10',
-  },
+  },*/
   40: {
     rpcUrl: 'https://mainnet.telos.net/evm',
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://mainnet.telos.net/evm'),
