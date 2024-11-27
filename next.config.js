@@ -11,7 +11,7 @@ const nextConfig = {
     defaultLocale: 'en',
   },
   images: {
-    domains: ['raw.githubusercontent.com', 'assets.coingecko.com', 'defillama.com'],
+    domains: ['raw.githubusercontent.com', 'assets.coingecko.com', 'defillama.com', 'coin-images.coingecko.com'],
   },
   async redirects() {
     return [

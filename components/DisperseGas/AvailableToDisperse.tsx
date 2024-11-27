@@ -1,4 +1,3 @@
-import Image from 'next/image';
 import { chainDetails } from '~/utils/network';
 import { useAccount, useNetwork } from 'wagmi';
 import defaultImage from '~/public/empty-token.webp';
@@ -28,8 +27,8 @@ export default function AvailableToDisperse({ id }: { id: string }) {
       ) : (
         <div className="flex items-center gap-1">
           <div className="flex h-[14px] w-[14px] flex-shrink-0 items-center rounded-full">
-            <Image
-              src={network?.logoURI ?? defaultImage}
+            <img
+              src={network?.logoURI ?? defaultImage.src}
               alt={t0('logoAlt', { name: chain?.name ?? 'Unsupported Token' })}
               width={14}
               height={14}

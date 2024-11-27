@@ -10,7 +10,6 @@ import { DisclosureState } from 'ariakit';
 import { Menu, MenuItem } from '~/components/NestedMenu';
 import { useIsMounted, useLocale, useWindowSize } from '~/hooks';
 import { useTranslations } from 'next-intl';
-import Image from 'next/image';
 import { formatAddress } from '~/utils/address';
 import { chainDetails } from '~/utils/network';
 import { useAccount, useNetwork, useSwitchNetwork } from 'wagmi';
@@ -93,13 +92,12 @@ export default function HeaderMenu({
                 label={
                   <div className="flex items-center gap-2">
                     <div className="flex h-5 w-5 items-center rounded-full">
-                      <Image
-                        src={network?.logoURI ?? defaultImage}
+                      <img
+                        src={network?.logoURI ?? defaultImage.src}
                         alt={t('logoAlt', { name: value.name })}
                         className="object-contain"
                         width={20}
                         height={20}
-                        priority
                       />
                     </div>
                     <span className="whitespace-nowrap">{value.name}</span>

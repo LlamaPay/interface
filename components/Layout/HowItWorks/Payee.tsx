@@ -1,5 +1,4 @@
 import { ArrowDownIcon } from '@heroicons/react/24/outline';
-import Image from 'next/image';
 
 export default function Payee() {
   return (
@@ -21,7 +20,7 @@ export default function Payee() {
             </div>
 
             <div className="flex items-center gap-1">
-              <Image
+              <img
                 src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
                 alt=""
                 height={16}

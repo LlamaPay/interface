@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useChainExplorer, useTokenList } from '~/hooks';
-import Image from 'next/image';
 import defaultImage from '~/public/empty-token.webp';
 import type { IStream } from '~/types';
 import { useTranslations } from 'next-intl';
@@ -20,8 +19,8 @@ export function TokenName({ data }: { data: IStream }) {
   return (
     <div className="flex items-center gap-2">
       <span className="h-[18px] w-[18px] rounded-full">
-        <Image
-          src={token?.logoURI ?? defaultImage}
+        <img
+          src={token?.logoURI ?? defaultImage.src}
           alt={t('logoAlt', { name: data.tokenName })}
           width={18}
           height={18}

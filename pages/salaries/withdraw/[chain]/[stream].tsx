@@ -145,8 +145,8 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
         <div className="mt-[5px] mb-8 flex items-center gap-[10px] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
           <Tooltip content="Chain">
             <div className="flex items-center rounded-full">
-              <Image
-                src={logoURI || defaultImage}
+              <img
+                src={logoURI.src || defaultImage.src}
                 alt={network ? t0('logoAlt', { name: network }) : 'Chain'}
                 className="object-contain"
                 width={16}
@@ -176,8 +176,8 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
           <>
             <div className="mt-[-28px] flex items-center gap-[10px] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
               <div className="flex items-center rounded-full">
-                <Image
-                  src={tokenLogo || defaultImage}
+                <img
+                  src={tokenLogo || defaultImage.src}
                   alt={stream.token.name || 'Token'}
                   className="object-contain"
                   width={16}
@@ -246,8 +246,8 @@ const Claim: NextPage<ClaimPageProps> = ({ subgraphEndpoint, streamId, network, 
                       onClick={addTokenToWallet}
                     >
                       <span>Add</span>
-                      <Image
-                        src={tokenLogo || defaultImage}
+                      <img
+                        src={tokenLogo || defaultImage.src}
                         alt={stream.token.name || 'Token'}
                         className="object-contain"
                         width={16}

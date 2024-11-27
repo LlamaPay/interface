@@ -9,7 +9,6 @@ import { SubmitButton } from './Button';
 import useCreateLlamaPayContract from '~/queries/useCreateLlamaPayContract';
 import { BeatLoader } from '~/components/BeatLoader';
 import useTokenBalances from '~/queries/useTokenBalances';
-import Image from 'next/image';
 import defaultImage from '~/public/empty-token.webp';
 import { useQueryClient } from '@tanstack/react-query';
 import { useTranslations } from 'next-intl';
@@ -55,9 +54,9 @@ function Token({
       <div className="flex items-center space-x-2 overflow-x-hidden">
         <div className="flex h-7 w-7 flex-shrink-0 items-center rounded-full">
           {data ? (
-            <Image src={data.logoURI} alt={t('logoAlt', { name: data.name })} width={24} height={24} />
+            <img src={data.logoURI} alt={t('logoAlt', { name: data.name })} width={24} height={24} />
           ) : (
-            <Image src={defaultImage} width={24} height={24} alt={t('logoAlt', { name: 'fallback token' })} />
+            <img src={defaultImage.src} width={24} height={24} alt={t('logoAlt', { name: 'fallback token' })} />
           )}
         </div>
         {data ? (

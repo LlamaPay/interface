@@ -9,7 +9,6 @@ import { useDialogState } from 'ariakit';
 import { BalanceAndSymbol } from './BalanceAndSymbol';
 import { UntilDepleted } from './UntilDepleted';
 import { MonthlyCost } from './MonthlyCost';
-import Image from 'next/image';
 import Fallback from '~/components/Fallback';
 import { BalanceIcon } from '~/components/Icons';
 import { useAccount } from 'wagmi';
@@ -130,7 +129,7 @@ const Balance = (props: { address?: string }) => {
                   <th className="whitespace-nowrap rounded-l border border-r-0 border-[#C0C0C0] bg-[#F9FDFB] px-4 py-[6px] text-left text-sm font-normal text-lp-gray-4 dark:border-[#3e3e42] dark:bg-neutral-800 dark:text-white">
                     <div className="flex items-center space-x-2">
                       <span className="h-[18px] w-[18px] rounded-full">
-                        <Image src={b.logoURI} alt={t('logoAlt', { name: b.name })} width={18} height={18} />
+                        <img src={b.logoURI} alt={t('logoAlt', { name: b.name })} width={18} height={18} />
                       </span>
                       {chainExplorer ? (
                         <a

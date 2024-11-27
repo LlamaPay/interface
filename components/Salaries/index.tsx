@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useRouter } from 'next/router';
-import Image, { StaticImageData } from 'next/image';
+import { StaticImageData } from 'next/image';
 import { useTranslations } from 'next-intl';
 import Layout from '~/components/Layout';
 import { BalanceIcon } from '~/components/Icons';
@@ -51,8 +51,8 @@ export default function Salaries({ subgraphEndpoint, address, resolvedAddress, n
         <div className="section-header ml-0 max-w-fit">
           <div className="mt-[5px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
             <div className="flex items-center rounded-full">
-              <Image
-                src={logoURI || defaultImage}
+              <img
+                src={logoURI.src ?? defaultImage.src}
                 alt={network ? t('logoAlt', { name: network }) : 'Fallback Logo'}
                 className="object-contain"
                 width={21}

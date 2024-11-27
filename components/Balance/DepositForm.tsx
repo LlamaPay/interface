@@ -9,7 +9,6 @@ import { SubmitButton } from '~/components/Form';
 import { BeatLoader } from '~/components/BeatLoader';
 import { FormDialog, TransactionDialog } from '~/components/Dialog';
 import { useDialogState } from 'ariakit';
-import Image from 'next/image';
 import AvailableAmount from '~/components/AvailableAmount';
 import useDepositGnosis from '~/queries/useDepositGnosis';
 import { useTranslations } from 'next-intl';
@@ -125,7 +124,7 @@ const DepositForm = ({ data, formDialog }: IFormProps) => {
     return (
       <div className="flex items-center gap-2">
         <div className="flex h-6 w-6 flex-shrink-0 items-center rounded-full">
-          <Image src={data.logoURI} alt={t('logoAlt', { name: data.title })} width={24} height={24} />
+          <img src={data.logoURI} alt={t('logoAlt', { name: data.title })} width={24} height={24} />
         </div>
         <span>{data.title}</span>
       </div>

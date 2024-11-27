@@ -12,7 +12,6 @@ import {
 import { ChevronUpDownIcon } from '@heroicons/react/24/solid';
 import { useNetwork, useSwitchNetwork } from 'wagmi';
 import { chainDetails } from '~/utils/network';
-import Image from 'next/image';
 import defaultImage from '~/public/empty-token.webp';
 import { useTranslations } from 'next-intl';
 import useGetStreamsOnAllNetworks from '~/queries/useGetStreamsOnAllNetworks';
@@ -57,13 +56,12 @@ export const NetworksMenu = () => {
       <Select state={select} className="nav-button-v2 hidden items-center justify-between gap-2 sm:flex">
         <>
           <div className="flex h-5 w-5 items-center rounded-full">
-            <Image
-              src={network?.logoURI ?? defaultImage}
+            <img
+              src={network?.logoURI ?? defaultImage.src}
               alt={t('logoAlt', { name: network?.prefix })}
               className="object-contain"
               width={20}
               height={20}
-              priority
             />
           </div>
           <span>{chain.name ?? t('unsupported')}</span>
@@ -89,13 +87,12 @@ export const NetworksMenu = () => {
                   onClick={() => switchNetwork(value.id)}
                 >
                   <div className="flex h-5 w-5 flex-shrink-0 items-center rounded-full">
-                    <Image
-                      src={network?.logoURI ?? defaultImage}
+                    <img
+                      src={network?.logoURI ?? defaultImage.src}
                       alt={t('logoAlt', { name: value.name })}
                       className="object-contain"
                       width={20}
                       height={20}
-                      priority
                     />
                   </div>
                   <span>{value.name}</span>
@@ -119,13 +116,12 @@ export const NetworksMenu = () => {
                   onClick={() => switchNetwork(value.id)}
                 >
                   <div className="flex h-5 w-5 flex-shrink-0 items-center rounded-full">
-                    <Image
-                      src={network?.logoURI ?? defaultImage}
+                    <img
+                      src={network?.logoURI ?? defaultImage.src}
                       alt={t('logoAlt', { name: value.name })}
                       className="object-contain"
                       width={20}
                       height={20}
-                      priority
                     />
                   </div>
                   <span>{value.name}</span>

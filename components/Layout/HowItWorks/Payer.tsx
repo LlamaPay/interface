@@ -1,5 +1,3 @@
-import Image from 'next/image';
-
 export default function Payer() {
   return (
     <>
@@ -104,7 +102,7 @@ export default function Payer() {
             <div className="absolute left-[-10px] right-[-10px] flex h-[46px] items-center justify-start rounded border border-lp-gray-1 bg-lp-white p-3 text-xs text-lp-gray-2">
               <div>4000</div>
               <div className="ml-auto flex items-center gap-[6px] rounded bg-[#D9D9D9] bg-opacity-40 p-1">
-                <Image
+                <img
                   src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
                   alt=""
                   height={16}
@@ -198,7 +196,7 @@ export default function Payer() {
             <div className="absolute left-[-10px] right-[-10px] flex h-[46px] items-center justify-start rounded border border-lp-gray-1 bg-lp-white p-3 text-xs text-lp-gray-2">
               <div>2000/4000</div>
               <div className="ml-auto flex items-center gap-[6px] rounded bg-[#D9D9D9] bg-opacity-40 p-1">
-                <Image
+                <img
                   src="https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48/logo.png"
                   alt=""
                   height={16}

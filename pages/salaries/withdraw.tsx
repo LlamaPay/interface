@@ -23,7 +23,6 @@ import useGnosisBatch from '~/queries/useGnosisBatch';
 import { LlamaContractInterface } from '~/utils/contract';
 import { chainDetails } from '~/utils/network';
 import defaultImage from '~/public/empty-token.webp';
-import Image from 'next/image';
 import { networkDetails } from '~/lib/networkDetails';
 import { useRouter } from 'next/router';
 import { FallbackContainer } from '~/components/Fallback';
@@ -159,8 +158,8 @@ const Withdraw: NextPage<IWithdrawProps> = ({ resolvedAddress }) => {
 
         <div className="mt-[-15px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
           <div className="flex items-center rounded-full">
-            <Image
-              src={logoURI ?? defaultImage}
+            <img
+              src={logoURI ?? defaultImage.src}
               alt={t('logoAlt', { name: network })}
               className="object-contain"
               width={21}

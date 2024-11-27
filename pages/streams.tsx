@@ -5,7 +5,7 @@ import { BalanceIcon } from '~/components/Icons';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 import { useStreamAndHistoryQuery } from '~/services/generated/graphql';
 import defaultImage from '~/public/empty-token.webp';
-import Image, { StaticImageData } from 'next/image';
+import { StaticImageData } from 'next/image';
 import { AltStreamSection } from '~/components/Stream';
 import { AltHistorySection } from '~/components/History';
 import { useFormatStreamAndHistory, useNetworkProvider } from '~/hooks';
@@ -50,8 +50,8 @@ const Streams: NextPage<StreamsProps> = ({ subgraphEndpoint, address, resolvedAd
           {network && (
             <div className="mt-[5px] flex items-center gap-[0.675rem] rounded bg-neutral-50 px-2 py-1 text-sm font-normal text-[#4E575F] dark:bg-[#202020] dark:text-white">
               <div className="flex items-center rounded-full">
-                <Image
-                  src={logoURI || defaultImage}
+                <img
+                  src={logoURI.src || defaultImage.src}
                   alt={t('logoAlt', { name: network })}
                   className="object-contain"
                   width={21}

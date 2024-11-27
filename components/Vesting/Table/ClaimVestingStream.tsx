@@ -71,7 +71,7 @@ export default function ClaimVesting({
         });
       })
       .catch((err) => {
-        toast.error(err.reason || err.message || 'Transaction Failed');
+        toast.error(`[CLAIM]: ${err.reason || err.message || 'Transaction Failed'}`);
       });
   }
 
