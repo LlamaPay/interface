@@ -595,6 +595,7 @@ export const networkDetails: INetworkDetails = {
   146: {
     rpcUrl: 'https://rpc.soniclabs.com',
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.soniclabs.com'),
+    subgraphEndpoint: `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/6UHAK4JCA2X1auiM3HnCjss613Uo5kjLqskJCngtwhoe`,
     vestingFactory_v2: "0xB93427b83573C8F27a08A909045c3e809610411a",
     llamapayFactoryAddress: "0x09c39B8311e4B7c678cBDAD76556877ecD3aEa07",
     blockExplorerURL: 'https://sonicscan.org/',
