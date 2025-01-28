@@ -11,6 +11,10 @@ function fetcher<TData, TVariables>(endpoint: string, requestInit: RequestInit, 
       method: 'POST',
       ...requestInit,
       body: JSON.stringify({ query, variables }),
+      headers:{
+        ...requestInit.headers,
+        "Content-Type": "application/json"
+      }
     });
 
     const json = await res.json();
