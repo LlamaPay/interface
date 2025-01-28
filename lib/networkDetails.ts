@@ -592,4 +592,15 @@ export const networkDetails: INetworkDetails = {
     tokenListId: 'polygon_zkevm',
     logoURI: 'https://raw.githubusercontent.com/DefiLlama/icons/v2/assets/chains/rsz_polygon zkevm.jpg',
   },
+  146: {
+    rpcUrl: 'https://rpc.soniclabs.com',
+    chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.soniclabs.com'),
+    vestingFactory_v2: "0xB93427b83573C8F27a08A909045c3e809610411a",
+    llamapayFactoryAddress: "0x09c39B8311e4B7c678cBDAD76556877ecD3aEa07",
+    blockExplorerURL: 'https://sonicscan.org/',
+    blockExplorerName: 'sonicscan',
+    prefix: 'sonic',
+    tokenListId: 'sonic',
+    logoURI: 'https://raw.githubusercontent.com/DefiLlama/icons/v2/assets/chains/rsz_sonic.jpg',
+  },
 };

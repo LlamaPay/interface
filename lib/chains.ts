@@ -113,7 +113,7 @@ export const chains: Array<wagmiChains.Chain> = [
     blockExplorers: {
       default: {
         name: 'polygonscan',
-        url: 'https://zkevm.polygonscan.com/',
+        url: 'https://zkevm.polygonscan.com',
       },
     },
   },
@@ -127,6 +127,19 @@ export const chains: Array<wagmiChains.Chain> = [
       default: {
         name: 'fraxscan',
         url: 'https://fraxscan.com',
+      },
+    },
+  },
+  {
+    id: 146,
+    name: 'Sonic',
+    network: 'sonic',
+    nativeCurrency: { "name": "Sonic", "symbol": "S", "decimals": 18 },
+    rpcUrls: { default: { http: ['https://rpc.soniclabs.com'] }, public: { http: ['https://rpc.soniclabs.com'] } },
+    blockExplorers: {
+      default: {
+        name: 'sonicscan',
+        url: 'https://sonicscan.org',
       },
     },
   },
