@@ -36,6 +36,7 @@ import Tooltip from '~/components/Tooltip';
 import { ClipboardDocumentIcon, ShareIcon } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import useDebounce from '~/hooks/useDebounce';
+import { botDeployedOn } from '~/utils/constants';
 
 export function StreamTable({ data }: { data: IStream[] }) {
   const addressStore = useAddressStore();
@@ -190,7 +191,7 @@ export function StreamTable({ data }: { data: IStream[] }) {
         cell: ({ cell }) => {
           const data = cell.row.original;
           if (!data || !chainId) return null;
-          if (chainId !== 43114 && chainId !== 5 && chainId !== 1) return null;
+          if (!botDeployedOn.includes(chainId)) return null;
           return <Schedule data={data} nativeCurrency={nativeCurrency?.symbol ?? 'ETH'} chainId={chainId} />;
         },
       },
