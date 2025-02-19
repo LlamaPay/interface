@@ -44,6 +44,6 @@ export const whitelist: ITokenWhitelist = {
 
 export const zeroAdd = '0x0000000000000000000000000000000000000000';
 
-export const botDeployedOn: number[] = [43114, 5, 1, 137, 10, 250, 56];
+export const botDeployedOn: number[] = [43114, 5, 1, 137, 10, 250, 56, 42161];
 
 export const timeframes = ['Hour', 'Day', 'Week', 'Month', 'Year'];
