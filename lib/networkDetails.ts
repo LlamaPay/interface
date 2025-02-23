@@ -34,15 +34,15 @@ function scramble(str) {
 }
 */
 
-function unscramble(str:string) {
-  return str.split("").reduce(function(a, b) {
-    return a + String.fromCharCode(b.charCodeAt(0)+8)
-  }, "");
+function unscramble(str: string) {
+  return str.split('').reduce(function (a, b) {
+    return a + String.fromCharCode(b.charCodeAt(0) + 8);
+  }, '');
 }
 
-const apiKey = unscramble('.[^+0](,0[+1,*\\YZY\\[(*+Z,][/**,]')
+const apiKey = unscramble('.[^+0](,0[+1,*\\YZY\\[(*+Z,][/**,]');
 
-const NEW_LLAMAPAY_SALARIES_FACTORY_ADDRESS = "0x09c39B8311e4B7c678cBDAD76556877ecD3aEa07"
+const NEW_LLAMAPAY_SALARIES_FACTORY_ADDRESS = '0x09c39B8311e4B7c678cBDAD76556877ecD3aEa07';
 
 export const networkDetails: INetworkDetails = {
   43113: {
@@ -171,6 +171,7 @@ export const networkDetails: INetworkDetails = {
     vestingFactory_v2: '0x62E13BE78af77C86D38a027ae432F67d9EcD4c10',
     paymentsContract: CONTRACTS.PAYMENTS_ARBITRUM,
     paymentsGraphApi: `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/FqvRmJgUDxy2vgUHW3bGzCE1TdcydQGYoGDyDxe5R69C`,
+    botSubgraph: `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/J5Qy3zArdBEoqxMy6gKvWHzxgCbsoHTZYfZmoWMjvS7M`,
   },
   56: {
     rpcUrl: 'https://rpc.ankr.com/bsc',
@@ -596,8 +597,8 @@ export const networkDetails: INetworkDetails = {
     rpcUrl: 'https://rpc.soniclabs.com',
     chainProviders: new ethers.providers.StaticJsonRpcProvider('https://rpc.soniclabs.com'),
     subgraphEndpoint: `https://api.studio.thegraph.com/query/73158/llamapay-salaries-sonic/version/latest`, // production url not used because of "no allocations" error `https://gateway-arbitrum.network.thegraph.com/api/${apiKey}/subgraphs/id/6UHAK4JCA2X1auiM3HnCjss613Uo5kjLqskJCngtwhoe`,
-    vestingFactory_v2: "0xB93427b83573C8F27a08A909045c3e809610411a",
-    llamapayFactoryAddress: "0x09c39B8311e4B7c678cBDAD76556877ecD3aEa07",
+    vestingFactory_v2: '0xB93427b83573C8F27a08A909045c3e809610411a',
+    llamapayFactoryAddress: '0x09c39B8311e4B7c678cBDAD76556877ecD3aEa07',
     blockExplorerURL: 'https://sonicscan.org/',
     blockExplorerName: 'sonicscan',
     prefix: 'sonic',
